@@ -67,9 +67,8 @@ static const char especials[17] = "()<>@,;:\"/[]?.= ";
 #define UTF16LOEND      0xDFFFUL
 //@endcond
 
-/* Convert an IMAP mailbox to a Unicode path
- */
-QString RfcCodecs::fromIMAP( const QString &inSrc )
+//-----------------------------------------------------------------------------
+QString RfcCodecs::encodeImapFolderName( const QString &inSrc )
 {
   unsigned char c, i, bitcount;
   unsigned long ucs4, utf16, bitbuf;
@@ -153,7 +152,7 @@ QString RfcCodecs::fromIMAP( const QString &inSrc )
   return QString::fromUtf8( dst.data () );
 }
 
-/* replace " with \" and \ with \\ " and \ characters */
+//-----------------------------------------------------------------------------
 QString RfcCodecs::quoteIMAP( const QString &src )
 {
   uint len = src.length();
@@ -169,8 +168,8 @@ QString RfcCodecs::quoteIMAP( const QString &src )
   return result;
 }
 
-/* Convert Unicode path to modified UTF-7 IMAP mailbox */
-QString RfcCodecs::toIMAP( const QString &inSrc )
+//-----------------------------------------------------------------------------
+QString RfcCodecs::decodeImapFolderName( const QString &inSrc )
 {
   unsigned int utf8pos, utf8total, c, utf7mode, bitstogo, utf16flag;
   unsigned int ucs4, bitbuf;
