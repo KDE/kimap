@@ -4,7 +4,7 @@ add_subdirectory( tests )
 ########### next target ###############
 
 set(kimap_LIB_SRCS
-   rfcdecoder.cpp)
+   rfccodecs.cpp)
 
 kde4_automoc(${kimap_LIB_SRCS})
 
@@ -17,4 +17,4 @@ install(TARGETS kimap  DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES kimap.h rfcdecoder.h DESTINATION ${INCLUDE_INSTALL_DIR}/kimap  )
+install( FILES kimap.h rfccodecs.h DESTINATION ${INCLUDE_INSTALL_DIR}/kimap  )

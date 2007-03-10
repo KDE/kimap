@@ -19,7 +19,7 @@
  *   Boston, MA 02110-1301, USA.
  *
  *********************************************************************/
-#include "rfcdecoder.h"
+#include "rfccodecs.h"
 
 #include <ctype.h>
 #include <sys/types.h>
