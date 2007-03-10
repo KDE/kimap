@@ -50,10 +50,12 @@ using namespace KIMAP;
 // This part taken from rfc 2192 IMAP URL Scheme. C. Newman. September 1997.
 // adapted to QT-Toolkit by Sven Carstens <s.carstens@gmx.de> 2000
 
-static unsigned char base64chars[] =
+//@cond PRIVATE
+static const unsigned char base64chars[] =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+,";
 #define UNDEFINED 64
 #define MAXLINE  76
+static const char especials[17] = "()<>@,;:\"/[]?.= ";
 
 /* UTF16 definitions */
 #define UTF16MASK       0x03FFUL
@@ -63,6 +65,7 @@ static unsigned char base64chars[] =
 #define UTF16HIGHEND    0xDBFFUL
 #define UTF16LOSTART    0xDC00UL
 #define UTF16LOEND      0xDFFFUL
+//@endcond
 
 /* Convert an IMAP mailbox to a Unicode path
  */
@@ -410,8 +413,6 @@ const QString RfcCodecs::decodeRFC2047String( const QString &str,
 }
 
 //-----------------------------------------------------------------------------
-const char especials[17] = "()<>@,;:\"/[]?.= ";
-
 const QString RfcCodecs::encodeRFC2047String( const QString &str )
 {
   if ( str.isEmpty () ) {
