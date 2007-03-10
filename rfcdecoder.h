@@ -1,8 +1,6 @@
-#ifndef RFCDECODER_H
-#define RFCDECODER_H
 /**********************************************************************
  *
- *   rfcdecoder.h  - handler for various rfc/mime encodings
+ *   rfccodecs  - handler for various rfc/mime encodings
  *   Copyright (C) 2000 s.carstens@gmx.de
  *
  *   This library is free software; you can redistribute it and/or
@@ -22,62 +20,97 @@
  *
  *********************************************************************/
 
+#ifndef KIMAP_RFCCODECS_H
+#define KIMAP_RFCCODECS_H
+
 #include <QString>
 
+#include "kimap.h"
+
 class QTextCodec;
+
+namespace KIMAP {
 
 /**
  * handler for various rfc/mime encodings
  * @author Sven Carstens <s.carstens@gmx.de>
  * @date 2000
- * @todo rename to rfcCodecs as it encodes too.
  */
-class rfcDecoder
+class KIMAP_EXPORT RfcCodecs
 {
-
-public:
-
-/** Convert an IMAP mailbox to a Unicode path
- */
-  static QString fromIMAP (const QString & src);
-/** Convert Unicode path to modified UTF-7 IMAP mailbox
- */
-  static QString toIMAP (const QString & inSrc);
-/** replace " with \" and \ with \\ " and \ characters */
-  static QString quoteIMAP (const QString & src);
+  public:
 
   /**
-   * fetch a codec by name
-   * @return Text Codec object
-   */
-  static QTextCodec *codecForName (const QString &);
+    Convert an IMAP mailbox to a Unicode path
+  */
+  static QString fromIMAP( const QString &src );
+
+  /**
+    Convert Unicode path to modified UTF-7 IMAP mailbox.
+  */
+  static QString toIMAP( const QString &inSrc );
+
+  /**
+    replace " with \" and \ with \\ " and \ characters.
+  */
+  static QString quoteIMAP( const QString &src );
+
+  /**
+    Fetches a codec by @p name.
+    @return Text Codec object
+  */
+  static QTextCodec *codecForName( const QString &name );
 
   // decoder for RFC2047 and RFC1522
-  /** decode a RFC2047 String */
-  static const QString decodeRFC2047String (const QString & _str,
-                                            QString & charset,
-                                            QString & language);
-  /** decode a RFC2047 String */
-  static const QString decodeRFC2047String (const QString & _str,
-                                            QString & charset);
-  /** decode a RFC2047 String */
-  static const QString decodeRFC2047String (const QString & _str);
+
+  /**
+    Decodes a RFC2047 string @p str.
+  */
+  static const QString decodeRFC2047String( const QString &str,
+                                            QString &charset,
+                                            QString &language );
+  /**
+    Decodes a RFC2047 string @p str.
+  */
+  static const QString decodeRFC2047String( const QString &str,
+                                            QString &charset );
+
+  /**
+    Decode a RFC2047 string @p str.
+  */
+  static const QString decodeRFC2047String( const QString &str );
 
   // encoder for RFC2047 and RFC1522
-  /** encode a RFC2047 String */
-  static const QString encodeRFC2047String (const QString & _str,
-                                            QString & charset,
-                                            QString & language);
-  /** encode a RFC2047 String */
-  static const QString encodeRFC2047String (const QString & _str,
-                                            QString & charset);
-  /** encode a RFC2047 String */
-  static const QString encodeRFC2047String (const QString & _str);
 
-  /** encode a RFC2231 String */
-  static const QString encodeRFC2231String (const QString & _str);
-  /** decode a RFC2231 String */
-  static const QString decodeRFC2231String (const QString & _str);
+  /**
+    Encodes a RFC2047 string @p str.
+  */
+  static const QString encodeRFC2047String( const QString &str,
+                                            QString &charset,
+                                            QString &language );
+
+  /**
+    Encodes a RFC2047 string @p str.
+  */
+  static const QString encodeRFC2047String( const QString &str,
+                                            QString &charset );
+
+  /**
+    Encodes a RFC2047 string @p str.
+  */
+  static const QString encodeRFC2047String( const QString &str );
+
+  /**
+    Encodes a RFC2231 string @p str.
+  */
+  static const QString encodeRFC2231String( const QString &str );
+
+  /**
+    Decodes a RFC2231 string @p str.
+  */
+  static const QString decodeRFC2231String( const QString &str );
 };
+
+}
 
 #endif

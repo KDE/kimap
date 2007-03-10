@@ -1,6 +1,6 @@
 /**********************************************************************
  *
- *   rfcdecoder.cc  - handler for various rfc/mime encodings
+ *   rfccodecs.cpp - handler for various rfc/mime encodings
  *   Copyright (C) 2000 s.carstens@gmx.de
  *
  *   This library is free software; you can redistribute it and/or
@@ -30,10 +30,11 @@
 #include <QTextCodec>
 #include <QBuffer>
 #include <QRegExp>
-//Added by qt3to4:
 #include <Q3CString>
 #include <QLatin1Char>
 #include <kcodecs.h>
+
+using namespace KIMAP;
 
 // This part taken from rfc 2192 IMAP URL Scheme. C. Newman. September 1997.
 // adapted to QT-Toolkit by Sven Carstens <s.carstens@gmx.de> 2000
@@ -54,7 +55,7 @@ static unsigned char base64chars[] =
 
 /* Convert an IMAP mailbox to a Unicode path
  */
-QString rfcDecoder::fromIMAP (const QString & inSrc)
+QString RfcCodecs::fromIMAP (const QString & inSrc)
 {
   unsigned char c, i, bitcount;
   unsigned long ucs4, utf16, bitbuf;
@@ -157,7 +158,7 @@ QString rfcDecoder::fromIMAP (const QString & inSrc)
 }
 
 /* replace " with \" and \ with \\ " and \ characters */
-QString rfcDecoder::quoteIMAP(const QString &src)
+QString RfcCodecs::quoteIMAP(const QString &src)
 {
   uint len = src.length();
   QString result;
@@ -174,7 +175,7 @@ QString rfcDecoder::quoteIMAP(const QString &src)
 
 /* Convert Unicode path to modified UTF-7 IMAP mailbox
  */
-QString rfcDecoder::toIMAP (const QString & inSrc)
+QString RfcCodecs::toIMAP (const QString & inSrc)
 {
   unsigned int utf8pos, utf8total, c, utf7mode, bitstogo, utf16flag;
   unsigned int ucs4, bitbuf;
@@ -295,7 +296,7 @@ QString rfcDecoder::toIMAP (const QString & inSrc)
 
 //-----------------------------------------------------------------------------
 QTextCodec *
-rfcDecoder::codecForName (const QString & _str)
+RfcCodecs::codecForName (const QString & _str)
 {
   if (_str.isEmpty ())
     return NULL;
@@ -305,7 +306,7 @@ rfcDecoder::codecForName (const QString & _str)
 
 //-----------------------------------------------------------------------------
 const QString
-rfcDecoder::decodeRFC2047String (const QString & _str)
+RfcCodecs::decodeRFC2047String (const QString & _str)
 {
   QString throw_away;
 
@@ -314,7 +315,7 @@ rfcDecoder::decodeRFC2047String (const QString & _str)
 
 //-----------------------------------------------------------------------------
 const QString
-rfcDecoder::decodeRFC2047String (const QString & _str, QString & charset)
+RfcCodecs::decodeRFC2047String (const QString & _str, QString & charset)
 {
   QString throw_away;
 
@@ -323,7 +324,7 @@ rfcDecoder::decodeRFC2047String (const QString & _str, QString & charset)
 
 //-----------------------------------------------------------------------------
 const QString
-rfcDecoder::decodeRFC2047String (const QString & _str, QString & charset,
+RfcCodecs::decodeRFC2047String (const QString & _str, QString & charset,
                                  QString & language)
 {
   //do we have a rfc string
@@ -378,7 +379,7 @@ rfcDecoder::decodeRFC2047String (const QString & _str, QString & charset,
         valid = false;
       pos += 3;
       i += 3;
-//    kDebug(7116) << "rfcDecoder::decodeRFC2047String - charset " << charset << " - language " << language << " - '" << pos << "'" << endl;
+//    kDebug(7116) << "RfcCodecs::decodeRFC2047String - charset " << charset << " - language " << language << " - '" << pos << "'" << endl;
     }
     if (valid)
     {
@@ -404,10 +405,10 @@ rfcDecoder::decodeRFC2047String (const QString & _str, QString & charset,
         for (i = str.length () - 1; i >= 0; i--)
           if (str[i] == '_')
             str[i] = ' ';
-//    kDebug(7116) << "rfcDecoder::decodeRFC2047String - before QP '" << str << "'" << endl;
+//    kDebug(7116) << "RfcCodecs::decodeRFC2047String - before QP '" << str << "'" << endl;
 
         str = KCodecs::quotedPrintableDecode(str);
-//    kDebug(7116) << "rfcDecoder::decodeRFC2047String - after QP '" << str << "'" << endl;
+//    kDebug(7116) << "RfcCodecs::decodeRFC2047String - after QP '" << str << "'" << endl;
       }
       else
       {
@@ -423,7 +424,7 @@ rfcDecoder::decodeRFC2047String (const QString & _str, QString & charset,
     }
     else
     {
-//    kDebug(7116) << "rfcDecoder::decodeRFC2047String - invalid" << endl;
+//    kDebug(7116) << "RfcCodecs::decodeRFC2047String - invalid" << endl;
       //result += "=?";
       //pos = beg -1; // because pos gets increased shortly afterwards
       pos = beg - 2;
@@ -448,7 +449,7 @@ rfcDecoder::decodeRFC2047String (const QString & _str, QString & charset,
 const char especials[17] = "()<>@,;:\"/[]?.= ";
 
 const QString
-rfcDecoder::encodeRFC2047String (const QString & _str)
+RfcCodecs::encodeRFC2047String (const QString & _str)
 {
   if (_str.isEmpty ())
     return _str;
@@ -563,7 +564,7 @@ rfcDecoder::encodeRFC2047String (const QString & _str)
 
 //-----------------------------------------------------------------------------
 const QString
-rfcDecoder::encodeRFC2231String (const QString & _str)
+RfcCodecs::encodeRFC2231String (const QString & _str)
 {
   if (_str.isEmpty ())
     return _str;
@@ -617,7 +618,7 @@ rfcDecoder::encodeRFC2231String (const QString & _str)
 
 //-----------------------------------------------------------------------------
 const QString
-rfcDecoder::decodeRFC2231String (const QString & _str)
+RfcCodecs::decodeRFC2231String (const QString & _str)
 {
   int p = _str.indexOf ('\'');
 
