@@ -1,0 +1,20 @@
+project(kimap)
+add_subdirectory( tests )
+
+########### next target ###############
+
+set(kimap_LIB_SRCS
+   rfcdecoder.cpp)
+
+kde4_automoc(${kimap_LIB_SRCS})
+
+kde4_add_library(kimap SHARED ${kimap_LIB_SRCS})
+
+target_link_libraries(kimap ${KDE4_KDECORE_LIBS})
+
+set_target_properties(kimap PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
+install(TARGETS kimap  DESTINATION ${LIB_INSTALL_DIR} )
+
+########### install files ###############
+
+install( FILES kimap.h rfcdecoder.h DESTINATION ${INCLUDE_INSTALL_DIR}/kimap  )
