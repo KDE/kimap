@@ -1,0 +1,25 @@
+/*!
+ * @mainpage KIMAP - an API for handling IMAP data.
+ *
+ * @section purpose Purpose
+ *
+ * The kimap library contains an API for the handling of IMAP data.
+ *
+ * @section desc Description
+ *
+ * Insert a nice description here.
+ *
+ * @authors
+ * The major authors of this library are:\n
+ * Sven Carstens \<s.carstens@gmx.de\>
+ *
+ * @maintainers
+ * Tom Albers \<tomalbers@kde.nl\>,
+ * Volker Krause \<vkrause@kde.org\>,
+ * Allen Winter \<winter@kde.org\>
+ *
+ * @licenses
+ * @lgpl
+ */
+
+// DOXYGEN_PROJECTNAME=KIMAP Library
