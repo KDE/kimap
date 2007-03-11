@@ -52,14 +52,28 @@ static bool checkIMAPEncoding( const QString& decodedIn, const QString& encodedI
   return true;
 }
 
+static bool checkQuotes( const QString& input, const QString& expected )
+{
+  QString quoted = RfcCodecs::quoteIMAP(input);
+  check( "quoteIMAP test: " + input + " quoted ", quoted, expected );
+  return true;
+}
 
 int main(int argc, char *argv[])
 {
   QCoreApplication app( argc, argv );
 
-  // Check encoding:
+  // Check basic encoding
   checkIMAPEncoding("Test.Frode Rønning", "Test.Frode R&APg-nning");
   checkIMAPEncoding("Test.tom & jerry", "Test.tom &- jerry");
+
+  // Try to feed already encoded
+  checkIMAPEncoding("Test.Cl&AOE-udio", "Test.Cl&-AOE-udio");
+
+  // QuoteImap Tests.
+  checkQuotes("tom\"allen","tom\\\"allen");
+  checkQuotes("tom\'allen","tom\'allen");
+  checkQuotes("tom\\allen","tom\\\\allen");
 
   printf("\nTest OK !\n");
 
