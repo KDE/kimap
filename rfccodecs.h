@@ -47,13 +47,13 @@ class KIMAP_EXPORT RfcCodecs
   public:
 
     /**
-      Converts an IMAP mailbox to a Unicode path.
+      Converts an Unicode IMAP mailbox to a QString which can be used in IMAP communication.
       @param src is the QString containing the IMAP mailbox.
     */
     static QString encodeImapFolderName( const QString &src );
 
     /**
-      Converts a Unicode path to modified UTF-7 IMAP mailbox.
+      Converts an UTF-7 encoded IMAP mailbox to a Unicode QString.
       @param inSrc is the QString containing the Unicode path.
     */
     static QString decodeImapFolderName( const QString &inSrc );
