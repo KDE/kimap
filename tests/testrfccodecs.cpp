@@ -42,23 +42,13 @@ static bool check(const QString& txt, const QString& a, const QString& b)
   return true;
 }
 
-static bool checkToIMAP( const QString& input, const QString& expResult )
+static bool checkIMAPEncoding( const QString& decodedIn, const QString& encodedIn )
 {
-  QString encoded = RfcCodecs::quoteIMAP( input );
-  check( "toIMAP " + input + " encoded ", encoded, expResult );
-  return true;
-}
-
-
-static bool checkFromIMAP( const QString& input, const QString& expResult )
-{
-#ifdef __GNUC__
-#warning FIXME!
-#endif
-#if 0
-  QString decoded = RfcCodecs::fromIMAP( input );
-  check( "toIMAP " + input + " decoded ", decoded, expResult );
-#endif
+  QString encoded = RfcCodecs::encodeImapFolderName( decodedIn );
+  check( "encode test: " + decodedIn + " encoded ", encoded, encodedIn );
+  
+  QString decoded = RfcCodecs::decodeImapFolderName( encodedIn );
+  check( "decode test: " + encodedIn + " decoded ", decoded, decodedIn );
   return true;
 }
 
@@ -68,13 +58,8 @@ int main(int argc, char *argv[])
   QCoreApplication app( argc, argv );
 
   // Check encoding:
-  checkToIMAP("TestCases.Frode Rønning", "TestCases.Frode R&APg-nning");
-  checkToIMAP("TestCases.tom & jerry", "TestCases.tom &- jerry");
-
-  // Check decoding:
-  checkFromIMAP("TestCases.Frode R&APg-nning","TestCases.Frode Rønning");
-  checkFromIMAP("TestCases.tom &- jerry","TestCases.tom & jerry");
-
+  checkIMAPEncoding("Test.Frode Rønning", "Test.Frode R&APg-nning");
+  checkIMAPEncoding("Test.tom & jerry", "Test.tom &- jerry");
 
   printf("\nTest OK !\n");
 

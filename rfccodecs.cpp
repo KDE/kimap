@@ -68,7 +68,7 @@ static const char especials[17] = "()<>@,;:\"/[]?.= ";
 //@endcond
 
 //-----------------------------------------------------------------------------
-QString RfcCodecs::encodeImapFolderName( const QString &inSrc )
+QString RfcCodecs::decodeImapFolderName( const QString &inSrc )
 {
   unsigned char c, i, bitcount;
   unsigned long ucs4, utf16, bitbuf;
@@ -169,7 +169,7 @@ QString RfcCodecs::quoteIMAP( const QString &src )
 }
 
 //-----------------------------------------------------------------------------
-QString RfcCodecs::decodeImapFolderName( const QString &inSrc )
+QString RfcCodecs::encodeImapFolderName( const QString &inSrc )
 {
   unsigned int utf8pos, utf8total, c, utf7mode, bitstogo, utf16flag;
   unsigned int ucs4, bitbuf;
