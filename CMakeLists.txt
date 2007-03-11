@@ -10,7 +10,7 @@ kde4_automoc(${kimap_LIB_SRCS})
 
 kde4_add_library(kimap SHARED ${kimap_LIB_SRCS})
 
-target_link_libraries(kimap ${KDE4_KDECORE_LIBS} ${QT_QT3SUPPORT_LIBRARIES} )
+target_link_libraries(kimap ${KDE4_KDECORE_LIBS})
 
 set_target_properties(kimap PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
 install(TARGETS kimap  DESTINATION ${LIB_INSTALL_DIR} )

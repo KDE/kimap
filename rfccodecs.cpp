@@ -41,7 +41,7 @@
 #include <QTextCodec>
 #include <QBuffer>
 #include <QRegExp>
-#include <Q3CString>
+#include <QByteArray>
 #include <QLatin1Char>
 #include <kcodecs.h>
 
@@ -173,7 +173,7 @@ QString RfcCodecs::encodeImapFolderName( const QString &inSrc )
 {
   unsigned int utf8pos, utf8total, c, utf7mode, bitstogo, utf16flag;
   unsigned int ucs4, bitbuf;
-  Q3CString src = inSrc.toUtf8 ();
+  QByteArray src = inSrc.toUtf8 ();
   QString dst;
 
   int srcPtr = 0;
@@ -308,7 +308,7 @@ const QString RfcCodecs::decodeRFC2047String( const QString &str,
   QByteArray aStr = str.toAscii ();  // QString.length() means Unicode chars
   QByteArray result;
   char *pos, *beg, *end, *mid = NULL;
-  Q3CString cstr;
+  QByteArray cstr;
   char encoding = 0, ch;
   bool valid;
   const int maxLen = 200;
@@ -332,7 +332,7 @@ const QString RfcCodecs::decodeRFC2047String( const QString &str,
     if ( *pos != '?' || i < 4 || i >= maxLen ) {
       valid = false;
     } else {
-      charset = Q3CString( beg, i - 1 );  // -2 + 1 for the zero
+      charset = QByteArray( beg, i - 1 );  // -2 + 1 for the zero
       int pt = charset.lastIndexOf( '*' );
       if ( pt != -1 ) {
         // save language for later usage
@@ -368,7 +368,7 @@ const QString RfcCodecs::decodeRFC2047String( const QString &str,
     if ( valid ) {
       ch = *pos;
       *pos = '\0';
-      cstr = Q3CString (mid).left( (int)( mid - pos - 1 ) );
+      cstr = QByteArray (mid).left( (int)( mid - pos - 1 ) );
       if ( encoding == 'Q' ) {
         // decode quoted printable text
         for ( i = cstr.length () - 1; i >= 0; i-- ) {
@@ -554,7 +554,7 @@ const QString RfcCodecs::encodeRFC2231String( const QString &str )
     free( latin );
     return str;
   }
-  Q3CString result;
+  QByteArray result;
   l = latin;
   while ( *l ) {
     quote = *l < 0;
