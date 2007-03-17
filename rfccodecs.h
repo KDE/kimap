@@ -24,6 +24,9 @@
  * This file is part of the IMAP support library and defines the
  * RfcCodecs class.
  *
+ * @brief
+ * Provides handlers for various RFC/MIME encodings.
+ *
  * @author Sven Carstens
  */
 
@@ -38,81 +41,72 @@ class QTextCodec;
 
 namespace KIMAP {
 
-/**
- * @brief
- * Provides handlers for various RFC/MIME encodings.
- */
-class KIMAP_EXPORT RfcCodecs
-{
-  public:
+  /**
+    Converts an Unicode IMAP mailbox to a QString which can be used in
+    IMAP communication.
+    @param src is the QString containing the IMAP mailbox.
+  */
+  KIMAP_EXPORT QString encodeImapFolderName( const QString &src );
 
-    /**
-      Converts an Unicode IMAP mailbox to a QString which can be used in IMAP communication.
-      @param src is the QString containing the IMAP mailbox.
-    */
-    static QString encodeImapFolderName( const QString &src );
+  /**
+    Converts an UTF-7 encoded IMAP mailbox to a Unicode QString.
+    @param inSrc is the QString containing the Unicode path.
+  */
+  KIMAP_EXPORT QString decodeImapFolderName( const QString &inSrc );
 
-    /**
-      Converts an UTF-7 encoded IMAP mailbox to a Unicode QString.
-      @param inSrc is the QString containing the Unicode path.
-    */
-    static QString decodeImapFolderName( const QString &inSrc );
+  /**
+    Replaces " with \" and \ with \\ " and \ characters.
+    @param src is the QString to quote.
+  */
+  KIMAP_EXPORT QString quoteIMAP( const QString &src );
 
-    /**
-      Replaces " with \" and \ with \\ " and \ characters.
-      @param src is the QString to quote.
-    */
-    static QString quoteIMAP( const QString &src );
+  /**
+    Fetches a Codec by @p name.
+    @param name is the QString version of the Codec name.
+    @return Text Codec object
+  */
+  KIMAP_EXPORT QTextCodec *codecForName( const QString &name );
 
-    /**
-      Fetches a Codec by @p name.
-      @param name is the QString version of the Codec name.
-      @return Text Codec object
-    */
-    static QTextCodec *codecForName( const QString &name );
+  /**
+    Decodes a RFC2047 string @p str.
+    @param str is the QString to decode.
+    @param charset is the character set to use when decoding.
+    @param language is the language found in the charset.
+  */
+  KIMAP_EXPORT const QString decodeRFC2047String( const QString &str,
+                                                  QString &charset,
+                                                  QString &language );
+  /**
+    Decodes a RFC2047 string @p str.
+    @param str is the QString to decode.
+    @param charset is the character set to use when decoding.
+  */
+  KIMAP_EXPORT const QString decodeRFC2047String( const QString &str,
+                                                  QString &charset );
 
-    /**
-      Decodes a RFC2047 string @p str.
-      @param str is the QString to decode.
-      @param charset is the character set to use when decoding.
-      @param language is the language found in the charset.
-    */
-    static const QString decodeRFC2047String( const QString &str,
-                                              QString &charset,
-                                              QString &language );
-    /**
-      Decodes a RFC2047 string @p str.
-      @param str is the QString to decode.
-      @param charset is the character set to use when decoding.
-    */
-    static const QString decodeRFC2047String( const QString &str,
-                                              QString &charset );
+  /**
+    Decodes a RFC2047 string @p str.
+    @param str is the QString to decode.
+  */
+  KIMAP_EXPORT const QString decodeRFC2047String( const QString &str );
 
-    /**
-      Decodes a RFC2047 string @p str.
-      @param str is the QString to decode.
-    */
-    static const QString decodeRFC2047String( const QString &str );
+  /**
+    Encodes a RFC2047 string @p str.
+    @param str is the QString to encode.
+  */
+  KIMAP_EXPORT const QString encodeRFC2047String( const QString &str );
 
-    /**
-      Encodes a RFC2047 string @p str.
-      @param str is the QString to encode.
-    */
-    static const QString encodeRFC2047String( const QString &str );
+  /**
+    Encodes a RFC2231 string @p str.
+    @param str is the QString to encode.
+  */
+  KIMAP_EXPORT const QString encodeRFC2231String( const QString &str );
 
-    /**
-      Encodes a RFC2231 string @p str.
-      @param str is the QString to encode.
-    */
-    static const QString encodeRFC2231String( const QString &str );
-
-    /**
-      Decodes a RFC2231 string @p str.
-      @param str is the QString to decode.
-    */
-    static const QString decodeRFC2231String( const QString &str );
-};
-
+  /**
+    Decodes a RFC2231 string @p str.
+    @param str is the QString to decode.
+  */
+  KIMAP_EXPORT const QString decodeRFC2231String( const QString &str );
 }
 
 #endif

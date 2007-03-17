@@ -68,7 +68,7 @@ static const char especials[17] = "()<>@,;:\"/[]?.= ";
 //@endcond
 
 //-----------------------------------------------------------------------------
-QString RfcCodecs::decodeImapFolderName( const QString &inSrc )
+QString KIMAP::decodeImapFolderName( const QString &inSrc )
 {
   unsigned char c, i, bitcount;
   unsigned long ucs4, utf16, bitbuf;
@@ -153,7 +153,7 @@ QString RfcCodecs::decodeImapFolderName( const QString &inSrc )
 }
 
 //-----------------------------------------------------------------------------
-QString RfcCodecs::quoteIMAP( const QString &src )
+QString KIMAP::quoteIMAP( const QString &src )
 {
   uint len = src.length();
   QString result;
@@ -169,7 +169,7 @@ QString RfcCodecs::quoteIMAP( const QString &src )
 }
 
 //-----------------------------------------------------------------------------
-QString RfcCodecs::encodeImapFolderName( const QString &inSrc )
+QString KIMAP::encodeImapFolderName( const QString &inSrc )
 {
   unsigned int utf8pos, utf8total, c, utf7mode, bitstogo, utf16flag;
   unsigned int ucs4, bitbuf;
@@ -268,17 +268,17 @@ QString RfcCodecs::encodeImapFolderName( const QString &inSrc )
 }
 
 //-----------------------------------------------------------------------------
-QTextCodec *RfcCodecs::codecForName( const QString &str )
+QTextCodec *KIMAP::codecForName( const QString &str )
 {
   if ( str.isEmpty () ) {
-    return NULL;
+    return 0;
   }
   return QTextCodec::codecForName ( str.toLower ().
                                     replace ( "windows", "cp" ).toLatin1 () );
 }
 
 //-----------------------------------------------------------------------------
-const QString RfcCodecs::decodeRFC2047String( const QString &str )
+const QString KIMAP::decodeRFC2047String( const QString &str )
 {
   QString throw_away;
 
@@ -286,8 +286,8 @@ const QString RfcCodecs::decodeRFC2047String( const QString &str )
 }
 
 //-----------------------------------------------------------------------------
-const QString RfcCodecs::decodeRFC2047String( const QString &str,
-                                              QString &charset )
+const QString KIMAP::decodeRFC2047String( const QString &str,
+                                          QString &charset )
 {
   QString throw_away;
 
@@ -295,9 +295,9 @@ const QString RfcCodecs::decodeRFC2047String( const QString &str,
 }
 
 //-----------------------------------------------------------------------------
-const QString RfcCodecs::decodeRFC2047String( const QString &str,
-                                              QString &charset,
-                                              QString &language )
+const QString KIMAP::decodeRFC2047String( const QString &str,
+                                          QString &charset,
+                                          QString &language )
 {
   //do we have a rfc string
   if ( !str.contains( "=?" ) ) {
@@ -307,7 +307,7 @@ const QString RfcCodecs::decodeRFC2047String( const QString &str,
   // FIXME get rid of the conversion?
   QByteArray aStr = str.toAscii ();  // QString.length() means Unicode chars
   QByteArray result;
-  char *pos, *beg, *end, *mid = NULL;
+  char *pos, *beg, *end, *mid = 0;
   QByteArray cstr;
   char encoding = 0, ch;
   bool valid;
@@ -350,7 +350,7 @@ const QString RfcCodecs::decodeRFC2047String( const QString &str,
       }
       pos += 3;
       i += 3;
-//  kDebug(7116) << "RfcCodecs::decodeRFC2047String - charset " << charset
+//  kDebug(7116) << "KIMAP::decodeRFC2047String - charset " << charset
 //               << " - language " << language << " - '" << pos << "'" << endl;
     }
     if ( valid ) {
@@ -376,10 +376,10 @@ const QString RfcCodecs::decodeRFC2047String( const QString &str,
             cstr[i] = ' ';
           }
         }
-//    kDebug(7116) << "RfcCodecs::decodeRFC2047String - before QP '"
+//    kDebug(7116) << "KIMAP::decodeRFC2047String - before QP '"
 //    << cstr << "'" << endl;
         cstr = KCodecs::quotedPrintableDecode( cstr );
-//    kDebug(7116) << "RfcCodecs::decodeRFC2047String - after QP '"
+//    kDebug(7116) << "KIMAP::decodeRFC2047String - after QP '"
 //    << cstr << "'" << endl;
       } else {
         // decode base64 text
@@ -393,7 +393,7 @@ const QString RfcCodecs::decodeRFC2047String( const QString &str,
 
       pos = end - 1;
     } else {
-//    kDebug(7116) << "RfcCodecs::decodeRFC2047String - invalid" << endl;
+//    kDebug(7116) << "KIMAP::decodeRFC2047String - invalid" << endl;
       //result += "=?";
       //pos = beg -1; // because pos gets increased shortly afterwards
       pos = beg - 2;
@@ -412,7 +412,7 @@ const QString RfcCodecs::decodeRFC2047String( const QString &str,
 }
 
 //-----------------------------------------------------------------------------
-const QString RfcCodecs::encodeRFC2047String( const QString &str )
+const QString KIMAP::encodeRFC2047String( const QString &str )
 {
   if ( str.isEmpty () ) {
     return str;
@@ -531,7 +531,7 @@ const QString RfcCodecs::encodeRFC2047String( const QString &str )
 }
 
 //-----------------------------------------------------------------------------
-const QString RfcCodecs::encodeRFC2231String( const QString &str )
+const QString KIMAP::encodeRFC2231String( const QString &str )
 {
   if ( str.isEmpty () ) {
     return str;
@@ -585,7 +585,7 @@ const QString RfcCodecs::encodeRFC2231String( const QString &str )
 }
 
 //-----------------------------------------------------------------------------
-const QString RfcCodecs::decodeRFC2231String( const QString &str )
+const QString KIMAP::decodeRFC2231String( const QString &str )
 {
   int p = str.indexOf ( '\'' );
 
