@@ -14,7 +14,7 @@ kde4_automoc(${testrfccodecs_SRCS})
 
 kde4_add_executable(testrfccodecs NOGUI RUN_UNINSTALLED ${testrfccodecs_SRCS})
 
-target_link_libraries(testrfccodecs ${KDE4_KDECORE_LIBS} kimap ${QT_TEST_LIBRARY})
+target_link_libraries(testrfccodecs ${KDE4_KDECORE_LIBS} kimap ${QT_QTTEST_LIBRARY})
 
 add_test(kimap-testrfccodecs ${EXECUTABLE_OUTPUT_PATH}/testrfccodecs)
 

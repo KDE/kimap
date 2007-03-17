@@ -1,6 +1,7 @@
-/* This file is part of the KDE project
-   Copyright (C) 2004 David Faure <faure@kde.org>
+/*
+   This file is part of the kimap library.
    Copyright (C) 2007 Tom Albers <tomalbers@kde.nl>
+   Copyright (c) 2007 Allen Winter <winter@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -16,67 +17,41 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+#include <qtest_kde.h>
+
+#include "testrfccodecs.h"
+#include "testrfccodecs.moc"
+
+QTEST_KDEMAIN( RFCCodecsTest, NoGUI )
 
 #include "kimap/rfccodecs.h"
-
-#include <kcmdlineargs.h>
-#include <kdebug.h>
-
-#include <QCoreApplication>
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
-
 using namespace KIMAP;
 
-static bool check(const QString& txt, const QString& a, const QString& b)
+void RFCCodecsTest::testIMAPEncoding()
 {
-  if (a == b) {
-    kDebug() << txt << " : checking '" << a << "' against expected value '" << b << "'... " << "ok" << endl;
-  }
-  else {
-    kDebug() << txt << " : checking '" << a << "' against expected value '" << b << "'... " << "KO !" << endl;
-    exit(1);
-  }
-  return true;
-}
+  QString encoded, decoded;
 
-static bool checkIMAPEncoding( const QString& decodedIn, const QString& encodedIn )
-{
-  QString encoded = RfcCodecs::encodeImapFolderName( decodedIn );
-  check( "encode test: " + decodedIn + " encoded ", encoded, encodedIn );
-  
-  QString decoded = RfcCodecs::decodeImapFolderName( encodedIn );
-  check( "decode test: " + encodedIn + " decoded ", decoded, decodedIn );
-  return true;
-}
+  encoded = encodeImapFolderName( "Test.Frode Rønning" );
+  QVERIFY( encoded == "Test.Frode R&APg-nning" );
+  decoded = decodeImapFolderName( "Test.Frode R&APg-nning" );
+  QVERIFY( decoded == "Test.Frode Rønning" );
 
-static bool checkQuotes( const QString& input, const QString& expected )
-{
-  QString quoted = RfcCodecs::quoteIMAP(input);
-  check( "quoteIMAP test: " + input + " quoted ", quoted, expected );
-  return true;
-}
-
-int main(int argc, char *argv[])
-{
-  QCoreApplication app( argc, argv );
-
-  // Check basic encoding
-  checkIMAPEncoding("Test.Frode Rønning", "Test.Frode R&APg-nning");
-  checkIMAPEncoding("Test.tom & jerry", "Test.tom &- jerry");
+  encoded = encodeImapFolderName( "Test.tom & jerry" );
+  QVERIFY( encoded == "Test.tom &- jerry" );
+  decoded = decodeImapFolderName( "Test.tom &- jerry" );
+  QVERIFY( decoded == "Test.tom & jerry" );
 
   // Try to feed already encoded
-  checkIMAPEncoding("Test.Cl&AOE-udio", "Test.Cl&-AOE-udio");
+  encoded = encodeImapFolderName( "Test.Cl&AOE-udio" );
+  QVERIFY( encoded == "Test.Cl&-AOE-udio" );
+  decoded = decodeImapFolderName( "Test.Cl&-AOE-udio" );
+  QVERIFY( decoded == "Test.Cl&AOE-udio" );
+}
 
-  // QuoteImap Tests.
-  checkQuotes("tom\"allen","tom\\\"allen");
-  checkQuotes("tom\'allen","tom\'allen");
-  checkQuotes("tom\\allen","tom\\\\allen");
-
-  printf("\nTest OK !\n");
-
-  return 0;
+void RFCCodecsTest::testQuotes()
+{
+  QVERIFY( quoteIMAP( "tom\"allen" ) == "tom\\\"allen" );
+  QVERIFY( quoteIMAP( "tom\'allen" ) == "tom\'allen" );
+  QVERIFY( quoteIMAP( "tom\\allen" ) == "tom\\\\allen" );
 }
 
