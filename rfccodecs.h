@@ -33,7 +33,7 @@
 #ifndef KIMAP_RFCCODECS_H
 #define KIMAP_RFCCODECS_H
 
-#include <QString>
+#include <QtCore/QString>
 
 #include "kimap.h"
 
