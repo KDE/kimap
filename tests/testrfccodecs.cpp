@@ -22,7 +22,7 @@
 #include "testrfccodecs.h"
 #include "testrfccodecs.moc"
 
-QTEST_KDEMAIN( RFCCodecsTest, NoGUI )
+QTEST_KDEMAIN_CORE( RFCCodecsTest )
 
 #include "kimap/rfccodecs.h"
 using namespace KIMAP;
