@@ -23,14 +23,14 @@
 
 #include <kdemacros.h>
 
-#if defined(_WIN32) || defined(_WIN64)
-#ifdef MAKE_KIMAP_LIB
-#define KIMAP_EXPORT KDE_EXPORT
-#else
-#define KIMAP_EXPORT KDE_IMPORT
-#endif
-#else
-#define KIMAP_EXPORT KDE_EXPORT
+#ifndef KIMAP_EXPORT
+# if defined(MAKE_KIMAP_LIB)
+   /* We are building this library */
+#  define KIMAP_EXPORT KDE_EXPORT
+# else
+   /* We are using this library */
+#  define KIMAP_EXPORT KDE_IMPORT
+# endif
 #endif
 
 #endif
