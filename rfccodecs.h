@@ -35,7 +35,7 @@
 
 #include <QtCore/QString>
 
-#include "kimap.h"
+#include "kimap_export.h"
 
 class QTextCodec;
 

@@ -18,8 +18,8 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KIMAP_H
-#define KIMAP_H
+#ifndef KIMAP_EXPORT_H
+#define KIMAP_EXPORT_H
 
 #include <kdemacros.h>
 

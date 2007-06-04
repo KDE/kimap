@@ -17,4 +17,4 @@ install(TARGETS kimap  DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES kimap.h rfccodecs.h DESTINATION ${INCLUDE_INSTALL_DIR}/kimap  )
+install( FILES kimap_export.h rfccodecs.h DESTINATION ${INCLUDE_INSTALL_DIR}/kimap  )
