@@ -6,7 +6,6 @@ add_subdirectory( tests )
 set(kimap_LIB_SRCS
    rfccodecs.cpp)
 
-kde4_automoc(${kimap_LIB_SRCS})
 
 kde4_add_library(kimap SHARED ${kimap_LIB_SRCS})
 

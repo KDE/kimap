@@ -5,7 +5,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kimap )
 
 set(testrfccodecs_SRCS testrfccodecs.cpp )
 
-kde4_automoc(${testrfccodecs_SRCS})
 
 kde4_add_unit_test(testrfccodecs TESTNAME kimap-testrcfcodecs ${testrfccodecs_SRCS})
 
