@@ -350,8 +350,8 @@ const QString KIMAP::decodeRFC2047String( const QString &str,
       }
       pos += 3;
       i += 3;
-//  kDebug(7116) << "KIMAP::decodeRFC2047String - charset " << charset
-//               << " - language " << language << " - '" << pos << "'" << endl;
+//  kDebug(7116) << "KIMAP::decodeRFC2047String - charset" << charset
+//               << "- language" << language << "-'" << pos << "'";
     }
     if ( valid ) {
       mid = pos;
@@ -377,10 +377,10 @@ const QString KIMAP::decodeRFC2047String( const QString &str,
           }
         }
 //    kDebug(7116) << "KIMAP::decodeRFC2047String - before QP '"
-//    << cstr << "'" << endl;
+//    << cstr << "'";
         cstr = KCodecs::quotedPrintableDecode( cstr );
 //    kDebug(7116) << "KIMAP::decodeRFC2047String - after QP '"
-//    << cstr << "'" << endl;
+//    << cstr << "'";
       } else {
         // decode base64 text
         cstr = KCodecs::base64Decode( cstr );
@@ -393,7 +393,7 @@ const QString KIMAP::decodeRFC2047String( const QString &str,
 
       pos = end - 1;
     } else {
-//    kDebug(7116) << "KIMAP::decodeRFC2047String - invalid" << endl;
+//    kDebug(7116) << "KIMAP::decodeRFC2047String - invalid";
       //result += "=?";
       //pos = beg -1; // because pos gets increased shortly afterwards
       pos = beg - 2;
@@ -404,7 +404,7 @@ const QString KIMAP::decodeRFC2047String( const QString &str,
   if ( !charset.isEmpty () ) {
     QTextCodec *aCodec = codecForName( charset.toAscii () );
     if ( aCodec ) {
-//    kDebug(7116) << "Codec is " << aCodec->name() << endl;
+//    kDebug(7116) << "Codec is" << aCodec->name();
       return aCodec->toUnicode( result );
     }
   }
@@ -606,7 +606,7 @@ const QString KIMAP::decodeRFC2231String( const QString &str )
   QString st = str.mid ( l + 1 );
   QString language = str.mid ( p + 1, l - p - 1 );
 
-  //kDebug(7116) << "Charset: " << charset << " Language: " << language << endl;
+  //kDebug(7116) << "Charset:" << charset << "Language:" << language;
 
   char ch, ch2;
   p = 0;
