@@ -383,7 +383,7 @@ const QString KIMAP::decodeRFC2047String( const QString &str,
 //    << cstr << "'";
       } else {
         // decode base64 text
-        cstr = KCodecs::base64Decode( cstr );
+        cstr = QByteArray::fromBase64( cstr );
       }
       *pos = ch;
       int len = cstr.length();
