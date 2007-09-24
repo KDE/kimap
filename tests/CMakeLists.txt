@@ -1,6 +1,6 @@
 
 include_directories( ${CMAKE_SOURCE_DIR}/kimap )
-
+set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 ########### next target ###############
 
 set(testrfccodecs_SRCS testrfccodecs.cpp )
