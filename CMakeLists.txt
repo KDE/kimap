@@ -12,7 +12,11 @@ kde4_add_library(kimap SHARED ${kimap_LIB_SRCS})
 target_link_libraries(kimap ${KDE4_KDECORE_LIBS})
 
 set_target_properties(kimap PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
-install(TARGETS kimap  DESTINATION ${LIB_INSTALL_DIR} )
+install(TARGETS kimap  
+    RUNTIME DESTINATION ${BIN_INSTALL_DIR}
+    LIBRARY DESTINATION ${LIB_INSTALL_DIR}
+    ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
+)
 
 ########### install files ###############
 
