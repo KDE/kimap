@@ -31,20 +31,20 @@ void RFCCodecsTest::testIMAPEncoding()
 {
   QString encoded, decoded;
 
-  encoded = encodeImapFolderName( "Test.Frode Rønning" );
+  encoded = encodeImapFolderName( QString( "Test.Frode Rønning" ) );
   QVERIFY( encoded == "Test.Frode R&APg-nning" );
-  decoded = decodeImapFolderName( "Test.Frode R&APg-nning" );
+  decoded = decodeImapFolderName( QString( "Test.Frode R&APg-nning" ) );
   QVERIFY( decoded == "Test.Frode Rønning" );
 
-  encoded = encodeImapFolderName( "Test.tom & jerry" );
+  encoded = encodeImapFolderName( QString( "Test.tom & jerry" ) );
   QVERIFY( encoded == "Test.tom &- jerry" );
-  decoded = decodeImapFolderName( "Test.tom &- jerry" );
+  decoded = decodeImapFolderName( QString( "Test.tom &- jerry" ) );
   QVERIFY( decoded == "Test.tom & jerry" );
 
   // Try to feed already encoded
-  encoded = encodeImapFolderName( "Test.Cl&AOE-udio" );
+  encoded = encodeImapFolderName( QString( "Test.Cl&AOE-udio" ) );
   QVERIFY( encoded == "Test.Cl&-AOE-udio" );
-  decoded = decodeImapFolderName( "Test.Cl&-AOE-udio" );
+  decoded = decodeImapFolderName( QString( "Test.Cl&-AOE-udio" ) );
   QVERIFY( decoded == "Test.Cl&AOE-udio" );
 }
 
