@@ -414,13 +414,19 @@ const QString KIMAP::decodeRFC2047String( const QString &str,
 //-----------------------------------------------------------------------------
 const QString KIMAP::encodeRFC2047String( const QString &str )
 {
+  return encodeRFC2047String( str.toLatin1() );
+}
+
+//-----------------------------------------------------------------------------
+const QByteArray KIMAP::encodeRFC2047String( const QByteArray &str )
+{
   if ( str.isEmpty () ) {
     return str;
   }
 
   const signed char *latin =
     reinterpret_cast<const signed char *>
-    ( str.toLatin1().data() ), *l, *start, *stop;
+    ( str.data() ), *l, *start, *stop;
   char hexcode;
   int numQuotes, i;
   int rptr = 0;
@@ -526,7 +532,6 @@ const QString KIMAP::encodeRFC2047String( const QString &str )
     }
   }
   result[rptr] = 0;
-  //free (latinStart);
   return result;
 }
 
