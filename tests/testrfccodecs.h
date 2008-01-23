@@ -27,9 +27,9 @@
 class RFCCodecsTest : public QObject
 {
   Q_OBJECT
-private Q_SLOTS:
-  void testIMAPEncoding();
-  void testQuotes();
+  private Q_SLOTS:
+    void testIMAPEncoding();
+    void testQuotes();
 };
 
 #endif
