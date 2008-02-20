@@ -4,7 +4,6 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=5327 )
 
 add_subdirectory( tests )
 
-########### next target ###############
 
 set(kimap_LIB_SRCS
    rfccodecs.cpp)
@@ -19,4 +18,4 @@ install(TARGETS kimap ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES kimap_export.h rfccodecs.h DESTINATION ${INCLUDE_INSTALL_DIR}/kimap  )
+install( FILES kimap_export.h rfccodecs.h DESTINATION ${INCLUDE_INSTALL_DIR}/kimap  COMPONENT Devel)
