@@ -44,7 +44,7 @@ class SessionPrivate
     SessionPrivate( Session *session );
 
     void addJob(Job *job);
-    void sendCommand( const QByteArray &command );
+    QByteArray sendCommand( const QByteArray &command, const QByteArray &args = QByteArray() );
 
   private:
     void reconnect();
@@ -67,6 +67,10 @@ class SessionPrivate
     bool jobRunning;
     Job *currentJob;
     QQueue<Job*> queue;
+
+    QByteArray authTag;
+    QByteArray selectTag;
+    QByteArray closeTag;
 };
 
 }

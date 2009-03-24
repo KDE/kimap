@@ -119,15 +119,15 @@ void SessionPrivate::jobDestroyed( QObject *job )
 
 void SessionPrivate::responseReceived( const Message &response )
 {
+  QByteArray tag;
   QByteArray code;
-  QByteArray command;
+
+  if ( response.content.size()>=1 ) {
+    tag = response.content[0].toString();
+  }
 
   if ( response.content.size()>=2 ) {
     code = response.content[1].toString();
-  }
-
-  if ( response.content.size()>=3 ) {
-    command = response.content[2].toString();
   }
 
   switch ( state ) {
@@ -144,22 +144,26 @@ void SessionPrivate::responseReceived( const Message &response )
     }
     return;
   case Session::NotAuthenticated:
-    if ( code=="OK" && ( command=="LOGIN" || command=="AUTHENTICATE" ) ) {
+    if ( code=="OK" && tag==authTag ) {
       state = Session::Authenticated;
     }
     break;
   case Session::Authenticated:
-    if ( code=="OK" && ( command=="SELECT" || command=="EXAMINE" ) ) {
+    if ( code=="OK" && tag==selectTag ) {
       state = Session::Selected;
     }
     break;
   case Session::Selected:
-    if ( ( code=="OK" && command=="CLOSE" )
-      || ( code!="OK" && ( command=="SELECT" || command=="EXAMINE" ) ) ) {
+    if ( ( code=="OK" && tag==closeTag )
+      || ( code!="OK" && tag==selectTag) ) {
       state = Session::Authenticated;
     }
     break;
   }
+
+  if (tag==authTag) authTag.clear();
+  if (tag==selectTag) selectTag.clear();
+  if (tag==closeTag) closeTag.clear();
 
   // If a job is running forward it the response
   if ( currentJob!=0 ) {
@@ -169,9 +173,22 @@ void SessionPrivate::responseReceived( const Message &response )
   }
 }
 
-void SessionPrivate::sendCommand( const QByteArray &command )
+QByteArray SessionPrivate::sendCommand( const QByteArray &command, const QByteArray &args )
 {
-  socket->write(command);
+  static quint16 tagCount = 0;
+  QByteArray tag = "A" + QByteArray::number(++tagCount).rightJustified(6, '0');
+
+  socket->write(tag+' '+command+' '+args+"\r\n");
+
+  if ( command=="LOGIN" || command=="AUTHENTICATE" ) {
+    authTag = tag;
+  } else if ( command=="SELECT" || command=="EXAMINE" ) {
+    selectTag = tag;
+  } else if ( command=="CLOSE" ) {
+    closeTag = tag;
+  }
+
+  return tag;
 }
 
 #include "session.moc"

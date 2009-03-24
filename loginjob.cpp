@@ -35,6 +35,7 @@ namespace KIMAP
 
       QString userName;
       QString password;
+      QByteArray tag;
   };
 }
 
@@ -77,18 +78,15 @@ void LoginJob::setPassword( const QString &password )
 void LoginJob::doStart()
 {
   Q_D(LoginJob);
-  d->sessionInternal()->sendCommand(
-    QString( "A001 LOGIN %1 %2\r\n" )
-    .arg(d->userName)
-    .arg(d->password)
-    .toUtf8()
-  );
+  d->tag = d->sessionInternal()->sendCommand( "LOGIN", d->userName.toUtf8()+' '+d->password.toUtf8() );
 }
 
 void LoginJob::doHandleResponse( const Message &response )
 {
+  Q_D(LoginJob);
+
   if ( !response.content.isEmpty()
-    && response.content.first().toString()=="A001" ) {
+    && response.content.first().toString()==d->tag ) {
     if ( response.content.size() < 2 ) {
       setErrorText( i18n("Login failed, malformed reply from the server") );
     } else if ( response.content[1].toString()!="OK" ) {
