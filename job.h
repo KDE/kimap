@@ -46,6 +46,7 @@ class KIMAP_EXPORT Job : public KJob
   protected:
     virtual void doStart() = 0;
     virtual void doHandleResponse(const Message &response);
+    virtual void connectionLost();
 
     Job( Session *session );
     Job( JobPrivate &dd );

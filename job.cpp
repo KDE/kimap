@@ -21,6 +21,8 @@
 #include "job_p.h"
 #include "session_p.h"
 
+#include <KDE/KLocale>
+
 using namespace KIMAP;
 
 Job::Job( Session *session )
@@ -48,7 +50,13 @@ void Job::start()
 
 void Job::doHandleResponse(const Message &/*response*/)
 {
-  qDebug( "Mooooo" );
+}
+
+void Job::connectionLost()
+{
+  setError( KJob::UserDefinedError );
+  setErrorText( i18n("Connection to server lost") );
+  emitResult();
 }
 
 #include "job.moc"

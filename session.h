@@ -53,6 +53,9 @@ class KIMAP_EXPORT Session : public QObject
     Q_PRIVATE_SLOT( d, void jobDestroyed( QObject* ) )
     Q_PRIVATE_SLOT( d, void responseReceived( const KIMAP::Message& ) )
 
+    Q_PRIVATE_SLOT( d, void socketDisconnected() )
+    Q_PRIVATE_SLOT( d, void socketError() )
+
     SessionPrivate *const d;
 };
 

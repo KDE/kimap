@@ -6,6 +6,7 @@
 
 #include "kimap/session.h"
 #include "kimap/loginjob.h"
+#include "kimap/logoutjob.h"
 
 using namespace KIMAP;
 
@@ -32,8 +33,12 @@ int main( int argc, char **argv )
   login->setPassword(password);
   login->exec();
   Q_ASSERT_X(login->error()==0, "LoginJob", login->errorString().toLocal8Bit());
-
   Q_ASSERT(session.state()==Session::Authenticated);
+
+  LogoutJob *logout = new LogoutJob(&session);
+  logout->exec();
+  Q_ASSERT_X(logout->error()==0, "LogoutJob", logout->errorString().toLocal8Bit());
+  Q_ASSERT(session.state()==Session::Disconnected);
 
   return 0;
 }

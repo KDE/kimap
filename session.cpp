@@ -37,7 +37,10 @@ Session::Session( const QString &hostName, quint16 port, QObject *parent)
   d->jobRunning = false;
 
   d->socket = new SessionSocket;
-  //TODO: connects to catch errors
+  connect( d->socket, SIGNAL(disconnected()),
+           this, SLOT(socketDisconnected()) );
+  connect( d->socket, SIGNAL(error(QAbstractSocket::SocketError)),
+           this, SLOT(socketError()) );
 
   d->thread = new SessionThread( this );
   d->thread->setDevice(d->socket);
@@ -178,7 +181,13 @@ QByteArray SessionPrivate::sendCommand( const QByteArray &command, const QByteAr
   static quint16 tagCount = 0;
   QByteArray tag = "A" + QByteArray::number(++tagCount).rightJustified(6, '0');
 
-  socket->write(tag+' '+command+' '+args+"\r\n");
+  QByteArray payload = tag+' '+command;
+  if ( !args.isEmpty() ) {
+    payload+= ' '+args;
+  }
+  payload+="\r\n";
+
+  socket->write(payload);
 
   if ( command=="LOGIN" || command=="AUTHENTICATE" ) {
     authTag = tag;
@@ -189,6 +198,22 @@ QByteArray SessionPrivate::sendCommand( const QByteArray &command, const QByteAr
   }
 
   return tag;
+}
+
+void SessionPrivate::socketDisconnected()
+{
+  state = Session::Disconnected;
+  socket->close();
+
+  if ( currentJob ) {
+    currentJob->connectionLost();
+  }
+}
+
+void SessionPrivate::socketError()
+{
+  //qWarning() << "Socket error occurred:" << socket->errorString();
+  socketDisconnected();
 }
 
 #include "session.moc"

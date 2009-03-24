@@ -55,6 +55,9 @@ class SessionPrivate
     void jobDestroyed( QObject *job );
     void responseReceived( const KIMAP::Message &response );
 
+    void socketDisconnected();
+    void socketError();
+
     Session *const q;
 
     QString hostName;
