@@ -54,7 +54,7 @@ struct Message
 
 }
 
-Q_DECLARE_METATYPE(KIMAP::Message);
+Q_DECLARE_METATYPE(KIMAP::Message)
 static const int typeId = qRegisterMetaType<KIMAP::Message>();
 
 #endif
