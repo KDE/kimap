@@ -79,7 +79,9 @@ void SessionThread::run()
 
     emit responseReceived(message);
 
-    m_cond.wait(&m_mutex);
+    if ( m_stream->availableDataSize()==0 ) {
+      m_cond.wait(&m_mutex);
+    }
   }
 }
 

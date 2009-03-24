@@ -175,6 +175,8 @@ class KIMAP_EXPORT ImapStreamParser
      */
     QByteArray readRemainingData();
 
+    int availableDataSize() const;
+
     void setData( const QByteArray &data );
 
 

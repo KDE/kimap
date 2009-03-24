@@ -465,6 +465,11 @@ QByteArray ImapStreamParser::readRemainingData()
   return m_data.mid(m_position);
 }
 
+int ImapStreamParser::availableDataSize() const
+{
+  return m_socket->bytesAvailable()+m_data.size()-m_position;
+}
+
 bool ImapStreamParser::atCommandEnd()
 {
   if ( !waitForMoreData( m_position >= m_data.length() ) )
