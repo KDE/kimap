@@ -10,6 +10,7 @@ set(kimap_LIB_SRCS
    imapstreamparser.cpp
    job.cpp
    capabilitiesjob.cpp
+   listjob.cpp
    loginjob.cpp
    logoutjob.cpp
    rfccodecs.cpp
@@ -26,4 +27,4 @@ install(TARGETS kimap EXPORT kdepimlibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_
 
 ########### install files ###############
 
-install( FILES kimap_export.h job.h loginjob.h logoutjob.h rfccodecs.h session.h DESTINATION ${INCLUDE_INSTALL_DIR}/kimap  COMPONENT Devel)
+install( FILES kimap_export.h job.h listjob.h loginjob.h logoutjob.h rfccodecs.h session.h DESTINATION ${INCLUDE_INSTALL_DIR}/kimap  COMPONENT Devel)

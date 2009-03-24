@@ -7,6 +7,7 @@
 
 #include "kimap/session.h"
 #include "kimap/capabilitiesjob.h"
+#include "kimap/listjob.h"
 #include "kimap/loginjob.h"
 #include "kimap/logoutjob.h"
 
@@ -44,6 +45,23 @@ int main( int argc, char **argv )
   Q_ASSERT_X(capabilities->error()==0, "CapabilitiesJob", capabilities->errorString().toLocal8Bit());
   Q_ASSERT(session.state()==Session::Authenticated);
   kDebug() << capabilities->capabilities();
+
+  kDebug() << "Listing mailboxes:";
+  ListJob *list = new ListJob(&session);
+  list->exec();
+  Q_ASSERT_X(list->error()==0, "ListJob", list->errorString().toLocal8Bit());
+  Q_ASSERT(session.state()==Session::Authenticated);
+
+  int count = list->mailBoxes().size();
+  for (int i=0; i<count; ++i) {
+    QList<QByteArray> descriptor = list->mailBoxes()[i];
+    QByteArray mailBox;
+    for (int j=1; j<descriptor.size(); ++j) {
+      if (j!=1) mailBox+=descriptor[0];
+      mailBox+=descriptor[j];
+    }
+    kDebug() << mailBox;
+  }
 
   kDebug() << "Logging out...";
   LogoutJob *logout = new LogoutJob(&session);
