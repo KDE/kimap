@@ -3,8 +3,10 @@
 #include <kdebug.h>
 #include <qtcpsocket.h>
 #include <qcoreapplication.h>
+#include <qsignalspy.h>
 
 #include "kimap/session.h"
+#include "kimap/capabilitiesjob.h"
 #include "kimap/loginjob.h"
 #include "kimap/logoutjob.h"
 
@@ -28,6 +30,7 @@ int main( int argc, char **argv )
   QCoreApplication app(argc, argv);
   Session session(server, 143);
 
+  kDebug() << "Logging in...";
   LoginJob *login = new LoginJob(&session);
   login->setUserName(user);
   login->setPassword(password);
@@ -35,6 +38,14 @@ int main( int argc, char **argv )
   Q_ASSERT_X(login->error()==0, "LoginJob", login->errorString().toLocal8Bit());
   Q_ASSERT(session.state()==Session::Authenticated);
 
+  kDebug() << "Asking for capabilities:";
+  CapabilitiesJob *capabilities = new CapabilitiesJob(&session);
+  capabilities->exec();
+  Q_ASSERT_X(capabilities->error()==0, "CapabilitiesJob", capabilities->errorString().toLocal8Bit());
+  Q_ASSERT(session.state()==Session::Authenticated);
+  kDebug() << capabilities->capabilities();
+
+  kDebug() << "Logging out...";
   LogoutJob *logout = new LogoutJob(&session);
   logout->exec();
   Q_ASSERT_X(logout->error()==0, "LogoutJob", logout->errorString().toLocal8Bit());
