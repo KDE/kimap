@@ -85,8 +85,6 @@ void SessionThread::run()
       qWarning() << "The stream parser raised an exception:" << e.what();
     }
 
-    emit responseReceived(message);
-
     if ( m_stream->availableDataSize()==0 ) {
       m_cond.wait(&m_mutex);
     }
