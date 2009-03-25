@@ -19,6 +19,7 @@
 
 #include "sessionthread_p.h"
 
+#include <QtCore/QDebug>
 #include <QtCore/QIODevice>
 #include "imapstreamparser.h"
 #include "message_p.h"
@@ -59,22 +60,29 @@ void SessionThread::run()
     Message message;
     QList<Message::Part> *payload = &message.content;
 
-    while ( !m_stream->atCommandEnd() ) {
-      if ( m_stream->hasString() ) {
-        *payload << Message::Part(m_stream->readString());
-      } else if ( m_stream->hasList() ) {
-        *payload << Message::Part(m_stream->readParenthesizedList());
-      } else if ( m_stream->hasResponseCode() ) {
-        payload = &message.responseCode;
-      } else if ( m_stream->atResponseCodeEnd() ) {
-        payload = &message.content;
-      } else if ( m_stream->hasLiteral() ) {
-        QByteArray literal;
-        while ( !m_stream->atLiteralEnd() ) {
-          literal+= m_stream->readLiteralPart();
+    try {
+      while ( !m_stream->atCommandEnd() ) {
+        if ( m_stream->hasString() ) {
+          *payload << Message::Part(m_stream->readString());
+        } else if ( m_stream->hasList() ) {
+          *payload << Message::Part(m_stream->readParenthesizedList());
+        } else if ( m_stream->hasResponseCode() ) {
+          payload = &message.responseCode;
+        } else if ( m_stream->atResponseCodeEnd() ) {
+          payload = &message.content;
+        } else if ( m_stream->hasLiteral() ) {
+          QByteArray literal;
+          while ( !m_stream->atLiteralEnd() ) {
+            literal+= m_stream->readLiteralPart();
+          }
+          *payload << Message::Part(literal);
         }
-        *payload << Message::Part(literal);
       }
+
+      emit responseReceived(message);
+
+    } catch (KIMAP::ImapParserException e) {
+      qWarning() << "The stream parser raised an exception:" << e.what();
     }
 
     emit responseReceived(message);

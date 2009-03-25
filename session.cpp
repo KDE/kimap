@@ -28,6 +28,8 @@
 
 using namespace KIMAP;
 
+Q_DECLARE_METATYPE(QAbstractSocket::SocketError)
+
 Session::Session( const QString &hostName, quint16 port, QObject *parent)
   : QObject(parent), d(new SessionPrivate(this))
 {
@@ -39,6 +41,7 @@ Session::Session( const QString &hostName, quint16 port, QObject *parent)
   d->socket = new SessionSocket;
   connect( d->socket, SIGNAL(disconnected()),
            this, SLOT(socketDisconnected()) );
+  static int typeId = qRegisterMetaType<QAbstractSocket::SocketError>();
   connect( d->socket, SIGNAL(error(QAbstractSocket::SocketError)),
            this, SLOT(socketError()) );
 
