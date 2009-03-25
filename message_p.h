@@ -65,6 +65,23 @@ struct Message
         }
       }
 
+      if ( !responseCode.isEmpty() ) {
+        result+="[ ";
+        foreach ( const Part &part, responseCode ) {
+          if ( part.type()==Part::List ) {
+            result+='(';
+            foreach ( const QByteArray &item, part.toList() ) {
+              result+= ' ';
+              result+= item;
+            }
+            result+=" ) ";
+          } else {
+            result+= part.toString()+' ';
+          }
+        }
+        result+=" ]";
+      }
+
       return result;
     }
 
