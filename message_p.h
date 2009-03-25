@@ -36,7 +36,7 @@ struct Message
         explicit Part(const QByteArray &string)
           : m_type(String), m_string(string) { }
         explicit Part(const QList<QByteArray> &list)
-          : m_type(String), m_list(list) { }
+          : m_type(List), m_list(list) { }
 
         inline Type type() const { return m_type; }
         inline QByteArray toString() const { return m_string; }
@@ -47,6 +47,26 @@ struct Message
         QByteArray m_string;
         QList<QByteArray> m_list;
     };
+
+    inline QByteArray toString() const
+    {
+      QByteArray result;
+
+      foreach ( const Part &part, content ) {
+        if ( part.type()==Part::List ) {
+          result+='(';
+          foreach ( const QByteArray &item, part.toList() ) {
+            result+= ' ';
+            result+= item;
+          }
+          result+=" ) ";
+        } else {
+          result+= part.toString()+' ';
+        }
+      }
+
+      return result;
+    }
 
     QList<Part> content;
     QList<Part> responseCode;
