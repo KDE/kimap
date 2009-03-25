@@ -41,13 +41,13 @@ class KIMAP_EXPORT Session : public QObject
     enum State { Disconnected = 0, NotAuthenticated, Authenticated, Selected };
 
     explicit Session( const QString &hostName, quint16 port, QObject *parent=0 );
+    ~Session();
 
     QString hostName() const;
     quint16 port() const;
     State state() const;
 
   private:
-    Q_PRIVATE_SLOT( d, void reconnect() )
     Q_PRIVATE_SLOT( d, void doStartNext() )
     Q_PRIVATE_SLOT( d, void jobDone( KJob* ) )
     Q_PRIVATE_SLOT( d, void jobDestroyed( QObject* ) )

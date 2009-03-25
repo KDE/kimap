@@ -20,43 +20,56 @@
 #ifndef KIMAP_SESSIONTHREAD_P_H
 #define KIMAP_SESSIONTHREAD_P_H
 
-#include <QtCore/QThread>
 #include <QtCore/QMutex>
-#include <QtCore/QWaitCondition>
+#include <QtCore/QQueue>
+#include <QtCore/QThread>
 
-class QIODevice;
+#include <QtNetwork/QTcpSocket>
+
+typedef QTcpSocket SessionSocket;
 
 namespace KIMAP {
 
 class ImapStreamParser;
 class Message;
+class Session;
 
 class SessionThread : public QThread
 {
   Q_OBJECT
 
   public:
-    explicit SessionThread( QObject *parent = 0 );
+    explicit SessionThread( const QString &hostName, quint16 port, Session *parent );
     ~SessionThread();
 
-    void setDevice( QIODevice *device );
+    inline QString hostName() { return m_hostName; }
+    inline quint16 port() { return m_port; }
 
-    void sendCommand( const QByteArray &command );
+    void sendData( const QByteArray &payload );
     void run();
+
+  public slots:
+    void closeSocket();
+    void reconnect();
 
   signals:
     void responseReceived(const KIMAP::Message &response);
 
   private slots:
-    void requestResponse();
+    void readMessage();
+    void writeDataQueue();
 
   private:
-    QIODevice *m_device;
+    QString m_hostName;
+    quint16 m_port;
+
+    Session *m_session;
+    SessionSocket *m_socket;
     ImapStreamParser *m_stream;
 
+    QQueue<QByteArray> m_dataQueue;
+
     QMutex m_mutex;
-    QWaitCondition m_cond;
-    bool m_quit;
 };
 
 }

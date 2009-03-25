@@ -24,8 +24,6 @@
 #include <QtCore/QQueue>
 #include <QtCore/QString>
 
-#include <QtNetwork/QTcpSocket>
-
 class KJob;
 
 namespace KIMAP {
@@ -33,8 +31,6 @@ namespace KIMAP {
 class Job;
 class Message;
 class SessionThread;
-
-typedef QTcpSocket SessionSocket;
 
 class SessionPrivate
 {
@@ -60,11 +56,8 @@ class SessionPrivate
 
     Session *const q;
 
-    QString hostName;
-    quint16 port;
     Session::State state;
 
-    SessionSocket *socket;
     SessionThread *thread;
 
     bool jobRunning;

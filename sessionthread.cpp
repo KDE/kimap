@@ -20,93 +20,129 @@
 #include "sessionthread_p.h"
 
 #include <QtCore/QDebug>
-#include <QtCore/QIODevice>
+#include <QtCore/QTimer>
+
 #include "imapstreamparser.h"
 #include "message_p.h"
+#include "session.h"
 
 using namespace KIMAP;
 
-SessionThread::SessionThread( QObject *parent )
-  : QThread(parent), m_device(0), m_stream(0), m_quit(false)
-{
+Q_DECLARE_METATYPE(QAbstractSocket::SocketError)
+static const int _kimap_socketErrorTypeId = qRegisterMetaType<QAbstractSocket::SocketError>();
 
+SessionThread::SessionThread( const QString &hostName, quint16 port, Session *parent )
+  : QThread(), m_hostName(hostName), m_port(port),
+    m_session(parent), m_socket(0), m_stream(0)
+{
+  // Yeah, sounds weird, but QThread object is linked to the parent
+  // thread not to itself, and I'm too lazy to introduce yet another
+  // internal QObject
+  moveToThread(this);
 }
 
 SessionThread::~SessionThread()
 {
-  m_quit = true;
-  m_cond.wakeOne();
+  quit();
   wait();
-  delete m_stream;
-  delete m_device;
 }
 
-void SessionThread::requestResponse()
+void SessionThread::sendData( const QByteArray &payload )
 {
   QMutexLocker locker(&m_mutex);
 
-  if ( !isRunning() ) {
-    start();
-  } else {
-    m_cond.wakeOne();
+  m_dataQueue.enqueue( payload );
+  QTimer::singleShot( 0, this, SLOT( writeDataQueue() ) );
+}
+
+void SessionThread::writeDataQueue()
+{
+  QMutexLocker locker(&m_mutex);
+
+  while ( !m_dataQueue.isEmpty() ) {
+    m_socket->write( m_dataQueue.dequeue() );
+  }
+}
+
+void SessionThread::readMessage()
+{
+  QMutexLocker locker(&m_mutex);
+
+  if ( m_stream->availableDataSize()==0 ) {
+    return;
+  }
+
+  Message message;
+  QList<Message::Part> *payload = &message.content;
+
+  try {
+    while ( !m_stream->atCommandEnd() ) {
+      if ( m_stream->hasString() ) {
+        *payload << Message::Part(m_stream->readString());
+      } else if ( m_stream->hasList() ) {
+        *payload << Message::Part(m_stream->readParenthesizedList());
+      } else if ( m_stream->hasResponseCode() ) {
+        payload = &message.responseCode;
+      } else if ( m_stream->atResponseCodeEnd() ) {
+        payload = &message.content;
+      } else if ( m_stream->hasLiteral() ) {
+        QByteArray literal;
+        while ( !m_stream->atLiteralEnd() ) {
+          literal+= m_stream->readLiteralPart();
+        }
+        *payload << Message::Part(literal);
+      }
+    }
+
+    emit responseReceived(message);
+
+  } catch (KIMAP::ImapParserException e) {
+    qWarning() << "The stream parser raised an exception:" << e.what();
+  }
+
+  if ( m_stream->availableDataSize()>1 ) {
+    QTimer::singleShot( 0, this, SLOT( readMessage() ) );
+  }
+
+}
+
+void SessionThread::closeSocket()
+{
+  QMutexLocker locker(&m_mutex);
+
+  QMetaObject::invokeMethod( m_socket, "close" );
+}
+
+void SessionThread::reconnect()
+{
+  QMutexLocker locker(&m_mutex);
+
+  if ( m_socket->state() != SessionSocket::ConnectedState &&
+       m_socket->state() != SessionSocket::ConnectingState ) {
+    m_socket->connectToHost(m_hostName, m_port);
   }
 }
 
 void SessionThread::run()
 {
-  while ( !m_quit ) {
-    QMutexLocker locker(&m_mutex);
+  m_socket = new SessionSocket;
+  m_stream = new ImapStreamParser( m_socket );
+  connect( m_socket, SIGNAL(readyRead()),
+           this, SLOT(readMessage()), Qt::QueuedConnection );
 
-    Message message;
-    QList<Message::Part> *payload = &message.content;
+  connect( m_socket, SIGNAL(disconnected()),
+           m_session, SLOT(socketDisconnected()) );
+  connect( m_socket, SIGNAL(error(QAbstractSocket::SocketError)),
+           m_session, SLOT(socketError()) );
 
-    try {
-      while ( !m_stream->atCommandEnd() ) {
-        if ( m_stream->hasString() ) {
-          *payload << Message::Part(m_stream->readString());
-        } else if ( m_stream->hasList() ) {
-          *payload << Message::Part(m_stream->readParenthesizedList());
-        } else if ( m_stream->hasResponseCode() ) {
-          payload = &message.responseCode;
-        } else if ( m_stream->atResponseCodeEnd() ) {
-          payload = &message.content;
-        } else if ( m_stream->hasLiteral() ) {
-          QByteArray literal;
-          while ( !m_stream->atLiteralEnd() ) {
-            literal+= m_stream->readLiteralPart();
-          }
-          *payload << Message::Part(literal);
-        }
-      }
+  connect( this, SIGNAL(responseReceived(KIMAP::Message)),
+           m_session, SLOT(responseReceived(KIMAP::Message)) );
 
-      emit responseReceived(message);
+  QTimer::singleShot( 0, this, SLOT( reconnect() ) );
+  exec();
 
-    } catch (KIMAP::ImapParserException e) {
-      qWarning() << "The stream parser raised an exception:" << e.what();
-    }
-
-    if ( m_stream->availableDataSize()==0 ) {
-      m_cond.wait(&m_mutex);
-    }
-  }
-}
-
-void SessionThread::setDevice( QIODevice *device )
-{
-  QMutexLocker locker(&m_mutex);
   delete m_stream;
-  delete m_device;
-
-  m_device = device;
-
-  if ( m_device!=0 ) {
-    m_device->setParent(0);
-
-    m_stream = new ImapStreamParser( device );
-    connect( m_device, SIGNAL(readyRead()), this, SLOT(requestResponse()) );
-  } else {
-    m_stream = 0;
-  }
+  delete m_socket;
 }
 
 #include "sessionthread_p.moc"

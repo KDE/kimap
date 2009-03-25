@@ -19,48 +19,39 @@
 
 #include "session.h"
 #include "session_p.h"
-#include "job.h"
-#include "message_p.h"
-#include "sessionthread_p.h"
 
 #include <QtCore/QDebug>
 #include <QtCore/QTimer>
 
-using namespace KIMAP;
+#include "job.h"
+#include "message_p.h"
+#include "sessionthread_p.h"
 
-Q_DECLARE_METATYPE(QAbstractSocket::SocketError)
-static const int _kimap_socketErrorTypeId = qRegisterMetaType<QAbstractSocket::SocketError>();
+using namespace KIMAP;
 
 Session::Session( const QString &hostName, quint16 port, QObject *parent)
   : QObject(parent), d(new SessionPrivate(this))
 {
-  d->hostName = hostName;
-  d->port = port;
   d->state = Disconnected;
   d->jobRunning = false;
 
-  d->socket = new SessionSocket;
-  connect( d->socket, SIGNAL(disconnected()),
-           this, SLOT(socketDisconnected()) );
-  connect( d->socket, SIGNAL(error(QAbstractSocket::SocketError)),
-           this, SLOT(socketError()) );
+  d->thread = new SessionThread(hostName, port, this);
+  d->thread->start();
+}
 
-  d->thread = new SessionThread( this );
-  d->thread->setDevice(d->socket);
-  connect( d->thread, SIGNAL(responseReceived(KIMAP::Message)),
-           this, SLOT(responseReceived(KIMAP::Message)) );
-
-  d->reconnect();
+Session::~Session()
+{
+  delete d->thread;
 }
 
 QString Session::hostName() const
 {
-  return d->hostName;
+  return d->thread->hostName();
 }
 
 quint16 Session::port() const
 {
-  return d->port;
+  return d->thread->port();
 }
 
 Session::State Session::state() const
@@ -71,14 +62,6 @@ Session::State Session::state() const
 SessionPrivate::SessionPrivate( Session *session )
   : q(session)
 {
-}
-
-void SessionPrivate::reconnect()
-{
-  if ( socket->state() != SessionSocket::ConnectedState &&
-       socket->state() != SessionSocket::ConnectingState ) {
-    socket->connectToHost(hostName, port);
-  }
 }
 
 void SessionPrivate::addJob(Job *job)
@@ -145,8 +128,8 @@ void SessionPrivate::responseReceived( const Message &response )
       state = Session::Authenticated;
       startNext();
     } else {
-      socket->close();
-      QTimer::singleShot( 1000, q, SLOT( reconnect() ) );
+      thread->closeSocket();
+      QTimer::singleShot( 1000, thread, SLOT( reconnect() ) );
     }
     return;
   case Session::NotAuthenticated:
@@ -190,7 +173,7 @@ QByteArray SessionPrivate::sendCommand( const QByteArray &command, const QByteAr
   }
   payload+="\r\n";
 
-  socket->write(payload);
+  thread->sendData(payload);
 
   if ( command=="LOGIN" || command=="AUTHENTICATE" ) {
     authTag = tag;
@@ -206,7 +189,7 @@ QByteArray SessionPrivate::sendCommand( const QByteArray &command, const QByteAr
 void SessionPrivate::socketDisconnected()
 {
   state = Session::Disconnected;
-  socket->close();
+  thread->closeSocket();
 
   if ( currentJob ) {
     currentJob->connectionLost();
