@@ -65,16 +65,8 @@ void LogoutJob::doHandleResponse( const Message &response )
       setErrorText( i18n("Logout failed, malformed reply from the server") );
       emitResult();
     } else if ( response.content[1].toString()!="OK" ) {
-      QString status;
-      for ( QList<Message::Part>::ConstIterator it = response.content.begin()+1;
-            it!=response.content.end(); ++it ) {
-        if (it!=response.content.begin()+1) {
-          status+=' ';
-        }
-        status+=(*it).toString();
-      }
       setError( UserDefinedError );
-      setErrorText( i18n("Logout failed, server replied: %1", status) );
+      setErrorText( i18n("Logout failed, server replied: %1", response.toString().constData()) );
       emitResult();
     }
   }

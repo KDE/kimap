@@ -71,16 +71,8 @@ void CapabilitiesJob::doHandleResponse( const Message &response )
     if ( response.content.size() < 2 ) {
       setErrorText( i18n("Capabilities query failed, malformed reply from the server") );
     } else if ( response.content[1].toString()!="OK" ) {
-      QString status;
-      for ( QList<Message::Part>::ConstIterator it = response.content.begin()+1;
-            it!=response.content.end(); ++it ) {
-        if (it!=response.content.begin()+1) {
-          status+=' ';
-        }
-        status+=(*it).toString();
-      }
       setError( UserDefinedError );
-      setErrorText( i18n("Capabilities query failed, server replied: %1", status) );
+      setErrorText( i18n("Capabilities query failed, server replied: %1", response.toString().constData()) );
     }
 
     emitResult();
