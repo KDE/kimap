@@ -10,6 +10,7 @@
 #include "kimap/listjob.h"
 #include "kimap/loginjob.h"
 #include "kimap/logoutjob.h"
+#include "kimap/selectjob.h"
 
 using namespace KIMAP;
 
@@ -63,6 +64,21 @@ int main( int argc, char **argv )
     }
     kDebug() << mailBox;
   }
+
+
+  kDebug() << "Selecting INBOX:";
+  SelectJob *select = new SelectJob(&session);
+  select->setMailBox("INBOX");
+  select->exec();
+  Q_ASSERT_X(select->error()==0, "SelectJob", select->errorString().toLocal8Bit());
+  Q_ASSERT(session.state()==Session::Selected);
+  kDebug() << "Flags:" << select->flags();
+  kDebug() << "Permanent flags:" << select->permanentFlags();
+  kDebug() << "Total Number of Messages:" << select->messageCount();
+  kDebug() << "Number of recent Messages:" << select->recentCount();
+  kDebug() << "First Unseen Message Index:" << select->firstUnseenIndex();
+  kDebug() << "UID validity:" << select->uidValidity();
+  kDebug() << "Next UID:" << select->nextUid();
 
   kDebug() << "Logging out...";
   LogoutJob *logout = new LogoutJob(&session);
