@@ -49,7 +49,6 @@ int main( int argc, char **argv )
 
   kDebug() << "Listing mailboxes:";
   ListJob *list = new ListJob(&session);
-  list->setIncludeUnsubscribed(true);
   list->exec();
   Q_ASSERT_X(list->error()==0, "ListJob", list->errorString().toLocal8Bit());
   Q_ASSERT(session.state()==Session::Authenticated);
