@@ -17,6 +17,7 @@ set(kimap_LIB_SRCS
    selectjob.cpp
    session.cpp
    sessionthread.cpp
+   closejob.cpp
 )
 
 kde4_add_library(kimap SHARED ${kimap_LIB_SRCS})

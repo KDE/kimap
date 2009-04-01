@@ -11,6 +11,7 @@
 #include "kimap/loginjob.h"
 #include "kimap/logoutjob.h"
 #include "kimap/selectjob.h"
+#include "kimap/closejob.h"
 
 using namespace KIMAP;
 
@@ -78,6 +79,11 @@ int main( int argc, char **argv )
   kDebug() << "First Unseen Message Index:" << select->firstUnseenIndex();
   kDebug() << "UID validity:" << select->uidValidity();
   kDebug() << "Next UID:" << select->nextUid();
+
+  kDebug() << "Closing INBOX:";
+  CloseJob *close = new CloseJob(&session);
+  close->exec();
+  Q_ASSERT(session.state()==Session::Authenticated);
 
   kDebug() << "Logging out...";
   LogoutJob *logout = new LogoutJob(&session);
