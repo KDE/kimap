@@ -12,6 +12,7 @@
 #include "kimap/logoutjob.h"
 #include "kimap/selectjob.h"
 #include "kimap/closejob.h"
+#include "kimap/expungejob.h"
 
 using namespace KIMAP;
 
@@ -79,6 +80,11 @@ int main( int argc, char **argv )
   kDebug() << "First Unseen Message Index:" << select->firstUnseenIndex();
   kDebug() << "UID validity:" << select->uidValidity();
   kDebug() << "Next UID:" << select->nextUid();
+
+  kDebug() << "Expunge INBOX:";
+  ExpungeJob *expunge = new ExpungeJob(&session);
+  expunge->exec();
+  kDebug() << "Deleted items: " << expunge->deletedItems();
 
   kDebug() << "Closing INBOX:";
   CloseJob *close = new CloseJob(&session);
