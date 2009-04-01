@@ -83,10 +83,10 @@ void ExpungeJob::doHandleResponse( const Message &response )
         QByteArray s = response.content[1].toString();
         bool ok = true;
         int id = s.toInt(&ok);
-        if (!ok) {
-          //TODO error handling
+        if (ok) {
+          d->items.append(id);
         }
-        d->items.append(id);
+        //TODO error handling
         return;
       }
   }
