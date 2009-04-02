@@ -26,13 +26,18 @@ int main( int argc, char **argv )
   }
 
   QString server = QString::fromLocal8Bit(argv[1]);
+  int port = 143;
+  if ( server.count( ':' ) == 1 ) {
+    port = server.split( ':' ).last().toInt();
+    server = server.split( ':' ).first();
+  }
   QString user = QString::fromLocal8Bit(argv[2]);
   QString password = QString::fromLocal8Bit(argv[3]);
 
-  kDebug() << "Querying:" << server << user << password;
+  kDebug() << "Querying:" << server << port << user << password;
 
   QCoreApplication app(argc, argv);
-  Session session(server, 143);
+  Session session(server, port);
 
   kDebug() << "Logging in...";
   LoginJob *login = new LoginJob(&session);
