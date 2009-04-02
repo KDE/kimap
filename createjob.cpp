@@ -17,7 +17,7 @@
     02110-1301, USA.
 */
 
-#include "deletejob.h"
+#include "createjob.h"
 
 #include <KDE/KLocale>
 #include <KDE/KDebug>
@@ -28,11 +28,11 @@
 
 namespace KIMAP
 {
-  class DeleteJobPrivate : public JobPrivate
+  class CreateJobPrivate : public JobPrivate
   {
     public:
-      DeleteJobPrivate( Session *session ) : JobPrivate(session) { }
-      ~DeleteJobPrivate() { }
+      CreateJobPrivate( Session *session ) : JobPrivate(session) { }
+      ~CreateJobPrivate() { }
 
       QByteArray tag;
       QByteArray mailBox;
@@ -41,58 +41,59 @@ namespace KIMAP
 
 using namespace KIMAP;
 
-DeleteJob::DeleteJob( Session *session )
-  : Job( *new DeleteJobPrivate(session) )
+CreateJob::CreateJob( Session *session )
+  : Job( *new CreateJobPrivate(session) )
 {
 
 }
 
-DeleteJob::~DeleteJob()
+CreateJob::~CreateJob()
 {
 }
 
-void DeleteJob::doStart()
+void CreateJob::doStart()
 {
-  Q_D(DeleteJob);
-  d->tag = d->sessionInternal()->sendCommand( "DELETE", '\"'+d->mailBox+'\"' );
+  Q_D(CreateJob);
+  d->tag = d->sessionInternal()->sendCommand( "CREATE", '\"'+d->mailBox+'\"' );
 }
 
-void DeleteJob::doHandleResponse( const Message &response )
+void CreateJob::doHandleResponse( const Message &response )
 {
-  Q_D(DeleteJob);
+  Q_D(CreateJob);
 
   if ( !response.content.isEmpty()
     && response.content.first().toString()==d->tag ) {
     if ( response.content.size() < 2 ) {
-      setErrorText( i18n("Delete failed, malformed reply from the server") );
+      setErrorText( i18n("Create failed, malformed reply from the server") );
     } else
     if ( response.content[1].toString()=="NO" ) {
       setError( UserDefinedError );
-      setErrorText( i18n("Delete failed, can't delete mailbox. Server replied: %1", response.toString().constData()) );
+      setErrorText( i18n("Create failed, can't create mailbox with that name. Server replied: %1", response.toString().constData()) );
     } else
     if ( response.content[1].toString()!="OK" ) {
       setError( UserDefinedError );
-      setErrorText( i18n("Delete failed, server replied: %1", response.toString().constData()) );
+      setErrorText( i18n("Create failed, server replied: %1", response.toString().constData()) );
     }
     emitResult();
   }
 }
 
-void DeleteJob::connectionLost()
+void CreateJob::connectionLost()
 {
   emitResult();
 }
 
-void DeleteJob::setMailBox( const QByteArray &mailBox )
+void CreateJob::setMailBox( const QByteArray &mailBox )
 {
-  Q_D(DeleteJob);
+  Q_D(CreateJob);
   d->mailBox = mailBox;
 }
 
-QByteArray DeleteJob::mailBox() const
+QByteArray CreateJob::mailBox() const
 {
-  Q_D(const DeleteJob);
+  Q_D(const CreateJob);
   return d->mailBox;
 }
 
-#include "deletejob.moc"
+
+#include "createjob.moc"

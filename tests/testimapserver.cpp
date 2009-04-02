@@ -13,8 +13,62 @@
 #include "kimap/selectjob.h"
 #include "kimap/closejob.h"
 #include "kimap/expungejob.h"
+#include "kimap/createjob.h"
+#include "kimap/deletejob.h"
 
 using namespace KIMAP;
+
+void testDelete(Session *session)
+{
+  kDebug() << "Creating INBOX/TestFolder:";
+  CreateJob *create = new CreateJob(session);
+  create->setMailBox("INBOX/TestFolder");
+  create->exec();
+
+
+  kDebug() << "Listing  with name TestFolder  before DELETE:";
+  ListJob *list = new ListJob(session);
+  list->setIncludeUnsubscribed(true);
+  list->exec();
+  Q_ASSERT_X(list->error()==0, "ListJob", list->errorString().toLocal8Bit());
+//   Q_ASSERT(session->state()==Session::Authenticated);
+
+  int count = list->mailBoxes().size();
+  for (int i=0; i<count; ++i) {
+    QList<QByteArray> descriptor = list->mailBoxes()[i];
+    QByteArray mailBox;
+    for (int j=1; j<descriptor.size(); ++j) {
+      if (j!=1) mailBox+=descriptor[0];
+      mailBox+=descriptor[j];
+    }
+    if (mailBox.endsWith("TestFolder"))
+      kDebug() << mailBox;
+  }
+
+  kDebug() << "Deleting INBOX/TestFolder";
+  DeleteJob *deletejob = new DeleteJob(session);
+  deletejob->setMailBox("INBOX/TestFolder");
+  deletejob->exec();
+
+  kDebug() << "Listing with name TestFolder after DELETE:";
+  list = new ListJob(session);
+  list->setIncludeUnsubscribed(true);
+  list->exec();
+  Q_ASSERT_X(list->error()==0, "ListJob", list->errorString().toLocal8Bit());
+//   Q_ASSERT(session->state()==Session::Authenticated);
+
+  count = list->mailBoxes().size();
+  for (int i=0; i<count; ++i) {
+    QList<QByteArray> descriptor = list->mailBoxes()[i];
+    QByteArray mailBox;
+    for (int j=1; j<descriptor.size(); ++j) {
+      if (j!=1) mailBox+=descriptor[0];
+      mailBox+=descriptor[j];
+    }
+    if (mailBox.endsWith("TestFolder"))
+      kDebug() << mailBox;
+  }
+}
 
 int main( int argc, char **argv )
 {
@@ -71,7 +125,6 @@ int main( int argc, char **argv )
     kDebug() << mailBox;
   }
 
-
   kDebug() << "Selecting INBOX:";
   SelectJob *select = new SelectJob(&session);
   select->setMailBox("INBOX");
@@ -85,6 +138,8 @@ int main( int argc, char **argv )
   kDebug() << "First Unseen Message Index:" << select->firstUnseenIndex();
   kDebug() << "UID validity:" << select->uidValidity();
   kDebug() << "Next UID:" << select->nextUid();
+
+  testDelete(&session);
 
   kDebug() << "Expunge INBOX:";
   ExpungeJob *expunge = new ExpungeJob(&session);

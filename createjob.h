@@ -17,8 +17,8 @@
     02110-1301, USA.
 */
 
-#ifndef KIMAP_DELETEJOB_H
-#define KIMAP_DELETEJOB_H
+#ifndef KIMAP_CREATEJOB_H
+#define KIMAP_CREATEJOB_H
 
 #include "kimap_export.h"
 
@@ -28,18 +28,18 @@ namespace KIMAP {
 
 class Session;
 class Message;
-class DeleteJobPrivate;
+class CreateJobPrivate;
 
-class KIMAP_EXPORT DeleteJob : public Job
+class KIMAP_EXPORT CreateJob : public Job
 {
   Q_OBJECT
-  Q_DECLARE_PRIVATE(DeleteJob)
+  Q_DECLARE_PRIVATE(CreateJob)
 
   friend class SessionPrivate;
 
   public:
-    DeleteJob( Session *session );
-    virtual ~DeleteJob();
+    CreateJob( Session *session );
+    virtual ~CreateJob();
 
     void setMailBox( const QByteArray &mailBox );
     QByteArray mailBox() const;
