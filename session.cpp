@@ -60,7 +60,8 @@ Session::State Session::state() const
 }
 
 SessionPrivate::SessionPrivate( Session *session )
-  : q(session)
+  : q(session),
+    currentJob(0)
 {
 }
 
