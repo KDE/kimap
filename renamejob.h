@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2009 Kevin Ottens <ervin@kde.org>
+    Copyright (c) 2009 Andras Mantia <amantia@kde.org>
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Library General Public License as published by
@@ -17,8 +17,8 @@
     02110-1301, USA.
 */
 
-#ifndef KIMAP_LOGINJOB_H
-#define KIMAP_LOGINJOB_H
+#ifndef KIMAP_RENAMEJOB_H
+#define KIMAP_RENAMEJOB_H
 
 #include "kimap_export.h"
 
@@ -28,25 +28,33 @@ namespace KIMAP {
 
 class Session;
 class Message;
-class LoginJobPrivate;
+class RenameJobPrivate;
 
-class KIMAP_EXPORT LoginJob : public Job
+class KIMAP_EXPORT RenameJob : public Job
 {
   Q_OBJECT
-  Q_DECLARE_PRIVATE(LoginJob)
+  Q_DECLARE_PRIVATE(RenameJob)
 
   friend class SessionPrivate;
 
   public:
-    LoginJob( Session *session );
-    virtual ~LoginJob();
+    RenameJob( Session *session );
+    virtual ~RenameJob();
 
-    QString userName() const;
-    void setUserName( const QString &userName );
+    /**
+     * Set the name of the mailbox that will be renamed.
+     * @param mailBox the original name of the mailbox
+     */
+    void setMailBox( const QByteArray &mailBox );
+    QByteArray mailBox() const;
 
-    QString password() const;
-    void setPassword( const QString &password );
-
+    /**
+     * The new name of the mailbox, see setMailBox.
+     * @param mailBox the new mailbox name
+     */
+    void setNewMailBox( const QByteArray &mailBox );
+    QByteArray newMailBox() const;
+  
   protected:
     virtual void doStart();
 };

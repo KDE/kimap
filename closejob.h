@@ -43,8 +43,6 @@ class KIMAP_EXPORT CloseJob : public Job
 
   protected:
     virtual void doStart();
-    virtual void doHandleResponse(const Message &response);
-    virtual void connectionLost();
 };
 
 }

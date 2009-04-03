@@ -43,7 +43,6 @@ class KIMAP_EXPORT LogoutJob : public Job
 
   protected:
     virtual void doStart();
-    virtual void doHandleResponse(const Message &response);
     virtual void connectionLost();
 };
 

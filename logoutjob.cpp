@@ -30,19 +30,16 @@ namespace KIMAP
   class LogoutJobPrivate : public JobPrivate
   {
     public:
-      LogoutJobPrivate( Session *session ) : JobPrivate(session) { }
+      LogoutJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name) { }
       ~LogoutJobPrivate() { }
-
-      QByteArray tag;
   };
 }
 
 using namespace KIMAP;
 
 LogoutJob::LogoutJob( Session *session )
-  : Job( *new LogoutJobPrivate(session) )
+  : Job( *new LogoutJobPrivate(session, i18n("Logout")) )
 {
-
 }
 
 LogoutJob::~LogoutJob()
@@ -53,23 +50,6 @@ void LogoutJob::doStart()
 {
   Q_D(LogoutJob);
   d->tag = d->sessionInternal()->sendCommand( "LOGOUT" );
-}
-
-void LogoutJob::doHandleResponse( const Message &response )
-{
-  Q_D(LogoutJob);
-
-  if ( !response.content.isEmpty()
-    && response.content.first().toString()==d->tag ) {
-    if ( response.content.size() < 2 ) {
-      setErrorText( i18n("Logout failed, malformed reply from the server") );
-      emitResult();
-    } else if ( response.content[1].toString()!="OK" ) {
-      setError( UserDefinedError );
-      setErrorText( i18n("Logout failed, server replied: %1", response.toString().constData()) );
-      emitResult();
-    }
-  }
 }
 
 void LogoutJob::connectionLost()

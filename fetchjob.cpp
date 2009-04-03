@@ -30,7 +30,7 @@ namespace KIMAP
   class FetchJobPrivate : public JobPrivate
   {
     public:
-      FetchJobPrivate( Session *session ) : JobPrivate( session ) { }
+      FetchJobPrivate( Session *session, const QString& name ) : JobPrivate( session, name ) { }
       ~FetchJobPrivate() { }
 
       void parseBodyStructure( const QByteArray &structure, int &pos, KMime::Content *content );
@@ -57,7 +57,6 @@ namespace KIMAP
         return parts[id][partName];
       }
 
-      QByteArray tag;
       QByteArray set;
       FetchJob::FetchScope scope;
 
@@ -72,7 +71,7 @@ namespace KIMAP
 using namespace KIMAP;
 
 FetchJob::FetchJob( Session *session )
-  : Job( *new FetchJobPrivate(session) )
+  : Job( *new FetchJobPrivate(session, i18n("Fetch")) )
 {
   Q_D(FetchJob);
   d->scope.mode = FetchScope::Content;
@@ -176,69 +175,61 @@ void FetchJob::doHandleResponse( const Message &response )
 {
   Q_D(FetchJob);
 
-  if ( !response.content.isEmpty()
-    && response.content.first().toString()==d->tag ) {
-    if ( response.content.size() < 2 ) {
-      setErrorText( i18n("Fetch failed, malformed reply from the server") );
-    } else if ( response.content[1].toString()!="OK" ) {
-      setError( UserDefinedError );
-      setErrorText( i18n("Fetch failed, server replied: %1", response.toString().constData()) );
-    }
-
-    emitResult();
-  } else if ( response.content.size() == 4
+  if (handleErrorReplies(response) == NotHandled ) {
+    if ( response.content.size() == 4
            && response.content[2].toString()=="FETCH"
            && response.content[3].type()==Message::Part::List ) {
 
-    int id = response.content[1].toString().toInt();
-    QList<QByteArray> content = response.content[3].toList();
+      int id = response.content[1].toString().toInt();
+      QList<QByteArray> content = response.content[3].toList();
 
-    for ( QList<QByteArray>::ConstIterator it = content.begin();
-          it!=content.end(); ++it ) {
-      QByteArray str = *it;
-      ++it;
+      for ( QList<QByteArray>::ConstIterator it = content.begin();
+            it!=content.end(); ++it ) {
+        QByteArray str = *it;
+        ++it;
 
-      if ( str=="RFC822.SIZE" ) {
-        d->sizes[id] = it->toInt();
-      } else if ( str=="INTERNALDATE" ) {
-        d->message(id)->date()->setDateTime( KDateTime::fromString( *it, KDateTime::RFCDate ) );
-      } else if ( str=="FLAGS" ) {
-        if ( (*it).startsWith('(') && (*it).endsWith(')') ) {
-          QByteArray str = *it;
-          str.chop(1);
-          str.remove(0, 1);
-          d->flags[id] = str.split(' ');
-        } else {
-          d->flags[id] << *it;
-        }
-      } else if ( str=="BODYSTRUCTURE" ) {
-        int pos = 0;
-        d->parseBodyStructure(*it, pos, d->message(id).data());
-        d->message(id)->assemble();
-      } else if ( str.startsWith("BODY[") ) {
-        if ( !str.endsWith(']') ) { // BODY[ ... ] might have been split, skip until we find the ]
-          while ( !(*it).endsWith(']') ) ++it;
-          ++it;
-        }
-
-        int index;
-        if ( (index=str.indexOf("HEADER"))>0 || (index=str.indexOf("MIME"))>0 ) { // headers
-          if ( str[index-1]=='.' ) {
-            QByteArray partId = str.mid( 5, index-6 );
-            d->part( id, partId )->setHead(*it);
-            d->part( id, partId )->parse();
+        if ( str=="RFC822.SIZE" ) {
+          d->sizes[id] = it->toInt();
+        } else if ( str=="INTERNALDATE" ) {
+          d->message(id)->date()->setDateTime( KDateTime::fromString( *it, KDateTime::RFCDate ) );
+        } else if ( str=="FLAGS" ) {
+          if ( (*it).startsWith('(') && (*it).endsWith(')') ) {
+            QByteArray str = *it;
+            str.chop(1);
+            str.remove(0, 1);
+            d->flags[id] = str.split(' ');
           } else {
-            d->message(id)->setHead(*it);
-            d->message(id)->parse();
+            d->flags[id] << *it;
           }
-        } else { // full payload
-          if ( str=="BODY[]" ) {
-            d->message(id)->setContent(*it);
-            d->message(id)->parse();
-          } else {
-            QByteArray partId = str.mid( 5, str.size()-6 );
-            d->part( id, partId )->setBody(*it);
-            d->part( id, partId )->parse();
+        } else if ( str=="BODYSTRUCTURE" ) {
+          int pos = 0;
+          d->parseBodyStructure(*it, pos, d->message(id).data());
+          d->message(id)->assemble();
+        } else if ( str.startsWith("BODY[") ) {
+          if ( !str.endsWith(']') ) { // BODY[ ... ] might have been split, skip until we find the ]
+            while ( !(*it).endsWith(']') ) ++it;
+            ++it;
+          }
+
+          int index;
+          if ( (index=str.indexOf("HEADER"))>0 || (index=str.indexOf("MIME"))>0 ) { // headers
+            if ( str[index-1]=='.' ) {
+              QByteArray partId = str.mid( 5, index-6 );
+              d->part( id, partId )->setHead(*it);
+              d->part( id, partId )->parse();
+            } else {
+              d->message(id)->setHead(*it);
+              d->message(id)->parse();
+            }
+          } else { // full payload
+            if ( str=="BODY[]" ) {
+              d->message(id)->setContent(*it);
+              d->message(id)->parse();
+            } else {
+              QByteArray partId = str.mid( 5, str.size()-6 );
+              d->part( id, partId )->setBody(*it);
+              d->part( id, partId )->parse();
+            }
           }
         }
       }

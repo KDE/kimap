@@ -17,7 +17,7 @@
     02110-1301, USA.
 */
 
-#include "deletejob.h"
+#include "renamejob.h"
 
 #include <KDE/KLocale>
 #include <KDE/KDebug>
@@ -28,43 +28,57 @@
 
 namespace KIMAP
 {
-  class DeleteJobPrivate : public JobPrivate
+  class RenameJobPrivate : public JobPrivate
   {
     public:
-      DeleteJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name) { }
-      ~DeleteJobPrivate() { }
+      RenameJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name) { }
+      ~RenameJobPrivate() { }
 
       QByteArray mailBox;
+      QByteArray newMailBox;
   };
 }
 
 using namespace KIMAP;
 
-DeleteJob::DeleteJob( Session *session )
-  : Job( *new DeleteJobPrivate(session, i18n("Delete")) )
+RenameJob::RenameJob( Session *session )
+  : Job( *new RenameJobPrivate(session, i18n("Rename")) )
 {
 }
 
-DeleteJob::~DeleteJob()
+RenameJob::~RenameJob()
 {
 }
 
-void DeleteJob::doStart()
+void RenameJob::doStart()
 {
-  Q_D(DeleteJob);
-  d->tag = d->sessionInternal()->sendCommand( "DELETE", '\"'+d->mailBox+'\"' );
+  Q_D(RenameJob);
+  d->tag = d->sessionInternal()->sendCommand( "RENAME", '\"' + d->mailBox + "\" \"" + d->newMailBox + '\"' );
 }
 
-void DeleteJob::setMailBox( const QByteArray &mailBox )
+void RenameJob::setMailBox( const QByteArray &mailBox )
 {
-  Q_D(DeleteJob);
+  Q_D(RenameJob);
   d->mailBox = mailBox;
 }
 
-QByteArray DeleteJob::mailBox() const
+QByteArray RenameJob::mailBox() const
 {
-  Q_D(const DeleteJob);
+  Q_D(const RenameJob);
   return d->mailBox;
 }
 
-#include "deletejob.moc"
+void RenameJob::setNewMailBox( const QByteArray &mailBox )
+{
+  Q_D(RenameJob);
+  d->newMailBox = mailBox;
+}
+
+QByteArray RenameJob::newMailBox() const
+{
+  Q_D(const RenameJob);
+  return d->newMailBox;
+}
+
+
+#include "renamejob.moc"

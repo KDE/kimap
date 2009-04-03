@@ -30,11 +30,10 @@ namespace KIMAP
   class ListJobPrivate : public JobPrivate
   {
     public:
-      ListJobPrivate( Session *session ) : JobPrivate(session), includeUnsubscribed(false) { }
+      ListJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name), includeUnsubscribed(false) { }
       ~ListJobPrivate() { }
 
       bool includeUnsubscribed;
-      QByteArray tag;
       QByteArray command;
       QList< QList<QByteArray> > descriptors;
   };
@@ -43,9 +42,8 @@ namespace KIMAP
 using namespace KIMAP;
 
 ListJob::ListJob( Session *session )
-  : Job( *new ListJobPrivate(session) )
+  : Job( *new ListJobPrivate(session, i18n("List")) )
 {
-
 }
 
 ListJob::~ListJob()
@@ -86,28 +84,20 @@ void ListJob::doHandleResponse( const Message &response )
 {
   Q_D(ListJob);
 
-  if ( !response.content.isEmpty()
-    && response.content.first().toString()==d->tag ) {
-    if ( response.content.size() < 2 ) {
-      setErrorText( i18n("List failed, malformed reply from the server") );
-    } else if ( response.content[1].toString()!="OK" ) {
-      setError( UserDefinedError );
-      setErrorText( i18n("List failed, server replied: %1", response.toString().constData()) );
-    }
-
-    emitResult();
-  } else if ( response.content.size() == 5
+  if (handleErrorReplies(response) == NotHandled) {
+    if ( response.content.size() == 5
            && response.content[1].toString()==d->command ) {
-    QByteArray separator = response.content[3].toString();
-    Q_ASSERT(separator.size()==1);
-    QByteArray fullName = response.content[4].toString();
+      QByteArray separator = response.content[3].toString();
+      Q_ASSERT(separator.size()==1);
+      QByteArray fullName = response.content[4].toString();
 
-    QList<QByteArray> mailBoxDescriptor;
-    mailBoxDescriptor << separator;
-    mailBoxDescriptor << fullName.split(separator[0]);
+      QList<QByteArray> mailBoxDescriptor;
+      mailBoxDescriptor << separator;
+      mailBoxDescriptor << fullName.split(separator[0]);
 
-    d->descriptors << mailBoxDescriptor;
-    emit mailBoxReceived( mailBoxDescriptor );
+      d->descriptors << mailBoxDescriptor;
+      emit mailBoxReceived( mailBoxDescriptor );
+    }
   }
 }
 

@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2009 Kevin Ottens <ervin@kde.org>
+    Copyright (c) 2009 Andras Mantia <amantia@kde.org>
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Library General Public License as published by
@@ -17,8 +17,8 @@
     02110-1301, USA.
 */
 
-#ifndef KIMAP_LOGINJOB_H
-#define KIMAP_LOGINJOB_H
+#ifndef KIMAP_CHECKJOB_H
+#define KIMAP_CHECKJOB_H
 
 #include "kimap_export.h"
 
@@ -28,24 +28,18 @@ namespace KIMAP {
 
 class Session;
 class Message;
-class LoginJobPrivate;
+class CheckJobPrivate;
 
-class KIMAP_EXPORT LoginJob : public Job
+class KIMAP_EXPORT CheckJob : public Job
 {
   Q_OBJECT
-  Q_DECLARE_PRIVATE(LoginJob)
+  Q_DECLARE_PRIVATE(CheckJob)
 
   friend class SessionPrivate;
 
   public:
-    LoginJob( Session *session );
-    virtual ~LoginJob();
-
-    QString userName() const;
-    void setUserName( const QString &userName );
-
-    QString password() const;
-    void setPassword( const QString &password );
+    CheckJob( Session *session );
+    virtual ~CheckJob();
 
   protected:
     virtual void doStart();

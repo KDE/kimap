@@ -21,6 +21,7 @@
 #define KIMAP_JOB_P_H
 
 #include "session.h"
+#include <KDE/KLocale>
 
 namespace KIMAP {
 
@@ -29,14 +30,18 @@ class SessionPrivate;
 class JobPrivate
 {
   public:
-    JobPrivate( Session *session ) : m_session(session) { }
+    JobPrivate( Session *session, const QString& name ) : m_session(session)  {
+      m_name = name;
+    }
     virtual ~JobPrivate() { }
 
     inline SessionPrivate *sessionInternal() {
       return m_session->d;
     }
 
+    QByteArray tag;
     Session *m_session;
+    QString m_name;
 };
 
 }

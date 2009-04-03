@@ -30,19 +30,16 @@ namespace KIMAP
   class CloseJobPrivate : public JobPrivate
   {
     public:
-      CloseJobPrivate( Session *session ) : JobPrivate(session) { }
+      CloseJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name) { }
       ~CloseJobPrivate() { }
-
-      QByteArray tag;
   };
 }
 
 using namespace KIMAP;
 
 CloseJob::CloseJob( Session *session )
-  : Job( *new CloseJobPrivate(session) )
+  : Job( *new CloseJobPrivate(session, i18n("Close")) )
 {
-
 }
 
 CloseJob::~CloseJob()
@@ -53,27 +50,6 @@ void CloseJob::doStart()
 {
   Q_D(CloseJob);
   d->tag = d->sessionInternal()->sendCommand( "CLOSE" );
-}
-
-void CloseJob::doHandleResponse( const Message &response )
-{
-  Q_D(CloseJob);
-
-  if ( !response.content.isEmpty()
-    && response.content.first().toString()==d->tag ) {
-    if ( response.content.size() < 2 ) {
-      setErrorText( i18n("Close failed, malformed reply from the server") );
-    } else if ( response.content[1].toString()!="OK" ) {
-      setError( UserDefinedError );
-      setErrorText( i18n("Close failed, server replied: %1", response.toString().constData()) );
-    }
-  }
-  emitResult();
-}
-
-void CloseJob::connectionLost()
-{
-  emitResult();
 }
 
 #include "closejob.moc"

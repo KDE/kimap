@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2009 Kevin Ottens <ervin@kde.org>
+    Copyright (c) 2009 Andras Mantia <amantia@kde.org>
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Library General Public License as published by
@@ -17,40 +17,39 @@
     02110-1301, USA.
 */
 
-#ifndef KIMAP_LOGINJOB_H
-#define KIMAP_LOGINJOB_H
+#include "noopjob.h"
 
-#include "kimap_export.h"
+#include <KDE/KLocale>
 
-#include "job.h"
+#include "job_p.h"
+#include "message_p.h"
+#include "session_p.h"
 
-namespace KIMAP {
-
-class Session;
-class Message;
-class LoginJobPrivate;
-
-class KIMAP_EXPORT LoginJob : public Job
+namespace KIMAP
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE(LoginJob)
-
-  friend class SessionPrivate;
-
-  public:
-    LoginJob( Session *session );
-    virtual ~LoginJob();
-
-    QString userName() const;
-    void setUserName( const QString &userName );
-
-    QString password() const;
-    void setPassword( const QString &password );
-
-  protected:
-    virtual void doStart();
-};
-
+  class NoopJobPrivate : public JobPrivate
+  {
+    public:
+      NoopJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name) { }
+      ~NoopJobPrivate() { }
+  };
 }
 
-#endif
+using namespace KIMAP;
+
+NoopJob::NoopJob( Session *session )
+  : Job( *new NoopJobPrivate(session, i18n("Noop")) )
+{
+}
+
+NoopJob::~NoopJob()
+{
+}
+
+void NoopJob::doStart()
+{
+  Q_D(NoopJob);
+  d->tag = d->sessionInternal()->sendCommand( "NOOP" );
+}
+
+#include "noopjob.moc"

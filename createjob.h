@@ -46,8 +46,6 @@ class KIMAP_EXPORT CreateJob : public Job
 
   protected:
     virtual void doStart();
-    virtual void doHandleResponse(const Message &response);
-    virtual void connectionLost();
 };
 
 }

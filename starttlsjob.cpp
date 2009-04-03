@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2009 Kevin Ottens <ervin@kde.org>
+    Copyright (c) 2009 Andras Mantia <amantia@kde.org>
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Library General Public License as published by
@@ -17,68 +17,69 @@
     02110-1301, USA.
 */
 
-#include "job.h"
+#include "starttlsjob.h"
+
+#include <KDE/KLocale>
+#include <KDE/KDebug>
+
 #include "job_p.h"
 #include "message_p.h"
 #include "session_p.h"
 
-#include <KDE/KLocale>
+namespace KIMAP
+{
+  class StartTlsJobPrivate : public JobPrivate
+  {
+    public:
+      StartTlsJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name) { }
+      ~StartTlsJobPrivate() { }
+
+      QList< int > items;
+  };
+}
 
 using namespace KIMAP;
 
-Job::Job( Session *session )
-  : d_ptr(new JobPrivate(session, i18n("Job")))
+StartTlsJob::StartTlsJob( Session *session )
+  : Job( *new StartTlsJobPrivate(session, i18n("StartTLS")) )
 {
-
 }
 
-Job::Job( JobPrivate &dd )
-  : d_ptr(&dd)
+StartTlsJob::~StartTlsJob()
 {
-
 }
 
-Job::~Job()
+void StartTlsJob::doStart()
 {
-  delete d_ptr;
+  Q_D(StartTlsJob);
+  d->tag = d->sessionInternal()->sendCommand( "STARTTLS" );
 }
 
-void Job::start()
+void StartTlsJob::doHandleResponse( const Message &response )
 {
-  Q_D(Job);
-  d->sessionInternal()->addJob(this);
-}
+  Q_D(StartTlsJob);
 
-void Job::doHandleResponse(const Message &response)
-{
-  handleErrorReplies(response);
-}
-
-void Job::connectionLost()
-{
-  setError( KJob::UserDefinedError );
-  setErrorText( i18n("Connection to server lost") );
-  emitResult();
-}
-
-Job::HandlerResponse Job::handleErrorReplies(const Message &response)
-{
-  Q_D(Job);
-  
   if ( !response.content.isEmpty()
        && response.content.first().toString() == d->tag ) {
     if ( response.content.size() < 2 ) {
       setErrorText( i18n("%1 failed, malformed reply from the server").arg(d->m_name) );
-    } else if ( response.content[1].toString() != "OK" ) {
+    } else
+    if ( response.content[1].toString() != "OK" ) {
       setError( UserDefinedError );
       setErrorText( i18n("%1 failed, server replied: %2", d->m_name, response.toString().constData()) );
+    } else
+    if ( response.content[1].toString() == "OK" ) {
+      //TODO: implement TLS layer commands
     }
     emitResult();
-    return Handled;
   }
+}
 
-  return NotHandled;
+QList< int > StartTlsJob::deletedItems() const
+{
+  Q_D(const StartTlsJob);
+  return d->items;
 }
 
 
-#include "job.moc"
+#include "starttlsjob.moc"

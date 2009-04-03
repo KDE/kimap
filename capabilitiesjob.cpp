@@ -30,20 +30,18 @@ namespace KIMAP
   class CapabilitiesJobPrivate : public JobPrivate
   {
     public:
-      CapabilitiesJobPrivate( Session *session ) : JobPrivate(session) { }
+      CapabilitiesJobPrivate( Session *session,  const QString& name ) : JobPrivate(session, name) { }
       ~CapabilitiesJobPrivate() { }
 
       QStringList capabilities;
-      QByteArray tag;
   };
 }
 
 using namespace KIMAP;
 
 CapabilitiesJob::CapabilitiesJob( Session *session )
-  : Job( *new CapabilitiesJobPrivate(session) )
+  : Job( *new CapabilitiesJobPrivate(session, i18n("Capabilities")) )
 {
-
 }
 
 CapabilitiesJob::~CapabilitiesJob()
@@ -64,24 +62,16 @@ void CapabilitiesJob::doStart()
 
 void CapabilitiesJob::doHandleResponse( const Message &response )
 {
+
   Q_D(CapabilitiesJob);
-
-  if ( !response.content.isEmpty()
-    && response.content.first().toString()==d->tag ) {
-    if ( response.content.size() < 2 ) {
-      setErrorText( i18n("Capabilities query failed, malformed reply from the server") );
-    } else if ( response.content[1].toString()!="OK" ) {
-      setError( UserDefinedError );
-      setErrorText( i18n("Capabilities query failed, server replied: %1", response.toString().constData()) );
-    }
-
-    emitResult();
-  } else if ( response.content.size() >= 2
+  if (handleErrorReplies(response) == NotHandled) {
+    if ( response.content.size() >= 2
            && response.content[1].toString()=="CAPABILITY" ) {
-    for (int i=2; i<response.content.size(); ++i) {
-      d->capabilities << response.content[i].toString();
+      for (int i=2; i<response.content.size(); ++i) {
+        d->capabilities << response.content[i].toString();
+      }
+      emit capabilitiesReceived(d->capabilities);
     }
-    emit capabilitiesReceived(d->capabilities);
   }
 }
 

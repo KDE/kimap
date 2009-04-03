@@ -30,12 +30,11 @@ namespace KIMAP
   class SelectJobPrivate : public JobPrivate
   {
     public:
-      SelectJobPrivate( Session *session )
-        : JobPrivate(session), readOnly(false), messageCount(-1), recentCount(-1),
+      SelectJobPrivate( Session *session, const QString& name )
+        : JobPrivate(session, name), readOnly(false), messageCount(-1), recentCount(-1),
           firstUnseenIndex(-1), uidValidity(-1), nextUid(-1) { }
       ~SelectJobPrivate() { }
 
-      QByteArray tag;
       QByteArray mailBox;
       bool readOnly;
 
@@ -52,9 +51,8 @@ namespace KIMAP
 using namespace KIMAP;
 
 SelectJob::SelectJob( Session *session )
-  : Job( *new SelectJobPrivate(session) )
+  : Job( *new SelectJobPrivate(session, i18n("Select")) )
 {
-
 }
 
 SelectJob::~SelectJob()
@@ -143,55 +141,47 @@ void SelectJob::doHandleResponse( const Message &response )
 {
   Q_D(SelectJob);
 
-  if ( !response.content.isEmpty()
-    && response.content.first().toString()==d->tag ) {
-    if ( response.content.size() < 2 ) {
-      setErrorText( i18n("Select failed, malformed reply from the server") );
-    } else if ( response.content[1].toString()!="OK" ) {
-      setError( UserDefinedError );
-      setErrorText( i18n("Select failed, server replied: %1", response.toString().constData()) );
-    }
+  if ( handleErrorReplies(response) == NotHandled) {
+      if ( response.content.size() >= 2 ) {
+        QByteArray code = response.content[1].toString();
 
-    emitResult();
-  } else if ( response.content.size() >= 2 ) {
-    QByteArray code = response.content[1].toString();
+        if ( code=="OK" ) {
+          if ( response.responseCode.size() < 2 ) return;
 
-    if ( code=="OK" ) {
-      if ( response.responseCode.size() < 2 ) return;
+          code = response.responseCode[0].toString();
 
-      code = response.responseCode[0].toString();
+          if ( code=="PERMANENTFLAGS" ) {
+            d->permanentFlags = response.responseCode[1].toList();
+          } else {
+            bool isInt;
+            int value = response.responseCode[1].toString().toInt(&isInt);
+            if ( !isInt ) return;
 
-      if ( code=="PERMANENTFLAGS" ) {
-        d->permanentFlags = response.responseCode[1].toList();
-      } else {
-        bool isInt;
-        int value = response.responseCode[1].toString().toInt(&isInt);
-        if ( !isInt ) return;
+            if ( code=="UNSEEN" ) {
+              d->firstUnseenIndex = value;
+            } else if ( code=="UIDVALIDITY" ) {
+              d->uidValidity = value;
+            } else if ( code=="UIDNEXT" ) {
+              d->nextUid = value;
+            }
+          }
+        } else if ( code=="FLAGS" ) {
+          d->flags = response.content[2].toList();
+        } else {
+          bool isInt;
+          int value = response.content[1].toString().toInt(&isInt);
+          if ( !isInt || response.content.size()<3 ) return;
 
-        if ( code=="UNSEEN" ) {
-          d->firstUnseenIndex = value;
-        } else if ( code=="UIDVALIDITY" ) {
-          d->uidValidity = value;
-        } else if ( code=="UIDNEXT" ) {
-          d->nextUid = value;
+          code = response.content[2].toString();
+          if ( code=="EXISTS" ) {
+            d->messageCount = value;
+          } else if ( code=="RECENT" ) {
+            d->recentCount = value;
+          }
         }
+      } else {
+        qDebug("%s", response.toString().constData());
       }
-    } else if ( code=="FLAGS" ) {
-      d->flags = response.content[2].toList();
-    } else {
-      bool isInt;
-      int value = response.content[1].toString().toInt(&isInt);
-      if ( !isInt || response.content.size()<3 ) return;
-
-      code = response.content[2].toString();
-      if ( code=="EXISTS" ) {
-        d->messageCount = value;
-      } else if ( code=="RECENT" ) {
-        d->recentCount = value;
-      }
-    }
-  } else {
-    qDebug("%s", response.toString().constData());
   }
 }
 

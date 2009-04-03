@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2009 Kevin Ottens <ervin@kde.org>
+    Copyright (c) 2009 Andras Mantia <amantia@kde.org>
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Library General Public License as published by
@@ -17,40 +17,39 @@
     02110-1301, USA.
 */
 
-#ifndef KIMAP_LOGINJOB_H
-#define KIMAP_LOGINJOB_H
+#include "checkjob.h"
 
-#include "kimap_export.h"
+#include <KDE/KLocale>
 
-#include "job.h"
+#include "job_p.h"
+#include "message_p.h"
+#include "session_p.h"
 
-namespace KIMAP {
-
-class Session;
-class Message;
-class LoginJobPrivate;
-
-class KIMAP_EXPORT LoginJob : public Job
+namespace KIMAP
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE(LoginJob)
-
-  friend class SessionPrivate;
-
-  public:
-    LoginJob( Session *session );
-    virtual ~LoginJob();
-
-    QString userName() const;
-    void setUserName( const QString &userName );
-
-    QString password() const;
-    void setPassword( const QString &password );
-
-  protected:
-    virtual void doStart();
-};
-
+  class CheckJobPrivate : public JobPrivate
+  {
+    public:
+      CheckJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name) { }
+      ~CheckJobPrivate() { }
+  };
 }
 
-#endif
+using namespace KIMAP;
+
+CheckJob::CheckJob( Session *session )
+  : Job( *new CheckJobPrivate(session, i18n("Check")) )
+{
+}
+
+CheckJob::~CheckJob()
+{
+}
+
+void CheckJob::doStart()
+{
+  Q_D(CheckJob);
+  d->tag = d->sessionInternal()->sendCommand( "CHECK" );
+}
+
+#include "checkjob.moc"

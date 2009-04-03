@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2009 Kevin Ottens <ervin@kde.org>
+    Copyright (c) 2009 Andras Mantia <amantia@kde.org>
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Library General Public License as published by
@@ -17,9 +17,10 @@
     02110-1301, USA.
 */
 
-#include "loginjob.h"
+#include "unsubscribejob.h"
 
 #include <KDE/KLocale>
+#include <KDE/KDebug>
 
 #include "job_p.h"
 #include "message_p.h"
@@ -27,56 +28,44 @@
 
 namespace KIMAP
 {
-  class LoginJobPrivate : public JobPrivate
+  class UnsubscribeJobPrivate : public JobPrivate
   {
     public:
-      LoginJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name) { }
-      ~LoginJobPrivate() { }
+      UnsubscribeJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name) { }
+      ~UnsubscribeJobPrivate() { }
 
-      QString userName;
-      QString password;
+      QByteArray mailBox;
   };
 }
 
 using namespace KIMAP;
 
-LoginJob::LoginJob( Session *session )
-  : Job( *new LoginJobPrivate(session, i18n("Login")) )
+UnsubscribeJob::UnsubscribeJob( Session *session )
+  : Job( *new UnsubscribeJobPrivate(session, i18n("Unsubscribe")) )
 {
 }
 
-LoginJob::~LoginJob()
+UnsubscribeJob::~UnsubscribeJob()
 {
 }
 
-QString LoginJob::userName() const
+void UnsubscribeJob::doStart()
 {
-  Q_D(const LoginJob);
-  return d->userName;
+  Q_D(UnsubscribeJob);
+  d->tag = d->sessionInternal()->sendCommand( "UNSUBSCRIBE", '\"'+d->mailBox+'\"' );
 }
 
-void LoginJob::setUserName( const QString &userName )
+void UnsubscribeJob::setMailBox( const QByteArray &mailBox )
 {
-  Q_D(LoginJob);
-  d->userName = userName;
+  Q_D(UnsubscribeJob);
+  d->mailBox = mailBox;
 }
 
-QString LoginJob::password() const
+QByteArray UnsubscribeJob::mailBox() const
 {
-  Q_D(const LoginJob);
-  return d->password;
+  Q_D(const UnsubscribeJob);
+  return d->mailBox;
 }
 
-void LoginJob::setPassword( const QString &password )
-{
-  Q_D(LoginJob);
-  d->password = password;
-}
 
-void LoginJob::doStart()
-{
-  Q_D(LoginJob);
-  d->tag = d->sessionInternal()->sendCommand( "LOGIN", d->userName.toUtf8()+' '+d->password.toUtf8() );
-}
-
-#include "loginjob.moc"
+#include "unsubscribejob.moc"

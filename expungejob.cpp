@@ -31,10 +31,9 @@ namespace KIMAP
   class ExpungeJobPrivate : public JobPrivate
   {
     public:
-      ExpungeJobPrivate( Session *session ) : JobPrivate(session) { }
+      ExpungeJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name) { }
       ~ExpungeJobPrivate() { }
 
-      QByteArray tag;
       QList< int > items;
   };
 }
@@ -42,9 +41,8 @@ namespace KIMAP
 using namespace KIMAP;
 
 ExpungeJob::ExpungeJob( Session *session )
-  : Job( *new ExpungeJobPrivate(session) )
+  : Job( *new ExpungeJobPrivate(session, i18n("Expunge")) )
 {
-
 }
 
 ExpungeJob::~ExpungeJob()
@@ -61,34 +59,20 @@ void ExpungeJob::doHandleResponse( const Message &response )
 {
   Q_D(ExpungeJob);
 
-  if ( !response.content.isEmpty()
-    && response.content.first().toString()==d->tag ) {
-    if ( response.content.size() < 2 ) {
-      setErrorText( i18n("Expunge failed, malformed reply from the server") );
-    } else
-    if ( response.content[1].toString()=="NO" ) {
-      setError( UserDefinedError );
-      setErrorText( i18n("Expunge failed, can't expunge. Server replied: %1", response.toString().constData()) );
-    } else
-    if ( response.content[1].toString()!="OK" ) {
-      setError( UserDefinedError );
-      setErrorText( i18n("Expunge failed, server replied: %1", response.toString().constData()) );
-    }
-    emitResult();
-    return;
-  } else
-  if ( response.content.size() >= 2 ) {
-      QByteArray code = response.content[2].toString();
-      if  (code == "EXPUNGE") {
-        QByteArray s = response.content[1].toString();
-        bool ok = true;
-        int id = s.toInt(&ok);
-        if (ok) {
-          d->items.append(id);
+  if (handleErrorReplies(response) == NotHandled) {
+    if ( response.content.size() >= 2 ) {
+        QByteArray code = response.content[2].toString();
+        if  (code == "EXPUNGE") {
+          QByteArray s = response.content[1].toString();
+          bool ok = true;
+          int id = s.toInt(&ok);
+          if (ok) {
+            d->items.append(id);
+          }
+          //TODO error handling
+          return;
         }
-        //TODO error handling
-        return;
-      }
+    }
   }
 
 //TODO unhandled case
@@ -97,11 +81,6 @@ void ExpungeJob::doHandleResponse( const Message &response )
   }
 
 
-}
-
-void ExpungeJob::connectionLost()
-{
-  emitResult();
 }
 
 QList< int > ExpungeJob::deletedItems() const

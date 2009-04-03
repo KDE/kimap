@@ -46,7 +46,6 @@ class KIMAP_EXPORT ExpungeJob : public Job
   protected:
     virtual void doStart();
     virtual void doHandleResponse(const Message &response);
-    virtual void connectionLost();
 };
 
 }

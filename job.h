@@ -44,10 +44,17 @@ class KIMAP_EXPORT Job : public KJob
     virtual void start();
 
   protected:
+    enum HandlerResponse {
+      Handled = 0,
+      NotHandled
+    };
+    
     virtual void doStart() = 0;
     virtual void doHandleResponse(const Message &response);
     virtual void connectionLost();
-
+    virtual HandlerResponse handleErrorReplies(const Message &response);
+    void setNOErrorText(const QString &error);
+    
     Job( Session *session );
     Job( JobPrivate &dd );
 

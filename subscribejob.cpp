@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2009 Kevin Ottens <ervin@kde.org>
+    Copyright (c) 2009 Andras Mantia <amantia@kde.org>
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Library General Public License as published by
@@ -17,9 +17,10 @@
     02110-1301, USA.
 */
 
-#include "loginjob.h"
+#include "subscribejob.h"
 
 #include <KDE/KLocale>
+#include <KDE/KDebug>
 
 #include "job_p.h"
 #include "message_p.h"
@@ -27,56 +28,44 @@
 
 namespace KIMAP
 {
-  class LoginJobPrivate : public JobPrivate
+  class SubscribeJobPrivate : public JobPrivate
   {
     public:
-      LoginJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name) { }
-      ~LoginJobPrivate() { }
+      SubscribeJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name) { }
+      ~SubscribeJobPrivate() { }
 
-      QString userName;
-      QString password;
+      QByteArray mailBox;
   };
 }
 
 using namespace KIMAP;
 
-LoginJob::LoginJob( Session *session )
-  : Job( *new LoginJobPrivate(session, i18n("Login")) )
+SubscribeJob::SubscribeJob( Session *session )
+  : Job( *new SubscribeJobPrivate(session, i18n("Subscribe")) )
 {
 }
 
-LoginJob::~LoginJob()
+SubscribeJob::~SubscribeJob()
 {
 }
 
-QString LoginJob::userName() const
+void SubscribeJob::doStart()
 {
-  Q_D(const LoginJob);
-  return d->userName;
+  Q_D(SubscribeJob);
+  d->tag = d->sessionInternal()->sendCommand( "SUBSCRIBE", '\"'+d->mailBox+'\"' );
 }
 
-void LoginJob::setUserName( const QString &userName )
+void SubscribeJob::setMailBox( const QByteArray &mailBox )
 {
-  Q_D(LoginJob);
-  d->userName = userName;
+  Q_D(SubscribeJob);
+  d->mailBox = mailBox;
 }
 
-QString LoginJob::password() const
+QByteArray SubscribeJob::mailBox() const
 {
-  Q_D(const LoginJob);
-  return d->password;
+  Q_D(const SubscribeJob);
+  return d->mailBox;
 }
 
-void LoginJob::setPassword( const QString &password )
-{
-  Q_D(LoginJob);
-  d->password = password;
-}
 
-void LoginJob::doStart()
-{
-  Q_D(LoginJob);
-  d->tag = d->sessionInternal()->sendCommand( "LOGIN", d->userName.toUtf8()+' '+d->password.toUtf8() );
-}
-
-#include "loginjob.moc"
+#include "subscribejob.moc"
