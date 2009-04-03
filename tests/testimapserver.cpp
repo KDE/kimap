@@ -7,6 +7,7 @@
 
 #include "kimap/session.h"
 #include "kimap/capabilitiesjob.h"
+#include "kimap/fetchjob.h"
 #include "kimap/listjob.h"
 #include "kimap/loginjob.h"
 #include "kimap/logoutjob.h"
@@ -17,6 +18,27 @@
 #include "kimap/deletejob.h"
 
 using namespace KIMAP;
+
+void dumpContentHelper(KMime::Content *part, const QString &partId = QString())
+{
+  if (partId.isEmpty()) {
+    kDebug() << "** Message root **";
+  } else {
+    kDebug() << "** Part" << partId << "**";
+  }
+
+  kDebug() << part->head();
+
+  KMime::Content::List children = part->contents();
+  for (int i=0; i<children.size(); i++) {
+    QString newId = partId;
+    if (!newId.isEmpty()) {
+      newId+=".";
+    }
+    newId+=QString::number(i+1);
+    dumpContentHelper(children[i], newId);
+  }
+}
 
 void testDelete(Session *session)
 {
@@ -89,6 +111,7 @@ int main( int argc, char **argv )
   QString password = QString::fromLocal8Bit(argv[3]);
 
   kDebug() << "Querying:" << server << port << user << password;
+  qDebug();
 
   QCoreApplication app(argc, argv);
   Session session(server, port);
@@ -100,6 +123,7 @@ int main( int argc, char **argv )
   login->exec();
   Q_ASSERT_X(login->error()==0, "LoginJob", login->errorString().toLocal8Bit());
   Q_ASSERT(session.state()==Session::Authenticated);
+  qDebug();
 
   kDebug() << "Asking for capabilities:";
   CapabilitiesJob *capabilities = new CapabilitiesJob(&session);
@@ -107,6 +131,7 @@ int main( int argc, char **argv )
   Q_ASSERT_X(capabilities->error()==0, "CapabilitiesJob", capabilities->errorString().toLocal8Bit());
   Q_ASSERT(session.state()==Session::Authenticated);
   kDebug() << capabilities->capabilities();
+  qDebug();
 
   kDebug() << "Listing mailboxes:";
   ListJob *list = new ListJob(&session);
@@ -124,6 +149,7 @@ int main( int argc, char **argv )
     }
     kDebug() << mailBox;
   }
+  qDebug();
 
   kDebug() << "Selecting INBOX:";
   SelectJob *select = new SelectJob(&session);
@@ -138,6 +164,100 @@ int main( int argc, char **argv )
   kDebug() << "First Unseen Message Index:" << select->firstUnseenIndex();
   kDebug() << "UID validity:" << select->uidValidity();
   kDebug() << "Next UID:" << select->nextUid();
+  qDebug();
+
+  kDebug() << "Fetching first 3 messages headers:";
+  FetchJob *fetch = new FetchJob(&session);
+  FetchJob::FetchScope scope;
+  fetch->setSequenceSet("1:3");
+  scope.parts.clear();
+  scope.mode = FetchJob::FetchScope::Headers;
+  fetch->setScope(scope);
+  fetch->exec();
+  Q_ASSERT_X(fetch->error()==0, "FetchJob", fetch->errorString().toLocal8Bit());
+  Q_ASSERT(session.state()==Session::Selected);
+  QMap<int, QSharedPointer<KMime::Message> > messages = fetch->messages();
+  foreach (int id, messages.keys()) {
+    kDebug() << "* Message" << id << "(" << fetch->sizes()[id] << "bytes )";
+    kDebug() << "  From      :" << messages[id]->from()->asUnicodeString();
+    kDebug() << "  To        :" << messages[id]->to()->asUnicodeString();
+    kDebug() << "  Date      :" << messages[id]->date()->asUnicodeString();
+    kDebug() << "  Subject   :" << messages[id]->subject()->asUnicodeString();
+    kDebug() << "  Message-ID:" << messages[id]->messageID()->asUnicodeString();
+  }
+  qDebug();
+
+
+  kDebug() << "Fetching first 3 messages flags:";
+  fetch = new FetchJob(&session);
+  fetch->setSequenceSet("1:3");
+  scope.parts.clear();
+  scope.mode = FetchJob::FetchScope::Flags;
+  fetch->setScope(scope);
+  fetch->exec();
+  Q_ASSERT_X(fetch->error()==0, "FetchJob", fetch->errorString().toLocal8Bit());
+  Q_ASSERT(session.state()==Session::Selected);
+  QMap<int, QList<QByteArray> > flags = fetch->flags();
+  foreach (int id, flags.keys()) {
+    kDebug() << "* Message" << id << "flags:" << flags[id];
+  }
+  qDebug();
+
+  kDebug() << "Fetching first message structure:";
+  fetch = new FetchJob(&session);
+  fetch->setSequenceSet("1");
+  scope.parts.clear();
+  scope.mode = FetchJob::FetchScope::Structure;
+  fetch->setScope(scope);
+  fetch->exec();
+  Q_ASSERT_X(fetch->error()==0, "FetchJob", fetch->errorString().toLocal8Bit());
+  Q_ASSERT(session.state()==Session::Selected);
+  QSharedPointer<KMime::Message> message = fetch->messages()[1];
+  dumpContentHelper(message.data());
+  qDebug();
+
+  kDebug() << "Fetching first message second part headers:";
+  fetch = new FetchJob(&session);
+  fetch->setSequenceSet("1");
+  scope.parts.clear();
+  scope.parts << "2";
+  scope.mode = FetchJob::FetchScope::Headers;
+  fetch->setScope(scope);
+  fetch->exec();
+  Q_ASSERT_X(fetch->error()==0, "FetchJob", fetch->errorString().toLocal8Bit());
+  Q_ASSERT(session.state()==Session::Selected);
+  QMap<int, QMap<QByteArray, QSharedPointer<KMime::Content> > > allParts = fetch->parts();
+  foreach (int id, allParts.keys()) {
+    kDebug() << "* Message" << id << "parts headers";
+    QMap<QByteArray, QSharedPointer<KMime::Content> > parts = allParts[id];
+    foreach (const QByteArray &partId, parts.keys()) {
+      kDebug() << "  ** Part" << partId;
+      kDebug() << "     Name       :" << parts[partId]->contentType()->name();
+      kDebug() << "     Mimetype   :" << parts[partId]->contentType()->mimeType();
+      kDebug() << "     Description:" << parts[partId]->contentDescription()->asUnicodeString().simplified();
+    }
+  }
+  qDebug();
+
+  kDebug() << "Fetching first message second part content:";
+  fetch = new FetchJob(&session);
+  fetch->setSequenceSet("1");
+  scope.parts.clear();
+  scope.parts << "2";
+  scope.mode = FetchJob::FetchScope::Content;
+  fetch->setScope(scope);
+  fetch->exec();
+  Q_ASSERT_X(fetch->error()==0, "FetchJob", fetch->errorString().toLocal8Bit());
+  Q_ASSERT(session.state()==Session::Selected);
+  allParts = fetch->parts();
+  foreach (int id, allParts.keys()) {
+    QMap<QByteArray, QSharedPointer<KMime::Content> > parts = allParts[id];
+    foreach (const QByteArray &partId, parts.keys()) {
+      kDebug() << "* Message" << id << "part" << partId << "content:";
+      kDebug() << parts[partId]->body();
+    }
+  }
+  qDebug();
 
   testDelete(&session);
 
@@ -150,6 +270,7 @@ int main( int argc, char **argv )
   CloseJob *close = new CloseJob(&session);
   close->exec();
   Q_ASSERT(session.state()==Session::Authenticated);
+  qDebug();
 
   kDebug() << "Logging out...";
   LogoutJob *logout = new LogoutJob(&session);
