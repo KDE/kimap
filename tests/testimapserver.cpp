@@ -61,13 +61,13 @@ void listFolders(Session *session, bool includeUnsubscribed = false, const QByte
     if (mailBox.endsWith(nameFilter))
       kDebug() << mailBox;
   }
-  
+
 }
 
 void testAppend(Session *session)
 {
   kDebug() << "TESTING: APPEND";
-  //setup 
+  //setup
   CreateJob *create = new CreateJob(session);
   create->setMailBox("INBOX/TestFolder");
   create->exec();
@@ -127,7 +127,7 @@ void testRename(Session *session)
   CreateJob *create = new CreateJob(session);
   create->setMailBox("INBOX/TestFolder");
   create->exec();
-  
+
   kDebug() << "Listing mailboxes with name TestFolder:";
   listFolders(session, true, "TestFolder");
 
@@ -160,7 +160,7 @@ void testSubscribe(Session *session)
   CreateJob *create = new CreateJob(session);
   create->setMailBox("INBOX/TestFolder");
   create->exec();
-  
+
   kDebug() << "Listing  subscribed mailboxes with name TestFolder:";
   listFolders(session, false, "TestFolder");
 
@@ -180,7 +180,7 @@ void testSubscribe(Session *session)
 
   kDebug() << "Listing  subscribed mailboxes with name TestFolder:";
   listFolders(session, false, "TestFolder");
-  
+
   //cleanup
   DeleteJob *deletejob = new DeleteJob(session);
   deletejob->setMailBox("INBOX/TestFolder");
@@ -231,15 +231,13 @@ int main( int argc, char **argv )
 
   QCoreApplication app(argc, argv);
   Session session(server, port);
- 
+
   kDebug() << "Logging in...";
   LoginJob *login = new LoginJob(&session);
   login->setEncryptionMode(LoginJob::TlsV1);
   login->setUserName(user);
   login->setPassword(password);
   login->exec();
-  Q_ASSERT_X(login->error()==0, "LoginJob", login->errorString().toLocal8Bit());
-  Q_ASSERT(session.state()==Session::Authenticated);
   qDebug();
 
   if (login->encryptionMode() == LoginJob::Unencrypted)
@@ -252,7 +250,7 @@ int main( int argc, char **argv )
     Q_ASSERT_X(login->error()==0, "LoginJob", login->errorString().toLocal8Bit());
     Q_ASSERT(session.state()==Session::Authenticated);
     qDebug();
-    
+
   }
 
   kDebug() << "Asking for capabilities:";
@@ -376,13 +374,13 @@ int main( int argc, char **argv )
   qDebug();
 
   testDelete(&session);
-  
+
   testSubscribe(&session);
 
   testRename(&session);
 
   testAppend(&session);
-  
+
   kDebug() << "Expunge INBOX:";
   ExpungeJob *expunge = new ExpungeJob(&session);
   expunge->exec();
