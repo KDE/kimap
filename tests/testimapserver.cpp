@@ -17,6 +17,9 @@
 #include "kimap/expungejob.h"
 #include "kimap/createjob.h"
 #include "kimap/deletejob.h"
+#include "kimap/subscribejob.h"
+#include "kimap/unsubscribejob.h"
+#include "kimap/renamejob.h"
 
 using namespace KIMAP;
 
@@ -41,9 +44,30 @@ void dumpContentHelper(KMime::Content *part, const QString &partId = QString())
   }
 }
 
-void testDelete(Session *session)
+void listFolders(Session *session, bool includeUnsubscribed = false, const QByteArray& nameFilter = "")
 {
-  kDebug() << "Creating INBOX/TestFolder:";
+  ListJob *list = new ListJob(session);
+  list->setIncludeUnsubscribed(includeUnsubscribed);
+  list->exec();
+  Q_ASSERT_X(list->error()==0, "ListJob", list->errorString().toLocal8Bit());
+  int count = list->mailBoxes().size();
+  for (int i=0; i<count; ++i) {
+    QList<QByteArray> descriptor = list->mailBoxes()[i];
+    QByteArray mailBox;
+    for (int j=1; j<descriptor.size(); ++j) {
+      if (j!=1) mailBox+=descriptor[0];
+      mailBox+=descriptor[j];
+    }
+    if (mailBox.endsWith(nameFilter))
+      kDebug() << mailBox;
+  }
+  
+}
+
+void testAppend(Session *session)
+{
+  kDebug() << "TESTING: APPEND";
+  //setup 
   CreateJob *create = new CreateJob(session);
   create->setMailBox("INBOX/TestFolder");
   create->exec();
@@ -87,25 +111,93 @@ void testDelete(Session *session)
   select->setMailBox("INBOX");
   select->exec();
 
+  //cleanup
+  DeleteJob *deletejob = new DeleteJob(session);
+  deletejob->setMailBox("INBOX/TestFolder");
+  deletejob->exec();
+  deletejob = new DeleteJob(session);
+  deletejob->setMailBox("INBOX/RenamedTestFolder");
+  deletejob->exec();
+}
+
+void testRename(Session *session)
+{
+  kDebug() << "TESTING: RENAME";
+  //setup
+  CreateJob *create = new CreateJob(session);
+  create->setMailBox("INBOX/TestFolder");
+  create->exec();
+  
+  kDebug() << "Listing mailboxes with name TestFolder:";
+  listFolders(session, true, "TestFolder");
+
+  //actual tests
+  kDebug() << "Renaming to RenamedTestFolder";
+  RenameJob *rename = new RenameJob(session);
+  rename->setMailBox("INBOX/TestFolder");
+  rename->setNewMailBox("INBOX/RenamedTestFolder");
+  rename->exec();
+
+  kDebug() << "Listing mailboxes with name TestFolder:";
+  listFolders(session, true, "TestFolder");
+  kDebug() << "Listing mailboxes with name RenamedTestFolder:";
+  listFolders(session, true, "RenamedTestFolder");
+
+  //cleanup
+  DeleteJob *deletejob = new DeleteJob(session);
+  deletejob->setMailBox("INBOX/TestFolder");
+  deletejob->exec();
+  deletejob = new DeleteJob(session);
+  deletejob->setMailBox("INBOX/RenamedTestFolder");
+  deletejob->exec();
+}
+
+
+void testSubscribe(Session *session)
+{
+  kDebug() << "TESTING: SUBSCRIBE/UNSUBSCRIBE";
+  //setup
+  CreateJob *create = new CreateJob(session);
+  create->setMailBox("INBOX/TestFolder");
+  create->exec();
+  
+  kDebug() << "Listing  subscribed mailboxes with name TestFolder:";
+  listFolders(session, false, "TestFolder");
+
+  //actual tests
+  kDebug() << "Subscribing to INBOX/TestFolder";
+  SubscribeJob *subscribe = new SubscribeJob(session);
+  subscribe->setMailBox("INBOX/TestFolder");
+  subscribe->exec();
+
+  kDebug() << "Listing  subscribed mailboxes with name TestFolder:";
+  listFolders(session, false, "TestFolder");
+
+  kDebug() << "Unsubscribing from INBOX/TestFolder";
+  UnsubscribeJob *unsubscribe = new UnsubscribeJob(session);
+  unsubscribe->setMailBox("INBOX/TestFolder");
+  unsubscribe->exec();
+
+  kDebug() << "Listing  subscribed mailboxes with name TestFolder:";
+  listFolders(session, false, "TestFolder");
+  
+  //cleanup
+  DeleteJob *deletejob = new DeleteJob(session);
+  deletejob->setMailBox("INBOX/TestFolder");
+  deletejob->exec();
+}
+
+void testDelete(Session *session)
+{
+  kDebug() << "TESTING: DELETE";
+  kDebug() << "Creating INBOX/TestFolder:";
+  CreateJob *create = new CreateJob(session);
+  create->setMailBox("INBOX/TestFolder");
+  create->exec();
+
 
   kDebug() << "Listing  with name TestFolder  before DELETE:";
-  ListJob *list = new ListJob(session);
-  list->setIncludeUnsubscribed(true);
-  list->exec();
-  Q_ASSERT_X(list->error()==0, "ListJob", list->errorString().toLocal8Bit());
-//   Q_ASSERT(session->state()==Session::Authenticated);
-
-  int count = list->mailBoxes().size();
-  for (int i=0; i<count; ++i) {
-    QList<QByteArray> descriptor = list->mailBoxes()[i];
-    QByteArray mailBox;
-    for (int j=1; j<descriptor.size(); ++j) {
-      if (j!=1) mailBox+=descriptor[0];
-      mailBox+=descriptor[j];
-    }
-    if (mailBox.endsWith("TestFolder"))
-      kDebug() << mailBox;
-  }
+  listFolders(session, true, "TestFolder");
 
   kDebug() << "Deleting INBOX/TestFolder";
   DeleteJob *deletejob = new DeleteJob(session);
@@ -113,23 +205,7 @@ void testDelete(Session *session)
   deletejob->exec();
 
   kDebug() << "Listing with name TestFolder after DELETE:";
-  list = new ListJob(session);
-  list->setIncludeUnsubscribed(true);
-  list->exec();
-  Q_ASSERT_X(list->error()==0, "ListJob", list->errorString().toLocal8Bit());
-//   Q_ASSERT(session->state()==Session::Authenticated);
-
-  count = list->mailBoxes().size();
-  for (int i=0; i<count; ++i) {
-    QList<QByteArray> descriptor = list->mailBoxes()[i];
-    QByteArray mailBox;
-    for (int j=1; j<descriptor.size(); ++j) {
-      if (j!=1) mailBox+=descriptor[0];
-      mailBox+=descriptor[j];
-    }
-    if (mailBox.endsWith("TestFolder"))
-      kDebug() << mailBox;
-  }
+  listFolders(session, true, "TestFolder");
 }
 
 int main( int argc, char **argv )
@@ -155,15 +231,29 @@ int main( int argc, char **argv )
 
   QCoreApplication app(argc, argv);
   Session session(server, port);
-
+ 
   kDebug() << "Logging in...";
   LoginJob *login = new LoginJob(&session);
+  login->setEncryptionMode(LoginJob::TlsV1);
   login->setUserName(user);
   login->setPassword(password);
   login->exec();
   Q_ASSERT_X(login->error()==0, "LoginJob", login->errorString().toLocal8Bit());
   Q_ASSERT(session.state()==Session::Authenticated);
   qDebug();
+
+  if (login->encryptionMode() == LoginJob::Unencrypted)
+  {
+    kDebug() << "Encrypted login not possible, try to log in without encryption";
+    login = new LoginJob(&session);
+    login->setUserName(user);
+    login->setPassword(password);
+    login->exec();
+    Q_ASSERT_X(login->error()==0, "LoginJob", login->errorString().toLocal8Bit());
+    Q_ASSERT(session.state()==Session::Authenticated);
+    qDebug();
+    
+  }
 
   kDebug() << "Asking for capabilities:";
   CapabilitiesJob *capabilities = new CapabilitiesJob(&session);
@@ -174,22 +264,8 @@ int main( int argc, char **argv )
   qDebug();
 
   kDebug() << "Listing mailboxes:";
-  ListJob *list = new ListJob(&session);
-  list->exec();
-  Q_ASSERT_X(list->error()==0, "ListJob", list->errorString().toLocal8Bit());
+  listFolders(&session);
   Q_ASSERT(session.state()==Session::Authenticated);
-
-  int count = list->mailBoxes().size();
-  for (int i=0; i<count; ++i) {
-    QList<QByteArray> descriptor = list->mailBoxes()[i];
-    QByteArray mailBox;
-    for (int j=1; j<descriptor.size(); ++j) {
-      if (j!=1) mailBox+=descriptor[0];
-      mailBox+=descriptor[j];
-    }
-    kDebug() << mailBox;
-  }
-  qDebug();
 
   kDebug() << "Selecting INBOX:";
   SelectJob *select = new SelectJob(&session);
@@ -300,7 +376,13 @@ int main( int argc, char **argv )
   qDebug();
 
   testDelete(&session);
+  
+  testSubscribe(&session);
 
+  testRename(&session);
+
+  testAppend(&session);
+  
   kDebug() << "Expunge INBOX:";
   ExpungeJob *expunge = new ExpungeJob(&session);
   expunge->exec();
