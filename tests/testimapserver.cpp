@@ -20,6 +20,7 @@
 #include "kimap/subscribejob.h"
 #include "kimap/unsubscribejob.h"
 #include "kimap/renamejob.h"
+#include "kimap/storejob.h"
 
 using namespace KIMAP;
 
@@ -64,9 +65,9 @@ void listFolders(Session *session, bool includeUnsubscribed = false, const QByte
 
 }
 
-void testAppend(Session *session)
+void testAppendAndStore(Session *session)
 {
-  kDebug() << "TESTING: APPEND";
+  kDebug() << "TESTING: APPEND and STORE";
   //setup
   CreateJob *create = new CreateJob(session);
   create->setMailBox("INBOX/TestFolder");
@@ -106,6 +107,31 @@ void testAppend(Session *session)
   Q_ASSERT_X(fetch->error()==0, "FetchJob", fetch->errorString().toLocal8Bit());
   Q_ASSERT_X(testMailContent==message->head()+message->body(),
              "Message differs from reference", message->head()+message->body());
+
+  fetch = new FetchJob(session);
+  fetch->setSequenceSet("1");
+  scope.parts.clear();
+  scope.mode = FetchJob::FetchScope::Flags;
+  fetch->setScope(scope);
+  fetch->exec();
+  QList<QByteArray> expectedFlags = fetch->flags()[1];
+  kDebug() << "Read the message flags:" << expectedFlags;
+
+  kDebug() << "Add the \\Deleted flag...";
+  expectedFlags << "\\Deleted";
+  qSort(expectedFlags);
+  StoreJob *store = new StoreJob(session);
+  store->setSequenceSet("1");
+  store->setMode(StoreJob::AppendFlags);
+  store->setFlags(QList<QByteArray>() << "\\Deleted");
+  store->exec();
+  Q_ASSERT_X(store->error()==0, "StoreJob", store->errorString().toLocal8Bit());
+
+  QList<QByteArray> resultingFlags = store->resultingFlags()[1];
+  qSort(resultingFlags);
+  if (expectedFlags!=resultingFlags) kDebug() << resultingFlags;
+  Q_ASSERT(expectedFlags==resultingFlags);
+
 
   select = new SelectJob(session);
   select->setMailBox("INBOX");
@@ -379,7 +405,7 @@ int main( int argc, char **argv )
 
   testRename(&session);
 
-  testAppend(&session);
+  testAppendAndStore(&session);
 
   kDebug() << "Expunge INBOX:";
   ExpungeJob *expunge = new ExpungeJob(&session);
