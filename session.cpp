@@ -187,6 +187,11 @@ QByteArray SessionPrivate::sendCommand( const QByteArray &command, const QByteAr
   return tag;
 }
 
+void SessionPrivate::sendData( const QByteArray &data )
+{
+  thread->sendData(data+"\r\n");
+}
+
 void SessionPrivate::socketDisconnected()
 {
   state = Session::Disconnected;
