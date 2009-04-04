@@ -33,18 +33,20 @@ namespace KIMAP
     public:
      enum AuthState {
         StartTls = 0,
+        Capability,
         Login
       };
 
-      LoginJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name), encryptionMode(LoginJob::Unencrypted), authState(Login) { }
+      LoginJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name), encryptionMode(LoginJob::Unencrypted), authState(Login), plainLoginDisabled(false) { }
       ~LoginJobPrivate() { }
 
       QString userName;
       QString password;
 
       LoginJob::EncryptionMode encryptionMode;
-
       AuthState authState;
+      QStringList capabilities;
+      bool plainLoginDisabled;
   };
 }
 
@@ -98,10 +100,11 @@ void LoginJob::doStart()
 void LoginJob::doHandleResponse( const Message &response )
 {
   Q_D(LoginJob);
-
   QString commandName = i18n("Login");
 
-  if (d->authState == LoginJobPrivate::StartTls) {
+  if (d->authState == LoginJobPrivate::Capability) {
+    commandName = i18n("Capability");
+  } else if (d->authState == LoginJobPrivate::StartTls) {
     commandName = i18n("StartTls");
   }
 
@@ -109,15 +112,43 @@ void LoginJob::doHandleResponse( const Message &response )
        && response.content.first().toString() == d->tag ) {
     if ( response.content.size() < 2 ) {
       setErrorText( i18n("%1 failed, malformed reply from the server").arg(commandName) );
-  } else
-    if ( response.content[1].toString() != "OK" ) {
-      setError( UserDefinedError );
-      setErrorText( i18n("%1 failed, server replied: %2", commandName, response.toString().constData()) );
-  } else
-    if ( response.content[1].toString() == "OK" && d->authState == LoginJobPrivate::StartTls) {
-      d->sessionInternal()->startTls();
-      return;
+    } else if ( response.content[1].toString() != "OK" ) {
+        setError( UserDefinedError );
+        setErrorText( i18n("%1 failed, server replied: %2", commandName, response.toString().constData()) );
+    } else if ( response.content[1].toString() == "OK")    {
+      if (d->authState == LoginJobPrivate::Capability) {
+        Q_FOREACH(QString capability, d->capabilities) {
+          if (capability.startsWith("AUTH=")) {
+            QString authType = capability.mid(5);
+            if (authType == "PLAIN") {
+              if (d->plainLoginDisabled) {
+                setError( UserDefinedError );
+                setErrorText( i18n("Login failed, plain login is disabled by the server.") );
+              } else {
+                d->authState = LoginJobPrivate::Login;
+                d->tag = d->sessionInternal()->sendCommand( "LOGIN", d->userName.toUtf8()+' '+d->password.toUtf8() );
+                return; //don't let emitResult to be called
+              }
+            } else {
+              kDebug() << "Server doesn't support PLAIN authentication, client doesn't support SASL (yet).";
+            }
+          }
+        }
+      } else if (d->authState == LoginJobPrivate::StartTls) {
+        d->sessionInternal()->startTls();
+        return; //don't let emitResult to be called
+      }
     }
+  } else if ( response.content.size() >= 2
+           && response.content[1].toString()=="CAPABILITY" ) {
+      for (int i = 2; i < response.content.size(); ++i) {
+        QString capability = response.content[i].toString();
+        d->capabilities << capability;
+        if (capability == "LOGINDISABLED") {
+          d->plainLoginDisabled = true;
+        }
+      }
+      return; //don't let emitResult to be called
   }
   emitResult();
 }
@@ -127,8 +158,8 @@ void LoginJob::tlsResponse(bool response)
   Q_D(LoginJob);
     
   if (response) {
-    d->authState = LoginJobPrivate::Login;
-    d->tag = d->sessionInternal()->sendCommand( "LOGIN", d->userName.toUtf8()+' '+d->password.toUtf8() );
+    d->authState = LoginJobPrivate::Capability;
+    d->tag = d->sessionInternal()->sendCommand( "CAPABILITY" );
   } else {
     setError( UserDefinedError );
     setErrorText( i18n("Login failed, TLS negotiation failed." ));
@@ -155,7 +186,7 @@ void LoginJob::connectionLost()
 
   //don't emit the result if the connection was lost before getting the tls result, as it can mean
   //the TLS handshake failed and the socket was reconnected in normal mode
-  if (d->authState == LoginJobPrivate::Login) {
+  if (d->authState != LoginJobPrivate::StartTls) {
     emitResult();
   }
     
