@@ -25,6 +25,7 @@
 #include "job_p.h"
 #include "message_p.h"
 #include "session_p.h"
+#include "rfccodecs.h"
 
 #ifndef HAVE_LIBSASL2
 #define HAVE_LIBSASL2
@@ -124,7 +125,7 @@ bool LoginJobPrivate::sasl_interact()
 
 LoginJob::LoginJob( Session *session )
   : Job( *new LoginJobPrivate(session, i18n("Login")) )
-{  
+{
   connect(session, SIGNAL(tlsNegotiationResult(bool)), this, SLOT(tlsResponse(bool)));
 }
 
@@ -161,7 +162,10 @@ void LoginJob::doStart()
   Q_D(LoginJob);
   if (d->encryptionMode == Unencrypted ) {
     if (d->authMode.isEmpty()) {
-      d->tag = d->sessionInternal()->sendCommand( "LOGIN", d->userName.toUtf8()+' '+d->password.toUtf8() );
+      d->tag = d->sessionInternal()->sendCommand( "LOGIN",
+                                                  quoteIMAP( d->userName ).toUtf8()
+                                                 +' '
+                                                 +quoteIMAP(d->password ).toUtf8() );
     } else {
       if (!startAuthentication()) {
         emitResult();
@@ -213,7 +217,10 @@ void LoginJob::doHandleResponse( const Message &response )
             emitResult();
           } else {
             d->authState = LoginJobPrivate::Login;
-            d->tag = d->sessionInternal()->sendCommand( "LOGIN", d->userName.toUtf8()+' '+d->password.toUtf8() );
+            d->tag = d->sessionInternal()->sendCommand( "LOGIN",
+                                                        quoteIMAP( d->userName ).toUtf8()
+                                                       +' '
+                                                       +quoteIMAP( d->password ).toUtf8() );
           }
         }
 
@@ -356,7 +363,7 @@ bool LoginJob::answerChallenge(const QByteArray &data)
 void LoginJob::tlsResponse(bool response)
 {
   Q_D(LoginJob);
-    
+
   if (response) {
     d->authState = LoginJobPrivate::Capability;
     d->tag = d->sessionInternal()->sendCommand( "CAPABILITY" );
@@ -413,7 +420,7 @@ void LoginJob::connectionLost()
   if (d->authState != LoginJobPrivate::StartTls) {
     emitResult();
   }
-    
+
 }
 
 
