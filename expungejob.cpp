@@ -73,14 +73,8 @@ void ExpungeJob::doHandleResponse( const Message &response )
           return;
         }
     }
-  }
-
-//TODO unhandled case
-  {
     kDebug() << "Unhandled response: " << response.toString().constData();
   }
-
-
 }
 
 QList< int > ExpungeJob::deletedItems() const
