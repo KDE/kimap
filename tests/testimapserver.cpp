@@ -6,6 +6,7 @@
 #include <qsignalspy.h>
 
 #include "kimap/session.h"
+#include "kimap/appendjob.h"
 #include "kimap/capabilitiesjob.h"
 #include "kimap/fetchjob.h"
 #include "kimap/listjob.h"
@@ -46,6 +47,45 @@ void testDelete(Session *session)
   CreateJob *create = new CreateJob(session);
   create->setMailBox("INBOX/TestFolder");
   create->exec();
+
+  QByteArray testMailContent =
+    "Date: Mon, 7 Feb 1994 21:52:25 -0800 (PST)\r\n"
+    "From: Fred Foobar <foobar@Blurdybloop.COM>\r\n"
+    "Subject: afternoon meeting\r\n"
+    "To: mooch@owatagu.siam.edu\r\n"
+    "Message-Id: <B27397-0100000@Blurdybloop.COM>\r\n"
+    "MIME-Version: 1.0\r\n"
+    "Content-Type: TEXT/PLAIN; CHARSET=US-ASCII\r\n"
+    "\r\n"
+    "Hello Joe, do you think we can meet at 3:30 tomorrow?\r\n";
+
+  kDebug() << "Append a message in INBOX/TestFolder...";
+  AppendJob *append = new AppendJob(session);
+  append->setMailBox("INBOX/TestFolder");
+  append->setContent(testMailContent);
+  append->exec();
+  Q_ASSERT_X(append->error()==0, "AppendJob", append->errorString().toLocal8Bit());
+
+  kDebug() << "Read the message back and compare...";
+  SelectJob *select = new SelectJob(session);
+  select->setMailBox("INBOX/TestFolder");
+  select->exec();
+
+  FetchJob *fetch = new FetchJob(session);
+  FetchJob::FetchScope scope;
+  fetch->setSequenceSet("1");
+  scope.parts.clear();
+  scope.mode = FetchJob::FetchScope::Content;
+  fetch->setScope(scope);
+  fetch->exec();
+  QSharedPointer<KMime::Message> message = fetch->messages()[1];
+  Q_ASSERT_X(fetch->error()==0, "FetchJob", fetch->errorString().toLocal8Bit());
+  Q_ASSERT_X(testMailContent==message->head()+message->body(),
+             "Message differs from reference", message->head()+message->body());
+
+  select = new SelectJob(session);
+  select->setMailBox("INBOX");
+  select->exec();
 
 
   kDebug() << "Listing  with name TestFolder  before DELETE:";
