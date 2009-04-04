@@ -20,6 +20,7 @@
 #include "loginjob.h"
 
 #include <KDE/KLocale>
+#include <KDE/KDebug>
 
 #include "job_p.h"
 #include "message_p.h"
@@ -30,11 +31,20 @@ namespace KIMAP
   class LoginJobPrivate : public JobPrivate
   {
     public:
-      LoginJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name) { }
+     enum AuthState {
+        StartTls = 0,
+        Login
+      };
+
+      LoginJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name), encryptionMode(LoginJob::Unencrypted), authState(Login) { }
       ~LoginJobPrivate() { }
 
       QString userName;
       QString password;
+
+      LoginJob::EncryptionMode encryptionMode;
+
+      AuthState authState;
   };
 }
 
@@ -42,7 +52,8 @@ using namespace KIMAP;
 
 LoginJob::LoginJob( Session *session )
   : Job( *new LoginJobPrivate(session, i18n("Login")) )
-{
+{  
+  connect(session, SIGNAL(tlsNegotiationResult(bool)), this, SLOT(tlsResponse(bool)));
 }
 
 LoginJob::~LoginJob()
@@ -76,7 +87,79 @@ void LoginJob::setPassword( const QString &password )
 void LoginJob::doStart()
 {
   Q_D(LoginJob);
-  d->tag = d->sessionInternal()->sendCommand( "LOGIN", d->userName.toUtf8()+' '+d->password.toUtf8() );
+  if (d->encryptionMode == Unencrypted ) {
+    d->tag = d->sessionInternal()->sendCommand( "LOGIN", d->userName.toUtf8()+' '+d->password.toUtf8() );
+  } else if (d->encryptionMode == TlsV1) {
+    d->authState = LoginJobPrivate::StartTls;
+    d->tag = d->sessionInternal()->sendCommand( "STARTTLS" );
+  }
 }
+
+void LoginJob::doHandleResponse( const Message &response )
+{
+  Q_D(LoginJob);
+
+  QString commandName = i18n("Login");
+
+  if (d->authState == LoginJobPrivate::StartTls) {
+    commandName = i18n("StartTls");
+  }
+
+  if ( !response.content.isEmpty()
+       && response.content.first().toString() == d->tag ) {
+    if ( response.content.size() < 2 ) {
+      setErrorText( i18n("%1 failed, malformed reply from the server").arg(commandName) );
+  } else
+    if ( response.content[1].toString() != "OK" ) {
+      setError( UserDefinedError );
+      setErrorText( i18n("%1 failed, server replied: %2", commandName, response.toString().constData()) );
+  } else
+    if ( response.content[1].toString() == "OK" && d->authState == LoginJobPrivate::StartTls) {
+      d->sessionInternal()->startTls();
+      return;
+    }
+  }
+  emitResult();
+}
+
+void LoginJob::tlsResponse(bool response)
+{
+  Q_D(LoginJob);
+    
+  if (response) {
+    d->authState = LoginJobPrivate::Login;
+    d->tag = d->sessionInternal()->sendCommand( "LOGIN", d->userName.toUtf8()+' '+d->password.toUtf8() );
+  } else {
+    setError( UserDefinedError );
+    setErrorText( i18n("%1 failed, TLS negotiation failed." ));
+    d->encryptionMode = Unencrypted;
+    emitResult();
+  }
+}
+
+void LoginJob::setEncryptionMode(EncryptionMode mode)
+{
+  Q_D(LoginJob);
+  d->encryptionMode = mode;
+}
+
+LoginJob::EncryptionMode LoginJob::encryptionMode()
+{
+  Q_D(LoginJob);
+  return d->encryptionMode;
+}
+
+void LoginJob::connectionLost()
+{
+  Q_D(LoginJob);
+
+  //don't emit the result if the connection was lost before getting the tls result, as it can mean
+  //the TLS handshake failed and the socket was reconnected in normal mode
+  if (d->authState == LoginJobPrivate::Login) {
+    emitResult();
+  }
+    
+}
+
 
 #include "loginjob.moc"

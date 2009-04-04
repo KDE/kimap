@@ -38,6 +38,12 @@ class KIMAP_EXPORT LoginJob : public Job
   friend class SessionPrivate;
 
   public:
+    enum EncryptionMode {
+        Unencrypted = 0,
+        TlsV1
+    };
+    Q_DECLARE_FLAGS(EncryptionModes, EncryptionMode)
+   
     LoginJob( Session *session );
     virtual ~LoginJob();
 
@@ -47,8 +53,27 @@ class KIMAP_EXPORT LoginJob : public Job
     QString password() const;
     void setPassword( const QString &password );
 
+    /**
+     * Set the encryption mode for the connection. In case an encryption mode is set, the caller
+     * MUST check the encryptionMode() result after executing the job, to see if the connection is
+     * encrypted or not (e.g handshaking failed).
+     * @param mode the encryption mode, see EncryptionModes
+     */
+    void setEncryptionMode(EncryptionMode mode);
+
+    /**
+      Get the encryption mode.
+      @return the currently active encryption mode
+    */
+    EncryptionMode encryptionMode();
+
   protected:
     virtual void doStart();
+    virtual void doHandleResponse( const Message &response );
+    virtual void connectionLost();
+   
+  protected Q_SLOTS:
+    void tlsResponse(bool);  
 };
 
 }

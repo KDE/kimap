@@ -36,6 +36,8 @@ Session::Session( const QString &hostName, quint16 port, QObject *parent)
   d->jobRunning = false;
 
   d->thread = new SessionThread(hostName, port, this);
+  connect(d->thread, SIGNAL(tlsNegotiationResult(bool)), this, SIGNAL(tlsNegotiationResult(bool)));
+
   d->thread->start();
 }
 
@@ -206,6 +208,11 @@ void SessionPrivate::socketError()
 {
   //qWarning() << "Socket error occurred:" << socket->errorString();
   socketDisconnected();
+}
+
+void SessionPrivate::startTls()
+{
+  QMetaObject::invokeMethod( thread, "startTls" );
 }
 
 #include "session.moc"

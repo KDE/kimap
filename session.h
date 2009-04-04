@@ -47,6 +47,9 @@ class KIMAP_EXPORT Session : public QObject
     quint16 port() const;
     State state() const;
 
+  Q_SIGNALS:
+    void tlsNegotiationResult(bool);
+
   private:
     Q_PRIVATE_SLOT( d, void doStartNext() )
     Q_PRIVATE_SLOT( d, void jobDone( KJob* ) )

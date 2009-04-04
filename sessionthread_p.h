@@ -24,9 +24,9 @@
 #include <QtCore/QQueue>
 #include <QtCore/QThread>
 
-#include <QtNetwork/QTcpSocket>
+#include <ktcpsocket.h>
 
-typedef QTcpSocket SessionSocket;
+typedef KTcpSocket SessionSocket;
 
 namespace KIMAP {
 
@@ -44,16 +44,18 @@ class SessionThread : public QThread
 
     inline QString hostName() { return m_hostName; }
     inline quint16 port() { return m_port; }
-
+    
     void sendData( const QByteArray &payload );
     void run();
 
   public slots:
     void closeSocket();
     void reconnect();
+    void startTls();
 
   signals:
     void responseReceived(const KIMAP::Message &response);
+    void tlsNegotiationResult(bool);
 
   private slots:
     void readMessage();
@@ -70,6 +72,8 @@ class SessionThread : public QThread
     QQueue<QByteArray> m_dataQueue;
 
     QMutex m_mutex;
+
+    bool m_encryptedMode;
 };
 
 }

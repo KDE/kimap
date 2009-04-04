@@ -41,6 +41,7 @@ class SessionPrivate
 
     void addJob(Job *job);
     QByteArray sendCommand( const QByteArray &command, const QByteArray &args = QByteArray() );
+    void startTls();
     void sendData( const QByteArray &data );
 
   private:

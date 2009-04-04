@@ -28,7 +28,6 @@ set(kimap_LIB_SRCS
    renamejob.cpp
    checkjob.cpp
    noopjob.cpp
-   starttlsjob.cpp
 )
 
 kde4_add_library(kimap SHARED ${kimap_LIB_SRCS})
