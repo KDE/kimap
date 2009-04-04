@@ -131,7 +131,7 @@ void LoginJob::tlsResponse(bool response)
     d->tag = d->sessionInternal()->sendCommand( "LOGIN", d->userName.toUtf8()+' '+d->password.toUtf8() );
   } else {
     setError( UserDefinedError );
-    setErrorText( i18n("%1 failed, TLS negotiation failed." ));
+    setErrorText( i18n("Login failed, TLS negotiation failed." ));
     d->encryptionMode = Unencrypted;
     emitResult();
   }
