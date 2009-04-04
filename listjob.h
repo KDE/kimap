@@ -45,9 +45,11 @@ class KIMAP_EXPORT ListJob : public Job
     bool isIncludeUnsubscribed() const;
 
     QList< QList<QByteArray> > mailBoxes() const;
+    QHash< QList<QByteArray>, QList<QByteArray> > flags() const;
 
   Q_SIGNALS:
-    void mailBoxReceived( const QList<QByteArray> &descriptor );
+    void mailBoxReceived( const QList<QByteArray> &descriptor,
+                          const QList<QByteArray> &flags );
 
   protected:
     virtual void doStart();

@@ -25,6 +25,17 @@
 #include "message_p.h"
 #include "session_p.h"
 
+uint qHash( const QList<QByteArray> &descriptor )
+{
+  QByteArray toHash;
+
+  foreach (const QByteArray &part, descriptor ) {
+    toHash+= part;
+  }
+
+  return qHash(toHash);
+}
+
 namespace KIMAP
 {
   class ListJobPrivate : public JobPrivate
@@ -36,6 +47,7 @@ namespace KIMAP
       bool includeUnsubscribed;
       QByteArray command;
       QList< QList<QByteArray> > descriptors;
+      QHash< QList<QByteArray>, QList<QByteArray> > flags;
   };
 }
 
@@ -87,6 +99,7 @@ void ListJob::doHandleResponse( const Message &response )
   if (handleErrorReplies(response) == NotHandled) {
     if ( response.content.size() == 5
            && response.content[1].toString()==d->command ) {
+      QList<QByteArray> flags = response.content[2].toList();
       QByteArray separator = response.content[3].toString();
       Q_ASSERT(separator.size()==1);
       QByteArray fullName = response.content[4].toString();
@@ -96,7 +109,8 @@ void ListJob::doHandleResponse( const Message &response )
       mailBoxDescriptor << fullName.split(separator[0]);
 
       d->descriptors << mailBoxDescriptor;
-      emit mailBoxReceived( mailBoxDescriptor );
+      d->flags[mailBoxDescriptor] = flags;
+      emit mailBoxReceived( mailBoxDescriptor, flags );
     }
   }
 }
