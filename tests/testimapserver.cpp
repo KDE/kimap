@@ -261,6 +261,7 @@ int main( int argc, char **argv )
   kDebug() << "Logging in...";
   LoginJob *login = new LoginJob(&session);
   login->setEncryptionMode(LoginJob::TlsV1);
+  login->setAuthenticationMode(LoginJob::Plain);
   login->setUserName(user);
   login->setPassword(password);
   login->exec();

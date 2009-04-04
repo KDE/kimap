@@ -44,6 +44,18 @@ class KIMAP_EXPORT LoginJob : public Job
     };
     Q_DECLARE_FLAGS(EncryptionModes, EncryptionMode)
    
+    enum AuthenticationMode {
+        ClearText = 0,
+        Login,
+        Plain,
+        CramMD5,
+        DigestMD5,
+        NTLM,
+        GSSAPI,
+        Anonymous        
+    };
+    Q_DECLARE_FLAGS(AuthenticationModes, AuthenticationMode)
+    
     LoginJob( Session *session );
     virtual ~LoginJob();
 
@@ -67,13 +79,19 @@ class KIMAP_EXPORT LoginJob : public Job
     */
     EncryptionMode encryptionMode();
 
+    void setAuthenticationMode(AuthenticationMode mode);
+
   protected:
     virtual void doStart();
     virtual void doHandleResponse( const Message &response );
     virtual void connectionLost();
    
   protected Q_SLOTS:
-    void tlsResponse(bool);  
+    void tlsResponse(bool);
+
+  private:
+    bool startAuthentication();
+    bool answerChallenge(const QByteArray &data);
 };
 
 }
