@@ -65,6 +65,11 @@ class KIMAP_EXPORT FetchJob : public Job
     QMap<int, QList<QByteArray> > flags() const;
     QMap<int, qint64> sizes() const;
 
+  Q_SIGNALS:
+    void headersReceived( const QByteArray &mailBox, int messageNumber, qint64 size, KMime::Message *message );
+    void messageReceived( const QByteArray &mailBox, int messageNumber, KMime::Message *message );
+    void partReceived( const QByteArray &mailBox, int messageNumber, const QByteArray &partIndex, KMime::Content *part );
+
   protected:
     virtual void doStart();
     virtual void doHandleResponse(const Message &response);

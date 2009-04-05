@@ -225,13 +225,22 @@ void FetchJob::doHandleResponse( const Message &response )
             if ( str=="BODY[]" ) {
               d->message(id)->setContent(*it);
               d->message(id)->parse();
+              emit messageReceived( d->sessionInternal()->selectedMailBox(),
+                                    id, d->message(id).data() );
             } else {
               QByteArray partId = str.mid( 5, str.size()-6 );
               d->part( id, partId )->setBody(*it);
               d->part( id, partId )->parse();
+              emit partReceived( d->sessionInternal()->selectedMailBox(),
+                                 id, partId, d->part( id, partId ).data() );
             }
           }
         }
+      }
+
+      if ( d->scope.mode == FetchScope::Headers ) {
+        emit headersReceived( d->sessionInternal()->selectedMailBox(),
+                              id, d->sizes[id], d->message(id).data() );
       }
     }
   }
