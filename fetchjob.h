@@ -57,6 +57,9 @@ class KIMAP_EXPORT FetchJob : public Job
     void setSequenceSet( const QByteArray &set );
     QByteArray sequenceSet() const;
 
+    void setUidBased(bool uidBased);
+    bool isUidBased() const;
+
     void setScope( const FetchScope &scope );
     FetchScope scope() const;
 

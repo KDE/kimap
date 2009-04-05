@@ -30,7 +30,7 @@ namespace KIMAP
   class FetchJobPrivate : public JobPrivate
   {
     public:
-      FetchJobPrivate( Session *session, const QString& name ) : JobPrivate( session, name ) { }
+      FetchJobPrivate( Session *session, const QString& name ) : JobPrivate( session, name ), uidBased(false) { }
       ~FetchJobPrivate() { }
 
       void parseBodyStructure( const QByteArray &structure, int &pos, KMime::Content *content );
@@ -58,6 +58,7 @@ namespace KIMAP
       }
 
       QByteArray set;
+      bool uidBased;
       FetchJob::FetchScope scope;
 
       QMap<int, QSharedPointer<KMime::Message> > messages;
@@ -91,6 +92,18 @@ QByteArray FetchJob::sequenceSet() const
 {
   Q_D(const FetchJob);
   return d->set;
+}
+
+void FetchJob::setUidBased(bool uidBased)
+{
+  Q_D(FetchJob);
+  d->uidBased = uidBased;
+}
+
+bool FetchJob::isUidBased() const
+{
+  Q_D(const FetchJob);
+  return d->uidBased;
 }
 
 void FetchJob::setScope( const FetchScope &scope )
@@ -166,6 +179,11 @@ void FetchJob::doStart()
       parameters+=')';
     }
     break;
+  }
+
+  QByteArray command = "FETCH";
+  if ( d->uidBased ) {
+    command = "UID "+command;
   }
 
   d->tag = d->sessionInternal()->sendCommand( "FETCH", parameters );
