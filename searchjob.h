@@ -1,0 +1,125 @@
+/*
+    Copyright (c) 2009 Andras Mantia <amantia@kde.org>
+
+    This library is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Library General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or (at your
+    option) any later version.
+
+    This library is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public
+    License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to the
+    Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+    02110-1301, USA.
+*/
+
+#ifndef KIMAP_SEARCHJOB_H
+#define KIMAP_SEARCHJOB_H
+
+#include "kimap_export.h"
+
+#include "job.h"
+
+class QDate;
+
+namespace KIMAP {
+
+class Session;
+class Message;
+class SearchJobPrivate;
+
+class KIMAP_EXPORT SearchJob : public Job
+{
+  Q_OBJECT
+  Q_DECLARE_PRIVATE(SearchJob)
+
+  friend class SessionPrivate;
+
+  public:
+    enum SearchLogic {
+      And = 0,
+      Or,
+      Not
+    };
+    Q_DECLARE_FLAGS(SearchLogics, SearchLogic)
+
+    enum SearchCriteria {
+       All = 0,
+       Answered,
+       BCC,
+       Before,
+       Body,
+       CC,
+       Deleted,
+       Draft,
+       Flagged,
+       From,
+       Header,
+       Keyword,
+       Larger,
+       New,
+       Old,
+       On,
+       Recent,
+       Seen,
+       SentBefore,
+       SentOn,
+       SentSince,
+       Since,
+       Smaller,
+       Subject,
+       Text,
+       To,
+       Uid,
+       Unanswered,
+       Undeleted,
+       Undraft,
+       Unflagged,
+       Unkeyword,
+       Unseen
+    };
+     Q_DECLARE_FLAGS(SearchCriterias, SearchCriteria)
+       
+    SearchJob( Session *session );
+    virtual ~SearchJob();
+
+    void setUidBased(bool uidBased);
+    bool isUidBased() const;
+    
+    void setCharset( const QByteArray &charSet );
+    QByteArray charset() const;
+
+    /**
+     * Get the search result, as a list of sequence numbers or UIDs, based on the isUidBased status
+     * @return the found items  
+     */
+    QList<int> foundItems();
+    
+    /**
+     * Add a search criteria that doesn't have an argument.
+     * @param criteria a criteria from SearchCriterias
+     */
+    void addSearchCriteria( SearchCriteria criteria );
+    
+    void addSearchCriteria( SearchCriteria criteria, const QByteArray &argument );
+    void addSearchCriteria( SearchCriteria criteria, int argument );
+    void addSearchCriteria( SearchCriteria criteria, const QDate& argument );
+    void addSearchCriteria( const QByteArray &searchCriteria );
+    /**
+     * Set the logic combining the search criterias.
+     * @param logic AND (the default), OR, NOT. See SearchLogics.
+     */
+    void setSearchLogic(SearchLogic logic);
+    
+  protected:
+    virtual void doStart();
+    virtual void doHandleResponse(const Message &response);
+};
+
+}
+
+#endif

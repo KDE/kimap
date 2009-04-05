@@ -31,6 +31,7 @@ set(kimap_LIB_SRCS
    statusjob.cpp
    storejob.cpp
    copyjob.cpp
+   searchjob.cpp
 )
 
 kde4_add_library(kimap SHARED ${kimap_LIB_SRCS})
@@ -44,4 +45,4 @@ install(TARGETS kimap EXPORT kdepimlibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_
 
 ########### install files ###############
 
-install( FILES kimap_export.h job.h appendjob.h capabilitiesjob.h fetchjob.h listjob.h loginjob.h logoutjob.h rfccodecs.h selectjob.h closejob.h expungejob.h deletejob.h createjob.h subscribejob.h unsubscribejob.h renamejob.h checkjob.h noopjob.h  statusjob.h session.h sessionuiproxy.h storejob.h copyjob.h DESTINATION ${INCLUDE_INSTALL_DIR}/kimap  COMPONENT Devel)
+install( FILES kimap_export.h job.h appendjob.h capabilitiesjob.h fetchjob.h listjob.h loginjob.h logoutjob.h rfccodecs.h selectjob.h closejob.h expungejob.h deletejob.h createjob.h subscribejob.h unsubscribejob.h renamejob.h checkjob.h noopjob.h  statusjob.h session.h sessionuiproxy.h storejob.h copyjob.h searchjob.h DESTINATION ${INCLUDE_INSTALL_DIR}/kimap  COMPONENT Devel)
