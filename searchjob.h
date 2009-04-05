@@ -100,15 +100,46 @@ class KIMAP_EXPORT SearchJob : public Job
     QList<int> foundItems();
     
     /**
-     * Add a search criteria that doesn't have an argument.
+     * Add a search criteria that doesn't have an argument. Passing a criteria that
+     * should have an argument will be ignored.
      * @param criteria a criteria from SearchCriterias
      */
     void addSearchCriteria( SearchCriteria criteria );
     
+    /**
+     * Add a search criteria that has one or more space separate string arguments.
+     * Passing a criteria that accepts a different type or argument or no
+     * argument will be ignored.
+     * @param criteria a criteria from SearchCriterias
+     * @param argument the arguments
+     */
     void addSearchCriteria( SearchCriteria criteria, const QByteArray &argument );
+
+    /**
+     * Add a search criteria that has an integer argument.
+     * Passing a criteria that accepts a different type or argument or no
+     * argument will be ignored.
+     * @param criteria a criteria from SearchCriterias
+     * @param argument a number argument
+     */
     void addSearchCriteria( SearchCriteria criteria, int argument );
+    
+    /**
+     * Add a search criteria that has a date as argument.
+     * Passing a criteria that accepts a different type or argument or no
+     * argument will be ignored.
+     * @param criteria a criteria from SearchCriterias
+     * @param argument a date
+     */
     void addSearchCriteria( SearchCriteria criteria, const QDate& argument );
+    
+    /**
+     * Add a custom criteria. No checks are done, the data is sent as it is
+     * to the server.
+     * @param searchCriteria free form search criteria.
+     */
     void addSearchCriteria( const QByteArray &searchCriteria );
+
     /**
      * Set the logic combining the search criterias.
      * @param logic AND (the default), OR, NOT. See SearchLogics.
