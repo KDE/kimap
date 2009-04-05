@@ -2,8 +2,9 @@
 #include <kaboutdata.h>
 #include <kdebug.h>
 #include <qtcpsocket.h>
-#include <qcoreapplication.h>
+#include <qapplication.h>
 #include <qsignalspy.h>
+#include <kmessagebox.h>
 
 #include "kimap/session.h"
 #include "kimap/appendjob.h"
@@ -21,8 +22,20 @@
 #include "kimap/unsubscribejob.h"
 #include "kimap/renamejob.h"
 #include "kimap/storejob.h"
+#include "kimap/sessionuiproxy.h"
 
 using namespace KIMAP;
+
+class UiProxy: public SessionUiProxy {
+  public:
+    bool ignoreSslError(const QString &error) {
+      if (KMessageBox::questionYesNo(0, i18n("Ssl error received: %1. Continue?").arg(error), i18n("SSL Error") ) == KMessageBox::Yes) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+};
 
 void dumpContentHelper(KMime::Content *part, const QString &partId = QString())
 {
@@ -255,8 +268,10 @@ int main( int argc, char **argv )
   kDebug() << "Querying:" << server << port << user << password;
   qDebug();
 
-  QCoreApplication app(argc, argv);
+  QApplication app(argc, argv);
   Session session(server, port);
+  UiProxy *proxy = new UiProxy();
+  session.setUiProxy(proxy);
 
   kDebug() << "Logging in...";
   LoginJob *login = new LoginJob(&session);

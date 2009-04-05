@@ -56,10 +56,13 @@ class SessionThread : public QThread
   signals:
     void responseReceived(const KIMAP::Message &response);
     void tlsNegotiationResult(bool);
+    void sslError(const QString&);
 
   private slots:
     void readMessage();
     void writeDataQueue();
+    void tlsConnected();
+    void sslErrorHandlerResponse(bool result);
 
   private:
     QString m_hostName;

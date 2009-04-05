@@ -157,27 +157,42 @@ void SessionThread::startTls()
   QMutexLocker locker(&m_mutex);
   
   m_socket->setAdvertisedSslVersion(KTcpSocket::TlsV1);
-//   m_socket->ignoreSslErrors();
+  m_socket->ignoreSslErrors();
+  connect(m_socket, SIGNAL(encrypted()), this, SLOT(tlsConnected()));
   m_socket->startClientEncryption();
-  const bool encryptionStarted = m_socket->waitForEncrypted(-1);
+}
+
+void SessionThread::tlsConnected()
+{
+  QMutexLocker locker(&m_mutex);
   KSslCipher cipher = m_socket->sessionCipher();
 
-  if (!encryptionStarted || m_socket->encryptionMode() != KTcpSocket::SslClientMode
+  if ( m_socket->sslErrors().count() > 0 || m_socket->encryptionMode() != KTcpSocket::SslClientMode
       || cipher.isNull() || cipher.usedBits() == 0) {
-      kDebug() << "Initial SSL handshake failed. encryptionStarted is"
-                    << encryptionStarted << ", cipher.isNull() is" << cipher.isNull()
+      kDebug() << "Initial SSL handshake failed. cipher.isNull() is" << cipher.isNull()
                     << ", cipher.usedBits() is" << cipher.usedBits()
                     << ", the socket says:" <<  m_socket->errorString()
                     << "and the list of SSL errors contains"
                     << m_socket->sslErrors().count() << "items.";
-     m_encryptedMode = false;
-     //reconnect in unencrypted mode, so new commands can be issued
-     m_socket->connectToHost(m_hostName, m_port);
-     emit tlsNegotiationResult(false);
+     emit sslError(m_socket->errorString());
   } else {
     kDebug() << "TLS negotiation done.";
     m_encryptedMode = true;
     emit tlsNegotiationResult(true);
+  }
+}
+
+void SessionThread::sslErrorHandlerResponse(bool response)
+{
+  if (response) {
+    m_encryptedMode = true;
+    emit tlsNegotiationResult(true);
+  } else {
+     m_encryptedMode = false;
+     //reconnect in unencrypted mode, so new commands can be issued
+     m_socket->disconnectFromHost();
+     m_socket->connectToHost(m_hostName, m_port);
+     emit tlsNegotiationResult(false);
   }
 }
 

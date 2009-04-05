@@ -26,6 +26,7 @@
 
 namespace KIMAP {
 
+class SessionUiProxy;
 class SessionPrivate;
 class JobPrivate;
 class Message;
@@ -46,9 +47,14 @@ class KIMAP_EXPORT Session : public QObject
     QString hostName() const;
     quint16 port() const;
     State state() const;
+    void setUiProxy(SessionUiProxy *proxy);
 
   Q_SIGNALS:
     void tlsNegotiationResult(bool);
+    void sslErrorHandlerResponse(bool);
+
+  private Q_SLOTS:
+    void handleSslError(const QString& message);
 
   private:
     Q_PRIVATE_SLOT( d, void doStartNext() )

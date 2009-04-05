@@ -19,9 +19,13 @@
 
 #include "session.h"
 #include "session_p.h"
+#include "sessionuiproxy.h"
 
 #include <QtCore/QDebug>
 #include <QtCore/QTimer>
+
+#include <KDE/KMessageBox>
+#include <KDE/KLocale>
 
 #include "job.h"
 #include "message_p.h"
@@ -37,6 +41,8 @@ Session::Session( const QString &hostName, quint16 port, QObject *parent)
 
   d->thread = new SessionThread(hostName, port, this);
   connect(d->thread, SIGNAL(tlsNegotiationResult(bool)), this, SIGNAL(tlsNegotiationResult(bool)));
+  connect(d->thread, SIGNAL(sslError(const QString&)), this, SLOT(handleSslError(const QString&)));
+  connect(this, SIGNAL(sslErrorHandlerResponse(bool)), d->thread, SLOT(sslErrorHandlerResponse(bool)));
 
   d->thread->start();
 }
@@ -44,6 +50,11 @@ Session::Session( const QString &hostName, quint16 port, QObject *parent)
 Session::~Session()
 {
   delete d->thread;
+}
+
+void Session::setUiProxy(SessionUiProxy *proxy)
+{
+  d->uiProxy = proxy;
 }
 
 QString Session::hostName() const
@@ -61,9 +72,18 @@ Session::State Session::state() const
   return d->state;
 }
 
+void Session::handleSslError(const QString& error) {
+   if (d->uiProxy && d->uiProxy->ignoreSslError(error)) {
+     emit sslErrorHandlerResponse(true);
+   } else {
+     emit sslErrorHandlerResponse(false);
+   }
+}
+
 SessionPrivate::SessionPrivate( Session *session )
   : q(session),
-    currentJob(0)
+    currentJob(0),
+    uiProxy(0)           
 {
 }
 

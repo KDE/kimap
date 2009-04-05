@@ -31,6 +31,7 @@ namespace KIMAP {
 class Job;
 class Message;
 class SessionThread;
+class SessionUiProxy;
 
 class SessionPrivate
 {
@@ -63,6 +64,7 @@ class SessionPrivate
     Session::State state;
 
     SessionThread *thread;
+    SessionUiProxy *uiProxy;
 
     bool jobRunning;
     Job *currentJob;
