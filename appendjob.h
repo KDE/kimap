@@ -27,8 +27,6 @@
 #include "kmime/kmime_content.h"
 #include "kmime/kmime_message.h"
 
-#include <QtCore/QSharedPointer>
-
 namespace KIMAP {
 
 class Session;

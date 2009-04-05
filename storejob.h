@@ -24,8 +24,6 @@
 
 #include "job.h"
 
-#include <QtCore/QSharedPointer>
-
 namespace KIMAP {
 
 class Session;
