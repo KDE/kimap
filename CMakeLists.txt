@@ -28,6 +28,7 @@ set(kimap_LIB_SRCS
    renamejob.cpp
    checkjob.cpp
    noopjob.cpp
+   statusjob.cpp
    storejob.cpp
 )
 
@@ -42,4 +43,4 @@ install(TARGETS kimap EXPORT kdepimlibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_
 
 ########### install files ###############
 
-install( FILES kimap_export.h job.h appendjob.h capabilitiesjob.h fetchjob.h listjob.h loginjob.h logoutjob.h rfccodecs.h selectjob.h session.h storejob.h DESTINATION ${INCLUDE_INSTALL_DIR}/kimap  COMPONENT Devel)
+install( FILES kimap_export.h job.h appendjob.h capabilitiesjob.h fetchjob.h listjob.h loginjob.h logoutjob.h rfccodecs.h selectjob.h session.h statusjob.h storejob.h DESTINATION ${INCLUDE_INSTALL_DIR}/kimap  COMPONENT Devel)
