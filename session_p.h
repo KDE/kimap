@@ -44,6 +44,8 @@ class SessionPrivate
     void startTls();
     void sendData( const QByteArray &data );
 
+    QByteArray selectedMailBox() const;
+
   private:
     void reconnect();
 
@@ -69,6 +71,9 @@ class SessionPrivate
     QByteArray authTag;
     QByteArray selectTag;
     QByteArray closeTag;
+
+    QByteArray currentMailBox;
+    QByteArray upcomingMailBox;
 };
 
 }

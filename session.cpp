@@ -143,12 +143,16 @@ void SessionPrivate::responseReceived( const Message &response )
   case Session::Authenticated:
     if ( code=="OK" && tag==selectTag ) {
       state = Session::Selected;
+      currentMailBox = upcomingMailBox;
     }
     break;
   case Session::Selected:
     if ( ( code=="OK" && tag==closeTag )
       || ( code!="OK" && tag==selectTag) ) {
       state = Session::Authenticated;
+      if ( tag==closeTag ) {
+        currentMailBox = QByteArray();
+      }
     }
     break;
   }
@@ -182,6 +186,9 @@ QByteArray SessionPrivate::sendCommand( const QByteArray &command, const QByteAr
     authTag = tag;
   } else if ( command=="SELECT" || command=="EXAMINE" ) {
     selectTag = tag;
+    upcomingMailBox = args;
+    upcomingMailBox.remove( 0, 1 );
+    upcomingMailBox.chop( 1 );
   } else if ( command=="CLOSE" ) {
     closeTag = tag;
   }
@@ -213,6 +220,11 @@ void SessionPrivate::socketError()
 void SessionPrivate::startTls()
 {
   QMetaObject::invokeMethod( thread, "startTls" );
+}
+
+QByteArray SessionPrivate::selectedMailBox() const
+{
+  return currentMailBox;
 }
 
 #include "session.moc"
