@@ -1,5 +1,5 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/kimap )
+include_directories( ${CMAKE_SOURCE_DIR}/kimap ${Boost_INCLUDE_DIR})
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
 MACRO(KIMAP_UNIT_TESTS)
