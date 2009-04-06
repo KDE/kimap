@@ -34,6 +34,7 @@ ADD_IMAPLIB_TEST(capabilitiesjobtest.cpp)
 ADD_IMAPLIB_TEST(selectjobtest.cpp)
 ADD_IMAPLIB_TEST(createjobtest.cpp)
 ADD_IMAPLIB_TEST(deletejobtest.cpp)
+ADD_IMAPLIB_TEST(renamejobtest.cpp)
 
 
 
