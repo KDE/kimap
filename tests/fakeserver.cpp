@@ -34,6 +34,7 @@ FakeServer::FakeServer( QObject* parent ) : QThread( parent )
 
 FakeServer::~FakeServer()
 {
+  wait();
 }
 
 void FakeServer::dataAvailable()
