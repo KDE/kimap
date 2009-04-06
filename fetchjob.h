@@ -27,7 +27,7 @@
 #include "kmime/kmime_content.h"
 #include "kmime/kmime_message.h"
 
-#include <QtCore/QSharedPointer>
+#include <boost/shared_ptr.hpp>
 
 namespace KIMAP {
 
@@ -63,15 +63,16 @@ class KIMAP_EXPORT FetchJob : public Job
     void setScope( const FetchScope &scope );
     FetchScope scope() const;
 
-    QMap<int, QSharedPointer<KMime::Message> > messages() const;
-    QMap<int, QMap<QByteArray, QSharedPointer<KMime::Content> > > parts() const;
+    QMap<int, boost::shared_ptr<KMime::Message> > messages() const;
+    QMap<int, QMap<QByteArray, boost::shared_ptr<KMime::Content> > > parts() const;
     QMap<int, QList<QByteArray> > flags() const;
     QMap<int, qint64> sizes() const;
+    QMap<int, qint64> uids() const;
 
   Q_SIGNALS:
-    void headersReceived( const QByteArray &mailBox, int messageNumber, qint64 size, KMime::Message *message );
-    void messageReceived( const QByteArray &mailBox, int messageNumber, KMime::Message *message );
-    void partReceived( const QByteArray &mailBox, int messageNumber, const QByteArray &partIndex, KMime::Content *part );
+    void headersReceived( const QByteArray &mailBox, qint64 uid, int messageNumber, qint64 size, boost::shared_ptr<KMime::Message> message );
+    void messageReceived( const QByteArray &mailBox, qint64 uid, int messageNumber, boost::shared_ptr<KMime::Message> message );
+    void partReceived( const QByteArray &mailBox, qint64 uid, int messageNumber, const QByteArray &partIndex, boost::shared_ptr<KMime::Content> part );
 
   protected:
     virtual void doStart();

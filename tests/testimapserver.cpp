@@ -116,7 +116,7 @@ void testAppendAndStore(Session *session)
   scope.mode = FetchJob::FetchScope::Content;
   fetch->setScope(scope);
   fetch->exec();
-  QSharedPointer<KMime::Message> message = fetch->messages()[1];
+  boost::shared_ptr<KMime::Message> message = fetch->messages()[1];
   Q_ASSERT_X(fetch->error()==0, "FetchJob", fetch->errorString().toLocal8Bit());
   Q_ASSERT_X(testMailContent==message->head()+message->body(),
              "Message differs from reference", message->head()+message->body());
@@ -332,7 +332,7 @@ int main( int argc, char **argv )
   fetch->exec();
   Q_ASSERT_X(fetch->error()==0, "FetchJob", fetch->errorString().toLocal8Bit());
   Q_ASSERT(session.state()==Session::Selected);
-  QMap<int, QSharedPointer<KMime::Message> > messages = fetch->messages();
+  QMap<int, boost::shared_ptr<KMime::Message> > messages = fetch->messages();
   foreach (int id, messages.keys()) {
     kDebug() << "* Message" << id << "(" << fetch->sizes()[id] << "bytes )";
     kDebug() << "  From      :" << messages[id]->from()->asUnicodeString();
@@ -368,8 +368,8 @@ int main( int argc, char **argv )
   fetch->exec();
   Q_ASSERT_X(fetch->error()==0, "FetchJob", fetch->errorString().toLocal8Bit());
   Q_ASSERT(session.state()==Session::Selected);
-  QSharedPointer<KMime::Message> message = fetch->messages()[1];
-  dumpContentHelper(message.data());
+  boost::shared_ptr<KMime::Message> message = fetch->messages()[1];
+  dumpContentHelper(message.get());
   qDebug();
 
   kDebug() << "Fetching first message second part headers:";
@@ -382,10 +382,10 @@ int main( int argc, char **argv )
   fetch->exec();
   Q_ASSERT_X(fetch->error()==0, "FetchJob", fetch->errorString().toLocal8Bit());
   Q_ASSERT(session.state()==Session::Selected);
-  QMap<int, QMap<QByteArray, QSharedPointer<KMime::Content> > > allParts = fetch->parts();
+  QMap<int, QMap<QByteArray, boost::shared_ptr<KMime::Content> > > allParts = fetch->parts();
   foreach (int id, allParts.keys()) {
     kDebug() << "* Message" << id << "parts headers";
-    QMap<QByteArray, QSharedPointer<KMime::Content> > parts = allParts[id];
+    QMap<QByteArray, boost::shared_ptr<KMime::Content> > parts = allParts[id];
     foreach (const QByteArray &partId, parts.keys()) {
       kDebug() << "  ** Part" << partId;
       kDebug() << "     Name       :" << parts[partId]->contentType()->name();
@@ -407,7 +407,7 @@ int main( int argc, char **argv )
   Q_ASSERT(session.state()==Session::Selected);
   allParts = fetch->parts();
   foreach (int id, allParts.keys()) {
-    QMap<QByteArray, QSharedPointer<KMime::Content> > parts = allParts[id];
+    QMap<QByteArray, boost::shared_ptr<KMime::Content> > parts = allParts[id];
     foreach (const QByteArray &partId, parts.keys()) {
       kDebug() << "* Message" << id << "part" << partId << "content:";
       kDebug() << parts[partId]->body();

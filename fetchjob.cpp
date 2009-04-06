@@ -39,19 +39,19 @@ namespace KIMAP
       QByteArray parseSentence( const QByteArray &structure, int &pos );
       void skipLeadingSpaces( const QByteArray &structure, int &pos );
 
-      QSharedPointer<KMime::Message> message(int id)
+      boost::shared_ptr<KMime::Message> message(int id)
       {
         if ( !messages.contains(id) ) {
-          messages[id] = QSharedPointer<KMime::Message>(new KMime::Message);
+          messages[id] = boost::shared_ptr<KMime::Message>(new KMime::Message);
         }
 
         return messages[id];
       }
 
-      QSharedPointer<KMime::Content> part(int id, QByteArray partName)
+      boost::shared_ptr<KMime::Content> part(int id, QByteArray partName)
       {
         if ( !parts[id].contains(partName) ) {
-          parts[id][partName] = QSharedPointer<KMime::Content>(new KMime::Content);
+          parts[id][partName] = boost::shared_ptr<KMime::Content>(new KMime::Content);
         }
 
         return parts[id][partName];
@@ -61,10 +61,11 @@ namespace KIMAP
       bool uidBased;
       FetchJob::FetchScope scope;
 
-      QMap<int, QSharedPointer<KMime::Message> > messages;
-      QMap<int, QMap<QByteArray, QSharedPointer<KMime::Content> > > parts;
+      QMap<int, boost::shared_ptr<KMime::Message> > messages;
+      QMap<int, QMap<QByteArray, boost::shared_ptr<KMime::Content> > > parts;
       QMap<int, QList<QByteArray> > flags;
       QMap<int, qint64> sizes;
+      QMap<int, qint64> uids;
 
   };
 }
@@ -118,13 +119,13 @@ FetchJob::FetchScope FetchJob::scope() const
   return d->scope;
 }
 
-QMap<int, QSharedPointer<KMime::Message> > FetchJob::messages() const
+QMap<int, boost::shared_ptr<KMime::Message> > FetchJob::messages() const
 {
   Q_D(const FetchJob);
   return d->messages;
 }
 
-QMap<int, QMap<QByteArray, QSharedPointer<KMime::Content> > > FetchJob::parts() const
+QMap<int, QMap<QByteArray, boost::shared_ptr<KMime::Content> > > FetchJob::parts() const
 {
   Q_D(const FetchJob);
   return d->parts;
@@ -142,6 +143,12 @@ QMap<int, qint64> FetchJob::sizes() const
   return d->sizes;
 }
 
+QMap<int, qint64> FetchJob::uids() const
+{
+  Q_D(const FetchJob);
+  return d->uids;
+}
+
 void FetchJob::doStart()
 {
   Q_D(FetchJob);
@@ -151,32 +158,30 @@ void FetchJob::doStart()
   switch ( d->scope.mode ) {
   case FetchScope::Headers:
     if ( d->scope.parts.isEmpty() ) {
-      parameters+="(RFC822.SIZE INTERNALDATE BODY[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT)])";
+      parameters+="(RFC822.SIZE INTERNALDATE BODY[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT)] UID)";
     } else {
       parameters+='(';
       foreach ( const QByteArray &part, d->scope.parts ) {
         parameters+="BODY["+part+".MIME] ";
       }
-      parameters.chop(1);
-      parameters+=')';
+      parameters+="UID)";
     }
     break;
   case FetchScope::Flags:
-    parameters+="FLAGS";
+    parameters+="(FLAGS UID)";
     break;
   case FetchScope::Structure:
-    parameters+="BODYSTRUCTURE";
+    parameters+="(BODYSTRUCTURE UID)";
     break;
   case FetchScope::Content:
     if ( d->scope.parts.isEmpty() ) {
-      parameters+="BODY[]";
+      parameters+="(BODY[] UID)";
     } else {
       parameters+='(';
       foreach ( const QByteArray &part, d->scope.parts ) {
         parameters+="BODY["+part+"] ";
       }
-      parameters.chop(1);
-      parameters+=')';
+      parameters+="UID)";
     }
     break;
   }
@@ -186,9 +191,9 @@ void FetchJob::doStart()
     command = "UID "+command;
   }
 
-  d->tag = d->sessionInternal()->sendCommand( "FETCH", parameters );
+  d->tag = d->sessionInternal()->sendCommand( command, parameters );
 }
-
+#include <kdebug.h>
 void FetchJob::doHandleResponse( const Message &response )
 {
   Q_D(FetchJob);
@@ -206,7 +211,9 @@ void FetchJob::doHandleResponse( const Message &response )
         QByteArray str = *it;
         ++it;
 
-        if ( str=="RFC822.SIZE" ) {
+        if ( str=="UID" ) {
+          d->uids[id] = it->toInt();
+        } else if ( str=="RFC822.SIZE" ) {
           d->sizes[id] = it->toInt();
         } else if ( str=="INTERNALDATE" ) {
           d->message(id)->date()->setDateTime( KDateTime::fromString( *it, KDateTime::RFCDate ) );
@@ -221,7 +228,7 @@ void FetchJob::doHandleResponse( const Message &response )
           }
         } else if ( str=="BODYSTRUCTURE" ) {
           int pos = 0;
-          d->parseBodyStructure(*it, pos, d->message(id).data());
+          d->parseBodyStructure(*it, pos, d->message(id).get());
           d->message(id)->assemble();
         } else if ( str.startsWith("BODY[") ) {
           if ( !str.endsWith(']') ) { // BODY[ ... ] might have been split, skip until we find the ]
@@ -241,24 +248,25 @@ void FetchJob::doHandleResponse( const Message &response )
             }
           } else { // full payload
             if ( str=="BODY[]" ) {
-              d->message(id)->setContent(*it);
+              d->message(id)->setContent( KMime::CRLFtoLF(*it) );
               d->message(id)->parse();
-              emit messageReceived( d->sessionInternal()->selectedMailBox(),
-                                    id, d->message(id).data() );
+              kDebug() << "Message Content:" << *it << d->message(id)->head() << d->message(id)->body();
+              emit messageReceived( d->sessionInternal()->selectedMailBox(), d->uids[id],
+                                    id, d->message(id) );
             } else {
               QByteArray partId = str.mid( 5, str.size()-6 );
               d->part( id, partId )->setBody(*it);
               d->part( id, partId )->parse();
-              emit partReceived( d->sessionInternal()->selectedMailBox(),
-                                 id, partId, d->part( id, partId ).data() );
+              emit partReceived( d->sessionInternal()->selectedMailBox(), d->uids[id],
+                                 id, partId, d->part( id, partId ) );
             }
           }
         }
       }
 
       if ( d->scope.mode == FetchScope::Headers ) {
-        emit headersReceived( d->sessionInternal()->selectedMailBox(),
-                              id, d->sizes[id], d->message(id).data() );
+        emit headersReceived( d->sessionInternal()->selectedMailBox(), d->uids[id],
+                              id, d->sizes[id], d->message(id) );
       }
     }
   }
