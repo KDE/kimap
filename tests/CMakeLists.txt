@@ -29,7 +29,8 @@ ENDMACRO(ADD_IMAPLIB_TEST)
 
 ### tests
 ADD_IMAPLIB_TEST(loginjobtest.cpp)
-ADD_IMAPLIB_TEST(logoutjobtest.cpp)
+ADD_IMAPLIB_TEST(logoutjobtest.cpp) 
+ADD_IMAPLIB_TEST(capabilitiesjobtest.cpp)
 
 
 
