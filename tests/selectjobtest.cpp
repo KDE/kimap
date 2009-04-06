@@ -33,7 +33,7 @@ class SelectJobTest: public QObject {
 
 private Q_SLOTS:    
 
-void testCapabilities_data() {
+void testSelect_data() {
   QTest::addColumn<QStringList>( "response" );
   QTest::addColumn<QList<QByteArray> >( "flags" );
   QTest::addColumn<QList<QByteArray> >( "permanentflags" );
@@ -64,7 +64,7 @@ void testCapabilities_data() {
   QTest::newRow( "no" ) << response << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << 0;
 }
 
-void testCapabilities()
+void testSelect()
 {
     FakeServer fakeServer;
     fakeServer.start();
@@ -81,6 +81,7 @@ void testCapabilities()
     fakeServer.setResponse( response );
 
     KIMAP::SelectJob *job = new KIMAP::SelectJob(&session);
+    job->setMailBox("INBOX");
     QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
     QEXPECT_FAIL("no" , "Expected failure on NO response", Continue);
     bool result = job->exec();
