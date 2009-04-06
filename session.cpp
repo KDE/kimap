@@ -83,7 +83,8 @@ void Session::handleSslError(const QString& error) {
 SessionPrivate::SessionPrivate( Session *session )
   : q(session),
     currentJob(0),
-    uiProxy(0)           
+    uiProxy(0),
+    tagCount(0)
 {
 }
 
@@ -191,7 +192,6 @@ void SessionPrivate::responseReceived( const Message &response )
 
 QByteArray SessionPrivate::sendCommand( const QByteArray &command, const QByteArray &args )
 {
-  static quint16 tagCount = 0;
   QByteArray tag = "A" + QByteArray::number(++tagCount).rightJustified(6, '0');
 
   QByteArray payload = tag+' '+command;

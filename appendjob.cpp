@@ -44,7 +44,6 @@ using namespace KIMAP;
 AppendJob::AppendJob( Session *session )
   : Job( *new AppendJobPrivate(session, i18n("Append")) )
 {
-  Q_D(AppendJob);
 }
 
 AppendJob::~AppendJob()

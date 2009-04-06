@@ -76,6 +76,7 @@ class SessionPrivate
 
     QByteArray currentMailBox;
     QByteArray upcomingMailBox;
+    quint16 tagCount;
 };
 
 }
