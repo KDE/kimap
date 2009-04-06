@@ -43,7 +43,7 @@ namespace KIMAP
       int messageCount;
       int recentCount;
       int firstUnseenIndex;
-      int uidValidity;
+      qint64 uidValidity;
       int nextUid;
   };
 }
@@ -113,7 +113,7 @@ int SelectJob::firstUnseenIndex() const
   return d->firstUnseenIndex;
 }
 
-int SelectJob::uidValidity() const
+qint64 SelectJob::uidValidity() const
 {
   Q_D(const SelectJob);
   return d->uidValidity;
@@ -154,15 +154,19 @@ void SelectJob::doHandleResponse( const Message &response )
             d->permanentFlags = response.responseCode[1].toList();
           } else {
             bool isInt;
-            int value = response.responseCode[1].toString().toInt(&isInt);
-            if ( !isInt ) return;
 
-            if ( code=="UNSEEN" ) {
-              d->firstUnseenIndex = value;
-            } else if ( code=="UIDVALIDITY" ) {
+            if ( code=="UIDVALIDITY" ) {
+              qint64 value = response.responseCode[1].toString().toLongLong(&isInt);
+              if ( !isInt ) return;
               d->uidValidity = value;
-            } else if ( code=="UIDNEXT" ) {
-              d->nextUid = value;
+            } else {
+              int value = response.responseCode[1].toString().toInt(&isInt);
+              if ( !isInt ) return;
+              if ( code=="UNSEEN" ) {
+                d->firstUnseenIndex = value;
+              } else if ( code=="UIDNEXT" ) {
+                d->nextUid = value;
+              }
             }
           }
         } else if ( code=="FLAGS" ) {

@@ -54,7 +54,7 @@ class KIMAP_EXPORT SelectJob : public Job
     int recentCount() const;
     int firstUnseenIndex() const;
 
-    int uidValidity() const;
+    qint64 uidValidity() const;
     int nextUid() const;
 
   protected:

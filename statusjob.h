@@ -45,12 +45,12 @@ class KIMAP_EXPORT StatusJob : public Job
     QByteArray mailBox() const;
 
     int messageCount() const;
-    int uidValidity() const;
+    qint64 uidValidity() const;
     int nextUid() const;
 
   Q_SIGNALS:
     void status( const QByteArray &mailBox, int messageCount,
-                 int uidValidity, int nextUid );
+                 qint64 uidValidity, int nextUid );
 
   protected:
     virtual void doStart();

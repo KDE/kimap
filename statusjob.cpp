@@ -38,7 +38,7 @@ namespace KIMAP
       QByteArray mailBox;
 
       int messageCount;
-      int uidValidity;
+      qint64 uidValidity;
       int nextUid;
   };
 }
@@ -72,7 +72,7 @@ int StatusJob::messageCount() const
   return d->messageCount;
 }
 
-int StatusJob::uidValidity() const
+qint64 StatusJob::uidValidity() const
 {
   Q_D(const StatusJob);
   return d->uidValidity;
@@ -110,7 +110,7 @@ void StatusJob::doHandleResponse( const Message &response )
               d->messageCount = it->toInt();
             } else if ( (*it)=="UIDVALIDITY" ) {
               ++it;
-              d->uidValidity = it->toInt();
+              d->uidValidity = it->toLongLong();
             } else if ( (*it)=="UIDNEXT" ) {
               ++it;
               d->nextUid = it->toInt();
