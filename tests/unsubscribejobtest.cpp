@@ -20,7 +20,7 @@
 
 #include "fakeserver.h"
 #include "kimap/session.h"
-#include "kimap/renamejob.h"
+#include "kimap/unsubscribejob.h"
 
 #include <QTcpSocket>
 #include <QtTest>
@@ -28,49 +28,45 @@
 
 Q_DECLARE_METATYPE(QList<QByteArray>);
 
-class RenameJobTest: public QObject {
+class UnsubscribeJobTest: public QObject {
   Q_OBJECT
 
 private Q_SLOTS:    
 
-void testRename_data() {
+void testUnsubscribe_data() {
   QTest::addColumn<QByteArray>( "mailbox" );
-  QTest::addColumn<QByteArray>( "newname" );
   QTest::addColumn<QStringList>( "response" );
   
   QStringList response;
   response << "A000001 OK CREATE completed";
-  QTest::newRow( "good" ) << QByteArray("INBOX") << QByteArray("oldmail") << response ;
+  QTest::newRow( "good" ) << QByteArray("#news.comp.mail.mime")  << response ;
 
   response.clear();
   response << "A000001 BAD command unknown or arguments invalid";
-  QTest::newRow( "bad" ) << QByteArray("INBOX-FAIL-BAD")  << QByteArray("oldmail-bad") << response;
+  QTest::newRow( "bad" ) << QByteArray("INBOX-FAIL-BAD") << response;
   
   response.clear();
-  response << "A000001 NO rename failure";
-  QTest::newRow( "no" ) << QByteArray("INBOX-FAIL-NO")  << QByteArray("oldmail-no") << response ;
+  response << "A000001 NO unsubscribe failure";
+  QTest::newRow( "no" ) << QByteArray("INBOX-FAIL-NO") << response ;
 }
 
-void testRename()
+void testUnsubscribe()
 {
     FakeServer fakeServer;
     fakeServer.start();
     KIMAP::Session session("127.0.0.1", 5989);
     QFETCH( QByteArray, mailbox );
-    QFETCH( QByteArray, newname );
     QFETCH( QStringList, response );
     
     fakeServer.setResponse( response );
 
-    KIMAP::RenameJob *job = new KIMAP::RenameJob(&session);
+    KIMAP::UnsubscribeJob *job = new KIMAP::UnsubscribeJob(&session);
     job->setMailBox(mailbox);
-    job->setNewMailBox(newname);
     QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
     QEXPECT_FAIL("no" , "Expected failure on NO response", Continue);
     bool result = job->exec();
     QVERIFY(result);
     QCOMPARE(job->mailBox(), mailbox);
-    QCOMPARE(job->newMailBox(), newname);
 
     fakeServer.quit();
 }
@@ -78,6 +74,6 @@ void testRename()
 
 };
 
-QTEST_KDEMAIN( RenameJobTest, NoGUI )
+QTEST_KDEMAIN( UnsubscribeJobTest, NoGUI )
 
-#include "renamejobtest.moc"
+#include "unsubscribejobtest.moc"
