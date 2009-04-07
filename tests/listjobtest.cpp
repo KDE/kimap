@@ -26,8 +26,8 @@
 #include <QtTest>
 #include <KDebug>
 
-Q_DECLARE_METATYPE(QList<QByteArray>);
-Q_DECLARE_METATYPE(QList<QList<QByteArray> >);
+Q_DECLARE_METATYPE(QList<QByteArray>)
+Q_DECLARE_METATYPE(QList<QList<QByteArray> >)
 
 class ListJobTest: public QObject {
   Q_OBJECT
