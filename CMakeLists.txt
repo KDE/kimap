@@ -32,6 +32,7 @@ set(kimap_LIB_SRCS
    storejob.cpp
    copyjob.cpp
    searchjob.cpp
+   acljobbase.cpp
 )
 
 kde4_add_library(kimap SHARED ${kimap_LIB_SRCS})
