@@ -49,7 +49,7 @@ class KIMAP_EXPORT AclJobBase : public Job
       Admin
     };
 
-    Q_DECLARE_FLAGS(AclRights, AclRight);
+    Q_DECLARE_FLAGS(AclRights, AclRight)
     
     enum AclModifier {
       Add = 0,
@@ -57,7 +57,7 @@ class KIMAP_EXPORT AclJobBase : public Job
       Change
     };
 
-    Q_DECLARE_FLAGS(AclModifiers, AclModifier);
+    Q_DECLARE_FLAGS(AclModifiers, AclModifier)
     
     AclJobBase( Session *session );
     virtual ~AclJobBase();
