@@ -103,8 +103,8 @@ void StatusJob::doHandleResponse( const Message &response )
         if ( code=="STATUS" && mailBox==d->mailBox ) {
           QList<QByteArray> data = response.content[3].toList();
 
-          for ( QList<QByteArray>::ConstIterator it = data.begin();
-                it!=data.end(); ++it ) {
+          for ( QList<QByteArray>::ConstIterator it = data.constBegin();
+                it!=data.constEnd(); ++it ) {
             if ( (*it)=="MESSAGES" ) {
               ++it;
               d->messageCount = it->toInt();

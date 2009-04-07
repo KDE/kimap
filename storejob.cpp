@@ -137,8 +137,8 @@ void StoreJob::doHandleResponse( const Message &response )
       int id = response.content[1].toString().toInt();
       QList<QByteArray> content = response.content[3].toList();
 
-      for ( QList<QByteArray>::ConstIterator it = content.begin();
-            it!=content.end(); ++it ) {
+      for ( QList<QByteArray>::ConstIterator it = content.constBegin();
+            it!=content.constEnd(); ++it ) {
         QByteArray str = *it;
         ++it;
 
