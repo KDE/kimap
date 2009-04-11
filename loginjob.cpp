@@ -194,7 +194,7 @@ void LoginJob::doHandleResponse( const Message &response )
   if ( !response.content.isEmpty()
        && response.content.first().toString() == d->tag ) {
     if ( response.content.size() < 2 ) {
-      setErrorText( i18n("%1 failed, malformed reply from the server").arg(commandName) );
+      setErrorText( i18n("%1 failed, malformed reply from the server", commandName) );
       emitResult();
     } else if ( response.content[1].toString() != "OK" ) {
         //server replied with NO or BAD for SASL authentication
@@ -264,7 +264,7 @@ void LoginJob::doHandleResponse( const Message &response )
       kDebug() << "Capabilities after STARTTLS: " << d->capabilities;
       if (!authModeSupported) {
         setError( UserDefinedError );
-        setErrorText( i18n("Login failed, authentication mode %1 is not supported by the server.").arg(d->authMode) );
+        setErrorText( i18n("Login failed, authentication mode %1 is not supported by the server.", d->authMode) );
         d->authState = LoginJobPrivate::Login; //just to treat the upcoming OK correctly
       }
     }
