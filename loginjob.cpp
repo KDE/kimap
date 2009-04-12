@@ -194,7 +194,7 @@ void LoginJob::doHandleResponse( const Message &response )
   if ( !response.content.isEmpty()
        && response.content.first().toString() == d->tag ) {
     if ( response.content.size() < 2 ) {
-      setErrorText( i18n("%1 failed, malformed reply from the server", commandName) );
+      setErrorText( i18n("%1 failed, malformed reply from the server.", commandName) );
       emitResult();
     } else if ( response.content[1].toString() != "OK" ) {
         //server replied with NO or BAD for SASL authentication
