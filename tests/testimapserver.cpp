@@ -5,6 +5,7 @@
 #include <qapplication.h>
 #include <qsignalspy.h>
 #include <kmessagebox.h>
+#include <kio/ksslcertificatemanager.h>
 
 #include "kimap/session.h"
 #include "kimap/appendjob.h"
@@ -28,8 +29,8 @@ using namespace KIMAP;
 
 class UiProxy: public SessionUiProxy {
   public:
-    bool ignoreSslError(const QString &error) {
-      if (KMessageBox::questionYesNo(0, i18n("Ssl error received: %1. Continue?").arg(error), i18n("SSL Error") ) == KMessageBox::Yes) {
+    bool ignoreSslError(const SslErrorUiData& errorData) {
+      if (KSslCertificateManager::askIgnoreSslErrors(errorData, KSslCertificateManager::StoreRules)) {
         return true;
       } else {
         return false;

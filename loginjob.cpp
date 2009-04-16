@@ -1,7 +1,7 @@
 /*
     Copyright (c) 2009 Kevin Ottens <ervin@kde.org>
     Copyright (c) 2009 Andras Mantia <amantia@kde.org>
-              
+
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Library General Public License as published by
@@ -29,9 +29,6 @@
 #include "session_p.h"
 #include "rfccodecs.h"
 
-#ifndef HAVE_LIBSASL2
-#define HAVE_LIBSASL2
-#endif
 #include "common.h"
 
 extern "C" {
@@ -76,7 +73,7 @@ namespace KIMAP
       AuthState authState;
       QStringList capabilities;
       bool plainLoginDisabled;
-  
+
       sasl_conn_t *conn;
       sasl_interact_t *client_interact;
   };
@@ -182,7 +179,7 @@ void LoginJob::doStart()
 void LoginJob::doHandleResponse( const Message &response )
 {
   Q_D(LoginJob);
-  
+
   //set the actual command name for standard responses
   QString commandName = i18n("Login");
   if (d->authState == LoginJobPrivate::Capability) {
@@ -201,7 +198,7 @@ void LoginJob::doHandleResponse( const Message &response )
         if (d->authState == LoginJobPrivate::Authenticate) {
           sasl_dispose( &d->conn );
         }
-          
+
         setError( UserDefinedError );
         setErrorText( i18n("%1 failed, server replied: %2", commandName, response.toString().constData()) );
         emitResult();
@@ -247,7 +244,7 @@ void LoginJob::doHandleResponse( const Message &response )
     if ( d->authState == LoginJobPrivate::Authenticate ) {
       if (!answerChallenge(response.content[1].toString())) {
         emitResult(); //error, we're done
-      }       
+      }
     } else if ( response.content[1].toString()=="CAPABILITY" ) {
       bool authModeSupported = d->authMode.isEmpty();
       for (int i = 2; i < response.content.size(); ++i) {
@@ -286,7 +283,7 @@ bool LoginJob::startAuthentication()
   const char *out = 0;
   uint outlen = 0;
   const char *mechusing = 0;
-  
+
   int result = sasl_client_new( "imap", d->m_session->hostName().toLatin1(), 0, 0, callbacks, 0, &d->conn );
   if ( result != SASL_OK ) {
     kDebug() <<"sasl_client_new failed with:" << result;
@@ -294,7 +291,7 @@ bool LoginJob::startAuthentication()
     setErrorText( QString::fromUtf8( sasl_errdetail( d->conn ) ) );
     return false;
   }
-  
+
   do {
     result = sasl_client_start(d->conn, d->authMode.toLatin1(), &d->client_interact,d->capabilities.contains("SASL-IR") ? &out : 0, &outlen, &mechusing);
 
@@ -326,7 +323,7 @@ bool LoginJob::startAuthentication()
 bool LoginJob::answerChallenge(const QByteArray &data)
 {
   Q_D(LoginJob);
-  
+
   QByteArray challenge = data;
   int result = -1;
   const char *out = 0;

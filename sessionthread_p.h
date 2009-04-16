@@ -44,7 +44,7 @@ class SessionThread : public QThread
 
     inline QString hostName() { return m_hostName; }
     inline quint16 port() { return m_port; }
-    
+
     void sendData( const QByteArray &payload );
     void run();
 
@@ -56,7 +56,7 @@ class SessionThread : public QThread
   signals:
     void responseReceived(const KIMAP::Message &response);
     void tlsNegotiationResult(bool);
-    void sslError(const QString&);
+    void sslError(const SslErrorUiData&);
 
   private slots:
     void readMessage();

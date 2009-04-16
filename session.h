@@ -24,6 +24,8 @@
 
 #include <QtCore/QObject>
 
+class SslErrorUiData;
+
 namespace KIMAP {
 
 class SessionUiProxy;
@@ -47,6 +49,10 @@ class KIMAP_EXPORT Session : public QObject
     QString hostName() const;
     quint16 port() const;
     State state() const;
+    /**
+     * Sets an ui proxy that displays the error messages and waits for user feedback.
+     * @param proxy the ui proxy object
+     */
     void setUiProxy(SessionUiProxy *proxy);
 
   Q_SIGNALS:
@@ -54,7 +60,7 @@ class KIMAP_EXPORT Session : public QObject
     void sslErrorHandlerResponse(bool);
 
   private Q_SLOTS:
-    void handleSslError(const QString& message);
+    void handleSslError(const SslErrorUiData& errorData);
 
   private:
     Q_PRIVATE_SLOT( d, void doStartNext() )

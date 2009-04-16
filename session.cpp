@@ -41,7 +41,7 @@ Session::Session( const QString &hostName, quint16 port, QObject *parent)
 
   d->thread = new SessionThread(hostName, port, this);
   connect(d->thread, SIGNAL(tlsNegotiationResult(bool)), this, SIGNAL(tlsNegotiationResult(bool)));
-  connect(d->thread, SIGNAL(sslError(const QString&)), this, SLOT(handleSslError(const QString&)));
+  connect(d->thread, SIGNAL(sslError(const SslErrorUiData&)), this, SLOT(handleSslError(const SslErrorUiData&)));
   connect(this, SIGNAL(sslErrorHandlerResponse(bool)), d->thread, SLOT(sslErrorHandlerResponse(bool)));
 
   d->thread->start();
@@ -72,8 +72,8 @@ Session::State Session::state() const
   return d->state;
 }
 
-void Session::handleSslError(const QString& error) {
-   if (d->uiProxy && d->uiProxy->ignoreSslError(error)) {
+void Session::handleSslError(const SslErrorUiData& errorData) {
+  if (d->uiProxy && d->uiProxy->ignoreSslError(errorData)) {
      emit sslErrorHandlerResponse(true);
    } else {
      emit sslErrorHandlerResponse(false);
@@ -82,8 +82,8 @@ void Session::handleSslError(const QString& error) {
 
 SessionPrivate::SessionPrivate( Session *session )
   : q(session),
-    currentJob(0),
     uiProxy(0),
+    currentJob(0),
     tagCount(0)
 {
 }

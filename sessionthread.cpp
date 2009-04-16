@@ -31,7 +31,9 @@
 using namespace KIMAP;
 
 Q_DECLARE_METATYPE(KTcpSocket::Error)
+Q_DECLARE_METATYPE(SslErrorUiData);
 static const int _kimap_socketErrorTypeId = qRegisterMetaType<KTcpSocket::Error>();
+static const int _kimap_sslErrorUiData = qRegisterMetaType<SslErrorUiData>();
 
 SessionThread::SessionThread( const QString &hostName, quint16 port, Session *parent )
   : QThread(), m_hostName(hostName), m_port(port),
@@ -155,7 +157,7 @@ void SessionThread::run()
 void SessionThread::startTls()
 {
   QMutexLocker locker(&m_mutex);
-  
+
   m_socket->setAdvertisedSslVersion(KTcpSocket::TlsV1);
   m_socket->ignoreSslErrors();
   connect(m_socket, SIGNAL(encrypted()), this, SLOT(tlsConnected()));
@@ -174,7 +176,8 @@ void SessionThread::tlsConnected()
                     << ", the socket says:" <<  m_socket->errorString()
                     << "and the list of SSL errors contains"
                     << m_socket->sslErrors().count() << "items.";
-     emit sslError(m_socket->errorString());
+     SslErrorUiData errorData(m_socket);
+     emit sslError(errorData);
   } else {
     kDebug() << "TLS negotiation done.";
     m_encryptedMode = true;
@@ -184,6 +187,7 @@ void SessionThread::tlsConnected()
 
 void SessionThread::sslErrorHandlerResponse(bool response)
 {
+  QMutexLocker locker(&m_mutex);
   if (response) {
     m_encryptedMode = true;
     emit tlsNegotiationResult(true);
@@ -191,6 +195,7 @@ void SessionThread::sslErrorHandlerResponse(bool response)
      m_encryptedMode = false;
      //reconnect in unencrypted mode, so new commands can be issued
      m_socket->disconnectFromHost();
+     m_socket->waitForDisconnected();
      m_socket->connectToHost(m_hostName, m_port);
      emit tlsNegotiationResult(false);
   }
