@@ -24,7 +24,7 @@ MACRO(ADD_IMAPLIB_TEST _source)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
   get_filename_component(_name ${_source} NAME_WE)
   kde4_add_unit_test(${_name} TESTNAME kimap-${_name} ${_test})
-  target_link_libraries(${_name} kimap ${QT_QTTEST_LIBRARY} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTNETWORK_LIBRARY} )
+  target_link_libraries(${_name} kimap ${QT_QTTEST_LIBRARY} ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} ${QT_QTNETWORK_LIBRARY} )
 ENDMACRO(ADD_IMAPLIB_TEST)
 
 ### tests
