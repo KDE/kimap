@@ -39,7 +39,7 @@ class KIMAP_EXPORT SessionUiProxy
      * class UiProxy: public SessionUiProxy {
      *   public:
      *     bool ignoreSslError(const SslErrorUiData& errorData) {
-     *       if (KSslCertificateManager::askIgnoreSslErrors(errorData, KSslCertificateManager::StoreRules)) {
+     *       if (KSslCertificateManager::askIgnoreSslErrors(errorData)) {
      *         return true;
      *       } else {
      *        return false;
