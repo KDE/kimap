@@ -31,7 +31,7 @@
 using namespace KIMAP;
 
 Q_DECLARE_METATYPE(KTcpSocket::Error)
-Q_DECLARE_METATYPE(SslErrorUiData);
+Q_DECLARE_METATYPE(SslErrorUiData)
 static const int _kimap_socketErrorTypeId = qRegisterMetaType<KTcpSocket::Error>();
 static const int _kimap_sslErrorUiData = qRegisterMetaType<SslErrorUiData>();
 
