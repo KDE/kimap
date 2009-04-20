@@ -28,6 +28,7 @@
 #include "kimap/getacljob.h"
 #include "kimap/deleteacljob.h"
 #include "kimap/myrightsjob.h"
+#include "kimap/listrightsjob.h"
 
 using namespace KIMAP;
 
@@ -89,6 +90,18 @@ void testAcl(Session *session, const QString &user)
   CreateJob *create = new CreateJob(session);
   create->setMailBox("INBOX/TestFolder");
   create->exec();
+
+  ListRightsJob *listRights = new ListRightsJob(session);
+  listRights->setMailBox("INBOX/TestFolder");
+  listRights->setIdentifier(user.toLatin1());
+  listRights->exec();
+  kDebug() << "Default rights on INBOX/TestFolder: " << listRights->rightsToString(listRights->defaultRights());
+  QList<QList<AclJobBase::AclRight> > possible = listRights->possibleRights();
+  QStringList strList;
+  Q_FOREACH(QList<AclJobBase::AclRight> r, possible) {
+    strList << listRights->rightsToString(r);
+  }
+  kDebug() << "Possible rights on INBOX/TestFolder: " << strList;
 
   MyRightsJob *myRights = new MyRightsJob(session);
   myRights->setMailBox("INBOX/TestFolder");
