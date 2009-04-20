@@ -57,8 +57,7 @@ void SetAclJob::doStart()
   } else if (d->modifier == Remove) {
     r.prepend('-');
   }
-  kDebug() << "SETACL"<< '\"' + d->mailBox + "\" \"" + d->id + '\"' + r;
-  d->tag = d->sessionInternal()->sendCommand( "SETACL", '\"' + d->mailBox + "\" \"" + d->id + "\" " + r );
+  d->tag = d->sessionInternal()->sendCommand( "SETACL", '\"' + d->mailBox + "\" \"" + d->id + "\" \"" + r +'\"');
 }
 
 void SetAclJob::setRights(const QByteArray& rights)

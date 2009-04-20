@@ -108,9 +108,9 @@ void testAcl(Session *session, const QString &user)
   Q_ASSERT_X(mine == users, "GETACL returns different rights for the same user", "");
 
 
-  kDebug() << "Removing Create right ";
+  kDebug() << "Removing Delete right ";
   mine.clear();
-  mine.append(AclJobBase::Create);
+  mine.append(AclJobBase::Delete);
   SetAclJob *setAcl= new SetAclJob(session);
   setAcl->setMailBox("INBOX/TestFolder");
   setAcl->setIdentifier(user.toLatin1());
@@ -123,9 +123,9 @@ void testAcl(Session *session, const QString &user)
   users = getAcl->rights(user.toLatin1());
   kDebug() << user << " rights on INBOX/TestFolder: " << getAcl->rightsToString(users);
 
-  kDebug() << "Adding back Create right ";
+  kDebug() << "Adding back Delete right ";
   mine.clear();
-  mine.append(AclJobBase::Create);
+  mine.append(AclJobBase::Delete);
   setAcl= new SetAclJob(session);
   setAcl->setMailBox("INBOX/TestFolder");
   setAcl->setIdentifier(user.toLatin1());
