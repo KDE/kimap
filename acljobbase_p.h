@@ -38,9 +38,14 @@ namespace KIMAP
         rightsMap['w'] = AclJobBase::Write;
         rightsMap['i'] = AclJobBase::Insert;
         rightsMap['p'] = AclJobBase::Post;
-        rightsMap['c'] = AclJobBase::Create;
-        rightsMap['d'] = AclJobBase::Delete;
+        rightsMap['c'] = AclJobBase::Create; //TODO: obsolete, keep it?
+        rightsMap['d'] = AclJobBase::Delete; //TODO: obsolete, keep it?
+        rightsMap['k'] = AclJobBase::CreateMailbox;
+        rightsMap['x'] = AclJobBase::DeleteMailbox;
+        rightsMap['t'] = AclJobBase::DeleteMessage;
+        rightsMap['e'] = AclJobBase::Expunge;
         rightsMap['a'] = AclJobBase::Admin;
+        rightsMap['n'] = AclJobBase::WriteShared;
         rightsMap['0'] = AclJobBase::Custom0;
         rightsMap['1'] = AclJobBase::Custom1;
         rightsMap['2'] = AclJobBase::Custom2;
