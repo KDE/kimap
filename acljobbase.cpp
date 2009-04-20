@@ -22,50 +22,100 @@
 #include <KDE/KLocale>
 #include <KDE/KDebug>
 
-#include "job_p.h"
+#include "acljobbase_p.h"
 #include "message_p.h"
 #include "session_p.h"
 
-namespace KIMAP
-{
-  class AclJobBasePrivate : public JobPrivate
-  {
-    public:
-      AclJobBasePrivate( Session *session, const QString& name ) : JobPrivate(session, name), modifier(AclJobBase::Change)
-      {
-         rightsMap['l'] = AclJobBase::Lookup;
-         rightsMap['r'] = AclJobBase::Read;
-         rightsMap['s'] = AclJobBase::KeepSeen;
-         rightsMap['i'] = AclJobBase::Insert;
-         rightsMap['p'] = AclJobBase::Post;
-         rightsMap['c'] = AclJobBase::Create;
-         rightsMap['d'] = AclJobBase::Delete;
-         rightsMap['a'] = AclJobBase::Admin;
-      }
-      ~AclJobBasePrivate() { }
+using namespace KIMAP;
 
-      QByteArray mailBox;
-      QList<AclJobBase::AclRight> rights;
-      AclJobBase::AclModifier modifier;
-      QMap<QChar, AclJobBase::AclRight> rightsMap;
-  };
+void AclJobBasePrivate::setIdentifier( const QByteArray &identifier )
+{
+  id = identifier;
 }
 
-using namespace KIMAP;
+QByteArray AclJobBasePrivate::identifier() const
+{
+  return id;
+}
+
+
+
+QByteArray AclJobBasePrivate::rights()
+{
+  QByteArray r;
+  for (int i = 0; i < rightList.size(); i++) {
+    r += rightsMap.key(rightList[i]).toAscii();
+  }
+
+  return r;
+}
+
+bool AclJobBasePrivate::hasRightEnabled(AclJobBase::AclRight right)
+{
+  return rightList.contains(right);
+}
+
+QList<AclJobBase::AclRight> AclJobBasePrivate::rightsFromString(const QByteArray& rights)
+{
+  QList<AclJobBase::AclRight> result;
+
+  if (rights.isEmpty())
+    return result;
+
+  int pos = 0;
+  if (rights[0] == '+') {
+    modifier = AclJobBase::Add;
+    pos++;
+  } else if (rights[0]== '-') {
+    modifier = AclJobBase::Remove;
+    pos++;
+  } else {
+    modifier = AclJobBase::Change;
+  }
+
+  for (int i = pos; i < rights.size(); i++) {
+    if (rightsMap.contains(rights[i]) && !result.contains(rightsMap[rights[i]])) {
+      result.append(rightsMap[rights[i]]);
+    }
+  }
+
+  return result;
+}
+
+void AclJobBasePrivate::setRights(const QByteArray& rights)
+{
+  rightList = rightsFromString(rights);
+}
+
+void AclJobBasePrivate::setRights(AclJobBase::AclModifier _modifier, const QList<AclJobBase::AclRight> &rights)
+{
+
+  modifier = _modifier;
+  for (int i = 0; i < rights.size(); i++) {
+    if (!rightList.contains(rights[i])) {
+      rightList.append(rights[i]);
+    }
+  }
+}
+
+
 
 AclJobBase::AclJobBase( Session *session )
   : Job( *new AclJobBasePrivate(session, i18n("AclJobBase")) )
 {
 }
 
+
+AclJobBase::AclJobBase( JobPrivate &dd )
+  : Job(dd)
+{
+
+}
+
 AclJobBase::~AclJobBase()
 {
 }
 
-void AclJobBase::doStart()
-{
-  //does nothing
-}
 
 void AclJobBase::setMailBox( const QByteArray &mailBox )
 {
@@ -79,60 +129,15 @@ QByteArray AclJobBase::mailBox() const
   return d->mailBox;
 }
 
-void AclJobBase::setRights(const QByteArray& rights)
+QByteArray AclJobBase::rightsToString(const QList<AclJobBase::AclRight> &rights)
 {
-  Q_D(AclJobBase);
-  
-  if (rights.isEmpty())
-    return;
+  Q_D(const AclJobBase);
 
-  int pos = 0;
-  if (rights[0] == '+') {
-    d->modifier = Add;
-    pos++;
-  } else if (rights[0]== '-') {
-    d->modifier = Remove;
-    pos++;
-  } else {
-    d->modifier = Change;
+  QByteArray result;
+  Q_FOREACH(AclJobBase::AclRight right, rights) {
+    result += d->rightsMap.key(right).toLatin1();
   }
-
-  for (int i = pos; i < rights.size(); i++) {
-    if (d->rightsMap.contains(rights[i]) && !d->rights.contains(d->rightsMap[rights[i]])) {
-      d->rights.append(d->rightsMap[rights[i]]);
-    }
-  }
-}
-
-void AclJobBase::setRights(AclModifier modifier, const QList<AclRight> &rights)
-{
-  Q_D(AclJobBase);
-  
-  d->modifier = modifier;
-  for (int i = 0; i < rights.size(); i++) {
-    if (!d->rights.contains(rights[i])) {
-      d->rights.append(d->rightsMap[rights[i]]);
-    }
-  }
-}
-
-QByteArray AclJobBase::rights()
-{
-  Q_D(AclJobBase);
-  
-  QByteArray rights; 
-  for (int i = 0; i < d->rights.size(); i++) {
-    rights += d->rightsMap.key(d->rights[i]).toAscii();
-  }
-
-  return rights;
-}
-
-bool AclJobBase::hasRightEnabled(AclRight right)
-{
-  Q_D(AclJobBase);
-  
-  return d->rights.contains(right);
+  return result;
 }
 
 

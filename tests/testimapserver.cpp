@@ -24,6 +24,10 @@
 #include "kimap/renamejob.h"
 #include "kimap/storejob.h"
 #include "kimap/sessionuiproxy.h"
+#include "kimap/setacljob.h"
+#include "kimap/getacljob.h"
+#include "kimap/deleteacljob.h"
+#include "kimap/myrightsjob.h"
 
 using namespace KIMAP;
 
@@ -77,6 +81,67 @@ void listFolders(Session *session, bool includeUnsubscribed = false, const QByte
       kDebug() << mailBox;
   }
 
+}
+
+void testAcl(Session *session, const QString &user)
+{
+  kDebug() << "TESTING: ACL commands";
+  CreateJob *create = new CreateJob(session);
+  create->setMailBox("INBOX/TestFolder");
+  create->exec();
+
+  MyRightsJob *myRights = new MyRightsJob(session);
+  myRights->setMailBox("INBOX/TestFolder");
+  myRights->exec();
+
+  QList<AclJobBase::AclRight> mine = myRights->rights();
+  kDebug() << "My rights on INBOX/TestFolder: " << myRights->rightsToString(mine);
+  kDebug() << "Reading INBOX/TestFolder is possible: " << myRights->hasRightEnabled(AclJobBase::Read);
+  Q_ASSERT_X(myRights->hasRightEnabled(AclJobBase::Read), "Reading INBOX is NOT possible", "");
+
+  GetAclJob *getAcl= new GetAclJob(session);
+  getAcl->setMailBox("INBOX/TestFolder");
+  getAcl->exec();
+  kDebug() << "Anyone rights on INBOX/TestFolder: " << getAcl->rights("anyone");
+  QList<AclJobBase::AclRight> users = getAcl->rights(user.toLatin1());
+  kDebug() << user << " rights on INBOX/TestFolder: " << getAcl->rightsToString(users);
+  Q_ASSERT_X(mine == users, "GETACL returns different rights for the same user", "");
+
+
+  kDebug() << "Removing Create right ";
+  mine.clear();
+  mine.append(AclJobBase::Create);
+  SetAclJob *setAcl= new SetAclJob(session);
+  setAcl->setMailBox("INBOX/TestFolder");
+  setAcl->setIdentifier(user.toLatin1());
+  setAcl->setRights(AclJobBase::Remove, mine);
+  setAcl->exec();
+
+  getAcl= new GetAclJob(session);
+  getAcl->setMailBox("INBOX/TestFolder");
+  getAcl->exec();
+  users = getAcl->rights(user.toLatin1());
+  kDebug() << user << " rights on INBOX/TestFolder: " << getAcl->rightsToString(users);
+
+  kDebug() << "Adding back Create right ";
+  mine.clear();
+  mine.append(AclJobBase::Create);
+  setAcl= new SetAclJob(session);
+  setAcl->setMailBox("INBOX/TestFolder");
+  setAcl->setIdentifier(user.toLatin1());
+  setAcl->setRights(AclJobBase::Add, mine);
+  setAcl->exec();
+
+  getAcl= new GetAclJob(session);
+  getAcl->setMailBox("INBOX/TestFolder");
+  getAcl->exec();
+  users = getAcl->rights(user.toLatin1());
+  kDebug() << user << " rights on INBOX/TestFolder: " << getAcl->rightsToString(users);
+
+  //cleanup
+  DeleteJob *deletejob = new DeleteJob(session);
+  deletejob->setMailBox("INBOX/TestFolder");
+  deletejob->exec();
 }
 
 void testAppendAndStore(Session *session)
@@ -296,6 +361,8 @@ int main( int argc, char **argv )
 
   }
 
+  testAcl(&session, user);
+
   kDebug() << "Asking for capabilities:";
   CapabilitiesJob *capabilities = new CapabilitiesJob(&session);
   capabilities->exec();
@@ -423,6 +490,7 @@ int main( int argc, char **argv )
   testRename(&session);
 
   testAppendAndStore(&session);
+
 
   kDebug() << "Expunge INBOX:";
   ExpungeJob *expunge = new ExpungeJob(&session);

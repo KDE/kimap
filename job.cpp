@@ -65,7 +65,8 @@ void Job::connectionLost()
 Job::HandlerResponse Job::handleErrorReplies(const Message &response)
 {
   Q_D(Job);
-  
+//   kDebug() << response.toString();
+
   if ( !response.content.isEmpty()
        && response.content.first().toString() == d->tag ) {
     if ( response.content.size() < 2 ) {

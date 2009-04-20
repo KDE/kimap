@@ -17,62 +17,37 @@
     02110-1301, USA.
 */
 
-#ifndef KIMAP_ACLJOBBASE_H
-#define KIMAP_ACLJOBBASE_H
+#ifndef KIMAP_SETACLJOB_H
+#define KIMAP_SETACLJOB_H
 
 #include "kimap_export.h"
 
-#include "job.h"
+#include "acljobbase.h"
 
 namespace KIMAP {
 
 class Session;
 class Message;
-class AclJobBasePrivate;
+class SetAclJobPrivate;
 
-/** @short Base class of Acl related jobs. It cannot be used directly, you must subclass it and reimplement at least the
-doStart() method.
-*/
-class KIMAP_EXPORT AclJobBase : public Job
+
+class KIMAP_EXPORT SetAclJob : public AclJobBase
 {
   Q_OBJECT
-  Q_DECLARE_PRIVATE(AclJobBase)
+  Q_DECLARE_PRIVATE(SetAclJob)
 
   friend class SessionPrivate;
 
   public:
-    AclJobBase( Session *session );
-    virtual ~AclJobBase();
-
-    enum AclRight {
-      Lookup = 0,
-      Read,
-      KeepSeen,
-      Insert,
-      Post,
-      Create,
-      Delete,
-      Admin
-    };
-
-    Q_DECLARE_FLAGS(AclRights, AclRight)
-
-    enum AclModifier {
-      Add = 0,
-      Remove,
-      Change
-    };
-
-    Q_DECLARE_FLAGS(AclModifiers, AclModifier)
-
-
-    void setMailBox( const QByteArray &mailBox );
-    QByteArray mailBox() const;
-
-    QByteArray rightsToString(const QList<AclJobBase::AclRight> &rights);
+    SetAclJob( Session *session );
+    virtual ~SetAclJob();
+    void setRights(const QByteArray& rights);
+    void setRights(AclModifier modifier, const QList<AclRight> &rights);
+    void setIdentifier( const QByteArray &identifier );
+    QByteArray identifier();
 
   protected:
-    AclJobBase( JobPrivate &dd );
+    virtual void doStart();
 
 };
 
