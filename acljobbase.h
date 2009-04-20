@@ -48,11 +48,22 @@ class KIMAP_EXPORT AclJobBase : public Job
       Lookup = 0,
       Read,
       KeepSeen,
+      Write,
       Insert,
       Post,
       Create,
       Delete,
-      Admin
+      Admin,
+      Custom0,
+      Custom1,
+      Custom2,
+      Custom3,
+      Custom4,
+      Custom5,
+      Custom6,
+      Custom7,
+      Custom8,
+      Custom9
     };
 
     Q_DECLARE_FLAGS(AclRights, AclRight)

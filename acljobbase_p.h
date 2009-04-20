@@ -35,11 +35,22 @@ namespace KIMAP
         rightsMap['l'] = AclJobBase::Lookup;
         rightsMap['r'] = AclJobBase::Read;
         rightsMap['s'] = AclJobBase::KeepSeen;
+        rightsMap['w'] = AclJobBase::Write;
         rightsMap['i'] = AclJobBase::Insert;
         rightsMap['p'] = AclJobBase::Post;
         rightsMap['c'] = AclJobBase::Create;
         rightsMap['d'] = AclJobBase::Delete;
         rightsMap['a'] = AclJobBase::Admin;
+        rightsMap['0'] = AclJobBase::Custom0;
+        rightsMap['1'] = AclJobBase::Custom1;
+        rightsMap['2'] = AclJobBase::Custom2;
+        rightsMap['3'] = AclJobBase::Custom3;
+        rightsMap['4'] = AclJobBase::Custom4;
+        rightsMap['5'] = AclJobBase::Custom5;
+        rightsMap['6'] = AclJobBase::Custom6;
+        rightsMap['7'] = AclJobBase::Custom7;
+        rightsMap['8'] = AclJobBase::Custom8;
+        rightsMap['9'] = AclJobBase::Custom9;
       }
       ~AclJobBasePrivate() { }
 
