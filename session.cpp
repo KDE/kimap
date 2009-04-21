@@ -171,9 +171,7 @@ void SessionPrivate::responseReceived( const Message &response )
     if ( ( code=="OK" && tag==closeTag )
       || ( code!="OK" && tag==selectTag) ) {
       state = Session::Authenticated;
-      if ( tag==closeTag ) {
-        currentMailBox = QByteArray();
-      }
+      currentMailBox = QByteArray();
     } else if ( code=="OK" && tag==selectTag ) {
       currentMailBox = upcomingMailBox;
     }
