@@ -41,7 +41,7 @@ FakeServer::~FakeServer()
 void FakeServer::dataAvailable()
 {
     QMutexLocker locker(&m_mutex);
-    
+
     QByteArray data = tcpServerConnection->readAll();
 //     kDebug() << "R: " << data.trimmed();
 
@@ -85,7 +85,9 @@ void FakeServer::run()
 
 void FakeServer::setResponse( const QStringList& data )
 {
-    m_data = data;
+    QMutexLocker locker(&m_mutex);
+
+    m_data+= data;
 }
 
 #include "fakeserver.moc"
