@@ -174,6 +174,8 @@ void SessionPrivate::responseReceived( const Message &response )
       if ( tag==closeTag ) {
         currentMailBox = QByteArray();
       }
+    } else if ( code=="OK" && tag==selectTag ) {
+      currentMailBox = upcomingMailBox;
     }
     break;
   }

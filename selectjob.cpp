@@ -186,6 +186,8 @@ void SelectJob::doHandleResponse( const Message &response )
       } else {
         qDebug("%s", response.toString().constData());
       }
+  } else {
+    Q_ASSERT( error() || d->sessionInternal()->selectedMailBox() == d->mailBox );
   }
 }
 

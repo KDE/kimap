@@ -34,7 +34,7 @@ class SelectJobTest: public QObject {
 
 private Q_SLOTS:
 
-void testSelect_data() {
+void testSingleSelect_data() {
   QTest::addColumn<QStringList>( "response" );
   QTest::addColumn<QList<QByteArray> >( "flags" );
   QTest::addColumn<QList<QByteArray> >( "permanentflags" );
@@ -65,7 +65,7 @@ void testSelect_data() {
   QTest::newRow( "no" ) << response << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << 0;
 }
 
-void testSelect()
+void testSingleSelect()
 {
     FakeServer fakeServer;
     fakeServer.start();
@@ -104,6 +104,29 @@ void testSelect()
       QCOMPARE(job->nextUid(), nextUid);
     }
     fakeServer.quit();
+}
+
+void testSeveralSelect()
+{
+    FakeServer fakeServer;
+    fakeServer.start();
+    KIMAP::Session session("127.0.0.1", 5989);
+
+    fakeServer.setResponse( QStringList() << "A000001 OK User logged in" );
+    KIMAP::LoginJob *login = new KIMAP::LoginJob(&session);
+    login->setUserName("user");
+    login->setPassword("password");
+    QVERIFY(login->exec());
+
+    fakeServer.setResponse( QStringList() << "A000002 OK [READ-WRITE] SELECT completed" );
+    KIMAP::SelectJob *job = new KIMAP::SelectJob(&session);
+    job->setMailBox("INBOX");
+    QVERIFY(job->exec());
+
+    fakeServer.setResponse( QStringList() << "A000003 OK [READ-WRITE] SELECT completed" );
+    job = new KIMAP::SelectJob(&session);
+    job->setMailBox("INBOX/Foo");
+    QVERIFY(job->exec());
 }
 
 
