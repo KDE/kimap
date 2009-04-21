@@ -19,6 +19,7 @@
 #include <qtest_kde.h>
 
 #include "fakeserver.h"
+#include "kimap/loginjob.h"
 #include "kimap/session.h"
 #include "kimap/selectjob.h"
 
@@ -31,7 +32,7 @@ Q_DECLARE_METATYPE(QList<QByteArray>)
 class SelectJobTest: public QObject {
   Q_OBJECT
 
-private Q_SLOTS:    
+private Q_SLOTS:
 
 void testSelect_data() {
   QTest::addColumn<QStringList>( "response" );
@@ -42,11 +43,11 @@ void testSelect_data() {
   QTest::addColumn<int>( "firstUnseenIndex" );
   QTest::addColumn<qint64>( "uidValidity" );
   QTest::addColumn<int>( "nextUid" );
-  
+
   QStringList response;
   QList<QByteArray> flags;
   QList<QByteArray> permanentflags;
-  response << "* 172 EXISTS" << "* 1 RECENT" << "* OK [UNSEEN 12] Message 12 is first unseen" << "* OK [UIDVALIDITY 3857529045] UIDs valid" << "* OK [UIDNEXT 4392] Predicted next UID" << "* FLAGS (\\Answered \\Flagged \\Deleted \\Seen \\Draft)" << "* OK [PERMANENTFLAGS (\\Deleted \\Seen \\*)] Limited" << "A000001 OK [READ-WRITE] SELECT completed";
+  response << "* 172 EXISTS" << "* 1 RECENT" << "* OK [UNSEEN 12] Message 12 is first unseen" << "* OK [UIDVALIDITY 3857529045] UIDs valid" << "* OK [UIDNEXT 4392] Predicted next UID" << "* FLAGS (\\Answered \\Flagged \\Deleted \\Seen \\Draft)" << "* OK [PERMANENTFLAGS (\\Deleted \\Seen \\*)] Limited" << "A000002 OK [READ-WRITE] SELECT completed";
   flags << "\\Answered" << "\\Flagged" << "\\Deleted" << "\\Seen" << "\\Draft";
   permanentflags << "\\Deleted" << "\\Seen" << "\\*";
   QTest::newRow( "good" ) << response << flags << permanentflags << 172 << 1 << 12 << (qint64)3857529045 << 4392;
@@ -54,13 +55,13 @@ void testSelect_data() {
   response.clear();
   flags.clear();
   permanentflags.clear();
-  response << "A000001 BAD command unknown or arguments invalid";
+  response << "A000002 BAD command unknown or arguments invalid";
   QTest::newRow( "bad" ) << response << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << 0;
-  
+
   response.clear();
   flags.clear();
   permanentflags.clear();
-  response << "A000001 NO select failure";
+  response << "A000002 NO select failure";
   QTest::newRow( "no" ) << response << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << 0;
 }
 
@@ -69,6 +70,13 @@ void testSelect()
     FakeServer fakeServer;
     fakeServer.start();
     KIMAP::Session session("127.0.0.1", 5989);
+
+    fakeServer.setResponse( QStringList() << "A000001 OK User logged in" );
+    KIMAP::LoginJob *login = new KIMAP::LoginJob(&session);
+    login->setUserName("user");
+    login->setPassword("password");
+    QVERIFY(login->exec());
+
     QFETCH( QStringList, response );
     QFETCH( QList<QByteArray>, flags );
     QFETCH( QList<QByteArray>, permanentflags );
@@ -77,7 +85,7 @@ void testSelect()
     QFETCH( int, firstUnseenIndex);
     QFETCH( qint64, uidValidity);
     QFETCH( int, nextUid);
-    
+
     fakeServer.setResponse( response );
 
     KIMAP::SelectJob *job = new KIMAP::SelectJob(&session);
