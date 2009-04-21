@@ -31,9 +31,9 @@
 using namespace KIMAP;
 
 Q_DECLARE_METATYPE(KTcpSocket::Error)
-Q_DECLARE_METATYPE(SslErrorUiData)
+Q_DECLARE_METATYPE(KSslErrorUiData)
 static const int _kimap_socketErrorTypeId = qRegisterMetaType<KTcpSocket::Error>();
-static const int _kimap_sslErrorUiData = qRegisterMetaType<SslErrorUiData>();
+static const int _kimap_sslErrorUiData = qRegisterMetaType<KSslErrorUiData>();
 
 SessionThread::SessionThread( const QString &hostName, quint16 port, Session *parent )
   : QThread(), m_hostName(hostName), m_port(port),
@@ -176,7 +176,7 @@ void SessionThread::tlsConnected()
                     << ", the socket says:" <<  m_socket->errorString()
                     << "and the list of SSL errors contains"
                     << m_socket->sslErrors().count() << "items.";
-     SslErrorUiData errorData(m_socket);
+     KSslErrorUiData errorData(m_socket);
      emit sslError(errorData);
   } else {
     kDebug() << "TLS negotiation done.";

@@ -38,7 +38,7 @@ class KIMAP_EXPORT SessionUiProxy
      * #include <kio/ksslcertificatemanager.h>
      * class UiProxy: public SessionUiProxy {
      *   public:
-     *     bool ignoreSslError(const SslErrorUiData& errorData) {
+     *     bool ignoreSslError(const KSslErrorUiData& errorData) {
      *       if (KSslCertificateManager::askIgnoreSslErrors(errorData)) {
      *         return true;
      *       } else {
@@ -54,7 +54,7 @@ class KIMAP_EXPORT SessionUiProxy
      * @param errorData contains details about the error.
      * @return true if the error can be ignored
      */
-    virtual bool ignoreSslError(const SslErrorUiData& errorData) = 0;
+    virtual bool ignoreSslError(const KSslErrorUiData& errorData) = 0;
 };
 
 }

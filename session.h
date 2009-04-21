@@ -24,7 +24,7 @@
 
 #include <QtCore/QObject>
 
-class SslErrorUiData;
+class KSslErrorUiData;
 
 namespace KIMAP {
 
@@ -60,7 +60,7 @@ class KIMAP_EXPORT Session : public QObject
     void sslErrorHandlerResponse(bool);
 
   private Q_SLOTS:
-    void handleSslError(const SslErrorUiData& errorData);
+    void handleSslError(const KSslErrorUiData& errorData);
 
   private:
     Q_PRIVATE_SLOT( d, void doStartNext() )
