@@ -51,7 +51,6 @@ class SessionThread : public QThread
   public slots:
     void closeSocket();
     void reconnect();
-    void startTls();
     void startSsl(const KTcpSocket::SslVersion &version);
 
   signals:

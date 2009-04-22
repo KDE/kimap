@@ -157,21 +157,9 @@ void SessionThread::run()
   delete m_socket;
 }
 
-void SessionThread::startTls()
-{
-  QMutexLocker locker(&m_mutex);
-
-  m_socket->setAdvertisedSslVersion(KTcpSocket::TlsV1);
-  m_socket->ignoreSslErrors();
-  connect(m_socket, SIGNAL(encrypted()), this, SLOT(sslConnected()));
-  m_socket->startClientEncryption();
-}
-
 void SessionThread::startSsl(const KTcpSocket::SslVersion &version)
 {
   QMutexLocker locker(&m_mutex);
-
-  kDebug() << "Requested SSL version " << version;
 
   m_socket->setAdvertisedSslVersion(version);
   m_socket->ignoreSslErrors();

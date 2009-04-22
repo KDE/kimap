@@ -45,7 +45,6 @@ class SessionPrivate
 
     void addJob(Job *job);
     QByteArray sendCommand( const QByteArray &command, const QByteArray &args = QByteArray() );
-    void startTls();
     void startSsl(const KTcpSocket::SslVersion &version);
     void sendData( const QByteArray &data );
 

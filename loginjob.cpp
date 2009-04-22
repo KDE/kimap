@@ -245,7 +245,7 @@ void LoginJob::doHandleResponse( const Message &response )
           }
         }
       } else if (d->authState == LoginJobPrivate::StartTls) {
-        d->sessionInternal()->startTls();
+        d->sessionInternal()->startSsl(KTcpSocket::TlsV1);
       } else {
         emitResult(); //got an OK, command done
       }

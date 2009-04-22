@@ -248,11 +248,6 @@ void SessionPrivate::socketError()
   socketDisconnected();
 }
 
-void SessionPrivate::startTls()
-{
-  QMetaObject::invokeMethod( thread, "startTls" );
-}
-
 void SessionPrivate::startSsl(const KTcpSocket::SslVersion &version)
 {
   QMetaObject::invokeMethod( thread, "startSsl", Qt::QueuedConnection, Q_ARG(KTcpSocket::SslVersion, version) );
