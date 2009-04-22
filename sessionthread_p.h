@@ -52,16 +52,17 @@ class SessionThread : public QThread
     void closeSocket();
     void reconnect();
     void startTls();
+    void startSsl(const KTcpSocket::SslVersion &version);
 
   signals:
     void responseReceived(const KIMAP::Message &response);
-    void tlsNegotiationResult(bool);
+    void encryptionNegotiationResult(bool);
     void sslError(const KSslErrorUiData&);
 
   private slots:
     void readMessage();
     void writeDataQueue();
-    void tlsConnected();
+    void sslConnected();
     void sslErrorHandlerResponse(bool result);
 
   private:

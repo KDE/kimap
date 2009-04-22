@@ -141,8 +141,11 @@ void SessionThread::run()
 
   connect( m_socket, SIGNAL(disconnected()),
            m_session, SLOT(socketDisconnected()) );
+  connect( m_socket, SIGNAL(connected()),
+           m_session, SLOT(socketConnected()) );
   connect( m_socket, SIGNAL(error(KTcpSocket::Error)),
            m_session, SLOT(socketError()) );
+
 
   connect( this, SIGNAL(responseReceived(KIMAP::Message)),
            m_session, SLOT(responseReceived(KIMAP::Message)) );
@@ -160,11 +163,23 @@ void SessionThread::startTls()
 
   m_socket->setAdvertisedSslVersion(KTcpSocket::TlsV1);
   m_socket->ignoreSslErrors();
-  connect(m_socket, SIGNAL(encrypted()), this, SLOT(tlsConnected()));
+  connect(m_socket, SIGNAL(encrypted()), this, SLOT(sslConnected()));
   m_socket->startClientEncryption();
 }
 
-void SessionThread::tlsConnected()
+void SessionThread::startSsl(const KTcpSocket::SslVersion &version)
+{
+  QMutexLocker locker(&m_mutex);
+
+  kDebug() << "Requested SSL version " << version;
+
+  m_socket->setAdvertisedSslVersion(version);
+  m_socket->ignoreSslErrors();
+  connect(m_socket, SIGNAL(encrypted()), this, SLOT(sslConnected()));
+  m_socket->startClientEncryption();
+}
+
+void SessionThread::sslConnected()
 {
   QMutexLocker locker(&m_mutex);
   KSslCipher cipher = m_socket->sessionCipher();
@@ -181,7 +196,7 @@ void SessionThread::tlsConnected()
   } else {
     kDebug() << "TLS negotiation done.";
     m_encryptedMode = true;
-    emit tlsNegotiationResult(true);
+    emit encryptionNegotiationResult(true);
   }
 }
 
@@ -190,14 +205,14 @@ void SessionThread::sslErrorHandlerResponse(bool response)
   QMutexLocker locker(&m_mutex);
   if (response) {
     m_encryptedMode = true;
-    emit tlsNegotiationResult(true);
+    emit encryptionNegotiationResult(true);
   } else {
      m_encryptedMode = false;
      //reconnect in unencrypted mode, so new commands can be issued
      m_socket->disconnectFromHost();
      m_socket->waitForDisconnected();
      m_socket->connectToHost(m_hostName, m_port);
-     emit tlsNegotiationResult(false);
+     emit encryptionNegotiationResult(false);
   }
 }
 

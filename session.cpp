@@ -31,6 +31,10 @@
 #include "message_p.h"
 #include "sessionthread_p.h"
 
+Q_DECLARE_METATYPE(KTcpSocket::SslVersion)
+Q_DECLARE_METATYPE(QSslSocket::SslMode)
+static const int _kimap_sslVersionId = qRegisterMetaType<KTcpSocket::SslVersion>();
+
 using namespace KIMAP;
 
 Session::Session( const QString &hostName, quint16 port, QObject *parent)
@@ -40,7 +44,7 @@ Session::Session( const QString &hostName, quint16 port, QObject *parent)
   d->jobRunning = false;
 
   d->thread = new SessionThread(hostName, port, this);
-  connect(d->thread, SIGNAL(tlsNegotiationResult(bool)), this, SIGNAL(tlsNegotiationResult(bool)));
+  connect(d->thread, SIGNAL(encryptionNegotiationResult(bool)), this, SIGNAL(encryptionNegotiationResult(bool)));
   connect(d->thread, SIGNAL(sslError(const KSslErrorUiData&)), this, SLOT(handleSslError(const KSslErrorUiData&)));
   connect(this, SIGNAL(sslErrorHandlerResponse(bool)), d->thread, SLOT(sslErrorHandlerResponse(bool)));
 
@@ -105,8 +109,9 @@ void SessionPrivate::startNext()
 
 void SessionPrivate::doStartNext()
 {
-  if ( queue.isEmpty() || jobRunning || state==Session::Disconnected )
+  if ( queue.isEmpty() || jobRunning || state==Session::Disconnected ) {
     return;
+  }
 
   jobRunning = true;
 
@@ -221,6 +226,12 @@ void SessionPrivate::sendData( const QByteArray &data )
   thread->sendData(data+"\r\n");
 }
 
+void SessionPrivate::socketConnected()
+{
+  state = Session::NotAuthenticated;
+  startNext();
+}
+
 void SessionPrivate::socketDisconnected()
 {
   state = Session::Disconnected;
@@ -240,6 +251,11 @@ void SessionPrivate::socketError()
 void SessionPrivate::startTls()
 {
   QMetaObject::invokeMethod( thread, "startTls" );
+}
+
+void SessionPrivate::startSsl(const KTcpSocket::SslVersion &version)
+{
+  QMetaObject::invokeMethod( thread, "startSsl", Qt::QueuedConnection, Q_ARG(KTcpSocket::SslVersion, version) );
 }
 
 QByteArray SessionPrivate::selectedMailBox() const

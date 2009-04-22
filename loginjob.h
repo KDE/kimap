@@ -41,10 +41,14 @@ class KIMAP_EXPORT LoginJob : public Job
   public:
     enum EncryptionMode {
         Unencrypted = 0,
-        TlsV1
+        TlsV1,
+        SslV2,
+        SslV3,
+        SslV3_1,
+        AnySslVersion
     };
     Q_DECLARE_FLAGS(EncryptionModes, EncryptionMode)
-   
+
     enum AuthenticationMode {
         ClearText = 0,
         Login,
@@ -53,10 +57,10 @@ class KIMAP_EXPORT LoginJob : public Job
         DigestMD5,
         NTLM,
         GSSAPI,
-        Anonymous        
+        Anonymous
     };
     Q_DECLARE_FLAGS(AuthenticationModes, AuthenticationMode)
-    
+
     LoginJob( Session *session );
     virtual ~LoginJob();
 
@@ -86,9 +90,9 @@ class KIMAP_EXPORT LoginJob : public Job
     virtual void doStart();
     virtual void doHandleResponse( const Message &response );
     virtual void connectionLost();
-   
+
   protected Q_SLOTS:
-    void tlsResponse(bool);
+    void sslResponse(bool);
 
   private:
     bool startAuthentication();

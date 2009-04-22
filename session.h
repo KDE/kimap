@@ -56,7 +56,7 @@ class KIMAP_EXPORT Session : public QObject
     void setUiProxy(SessionUiProxy *proxy);
 
   Q_SIGNALS:
-    void tlsNegotiationResult(bool);
+    void encryptionNegotiationResult(bool);
     void sslErrorHandlerResponse(bool);
 
   private Q_SLOTS:
@@ -68,6 +68,7 @@ class KIMAP_EXPORT Session : public QObject
     Q_PRIVATE_SLOT( d, void jobDestroyed( QObject* ) )
     Q_PRIVATE_SLOT( d, void responseReceived( const KIMAP::Message& ) )
 
+    Q_PRIVATE_SLOT( d, void socketConnected() )
     Q_PRIVATE_SLOT( d, void socketDisconnected() )
     Q_PRIVATE_SLOT( d, void socketError() )
 

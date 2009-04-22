@@ -23,6 +23,7 @@
 
 #include <KDE/KLocale>
 #include <KDE/KDebug>
+#include <ktcpsocket.h>
 
 #include "job_p.h"
 #include "message_p.h"
@@ -125,7 +126,7 @@ bool LoginJobPrivate::sasl_interact()
 LoginJob::LoginJob( Session *session )
   : Job( *new LoginJobPrivate(session, i18n("Login")) )
 {
-  connect(session, SIGNAL(tlsNegotiationResult(bool)), this, SLOT(tlsResponse(bool)));
+  connect(session, SIGNAL(encryptionNegotiationResult(bool)), this, SLOT(sslResponse(bool)));
 }
 
 LoginJob::~LoginJob()
@@ -159,7 +160,16 @@ void LoginJob::setPassword( const QString &password )
 void LoginJob::doStart()
 {
   Q_D(LoginJob);
-  if (d->encryptionMode == Unencrypted ) {
+  if (d->encryptionMode == SslV2 || d->encryptionMode == SslV3 || d->encryptionMode == SslV3_1 || d->encryptionMode == AnySslVersion) {
+    KTcpSocket::SslVersion version = KTcpSocket::SslV2;
+    if (d->encryptionMode == SslV3)
+      version = KTcpSocket::SslV3;
+    if (d->encryptionMode == SslV3_1)
+      version = KTcpSocket::SslV3_1;
+    if (d->encryptionMode == AnySslVersion)
+      version = KTcpSocket::AnySslVersion;
+    d->sessionInternal()->startSsl(version);
+  } else  if (d->encryptionMode == Unencrypted ) {
     if (d->authMode.isEmpty()) {
       d->tag = d->sessionInternal()->sendCommand( "LOGIN",
                                                   quoteIMAP( d->userName ).toUtf8()
@@ -359,7 +369,7 @@ bool LoginJob::answerChallenge(const QByteArray &data)
   return true;
 }
 
-void LoginJob::tlsResponse(bool response)
+void LoginJob::sslResponse(bool response)
 {
   Q_D(LoginJob);
 

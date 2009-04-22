@@ -21,6 +21,9 @@
 #define KIMAP_SESSION_P_H
 
 #include "session.h"
+
+#include <ktcpsocket.h>
+
 #include <QtCore/QQueue>
 #include <QtCore/QString>
 
@@ -43,6 +46,7 @@ class SessionPrivate
     void addJob(Job *job);
     QByteArray sendCommand( const QByteArray &command, const QByteArray &args = QByteArray() );
     void startTls();
+    void startSsl(const KTcpSocket::SslVersion &version);
     void sendData( const QByteArray &data );
 
     QByteArray selectedMailBox() const;
@@ -56,6 +60,7 @@ class SessionPrivate
     void jobDestroyed( QObject *job );
     void responseReceived( const KIMAP::Message &response );
 
+    void socketConnected();
     void socketDisconnected();
     void socketError();
 
