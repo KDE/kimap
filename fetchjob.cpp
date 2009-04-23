@@ -158,7 +158,7 @@ void FetchJob::doStart()
   switch ( d->scope.mode ) {
   case FetchScope::Headers:
     if ( d->scope.parts.isEmpty() ) {
-      parameters+="(RFC822.SIZE INTERNALDATE BODY[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT)] UID)";
+      parameters+="(RFC822.SIZE INTERNALDATE BODY[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT)] FLAGS UID)";
     } else {
       parameters+='(';
       foreach ( const QByteArray &part, d->scope.parts ) {
@@ -193,7 +193,7 @@ void FetchJob::doStart()
 
   d->tag = d->sessionInternal()->sendCommand( command, parameters );
 }
-#include <kdebug.h>
+
 void FetchJob::doHandleResponse( const Message &response )
 {
   Q_D(FetchJob);
@@ -250,7 +250,6 @@ void FetchJob::doHandleResponse( const Message &response )
             if ( str=="BODY[]" ) {
               d->message(id)->setContent( KMime::CRLFtoLF(*it) );
               d->message(id)->parse();
-              kDebug() << "Message Content:" << *it << d->message(id)->head() << d->message(id)->body();
               emit messageReceived( d->sessionInternal()->selectedMailBox(), d->uids[id],
                                     id, d->message(id) );
             } else {
@@ -266,7 +265,7 @@ void FetchJob::doHandleResponse( const Message &response )
 
       if ( d->scope.mode == FetchScope::Headers ) {
         emit headersReceived( d->sessionInternal()->selectedMailBox(), d->uids[id],
-                              id, d->sizes[id], d->message(id) );
+                              id, d->sizes[id], d->flags[id], d->message(id) );
       }
     }
   }
