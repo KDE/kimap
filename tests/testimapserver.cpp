@@ -412,8 +412,6 @@ int main( int argc, char **argv )
 
   }
 
-  testMetaData(&session);
-
   kDebug() << "Asking for capabilities:";
   CapabilitiesJob *capabilities = new CapabilitiesJob(&session);
   capabilities->exec();
@@ -543,6 +541,8 @@ int main( int argc, char **argv )
   testAppendAndStore(&session);
 
   testAcl(&session, user);
+
+  testMetaData(&session);
 
   kDebug() << "Expunge INBOX:";
   ExpungeJob *expunge = new ExpungeJob(&session);
