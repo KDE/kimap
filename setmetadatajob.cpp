@@ -31,12 +31,14 @@ namespace KIMAP
   class SetMetaDataJobPrivate : public MetaDataJobBasePrivate
   {
     public:
-      SetMetaDataJobPrivate( Session *session, const QString& name ) : MetaDataJobBasePrivate(session, name) { }
+      SetMetaDataJobPrivate( Session *session, const QString& name ) : MetaDataJobBasePrivate(session, name), metaDataError(0), maxAcceptedSize(-1) { }
       ~SetMetaDataJobPrivate() { }
 
       QMap<QByteArray, QByteArray> entries;
       QMap<QByteArray, QByteArray>::ConstIterator entriesIt;
       QByteArray entryName;
+      int metaDataError;
+      qint64 maxAcceptedSize;
   };
 }
 
@@ -90,10 +92,34 @@ void SetMetaDataJob::doHandleResponse( const Message &response )
 {
   Q_D(SetMetaDataJob);
 
-  //TODO: handle NO error messages having [METADATA MAXSIZE NNN], [METADATA TOOMANY], [METADATA NOPRIVATE] (see rfc5464)
-  // or [ANNOTATEMORE TOOBIG], [ANNOTATEMORE TOOMANY] respectively
-  if (handleErrorReplies(response) == NotHandled ) {
-    if ( d->serverCapability == Metadata && response.content[0].toString() == "+" ) {
+  //TODO: Test if a server can really return more then one untagged NO response. If not, no need to OR the error codes
+  if ( !response.content.isEmpty()
+        && response.content.first().toString() == d->tag ) {
+    if ( response.content[1].toString() == "NO" ) {
+      setError( UserDefinedError );
+      setErrorText( i18n("%1 failed, server replied: %2", d->m_name, response.toString().constData()) );
+      if (response.content[2].toString() == "[ANNOTATEMORE TOOMANY]" || response.content[2].toString() == "[METADATA TOOMANY]") {
+        d->metaDataError |= TooMany;
+      } else if (response.content[2].toString() == "[ANNOTATEMORE TOOBIG]" || response.content[2].toString().startsWith("[METADATA MAXSIZE")) {
+        d->metaDataError |= TooBig;
+        d->maxAcceptedSize = -1;
+        if (response.content[2].toString().startsWith("[METADATA MAXSIZE")) {
+          QByteArray max = response.content[2].toString();
+          max.replace("[METADATA MAXSIZE", "");
+          max.replace("]","");
+          d->maxAcceptedSize = max.toLongLong();
+        }
+      } else if (response.content[2].toString() == "[METADATA NOPRIVATE]") {
+        d->metaDataError |= NoPrivate;
+      }
+    } else if ( response.content.size() < 2 ) {
+      setErrorText( i18n("%1 failed, malformed reply from the server.", d->m_name) );
+    } else if ( response.content[1].toString() != "OK" ) {
+      setError( UserDefinedError );
+      setErrorText( i18n("%1 failed, server replied: %2", d->m_name, response.toString().constData()) );
+    }
+    emitResult();
+   } else if ( d->serverCapability == Metadata && response.content[0].toString() == "+" ) {
       QByteArray content = d->entriesIt.value();
       ++d->entriesIt;
      if (d->entriesIt == d->entries.constEnd()) {
@@ -103,7 +129,6 @@ void SetMetaDataJob::doHandleResponse( const Message &response )
      }
 //      kDebug() << "SENT: " << content;
      d->sessionInternal()->sendData( content );
-    }
   }
 }
 
@@ -117,6 +142,12 @@ void SetMetaDataJob::setEntry(const QByteArray &entry)
 {
   Q_D(SetMetaDataJob);
   d->entryName = entry;
+}
+
+int SetMetaDataJob::metaDataError() const
+{
+  Q_D(const SetMetaDataJob);
+  return d->metaDataError;
 }
 
 #include "setmetadatajob.moc"

@@ -56,6 +56,26 @@ class KIMAP_EXPORT SetMetaDataJob : public MetaDataJobBase
      */
     void setEntry(const QByteArray &entry);
 
+    enum MetaDataError {
+      NoError = 0,
+      TooMany = 1,
+      TooBig = 2,
+      NoPrivate = 4
+    };
+
+    Q_DECLARE_FLAGS(MetaDataErrors, MetaDataError)
+
+    /**
+     * The metadata errors recived from the server.
+     * @return OR connected error codes, see MetaDataError
+     */
+    int metaDataError() const;
+    /**
+     * The maximum accepted metadata size.
+     * @return the accepted metadata size, -1 means the limit is unknown.
+     */
+    qint64 maxAcceptedSize();
+
   protected:
     virtual void doStart();
     virtual void doHandleResponse( const Message &response );
