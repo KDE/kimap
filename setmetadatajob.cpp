@@ -83,13 +83,12 @@ void SetMetaDataJob::doStart()
   }
 
   d->tag = d->sessionInternal()->sendCommand( command, parameters );
-  kDebug() << "SENT: " << command << " " << parameters;
+//   kDebug() << "SENT: " << command << " " << parameters;
 }
 
 void SetMetaDataJob::doHandleResponse( const Message &response )
 {
   Q_D(SetMetaDataJob);
-  kDebug() << "GOT: " << response.toString();
 
   //TODO: handle NO error messages having [METADATA MAXSIZE NNN], [METADATA TOOMANY], [METADATA NOPRIVATE] (see rfc5464)
   // or [ANNOTATEMORE TOOBIG], [ANNOTATEMORE TOOMANY] respectively
@@ -102,7 +101,7 @@ void SetMetaDataJob::doHandleResponse( const Message &response )
      } else {
        content +=" {" + QByteArray::number(d->entriesIt.value().size()) + '}';
      }
-     kDebug() << "SENT: " << content;
+//      kDebug() << "SENT: " << content;
      d->sessionInternal()->sendData( content );
     }
   }

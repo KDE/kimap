@@ -44,6 +44,7 @@ set(kimap_LIB_SRCS
    getquotarootjob.cpp
    metadatajobbase.cpp
    setmetadatajob.cpp
+   getmetadatajob.cpp
 )
 
 kde4_add_library(kimap SHARED ${kimap_LIB_SRCS})
@@ -60,5 +61,5 @@ install(TARGETS kimap EXPORT kdepimlibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_
 install( FILES kimap_export.h job.h appendjob.h capabilitiesjob.h fetchjob.h listjob.h loginjob.h logoutjob.h rfccodecs.h
  selectjob.h closejob.h expungejob.h deletejob.h createjob.h subscribejob.h unsubscribejob.h renamejob.h checkjob.h noopjob.h
  statusjob.h session.h sessionuiproxy.h storejob.h copyjob.h searchjob.h acljobbase.h setacljob.h getacljob.h deleteacljob.h
- myrightsjob.h listrightsjob.h quotajobbase.h setquotajob.h getquotajob.h getquotarootjob.h metadatajobbase.h setmetadatajob.h
+ myrightsjob.h listrightsjob.h quotajobbase.h setquotajob.h getquotajob.h getquotarootjob.h metadatajobbase.h setmetadatajob.h getmetadatajob.h
  DESTINATION ${INCLUDE_INSTALL_DIR}/kimap  COMPONENT Devel)

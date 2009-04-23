@@ -29,6 +29,8 @@
 #include "kimap/deleteacljob.h"
 #include "kimap/myrightsjob.h"
 #include "kimap/listrightsjob.h"
+#include "kimap/setmetadatajob.h"
+#include "kimap/getmetadatajob.h"
 
 using namespace KIMAP;
 
@@ -82,6 +84,42 @@ void listFolders(Session *session, bool includeUnsubscribed = false, const QByte
       kDebug() << mailBox;
   }
 
+}
+
+void testMetaData(Session *session)
+{
+  kDebug() << "TESTING: METADATA commands";
+  CreateJob *create = new CreateJob(session);
+  create->setMailBox("INBOX/TestFolder");
+  create->exec();
+
+  SetMetaDataJob *setmetadata = new SetMetaDataJob(session);
+  setmetadata->setMailBox("INBOX/TestFolder");
+  setmetadata->setServerCapapility(SetMetaDataJob::Annotatemore);
+  setmetadata->setEntry("/comment");
+  setmetadata->addMetaData("value.priv", "My new comment");
+  setmetadata->exec();
+
+  setmetadata = new SetMetaDataJob(session);
+  setmetadata->setMailBox("INBOX/TestFolder");
+  setmetadata->setServerCapapility(SetMetaDataJob::Annotatemore);
+  setmetadata->setEntry("/check");
+  setmetadata->addMetaData("value.priv", "true");
+  setmetadata->exec();
+
+  GetMetaDataJob *getmetadata = new GetMetaDataJob(session);
+  getmetadata->setMailBox("INBOX/TestFolder");
+  getmetadata->setServerCapapility(SetMetaDataJob::Annotatemore);
+  getmetadata->addEntry("/*");
+  getmetadata->addAttribute("value.priv");
+  getmetadata->exec();
+  Q_ASSERT_X(getmetadata->metaData("INBOX/TestFolder", "/check", "value.priv") == "true", "",  "/check metadata should be true");
+  Q_ASSERT_X(getmetadata->metaData("INBOX/TestFolder", "/comment", "value.priv") == "My new comment", "",  "/check metadata should be My new comment");
+
+  //cleanup
+  DeleteJob *deletejob = new DeleteJob(session);
+  deletejob->setMailBox("INBOX/TestFolder");
+  deletejob->exec();
 }
 
 void testAcl(Session *session, const QString &user)
@@ -373,6 +411,8 @@ int main( int argc, char **argv )
     qDebug();
 
   }
+
+  testMetaData(&session);
 
   kDebug() << "Asking for capabilities:";
   CapabilitiesJob *capabilities = new CapabilitiesJob(&session);
