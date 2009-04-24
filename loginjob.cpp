@@ -285,7 +285,7 @@ bool LoginJob::startAuthentication()
   //SASL authentication
   if (!initSASL()) {
       setError( UserDefinedError );
-      setErrorText( i18n("Login failed, client cannot initalize the SASL library.") );
+      setErrorText( i18n("Login failed, client cannot initialize the SASL library.") );
       return false;
   }
 
