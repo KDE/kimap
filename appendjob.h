@@ -53,6 +53,8 @@ class KIMAP_EXPORT AppendJob : public Job
     void setContent( const QByteArray &content );
     QByteArray content() const;
 
+    qint64 uid() const;
+
   protected:
     virtual void doStart();
     virtual void doHandleResponse(const Message &response);

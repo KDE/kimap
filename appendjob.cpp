@@ -30,12 +30,13 @@ namespace KIMAP
   class AppendJobPrivate : public JobPrivate
   {
     public:
-      AppendJobPrivate( Session *session, const QString& name ) : JobPrivate( session, name ) { }
+      AppendJobPrivate( Session *session, const QString& name ) : JobPrivate( session, name ), uid( 0 ) { }
       ~AppendJobPrivate() { }
 
       QByteArray mailBox;
       QList<QByteArray> flags;
       QByteArray content;
+      qint64 uid;
   };
 }
 
@@ -86,6 +87,12 @@ QByteArray AppendJob::content() const
   return d->content;
 }
 
+qint64 AppendJob::uid() const
+{
+  Q_D(const AppendJob);
+  return d->uid;
+}
+
 void AppendJob::doStart()
 {
   Q_D(AppendJob);
@@ -110,6 +117,17 @@ void AppendJob::doStart()
 void AppendJob::doHandleResponse( const Message &response )
 {
   Q_D(AppendJob);
+
+  for ( QList<Message::Part>::ConstIterator it = response.responseCode.begin();
+        it != response.responseCode.end(); ++it ) {
+    if ( it->toString()=="APPENDUID" ) {
+      it = it + 2;
+      if ( it != response.responseCode.end() ) {
+        d->uid = it->toString().toLongLong();
+      }
+      break;
+    }
+  }
 
   if (handleErrorReplies(response) == NotHandled ) {
     if ( response.content[0].toString() == "+" ) {
