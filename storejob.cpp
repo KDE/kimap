@@ -34,6 +34,7 @@ namespace KIMAP
       ~StoreJobPrivate() { }
 
       QByteArray set;
+      bool uidBased;
       StoreJob::StoreMode mode;
       QList<QByteArray> flags;
 
@@ -64,6 +65,18 @@ QByteArray StoreJob::sequenceSet() const
 {
   Q_D(const StoreJob);
   return d->set;
+}
+
+void StoreJob::setUidBased(bool uidBased)
+{
+  Q_D(StoreJob);
+  d->uidBased = uidBased;
+}
+
+bool StoreJob::isUidBased() const
+{
+  Q_D(const StoreJob);
+  return d->uidBased;
 }
 
 void StoreJob::setFlags( const QList<QByteArray> &flags )
@@ -122,7 +135,13 @@ void StoreJob::doStart()
   parameters+=')';
 
   qDebug("%s", parameters.constData());
-  d->tag = d->sessionInternal()->sendCommand( "STORE", parameters );
+
+  QByteArray command = "STORE";
+  if ( d->uidBased ) {
+    command = "UID "+command;
+  }
+
+  d->tag = d->sessionInternal()->sendCommand( command, parameters );
 }
 
 void StoreJob::doHandleResponse( const Message &response )

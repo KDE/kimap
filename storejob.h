@@ -52,6 +52,9 @@ class KIMAP_EXPORT StoreJob : public Job
     void setSequenceSet( const QByteArray &set );
     QByteArray sequenceSet() const;
 
+    void setUidBased( bool uidBased );
+    bool isUidBased() const;
+
     void setFlags( const QList<QByteArray> &flags );
     QList<QByteArray> flags() const;
 
