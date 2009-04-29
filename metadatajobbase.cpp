@@ -58,7 +58,7 @@ QByteArray MetaDataJobBase::mailBox() const
   return d->mailBox;
 }
 
-void MetaDataJobBase::setServerCapapility(const ServerCapability& capability)
+void MetaDataJobBase::setServerCapability(const ServerCapability& capability)
 {
   Q_D(MetaDataJobBase);
   d->serverCapability = capability;

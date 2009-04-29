@@ -95,21 +95,21 @@ void testMetaData(Session *session)
 
   SetMetaDataJob *setmetadata = new SetMetaDataJob(session);
   setmetadata->setMailBox("INBOX/TestFolder");
-  setmetadata->setServerCapapility(SetMetaDataJob::Annotatemore);
+  setmetadata->setServerCapability(SetMetaDataJob::Annotatemore);
   setmetadata->setEntry("/comment");
   setmetadata->addMetaData("value.priv", "My new comment");
   setmetadata->exec();
 
   setmetadata = new SetMetaDataJob(session);
   setmetadata->setMailBox("INBOX/TestFolder");
-  setmetadata->setServerCapapility(SetMetaDataJob::Annotatemore);
+  setmetadata->setServerCapability(SetMetaDataJob::Annotatemore);
   setmetadata->setEntry("/check");
   setmetadata->addMetaData("value.priv", "true");
   setmetadata->exec();
 
   GetMetaDataJob *getmetadata = new GetMetaDataJob(session);
   getmetadata->setMailBox("INBOX/TestFolder");
-  getmetadata->setServerCapapility(SetMetaDataJob::Annotatemore);
+  getmetadata->setServerCapability(SetMetaDataJob::Annotatemore);
   getmetadata->addEntry("/*","value.priv");
   getmetadata->exec();
   Q_ASSERT_X(getmetadata->metaData("INBOX/TestFolder", "/check", "value.priv") == "true", "",  "/check metadata should be true");

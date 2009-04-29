@@ -49,7 +49,7 @@ class KIMAP_EXPORT MetaDataJobBase : public Job
       Annotatemore //compatibility with draft-daboo-imap-annotatemore-07
     };
 
-    Q_DECLARE_FLAGS(ServerCapabilitys, ServerCapability)
+    Q_DECLARE_FLAGS(ServerCapabilities, ServerCapability)
 
     void setMailBox( const QByteArray &mailBox );
     QByteArray mailBox() const;
@@ -58,7 +58,7 @@ class KIMAP_EXPORT MetaDataJobBase : public Job
      * Set what kind of annotation does the server support. The commands send out depend on the mode set here.
      * @param capability Metadata (RFC5464 mode) or Annotatemore (draft-daboo-imap-annotatemore-07 mode)
      */
-    void setServerCapapility(const ServerCapability& capability);
+    void setServerCapability(const ServerCapability& capability);
 
     /**
      * Check the operating mode.
