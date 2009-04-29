@@ -50,17 +50,10 @@ class KIMAP_EXPORT GetMetaDataJob : public MetaDataJobBase
     Q_DECLARE_FLAGS(Depths, Depth)
 
     /**
-     * Add an entry name to query, if the job is operating in Annotatemore mode, the attribute names need to be specified with
-     * addAttribute.
+     * Add an entry, attribute pair to query, if the job is operating in Annotatemore mode, the attribute name is used.In Metadata mode the @param attribute is ignored.
      * @param entry the metadata entry name
      */
-    void addEntry(const QByteArray &entry);
-
-    /**
-     * Add an attribute value name to query, if the job is operating in Annotatemore mode. In Metadata mode it is ignored.
-     * @param attribute the metadata entry name
-     */
-    void addAttribute(const QByteArray &attribute);
+     void addEntry(const QByteArray &entry, const QByteArray &attribute = QByteArray());
 
     /**
      * Only entry values that are less than or equal in octet size to the specified @param size limit are returned. In

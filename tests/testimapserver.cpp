@@ -110,8 +110,7 @@ void testMetaData(Session *session)
   GetMetaDataJob *getmetadata = new GetMetaDataJob(session);
   getmetadata->setMailBox("INBOX/TestFolder");
   getmetadata->setServerCapapility(SetMetaDataJob::Annotatemore);
-  getmetadata->addEntry("/*");
-  getmetadata->addAttribute("value.priv");
+  getmetadata->addEntry("/*","value.priv");
   getmetadata->exec();
   Q_ASSERT_X(getmetadata->metaData("INBOX/TestFolder", "/check", "value.priv") == "true", "",  "/check metadata should be true");
   Q_ASSERT_X(getmetadata->metaData("INBOX/TestFolder", "/comment", "value.priv") == "My new comment", "",  "/check metadata should be My new comment");

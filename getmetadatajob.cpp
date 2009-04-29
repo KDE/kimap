@@ -152,15 +152,12 @@ void GetMetaDataJob::doHandleResponse( const Message &response )
   }
 }
 
-void GetMetaDataJob::addEntry(const QByteArray &entry)
+void GetMetaDataJob::addEntry(const QByteArray &entry, const QByteArray &attribute)
 {
   Q_D(GetMetaDataJob);
+  if (d->serverCapability == Annotatemore && attribute.isNull())
+    qWarning() << "In ANNOTATEMORE mode and attribute must be specified with addEnty!";
   d->entries.append(entry);
-}
-
-void GetMetaDataJob::addAttribute(const QByteArray &attribute)
-{
-  Q_D(GetMetaDataJob);
   d->attributes.append(attribute);
 }
 
