@@ -97,12 +97,16 @@ void ListJob::doHandleResponse( const Message &response )
   Q_D(ListJob);
 
   if (handleErrorReplies(response) == NotHandled) {
-    if ( response.content.size() == 5
+    if ( response.content.size() >= 5
            && response.content[1].toString()==d->command ) {
       QList<QByteArray> flags = response.content[2].toList();
       QByteArray separator = response.content[3].toString();
       Q_ASSERT(separator.size()==1);
-      QByteArray fullName = response.content[4].toString();
+      QByteArray fullName;
+      for ( int i=4; i<response.content.size(); i++ ) {
+        fullName+= response.content[i].toString()+' ';
+      }
+      fullName.chop( 1 );
 
       QList<QByteArray> mailBoxDescriptor;
       mailBoxDescriptor << separator;
