@@ -234,8 +234,9 @@ void testAppendAndStore(Session *session)
   fetch->exec();
   boost::shared_ptr<KMime::Message> message = fetch->messages()[1];
   Q_ASSERT_X(fetch->error()==0, "FetchJob", fetch->errorString().toLocal8Bit());
-  Q_ASSERT_X(testMailContent==message->head()+message->body(),
-             "Message differs from reference", message->head()+message->body());
+  testMailContent.replace( "\r\n", "\n" );
+  Q_ASSERT_X(testMailContent==message->head()+"\n"+message->body(),
+             "Message differs from reference", message->head()+"\n"+message->body());
 
   fetch = new FetchJob(session);
   fetch->setSequenceSet("1");
