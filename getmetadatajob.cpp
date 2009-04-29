@@ -184,9 +184,9 @@ void GetMetaDataJob::setDepth(Depth depth)
   }
 }
 
-QByteArray GetMetaDataJob::metaData(const QByteArray &mailBox, const QByteArray &entry, const QByteArray &attribute)
+QByteArray GetMetaDataJob::metaData(const QByteArray &mailBox, const QByteArray &entry, const QByteArray &attribute) const
 {
-  Q_D(GetMetaDataJob);
+  Q_D(const GetMetaDataJob);
   QByteArray attr = attribute;
 
   if (d->serverCapability == Metadata)
@@ -202,5 +202,10 @@ QByteArray GetMetaDataJob::metaData(const QByteArray &mailBox, const QByteArray 
   return result;
 }
 
+QMap<QByteArray, QMap<QByteArray, QByteArray> > GetMetaDataJob::allMetaData(const QByteArray &mailBox) const
+{
+  Q_D(const GetMetaDataJob);
+  return d->metadata[mailBox];
+}
 
 #include "getmetadatajob.moc"

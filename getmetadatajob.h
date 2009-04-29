@@ -75,7 +75,16 @@ class KIMAP_EXPORT GetMetaDataJob : public MetaDataJobBase
      * @param attribute
      * @return
      */
-    QByteArray metaData(const QByteArray &mailBox, const QByteArray &entry, const QByteArray &attribute = QByteArray());
+    QByteArray metaData(const QByteArray &mailBox, const QByteArray &entry,
+                        const QByteArray &attribute = QByteArray()) const;
+
+    /**
+     * Get all the metadata for a given mailbox.
+     *
+     * @param mailBox
+     * @return
+     */
+    QMap<QByteArray, QMap<QByteArray, QByteArray> > allMetaData(const QByteArray &mailBox) const;
 
   protected:
     virtual void doStart();
