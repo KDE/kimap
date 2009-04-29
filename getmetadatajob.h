@@ -52,6 +52,7 @@ class KIMAP_EXPORT GetMetaDataJob : public MetaDataJobBase
     /**
      * Add an entry, attribute pair to query, if the job is operating in Annotatemore mode, the attribute name is used.In Metadata mode the @param attribute is ignored.
      * @param entry the metadata entry name
+     * @param attribute the attribute name, in Annotatemore mode
      */
      void addEntry(const QByteArray &entry, const QByteArray &attribute = QByteArray());
 
@@ -68,21 +69,13 @@ class KIMAP_EXPORT GetMetaDataJob : public MetaDataJobBase
     void setDepth(Depth depth);
 
     /**
-     * Get the metadata in Metadata mode.
-     * @param mailBox
-     * @param entry
-     * @return
-     */
-    QByteArray metaData(const QByteArray &mailBox, const QByteArray &entry);
-
-    /**
-     * Get the metadata in Annotatemore mode. If used in Metadata mode, @param attribute is ignored.
+     * Get the metadata. If used in Metadata mode, @param attribute is ignored.
      * @param mailBox
      * @param entry
      * @param attribute
      * @return
      */
-    QByteArray metaData(const QByteArray &mailBox, const QByteArray &entry, const QByteArray &attribute);
+    QByteArray metaData(const QByteArray &mailBox, const QByteArray &entry, const QByteArray &attribute = QByteArray());
 
   protected:
     virtual void doStart();

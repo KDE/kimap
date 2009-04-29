@@ -184,12 +184,6 @@ void GetMetaDataJob::setDepth(Depth depth)
   }
 }
 
-QByteArray GetMetaDataJob::metaData(const QByteArray &mailBox, const QByteArray &entry)
-{
-  return metaData(mailBox, entry, "");
-}
-
-
 QByteArray GetMetaDataJob::metaData(const QByteArray &mailBox, const QByteArray &entry, const QByteArray &attribute)
 {
   Q_D(GetMetaDataJob);
