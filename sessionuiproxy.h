@@ -24,6 +24,8 @@
 
 #include "job.h"
 
+class KSslErrorUiData;
+
 namespace KIMAP {
 
 /** @short Interface to display communication errors and wait for user feedback. */
