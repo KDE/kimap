@@ -59,9 +59,6 @@ class KIMAP_EXPORT Session : public QObject
     void encryptionNegotiationResult(bool);
     void sslErrorHandlerResponse(bool);
 
-  private Q_SLOTS:
-    void handleSslError(const KSslErrorUiData& errorData);
-
   private:
     Q_PRIVATE_SLOT( d, void doStartNext() )
     Q_PRIVATE_SLOT( d, void jobDone( KJob* ) )
@@ -72,6 +69,9 @@ class KIMAP_EXPORT Session : public QObject
     Q_PRIVATE_SLOT( d, void socketDisconnected() )
     Q_PRIVATE_SLOT( d, void socketError() )
 
+    Q_PRIVATE_SLOT( d, void handleSslError( const KSslErrorUiData &errorData ) )
+
+    friend class SessionPrivate;
     SessionPrivate *const d;
 };
 

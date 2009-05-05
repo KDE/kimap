@@ -76,11 +76,11 @@ Session::State Session::state() const
   return d->state;
 }
 
-void Session::handleSslError(const KSslErrorUiData& errorData) {
-  if (d->uiProxy && d->uiProxy->ignoreSslError(errorData)) {
-     emit sslErrorHandlerResponse(true);
+void SessionPrivate::handleSslError(const KSslErrorUiData& errorData) {
+  if (uiProxy && uiProxy->ignoreSslError(errorData)) {
+     emit q->sslErrorHandlerResponse(true);
    } else {
-     emit sslErrorHandlerResponse(false);
+     emit q->sslErrorHandlerResponse(false);
    }
 }
 

@@ -50,6 +50,8 @@ class SessionPrivate
 
     QByteArray selectedMailBox() const;
 
+    void handleSslError( const KSslErrorUiData &errorData );
+
   private:
     void reconnect();
 
