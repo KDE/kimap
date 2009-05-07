@@ -58,7 +58,7 @@ void SetAclJob::doStart()
   } else if (d->modifier == Remove) {
     r.prepend('-');
   }
-  d->tag = d->sessionInternal()->sendCommand( "SETACL", '\"' + KIMAP::encodeImapFolderName( d->mailBox ) + "\" \"" + d->id + "\" \"" + r +'\"');
+  d->tag = d->sessionInternal()->sendCommand( "SETACL", '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + "\" \"" + d->id + "\" \"" + r +'\"');
 }
 
 void SetAclJob::setRights(const QByteArray& rights)

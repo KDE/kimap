@@ -71,7 +71,7 @@ namespace KIMAP
 
       QList<AclJobBase::AclRight> rightsFromString(const QByteArray& rights);
 
-      QByteArray mailBox;
+      QString mailBox;
       QByteArray id;
       QList<AclJobBase::AclRight> rightList;
       AclJobBase::AclModifier modifier;

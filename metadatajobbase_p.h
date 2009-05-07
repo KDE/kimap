@@ -36,7 +36,7 @@ namespace KIMAP
       ~MetaDataJobBasePrivate() { }
 
       MetaDataJobBase::ServerCapability serverCapability;
-      QByteArray mailBox;
+      QString mailBox;
   };
 }
 

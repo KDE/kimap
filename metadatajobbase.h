@@ -51,8 +51,8 @@ class KIMAP_EXPORT MetaDataJobBase : public Job
 
     Q_DECLARE_FLAGS(ServerCapabilities, ServerCapability)
 
-    void setMailBox( const QByteArray &mailBox );
-    QByteArray mailBox() const;
+    void setMailBox( const QString &mailBox );
+    QString mailBox() const;
 
     /**
      * Set what kind of annotation does the server support. The commands send out depend on the mode set here.

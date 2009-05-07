@@ -39,7 +39,7 @@ namespace KIMAP
        QByteArray depth;
        QList<QByteArray> entries;
        QList<QByteArray> attributes;
-       QMap<QByteArray, QMap<QByteArray, QMap<QByteArray, QByteArray> > > metadata;
+       QMap<QString, QMap<QByteArray, QMap<QByteArray, QByteArray> > > metadata;
        //    ^ mailbox        ^ entry          ^attribute  ^ value
   };
 }
@@ -59,7 +59,7 @@ void GetMetaDataJob::doStart()
 {
   Q_D(GetMetaDataJob);
   QByteArray parameters;
-  parameters = '\"' + KIMAP::encodeImapFolderName( d->mailBox ) + "\" ";
+  parameters = '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + "\" ";
 
   QByteArray command = "GETMETADATA";
   if (d->serverCapability == Annotatemore) {
@@ -125,7 +125,7 @@ void GetMetaDataJob::doHandleResponse( const Message &response )
   if (handleErrorReplies(response) == NotHandled ) {
     if ( response.content.size() >= 4 ) {
       if (d->serverCapability == Annotatemore && response.content[1].toString() == "ANNOTATION" ) {
-        QByteArray mailBox = KIMAP::decodeImapFolderName( response.content[2].toString() );
+        QString mailBox = QString::fromUtf8( KIMAP::decodeImapFolderName( response.content[2].toString() ) );
 
         int i = 3;
         while (i < response.content.size() - 1) {
@@ -140,7 +140,7 @@ void GetMetaDataJob::doHandleResponse( const Message &response )
         }
       } else
       if (d->serverCapability == Metadata && response.content[1].toString() == "METADATA" ) {
-        QByteArray mailBox = KIMAP::decodeImapFolderName( response.content[2].toString() );
+        QString mailBox = QString::fromUtf8( KIMAP::decodeImapFolderName( response.content[2].toString() ) );
 
         QList<QByteArray> entries = response.content[3].toList();
         int i = 0;
@@ -185,7 +185,7 @@ void GetMetaDataJob::setDepth(Depth depth)
   }
 }
 
-QByteArray GetMetaDataJob::metaData(const QByteArray &mailBox, const QByteArray &entry, const QByteArray &attribute) const
+QByteArray GetMetaDataJob::metaData(const QString &mailBox, const QByteArray &entry, const QByteArray &attribute) const
 {
   Q_D(const GetMetaDataJob);
   QByteArray attr = attribute;
@@ -203,7 +203,7 @@ QByteArray GetMetaDataJob::metaData(const QByteArray &mailBox, const QByteArray 
   return result;
 }
 
-QMap<QByteArray, QMap<QByteArray, QByteArray> > GetMetaDataJob::allMetaData(const QByteArray &mailBox) const
+QMap<QByteArray, QMap<QByteArray, QByteArray> > GetMetaDataJob::allMetaData(const QString &mailBox) const
 {
   Q_D(const GetMetaDataJob);
   return d->metadata[mailBox];

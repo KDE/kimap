@@ -41,8 +41,8 @@ class KIMAP_EXPORT CreateJob : public Job
     CreateJob( Session *session );
     virtual ~CreateJob();
 
-    void setMailBox( const QByteArray &mailBox );
-    QByteArray mailBox() const;
+    void setMailBox( const QString &mailBox );
+    QString mailBox() const;
 
   protected:
     virtual void doStart();

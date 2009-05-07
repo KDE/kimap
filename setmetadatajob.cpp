@@ -25,6 +25,7 @@
 #include "metadatajobbase_p.h"
 #include "message_p.h"
 #include "session_p.h"
+#include "rfccodecs.h"
 
 namespace KIMAP
 {
@@ -57,7 +58,7 @@ void SetMetaDataJob::doStart()
 {
   Q_D(SetMetaDataJob);
   QByteArray parameters;
-  parameters = '\"' + d->mailBox + "\" ";
+  parameters = '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + "\" ";
   d->entriesIt = d->entries.constBegin();
 
   QByteArray command = "SETMETADATA";

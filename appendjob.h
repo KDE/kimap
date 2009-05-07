@@ -44,8 +44,8 @@ class KIMAP_EXPORT AppendJob : public Job
     AppendJob( Session *session );
     virtual ~AppendJob();
 
-    void setMailBox( const QByteArray &mailBox );
-    QByteArray mailBox() const;
+    void setMailBox( const QString &mailBox );
+    QString mailBox() const;
 
     void setFlags( const QList<QByteArray> &flags);
     QList<QByteArray> flags() const;

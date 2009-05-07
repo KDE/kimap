@@ -35,7 +35,7 @@ namespace KIMAP
       SubscribeJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name) { }
       ~SubscribeJobPrivate() { }
 
-      QByteArray mailBox;
+      QString mailBox;
   };
 }
 
@@ -53,16 +53,16 @@ SubscribeJob::~SubscribeJob()
 void SubscribeJob::doStart()
 {
   Q_D(SubscribeJob);
-  d->tag = d->sessionInternal()->sendCommand( "SUBSCRIBE", '\"'+KIMAP::encodeImapFolderName( d->mailBox )+'\"' );
+  d->tag = d->sessionInternal()->sendCommand( "SUBSCRIBE", '\"'+KIMAP::encodeImapFolderName( d->mailBox.toUtf8() )+'\"' );
 }
 
-void SubscribeJob::setMailBox( const QByteArray &mailBox )
+void SubscribeJob::setMailBox( const QString &mailBox )
 {
   Q_D(SubscribeJob);
   d->mailBox = mailBox;
 }
 
-QByteArray SubscribeJob::mailBox() const
+QString SubscribeJob::mailBox() const
 {
   Q_D(const SubscribeJob);
   return d->mailBox;

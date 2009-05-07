@@ -45,16 +45,16 @@ class KIMAP_EXPORT RenameJob : public Job
      * Set the name of the mailbox that will be renamed.
      * @param mailBox the original name of the mailbox
      */
-    void setMailBox( const QByteArray &mailBox );
-    QByteArray mailBox() const;
+    void setMailBox( const QString &mailBox );
+    QString mailBox() const;
 
     /**
      * The new name of the mailbox, see setMailBox.
      * @param mailBox the new mailbox name
      */
-    void setNewMailBox( const QByteArray &mailBox );
-    QByteArray newMailBox() const;
-  
+    void setNewMailBox( const QString &mailBox );
+    QString newMailBox() const;
+
   protected:
     virtual void doStart();
 };

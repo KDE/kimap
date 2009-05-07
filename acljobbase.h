@@ -82,8 +82,8 @@ class KIMAP_EXPORT AclJobBase : public Job
     Q_DECLARE_FLAGS(AclModifiers, AclModifier)
 
 
-    void setMailBox( const QByteArray &mailBox );
-    QByteArray mailBox() const;
+    void setMailBox( const QString &mailBox );
+    QString mailBox() const;
 
     QByteArray rightsToString(const QList<AclJobBase::AclRight> &rights);
 

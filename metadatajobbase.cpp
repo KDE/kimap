@@ -46,13 +46,13 @@ MetaDataJobBase::~MetaDataJobBase()
 }
 
 
-void MetaDataJobBase::setMailBox( const QByteArray &mailBox )
+void MetaDataJobBase::setMailBox( const QString &mailBox )
 {
   Q_D(MetaDataJobBase);
   d->mailBox = mailBox;
 }
 
-QByteArray MetaDataJobBase::mailBox() const
+QString MetaDataJobBase::mailBox() const
 {
   Q_D(const MetaDataJobBase);
   return d->mailBox;

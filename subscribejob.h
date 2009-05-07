@@ -41,8 +41,8 @@ class KIMAP_EXPORT SubscribeJob : public Job
     SubscribeJob( Session *session );
     virtual ~SubscribeJob();
 
-    void setMailBox( const QByteArray &mailBox );
-    QByteArray mailBox() const;
+    void setMailBox( const QString &mailBox );
+    QString mailBox() const;
 
   protected:
     virtual void doStart();

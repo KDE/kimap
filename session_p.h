@@ -48,7 +48,7 @@ class SessionPrivate
     void startSsl(const KTcpSocket::SslVersion &version);
     void sendData( const QByteArray &data );
 
-    QByteArray selectedMailBox() const;
+    QString selectedMailBox() const;
 
     void handleSslError( const KSslErrorUiData &errorData );
 

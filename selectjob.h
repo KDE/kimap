@@ -41,8 +41,8 @@ class KIMAP_EXPORT SelectJob : public Job
     SelectJob( Session *session );
     virtual ~SelectJob();
 
-    void setMailBox( const QByteArray &mailBox );
-    QByteArray mailBox() const;
+    void setMailBox( const QString &mailBox );
+    QString mailBox() const;
 
     void setOpenReadOnly( bool readOnly );
     bool isOpenReadOnly() const;

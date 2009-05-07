@@ -41,8 +41,8 @@ class KIMAP_EXPORT DeleteJob : public Job
     DeleteJob( Session *session );
     virtual ~DeleteJob();
 
-    void setMailBox( const QByteArray &mailBox );
-    QByteArray mailBox() const;
+    void setMailBox( const QString &mailBox );
+    QString mailBox() const;
 
   protected:
     virtual void doStart();

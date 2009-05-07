@@ -36,7 +36,7 @@ namespace KIMAP
           firstUnseenIndex(-1), uidValidity(-1), nextUid(-1) { }
       ~SelectJobPrivate() { }
 
-      QByteArray mailBox;
+      QString mailBox;
       bool readOnly;
 
       QList<QByteArray> flags;
@@ -60,13 +60,13 @@ SelectJob::~SelectJob()
 {
 }
 
-void SelectJob::setMailBox( const QByteArray &mailBox )
+void SelectJob::setMailBox( const QString &mailBox )
 {
   Q_D(SelectJob);
   d->mailBox = mailBox;
 }
 
-QByteArray SelectJob::mailBox() const
+QString SelectJob::mailBox() const
 {
   Q_D(const SelectJob);
   return d->mailBox;
@@ -135,7 +135,7 @@ void SelectJob::doStart()
     command = "EXAMINE";
   }
 
-  d->tag = d->sessionInternal()->sendCommand( command, '\"'+KIMAP::encodeImapFolderName( d->mailBox )+'\"' );
+  d->tag = d->sessionInternal()->sendCommand( command, '\"'+KIMAP::encodeImapFolderName( d->mailBox.toUtf8() )+'\"' );
 }
 
 void SelectJob::doHandleResponse( const Message &response )

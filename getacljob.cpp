@@ -54,7 +54,7 @@ void GetAclJob::doStart()
 {
   Q_D(GetAclJob);
 
-  d->tag = d->sessionInternal()->sendCommand( "GETACL", '\"' + KIMAP::encodeImapFolderName( d->mailBox ) + '\"');
+  d->tag = d->sessionInternal()->sendCommand( "GETACL", '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + '\"');
 }
 
 void GetAclJob::doHandleResponse( const Message &response )

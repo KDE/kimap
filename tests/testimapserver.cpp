@@ -66,7 +66,7 @@ void dumpContentHelper(KMime::Content *part, const QString &partId = QString())
   }
 }
 
-void listFolders(Session *session, bool includeUnsubscribed = false, const QByteArray& nameFilter = "")
+void listFolders(Session *session, bool includeUnsubscribed = false, const QString &nameFilter = "")
 {
   ListJob *list = new ListJob(session);
   list->setIncludeUnsubscribed(includeUnsubscribed);
@@ -74,8 +74,8 @@ void listFolders(Session *session, bool includeUnsubscribed = false, const QByte
   Q_ASSERT_X(list->error()==0, "ListJob", list->errorString().toLocal8Bit());
   int count = list->mailBoxes().size();
   for (int i=0; i<count; ++i) {
-    QList<QByteArray> descriptor = list->mailBoxes()[i];
-    QByteArray mailBox;
+    QStringList descriptor = list->mailBoxes()[i];
+    QString mailBox;
     for (int j=1; j<descriptor.size(); ++j) {
       if (j!=1) mailBox+=descriptor[0];
       mailBox+=descriptor[j];

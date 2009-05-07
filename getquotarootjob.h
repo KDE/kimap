@@ -39,8 +39,8 @@ class KIMAP_EXPORT GetQuotaRootJob : public QuotaJobBase
     GetQuotaRootJob( Session *session );
     virtual ~GetQuotaRootJob();
 
-    void setMailBox(const QByteArray &mailBox);
-    QByteArray mailBox() const;
+    void setMailBox(const QString &mailBox);
+    QString mailBox() const;
     QList<QByteArray> roots() const;
     qint32 usage(const QByteArray& root, const QByteArray& resource);
     qint32 limit(const QByteArray& root, const QByteArray& resource);

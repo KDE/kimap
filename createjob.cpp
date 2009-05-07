@@ -35,7 +35,7 @@ namespace KIMAP
       CreateJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name) { }
       ~CreateJobPrivate() { }
 
-      QByteArray mailBox;
+      QString mailBox;
   };
 }
 
@@ -53,16 +53,16 @@ CreateJob::~CreateJob()
 void CreateJob::doStart()
 {
   Q_D(CreateJob);
-  d->tag = d->sessionInternal()->sendCommand( "CREATE", '\"'+KIMAP::encodeImapFolderName(d->mailBox)+'\"' );
+  d->tag = d->sessionInternal()->sendCommand( "CREATE", '\"'+KIMAP::encodeImapFolderName( d->mailBox.toUtf8() )+'\"' );
 }
 
-void CreateJob::setMailBox( const QByteArray &mailBox )
+void CreateJob::setMailBox( const QString &mailBox )
 {
   Q_D(CreateJob);
   d->mailBox = mailBox;
 }
 
-QByteArray CreateJob::mailBox() const
+QString CreateJob::mailBox() const
 {
   Q_D(const CreateJob);
   return d->mailBox;

@@ -26,8 +26,7 @@
 #include <QtTest>
 #include <KDebug>
 
-Q_DECLARE_METATYPE(QList<QByteArray>)
-Q_DECLARE_METATYPE(QList<QList<QByteArray> >)
+Q_DECLARE_METATYPE(QList<QStringList>)
 
 class ListJobTest: public QObject {
   Q_OBJECT
@@ -37,17 +36,17 @@ private Q_SLOTS:
 void testList_data() {
   QTest::addColumn<bool>( "unsubscribed" );
   QTest::addColumn<QStringList>( "response" );
-  QTest::addColumn<QList< QList<QByteArray> > >( "listresult" );
+  QTest::addColumn<QList<QStringList> >( "listresult" );
 
   QStringList response;
   response << "* LIST ( \\HasChildren ) / INBOX "<< "* LIST ( \\HasNoChildren ) / INBOX/&AOQ- &APY- &APw- @ &IKw- "<< "* LIST ( \\HasChildren ) / INBOX/lost+found " << "* LIST ( \\HasNoChildren ) / \"INBOX/lost+found/Calendar Public-20080128\" " << "A000001 OK LIST completed";
-  QList<QByteArray> resultPair;
-  QList<QList<QByteArray> > listresult;
+  QStringList resultPair;
+  QList<QStringList> listresult;
 
   resultPair << "/" << "INBOX";
   listresult << resultPair;
   resultPair.clear();
-  resultPair << "/" << "INBOX" << "ä ö ü @ €";
+  resultPair << "/" << "INBOX" << QString::fromUtf8( "ä ö ü @ €" );
   listresult << resultPair;
   resultPair.clear();
   resultPair << "/" << "INBOX" << "lost+found";
@@ -107,7 +106,7 @@ void testList()
     KIMAP::Session session("127.0.0.1", 5989);
     QFETCH( bool, unsubscribed);
     QFETCH( QStringList, response );
-    QFETCH( QList< QList<QByteArray> >, listresult );
+    QFETCH( QList<QStringList>, listresult );
 
     fakeServer.setResponse( response );
 

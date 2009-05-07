@@ -31,27 +31,27 @@ Q_DECLARE_METATYPE(QList<QByteArray>)
 class DeleteJobTest: public QObject {
   Q_OBJECT
 
-private Q_SLOTS:    
+private Q_SLOTS:
 
 void testDelete_data() {
-  QTest::addColumn<QByteArray>( "mailbox" );
+  QTest::addColumn<QString>( "mailbox" );
   QTest::addColumn<QStringList>( "response" );
-  
+
   QStringList response;
   response << "A000001 OK DELETE completed";
-  QTest::newRow( "good" ) << QByteArray("foo") << response ;
+  QTest::newRow( "good" ) << "foo" << response;
 
   response.clear();
   response << "A000001 BAD command unknown or arguments invalid";
-  QTest::newRow( "bad" ) << QByteArray("foo-BAD") << response;
-  
+  QTest::newRow( "bad" ) << "foo-BAD" << response;
+
   response.clear();
   response << "A000001 Name \"foo\" has inferior hierarchical names";
-  QTest::newRow( "no" ) << QByteArray("foo") << response ;
-  
+  QTest::newRow( "no" ) << "foo" << response;
+
   response.clear();
   response << "A000001 OK DELETE completed";
-  QTest::newRow( "hierarchical" ) << QByteArray("foo/bar") << response ;
+  QTest::newRow( "hierarchical" ) << "foo/bar" << response;
 }
 
 void testDelete()
@@ -59,9 +59,9 @@ void testDelete()
     FakeServer fakeServer;
     fakeServer.start();
     KIMAP::Session session("127.0.0.1", 5989);
-    QFETCH( QByteArray, mailbox );
+    QFETCH( QString, mailbox );
     QFETCH( QStringList, response );
-    
+
     fakeServer.setResponse( response );
 
     KIMAP::DeleteJob *job = new KIMAP::DeleteJob(&session);

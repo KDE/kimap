@@ -70,9 +70,9 @@ class KIMAP_EXPORT FetchJob : public Job
     QMap<int, qint64> uids() const;
 
   Q_SIGNALS:
-    void headersReceived( const QByteArray &mailBox, qint64 uid, int messageNumber, qint64 size, QList<QByteArray> flags, boost::shared_ptr<KMime::Message> message );
-    void messageReceived( const QByteArray &mailBox, qint64 uid, int messageNumber, boost::shared_ptr<KMime::Message> message );
-    void partReceived( const QByteArray &mailBox, qint64 uid, int messageNumber, const QByteArray &partIndex, boost::shared_ptr<KMime::Content> part );
+    void headersReceived( const QString &mailBox, qint64 uid, int messageNumber, qint64 size, QList<QByteArray> flags, boost::shared_ptr<KMime::Message> message );
+    void messageReceived( const QString &mailBox, qint64 uid, int messageNumber, boost::shared_ptr<KMime::Message> message );
+    void partReceived( const QString &mailBox, qint64 uid, int messageNumber, const QByteArray &partIndex, boost::shared_ptr<KMime::Content> part );
 
   protected:
     virtual void doStart();

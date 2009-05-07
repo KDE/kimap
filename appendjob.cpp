@@ -34,7 +34,7 @@ namespace KIMAP
       AppendJobPrivate( Session *session, const QString& name ) : JobPrivate( session, name ), uid( 0 ) { }
       ~AppendJobPrivate() { }
 
-      QByteArray mailBox;
+      QString mailBox;
       QList<QByteArray> flags;
       QByteArray content;
       qint64 uid;
@@ -52,13 +52,13 @@ AppendJob::~AppendJob()
 {
 }
 
-void AppendJob::setMailBox( const QByteArray &mailBox )
+void AppendJob::setMailBox( const QString &mailBox )
 {
   Q_D(AppendJob);
   d->mailBox = mailBox;
 }
 
-QByteArray AppendJob::mailBox() const
+QString AppendJob::mailBox() const
 {
   Q_D(const AppendJob);
   return d->mailBox;
@@ -98,7 +98,7 @@ void AppendJob::doStart()
 {
   Q_D(AppendJob);
 
-  QByteArray parameters = '\"'+KIMAP::encodeImapFolderName( d->mailBox )+'\"';
+  QByteArray parameters = '\"'+KIMAP::encodeImapFolderName( d->mailBox.toUtf8() )+'\"';
 
   if ( !d->flags.isEmpty() ) {
     parameters+=" (";

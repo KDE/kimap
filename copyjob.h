@@ -41,9 +41,9 @@ class KIMAP_EXPORT CopyJob : public Job
     CopyJob( Session *session );
     virtual ~CopyJob();
 
-    void setMailBox( const QByteArray &mailBox );
-    QByteArray mailBox() const;
-    
+    void setMailBox( const QString &mailBox );
+    QString mailBox() const;
+
     // TODO: Make a proper class (actually there's one in akonadi server)
     void setSequenceSet( const QByteArray &set );
     QByteArray sequenceSet() const;

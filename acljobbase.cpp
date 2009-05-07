@@ -117,13 +117,13 @@ AclJobBase::~AclJobBase()
 }
 
 
-void AclJobBase::setMailBox( const QByteArray &mailBox )
+void AclJobBase::setMailBox( const QString &mailBox )
 {
   Q_D(AclJobBase);
   d->mailBox = mailBox;
 }
 
-QByteArray AclJobBase::mailBox() const
+QString AclJobBase::mailBox() const
 {
   Q_D(const AclJobBase);
   return d->mailBox;

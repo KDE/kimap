@@ -35,7 +35,7 @@ namespace KIMAP
       GetQuotaRootJobPrivate( Session *session, const QString& name ) : QuotaJobBasePrivate(session, name) { }
       ~GetQuotaRootJobPrivate() { }
 
-      QByteArray mailBox;
+      QString mailBox;
       QList<QByteArray> rootList;
       uint rootIndex;
       QMap< QByteArray, QMap<QByteArray, QPair<qint32, qint32> > > quotas;
@@ -56,7 +56,7 @@ GetQuotaRootJob::~GetQuotaRootJob()
 void GetQuotaRootJob::doStart()
 {
   Q_D(GetQuotaRootJob);
-  d->tag = d->sessionInternal()->sendCommand( "GETQUOTAROOT", '\"' + KIMAP::encodeImapFolderName( d->mailBox ) + '\"');
+  d->tag = d->sessionInternal()->sendCommand( "GETQUOTAROOT", '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + '\"');
 }
 
 void GetQuotaRootJob::doHandleResponse(const Message &response)
@@ -84,14 +84,14 @@ void GetQuotaRootJob::doHandleResponse(const Message &response)
 }
 
 
-void GetQuotaRootJob::setMailBox(const QByteArray& mailBox)
+void GetQuotaRootJob::setMailBox(const QString& mailBox)
 {
   Q_D(GetQuotaRootJob);
 
   d->mailBox = mailBox;
 }
 
-QByteArray GetQuotaRootJob::mailBox() const
+QString GetQuotaRootJob::mailBox() const
 {
   Q_D(const GetQuotaRootJob);
 

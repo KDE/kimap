@@ -41,15 +41,15 @@ class KIMAP_EXPORT StatusJob : public Job
     StatusJob( Session *session );
     virtual ~StatusJob();
 
-    void setMailBox( const QByteArray &mailBox );
-    QByteArray mailBox() const;
+    void setMailBox( const QString &mailBox );
+    QString mailBox() const;
 
     int messageCount() const;
     qint64 uidValidity() const;
     int nextUid() const;
 
   Q_SIGNALS:
-    void status( const QByteArray &mailBox, int messageCount,
+    void status( const QString &mailBox, int messageCount,
                  qint64 uidValidity, int nextUid );
 
   protected:

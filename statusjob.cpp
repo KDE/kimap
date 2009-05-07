@@ -36,7 +36,7 @@ namespace KIMAP
           uidValidity(-1), nextUid(-1) { }
       ~StatusJobPrivate() { }
 
-      QByteArray mailBox;
+      QString mailBox;
 
       int messageCount;
       qint64 uidValidity;
@@ -55,13 +55,13 @@ StatusJob::~StatusJob()
 {
 }
 
-void StatusJob::setMailBox( const QByteArray &mailBox )
+void StatusJob::setMailBox( const QString &mailBox )
 {
   Q_D(StatusJob);
   d->mailBox = mailBox;
 }
 
-QByteArray StatusJob::mailBox() const
+QString StatusJob::mailBox() const
 {
   Q_D(const StatusJob);
   return d->mailBox;
@@ -89,7 +89,7 @@ void StatusJob::doStart()
 {
   Q_D(StatusJob);
 
-  d->tag = d->sessionInternal()->sendCommand( "STATUS", '\"'+KIMAP::encodeImapFolderName( d->mailBox )+"\" (MESSAGES UIDVALIDITY UIDNEXT)" );
+  d->tag = d->sessionInternal()->sendCommand( "STATUS", '\"'+KIMAP::encodeImapFolderName( d->mailBox.toUtf8() )+"\" (MESSAGES UIDVALIDITY UIDNEXT)" );
 }
 
 void StatusJob::doHandleResponse( const Message &response )
@@ -99,7 +99,7 @@ void StatusJob::doHandleResponse( const Message &response )
   if ( handleErrorReplies(response) == NotHandled) {
       if ( response.content.size() >= 4 ) {
         QByteArray code = response.content[1].toString();
-        QByteArray mailBox = response.content[2].toString();
+        QString mailBox = QString::fromUtf8( response.content[2].toString() );
 
         if ( code=="STATUS" && mailBox==d->mailBox ) {
           QList<QByteArray> data = response.content[3].toList();

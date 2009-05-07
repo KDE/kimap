@@ -31,23 +31,23 @@ Q_DECLARE_METATYPE(QList<QByteArray>)
 class UnsubscribeJobTest: public QObject {
   Q_OBJECT
 
-private Q_SLOTS:    
+private Q_SLOTS:
 
 void testUnsubscribe_data() {
-  QTest::addColumn<QByteArray>( "mailbox" );
+  QTest::addColumn<QString>( "mailbox" );
   QTest::addColumn<QStringList>( "response" );
-  
+
   QStringList response;
   response << "A000001 OK CREATE completed";
-  QTest::newRow( "good" ) << QByteArray("#news.comp.mail.mime")  << response ;
+  QTest::newRow( "good" ) << "#news.comp.mail.mime"  << response;
 
   response.clear();
   response << "A000001 BAD command unknown or arguments invalid";
-  QTest::newRow( "bad" ) << QByteArray("INBOX-FAIL-BAD") << response;
-  
+  QTest::newRow( "bad" ) << "INBOX-FAIL-BAD" << response;
+
   response.clear();
   response << "A000001 NO unsubscribe failure";
-  QTest::newRow( "no" ) << QByteArray("INBOX-FAIL-NO") << response ;
+  QTest::newRow( "no" ) << "INBOX-FAIL-NO" << response;
 }
 
 void testUnsubscribe()
@@ -55,9 +55,9 @@ void testUnsubscribe()
     FakeServer fakeServer;
     fakeServer.start();
     KIMAP::Session session("127.0.0.1", 5989);
-    QFETCH( QByteArray, mailbox );
+    QFETCH( QString, mailbox );
     QFETCH( QStringList, response );
-    
+
     fakeServer.setResponse( response );
 
     KIMAP::UnsubscribeJob *job = new KIMAP::UnsubscribeJob(&session);
