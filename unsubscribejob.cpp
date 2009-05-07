@@ -25,6 +25,7 @@
 #include "job_p.h"
 #include "message_p.h"
 #include "session_p.h"
+#include "rfccodecs.h"
 
 namespace KIMAP
 {
@@ -52,7 +53,7 @@ UnsubscribeJob::~UnsubscribeJob()
 void UnsubscribeJob::doStart()
 {
   Q_D(UnsubscribeJob);
-  d->tag = d->sessionInternal()->sendCommand( "UNSUBSCRIBE", '\"'+d->mailBox+'\"' );
+  d->tag = d->sessionInternal()->sendCommand( "UNSUBSCRIBE", '\"'+KIMAP::encodeImapFolderName( d->mailBox )+'\"' );
 }
 
 void UnsubscribeJob::setMailBox( const QByteArray &mailBox )

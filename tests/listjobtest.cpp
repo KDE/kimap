@@ -47,7 +47,7 @@ void testList_data() {
   resultPair << "/" << "INBOX";
   listresult << resultPair;
   resultPair.clear();
-  resultPair << "/" << "INBOX" << "&AOQ- &APY- &APw- @ &IKw-";
+  resultPair << "/" << "INBOX" << "ä ö ü @ €";
   listresult << resultPair;
   resultPair.clear();
   resultPair << "/" << "INBOX" << "lost+found";

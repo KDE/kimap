@@ -24,6 +24,7 @@
 #include "job_p.h"
 #include "message_p.h"
 #include "session_p.h"
+#include "rfccodecs.h"
 
 namespace KIMAP
 {
@@ -97,7 +98,7 @@ void AppendJob::doStart()
 {
   Q_D(AppendJob);
 
-  QByteArray parameters = d->mailBox;
+  QByteArray parameters = '\"'+KIMAP::encodeImapFolderName( d->mailBox )+'\"';
 
   if ( !d->flags.isEmpty() ) {
     parameters+=" (";

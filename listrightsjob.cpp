@@ -25,6 +25,7 @@
 #include "acljobbase_p.h"
 #include "message_p.h"
 #include "session_p.h"
+#include "rfccodecs.h"
 
 namespace KIMAP
 {
@@ -56,7 +57,7 @@ void ListRightsJob::doStart()
 {
   Q_D(ListRightsJob);
 
-  d->tag = d->sessionInternal()->sendCommand( "LISTRIGHTS", '\"' + d->mailBox + "\" \"" + d->id + "\"" );
+  d->tag = d->sessionInternal()->sendCommand( "LISTRIGHTS", '\"' + KIMAP::encodeImapFolderName( d->mailBox ) + "\" \"" + d->id + "\"" );
 }
 
 void ListRightsJob::doHandleResponse( const Message &response )

@@ -30,6 +30,7 @@
 #include "job.h"
 #include "message_p.h"
 #include "sessionthread_p.h"
+#include "rfccodecs.h"
 
 Q_DECLARE_METATYPE(KTcpSocket::SslVersion)
 Q_DECLARE_METATYPE(QSslSocket::SslMode)
@@ -214,6 +215,7 @@ QByteArray SessionPrivate::sendCommand( const QByteArray &command, const QByteAr
     upcomingMailBox = args;
     upcomingMailBox.remove( 0, 1 );
     upcomingMailBox.chop( 1 );
+    upcomingMailBox = KIMAP::decodeImapFolderName( upcomingMailBox );
   } else if ( command=="CLOSE" ) {
     closeTag = tag;
   }

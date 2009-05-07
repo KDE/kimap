@@ -25,6 +25,7 @@
 #include "acljobbase_p.h"
 #include "message_p.h"
 #include "session_p.h"
+#include "rfccodecs.h"
 
 namespace KIMAP
 {
@@ -57,7 +58,7 @@ void SetAclJob::doStart()
   } else if (d->modifier == Remove) {
     r.prepend('-');
   }
-  d->tag = d->sessionInternal()->sendCommand( "SETACL", '\"' + d->mailBox + "\" \"" + d->id + "\" \"" + r +'\"');
+  d->tag = d->sessionInternal()->sendCommand( "SETACL", '\"' + KIMAP::encodeImapFolderName( d->mailBox ) + "\" \"" + d->id + "\" \"" + r +'\"');
 }
 
 void SetAclJob::setRights(const QByteArray& rights)

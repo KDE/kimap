@@ -25,6 +25,7 @@
 #include "job_p.h"
 #include "message_p.h"
 #include "session_p.h"
+#include "rfccodecs.h"
 
 namespace KIMAP
 {
@@ -53,7 +54,8 @@ RenameJob::~RenameJob()
 void RenameJob::doStart()
 {
   Q_D(RenameJob);
-  d->tag = d->sessionInternal()->sendCommand( "RENAME", '\"' + d->mailBox + "\" \"" + d->newMailBox + '\"' );
+  d->tag = d->sessionInternal()->sendCommand( "RENAME", '\"' + KIMAP::encodeImapFolderName( d->mailBox ) + "\" \""
+                                              + KIMAP::encodeImapFolderName( d->newMailBox )+ '\"' );
 }
 
 void RenameJob::setMailBox( const QByteArray &mailBox )

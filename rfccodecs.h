@@ -42,6 +42,18 @@ class QTextCodec;
 namespace KIMAP {
 
   /**
+    Converts an Unicode IMAP mailbox to a QByteArray which can be used in
+    IMAP communication.
+    @param src is the QByteArray containing the IMAP mailbox.
+  */
+  KIMAP_EXPORT QByteArray encodeImapFolderName( const QByteArray &src );
+
+  /**
+    Converts an UTF-7 encoded IMAP mailbox to a QByteArray
+    @param inSrc is the QByteArray containing the Unicode path.
+  */
+  KIMAP_EXPORT QByteArray decodeImapFolderName( const QByteArray &inSrc );
+  /**
     Converts an Unicode IMAP mailbox to a QString which can be used in
     IMAP communication.
     @param src is the QString containing the IMAP mailbox.
@@ -59,6 +71,12 @@ namespace KIMAP {
     @param src is the QString to quote.
   */
   KIMAP_EXPORT QString quoteIMAP( const QString &src );
+
+  /**
+    Replaces " with \" and \ with \\ " and \ characters.
+    @param src is the QString to quote.
+  */
+  KIMAP_EXPORT QByteArray quoteIMAP( const QByteArray &src );
 
   /**
     Fetches a Codec by @p name.

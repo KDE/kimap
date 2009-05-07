@@ -24,6 +24,7 @@
 #include "job_p.h"
 #include "message_p.h"
 #include "session_p.h"
+#include "rfccodecs.h"
 
 namespace KIMAP
 {
@@ -88,7 +89,7 @@ void StatusJob::doStart()
 {
   Q_D(StatusJob);
 
-  d->tag = d->sessionInternal()->sendCommand( "STATUS", '\"'+d->mailBox+"\" (MESSAGES UIDVALIDITY UIDNEXT)" );
+  d->tag = d->sessionInternal()->sendCommand( "STATUS", '\"'+KIMAP::encodeImapFolderName( d->mailBox )+"\" (MESSAGES UIDVALIDITY UIDNEXT)" );
 }
 
 void StatusJob::doHandleResponse( const Message &response )

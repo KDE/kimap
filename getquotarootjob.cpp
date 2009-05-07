@@ -25,6 +25,7 @@
 #include "quotajobbase_p.h"
 #include "message_p.h"
 #include "session_p.h"
+#include "rfccodecs.h"
 
 namespace KIMAP
 {
@@ -55,7 +56,7 @@ GetQuotaRootJob::~GetQuotaRootJob()
 void GetQuotaRootJob::doStart()
 {
   Q_D(GetQuotaRootJob);
-  d->tag = d->sessionInternal()->sendCommand( "GETQUOTAROOT", '\"' + d->mailBox + '\"');
+  d->tag = d->sessionInternal()->sendCommand( "GETQUOTAROOT", '\"' + KIMAP::encodeImapFolderName( d->mailBox ) + '\"');
 }
 
 void GetQuotaRootJob::doHandleResponse(const Message &response)

@@ -68,14 +68,14 @@ static const char especials[17] = "()<>@,;:\"/[]?.= ";
 //@endcond
 
 //-----------------------------------------------------------------------------
-QString KIMAP::decodeImapFolderName( const QString &inSrc )
+QByteArray KIMAP::decodeImapFolderName( const QByteArray &inSrc )
 {
   unsigned char c, i, bitcount;
   unsigned long ucs4, utf16, bitbuf;
   unsigned char base64[256], utf8[6];
   unsigned int srcPtr = 0;
   QByteArray dst;
-  QByteArray src = inSrc.toAscii ();
+  QByteArray src = inSrc;
   uint srcLen = inSrc.length();
 
   /* initialize modified base64 decoding table */
@@ -149,10 +149,31 @@ QString KIMAP::decodeImapFolderName( const QString &inSrc )
       }
     }
   }
-  return QString::fromUtf8( dst.data () );
+  return dst;
+}
+
+QString KIMAP::decodeImapFolderName( const QString &inSrc )
+{
+  return QString::fromUtf8( decodeImapFolderName( inSrc.toUtf8() ).data() );
 }
 
 //-----------------------------------------------------------------------------
+
+QByteArray KIMAP::quoteIMAP( const QByteArray &src )
+{
+  uint len = src.length();
+  QByteArray result;
+  result.reserve( 2 * len );
+  for ( unsigned int i = 0; i < len; i++ ) {
+    if ( src[i] == '"' || src[i] == '\\' ) {
+      result += '\\';
+    }
+    result += src[i];
+  }
+  result.squeeze();
+  return result;
+}
+
 QString KIMAP::quoteIMAP( const QString &src )
 {
   uint len = src.length();
@@ -171,10 +192,15 @@ QString KIMAP::quoteIMAP( const QString &src )
 //-----------------------------------------------------------------------------
 QString KIMAP::encodeImapFolderName( const QString &inSrc )
 {
+  return QString::fromUtf8( encodeImapFolderName( inSrc.toUtf8() ).data() );
+}
+
+QByteArray KIMAP::encodeImapFolderName( const QByteArray &inSrc )
+{
   unsigned int utf8pos, utf8total, c, utf7mode, bitstogo, utf16flag;
   unsigned int ucs4, bitbuf;
-  QByteArray src = inSrc.toUtf8 ();
-  QString dst;
+  QByteArray src = inSrc;
+  QByteArray dst;
 
   int srcPtr = 0;
   utf7mode = 0;

@@ -25,6 +25,7 @@
 #include "job_p.h"
 #include "message_p.h"
 #include "session_p.h"
+#include "rfccodecs.h"
 
 namespace KIMAP
 {
@@ -52,7 +53,7 @@ DeleteJob::~DeleteJob()
 void DeleteJob::doStart()
 {
   Q_D(DeleteJob);
-  d->tag = d->sessionInternal()->sendCommand( "DELETE", '\"'+d->mailBox+'\"' );
+  d->tag = d->sessionInternal()->sendCommand( "DELETE", '\"'+KIMAP::encodeImapFolderName( d->mailBox )+'\"' );
 }
 
 void DeleteJob::setMailBox( const QByteArray &mailBox )

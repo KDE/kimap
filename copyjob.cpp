@@ -25,6 +25,7 @@
 #include "job_p.h"
 #include "message_p.h"
 #include "session_p.h"
+#include "rfccodecs.h"
 
 //TODO: when custom error codes are introduced, handle the NO [TRYCREATE] response
 
@@ -55,7 +56,7 @@ CopyJob::~CopyJob()
 void CopyJob::doStart()
 {
   Q_D(CopyJob);
-  d->tag = d->sessionInternal()->sendCommand( "COPY", d->set + " \"" + d->mailBox + '\"' );
+  d->tag = d->sessionInternal()->sendCommand( "COPY", d->set + " \"" + KIMAP::encodeImapFolderName( d->mailBox ) + '\"' );
 }
 
 void CopyJob::setMailBox( const QByteArray &mailBox )

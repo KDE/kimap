@@ -30,28 +30,51 @@ using namespace KIMAP;
 void RFCCodecsTest::testIMAPEncoding()
 {
   QString encoded, decoded;
+  QByteArray bEncoded, bDecoded;
 
-  encoded = encodeImapFolderName( QString( "Test.Frode R�nning" ) );
-  QVERIFY( encoded == "Test.Frode R&APg-nning" );
+  encoded = encodeImapFolderName( QString::fromUtf8( "Test.Frode Rønning" ) );
+  QCOMPARE( encoded, QString::fromUtf8("Test.Frode R&APg-nning") );
+  bEncoded = encodeImapFolderName( QString::fromUtf8( "Test.Frode Rønning" ).toUtf8() );
+  QCOMPARE( bEncoded, QString::fromUtf8("Test.Frode R&APg-nning").toUtf8() );
+
   decoded = decodeImapFolderName( QString( "Test.Frode R&APg-nning" ) );
-  QVERIFY( decoded == "Test.Frode R�nning" );
+  QCOMPARE( decoded, QString::fromUtf8("Test.Frode Rønning"));
+  bDecoded = decodeImapFolderName( QString::fromUtf8("Test.Frode Rønning" ).toUtf8() );
+  QCOMPARE( bDecoded, QString::fromUtf8("Test.Frode Rønning").toUtf8() );
 
-  encoded = encodeImapFolderName( QString( "Test.tom & jerry" ) );
-  QVERIFY( encoded == "Test.tom &- jerry" );
-  decoded = decodeImapFolderName( QString( "Test.tom &- jerry" ) );
-  QVERIFY( decoded == "Test.tom & jerry" );
+  encoded = encodeImapFolderName( QString::fromUtf8( "Test.tom & jerry" ) );
+  QCOMPARE( encoded, QString::fromUtf8("Test.tom &- jerry") );
+  bEncoded = encodeImapFolderName( QString::fromUtf8( "Test.tom & jerry" ).toUtf8() );
+  QCOMPARE( bEncoded, QString::fromUtf8("Test.tom &- jerry").toUtf8() );
+
+  decoded = decodeImapFolderName( QString::fromUtf8( "Test.tom &- jerry" ) );
+  QCOMPARE( decoded, QString::fromUtf8("Test.tom & jerry") );
+  bDecoded = decodeImapFolderName( QString::fromUtf8( "Test.tom &- jerry" ).toUtf8() );
+  QCOMPARE( bDecoded, QString::fromUtf8("Test.tom & jerry").toUtf8() );
 
   // Try to feed already encoded
-  encoded = encodeImapFolderName( QString( "Test.Cl&AOE-udio" ) );
-  QVERIFY( encoded == "Test.Cl&-AOE-udio" );
-  decoded = decodeImapFolderName( QString( "Test.Cl&-AOE-udio" ) );
-  QVERIFY( decoded == "Test.Cl&AOE-udio" );
+  encoded = encodeImapFolderName( QString::fromUtf8( "Test.Cl&AOE-udio" ) );
+  QCOMPARE( encoded, QString::fromUtf8("Test.Cl&-AOE-udio") );
+  bEncoded = encodeImapFolderName( QString::fromUtf8( "Test.Cl&AOE-udio" ).toUtf8() );
+  QCOMPARE( bEncoded, QString::fromUtf8("Test.Cl&-AOE-udio").toUtf8() );
+
+  decoded = decodeImapFolderName( QString::fromUtf8( "Test.Cl&-AOE-udio" ) );
+  QCOMPARE( decoded, QString::fromUtf8("Test.Cl&AOE-udio") );
+  bDecoded = decodeImapFolderName( QString::fromUtf8( "Test.Cl&-AOE-udio" ).toUtf8() );
+  QCOMPARE( bDecoded, QString::fromUtf8("Test.Cl&AOE-udio").toUtf8() );
+
+  // With UTF8 characters
+  bEncoded = "INBOX/&AOQ- &APY- &APw- @ &IKw-";
+  QCOMPARE( decodeImapFolderName( bEncoded ), QByteArray( "INBOX/ä ö ü @ €" ) );
 }
 
 void RFCCodecsTest::testQuotes()
 {
-  QVERIFY( quoteIMAP( "tom\"allen" ) == "tom\\\"allen" );
-  QVERIFY( quoteIMAP( "tom\'allen" ) == "tom\'allen" );
-  QVERIFY( quoteIMAP( "tom\\allen" ) == "tom\\\\allen" );
+  QString test("tom\"allen");
+  QCOMPARE( quoteIMAP( test ), QString("tom\\\"allen") );
+  test = "tom\'allen";
+  QCOMPARE( quoteIMAP( test ), QString("tom\'allen" ) );
+  test =  "tom\\allen";
+  QCOMPARE( quoteIMAP( test ), QString("tom\\\\allen" ) );
 }
 

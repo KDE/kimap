@@ -25,6 +25,7 @@
 #include "acljobbase_p.h"
 #include "message_p.h"
 #include "session_p.h"
+#include "rfccodecs.h"
 
 namespace KIMAP
 {
@@ -53,7 +54,7 @@ void GetAclJob::doStart()
 {
   Q_D(GetAclJob);
 
-  d->tag = d->sessionInternal()->sendCommand( "GETACL", '\"' + d->mailBox + '\"');
+  d->tag = d->sessionInternal()->sendCommand( "GETACL", '\"' + KIMAP::encodeImapFolderName( d->mailBox ) + '\"');
 }
 
 void GetAclJob::doHandleResponse( const Message &response )

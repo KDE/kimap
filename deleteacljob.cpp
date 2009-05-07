@@ -25,6 +25,7 @@
 #include "acljobbase_p.h"
 #include "message_p.h"
 #include "session_p.h"
+#include "rfccodecs.h"
 
 namespace KIMAP
 {
@@ -53,7 +54,7 @@ void DeleteAclJob::doStart()
 {
   Q_D(DeleteAclJob);
 
-  d->tag = d->sessionInternal()->sendCommand( "DELETEACL", '\"' + d->mailBox + "\" \"" + d->id);
+  d->tag = d->sessionInternal()->sendCommand( "DELETEACL", '\"' + KIMAP::encodeImapFolderName( d->mailBox ) + "\" \"" + d->id);
 }
 
 void DeleteAclJob::setIdentifier( const QByteArray &identifier )

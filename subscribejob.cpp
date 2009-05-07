@@ -25,6 +25,7 @@
 #include "job_p.h"
 #include "message_p.h"
 #include "session_p.h"
+#include "rfccodecs.h"
 
 namespace KIMAP
 {
@@ -52,7 +53,7 @@ SubscribeJob::~SubscribeJob()
 void SubscribeJob::doStart()
 {
   Q_D(SubscribeJob);
-  d->tag = d->sessionInternal()->sendCommand( "SUBSCRIBE", '\"'+d->mailBox+'\"' );
+  d->tag = d->sessionInternal()->sendCommand( "SUBSCRIBE", '\"'+KIMAP::encodeImapFolderName( d->mailBox )+'\"' );
 }
 
 void SubscribeJob::setMailBox( const QByteArray &mailBox )

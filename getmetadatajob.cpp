@@ -25,6 +25,7 @@
 #include "metadatajobbase_p.h"
 #include "message_p.h"
 #include "session_p.h"
+#include "rfccodecs.h"
 
 namespace KIMAP
 {
@@ -58,7 +59,7 @@ void GetMetaDataJob::doStart()
 {
   Q_D(GetMetaDataJob);
   QByteArray parameters;
-  parameters = '\"' + d->mailBox + "\" ";
+  parameters = '\"' + KIMAP::encodeImapFolderName( d->mailBox ) + "\" ";
 
   QByteArray command = "GETMETADATA";
   if (d->serverCapability == Annotatemore) {
@@ -124,7 +125,7 @@ void GetMetaDataJob::doHandleResponse( const Message &response )
   if (handleErrorReplies(response) == NotHandled ) {
     if ( response.content.size() >= 4 ) {
       if (d->serverCapability == Annotatemore && response.content[1].toString() == "ANNOTATION" ) {
-        QByteArray mailBox = response.content[2].toString();
+        QByteArray mailBox = KIMAP::decodeImapFolderName( response.content[2].toString() );
 
         int i = 3;
         while (i < response.content.size() - 1) {
@@ -139,7 +140,7 @@ void GetMetaDataJob::doHandleResponse( const Message &response )
         }
       } else
       if (d->serverCapability == Metadata && response.content[1].toString() == "METADATA" ) {
-        QByteArray mailBox = response.content[2].toString();
+        QByteArray mailBox = KIMAP::decodeImapFolderName( response.content[2].toString() );
 
         QList<QByteArray> entries = response.content[3].toList();
         int i = 0;

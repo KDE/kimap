@@ -24,6 +24,7 @@
 #include "job_p.h"
 #include "message_p.h"
 #include "session_p.h"
+#include "rfccodecs.h"
 
 namespace KIMAP
 {
@@ -134,7 +135,7 @@ void SelectJob::doStart()
     command = "EXAMINE";
   }
 
-  d->tag = d->sessionInternal()->sendCommand( command, '\"'+d->mailBox+'\"' );
+  d->tag = d->sessionInternal()->sendCommand( command, '\"'+KIMAP::encodeImapFolderName( d->mailBox )+'\"' );
 }
 
 void SelectJob::doHandleResponse( const Message &response )

@@ -24,6 +24,7 @@
 
 #include "job_p.h"
 #include "message_p.h"
+#include "rfccodecs.h"
 #include "session_p.h"
 
 namespace KIMAP
@@ -52,7 +53,7 @@ CreateJob::~CreateJob()
 void CreateJob::doStart()
 {
   Q_D(CreateJob);
-  d->tag = d->sessionInternal()->sendCommand( "CREATE", '\"'+d->mailBox+'\"' );
+  d->tag = d->sessionInternal()->sendCommand( "CREATE", '\"'+KIMAP::encodeImapFolderName(d->mailBox)+'\"' );
 }
 
 void CreateJob::setMailBox( const QByteArray &mailBox )

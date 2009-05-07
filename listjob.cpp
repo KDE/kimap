@@ -23,6 +23,7 @@
 
 #include "job_p.h"
 #include "message_p.h"
+#include "rfccodecs.h"
 #include "session_p.h"
 
 uint qHash( const QList<QByteArray> &descriptor )
@@ -107,6 +108,8 @@ void ListJob::doHandleResponse( const Message &response )
         fullName+= response.content[i].toString()+' ';
       }
       fullName.chop( 1 );
+
+      fullName = decodeImapFolderName( fullName );
 
       QList<QByteArray> mailBoxDescriptor;
       mailBoxDescriptor << separator;
