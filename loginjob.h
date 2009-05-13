@@ -90,7 +90,7 @@ class KIMAP_EXPORT LoginJob : public Job
     virtual void connectionLost();
 
   private:
-    Q_PRIVATE_SLOT( d_func(), void sslResponse(bool) );
+    Q_PRIVATE_SLOT( d_func(), void sslResponse(bool) )
 };
 
 }

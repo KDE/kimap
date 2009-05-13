@@ -94,7 +94,7 @@ class KIMAP_EXPORT FetchJob : public Job
     virtual void handleResponse(const Message &response);
 
   private:
-    Q_PRIVATE_SLOT( d_func(), void emitPendings() );
+    Q_PRIVATE_SLOT( d_func(), void emitPendings() )
 };
 
 }
