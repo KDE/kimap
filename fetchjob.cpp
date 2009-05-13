@@ -19,6 +19,7 @@
 
 #include "fetchjob.h"
 
+#include <QtCore/QTimer>
 #include <KDE/KLocale>
 
 #include "job_p.h"
@@ -30,7 +31,7 @@ namespace KIMAP
   class FetchJobPrivate : public JobPrivate
   {
     public:
-      FetchJobPrivate( Session *session, const QString& name ) : JobPrivate( session, name ), uidBased(false) { }
+      FetchJobPrivate( FetchJob *job, Session *session, const QString& name ) : JobPrivate( session, name ), q(job), uidBased(false) { }
       ~FetchJobPrivate() { }
 
       void parseBodyStructure( const QByteArray &structure, int &pos, KMime::Content *content );
@@ -39,57 +40,93 @@ namespace KIMAP
       QByteArray parseSentence( const QByteArray &structure, int &pos );
       void skipLeadingSpaces( const QByteArray &structure, int &pos );
 
-      boost::shared_ptr<KMime::Message> message(int id)
+      MessagePtr message(int id)
       {
         if ( !messages.contains(id) ) {
-          messages[id] = boost::shared_ptr<KMime::Message>(new KMime::Message);
+          messages[id] = MessagePtr(new KMime::Message);
         }
 
         return messages[id];
       }
 
-      boost::shared_ptr<KMime::Content> part(int id, QByteArray partName)
+      ContentPtr part(int id, QByteArray partName)
       {
         if ( !parts[id].contains(partName) ) {
-          parts[id][partName] = boost::shared_ptr<KMime::Content>(new KMime::Content);
+          parts[id][partName] = ContentPtr(new KMime::Content);
         }
 
         return parts[id][partName];
       }
 
-      QByteArray set;
+      void emitPendings()
+      {
+        if ( pendingUids.isEmpty() ) {
+          return;
+        }
+
+        if ( !pendingParts.isEmpty() ) {
+          emit q->partsReceived( sessionInternal()->selectedMailBox(),
+                                 pendingUids, pendingParts );
+
+        } else if ( !pendingSizes.isEmpty() || !pendingFlags.isEmpty() ) {
+          emit q->headersReceived( sessionInternal()->selectedMailBox(),
+                                   pendingUids, pendingSizes,
+                                   pendingFlags, pendingMessages );
+        } else {
+          emit q->messagesReceived( sessionInternal()->selectedMailBox(),
+                                    pendingUids, pendingMessages );
+        }
+
+        pendingUids.clear();
+        pendingMessages.clear();
+        pendingParts.clear();
+        pendingSizes.clear();
+        pendingFlags.clear();
+      }
+
+      FetchJob * const q;
+
+      ImapSet set;
       bool uidBased;
       FetchJob::FetchScope scope;
 
-      QMap<int, boost::shared_ptr<KMime::Message> > messages;
-      QMap<int, QMap<QByteArray, boost::shared_ptr<KMime::Content> > > parts;
-      QMap<int, QList<QByteArray> > flags;
-      QMap<int, qint64> sizes;
-      QMap<int, qint64> uids;
+      QMap<qint64, MessagePtr> messages;
+      QMap<qint64, MessageParts> parts;
+      QMap<qint64, MessageFlags> flags;
+      QMap<qint64, qint64> sizes;
+      QMap<qint64, qint64> uids;
 
+      QTimer emitPendingsTimer;
+      QMap<qint64, MessagePtr> pendingMessages;
+      QMap<qint64, MessageParts> pendingParts;
+      QMap<qint64, MessageFlags> pendingFlags;
+      QMap<qint64, qint64> pendingSizes;
+      QMap<qint64, qint64> pendingUids;
   };
 }
 
 using namespace KIMAP;
 
 FetchJob::FetchJob( Session *session )
-  : Job( *new FetchJobPrivate(session, i18n("Fetch")) )
+  : Job( *new FetchJobPrivate(this, session, i18n("Fetch")) )
 {
   Q_D(FetchJob);
   d->scope.mode = FetchScope::Content;
+  connect( &d->emitPendingsTimer, SIGNAL( timeout() ),
+           this, SLOT( emitPendings() ) );
 }
 
 FetchJob::~FetchJob()
 {
 }
 
-void FetchJob::setSequenceSet( const QByteArray &set )
+void FetchJob::setSequenceSet( const ImapSet &set )
 {
   Q_D(FetchJob);
   d->set = set;
 }
 
-QByteArray FetchJob::sequenceSet() const
+ImapSet FetchJob::sequenceSet() const
 {
   Q_D(const FetchJob);
   return d->set;
@@ -119,31 +156,31 @@ FetchJob::FetchScope FetchJob::scope() const
   return d->scope;
 }
 
-QMap<int, boost::shared_ptr<KMime::Message> > FetchJob::messages() const
+QMap<qint64, MessagePtr> FetchJob::messages() const
 {
   Q_D(const FetchJob);
   return d->messages;
 }
 
-QMap<int, QMap<QByteArray, boost::shared_ptr<KMime::Content> > > FetchJob::parts() const
+QMap<qint64, MessageParts> FetchJob::parts() const
 {
   Q_D(const FetchJob);
   return d->parts;
 }
 
-QMap<int, QList<QByteArray> > FetchJob::flags() const
+QMap<qint64, MessageFlags> FetchJob::flags() const
 {
   Q_D(const FetchJob);
   return d->flags;
 }
 
-QMap<int, qint64> FetchJob::sizes() const
+QMap<qint64, qint64> FetchJob::sizes() const
 {
   Q_D(const FetchJob);
   return d->sizes;
 }
 
-QMap<int, qint64> FetchJob::uids() const
+QMap<qint64, qint64> FetchJob::uids() const
 {
   Q_D(const FetchJob);
   return d->uids;
@@ -153,7 +190,7 @@ void FetchJob::doStart()
 {
   Q_D(FetchJob);
 
-  QByteArray parameters = d->set+' ';
+  QByteArray parameters = d->set.toImapSequenceSet()+' ';
 
   switch ( d->scope.mode ) {
   case FetchScope::Headers:
@@ -191,10 +228,11 @@ void FetchJob::doStart()
     command = "UID "+command;
   }
 
+  d->emitPendingsTimer.start( 100 );
   d->tag = d->sessionInternal()->sendCommand( command, parameters );
 }
 
-void FetchJob::doHandleResponse( const Message &response )
+void FetchJob::handleResponse( const Message &response )
 {
   Q_D(FetchJob);
 
@@ -203,7 +241,7 @@ void FetchJob::doHandleResponse( const Message &response )
            && response.content[2].toString()=="FETCH"
            && response.content[3].type()==Message::Part::List ) {
 
-      int id = response.content[1].toString().toInt();
+      qint64 id = response.content[1].toString().toLongLong();
       QList<QByteArray> content = response.content[3].toList();
 
       for ( QList<QByteArray>::ConstIterator it = content.constBegin();
@@ -212,9 +250,9 @@ void FetchJob::doHandleResponse( const Message &response )
         ++it;
 
         if ( str=="UID" ) {
-          d->uids[id] = it->toInt();
+          d->uids[id] = it->toLongLong();
         } else if ( str=="RFC822.SIZE" ) {
-          d->sizes[id] = it->toInt();
+          d->sizes[id] = it->toLongLong();
         } else if ( str=="INTERNALDATE" ) {
           d->message(id)->date()->setDateTime( KDateTime::fromString( *it, KDateTime::RFCDate ) );
         } else if ( str=="FLAGS" ) {
@@ -250,24 +288,31 @@ void FetchJob::doHandleResponse( const Message &response )
             if ( str=="BODY[]" ) {
               d->message(id)->setContent( KMime::CRLFtoLF(*it) );
               d->message(id)->parse();
-              emit messageReceived( d->sessionInternal()->selectedMailBox(), d->uids[id],
-                                    id, d->message(id) );
+
+              d->pendingUids[id] = d->uids[id];
+              d->pendingMessages[id] = d->message(id);
             } else {
               QByteArray partId = str.mid( 5, str.size()-6 );
               d->part( id, partId )->setBody(*it);
               d->part( id, partId )->parse();
-              emit partReceived( d->sessionInternal()->selectedMailBox(), d->uids[id],
-                                 id, partId, d->part( id, partId ) );
+
+              d->pendingUids[id] = d->uids[id];
+              d->pendingParts[id] = d->parts[id];
             }
           }
         }
       }
 
       if ( d->scope.mode == FetchScope::Headers ) {
-        emit headersReceived( d->sessionInternal()->selectedMailBox(), d->uids[id],
-                              id, d->sizes[id], d->flags[id], d->message(id) );
+        d->pendingUids[id] = d->uids[id];
+        d->pendingSizes[id] = d->sizes[id];
+        d->pendingFlags[id] = d->flags[id];
+        d->pendingMessages[id] = d->message(id);
       }
     }
+  } else {
+    d->emitPendingsTimer.stop();
+    d->emitPendings();
   }
 }
 

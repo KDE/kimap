@@ -59,12 +59,18 @@ namespace KIMAP
         Authenticate
       };
 
-      LoginJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name), encryptionMode(LoginJob::Unencrypted),  authState(Login), plainLoginDisabled(false) {
+      LoginJobPrivate( LoginJob *job, Session *session, const QString& name ) : JobPrivate(session, name), q(job), encryptionMode(LoginJob::Unencrypted),  authState(Login), plainLoginDisabled(false) {
         conn = 0;
         client_interact = 0;
       }
       ~LoginJobPrivate() { }
       bool sasl_interact();
+
+      bool startAuthentication();
+      bool answerChallenge(const QByteArray &data);
+      void sslResponse(bool response);
+
+      LoginJob *q;
 
       QString userName;
       QString password;
@@ -124,9 +130,10 @@ bool LoginJobPrivate::sasl_interact()
 
 
 LoginJob::LoginJob( Session *session )
-  : Job( *new LoginJobPrivate(session, i18n("Login")) )
+  : Job( *new LoginJobPrivate(this, session, i18n("Login")) )
 {
-  connect(session, SIGNAL(encryptionNegotiationResult(bool)), this, SLOT(sslResponse(bool)));
+  Q_D(LoginJob);
+  connect(d->sessionInternal(), SIGNAL(encryptionNegotiationResult(bool)), this, SLOT(sslResponse(bool)));
 }
 
 LoginJob::~LoginJob()
@@ -176,7 +183,7 @@ void LoginJob::doStart()
                                                  +' '
                                                  +quoteIMAP(d->password ).toUtf8() );
     } else {
-      if (!startAuthentication()) {
+      if (!d->startAuthentication()) {
         emitResult();
       }
     }
@@ -186,7 +193,7 @@ void LoginJob::doStart()
   }
 }
 
-void LoginJob::doHandleResponse( const Message &response )
+void LoginJob::handleResponse( const Message &response )
 {
   Q_D(LoginJob);
 
@@ -238,7 +245,7 @@ void LoginJob::doHandleResponse( const Message &response )
           if (capability.startsWith("AUTH=")) {
             QString authType = capability.mid(5);
             if (authType == d->authMode) {
-                if (!startAuthentication()) {
+                if (!d->startAuthentication()) {
                   emitResult(); //problem, we're done
                 }
             }
@@ -252,7 +259,7 @@ void LoginJob::doHandleResponse( const Message &response )
     }
   } else if ( response.content.size() >= 2 ) {
     if ( d->authState == LoginJobPrivate::Authenticate ) {
-      if (!answerChallenge(response.content[1].toString())) {
+      if (!d->answerChallenge(response.content[1].toString())) {
         emitResult(); //error, we're done
       }
     } else if ( response.content[1].toString()=="CAPABILITY" ) {
@@ -278,37 +285,35 @@ void LoginJob::doHandleResponse( const Message &response )
   }
 }
 
-bool LoginJob::startAuthentication()
+bool LoginJobPrivate::startAuthentication()
 {
-  Q_D(LoginJob);
-
   //SASL authentication
   if (!initSASL()) {
-      setError( UserDefinedError );
-      setErrorText( i18n("Login failed, client cannot initialize the SASL library.") );
-      return false;
+    q->setError( LoginJob::UserDefinedError );
+    q->setErrorText( i18n("Login failed, client cannot initialize the SASL library.") );
+    return false;
   }
 
-  d->authState = LoginJobPrivate::Authenticate;
+  authState = LoginJobPrivate::Authenticate;
   const char *out = 0;
   uint outlen = 0;
   const char *mechusing = 0;
 
-  int result = sasl_client_new( "imap", d->m_session->hostName().toLatin1(), 0, 0, callbacks, 0, &d->conn );
+  int result = sasl_client_new( "imap", m_session->hostName().toLatin1(), 0, 0, callbacks, 0, &conn );
   if ( result != SASL_OK ) {
     kDebug() <<"sasl_client_new failed with:" << result;
-    setError( UserDefinedError );
-    setErrorText( QString::fromUtf8( sasl_errdetail( d->conn ) ) );
+    q->setError( LoginJob::UserDefinedError );
+    q->setErrorText( QString::fromUtf8( sasl_errdetail( conn ) ) );
     return false;
   }
 
   do {
-    result = sasl_client_start(d->conn, d->authMode.toLatin1(), &d->client_interact,d->capabilities.contains("SASL-IR") ? &out : 0, &outlen, &mechusing);
+    result = sasl_client_start(conn, authMode.toLatin1(), &client_interact, capabilities.contains("SASL-IR") ? &out : 0, &outlen, &mechusing);
 
     if ( result == SASL_INTERACT ) {
-      if ( !d->sasl_interact() ) {
-        sasl_dispose( &d->conn );
-        setError( UserDefinedError ); //TODO: check up the actual error
+      if ( !sasl_interact() ) {
+        sasl_dispose( &conn );
+        q->setError( LoginJob::UserDefinedError ); //TODO: check up the actual error
         return false;
       }
     }
@@ -316,38 +321,36 @@ bool LoginJob::startAuthentication()
 
   if ( result != SASL_CONTINUE && result != SASL_OK ) {
     kDebug() <<"sasl_client_start failed with:" << result;
-    setError( UserDefinedError );
-    setErrorText( QString::fromUtf8( sasl_errdetail( d->conn ) ) );
-    sasl_dispose( &d->conn );
+    q->setError( LoginJob::UserDefinedError );
+    q->setErrorText( QString::fromUtf8( sasl_errdetail( conn ) ) );
+    sasl_dispose( &conn );
     return false;
   }
 
   QByteArray tmp = QByteArray::fromRawData( out, outlen );
   QByteArray challenge = tmp.toBase64();
 
-  d->tag = d->sessionInternal()->sendCommand( "AUTHENTICATE", d->authMode.toLatin1() + ' ' + challenge );
+  tag = sessionInternal()->sendCommand( "AUTHENTICATE", authMode.toLatin1() + ' ' + challenge );
 
   return true;
 }
 
-bool LoginJob::answerChallenge(const QByteArray &data)
+bool LoginJobPrivate::answerChallenge(const QByteArray &data)
 {
-  Q_D(LoginJob);
-
   QByteArray challenge = data;
   int result = -1;
   const char *out = 0;
   uint outlen = 0;
   do {
-    result = sasl_client_step(d->conn, challenge.isEmpty() ? 0 : challenge.data(),
+    result = sasl_client_step(conn, challenge.isEmpty() ? 0 : challenge.data(),
                               challenge.size(),
-                              &d->client_interact,
+                              &client_interact,
                               &out, &outlen);
 
     if (result == SASL_INTERACT) {
-      if ( !d->sasl_interact() ) {
-        setError( UserDefinedError ); //TODO: check up the actual error
-        sasl_dispose( &d->conn );
+      if ( !sasl_interact() ) {
+        q->setError( LoginJob::UserDefinedError ); //TODO: check up the actual error
+        sasl_dispose( &conn );
         return false;
       }
     }
@@ -355,32 +358,30 @@ bool LoginJob::answerChallenge(const QByteArray &data)
 
   if ( result != SASL_CONTINUE && result != SASL_OK ) {
     kDebug() <<"sasl_client_step failed with:" << result;
-    setError( UserDefinedError ); //TODO: check up the actual error
-    setErrorText( QString::fromUtf8( sasl_errdetail( d->conn ) ) );
-    sasl_dispose( &d->conn );
+    q->setError( LoginJob::UserDefinedError ); //TODO: check up the actual error
+    q->setErrorText( QString::fromUtf8( sasl_errdetail( conn ) ) );
+    sasl_dispose( &conn );
     return false;
   }
 
   QByteArray tmp = QByteArray::fromRawData( out, outlen );
   challenge = tmp.toBase64();
 
-  d->sessionInternal()->sendData( challenge );
+  sessionInternal()->sendData( challenge );
 
   return true;
 }
 
-void LoginJob::sslResponse(bool response)
+void LoginJobPrivate::sslResponse(bool response)
 {
-  Q_D(LoginJob);
-
   if (response) {
-    d->authState = LoginJobPrivate::Capability;
-    d->tag = d->sessionInternal()->sendCommand( "CAPABILITY" );
+    authState = LoginJobPrivate::Capability;
+    tag = sessionInternal()->sendCommand( "CAPABILITY" );
   } else {
-    setError( UserDefinedError );
-    setErrorText( i18n("Login failed, TLS negotiation failed." ));
-    d->encryptionMode = Unencrypted;
-    emitResult();
+    q->setError( LoginJob::UserDefinedError );
+    q->setErrorText( i18n("Login failed, TLS negotiation failed." ));
+    encryptionMode = LoginJob::Unencrypted;
+    q->emitResult();
   }
 }
 

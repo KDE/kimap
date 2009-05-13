@@ -30,6 +30,22 @@ class Session;
 class Message;
 class ListJobPrivate;
 
+struct KIMAP_EXPORT MailBoxDescriptor
+{
+  QString name;
+  QChar separator;
+
+  inline bool operator==(const MailBoxDescriptor &other) const
+  {
+    return other.name==name && other.separator==separator;
+  }
+
+  inline bool operator<(const MailBoxDescriptor &other) const
+  {
+    return other.name<name || (other.name==name && other.separator<separator);
+  }
+};
+
 class KIMAP_EXPORT ListJob : public Job
 {
   Q_OBJECT
@@ -38,22 +54,22 @@ class KIMAP_EXPORT ListJob : public Job
   friend class SessionPrivate;
 
   public:
-    ListJob( Session *session );
+    explicit ListJob( Session *session );
     virtual ~ListJob();
 
     void setIncludeUnsubscribed( bool include );
     bool isIncludeUnsubscribed() const;
 
-    QList<QStringList> mailBoxes() const;
-    QHash< QList<QByteArray>, QList<QByteArray> > flags() const;
+    QList<MailBoxDescriptor> mailBoxes() const;
+    QHash< MailBoxDescriptor, QList<QByteArray> > flags() const;
 
   Q_SIGNALS:
-    void mailBoxReceived( const QStringList &descriptor,
+    void mailBoxReceived( const KIMAP::MailBoxDescriptor &descriptor,
                           const QList<QByteArray> &flags );
 
   protected:
     virtual void doStart();
-    virtual void doHandleResponse(const Message &response);
+    virtual void handleResponse(const Message &response);
 };
 
 }

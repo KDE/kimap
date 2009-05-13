@@ -85,7 +85,7 @@ namespace KIMAP
         months[12] = "Dec";
 
         nextContent = 0;
-        uidBased = false;    
+        uidBased = false;
       }
       ~SearchJobPrivate() { }
 
@@ -120,7 +120,7 @@ void SearchJob::doStart()
   QByteArray searchKey;
 
   if (!d->charset.isEmpty()) {
-    searchKey = "[CHARSET] " + d->charset; 
+    searchKey = "[CHARSET] " + d->charset;
   }
 
   if (d->logic == SearchJob::Not) {
@@ -140,7 +140,7 @@ void SearchJob::doStart()
   d->tag = d->sessionInternal()->sendCommand( command, searchKey );
 }
 
-void SearchJob::doHandleResponse( const Message &response )
+void SearchJob::handleResponse( const Message &response )
 {
   Q_D(SearchJob);
 
@@ -151,7 +151,7 @@ void SearchJob::doHandleResponse( const Message &response )
     } else if ( response.content[1].toString() == "SEARCH" ) {
       for(int i = 2; i < response.content.size(); i++) {
         d->results.append(response.content[i].toString().toInt());
-      }          
+      }
     }
   }
 }
@@ -175,7 +175,7 @@ void SearchJob::setSearchLogic( SearchLogic logic )
   d->logic = logic;
 }
 
-void SearchJob::addSearchCriteria( SearchCriteria criteria ) 
+void SearchJob::addSearchCriteria( SearchCriteria criteria )
 {
   Q_D(SearchJob);
 
@@ -204,7 +204,7 @@ void SearchJob::addSearchCriteria( SearchCriteria criteria )
 }
 
 
-void SearchJob::addSearchCriteria( SearchCriteria criteria, int argument ) 
+void SearchJob::addSearchCriteria( SearchCriteria criteria, int argument )
 {
   Q_D(SearchJob);
   switch (criteria) {
@@ -220,7 +220,7 @@ void SearchJob::addSearchCriteria( SearchCriteria criteria, int argument )
 }
 
 
-void SearchJob::addSearchCriteria( SearchCriteria criteria, const QByteArray &argument ) 
+void SearchJob::addSearchCriteria( SearchCriteria criteria, const QByteArray &argument )
 {
   Q_D(SearchJob);
   switch (criteria) {
@@ -275,7 +275,7 @@ void SearchJob::addSearchCriteria( SearchCriteria criteria, const QDate &argumen
   }
 }
 
-void SearchJob::addSearchCriteria( const QByteArray &searchCriteria ) 
+void SearchJob::addSearchCriteria( const QByteArray &searchCriteria )
 {
   Q_D(SearchJob);
   d->criterias.append(searchCriteria);
@@ -296,6 +296,6 @@ bool SearchJob::isUidBased() const
 QList<int> SearchJob::foundItems()
 {
   Q_D(const SearchJob);
-  return d->results;  
+  return d->results;
 }
 #include "searchjob.moc"

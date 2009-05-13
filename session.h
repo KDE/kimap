@@ -43,7 +43,7 @@ class KIMAP_EXPORT Session : public QObject
   public:
     enum State { Disconnected = 0, NotAuthenticated, Authenticated, Selected };
 
-    explicit Session( const QString &hostName, quint16 port, QObject *parent=0 );
+    Session( const QString &hostName, quint16 port, QObject *parent=0 );
     ~Session();
 
     QString hostName() const;
@@ -54,10 +54,6 @@ class KIMAP_EXPORT Session : public QObject
      * @param proxy the ui proxy object
      */
     void setUiProxy(SessionUiProxy *proxy);
-
-  Q_SIGNALS:
-    void encryptionNegotiationResult(bool);
-    void sslErrorHandlerResponse(bool);
 
   private:
     Q_PRIVATE_SLOT( d, void doStartNext() )

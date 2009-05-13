@@ -38,7 +38,7 @@ class KIMAP_EXPORT SelectJob : public Job
   friend class SessionPrivate;
 
   public:
-    SelectJob( Session *session );
+    explicit SelectJob( Session *session );
     virtual ~SelectJob();
 
     void setMailBox( const QString &mailBox );
@@ -55,11 +55,11 @@ class KIMAP_EXPORT SelectJob : public Job
     int firstUnseenIndex() const;
 
     qint64 uidValidity() const;
-    int nextUid() const;
+    qint64 nextUid() const;
 
   protected:
     virtual void doStart();
-    virtual void doHandleResponse( const Message &response );
+    virtual void handleResponse( const Message &response );
 };
 
 }

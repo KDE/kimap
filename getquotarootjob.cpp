@@ -38,7 +38,7 @@ namespace KIMAP
       QString mailBox;
       QList<QByteArray> rootList;
       uint rootIndex;
-      QMap< QByteArray, QMap<QByteArray, QPair<qint32, qint32> > > quotas;
+      QMap< QByteArray, QMap<QByteArray, QPair<qint64, qint64> > > quotas;
   };
 }
 
@@ -59,7 +59,7 @@ void GetQuotaRootJob::doStart()
   d->tag = d->sessionInternal()->sendCommand( "GETQUOTAROOT", '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + '\"');
 }
 
-void GetQuotaRootJob::doHandleResponse(const Message &response)
+void GetQuotaRootJob::handleResponse(const Message &response)
 {
   Q_D(GetQuotaRootJob);
   if (handleErrorReplies(response) == NotHandled) {
@@ -105,7 +105,7 @@ QList<QByteArray> GetQuotaRootJob::roots() const
   return d->rootList;
 }
 
-qint32 GetQuotaRootJob::usage(const QByteArray& root, const QByteArray& resource)
+qint64 GetQuotaRootJob::usage(const QByteArray& root, const QByteArray& resource)
 {
   Q_D(GetQuotaRootJob);
 
@@ -118,7 +118,7 @@ qint32 GetQuotaRootJob::usage(const QByteArray& root, const QByteArray& resource
   return -1;
 }
 
-qint32 GetQuotaRootJob::limit(const QByteArray& root, const QByteArray& resource)
+qint64 GetQuotaRootJob::limit(const QByteArray& root, const QByteArray& resource)
 {
   Q_D(GetQuotaRootJob);
 

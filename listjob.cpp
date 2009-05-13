@@ -26,17 +26,6 @@
 #include "rfccodecs.h"
 #include "session_p.h"
 
-uint qHash( const QStringList &descriptor )
-{
-  QString toHash;
-
-  foreach (const QString &part, descriptor ) {
-    toHash+= part;
-  }
-
-  return qHash(toHash);
-}
-
 namespace KIMAP
 {
   class ListJobPrivate : public JobPrivate
@@ -47,8 +36,8 @@ namespace KIMAP
 
       bool includeUnsubscribed;
       QByteArray command;
-      QList<QStringList> descriptors;
-      QHash< QStringList, QList<QByteArray> > flags;
+      QList<MailBoxDescriptor> descriptors;
+      QMap< MailBoxDescriptor, QList<QByteArray> > flags;
   };
 }
 
@@ -75,7 +64,7 @@ bool ListJob::isIncludeUnsubscribed() const
   return d->includeUnsubscribed;
 }
 
-QList<QStringList> ListJob::mailBoxes() const
+QList<MailBoxDescriptor> ListJob::mailBoxes() const
 {
   Q_D(const ListJob);
   return d->descriptors;
@@ -93,7 +82,7 @@ void ListJob::doStart()
   d->tag = d->sessionInternal()->sendCommand( d->command, "\"\" *" );
 }
 
-void ListJob::doHandleResponse( const Message &response )
+void ListJob::handleResponse( const Message &response )
 {
   Q_D(ListJob);
 
@@ -111,11 +100,9 @@ void ListJob::doHandleResponse( const Message &response )
 
       fullName = decodeImapFolderName( fullName );
 
-      QStringList mailBoxDescriptor;
-      mailBoxDescriptor << QString::fromUtf8( separator );
-      foreach ( const QByteArray &part, fullName.split( separator[0] ) ) {
-        mailBoxDescriptor << QString::fromUtf8( part );
-      }
+      MailBoxDescriptor mailBoxDescriptor;
+      mailBoxDescriptor.separator = QChar( separator[0] );
+      mailBoxDescriptor.name = QString::fromUtf8( fullName );
 
       d->descriptors << mailBoxDescriptor;
       d->flags[mailBoxDescriptor] = flags;

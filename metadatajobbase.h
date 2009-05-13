@@ -41,15 +41,13 @@ class KIMAP_EXPORT MetaDataJobBase : public Job
   friend class SessionPrivate;
 
   public:
-    MetaDataJobBase( Session *session );
+    explicit MetaDataJobBase( Session *session );
     virtual ~MetaDataJobBase();
 
     enum ServerCapability {
       Metadata = 0, //rfc5464
       Annotatemore //compatibility with draft-daboo-imap-annotatemore-07
     };
-
-    Q_DECLARE_FLAGS(ServerCapabilities, ServerCapability)
 
     void setMailBox( const QString &mailBox );
     QString mailBox() const;

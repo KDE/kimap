@@ -22,6 +22,7 @@
 
 #include "kimap_export.h"
 
+#include "imapset.h"
 #include "job.h"
 
 #include "kmime/kmime_content.h"
@@ -34,6 +35,12 @@ namespace KIMAP {
 class Session;
 class Message;
 class FetchJobPrivate;
+
+typedef boost::shared_ptr<KMime::Content> ContentPtr;
+typedef QMap<QByteArray, ContentPtr> MessageParts;
+
+typedef boost::shared_ptr<KMime::Message> MessagePtr;
+typedef QList<QByteArray> MessageFlags;
 
 class KIMAP_EXPORT FetchJob : public Job
 {
@@ -49,13 +56,11 @@ class KIMAP_EXPORT FetchJob : public Job
       enum {Headers, Flags, Structure, Content} mode;
     };
 
-
-    FetchJob( Session *session );
+    explicit FetchJob( Session *session );
     virtual ~FetchJob();
 
-    // TODO: Make a proper class (actually there's one in akonadi server)
-    void setSequenceSet( const QByteArray &set );
-    QByteArray sequenceSet() const;
+    void setSequenceSet( const ImapSet &set );
+    ImapSet sequenceSet() const;
 
     void setUidBased(bool uidBased);
     bool isUidBased() const;
@@ -63,20 +68,33 @@ class KIMAP_EXPORT FetchJob : public Job
     void setScope( const FetchScope &scope );
     FetchScope scope() const;
 
-    QMap<int, boost::shared_ptr<KMime::Message> > messages() const;
-    QMap<int, QMap<QByteArray, boost::shared_ptr<KMime::Content> > > parts() const;
-    QMap<int, QList<QByteArray> > flags() const;
-    QMap<int, qint64> sizes() const;
-    QMap<int, qint64> uids() const;
+    QMap<qint64, MessagePtr> messages() const;
+    QMap<qint64, MessageParts> parts() const;
+    QMap<qint64, MessageFlags> flags() const;
+    QMap<qint64, qint64> sizes() const;
+    QMap<qint64, qint64> uids() const;
 
   Q_SIGNALS:
-    void headersReceived( const QString &mailBox, qint64 uid, int messageNumber, qint64 size, QList<QByteArray> flags, boost::shared_ptr<KMime::Message> message );
-    void messageReceived( const QString &mailBox, qint64 uid, int messageNumber, boost::shared_ptr<KMime::Message> message );
-    void partReceived( const QString &mailBox, qint64 uid, int messageNumber, const QByteArray &partIndex, boost::shared_ptr<KMime::Content> part );
+    void headersReceived( const QString &mailBox,
+                          const QMap<qint64, qint64> &uids,
+                          const QMap<qint64, qint64> &sizes,
+                          const QMap<qint64, KIMAP::MessageFlags> &flags,
+                          const QMap<qint64, KIMAP::MessagePtr> &messages );
+
+    void messagesReceived( const QString &mailBox,
+                           const QMap<qint64, qint64> &uids,
+                           const QMap<qint64, KIMAP::MessagePtr> &messages );
+
+    void partsReceived( const QString &mailBox,
+                        const QMap<qint64, qint64> &uids,
+                        const QMap<qint64, KIMAP::MessageParts> &parts );
 
   protected:
     virtual void doStart();
-    virtual void doHandleResponse(const Message &response);
+    virtual void handleResponse(const Message &response);
+
+  private:
+    Q_PRIVATE_SLOT( d_func(), void emitPendings() );
 };
 
 }

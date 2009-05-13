@@ -7,6 +7,7 @@
 #include <kmessagebox.h>
 #include <kio/ksslcertificatemanager.h>
 
+#include "kimap/acl.h"
 #include "kimap/session.h"
 #include "kimap/appendjob.h"
 #include "kimap/capabilitiesjob.h"
@@ -74,14 +75,9 @@ void listFolders(Session *session, bool includeUnsubscribed = false, const QStri
   Q_ASSERT_X(list->error()==0, "ListJob", list->errorString().toLocal8Bit());
   int count = list->mailBoxes().size();
   for (int i=0; i<count; ++i) {
-    QStringList descriptor = list->mailBoxes()[i];
-    QString mailBox;
-    for (int j=1; j<descriptor.size(); ++j) {
-      if (j!=1) mailBox+=descriptor[0];
-      mailBox+=descriptor[j];
-    }
-    if (mailBox.endsWith(nameFilter))
-      kDebug() << mailBox;
+    MailBoxDescriptor descriptor = list->mailBoxes()[i];
+    if (descriptor.name.endsWith(nameFilter))
+      kDebug() << descriptor.separator << descriptor.name;
   }
 
 }
@@ -132,11 +128,11 @@ void testAcl(Session *session, const QString &user)
   listRights->setMailBox("INBOX/TestFolder");
   listRights->setIdentifier(user.toLatin1());
   listRights->exec();
-  kDebug() << "Default rights on INBOX/TestFolder: " << listRights->rightsToString(listRights->defaultRights());
-  QList<QList<AclJobBase::AclRight> > possible = listRights->possibleRights();
+  kDebug() << "Default rights on INBOX/TestFolder: " << Acl::rightsToString(listRights->defaultRights());
+  QList<Acl::Rights> possible = listRights->possibleRights();
   QStringList strList;
-  Q_FOREACH(QList<AclJobBase::AclRight> r, possible) {
-    strList << listRights->rightsToString(r);
+  Q_FOREACH(Acl::Rights r, possible) {
+    strList << Acl::rightsToString(r);
   }
   kDebug() << "Possible rights on INBOX/TestFolder: " << strList;
 
@@ -144,23 +140,22 @@ void testAcl(Session *session, const QString &user)
   myRights->setMailBox("INBOX/TestFolder");
   myRights->exec();
 
-  QList<AclJobBase::AclRight> mine = myRights->rights();
-  kDebug() << "My rights on INBOX/TestFolder: " << myRights->rightsToString(mine);
-  kDebug() << "Reading INBOX/TestFolder is possible: " << myRights->hasRightEnabled(AclJobBase::Read);
-  Q_ASSERT_X(myRights->hasRightEnabled(AclJobBase::Read), "Reading INBOX is NOT possible", "");
+  Acl::Rights mine = myRights->rights();
+  kDebug() << "My rights on INBOX/TestFolder: " << Acl::rightsToString(mine);
+  kDebug() << "Reading INBOX/TestFolder is possible: " << myRights->hasRightEnabled(Acl::Read);
+  Q_ASSERT_X(myRights->hasRightEnabled(Acl::Read), "Reading INBOX is NOT possible", "");
 
   GetAclJob *getAcl= new GetAclJob(session);
   getAcl->setMailBox("INBOX/TestFolder");
   getAcl->exec();
   kDebug() << "Anyone rights on INBOX/TestFolder: " << getAcl->rights("anyone");
-  QList<AclJobBase::AclRight> users = getAcl->rights(user.toLatin1());
-  kDebug() << user << " rights on INBOX/TestFolder: " << getAcl->rightsToString(users);
+  Acl::Rights users = getAcl->rights(user.toLatin1());
+  kDebug() << user << " rights on INBOX/TestFolder: " << Acl::rightsToString(users);
   Q_ASSERT_X(mine == users, "GETACL returns different rights for the same user", "");
 
 
   kDebug() << "Removing Delete right ";
-  mine.clear();
-  mine.append(AclJobBase::Delete);
+  mine = Acl::Delete;
   SetAclJob *setAcl= new SetAclJob(session);
   setAcl->setMailBox("INBOX/TestFolder");
   setAcl->setIdentifier(user.toLatin1());
@@ -171,11 +166,10 @@ void testAcl(Session *session, const QString &user)
   getAcl->setMailBox("INBOX/TestFolder");
   getAcl->exec();
   users = getAcl->rights(user.toLatin1());
-  kDebug() << user << " rights on INBOX/TestFolder: " << getAcl->rightsToString(users);
+  kDebug() << user << " rights on INBOX/TestFolder: " << Acl::rightsToString(users);
 
   kDebug() << "Adding back Delete right ";
-  mine.clear();
-  mine.append(AclJobBase::Delete);
+  mine = Acl::Delete;
   setAcl= new SetAclJob(session);
   setAcl->setMailBox("INBOX/TestFolder");
   setAcl->setIdentifier(user.toLatin1());
@@ -186,7 +180,7 @@ void testAcl(Session *session, const QString &user)
   getAcl->setMailBox("INBOX/TestFolder");
   getAcl->exec();
   users = getAcl->rights(user.toLatin1());
-  kDebug() << user << " rights on INBOX/TestFolder: " << getAcl->rightsToString(users);
+  kDebug() << user << " rights on INBOX/TestFolder: " << Acl::rightsToString(users);
 
   //cleanup
   DeleteJob *deletejob = new DeleteJob(session);
@@ -227,31 +221,31 @@ void testAppendAndStore(Session *session)
 
   FetchJob *fetch = new FetchJob(session);
   FetchJob::FetchScope scope;
-  fetch->setSequenceSet("1");
+  fetch->setSequenceSet(ImapSet(1));
   scope.parts.clear();
   scope.mode = FetchJob::FetchScope::Content;
   fetch->setScope(scope);
   fetch->exec();
-  boost::shared_ptr<KMime::Message> message = fetch->messages()[1];
+  MessagePtr message = fetch->messages()[1];
   Q_ASSERT_X(fetch->error()==0, "FetchJob", fetch->errorString().toLocal8Bit());
   testMailContent.replace( "\r\n", "\n" );
   Q_ASSERT_X(testMailContent==message->head()+"\n"+message->body(),
              "Message differs from reference", message->head()+"\n"+message->body());
 
   fetch = new FetchJob(session);
-  fetch->setSequenceSet("1");
+  fetch->setSequenceSet(ImapSet(1));
   scope.parts.clear();
   scope.mode = FetchJob::FetchScope::Flags;
   fetch->setScope(scope);
   fetch->exec();
-  QList<QByteArray> expectedFlags = fetch->flags()[1];
+  MessageFlags expectedFlags = fetch->flags()[1];
   kDebug() << "Read the message flags:" << expectedFlags;
 
   kDebug() << "Add the \\Deleted flag...";
   expectedFlags << "\\Deleted";
   qSort(expectedFlags);
   StoreJob *store = new StoreJob(session);
-  store->setSequenceSet("1");
+  store->setSequenceSet(ImapSet(1));
   store->setMode(StoreJob::AppendFlags);
   store->setFlags(QList<QByteArray>() << "\\Deleted");
   store->exec();
@@ -290,8 +284,8 @@ void testRename(Session *session)
   //actual tests
   kDebug() << "Renaming to RenamedTestFolder";
   RenameJob *rename = new RenameJob(session);
-  rename->setMailBox("INBOX/TestFolder");
-  rename->setNewMailBox("INBOX/RenamedTestFolder");
+  rename->setSourceMailBox("INBOX/TestFolder");
+  rename->setDestinationMailBox("INBOX/RenamedTestFolder");
   rename->exec();
 
   kDebug() << "Listing mailboxes with name TestFolder:";
@@ -442,15 +436,15 @@ int main( int argc, char **argv )
   kDebug() << "Fetching first 3 messages headers:";
   FetchJob *fetch = new FetchJob(&session);
   FetchJob::FetchScope scope;
-  fetch->setSequenceSet("1:3");
+  fetch->setSequenceSet(ImapSet(1, 3));
   scope.parts.clear();
   scope.mode = FetchJob::FetchScope::Headers;
   fetch->setScope(scope);
   fetch->exec();
   Q_ASSERT_X(fetch->error()==0, "FetchJob", fetch->errorString().toLocal8Bit());
   Q_ASSERT(session.state()==Session::Selected);
-  QMap<int, boost::shared_ptr<KMime::Message> > messages = fetch->messages();
-  foreach (int id, messages.keys()) {
+  QMap<qint64, MessagePtr> messages = fetch->messages();
+  foreach (qint64 id, messages.keys()) {
     kDebug() << "* Message" << id << "(" << fetch->sizes()[id] << "bytes )";
     kDebug() << "  From      :" << messages[id]->from()->asUnicodeString();
     kDebug() << "  To        :" << messages[id]->to()->asUnicodeString();
@@ -463,35 +457,35 @@ int main( int argc, char **argv )
 
   kDebug() << "Fetching first 3 messages flags:";
   fetch = new FetchJob(&session);
-  fetch->setSequenceSet("1:3");
+  fetch->setSequenceSet(ImapSet(1, 3));
   scope.parts.clear();
   scope.mode = FetchJob::FetchScope::Flags;
   fetch->setScope(scope);
   fetch->exec();
   Q_ASSERT_X(fetch->error()==0, "FetchJob", fetch->errorString().toLocal8Bit());
   Q_ASSERT(session.state()==Session::Selected);
-  QMap<int, QList<QByteArray> > flags = fetch->flags();
-  foreach (int id, flags.keys()) {
+  QMap<qint64, MessageFlags> flags = fetch->flags();
+  foreach (qint64 id, flags.keys()) {
     kDebug() << "* Message" << id << "flags:" << flags[id];
   }
   qDebug();
 
   kDebug() << "Fetching first message structure:";
   fetch = new FetchJob(&session);
-  fetch->setSequenceSet("1");
+  fetch->setSequenceSet(ImapSet(1));
   scope.parts.clear();
   scope.mode = FetchJob::FetchScope::Structure;
   fetch->setScope(scope);
   fetch->exec();
   Q_ASSERT_X(fetch->error()==0, "FetchJob", fetch->errorString().toLocal8Bit());
   Q_ASSERT(session.state()==Session::Selected);
-  boost::shared_ptr<KMime::Message> message = fetch->messages()[1];
+  MessagePtr message = fetch->messages()[1];
   dumpContentHelper(message.get());
   qDebug();
 
   kDebug() << "Fetching first message second part headers:";
   fetch = new FetchJob(&session);
-  fetch->setSequenceSet("1");
+  fetch->setSequenceSet(ImapSet(1));
   scope.parts.clear();
   scope.parts << "2";
   scope.mode = FetchJob::FetchScope::Headers;
@@ -499,10 +493,10 @@ int main( int argc, char **argv )
   fetch->exec();
   Q_ASSERT_X(fetch->error()==0, "FetchJob", fetch->errorString().toLocal8Bit());
   Q_ASSERT(session.state()==Session::Selected);
-  QMap<int, QMap<QByteArray, boost::shared_ptr<KMime::Content> > > allParts = fetch->parts();
-  foreach (int id, allParts.keys()) {
+  QMap<qint64, MessageParts> allParts = fetch->parts();
+  foreach (qint64 id, allParts.keys()) {
     kDebug() << "* Message" << id << "parts headers";
-    QMap<QByteArray, boost::shared_ptr<KMime::Content> > parts = allParts[id];
+    MessageParts parts = allParts[id];
     foreach (const QByteArray &partId, parts.keys()) {
       kDebug() << "  ** Part" << partId;
       kDebug() << "     Name       :" << parts[partId]->contentType()->name();
@@ -514,7 +508,7 @@ int main( int argc, char **argv )
 
   kDebug() << "Fetching first message second part content:";
   fetch = new FetchJob(&session);
-  fetch->setSequenceSet("1");
+  fetch->setSequenceSet(ImapSet(1));
   scope.parts.clear();
   scope.parts << "2";
   scope.mode = FetchJob::FetchScope::Content;
@@ -524,7 +518,7 @@ int main( int argc, char **argv )
   Q_ASSERT(session.state()==Session::Selected);
   allParts = fetch->parts();
   foreach (int id, allParts.keys()) {
-    QMap<QByteArray, boost::shared_ptr<KMime::Content> > parts = allParts[id];
+    MessageParts parts = allParts[id];
     foreach (const QByteArray &partId, parts.keys()) {
       kDebug() << "* Message" << id << "part" << partId << "content:";
       kDebug() << parts[partId]->body();
@@ -547,7 +541,6 @@ int main( int argc, char **argv )
   kDebug() << "Expunge INBOX:";
   ExpungeJob *expunge = new ExpungeJob(&session);
   expunge->exec();
-  kDebug() << "Deleted items: " << expunge->deletedItems();
 
   kDebug() << "Closing INBOX:";
   CloseJob *close = new CloseJob(&session);

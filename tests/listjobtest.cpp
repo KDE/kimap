@@ -26,7 +26,7 @@
 #include <QtTest>
 #include <KDebug>
 
-Q_DECLARE_METATYPE(QList<QStringList>)
+Q_DECLARE_METATYPE(QList<KIMAP::MailBoxDescriptor>)
 
 class ListJobTest: public QObject {
   Q_OBJECT
@@ -36,25 +36,25 @@ private Q_SLOTS:
 void testList_data() {
   QTest::addColumn<bool>( "unsubscribed" );
   QTest::addColumn<QStringList>( "response" );
-  QTest::addColumn<QList<QStringList> >( "listresult" );
+  QTest::addColumn<QList<KIMAP::MailBoxDescriptor> >( "listresult" );
 
   QStringList response;
   response << "* LIST ( \\HasChildren ) / INBOX "<< "* LIST ( \\HasNoChildren ) / INBOX/&AOQ- &APY- &APw- @ &IKw- "<< "* LIST ( \\HasChildren ) / INBOX/lost+found " << "* LIST ( \\HasNoChildren ) / \"INBOX/lost+found/Calendar Public-20080128\" " << "A000001 OK LIST completed";
-  QStringList resultPair;
-  QList<QStringList> listresult;
+  KIMAP::MailBoxDescriptor descriptor;
+  QList<KIMAP::MailBoxDescriptor> listresult;
 
-  resultPair << "/" << "INBOX";
-  listresult << resultPair;
-  resultPair.clear();
-  resultPair << "/" << "INBOX" << QString::fromUtf8( "ä ö ü @ €" );
-  listresult << resultPair;
-  resultPair.clear();
-  resultPair << "/" << "INBOX" << "lost+found";
-  listresult << resultPair;
-  resultPair.clear();
-  resultPair << "/" << "INBOX" << "lost+found" << "Calendar Public-20080128";
-  listresult << resultPair;
-  resultPair.clear();
+  descriptor.separator = '/';
+  descriptor.name = "INBOX";
+  listresult << descriptor;
+  descriptor.separator = '/';
+  descriptor.name = QString::fromUtf8( "INBOX/ä ö ü @ €" );
+  listresult << descriptor;
+  descriptor.separator = '/';
+  descriptor.name = "INBOX/lost+found";
+  listresult << descriptor;
+  descriptor.separator = '/';
+  descriptor.name = "INBOX/lost+found/Calendar Public-20080128";
+  listresult << descriptor;
 
   QTest::newRow( "normal" ) << true << response << listresult;
 
@@ -62,30 +62,30 @@ void testList_data() {
   response << "* LSUB ( \\HasChildren ) / INBOX " <<  "* LSUB ( ) / INBOX/Calendar/3196 " << "* LSUB ( \\HasChildren ) / INBOX/Calendar/ff " << "* LSUB ( ) / INBOX/Calendar/ff/hgh "<< "* LSUB ( ) / user/test2/Calendar " << "A000001 OK LSUB completed";
   listresult.clear();
 
-  resultPair << "/" << "INBOX";
-  listresult << resultPair;
-  resultPair.clear();
-  resultPair << "/" << "INBOX" << "Calendar" << "3196";
-  listresult << resultPair;
-  resultPair.clear();
-  resultPair << "/" << "INBOX" << "Calendar" << "ff";
-  listresult << resultPair;
-  resultPair.clear();
-  resultPair << "/" << "INBOX" << "Calendar" << "ff" << "hgh";
-  listresult << resultPair;
-  resultPair.clear();
-  resultPair << "/" << "user" << "test2" << "Calendar";
-  listresult << resultPair;
-  resultPair.clear();
+  descriptor.separator = '/';
+  descriptor.name = "INBOX";
+  listresult << descriptor;
+  descriptor.separator = '/';
+  descriptor.name = "INBOX/Calendar/3196";
+  listresult << descriptor;
+  descriptor.separator = '/';
+  descriptor.name = "INBOX/Calendar/ff";
+  listresult << descriptor;
+  descriptor.separator = '/';
+  descriptor.name = "INBOX/Calendar/ff/hgh";
+  listresult << descriptor;
+  descriptor.separator = '/';
+  descriptor.name = "user/test2/Calendar";
+  listresult << descriptor;
 
   QTest::newRow( "subscribed" ) << false << response << listresult;
 
   response.clear();
   response << "* LIST ( \\HasNoChildren ) / INBOX/lost+found/Calendar Public-20080128 " << "A000001 OK LIST completed";
   listresult.clear();
-  resultPair << "/" << "INBOX" << "lost+found" << "Calendar Public-20080128";
-  listresult << resultPair;
-  resultPair.clear();
+  descriptor.separator = '/';
+  descriptor.name = "INBOX/lost+found/Calendar Public-20080128";
+  listresult << descriptor;
 
   QTest::newRow( "unquoted-space" ) << true << response << listresult;
 
@@ -106,7 +106,7 @@ void testList()
     KIMAP::Session session("127.0.0.1", 5989);
     QFETCH( bool, unsubscribed);
     QFETCH( QStringList, response );
-    QFETCH( QList<QStringList>, listresult );
+    QFETCH( QList<KIMAP::MailBoxDescriptor>, listresult );
 
     fakeServer.setResponse( response );
 
@@ -117,8 +117,8 @@ void testList()
     bool result = job->exec();
     QVERIFY(result);
     if (result) {
-      //kDebug() << job->mailBoxes().first();
-      //kDebug() << listresult.first();
+      //kDebug() << job->mailBoxes().first().name;
+      //kDebug() << listresult.first().name;
       QCOMPARE(job->mailBoxes(), listresult);
       //       kDebug() << job->flags();
     }

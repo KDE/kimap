@@ -23,6 +23,7 @@
 #include "kimap_export.h"
 
 #include "job.h"
+#include "imapset.h"
 
 namespace KIMAP {
 
@@ -38,15 +39,14 @@ class KIMAP_EXPORT CopyJob : public Job
   friend class SessionPrivate;
 
   public:
-    CopyJob( Session *session );
+    explicit CopyJob( Session *session );
     virtual ~CopyJob();
 
     void setMailBox( const QString &mailBox );
     QString mailBox() const;
 
-    // TODO: Make a proper class (actually there's one in akonadi server)
-    void setSequenceSet( const QByteArray &set );
-    QByteArray sequenceSet() const;
+    void setSequenceSet( const ImapSet &set );
+    ImapSet sequenceSet() const;
 
   protected:
     virtual void doStart();

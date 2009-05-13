@@ -45,7 +45,6 @@ class KIMAP_EXPORT SearchJob : public Job
       Or,
       Not
     };
-    Q_DECLARE_FLAGS(SearchLogics, SearchLogic)
 
     enum SearchCriteria {
        All = 0,
@@ -82,30 +81,29 @@ class KIMAP_EXPORT SearchJob : public Job
        Unkeyword,
        Unseen
     };
-     Q_DECLARE_FLAGS(SearchCriterias, SearchCriteria)
-       
-    SearchJob( Session *session );
+
+    explicit SearchJob( Session *session );
     virtual ~SearchJob();
 
     void setUidBased(bool uidBased);
     bool isUidBased() const;
-    
+
     void setCharset( const QByteArray &charSet );
     QByteArray charset() const;
 
     /**
      * Get the search result, as a list of sequence numbers or UIDs, based on the isUidBased status
-     * @return the found items  
+     * @return the found items
      */
     QList<int> foundItems();
-    
+
     /**
      * Add a search criteria that doesn't have an argument. Passing a criteria that
      * should have an argument will be ignored.
      * @param criteria a criteria from SearchCriterias
      */
     void addSearchCriteria( SearchCriteria criteria );
-    
+
     /**
      * Add a search criteria that has one or more space separate string arguments.
      * Passing a criteria that accepts a different type or argument or no
@@ -123,7 +121,7 @@ class KIMAP_EXPORT SearchJob : public Job
      * @param argument a number argument
      */
     void addSearchCriteria( SearchCriteria criteria, int argument );
-    
+
     /**
      * Add a search criteria that has a date as argument.
      * Passing a criteria that accepts a different type or argument or no
@@ -132,7 +130,7 @@ class KIMAP_EXPORT SearchJob : public Job
      * @param argument a date
      */
     void addSearchCriteria( SearchCriteria criteria, const QDate& argument );
-    
+
     /**
      * Add a custom criteria. No checks are done, the data is sent as it is
      * to the server.
@@ -145,10 +143,10 @@ class KIMAP_EXPORT SearchJob : public Job
      * @param logic AND (the default), OR, NOT. See SearchLogics.
      */
     void setSearchLogic(SearchLogic logic);
-    
+
   protected:
     virtual void doStart();
-    virtual void doHandleResponse(const Message &response);
+    virtual void handleResponse(const Message &response);
 };
 
 }

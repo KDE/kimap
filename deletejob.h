@@ -27,7 +27,6 @@
 namespace KIMAP {
 
 class Session;
-class Message;
 class DeleteJobPrivate;
 
 class KIMAP_EXPORT DeleteJob : public Job
@@ -38,7 +37,7 @@ class KIMAP_EXPORT DeleteJob : public Job
   friend class SessionPrivate;
 
   public:
-    DeleteJob( Session *session );
+    explicit DeleteJob( Session *session );
     virtual ~DeleteJob();
 
     void setMailBox( const QString &mailBox );

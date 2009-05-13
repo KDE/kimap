@@ -55,14 +55,14 @@ void GetQuotaJob::doStart()
   d->tag = d->sessionInternal()->sendCommand( "GETQUOTA", '\"' + d->root + '\"');
 }
 
-void GetQuotaJob::doHandleResponse(const Message &response)
+void GetQuotaJob::handleResponse(const Message &response)
 {
   Q_D(GetQuotaJob);
   if (handleErrorReplies(response) == NotHandled) {
     if ( response.content.size() >= 4
          && response.content[1].toString() == "QUOTA" ) {
       d->quota = d->readQuota(response.content[3]);
-         }
+    }
   }
 }
 

@@ -38,7 +38,7 @@ class KIMAP_EXPORT CloseJob : public Job
   friend class SessionPrivate;
 
   public:
-    CloseJob( Session *session );
+    explicit CloseJob( Session *session );
     virtual ~CloseJob();
 
   protected:

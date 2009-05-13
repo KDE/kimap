@@ -38,7 +38,7 @@ class KIMAP_EXPORT SetMetaDataJob : public MetaDataJobBase
   friend class SessionPrivate;
 
   public:
-    SetMetaDataJob( Session *session );
+    explicit SetMetaDataJob( Session *session );
     virtual ~SetMetaDataJob();
 
     /**
@@ -63,13 +63,14 @@ class KIMAP_EXPORT SetMetaDataJob : public MetaDataJobBase
       NoPrivate = 4
     };
 
+    // Q_DECLARE_WHATEVER_THAT_WAS missing
     Q_DECLARE_FLAGS(MetaDataErrors, MetaDataError)
 
     /**
      * The metadata errors recived from the server.
      * @return OR connected error codes, see MetaDataError
      */
-    int metaDataError() const;
+    MetaDataErrors metaDataErrors() const;
     /**
      * The maximum accepted metadata size.
      * @return the accepted metadata size, -1 means the limit is unknown.
@@ -78,10 +79,12 @@ class KIMAP_EXPORT SetMetaDataJob : public MetaDataJobBase
 
   protected:
     virtual void doStart();
-    virtual void doHandleResponse( const Message &response );
+    virtual void handleResponse( const Message &response );
 
 };
 
 }
+
+Q_DECLARE_OPERATORS_FOR_FLAGS( KIMAP::SetMetaDataJob::MetaDataErrors )
 
 #endif

@@ -41,11 +41,11 @@ class KIMAP_EXPORT QuotaJobBase : public Job
   friend class SessionPrivate;
 
   public:
-    QuotaJobBase( Session *session );
+    explicit QuotaJobBase( Session *session );
     virtual ~QuotaJobBase();
 
-    qint32 usage(const QByteArray& resource);
-    qint32 limit(const QByteArray& resource);
+    qint64 usage(const QByteArray& resource);
+    qint64 limit(const QByteArray& resource);
 
   protected:
     QuotaJobBase( JobPrivate &dd );

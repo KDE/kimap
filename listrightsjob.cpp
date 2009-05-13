@@ -32,11 +32,11 @@ namespace KIMAP
   class ListRightsJobPrivate : public AclJobBasePrivate
   {
     public:
-      ListRightsJobPrivate( Session *session, const QString& name ) : AclJobBasePrivate(session, name) {}
+      ListRightsJobPrivate( Session *session, const QString& name ) : AclJobBasePrivate(session, name), defaultRights(Acl::None) {}
       ~ListRightsJobPrivate() { }
 
-      QList<AclJobBase::AclRight> defaultRights;
-      QList<QList<AclJobBase::AclRight> > possibleRights;
+      Acl::Rights defaultRights;
+      QList<Acl::Rights> possibleRights;
 
   };
 }
@@ -60,7 +60,7 @@ void ListRightsJob::doStart()
   d->tag = d->sessionInternal()->sendCommand( "LISTRIGHTS", '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + "\" \"" + d->id + "\"" );
 }
 
-void ListRightsJob::doHandleResponse( const Message &response )
+void ListRightsJob::handleResponse( const Message &response )
 {
   Q_D(ListRightsJob);
 
@@ -68,11 +68,11 @@ void ListRightsJob::doHandleResponse( const Message &response )
     if ( response.content.size() >= 4
          && response.content[1].toString() == "LISTRIGHTS" ) {
       QByteArray s = response.content[4].toString();
-      d->defaultRights = d->rightsFromString(s);
+      d->defaultRights = Acl::rightsFromString(s);
       int i = 5;
       while ( i < response.content.size()) {
         s = response.content[i].toString();
-        d->possibleRights.append(d->rightsFromString(s));
+        d->possibleRights.append(Acl::rightsFromString(s));
         i++;
       }
    }
@@ -92,13 +92,13 @@ QByteArray ListRightsJob::identifier()
   return d->identifier();
 }
 
-QList<AclJobBase::AclRight> ListRightsJob::defaultRights()
+Acl::Rights ListRightsJob::defaultRights()
 {
   Q_D(ListRightsJob);
   return d->defaultRights;
 }
 
-QList<QList<AclJobBase::AclRight> > ListRightsJob::possibleRights()
+QList<Acl::Rights> ListRightsJob::possibleRights()
 {
   Q_D(ListRightsJob);
   return d->possibleRights;

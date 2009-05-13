@@ -35,8 +35,8 @@ namespace KIMAP
       RenameJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name) { }
       ~RenameJobPrivate() { }
 
-      QString mailBox;
-      QString newMailBox;
+      QString sourceMailBox;
+      QString destinationMailBox;
   };
 }
 
@@ -54,32 +54,32 @@ RenameJob::~RenameJob()
 void RenameJob::doStart()
 {
   Q_D(RenameJob);
-  d->tag = d->sessionInternal()->sendCommand( "RENAME", '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + "\" \""
-                                              + KIMAP::encodeImapFolderName( d->newMailBox.toUtf8() )+ '\"' );
+  d->tag = d->sessionInternal()->sendCommand( "RENAME", '\"' + KIMAP::encodeImapFolderName( d->sourceMailBox.toUtf8() ) + "\" \""
+                                              + KIMAP::encodeImapFolderName( d->destinationMailBox.toUtf8() )+ '\"' );
 }
 
-void RenameJob::setMailBox( const QString &mailBox )
+void RenameJob::setSourceMailBox( const QString &mailBox )
 {
   Q_D(RenameJob);
-  d->mailBox = mailBox;
+  d->sourceMailBox = mailBox;
 }
 
-QString RenameJob::mailBox() const
+QString RenameJob::sourceMailBox() const
 {
   Q_D(const RenameJob);
-  return d->mailBox;
+  return d->sourceMailBox;
 }
 
-void RenameJob::setNewMailBox( const QString &mailBox )
+void RenameJob::setDestinationMailBox( const QString &mailBox )
 {
   Q_D(RenameJob);
-  d->newMailBox = mailBox;
+  d->destinationMailBox = mailBox;
 }
 
-QString RenameJob::newMailBox() const
+QString RenameJob::destinationMailBox() const
 {
   Q_D(const RenameJob);
-  return d->newMailBox;
+  return d->destinationMailBox;
 }
 
 

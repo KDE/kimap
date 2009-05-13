@@ -39,15 +39,15 @@ class KIMAP_EXPORT MyRightsJob : public AclJobBase
   friend class SessionPrivate;
 
   public:
-    MyRightsJob( Session *session );
+    explicit MyRightsJob( Session *session );
     virtual ~MyRightsJob();
 
-    bool hasRightEnabled(AclJobBase::AclRight right);
-    QList<AclJobBase::AclRight> rights();
+    bool hasRightEnabled(Acl::Right right);
+    Acl::Rights rights();
 
   protected:
     virtual void doStart();
-    virtual void doHandleResponse(const Message &response);
+    virtual void handleResponse(const Message &response);
 
 };
 

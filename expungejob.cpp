@@ -33,8 +33,9 @@ namespace KIMAP
     public:
       ExpungeJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name) { }
       ~ExpungeJobPrivate() { }
-
+#if 0
       QList< int > items;
+#endif
   };
 }
 
@@ -55,14 +56,15 @@ void ExpungeJob::doStart()
   d->tag = d->sessionInternal()->sendCommand( "EXPUNGE" );
 }
 
-void ExpungeJob::doHandleResponse( const Message &response )
+void ExpungeJob::handleResponse( const Message &response )
 {
-  Q_D(ExpungeJob);
+//  Q_D(ExpungeJob);
 
   if (handleErrorReplies(response) == NotHandled) {
     if ( response.content.size() >= 2 ) {
         QByteArray code = response.content[2].toString();
         if  (code == "EXPUNGE") {
+#if 0
           QByteArray s = response.content[1].toString();
           bool ok = true;
           int id = s.toInt(&ok);
@@ -70,18 +72,13 @@ void ExpungeJob::doHandleResponse( const Message &response )
             d->items.append(id);
           }
           //TODO error handling
+#endif
           return;
         }
     }
     kDebug() << "Unhandled response: " << response.toString().constData();
+
   }
 }
-
-QList< int > ExpungeJob::deletedItems() const
-{
-  Q_D(const ExpungeJob);
-  return d->items;
-}
-
 
 #include "expungejob.moc"

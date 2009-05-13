@@ -63,14 +63,14 @@ void testRename()
     fakeServer.setResponse( response );
 
     KIMAP::RenameJob *job = new KIMAP::RenameJob(&session);
-    job->setMailBox(mailbox);
-    job->setNewMailBox(newname);
+    job->setSourceMailBox(mailbox);
+    job->setDestinationMailBox(newname);
     QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
     QEXPECT_FAIL("no" , "Expected failure on NO response", Continue);
     bool result = job->exec();
     QVERIFY(result);
-    QCOMPARE(job->mailBox(), mailbox);
-    QCOMPARE(job->newMailBox(), newname);
+    QCOMPARE(job->sourceMailBox(), mailbox);
+    QCOMPARE(job->destinationMailBox(), newname);
 
     fakeServer.quit();
 }

@@ -24,9 +24,6 @@
 
 #include "job.h"
 
-#include "kmime/kmime_content.h"
-#include "kmime/kmime_message.h"
-
 namespace KIMAP {
 
 class Session;
@@ -57,7 +54,7 @@ class KIMAP_EXPORT AppendJob : public Job
 
   protected:
     virtual void doStart();
-    virtual void doHandleResponse(const Message &response);
+    virtual void handleResponse(const Message &response);
 };
 
 }

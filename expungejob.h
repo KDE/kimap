@@ -38,14 +38,12 @@ class KIMAP_EXPORT ExpungeJob : public Job
   friend class SessionPrivate;
 
   public:
-    ExpungeJob( Session *session );
+    explicit ExpungeJob( Session *session );
     virtual ~ExpungeJob();
-
-    QList< int > deletedItems() const;
 
   protected:
     virtual void doStart();
-    virtual void doHandleResponse(const Message &response);
+    virtual void handleResponse(const Message &response);
 };
 
 }

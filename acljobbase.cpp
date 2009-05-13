@@ -38,64 +38,32 @@ QByteArray AclJobBasePrivate::identifier() const
   return id;
 }
 
-
-
-QByteArray AclJobBasePrivate::rights()
+bool AclJobBasePrivate::hasRightEnabled(Acl::Right right)
 {
-  QByteArray r;
-  for (int i = 0; i < rightList.size(); i++) {
-    r += rightsMap.key(rightList[i]).toAscii();
-  }
-
-  return r;
-}
-
-bool AclJobBasePrivate::hasRightEnabled(AclJobBase::AclRight right)
-{
-  return rightList.contains(right);
-}
-
-QList<AclJobBase::AclRight> AclJobBasePrivate::rightsFromString(const QByteArray& rights)
-{
-  QList<AclJobBase::AclRight> result;
-
-  if (rights.isEmpty())
-    return result;
-
-  int pos = 0;
-  if (rights[0] == '+') {
-    modifier = AclJobBase::Add;
-    pos++;
-  } else if (rights[0]== '-') {
-    modifier = AclJobBase::Remove;
-    pos++;
-  } else {
-    modifier = AclJobBase::Change;
-  }
-
-  for (int i = pos; i < rights.size(); i++) {
-    if (rightsMap.contains(rights[i]) && !result.contains(rightsMap[rights[i]])) {
-      result.append(rightsMap[rights[i]]);
-    }
-  }
-
-  return result;
+  return rightList & right;
 }
 
 void AclJobBasePrivate::setRights(const QByteArray& rights)
 {
-  rightList = rightsFromString(rights);
+  switch ( rights[0] ) {
+  case '+':
+    modifier = AclJobBase::Add;
+    break;
+  case '-':
+    modifier = AclJobBase::Remove;
+    break;
+  default:
+    modifier = AclJobBase::Change;
+    break;
+  }
+
+  rightList = Acl::rightsFromString(rights);
 }
 
-void AclJobBasePrivate::setRights(AclJobBase::AclModifier _modifier, const QList<AclJobBase::AclRight> &rights)
+void AclJobBasePrivate::setRights(AclJobBase::AclModifier _modifier, Acl::Rights rights)
 {
-
   modifier = _modifier;
-  for (int i = 0; i < rights.size(); i++) {
-    if (!rightList.contains(rights[i])) {
-      rightList.append(rights[i]);
-    }
-  }
+  rightList|= rights;
 }
 
 
@@ -128,17 +96,5 @@ QString AclJobBase::mailBox() const
   Q_D(const AclJobBase);
   return d->mailBox;
 }
-
-QByteArray AclJobBase::rightsToString(const QList<AclJobBase::AclRight> &rights)
-{
-  Q_D(const AclJobBase);
-
-  QByteArray result;
-  Q_FOREACH(AclJobBase::AclRight right, rights) {
-    result += d->rightsMap.key(right).toLatin1();
-  }
-  return result;
-}
-
 
 #include "acljobbase.moc"

@@ -52,7 +52,7 @@ SetAclJob::~SetAclJob()
 void SetAclJob::doStart()
 {
   Q_D(SetAclJob);
-  QByteArray r = d->rights();
+  QByteArray r = Acl::rightsToString( d->rightList );
   if (d->modifier == Add) {
     r.prepend('+');
   } else if (d->modifier == Remove) {
@@ -61,13 +61,7 @@ void SetAclJob::doStart()
   d->tag = d->sessionInternal()->sendCommand( "SETACL", '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + "\" \"" + d->id + "\" \"" + r +'\"');
 }
 
-void SetAclJob::setRights(const QByteArray& rights)
-{
-  Q_D(SetAclJob);
-  d->setRights(rights);
-}
-
-void SetAclJob::setRights(AclModifier modifier, const QList<AclRight> &rights)
+void SetAclJob::setRights(AclModifier modifier, Acl::Rights rights)
 {
   Q_D(SetAclJob);
   d->setRights(modifier, rights);

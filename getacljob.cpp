@@ -35,7 +35,7 @@ namespace KIMAP
       GetAclJobPrivate( Session *session, const QString& name ) : AclJobBasePrivate(session, name) {}
       ~GetAclJobPrivate() { }
 
-      QMap<QByteArray, QList<AclJobBase::AclRight> > userRights;
+      QMap<QByteArray, Acl::Rights> userRights;
   };
 }
 
@@ -57,7 +57,7 @@ void GetAclJob::doStart()
   d->tag = d->sessionInternal()->sendCommand( "GETACL", '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + '\"');
 }
 
-void GetAclJob::doHandleResponse( const Message &response )
+void GetAclJob::handleResponse( const Message &response )
 {
   Q_D(GetAclJob);
 //   kDebug() << response.toString();
@@ -69,29 +69,29 @@ void GetAclJob::doHandleResponse( const Message &response )
       while ( i < response.content.size() - 1 ) {
         QByteArray id = response.content[i].toString();
         QByteArray rights = response.content[i + 1].toString();
-        d->userRights[id] = d->rightsFromString(rights);
+        d->userRights[id] = Acl::rightsFromString(rights);
         i += 2;
       }
     }
   }
 }
 
-bool GetAclJob::hasRightEnabled(const QByteArray &identifier, AclJobBase::AclRight right)
+bool GetAclJob::hasRightEnabled(const QByteArray &identifier, Acl::Right right)
 {
   Q_D(GetAclJob);
   if (d->userRights.contains(identifier))
   {
-    QList<AclJobBase::AclRight> rights = d->userRights[identifier];
-    return rights.contains(right);
+    Acl::Rights rights = d->userRights[identifier];
+    return rights & right;
   }
 
   return false;
 }
 
-QList<AclJobBase::AclRight> GetAclJob::rights(const QByteArray &identifier)
+Acl::Rights GetAclJob::rights(const QByteArray &identifier)
 {
   Q_D(GetAclJob);
-  QList<AclJobBase::AclRight> result;
+  Acl::Rights result;
   if (d->userRights.contains(identifier))
   {
     result = d->userRights[identifier];

@@ -47,7 +47,6 @@ class KIMAP_EXPORT LoginJob : public Job
         SslV3_1,
         AnySslVersion
     };
-    Q_DECLARE_FLAGS(EncryptionModes, EncryptionMode)
 
     enum AuthenticationMode {
         ClearText = 0,
@@ -59,9 +58,8 @@ class KIMAP_EXPORT LoginJob : public Job
         GSSAPI,
         Anonymous
     };
-    Q_DECLARE_FLAGS(AuthenticationModes, AuthenticationMode)
 
-    LoginJob( Session *session );
+    explicit LoginJob( Session *session );
     virtual ~LoginJob();
 
     QString userName() const;
@@ -88,15 +86,11 @@ class KIMAP_EXPORT LoginJob : public Job
 
   protected:
     virtual void doStart();
-    virtual void doHandleResponse( const Message &response );
+    virtual void handleResponse( const Message &response );
     virtual void connectionLost();
 
-  protected Q_SLOTS:
-    void sslResponse(bool);
-
   private:
-    bool startAuthentication();
-    bool answerChallenge(const QByteArray &data);
+    Q_PRIVATE_SLOT( d_func(), void sslResponse(bool) );
 };
 
 }

@@ -27,7 +27,6 @@
 namespace KIMAP {
 
 class Session;
-class Message;
 class LogoutJobPrivate;
 
 class KIMAP_EXPORT LogoutJob : public Job
@@ -38,7 +37,7 @@ class KIMAP_EXPORT LogoutJob : public Job
   friend class SessionPrivate;
 
   public:
-    LogoutJob( Session *session );
+    explicit LogoutJob( Session *session );
     virtual ~LogoutJob();
 
   protected:

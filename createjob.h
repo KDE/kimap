@@ -38,7 +38,7 @@ class KIMAP_EXPORT CreateJob : public Job
   friend class SessionPrivate;
 
   public:
-    CreateJob( Session *session );
+    explicit CreateJob( Session *session );
     virtual ~CreateJob();
 
     void setMailBox( const QString &mailBox );

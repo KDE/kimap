@@ -30,52 +30,23 @@ namespace KIMAP
   class AclJobBasePrivate : public JobPrivate
   {
     public:
-      AclJobBasePrivate( Session *session, const QString& name ) : JobPrivate(session, name), modifier(AclJobBase::Change)
+      AclJobBasePrivate( Session *session, const QString& name ) : JobPrivate(session, name), rightList(Acl::None), modifier(AclJobBase::Change)
       {
-        rightsMap['l'] = AclJobBase::Lookup;
-        rightsMap['r'] = AclJobBase::Read;
-        rightsMap['s'] = AclJobBase::KeepSeen;
-        rightsMap['w'] = AclJobBase::Write;
-        rightsMap['i'] = AclJobBase::Insert;
-        rightsMap['p'] = AclJobBase::Post;
-        rightsMap['c'] = AclJobBase::Create; //TODO: obsolete, keep it?
-        rightsMap['d'] = AclJobBase::Delete; //TODO: obsolete, keep it?
-        rightsMap['k'] = AclJobBase::CreateMailbox;
-        rightsMap['x'] = AclJobBase::DeleteMailbox;
-        rightsMap['t'] = AclJobBase::DeleteMessage;
-        rightsMap['e'] = AclJobBase::Expunge;
-        rightsMap['a'] = AclJobBase::Admin;
-        rightsMap['n'] = AclJobBase::WriteShared;
-        rightsMap['0'] = AclJobBase::Custom0;
-        rightsMap['1'] = AclJobBase::Custom1;
-        rightsMap['2'] = AclJobBase::Custom2;
-        rightsMap['3'] = AclJobBase::Custom3;
-        rightsMap['4'] = AclJobBase::Custom4;
-        rightsMap['5'] = AclJobBase::Custom5;
-        rightsMap['6'] = AclJobBase::Custom6;
-        rightsMap['7'] = AclJobBase::Custom7;
-        rightsMap['8'] = AclJobBase::Custom8;
-        rightsMap['9'] = AclJobBase::Custom9;
       }
       ~AclJobBasePrivate() { }
 
       void setIdentifier( const QByteArray &identifier );
       QByteArray identifier() const;
 
-      QByteArray rights();
-
-      bool hasRightEnabled(AclJobBase::AclRight right);
+      bool hasRightEnabled(Acl::Right right);
 
       void setRights(const QByteArray& rights);
-      void setRights(AclJobBase::AclModifier modifier, const QList<AclJobBase::AclRight> &rights);
-
-      QList<AclJobBase::AclRight> rightsFromString(const QByteArray& rights);
+      void setRights(AclJobBase::AclModifier modifier, Acl::Rights rights);
 
       QString mailBox;
       QByteArray id;
-      QList<AclJobBase::AclRight> rightList;
+      Acl::Rights rightList;
       AclJobBase::AclModifier modifier;
-      QMap<QChar, AclJobBase::AclRight> rightsMap;
   };
 }
 

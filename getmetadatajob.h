@@ -38,7 +38,7 @@ class KIMAP_EXPORT GetMetaDataJob : public MetaDataJobBase
   friend class SessionPrivate;
 
   public:
-    GetMetaDataJob( Session *session );
+    explicit GetMetaDataJob( Session *session );
     virtual ~GetMetaDataJob();
 
     enum Depth {
@@ -60,7 +60,7 @@ class KIMAP_EXPORT GetMetaDataJob : public MetaDataJobBase
      * Only entry values that are less than or equal in octet size to the specified @param size limit are returned. In
      * Annotatemore mode, this setting is  ignored.
      */
-    void setMaxSize(qint32 size);
+    void setMaximumSize(qint64 size);
 
     /**
      * Default is NoDepth. In Annotatemore mode, this setting is  ignored.
@@ -88,7 +88,7 @@ class KIMAP_EXPORT GetMetaDataJob : public MetaDataJobBase
 
   protected:
     virtual void doStart();
-    virtual void doHandleResponse( const Message &response );
+    virtual void handleResponse( const Message &response );
 
 };
 

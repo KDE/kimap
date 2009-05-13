@@ -23,12 +23,15 @@
 #include "kimap_export.h"
 
 #include "job.h"
+#include "imapset.h"
 
 namespace KIMAP {
 
 class Session;
 class Message;
 class StoreJobPrivate;
+
+typedef QList<QByteArray> MessageFlags;
 
 class KIMAP_EXPORT StoreJob : public Job
 {
@@ -45,27 +48,26 @@ class KIMAP_EXPORT StoreJob : public Job
       RemoveFlags
     };
 
-    StoreJob( Session *session );
+    explicit StoreJob( Session *session );
     virtual ~StoreJob();
 
-    // TODO: Make a proper class (actually there's one in akonadi server)
-    void setSequenceSet( const QByteArray &set );
-    QByteArray sequenceSet() const;
+    void setSequenceSet( const ImapSet &set );
+    ImapSet sequenceSet() const;
 
     void setUidBased( bool uidBased );
     bool isUidBased() const;
 
-    void setFlags( const QList<QByteArray> &flags );
-    QList<QByteArray> flags() const;
+    void setFlags( const MessageFlags &flags );
+    MessageFlags flags() const;
 
     void setMode( StoreMode mode );
     StoreMode mode() const;
 
-    QMap<int, QList<QByteArray> > resultingFlags() const;
+    QMap<int, MessageFlags> resultingFlags() const;
 
   protected:
     virtual void doStart();
-    virtual void doHandleResponse(const Message &response);
+    virtual void handleResponse(const Message &response);
 };
 
 }

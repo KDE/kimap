@@ -33,12 +33,12 @@ namespace KIMAP
       StoreJobPrivate( Session *session, const QString& name ) : JobPrivate( session, name ) { }
       ~StoreJobPrivate() { }
 
-      QByteArray set;
+      ImapSet set;
       bool uidBased;
       StoreJob::StoreMode mode;
-      QList<QByteArray> flags;
+      MessageFlags flags;
 
-      QMap<int, QList<QByteArray> > resultingFlags;
+      QMap<int, MessageFlags> resultingFlags;
   };
 }
 
@@ -55,13 +55,13 @@ StoreJob::~StoreJob()
 {
 }
 
-void StoreJob::setSequenceSet( const QByteArray &set )
+void StoreJob::setSequenceSet( const ImapSet &set )
 {
   Q_D(StoreJob);
   d->set = set;
 }
 
-QByteArray StoreJob::sequenceSet() const
+ImapSet StoreJob::sequenceSet() const
 {
   Q_D(const StoreJob);
   return d->set;
@@ -79,13 +79,13 @@ bool StoreJob::isUidBased() const
   return d->uidBased;
 }
 
-void StoreJob::setFlags( const QList<QByteArray> &flags )
+void StoreJob::setFlags( const MessageFlags &flags )
 {
   Q_D(StoreJob);
   d->flags = flags;
 }
 
-QList<QByteArray> StoreJob::flags() const
+MessageFlags StoreJob::flags() const
 {
   Q_D(const StoreJob);
   return d->flags;
@@ -103,7 +103,7 @@ StoreJob::StoreMode StoreJob::mode() const
   return d->mode;
 }
 
-QMap<int, QList<QByteArray> > StoreJob::resultingFlags() const
+QMap<int, MessageFlags> StoreJob::resultingFlags() const
 {
   Q_D(const StoreJob);
   return d->resultingFlags;
@@ -113,7 +113,7 @@ void StoreJob::doStart()
 {
   Q_D(StoreJob);
 
-  QByteArray parameters = d->set+' ';
+  QByteArray parameters = d->set.toImapSequenceSet()+' ';
 
   switch ( d->mode ) {
   case SetFlags:
@@ -144,7 +144,7 @@ void StoreJob::doStart()
   d->tag = d->sessionInternal()->sendCommand( command, parameters );
 }
 
-void StoreJob::doHandleResponse( const Message &response )
+void StoreJob::handleResponse( const Message &response )
 {
   Q_D(StoreJob);
 

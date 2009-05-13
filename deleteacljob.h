@@ -39,7 +39,7 @@ class KIMAP_EXPORT DeleteAclJob : public AclJobBase
   friend class SessionPrivate;
 
   public:
-    DeleteAclJob( Session *session );
+    explicit DeleteAclJob( Session *session );
     virtual ~DeleteAclJob();
 
     void setIdentifier( const QByteArray &identifier );

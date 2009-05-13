@@ -22,6 +22,7 @@
 
 #include "kimap_export.h"
 
+#include "acl.h"
 #include "job.h"
 
 namespace KIMAP {
@@ -44,51 +45,17 @@ class KIMAP_EXPORT AclJobBase : public Job
     AclJobBase( Session *session );
     virtual ~AclJobBase();
 
-    enum AclRight {
-      Lookup = 0,
-      Read,
-      KeepSeen,
-      Write,
-      Insert,
-      Post,
-      Create,
-      CreateMailbox,
-      DeleteMailbox,
-      DeleteMessage,
-      Delete,
-      Admin,
-      Expunge,
-      WriteShared,
-      Custom0,
-      Custom1,
-      Custom2,
-      Custom3,
-      Custom4,
-      Custom5,
-      Custom6,
-      Custom7,
-      Custom8,
-      Custom9
-    };
-
-    Q_DECLARE_FLAGS(AclRights, AclRight)
-
     enum AclModifier {
       Add = 0,
       Remove,
       Change
     };
 
-    Q_DECLARE_FLAGS(AclModifiers, AclModifier)
-
-
     void setMailBox( const QString &mailBox );
     QString mailBox() const;
 
-    QByteArray rightsToString(const QList<AclJobBase::AclRight> &rights);
-
   protected:
-    AclJobBase( JobPrivate &dd );
+    explicit AclJobBase( JobPrivate &dd );
 
 };
 

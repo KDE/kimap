@@ -35,7 +35,7 @@ namespace KIMAP
       GetMetaDataJobPrivate( Session *session, const QString& name ) : MetaDataJobBasePrivate(session, name), maxSize(-1), depth("0") { }
       ~GetMetaDataJobPrivate() { }
 
-       qint32 maxSize;
+       qint64 maxSize;
        QByteArray depth;
        QList<QByteArray> entries;
        QList<QByteArray> attributes;
@@ -115,7 +115,7 @@ void GetMetaDataJob::doStart()
   kDebug() << "SENT: " << command << " " << parameters;
 }
 
-void GetMetaDataJob::doHandleResponse( const Message &response )
+void GetMetaDataJob::handleResponse( const Message &response )
 {
   Q_D(GetMetaDataJob);
   kDebug() << "GOT: " << response.toString();
@@ -162,7 +162,7 @@ void GetMetaDataJob::addEntry(const QByteArray &entry, const QByteArray &attribu
   d->attributes.append(attribute);
 }
 
-void GetMetaDataJob::setMaxSize(qint32 size)
+void GetMetaDataJob::setMaximumSize(qint64 size)
 {
   Q_D(GetMetaDataJob);
   d->maxSize = size;

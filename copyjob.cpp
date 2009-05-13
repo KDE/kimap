@@ -38,7 +38,7 @@ namespace KIMAP
       ~CopyJobPrivate() { }
 
       QString mailBox;
-      QByteArray set;
+      ImapSet set;
   };
 }
 
@@ -56,7 +56,7 @@ CopyJob::~CopyJob()
 void CopyJob::doStart()
 {
   Q_D(CopyJob);
-  d->tag = d->sessionInternal()->sendCommand( "COPY", d->set + " \"" + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + '\"' );
+  d->tag = d->sessionInternal()->sendCommand( "COPY", d->set.toImapSequenceSet() + " \"" + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + '\"' );
 }
 
 void CopyJob::setMailBox( const QString &mailBox )
@@ -71,13 +71,13 @@ QString CopyJob::mailBox() const
   return d->mailBox;
 }
 
-void CopyJob::setSequenceSet( const QByteArray &set )
+void CopyJob::setSequenceSet( const ImapSet &set )
 {
   Q_D(CopyJob);
   d->set = set;
 }
 
-QByteArray CopyJob::sequenceSet() const
+ImapSet CopyJob::sequenceSet() const
 {
   Q_D(const CopyJob);
   return d->set;

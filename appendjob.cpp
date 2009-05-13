@@ -115,7 +115,7 @@ void AppendJob::doStart()
   d->tag = d->sessionInternal()->sendCommand( "APPEND", parameters );
 }
 
-void AppendJob::doHandleResponse( const Message &response )
+void AppendJob::handleResponse( const Message &response )
 {
   Q_D(AppendJob);
 

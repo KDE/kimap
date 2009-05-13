@@ -45,7 +45,7 @@ namespace KIMAP
       int recentCount;
       int firstUnseenIndex;
       qint64 uidValidity;
-      int nextUid;
+      qint64 nextUid;
   };
 }
 
@@ -120,7 +120,7 @@ qint64 SelectJob::uidValidity() const
   return d->uidValidity;
 }
 
-int SelectJob::nextUid() const
+qint64 SelectJob::nextUid() const
 {
   Q_D(const SelectJob);
   return d->nextUid;
@@ -138,7 +138,7 @@ void SelectJob::doStart()
   d->tag = d->sessionInternal()->sendCommand( command, '\"'+KIMAP::encodeImapFolderName( d->mailBox.toUtf8() )+'\"' );
 }
 
-void SelectJob::doHandleResponse( const Message &response )
+void SelectJob::handleResponse( const Message &response )
 {
   Q_D(SelectJob);
 
@@ -161,7 +161,7 @@ void SelectJob::doHandleResponse( const Message &response )
               if ( !isInt ) return;
               d->uidValidity = value;
             } else {
-              int value = response.responseCode[1].toString().toInt(&isInt);
+              qint64 value = response.responseCode[1].toString().toLongLong(&isInt);
               if ( !isInt ) return;
               if ( code=="UNSEEN" ) {
                 d->firstUnseenIndex = value;

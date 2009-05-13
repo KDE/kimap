@@ -50,7 +50,7 @@ void Job::start()
   d->sessionInternal()->addJob(this);
 }
 
-void Job::doHandleResponse(const Message &response)
+void Job::handleResponse(const Message &response)
 {
   handleErrorReplies(response);
 }

@@ -36,7 +36,7 @@ class KIMAP_EXPORT SetQuotaJob : public QuotaJobBase
   friend class SessionPrivate;
 
   public:
-    SetQuotaJob( Session *session );
+    explicit SetQuotaJob( Session *session );
     virtual ~SetQuotaJob();
 
     /**
@@ -44,14 +44,15 @@ class KIMAP_EXPORT SetQuotaJob : public QuotaJobBase
      * @param resource quota resouce name
      * @param limit limit for the resouce
      */
-    void setQuota(const QByteArray& resource, qint32 limit);
+    // use qint64 for all the quota stuff
+    void setQuota(const QByteArray& resource, qint64 limit);
 
     void setRoot(const QByteArray &root);
     QByteArray root() const;
 
   protected:
     virtual void doStart();
-    virtual void doHandleResponse(const Message &response);
+    virtual void handleResponse(const Message &response);
 
 };
 

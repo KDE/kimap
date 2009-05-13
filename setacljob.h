@@ -39,10 +39,10 @@ class KIMAP_EXPORT SetAclJob : public AclJobBase
   friend class SessionPrivate;
 
   public:
-    SetAclJob( Session *session );
+    explicit SetAclJob( Session *session );
     virtual ~SetAclJob();
-    void setRights(const QByteArray& rights);
-    void setRights(AclModifier modifier, const QList<AclRight> &rights);
+
+    void setRights(AclModifier modifier, Acl::Rights rights);
     void setIdentifier( const QByteArray &identifier );
     QByteArray identifier();
 

@@ -24,6 +24,7 @@
 
 #include <ktcpsocket.h>
 
+#include <QtCore/QObject>
 #include <QtCore/QQueue>
 #include <QtCore/QString>
 
@@ -36,8 +37,10 @@ class Message;
 class SessionThread;
 class SessionUiProxy;
 
-class SessionPrivate
+class SessionPrivate : public QObject
 {
+  Q_OBJECT
+
   friend class Session;
 
   public:
@@ -51,6 +54,9 @@ class SessionPrivate
     QString selectedMailBox() const;
 
     void handleSslError( const KSslErrorUiData &errorData );
+
+  Q_SIGNALS:
+    void encryptionNegotiationResult(bool);
 
   private:
     void reconnect();

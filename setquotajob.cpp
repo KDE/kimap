@@ -34,7 +34,7 @@ namespace KIMAP
       SetQuotaJobPrivate( Session *session, const QString& name ) : QuotaJobBasePrivate(session, name) { }
       ~SetQuotaJobPrivate() { }
 
-      QMap<QByteArray, qint32> setList;
+      QMap<QByteArray, qint64> setList;
       QByteArray root;
   };
 }
@@ -55,7 +55,7 @@ void SetQuotaJob::doStart()
   Q_D(SetQuotaJob);
   QByteArray s;
   s += '(';
-  for (QMap<QByteArray, qint32>::ConstIterator it = d->setList.constBegin(); it != d->setList.constEnd(); ++it ) {
+  for (QMap<QByteArray, qint64>::ConstIterator it = d->setList.constBegin(); it != d->setList.constEnd(); ++it ) {
     s += it.key() + ' ' + QByteArray::number(it.value()) + ' ';
   }
   if (d->setList.isEmpty()) {
@@ -68,7 +68,7 @@ void SetQuotaJob::doStart()
   d->tag = d->sessionInternal()->sendCommand( "SETQUOTA", '\"' + d->root + "\" " + s);
 }
 
-void SetQuotaJob::doHandleResponse(const Message &response)
+void SetQuotaJob::handleResponse(const Message &response)
 {
   Q_D(SetQuotaJob);
   if (handleErrorReplies(response) == NotHandled) {
@@ -80,7 +80,7 @@ void SetQuotaJob::doHandleResponse(const Message &response)
 }
 
 
-void SetQuotaJob::setQuota(const QByteArray &resource, qint32 limit)
+void SetQuotaJob::setQuota(const QByteArray &resource, qint64 limit)
 {
   Q_D(SetQuotaJob);
 

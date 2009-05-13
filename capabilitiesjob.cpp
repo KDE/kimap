@@ -60,7 +60,7 @@ void CapabilitiesJob::doStart()
   d->tag = d->sessionInternal()->sendCommand( "CAPABILITY" );
 }
 
-void CapabilitiesJob::doHandleResponse( const Message &response )
+void CapabilitiesJob::handleResponse( const Message &response )
 {
 
   Q_D(CapabilitiesJob);

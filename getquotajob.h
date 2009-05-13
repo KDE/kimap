@@ -36,7 +36,7 @@ class KIMAP_EXPORT GetQuotaJob : public QuotaJobBase
   friend class SessionPrivate;
 
   public:
-    GetQuotaJob( Session *session );
+    explicit GetQuotaJob( Session *session );
     virtual ~GetQuotaJob();
 
     void setRoot(const QByteArray &root);
@@ -44,7 +44,7 @@ class KIMAP_EXPORT GetQuotaJob : public QuotaJobBase
 
   protected:
     virtual void doStart();
-    virtual void doHandleResponse(const Message &response);
+    virtual void handleResponse(const Message &response);
 
 };
 

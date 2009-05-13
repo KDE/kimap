@@ -33,9 +33,9 @@ namespace KIMAP
       {}
 
       ~QuotaJobBasePrivate() { }
-      QMap<QByteArray, QPair<qint32, qint32> > readQuota( const Message::Part &content );
+      QMap<QByteArray, QPair<qint64, qint64> > readQuota( const Message::Part &content );
 
-      QMap<QByteArray, QPair<qint32, qint32> > quota;
+      QMap<QByteArray, QPair<qint64, qint64> > quota;
   };
 }
 

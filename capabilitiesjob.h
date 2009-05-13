@@ -48,7 +48,7 @@ class KIMAP_EXPORT CapabilitiesJob : public Job
 
   protected:
     virtual void doStart();
-    virtual void doHandleResponse( const Message &response );
+    virtual void handleResponse( const Message &response );
 };
 
 }

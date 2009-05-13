@@ -45,9 +45,8 @@ Session::Session( const QString &hostName, quint16 port, QObject *parent)
   d->jobRunning = false;
 
   d->thread = new SessionThread(hostName, port, this);
-  connect(d->thread, SIGNAL(encryptionNegotiationResult(bool)), this, SIGNAL(encryptionNegotiationResult(bool)));
+  connect(d->thread, SIGNAL(encryptionNegotiationResult(bool)), d, SIGNAL(encryptionNegotiationResult(bool)));
   connect(d->thread, SIGNAL(sslError(const KSslErrorUiData&)), this, SLOT(handleSslError(const KSslErrorUiData&)));
-  connect(this, SIGNAL(sslErrorHandlerResponse(bool)), d->thread, SLOT(sslErrorHandlerResponse(bool)));
 
   d->thread->start();
 }
@@ -77,12 +76,13 @@ Session::State Session::state() const
   return d->state;
 }
 
-void SessionPrivate::handleSslError(const KSslErrorUiData& errorData) {
+void SessionPrivate::handleSslError(const KSslErrorUiData& errorData)
+{
   if (uiProxy && uiProxy->ignoreSslError(errorData)) {
-     emit q->sslErrorHandlerResponse(true);
-   } else {
-     emit q->sslErrorHandlerResponse(false);
-   }
+    QMetaObject::invokeMethod( thread, "sslErrorHandlerResponse", Q_ARG(bool, true) );
+  } else {
+    QMetaObject::invokeMethod( thread, "sslErrorHandlerResponse", Q_ARG(bool, false) );
+  }
 }
 
 SessionPrivate::SessionPrivate( Session *session )
@@ -190,7 +190,7 @@ void SessionPrivate::responseReceived( const Message &response )
 
   // If a job is running forward it the response
   if ( currentJob!=0 ) {
-    currentJob->doHandleResponse( response );
+    currentJob->handleResponse( response );
   } else {
     qWarning() << "A message was received from the server with no job to handle it";
   }
@@ -261,3 +261,4 @@ QString SessionPrivate::selectedMailBox() const
 }
 
 #include "session.moc"
+#include "session_p.moc"

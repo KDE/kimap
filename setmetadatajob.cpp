@@ -32,13 +32,13 @@ namespace KIMAP
   class SetMetaDataJobPrivate : public MetaDataJobBasePrivate
   {
     public:
-      SetMetaDataJobPrivate( Session *session, const QString& name ) : MetaDataJobBasePrivate(session, name), metaDataError(0), maxAcceptedSize(-1) { }
+      SetMetaDataJobPrivate( Session *session, const QString& name ) : MetaDataJobBasePrivate(session, name), metaDataErrors(0), maxAcceptedSize(-1) { }
       ~SetMetaDataJobPrivate() { }
 
       QMap<QByteArray, QByteArray> entries;
       QMap<QByteArray, QByteArray>::ConstIterator entriesIt;
       QByteArray entryName;
-      int metaDataError;
+      SetMetaDataJob::MetaDataErrors metaDataErrors;
       qint64 maxAcceptedSize;
   };
 }
@@ -89,7 +89,7 @@ void SetMetaDataJob::doStart()
 //   kDebug() << "SENT: " << command << " " << parameters;
 }
 
-void SetMetaDataJob::doHandleResponse( const Message &response )
+void SetMetaDataJob::handleResponse( const Message &response )
 {
   Q_D(SetMetaDataJob);
 
@@ -100,9 +100,9 @@ void SetMetaDataJob::doHandleResponse( const Message &response )
       setError( UserDefinedError );
       setErrorText( i18n("%1 failed, server replied: %2", d->m_name, response.toString().constData()) );
       if (response.content[2].toString() == "[ANNOTATEMORE TOOMANY]" || response.content[2].toString() == "[METADATA TOOMANY]") {
-        d->metaDataError |= TooMany;
+        d->metaDataErrors |= TooMany;
       } else if (response.content[2].toString() == "[ANNOTATEMORE TOOBIG]" || response.content[2].toString().startsWith("[METADATA MAXSIZE")) {
-        d->metaDataError |= TooBig;
+        d->metaDataErrors |= TooBig;
         d->maxAcceptedSize = -1;
         if (response.content[2].toString().startsWith("[METADATA MAXSIZE")) {
           QByteArray max = response.content[2].toString();
@@ -111,7 +111,7 @@ void SetMetaDataJob::doHandleResponse( const Message &response )
           d->maxAcceptedSize = max.toLongLong();
         }
       } else if (response.content[2].toString() == "[METADATA NOPRIVATE]") {
-        d->metaDataError |= NoPrivate;
+        d->metaDataErrors |= NoPrivate;
       }
     } else if ( response.content.size() < 2 ) {
       setErrorText( i18n("%1 failed, malformed reply from the server.", d->m_name) );
@@ -145,10 +145,10 @@ void SetMetaDataJob::setEntry(const QByteArray &entry)
   d->entryName = entry;
 }
 
-int SetMetaDataJob::metaDataError() const
+SetMetaDataJob::MetaDataErrors SetMetaDataJob::metaDataErrors() const
 {
   Q_D(const SetMetaDataJob);
-  return d->metaDataError;
+  return d->metaDataErrors;
 }
 
 #include "setmetadatajob.moc"

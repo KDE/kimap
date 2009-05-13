@@ -42,7 +42,7 @@ void testSingleSelect_data() {
   QTest::addColumn<int>( "recentcount" );
   QTest::addColumn<int>( "firstUnseenIndex" );
   QTest::addColumn<qint64>( "uidValidity" );
-  QTest::addColumn<int>( "nextUid" );
+  QTest::addColumn<qint64>( "nextUid" );
 
   QStringList response;
   QList<QByteArray> flags;
@@ -50,19 +50,19 @@ void testSingleSelect_data() {
   response << "* 172 EXISTS" << "* 1 RECENT" << "* OK [UNSEEN 12] Message 12 is first unseen" << "* OK [UIDVALIDITY 3857529045] UIDs valid" << "* OK [UIDNEXT 4392] Predicted next UID" << "* FLAGS (\\Answered \\Flagged \\Deleted \\Seen \\Draft)" << "* OK [PERMANENTFLAGS (\\Deleted \\Seen \\*)] Limited" << "A000002 OK [READ-WRITE] SELECT completed";
   flags << "\\Answered" << "\\Flagged" << "\\Deleted" << "\\Seen" << "\\Draft";
   permanentflags << "\\Deleted" << "\\Seen" << "\\*";
-  QTest::newRow( "good" ) << response << flags << permanentflags << 172 << 1 << 12 << (qint64)3857529045 << 4392;
+  QTest::newRow( "good" ) << response << flags << permanentflags << 172 << 1 << 12 << (qint64)3857529045 << (qint64)4392;
 
   response.clear();
   flags.clear();
   permanentflags.clear();
   response << "A000002 BAD command unknown or arguments invalid";
-  QTest::newRow( "bad" ) << response << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << 0;
+  QTest::newRow( "bad" ) << response << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << (qint64)0;
 
   response.clear();
   flags.clear();
   permanentflags.clear();
   response << "A000002 NO select failure";
-  QTest::newRow( "no" ) << response << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << 0;
+  QTest::newRow( "no" ) << response << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << (qint64)0;
 }
 
 void testSingleSelect()
@@ -84,7 +84,7 @@ void testSingleSelect()
     QFETCH( int, recentcount);
     QFETCH( int, firstUnseenIndex);
     QFETCH( qint64, uidValidity);
-    QFETCH( int, nextUid);
+    QFETCH( qint64, nextUid);
 
     fakeServer.setResponse( response );
 

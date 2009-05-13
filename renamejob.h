@@ -27,7 +27,6 @@
 namespace KIMAP {
 
 class Session;
-class Message;
 class RenameJobPrivate;
 
 class KIMAP_EXPORT RenameJob : public Job
@@ -38,22 +37,22 @@ class KIMAP_EXPORT RenameJob : public Job
   friend class SessionPrivate;
 
   public:
-    RenameJob( Session *session );
+    explicit RenameJob( Session *session );
     virtual ~RenameJob();
 
     /**
      * Set the name of the mailbox that will be renamed.
      * @param mailBox the original name of the mailbox
      */
-    void setMailBox( const QString &mailBox );
-    QString mailBox() const;
+    void setSourceMailBox( const QString &mailBox );
+    QString sourceMailBox() const;
 
     /**
      * The new name of the mailbox, see setMailBox.
      * @param mailBox the new mailbox name
      */
-    void setNewMailBox( const QString &mailBox );
-    QString newMailBox() const;
+    void setDestinationMailBox( const QString &mailBox );
+    QString destinationMailBox() const;
 
   protected:
     virtual void doStart();
