@@ -64,12 +64,15 @@ class KIMAP_EXPORT ListJob : public Job
     QHash< MailBoxDescriptor, QList<QByteArray> > flags() const;
 
   Q_SIGNALS:
-    void mailBoxReceived( const KIMAP::MailBoxDescriptor &descriptor,
-                          const QList<QByteArray> &flags );
+    void mailBoxesReceived( const QList<KIMAP::MailBoxDescriptor> &descriptors,
+                            const QList< QList<QByteArray> > &flags );
 
   protected:
     virtual void doStart();
     virtual void handleResponse(const Message &response);
+
+  private:
+    Q_PRIVATE_SLOT( d_func(), void emitPendings() );
 };
 
 }

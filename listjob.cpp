@@ -19,6 +19,7 @@
 
 #include "listjob.h"
 
+#include <QtCore/QTimer>
 #include <KDE/KLocale>
 
 #include "job_p.h"
@@ -31,21 +32,42 @@ namespace KIMAP
   class ListJobPrivate : public JobPrivate
   {
     public:
-      ListJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name), includeUnsubscribed(false) { }
+      ListJobPrivate( ListJob *job, Session *session, const QString& name ) : JobPrivate(session, name), q(job), includeUnsubscribed(false) { }
       ~ListJobPrivate() { }
+
+      void emitPendings()
+      {
+        if ( pendingDescriptors.isEmpty() ) {
+          return;
+        }
+
+        emit q->mailBoxesReceived( pendingDescriptors, pendingFlags );
+
+        pendingDescriptors.clear();
+        pendingFlags.clear();
+      }
+
+      ListJob * const q;
 
       bool includeUnsubscribed;
       QByteArray command;
       QList<MailBoxDescriptor> descriptors;
       QMap< MailBoxDescriptor, QList<QByteArray> > flags;
+
+      QTimer emitPendingsTimer;
+      QList<MailBoxDescriptor> pendingDescriptors;
+      QList< QList<QByteArray> > pendingFlags;
   };
 }
 
 using namespace KIMAP;
 
 ListJob::ListJob( Session *session )
-  : Job( *new ListJobPrivate(session, i18n("List")) )
+  : Job( *new ListJobPrivate(this, session, i18n("List")) )
 {
+  Q_D(ListJob);
+  connect( &d->emitPendingsTimer, SIGNAL( timeout() ),
+           this, SLOT( emitPendings() ) );
 }
 
 ListJob::~ListJob()
@@ -79,6 +101,7 @@ void ListJob::doStart()
     d->command = "LIST";
   }
 
+  d->emitPendingsTimer.start( 100 );
   d->tag = d->sessionInternal()->sendCommand( d->command, "\"\" *" );
 }
 
@@ -106,8 +129,13 @@ void ListJob::handleResponse( const Message &response )
 
       d->descriptors << mailBoxDescriptor;
       d->flags[mailBoxDescriptor] = flags;
-      emit mailBoxReceived( mailBoxDescriptor, flags );
+
+      d->pendingDescriptors << mailBoxDescriptor;
+      d->pendingFlags << flags;
     }
+  } else {
+    d->emitPendingsTimer.stop();
+    d->emitPendings();
   }
 }
 
