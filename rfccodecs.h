@@ -45,12 +45,14 @@ namespace KIMAP {
     Converts an Unicode IMAP mailbox to a QByteArray which can be used in
     IMAP communication.
     @param src is the QByteArray containing the IMAP mailbox.
+    @since 4.3
   */
   KIMAP_EXPORT QByteArray encodeImapFolderName( const QByteArray &src );
 
   /**
     Converts an UTF-7 encoded IMAP mailbox to a QByteArray
     @param inSrc is the QByteArray containing the Unicode path.
+    @since 4.3
   */
   KIMAP_EXPORT QByteArray decodeImapFolderName( const QByteArray &inSrc );
   /**
@@ -75,6 +77,7 @@ namespace KIMAP {
   /**
     Replaces " with \" and \ with \\ " and \ characters.
     @param src is the QString to quote.
+    @since 4.3
   */
   KIMAP_EXPORT QByteArray quoteIMAP( const QByteArray &src );
 
