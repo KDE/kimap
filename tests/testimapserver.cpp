@@ -5,7 +5,7 @@
 #include <qapplication.h>
 #include <qsignalspy.h>
 #include <kmessagebox.h>
-#include <kio/ksslcertificatemanager.h>
+#include <kio/sslui.h>
 
 #include "kimap/acl.h"
 #include "kimap/session.h"
@@ -38,7 +38,7 @@ using namespace KIMAP;
 class UiProxy: public SessionUiProxy {
   public:
     bool ignoreSslError(const KSslErrorUiData& errorData) {
-      if (KSslCertificateManager::askIgnoreSslErrors(errorData, KSslCertificateManager::StoreRules)) {
+      if (KIO::SslUi::askIgnoreSslErrors(errorData, KIO::SslUi::StoreRules)) {
         return true;
       } else {
         return false;
