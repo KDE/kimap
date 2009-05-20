@@ -92,6 +92,12 @@ QList<MailBoxDescriptor> ListJob::mailBoxes() const
   return d->descriptors;
 }
 
+QMap< MailBoxDescriptor, QList<QByteArray> > ListJob::flags() const
+{
+  Q_D(const ListJob);
+  return d->flags;
+}
+
 void ListJob::doStart()
 {
   Q_D(ListJob);
