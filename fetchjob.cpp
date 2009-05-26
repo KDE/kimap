@@ -65,15 +65,15 @@ namespace KIMAP
         }
 
         if ( !pendingParts.isEmpty() ) {
-          emit q->partsReceived( sessionInternal()->selectedMailBox(),
+          emit q->partsReceived( selectedMailBox,
                                  pendingUids, pendingParts );
 
         } else if ( !pendingSizes.isEmpty() || !pendingFlags.isEmpty() ) {
-          emit q->headersReceived( sessionInternal()->selectedMailBox(),
+          emit q->headersReceived( selectedMailBox,
                                    pendingUids, pendingSizes,
                                    pendingFlags, pendingMessages );
         } else {
-          emit q->messagesReceived( sessionInternal()->selectedMailBox(),
+          emit q->messagesReceived( selectedMailBox,
                                     pendingUids, pendingMessages );
         }
 
@@ -89,6 +89,7 @@ namespace KIMAP
       ImapSet set;
       bool uidBased;
       FetchJob::FetchScope scope;
+      QString selectedMailBox;
 
       QMap<qint64, MessagePtr> messages;
       QMap<qint64, MessageParts> parts;
@@ -229,6 +230,7 @@ void FetchJob::doStart()
   }
 
   d->emitPendingsTimer.start( 100 );
+  d->selectedMailBox = d->sessionInternal()->selectedMailBox();
   d->tag = d->sessionInternal()->sendCommand( command, parameters );
 }
 
