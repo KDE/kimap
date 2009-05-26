@@ -46,6 +46,8 @@ class KIMAP_EXPORT GetAclJob : public AclJobBase
     bool hasRightEnabled(const QByteArray &identifier, Acl::Right right) const;
     Acl::Rights rights(const QByteArray &identifier) const;
 
+    QMap<QByteArray, Acl::Rights> allRights() const;
+
   protected:
     virtual void doStart();
     virtual void handleResponse(const Message &response);
