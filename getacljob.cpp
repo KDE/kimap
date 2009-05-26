@@ -42,7 +42,7 @@ namespace KIMAP
 using namespace KIMAP;
 
 GetAclJob::GetAclJob( Session *session )
-  : AclJobBase(  *new GetAclJobPrivate(session, i18n("MyRights")  ))
+  : AclJobBase(  *new GetAclJobPrivate(session, i18n("GetAcl")  ))
 {
 }
 
@@ -76,9 +76,15 @@ void GetAclJob::handleResponse( const Message &response )
   }
 }
 
-bool GetAclJob::hasRightEnabled(const QByteArray &identifier, Acl::Right right)
+QList<QByteArray> GetAclJob::identifiers() const
 {
-  Q_D(GetAclJob);
+  Q_D(const GetAclJob);
+  return d->userRights.keys();
+}
+
+bool GetAclJob::hasRightEnabled(const QByteArray &identifier, Acl::Right right) const
+{
+  Q_D(const GetAclJob);
   if (d->userRights.contains(identifier))
   {
     Acl::Rights rights = d->userRights[identifier];
@@ -88,9 +94,9 @@ bool GetAclJob::hasRightEnabled(const QByteArray &identifier, Acl::Right right)
   return false;
 }
 
-Acl::Rights GetAclJob::rights(const QByteArray &identifier)
+Acl::Rights GetAclJob::rights(const QByteArray &identifier) const
 {
-  Q_D(GetAclJob);
+  Q_D(const GetAclJob);
   Acl::Rights result;
   if (d->userRights.contains(identifier))
   {

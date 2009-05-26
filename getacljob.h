@@ -42,8 +42,9 @@ class KIMAP_EXPORT GetAclJob : public AclJobBase
     explicit GetAclJob( Session *session );
     virtual ~GetAclJob();
 
-    bool hasRightEnabled(const QByteArray &identifier, Acl::Right right);
-    Acl::Rights rights(const QByteArray &identifier);
+    QList<QByteArray> identifiers() const;
+    bool hasRightEnabled(const QByteArray &identifier, Acl::Right right) const;
+    Acl::Rights rights(const QByteArray &identifier) const;
 
   protected:
     virtual void doStart();
