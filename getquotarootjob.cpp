@@ -45,7 +45,7 @@ namespace KIMAP
 using namespace KIMAP;
 
 GetQuotaRootJob::GetQuotaRootJob( Session *session )
-  : QuotaJobBase( *new QuotaJobBasePrivate(session, i18n("GetQuotaRoot")) )
+  : QuotaJobBase( *new GetQuotaRootJobPrivate(session, i18n("GetQuotaRoot")) )
 {
 }
 
@@ -105,9 +105,9 @@ QList<QByteArray> GetQuotaRootJob::roots() const
   return d->rootList;
 }
 
-qint64 GetQuotaRootJob::usage(const QByteArray& root, const QByteArray& resource)
+qint64 GetQuotaRootJob::usage(const QByteArray &root, const QByteArray &resource) const
 {
-  Q_D(GetQuotaRootJob);
+  Q_D(const GetQuotaRootJob);
 
   QByteArray r = resource.toUpper();
 
@@ -118,9 +118,9 @@ qint64 GetQuotaRootJob::usage(const QByteArray& root, const QByteArray& resource
   return -1;
 }
 
-qint64 GetQuotaRootJob::limit(const QByteArray& root, const QByteArray& resource)
+qint64 GetQuotaRootJob::limit(const QByteArray &root, const QByteArray &resource) const
 {
-  Q_D(GetQuotaRootJob);
+  Q_D(const GetQuotaRootJob);
 
   QByteArray r = resource.toUpper();
 
@@ -131,5 +131,36 @@ qint64 GetQuotaRootJob::limit(const QByteArray& root, const QByteArray& resource
   return -1;
 }
 
+QMap<QByteArray, qint64> GetQuotaRootJob::allUsages(const QByteArray &root) const
+{
+  Q_D(const GetQuotaRootJob);
+
+  QMap<QByteArray, qint64> result;
+
+  if (d->quotas.contains(root)) {
+    QMap< QByteArray, QPair<qint64, qint64> > quota = d->quotas[root];
+    foreach (const QByteArray &resource, quota.keys()) {
+      result[resource] = quota[resource].first;
+    }
+  }
+
+  return result;
+}
+
+QMap<QByteArray, qint64> GetQuotaRootJob::allLimits(const QByteArray &root) const
+{
+  Q_D(const GetQuotaRootJob);
+
+  QMap<QByteArray, qint64> result;
+
+  if (d->quotas.contains(root)) {
+    QMap< QByteArray, QPair<qint64, qint64> > quota = d->quotas[root];
+    foreach (const QByteArray &resource, quota.keys()) {
+      result[resource] = quota[resource].second;
+    }
+  }
+
+  return result;
+}
 
 #include "getquotarootjob.moc"
