@@ -28,7 +28,7 @@
 namespace KIMAP {
 
 class Session;
-class Message;
+struct Message;
 class AclJobBasePrivate;
 
 /** @short Base class of Acl related jobs. It cannot be used directly, you must subclass it and reimplement at least the

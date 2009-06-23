@@ -27,7 +27,7 @@
 namespace KIMAP {
 
 class Session;
-class Message;
+struct Message;
 class ListJobPrivate;
 
 struct KIMAP_EXPORT MailBoxDescriptor

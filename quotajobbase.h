@@ -27,7 +27,7 @@
 namespace KIMAP {
 
 class Session;
-class Message;
+struct Message;
 class QuotaJobBasePrivate;
 
 /** @short Base class of Quota related jobs. It cannot be used directly, you must subclass it and reimplement at least the

@@ -33,7 +33,7 @@
 namespace KIMAP {
 
 class Session;
-class Message;
+struct Message;
 class FetchJobPrivate;
 
 typedef boost::shared_ptr<KMime::Content> ContentPtr;

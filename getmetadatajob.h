@@ -27,7 +27,7 @@
 namespace KIMAP {
 
 class Session;
-class Message;
+struct Message;
 class GetMetaDataJobPrivate;
 
 class KIMAP_EXPORT GetMetaDataJob : public MetaDataJobBase

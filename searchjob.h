@@ -29,7 +29,7 @@ class QDate;
 namespace KIMAP {
 
 class Session;
-class Message;
+struct Message;
 class SearchJobPrivate;
 
 class KIMAP_EXPORT SearchJob : public Job

@@ -31,7 +31,7 @@ typedef KTcpSocket SessionSocket;
 namespace KIMAP {
 
 class ImapStreamParser;
-class Message;
+struct Message;
 class Session;
 
 class SessionThread : public QThread

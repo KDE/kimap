@@ -33,7 +33,7 @@ class KJob;
 namespace KIMAP {
 
 class Job;
-class Message;
+struct Message;
 class SessionThread;
 class SessionUiProxy;
 
