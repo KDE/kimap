@@ -47,7 +47,8 @@ SessionThread::SessionThread( const QString &hostName, quint16 port, Session *pa
 
 SessionThread::~SessionThread()
 {
-  quit();
+  // don't call quit() directly, this will deadlock in wait() if exec() hasn't run yet
+  QMetaObject::invokeMethod( this, "quit" );
   wait();
 }
 
