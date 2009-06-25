@@ -31,7 +31,7 @@ namespace KIMAP {
 class SessionUiProxy;
 class SessionPrivate;
 class JobPrivate;
-class Message;
+struct Message;
 
 class KIMAP_EXPORT Session : public QObject
 {

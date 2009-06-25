@@ -28,7 +28,7 @@
 namespace KIMAP {
 
 class Session;
-class Message;
+struct Message;
 class StoreJobPrivate;
 
 typedef QList<QByteArray> MessageFlags;

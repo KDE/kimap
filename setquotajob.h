@@ -25,7 +25,7 @@
 namespace KIMAP {
 
 class Session;
-class Message;
+struct Message;
 class SetQuotaJobPrivate;
 
 class KIMAP_EXPORT SetQuotaJob : public QuotaJobBase

@@ -27,7 +27,7 @@
 namespace KIMAP {
 
 class Session;
-class Message;
+struct Message;
 class MetaDataJobBasePrivate;
 
 /** @short Base class of Metadata/Annotatemore related jobs. It cannot be used directly, you must subclass it and reimplement at least the

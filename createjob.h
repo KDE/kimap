@@ -27,7 +27,7 @@
 namespace KIMAP {
 
 class Session;
-class Message;
+struct Message;
 class CreateJobPrivate;
 
 class KIMAP_EXPORT CreateJob : public Job
