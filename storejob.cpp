@@ -19,6 +19,7 @@
 
 #include "storejob.h"
 
+#include <KDE/KDebug>
 #include <KDE/KLocale>
 
 #include "job_p.h"
@@ -154,6 +155,10 @@ void StoreJob::handleResponse( const Message &response )
       && response.content[3].type()==Message::Part::List ) {
 
       int id = response.content[1].toString().toInt();
+      qint64 uid = 0;
+      bool uidFound = false;
+      QList<QByteArray> resultingFlags;
+
       QList<QByteArray> content = response.content[3].toList();
 
       for ( QList<QByteArray>::ConstIterator it = content.constBegin();
@@ -166,11 +171,21 @@ void StoreJob::handleResponse( const Message &response )
             QByteArray str = *it;
             str.chop(1);
             str.remove(0, 1);
-            d->resultingFlags[id] = str.split(' ');
+            resultingFlags = str.split(' ');
           } else {
-            d->resultingFlags[id] << *it;
+            resultingFlags << *it;
           }
+        } else if ( str=="UID" ) {
+          uid = it->toLongLong(&uidFound);
         }
+      }
+
+      if ( !d->uidBased ) {
+        d->resultingFlags[id] = resultingFlags;
+      } else if ( uidFound ) {
+        d->resultingFlags[uid] = resultingFlags;
+      } else {
+        kWarning() << "We asked for UID but the server didn't give it back, resultingFlags not stored.";
       }
     }
   }
