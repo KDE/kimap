@@ -38,6 +38,7 @@ ADD_IMAPLIB_TEST(renamejobtest.cpp)
 ADD_IMAPLIB_TEST(subscribejobtest.cpp)
 ADD_IMAPLIB_TEST(unsubscribejobtest.cpp)
 ADD_IMAPLIB_TEST(listjobtest.cpp)
+ADD_IMAPLIB_TEST(storejobtest.cpp)
 
 
 ########### automated tests ###############
