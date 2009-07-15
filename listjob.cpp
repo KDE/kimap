@@ -115,6 +115,14 @@ void ListJob::handleResponse( const Message &response )
 {
   Q_D(ListJob);
 
+  // We can predict it'll be handled by handleErrorReplies() so stop
+  // the timer now so that result() will really be the last emitted signal.
+  if ( !response.content.isEmpty()
+       && response.content.first().toString() == d->tag ) {
+    d->emitPendingsTimer.stop();
+    d->emitPendings();
+  }
+
   if (handleErrorReplies(response) == NotHandled) {
     if ( response.content.size() >= 5
            && response.content[1].toString()==d->command ) {
@@ -139,9 +147,6 @@ void ListJob::handleResponse( const Message &response )
       d->pendingDescriptors << mailBoxDescriptor;
       d->pendingFlags << flags;
     }
-  } else {
-    d->emitPendingsTimer.stop();
-    d->emitPendings();
   }
 }
 
