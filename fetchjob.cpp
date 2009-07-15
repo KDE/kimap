@@ -238,6 +238,14 @@ void FetchJob::handleResponse( const Message &response )
 {
   Q_D(FetchJob);
 
+  // We can predict it'll be handled by handleErrorReplies() so stop
+  // the timer now so that result() will really be the last emitted signal.
+  if ( !response.content.isEmpty()
+       && response.content.first().toString() == d->tag ) {
+    d->emitPendingsTimer.stop();
+    d->emitPendings();
+  }
+
   if (handleErrorReplies(response) == NotHandled ) {
     if ( response.content.size() == 4
            && response.content[2].toString()=="FETCH"
@@ -312,9 +320,6 @@ void FetchJob::handleResponse( const Message &response )
         d->pendingMessages[id] = d->message(id);
       }
     }
-  } else {
-    d->emitPendingsTimer.stop();
-    d->emitPendings();
   }
 }
 
