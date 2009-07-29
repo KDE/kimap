@@ -51,5 +51,6 @@ KIMAP_UNIT_TESTS(
 ###########   manual tests  ###############
 
 KIMAP_EXECUTABLE_TESTS(
+  testimapidle
   testimapserver
 )
