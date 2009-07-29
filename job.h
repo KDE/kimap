@@ -41,6 +41,8 @@ class KIMAP_EXPORT Job : public KJob
   public:
     virtual ~Job();
 
+    Session *session() const;
+
     virtual void start();
 
   private:
