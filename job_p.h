@@ -39,6 +39,10 @@ class JobPrivate
       return m_session->d;
     }
 
+    inline const SessionPrivate *sessionInternal() const {
+      return m_session->d;
+    }
+
     QByteArray tag;
     Session *m_session;
     QString m_name;

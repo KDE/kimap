@@ -44,6 +44,12 @@ Job::~Job()
   delete d_ptr;
 }
 
+Session *Job::session() const
+{
+  Q_D(const Job);
+  return d->m_session;
+}
+
 void Job::start()
 {
   Q_D(Job);
