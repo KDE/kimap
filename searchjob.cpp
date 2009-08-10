@@ -105,7 +105,7 @@ namespace KIMAP
 using namespace KIMAP;
 
 SearchJob::SearchJob( Session *session )
-  : Job( *new SearchJobPrivate(session, i18n("Search")) )
+  : Job( *new SearchJobPrivate(session, i18nc("Name of the search job", "Search")) )
 {
 }
 
@@ -128,8 +128,8 @@ void SearchJob::doStart()
   } else if (d->logic == SearchJob::Or) {
     searchKey += "OR";
   }
-  Q_FOREACH(QByteArray key, d->criterias) {
-    searchKey += " (" + key + ")";
+  Q_FOREACH(const QByteArray &key, d->criterias) {
+    searchKey += " (" + key + ')';
   }
 
   QByteArray command = "SEARCH";
@@ -210,7 +210,7 @@ void SearchJob::addSearchCriteria( SearchCriteria criteria, int argument )
   switch (criteria) {
     case Larger:
     case Smaller:
-      d->criterias.append(d->criteriaMap[criteria] + " " + QByteArray::number(argument));
+      d->criterias.append(d->criteriaMap[criteria] + ' ' + QByteArray::number(argument));
       break;
     default:
       //TODO Discuss if we keep error checking here, or accept anything, even if it is wrong

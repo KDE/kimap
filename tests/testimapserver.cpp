@@ -97,8 +97,9 @@ void listFolders(Session *session, bool includeUnsubscribed = false, const QStri
   int count = list->mailBoxes().size();
   for (int i=0; i<count; ++i) {
     MailBoxDescriptor descriptor = list->mailBoxes()[i];
-    if (descriptor.name.endsWith(nameFilter))
+    if (descriptor.name.endsWith(nameFilter)) {
       kDebug() << descriptor.separator << descriptor.name;
+    }
   }
 
 }
@@ -274,7 +275,9 @@ void testAppendAndStore(Session *session)
 
   QList<QByteArray> resultingFlags = store->resultingFlags()[1];
   qSort(resultingFlags);
-  if (expectedFlags!=resultingFlags) kDebug() << resultingFlags;
+  if (expectedFlags!=resultingFlags) {
+    kDebug() << resultingFlags;
+  }
   Q_ASSERT(expectedFlags==resultingFlags);
 
 

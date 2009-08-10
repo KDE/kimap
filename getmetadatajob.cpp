@@ -66,8 +66,8 @@ void GetMetaDataJob::doStart()
     d->m_name = i18n("GetAnnotation");
     command = "GETANNOTATION";
     if (d->entries.size() > 1)
-      parameters += "(";
-    Q_FOREACH(QByteArray entry, d->entries) {
+      parameters += '(';
+    Q_FOREACH(const QByteArray &entry, d->entries) {
       parameters += '\"' + entry + "\" ";
     }
     if (d->entries.size() > 1)
@@ -78,8 +78,8 @@ void GetMetaDataJob::doStart()
     parameters += ' ';
 
     if (d->attributes.size() > 1)
-      parameters += "(";
-    Q_FOREACH(QByteArray attribute, d->attributes) {
+      parameters += '(';
+    Q_FOREACH(const QByteArray &attribute, d->attributes) {
       parameters += '\"' + attribute + "\" ";
     }
     if (d->attributes.size() > 1)
@@ -99,8 +99,8 @@ void GetMetaDataJob::doStart()
     }
 
     if (d->entries.size() > 1)
-      parameters += "(";
-    Q_FOREACH(QByteArray entry, d->entries) {
+      parameters += '(';
+    Q_FOREACH(const QByteArray &entry, d->entries) {
       parameters += '\"' + entry + "\" ";
     }
     if (d->entries.size() > 1)
@@ -175,13 +175,13 @@ void GetMetaDataJob::setDepth(Depth depth)
   switch (depth)
   {
     case OneLevel:
-      d->depth = "1";
+      d->depth = "1"; //krazy:exclude=doublequote_chars
       break;
     case AllLevels:
       d->depth = "infinity";
       break;
     default:
-      d->depth = "0";
+      d->depth = "0"; //krazy:exclude=doublequote_chars
   }
 }
 

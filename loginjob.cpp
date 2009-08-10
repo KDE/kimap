@@ -241,8 +241,8 @@ void LoginJob::handleResponse( const Message &response )
         }
 
         //find the selected SASL authentication method
-        Q_FOREACH(QString capability, d->capabilities) {
-          if (capability.startsWith("AUTH=")) {
+        Q_FOREACH(const QString &capability, d->capabilities) {
+          if (capability.startsWith(QLatin1String("AUTH="))) {
             QString authType = capability.mid(5);
             if (authType == d->authMode) {
                 if (!d->startAuthentication()) {

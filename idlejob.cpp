@@ -50,7 +50,7 @@ namespace KIMAP
 using namespace KIMAP;
 
 IdleJob::IdleJob( Session *session )
-  : Job( *new IdleJobPrivate(this, session, i18n("Idle")) )
+  : Job( *new IdleJobPrivate(this, session, i18nc("name of the idle job", "Idle")) )
 {
 }
 

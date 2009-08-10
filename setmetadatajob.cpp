@@ -73,7 +73,7 @@ void SetMetaDataJob::doStart()
       parameters[parameters.length() - 1] = ')';
     }
   } else {
-    parameters += "(";
+    parameters += '(';
     if (!d->entries.isEmpty()) {
       parameters += '\"' + d->entriesIt.key() + '\"';
       parameters += ' ';
@@ -104,10 +104,10 @@ void SetMetaDataJob::handleResponse( const Message &response )
       } else if (response.content[2].toString() == "[ANNOTATEMORE TOOBIG]" || response.content[2].toString().startsWith("[METADATA MAXSIZE")) {
         d->metaDataErrors |= TooBig;
         d->maxAcceptedSize = -1;
-        if (response.content[2].toString().startsWith("[METADATA MAXSIZE")) {
+        if (response.content[2].toString().startsWith("[METADATA MAXSIZE")) { //krazy:exclude=strings
           QByteArray max = response.content[2].toString();
-          max.replace("[METADATA MAXSIZE", "");
-          max.replace("]","");
+          max.replace("[METADATA MAXSIZE",""); //krazy:exclude=doublequote_chars
+          max.replace("]", "");                //krazy:exclude=doublequote_chars
           d->maxAcceptedSize = max.toLongLong();
         }
       } else if (response.content[2].toString() == "[METADATA NOPRIVATE]") {

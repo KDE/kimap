@@ -67,7 +67,7 @@ class KIMAP_EXPORT SetMetaDataJob : public MetaDataJobBase
     Q_DECLARE_FLAGS(MetaDataErrors, MetaDataError)
 
     /**
-     * The metadata errors recived from the server.
+     * The metadata errors received from the server.
      * @return OR connected error codes, see MetaDataError
      */
     MetaDataErrors metaDataErrors() const;
