@@ -18,16 +18,14 @@
 */
 
 #include "metadatajobbase.h"
-
-#include <KDE/KLocale>
-#include <KDE/KDebug>
-
 #include "metadatajobbase_p.h"
 #include "message_p.h"
 #include "session_p.h"
 
-using namespace KIMAP;
+#include <KDE/KLocale>
+#include <KDE/KDebug>
 
+using namespace KIMAP;
 
 MetaDataJobBase::MetaDataJobBase( Session *session )
   : Job( *new MetaDataJobBasePrivate(session, i18n("MetaDataJobBase")) )

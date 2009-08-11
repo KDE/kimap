@@ -18,13 +18,12 @@
 */
 
 #include "acljobbase.h"
-
-#include <KDE/KLocale>
-#include <KDE/KDebug>
-
 #include "acljobbase_p.h"
 #include "message_p.h"
 #include "session_p.h"
+
+#include <KDE/KLocale>
+#include <KDE/KDebug>
 
 using namespace KIMAP;
 

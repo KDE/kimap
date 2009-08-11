@@ -198,7 +198,7 @@ void SessionPrivate::responseReceived( const Message &response )
 
 QByteArray SessionPrivate::sendCommand( const QByteArray &command, const QByteArray &args )
 {
-  QByteArray tag = "A" + QByteArray::number(++tagCount).rightJustified(6, '0');
+  QByteArray tag = 'A' + QByteArray::number(++tagCount).rightJustified(6, '0');
 
   QByteArray payload = tag+' '+command;
   if ( !args.isEmpty() ) {

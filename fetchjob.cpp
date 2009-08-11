@@ -278,7 +278,7 @@ void FetchJob::handleResponse( const Message &response )
           int pos = 0;
           d->parseBodyStructure(*it, pos, d->message(id).get());
           d->message(id)->assemble();
-        } else if ( str.startsWith("BODY[") ) {
+        } else if ( str.startsWith( "BODY[") ) { //krazy:exclude=strings
           if ( !str.endsWith(']') ) { // BODY[ ... ] might have been split, skip until we find the ]
             while ( !(*it).endsWith(']') ) ++it;
             ++it;

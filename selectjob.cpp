@@ -52,7 +52,7 @@ namespace KIMAP
 using namespace KIMAP;
 
 SelectJob::SelectJob( Session *session )
-  : Job( *new SelectJobPrivate(session, i18n("Select")) )
+  : Job( *new SelectJobPrivate(session, i18nc("name of the select job", "Select")) )
 {
 }
 
