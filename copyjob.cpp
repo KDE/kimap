@@ -39,6 +39,8 @@ namespace KIMAP
 
       QString mailBox;
       ImapSet set;
+      bool uidBased;
+      ImapSet resultingUids;
   };
 }
 
@@ -47,16 +49,12 @@ using namespace KIMAP;
 CopyJob::CopyJob( Session *session )
   : Job( *new CopyJobPrivate(session, i18n("Copy")) )
 {
+  Q_D(CopyJob);
+  d->uidBased = false;
 }
 
 CopyJob::~CopyJob()
 {
-}
-
-void CopyJob::doStart()
-{
-  Q_D(CopyJob);
-  d->tag = d->sessionInternal()->sendCommand( "COPY", d->set.toImapSequenceSet() + " \"" + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + '\"' );
 }
 
 void CopyJob::setMailBox( const QString &mailBox )
@@ -83,5 +81,56 @@ ImapSet CopyJob::sequenceSet() const
   return d->set;
 }
 
+
+void CopyJob::setUidBased( bool uidBased )
+{
+  Q_D(CopyJob);
+  d->uidBased = uidBased;
+}
+
+bool CopyJob::isUidBased() const
+{
+  Q_D(const CopyJob);
+  return d->uidBased;
+}
+
+ImapSet CopyJob::resultingUids() const
+{
+  Q_D(const CopyJob);
+  return d->resultingUids;
+}
+
+void CopyJob::doStart()
+{
+  Q_D(CopyJob);
+
+  QByteArray parameters = d->set.toImapSequenceSet()+' ';
+  parameters+= '\"'+KIMAP::encodeImapFolderName( d->mailBox.toUtf8() )+'\"';
+
+  QByteArray command = "COPY";
+  if ( d->uidBased ) {
+    command = "UID "+command;
+  }
+
+  d->tag = d->sessionInternal()->sendCommand( command, parameters );
+}
+
+void CopyJob::handleResponse( const Message &response )
+{
+  Q_D(CopyJob);
+
+  for ( QList<Message::Part>::ConstIterator it = response.responseCode.begin();
+        it != response.responseCode.end(); ++it ) {
+    if ( it->toString()=="COPYUID" ) {
+      it = it + 3;
+      if ( it != response.responseCode.end() ) {
+        d->resultingUids = ImapSet::fromImapSequenceSet( it->toString() );
+      }
+      break;
+    }
+  }
+
+  handleErrorReplies( response );
+}
 
 #include "copyjob.moc"

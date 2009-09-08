@@ -48,8 +48,14 @@ class KIMAP_EXPORT CopyJob : public Job
     void setSequenceSet( const ImapSet &set );
     ImapSet sequenceSet() const;
 
+    void setUidBased( bool uidBased );
+    bool isUidBased() const;
+
+    ImapSet resultingUids() const;
+
   protected:
     virtual void doStart();
+    virtual void handleResponse(const Message &response);
 };
 
 }
