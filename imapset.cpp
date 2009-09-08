@@ -147,6 +147,36 @@ QByteArray ImapInterval::toImapSequence() const
   return rv;
 }
 
+ImapInterval ImapInterval::fromImapSequence( const QByteArray &sequence )
+{
+  QList<QByteArray> values = sequence.split( ':' );
+  if ( values.isEmpty() || values.size() > 2 ) {
+    return ImapInterval();
+  }
+
+  bool ok = false;
+  Id begin = values[0].toLongLong(&ok);
+
+  if ( !ok ) {
+    return ImapInterval();
+  }
+
+  Id end;
+
+  if ( values.size() == 1 ) {
+    end = begin;
+  } else if ( values[1] == QByteArray( "*" ) ) {
+    end = 0;
+  } else {
+    ok = false;
+    end = values[1].toLongLong(&ok);
+    if ( !ok ) {
+      return ImapInterval();
+    }
+  }
+
+  return ImapInterval( begin, end );
+}
 
 ImapSet::ImapSet() :
     d( new Private )
@@ -179,6 +209,26 @@ ImapSet & ImapSet::operator =(const ImapSet & other)
   if ( this != &other )
     d = other.d;
   return *this;
+}
+
+bool ImapSet::operator ==(const ImapSet &other) const
+{
+  if ( d->intervals.size()!=other.d->intervals.size() ) {
+    return false;
+  }
+
+  foreach ( const ImapInterval &interval, d->intervals ) {
+    if ( !other.d->intervals.contains( interval ) ) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+void ImapSet::add( Id value )
+{
+  add( QList<Id>() << value );
 }
 
 void ImapSet::add(const QList<Id> & values)
@@ -216,11 +266,30 @@ QByteArray ImapSet::toImapSequenceSet() const
     rv << interval.toImapSequence();
   }
 
-  QByteArray result = rv.first();
-  QList<QByteArray>::ConstIterator it = rv.constBegin();
-  ++it;
-  for ( ; it != rv.constEnd(); ++it ) {
-    result += ',' + (*it);
+  QByteArray result;
+
+  if ( !rv.isEmpty() ) {
+    result = rv.first();
+    QList<QByteArray>::ConstIterator it = rv.constBegin();
+    ++it;
+    for ( ; it != rv.constEnd(); ++it ) {
+      result += ',' + (*it);
+    }
+  }
+
+  return result;
+}
+
+ImapSet ImapSet::fromImapSequenceSet( const QByteArray &sequence )
+{
+  ImapSet result;
+
+  QList<QByteArray> intervals = sequence.split( ',' );
+
+  foreach( const QByteArray &interval, intervals ) {
+    if ( !interval.isEmpty() ) {
+      result.add( ImapInterval::fromImapSequence( interval ) );
+    }
   }
 
   return result;
@@ -239,6 +308,12 @@ bool ImapSet::isEmpty() const
 QDebug& operator<<( QDebug &d, const ImapInterval &interval )
 {
   d << interval.toImapSequence();
+  return d;
+}
+
+QDebug& operator<<( QDebug &d, const ImapSet &set )
+{
+  d << set.toImapSequenceSet();
   return d;
 }
 

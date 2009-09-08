@@ -39,6 +39,7 @@ ADD_IMAPLIB_TEST(subscribejobtest.cpp)
 ADD_IMAPLIB_TEST(unsubscribejobtest.cpp)
 ADD_IMAPLIB_TEST(listjobtest.cpp)
 ADD_IMAPLIB_TEST(storejobtest.cpp)
+ADD_IMAPLIB_TEST(imapsettest.cpp)
 
 
 ########### automated tests ###############

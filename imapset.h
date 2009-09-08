@@ -122,6 +122,11 @@ class KIMAP_EXPORT ImapInterval
     */
     QByteArray toImapSequence() const;
 
+    /**
+      Return the interval corresponding to the given IMAP-compatible QByteArray representation
+    */
+    static ImapInterval fromImapSequence( const QByteArray &sequence );
+
   private:
     class Private;
     QSharedDataPointer<Private> d;
@@ -171,6 +176,19 @@ class KIMAP_EXPORT ImapSet
     ImapSet& operator=( const ImapSet &other );
 
     /**
+      Comparison operator.
+    */
+    bool operator==( const ImapSet &other ) const;
+
+    /**
+      Adds a single positive integer numbers to the set.
+      The list is sorted and splitted into as large as possible intervals.
+      No interval merging is performed.
+      @param value A positive integer number
+    */
+    void add( Id value );
+
+    /**
       Adds the given list of positive integer numbers to the set.
       The list is sorted and splitted into as large as possible intervals.
       No interval merging is performed.
@@ -190,6 +208,11 @@ class KIMAP_EXPORT ImapSet
     QByteArray toImapSequenceSet() const;
 
     /**
+      Return the set corresponding to the given IMAP-compatible QByteArray representation
+    */
+    static ImapSet fromImapSequenceSet( const QByteArray &sequence );
+
+    /**
       Returns the intervals this set consists of.
     */
     ImapInterval::List intervals() const;
@@ -207,6 +230,7 @@ class KIMAP_EXPORT ImapSet
 }
 
 KIMAP_EXPORT QDebug& operator<<( QDebug& d, const KIMAP::ImapInterval &interval );
+KIMAP_EXPORT QDebug& operator<<( QDebug& d, const KIMAP::ImapSet &set );
 
 Q_DECLARE_METATYPE( KIMAP::ImapInterval )
 Q_DECLARE_METATYPE( KIMAP::ImapInterval::List )
