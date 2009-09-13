@@ -196,11 +196,11 @@ void FetchJob::doStart()
   switch ( d->scope.mode ) {
   case FetchScope::Headers:
     if ( d->scope.parts.isEmpty() ) {
-      parameters+="(RFC822.SIZE INTERNALDATE BODY[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT)] FLAGS UID)";
+      parameters+="(RFC822.SIZE INTERNALDATE BODY.PEEK[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT)] FLAGS UID)";
     } else {
       parameters+='(';
       foreach ( const QByteArray &part, d->scope.parts ) {
-        parameters+="BODY["+part+".MIME] ";
+        parameters+="BODY.PEEK["+part+".MIME] ";
       }
       parameters+="UID)";
     }
@@ -213,11 +213,11 @@ void FetchJob::doStart()
     break;
   case FetchScope::Content:
     if ( d->scope.parts.isEmpty() ) {
-      parameters+="(BODY[] UID)";
+      parameters+="(BODY.PEEK[] UID)";
     } else {
       parameters+='(';
       foreach ( const QByteArray &part, d->scope.parts ) {
-        parameters+="BODY["+part+"] ";
+        parameters+="BODY.PEEK["+part+"] ";
       }
       parameters+="UID)";
     }
