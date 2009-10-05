@@ -430,6 +430,8 @@ int main( int argc, char **argv )
 
   }
 
+  kDebug() << "Server greeting:" << session.serverGreeting();
+
   kDebug() << "Asking for capabilities:";
   CapabilitiesJob *capabilities = new CapabilitiesJob(&session);
   capabilities->exec();

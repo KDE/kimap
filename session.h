@@ -49,6 +49,9 @@ class KIMAP_EXPORT Session : public QObject
     QString hostName() const;
     quint16 port() const;
     State state() const;
+
+    QByteArray serverGreeting() const;
+
     /**
      * Sets an ui proxy that displays the error messages and waits for user feedback.
      * @param proxy the ui proxy object
