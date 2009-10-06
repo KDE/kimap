@@ -86,6 +86,7 @@ class SessionPrivate : public QObject
     QByteArray selectTag;
     QByteArray closeTag;
 
+    QByteArray greeting;
     QByteArray currentMailBox;
     QByteArray upcomingMailBox;
     quint16 tagCount;

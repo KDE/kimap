@@ -76,6 +76,11 @@ Session::State Session::state() const
   return d->state;
 }
 
+QByteArray Session::serverGreeting() const
+{
+  return d->greeting;
+}
+
 void SessionPrivate::handleSslError(const KSslErrorUiData& errorData)
 {
   if (uiProxy && uiProxy->ignoreSslError(errorData)) {
@@ -87,6 +92,7 @@ void SessionPrivate::handleSslError(const KSslErrorUiData& errorData)
 
 SessionPrivate::SessionPrivate( Session *session )
   : q(session),
+    state(Session::Disconnected),
     uiProxy(0),
     currentJob(0),
     tagCount(0)
@@ -153,9 +159,21 @@ void SessionPrivate::responseReceived( const Message &response )
   case Session::Disconnected:
     if ( code=="OK" ) {
       state = Session::NotAuthenticated;
+
+      Message simplified = response;
+      simplified.content.removeFirst(); // Strip the tag
+      simplified.content.removeFirst(); // Strip the code
+      greeting = simplified.toString().trimmed(); // Save the server greeting
+
       startNext();
     } else if ( code=="PREAUTH" ) {
       state = Session::Authenticated;
+
+      Message simplified = response;
+      simplified.content.removeFirst(); // Strip the tag
+      simplified.content.removeFirst(); // Strip the code
+      greeting = simplified.toString().trimmed(); // Save the server greeting
+
       startNext();
     } else {
       thread->closeSocket();
@@ -230,7 +248,6 @@ void SessionPrivate::sendData( const QByteArray &data )
 
 void SessionPrivate::socketConnected()
 {
-  state = Session::NotAuthenticated;
   startNext();
 }
 
