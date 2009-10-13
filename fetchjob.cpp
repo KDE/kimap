@@ -222,6 +222,9 @@ void FetchJob::doStart()
       parameters+="UID)";
     }
     break;
+  case FetchScope::Full:
+    parameters+="(RFC822.SIZE INTERNALDATE BODY.PEEK[] FLAGS UID)";
+    break;
   }
 
   QByteArray command = "FETCH";
@@ -261,8 +264,10 @@ void FetchJob::handleResponse( const Message &response )
 
         if ( str=="UID" ) {
           d->uids[id] = it->toLongLong();
+          d->pendingUids[id] = d->uids[id];
         } else if ( str=="RFC822.SIZE" ) {
           d->sizes[id] = it->toLongLong();
+          d->pendingSizes[id] = d->sizes[id];
         } else if ( str=="INTERNALDATE" ) {
           d->message(id)->date()->setDateTime( KDateTime::fromString( *it, KDateTime::RFCDate ) );
         } else if ( str=="FLAGS" ) {
@@ -274,6 +279,7 @@ void FetchJob::handleResponse( const Message &response )
           } else {
             d->flags[id] << *it;
           }
+          d->pendingFlags[id] = d->flags[id];
         } else if ( str=="BODYSTRUCTURE" ) {
           int pos = 0;
           d->parseBodyStructure(*it, pos, d->message(id).get());
@@ -299,24 +305,22 @@ void FetchJob::handleResponse( const Message &response )
               d->message(id)->setContent( KMime::CRLFtoLF(*it) );
               d->message(id)->parse();
 
-              d->pendingUids[id] = d->uids[id];
               d->pendingMessages[id] = d->message(id);
             } else {
               QByteArray partId = str.mid( 5, str.size()-6 );
               d->part( id, partId )->setBody(*it);
               d->part( id, partId )->parse();
 
-              d->pendingUids[id] = d->uids[id];
               d->pendingParts[id] = d->parts[id];
             }
           }
         }
       }
 
+      // For the headers mode the message is built in several
+      // steps, hence why we wait it to be done until putting it
+      // in the pending queue.
       if ( d->scope.mode == FetchScope::Headers ) {
-        d->pendingUids[id] = d->uids[id];
-        d->pendingSizes[id] = d->sizes[id];
-        d->pendingFlags[id] = d->flags[id];
         d->pendingMessages[id] = d->message(id);
       }
     }

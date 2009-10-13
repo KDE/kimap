@@ -53,7 +53,7 @@ class KIMAP_EXPORT FetchJob : public Job
     struct FetchScope
     {
       QList<QByteArray> parts; // used only if mode == Headers or Content
-      enum {Headers, Flags, Structure, Content} mode;
+      enum {Headers, Flags, Structure, Content, Full} mode;
     };
 
     explicit FetchJob( Session *session );
