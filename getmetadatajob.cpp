@@ -111,7 +111,7 @@ void GetMetaDataJob::doStart()
     parameters += ')';
   }
 
-  d->tag = d->sessionInternal()->sendCommand( command, parameters );
+  d->tags << d->sessionInternal()->sendCommand( command, parameters );
   kDebug() << "SENT: " << command << " " << parameters;
 }
 

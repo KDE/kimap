@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2009 Andras Mantia <amantia@kde.org>
+    Copyright (c) 2009 Kevin Ottens <ervin@kde.org>
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Library General Public License as published by
@@ -17,39 +17,42 @@
     02110-1301, USA.
 */
 
-#include "closejob.h"
+#ifndef KIMAP_NAMESPACEJOB_H
+#define KIMAP_NAMESPACEJOB_H
 
-#include <KDE/KLocale>
+#include "kimap_export.h"
 
-#include "job_p.h"
-#include "message_p.h"
-#include "session_p.h"
+#include "job.h"
 
-namespace KIMAP
+namespace KIMAP {
+
+class Session;
+struct Message;
+struct MailBoxDescriptor;
+class NamespaceJobPrivate;
+
+class KIMAP_EXPORT NamespaceJob : public Job
 {
-  class CloseJobPrivate : public JobPrivate
-  {
-    public:
-      CloseJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name) { }
-      ~CloseJobPrivate() { }
-  };
+  Q_OBJECT
+  Q_DECLARE_PRIVATE(NamespaceJob)
+
+  friend class SessionPrivate;
+
+  public:
+    NamespaceJob( Session *session );
+    virtual ~NamespaceJob();
+
+    QList<MailBoxDescriptor> personalNamespaces() const;
+    QList<MailBoxDescriptor> userNamespaces() const;
+    QList<MailBoxDescriptor> sharedNamespaces() const;
+
+    bool containsEmptyNamespace() const;
+
+  protected:
+    virtual void doStart();
+    virtual void handleResponse( const Message &response );
+};
+
 }
 
-using namespace KIMAP;
-
-CloseJob::CloseJob( Session *session )
-  : Job( *new CloseJobPrivate(session, i18n("Close")) )
-{
-}
-
-CloseJob::~CloseJob()
-{
-}
-
-void CloseJob::doStart()
-{
-  Q_D(CloseJob);
-  d->tags << d->sessionInternal()->sendCommand( "CLOSE" );
-}
-
-#include "closejob.moc"
+#endif

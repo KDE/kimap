@@ -54,7 +54,7 @@ RenameJob::~RenameJob()
 void RenameJob::doStart()
 {
   Q_D(RenameJob);
-  d->tag = d->sessionInternal()->sendCommand( "RENAME", '\"' + KIMAP::encodeImapFolderName( d->sourceMailBox.toUtf8() ) + "\" \""
+  d->tags << d->sessionInternal()->sendCommand( "RENAME", '\"' + KIMAP::encodeImapFolderName( d->sourceMailBox.toUtf8() ) + "\" \""
                                               + KIMAP::encodeImapFolderName( d->destinationMailBox.toUtf8() )+ '\"' );
 }
 

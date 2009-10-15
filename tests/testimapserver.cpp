@@ -41,6 +41,7 @@
 #include "kimap/expungejob.h"
 #include "kimap/createjob.h"
 #include "kimap/deletejob.h"
+#include "kimap/namespacejob.h"
 #include "kimap/subscribejob.h"
 #include "kimap/unsubscribejob.h"
 #include "kimap/renamejob.h"
@@ -410,14 +411,14 @@ int main( int argc, char **argv )
 
   kDebug() << "Logging in...";
   LoginJob *login = new LoginJob(&session);
-  login->setEncryptionMode(LoginJob::TlsV1);
-  login->setAuthenticationMode(LoginJob::Plain);
+  //login->setEncryptionMode(LoginJob::TlsV1);
+  //login->setAuthenticationMode(LoginJob::Plain);
   login->setUserName(user);
   login->setPassword(password);
   login->exec();
   qDebug();
 
-  if (login->encryptionMode() == LoginJob::Unencrypted)
+  /*if (login->encryptionMode() == LoginJob::Unencrypted)
   {
     kDebug() << "Encrypted login not possible, try to log in without encryption";
     login = new LoginJob(&session);
@@ -428,7 +429,7 @@ int main( int argc, char **argv )
     Q_ASSERT(session.state()==Session::Authenticated);
     qDebug();
 
-  }
+  }*/
 
   kDebug() << "Server greeting:" << session.serverGreeting();
 
@@ -438,6 +439,30 @@ int main( int argc, char **argv )
   Q_ASSERT_X(capabilities->error()==0, "CapabilitiesJob", capabilities->errorString().toLocal8Bit());
   Q_ASSERT(session.state()==Session::Authenticated);
   kDebug() << capabilities->capabilities();
+  qDebug();
+
+  kDebug() << "Asking for namespaces:";
+  NamespaceJob *namespaces = new NamespaceJob(&session);
+  namespaces->exec();
+  Q_ASSERT_X(namespaces->error()==0, "CapabilitiesJob", namespaces->errorString().toLocal8Bit());
+  Q_ASSERT(session.state()==Session::Authenticated);
+
+  kDebug() << "Contains empty namespace:" << namespaces->containsEmptyNamespace();
+
+  kDebug() << "Personal:";
+  foreach ( MailBoxDescriptor ns, namespaces->personalNamespaces() ) {
+    kDebug() << ns.separator << ns.name;
+  }
+
+  kDebug() << "User:    ";
+  foreach ( MailBoxDescriptor ns, namespaces->userNamespaces() ) {
+    kDebug() << ns.separator << ns.name;
+  }
+
+  kDebug() << "Shared:  ";
+  foreach ( MailBoxDescriptor ns, namespaces->sharedNamespaces() ) {
+    kDebug() << ns.separator << ns.name;
+  }
   qDebug();
 
   kDebug() << "Listing mailboxes:";

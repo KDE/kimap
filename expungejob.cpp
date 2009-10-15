@@ -53,7 +53,7 @@ ExpungeJob::~ExpungeJob()
 void ExpungeJob::doStart()
 {
   Q_D(ExpungeJob);
-  d->tag = d->sessionInternal()->sendCommand( "EXPUNGE" );
+  d->tags << d->sessionInternal()->sendCommand( "EXPUNGE" );
 }
 
 void ExpungeJob::handleResponse( const Message &response )

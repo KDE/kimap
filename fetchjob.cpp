@@ -234,7 +234,7 @@ void FetchJob::doStart()
 
   d->emitPendingsTimer.start( 100 );
   d->selectedMailBox = d->sessionInternal()->selectedMailBox();
-  d->tag = d->sessionInternal()->sendCommand( command, parameters );
+  d->tags << d->sessionInternal()->sendCommand( command, parameters );
 }
 
 void FetchJob::handleResponse( const Message &response )
@@ -244,7 +244,8 @@ void FetchJob::handleResponse( const Message &response )
   // We can predict it'll be handled by handleErrorReplies() so stop
   // the timer now so that result() will really be the last emitted signal.
   if ( !response.content.isEmpty()
-       && response.content.first().toString() == d->tag ) {
+       && d->tags.size() == 1
+       && d->tags.contains( response.content.first().toString() ) ) {
     d->emitPendingsTimer.stop();
     d->emitPendings();
   }

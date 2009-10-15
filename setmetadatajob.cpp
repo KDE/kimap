@@ -85,7 +85,7 @@ void SetMetaDataJob::doStart()
     parameters += ')';
   }
 
-  d->tag = d->sessionInternal()->sendCommand( command, parameters );
+  d->tags << d->sessionInternal()->sendCommand( command, parameters );
 //   kDebug() << "SENT: " << command << " " << parameters;
 }
 
@@ -95,7 +95,7 @@ void SetMetaDataJob::handleResponse( const Message &response )
 
   //TODO: Test if a server can really return more then one untagged NO response. If not, no need to OR the error codes
   if ( !response.content.isEmpty()
-        && response.content.first().toString() == d->tag ) {
+        && d->tags.contains( response.content.first().toString() ) ) {
     if ( response.content[1].toString() == "NO" ) {
       setError( UserDefinedError );
       setErrorText( i18n("%1 failed, server replied: %2", d->m_name, response.toString().constData()) );

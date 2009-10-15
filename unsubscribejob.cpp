@@ -53,7 +53,7 @@ UnsubscribeJob::~UnsubscribeJob()
 void UnsubscribeJob::doStart()
 {
   Q_D(UnsubscribeJob);
-  d->tag = d->sessionInternal()->sendCommand( "UNSUBSCRIBE", '\"'+KIMAP::encodeImapFolderName( d->mailBox.toUtf8() )+'\"' );
+  d->tags << d->sessionInternal()->sendCommand( "UNSUBSCRIBE", '\"'+KIMAP::encodeImapFolderName( d->mailBox.toUtf8() )+'\"' );
 }
 
 void UnsubscribeJob::setMailBox( const QString &mailBox )
