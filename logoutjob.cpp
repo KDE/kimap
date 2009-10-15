@@ -49,7 +49,7 @@ LogoutJob::~LogoutJob()
 void LogoutJob::doStart()
 {
   Q_D(LogoutJob);
-  d->tag = d->sessionInternal()->sendCommand( "LOGOUT" );
+  d->tags << d->sessionInternal()->sendCommand( "LOGOUT" );
 }
 
 void LogoutJob::connectionLost()

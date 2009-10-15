@@ -67,7 +67,7 @@ void KIMAP::IdleJob::stop()
 void IdleJob::doStart()
 {
   Q_D(IdleJob);
-  d->tag = d->sessionInternal()->sendCommand( "IDLE" );
+  d->tags << d->sessionInternal()->sendCommand( "IDLE" );
 }
 
 void IdleJob::handleResponse( const Message &response )

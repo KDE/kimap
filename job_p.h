@@ -43,7 +43,7 @@ class JobPrivate
       return m_session->d;
     }
 
-    QByteArray tag;
+    QList<QByteArray> tags;
     Session *m_session;
     QString m_name;
 };

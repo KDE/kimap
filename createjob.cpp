@@ -53,7 +53,7 @@ CreateJob::~CreateJob()
 void CreateJob::doStart()
 {
   Q_D(CreateJob);
-  d->tag = d->sessionInternal()->sendCommand( "CREATE", '\"'+KIMAP::encodeImapFolderName( d->mailBox.toUtf8() )+'\"' );
+  d->tags << d->sessionInternal()->sendCommand( "CREATE", '\"'+KIMAP::encodeImapFolderName( d->mailBox.toUtf8() )+'\"' );
 }
 
 void CreateJob::setMailBox( const QString &mailBox )

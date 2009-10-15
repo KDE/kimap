@@ -49,7 +49,7 @@ CloseJob::~CloseJob()
 void CloseJob::doStart()
 {
   Q_D(CloseJob);
-  d->tag = d->sessionInternal()->sendCommand( "CLOSE" );
+  d->tags << d->sessionInternal()->sendCommand( "CLOSE" );
 }
 
 #include "closejob.moc"

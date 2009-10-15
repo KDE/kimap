@@ -112,7 +112,7 @@ void CopyJob::doStart()
     command = "UID "+command;
   }
 
-  d->tag = d->sessionInternal()->sendCommand( command, parameters );
+  d->tags << d->sessionInternal()->sendCommand( command, parameters );
 }
 
 void CopyJob::handleResponse( const Message &response )

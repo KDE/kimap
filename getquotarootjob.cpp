@@ -56,7 +56,7 @@ GetQuotaRootJob::~GetQuotaRootJob()
 void GetQuotaRootJob::doStart()
 {
   Q_D(GetQuotaRootJob);
-  d->tag = d->sessionInternal()->sendCommand( "GETQUOTAROOT", '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + '\"');
+  d->tags << d->sessionInternal()->sendCommand( "GETQUOTAROOT", '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + '\"');
 }
 
 void GetQuotaRootJob::handleResponse(const Message &response)

@@ -137,7 +137,7 @@ void SearchJob::doStart()
     command = "UID "+ command;
   }
 
-  d->tag = d->sessionInternal()->sendCommand( command, searchKey );
+  d->tags << d->sessionInternal()->sendCommand( command, searchKey );
 }
 
 void SearchJob::handleResponse( const Message &response )

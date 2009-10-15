@@ -65,7 +65,7 @@ void SetQuotaJob::doStart()
   }
 
   kDebug() << "SETQUOTA " << '\"' + d->root + "\" " + s;
-  d->tag = d->sessionInternal()->sendCommand( "SETQUOTA", '\"' + d->root + "\" " + s);
+  d->tags << d->sessionInternal()->sendCommand( "SETQUOTA", '\"' + d->root + "\" " + s);
 }
 
 void SetQuotaJob::handleResponse(const Message &response)

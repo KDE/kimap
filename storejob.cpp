@@ -142,7 +142,7 @@ void StoreJob::doStart()
     command = "UID "+command;
   }
 
-  d->tag = d->sessionInternal()->sendCommand( command, parameters );
+  d->tags << d->sessionInternal()->sendCommand( command, parameters );
 }
 
 void StoreJob::handleResponse( const Message &response )

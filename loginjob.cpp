@@ -178,7 +178,7 @@ void LoginJob::doStart()
     d->sessionInternal()->startSsl(version);
   } else  if (d->encryptionMode == Unencrypted ) {
     if (d->authMode.isEmpty()) {
-      d->tag = d->sessionInternal()->sendCommand( "LOGIN",
+      d->tags << d->sessionInternal()->sendCommand( "LOGIN",
                                                   quoteIMAP( d->userName ).toUtf8()
                                                  +' '
                                                  +quoteIMAP(d->password ).toUtf8() );
@@ -189,7 +189,7 @@ void LoginJob::doStart()
     }
   } else if (d->encryptionMode == TlsV1) {
     d->authState = LoginJobPrivate::StartTls;
-    d->tag = d->sessionInternal()->sendCommand( "STARTTLS" );
+    d->tags << d->sessionInternal()->sendCommand( "STARTTLS" );
   }
 }
 
@@ -206,7 +206,7 @@ void LoginJob::handleResponse( const Message &response )
   }
 
   if ( !response.content.isEmpty()
-       && response.content.first().toString() == d->tag ) {
+       && d->tags.contains( response.content.first().toString() ) ) {
     if ( response.content.size() < 2 ) {
       setErrorText( i18n("%1 failed, malformed reply from the server.", commandName) );
       emitResult();
@@ -233,7 +233,7 @@ void LoginJob::handleResponse( const Message &response )
             emitResult();
           } else {
             d->authState = LoginJobPrivate::Login;
-            d->tag = d->sessionInternal()->sendCommand( "LOGIN",
+            d->tags << d->sessionInternal()->sendCommand( "LOGIN",
                                                         quoteIMAP( d->userName ).toUtf8()
                                                        +' '
                                                        +quoteIMAP( d->password ).toUtf8() );
@@ -330,7 +330,7 @@ bool LoginJobPrivate::startAuthentication()
   QByteArray tmp = QByteArray::fromRawData( out, outlen );
   QByteArray challenge = tmp.toBase64();
 
-  tag = sessionInternal()->sendCommand( "AUTHENTICATE", authMode.toLatin1() + ' ' + challenge );
+  tags << sessionInternal()->sendCommand( "AUTHENTICATE", authMode.toLatin1() + ' ' + challenge );
 
   return true;
 }
@@ -376,7 +376,7 @@ void LoginJobPrivate::sslResponse(bool response)
 {
   if (response) {
     authState = LoginJobPrivate::Capability;
-    tag = sessionInternal()->sendCommand( "CAPABILITY" );
+    tags << sessionInternal()->sendCommand( "CAPABILITY" );
   } else {
     q->setError( LoginJob::UserDefinedError );
     q->setErrorText( i18n("Login failed, TLS negotiation failed." ));

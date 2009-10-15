@@ -108,7 +108,7 @@ void ListJob::doStart()
   }
 
   d->emitPendingsTimer.start( 100 );
-  d->tag = d->sessionInternal()->sendCommand( d->command, "\"\" *" );
+  d->tags << d->sessionInternal()->sendCommand( d->command, "\"\" *" );
 }
 
 void ListJob::handleResponse( const Message &response )
@@ -118,7 +118,8 @@ void ListJob::handleResponse( const Message &response )
   // We can predict it'll be handled by handleErrorReplies() so stop
   // the timer now so that result() will really be the last emitted signal.
   if ( !response.content.isEmpty()
-       && response.content.first().toString() == d->tag ) {
+       && d->tags.size() == 1
+       && d->tags.contains( response.content.first().toString() ) ) {
     d->emitPendingsTimer.stop();
     d->emitPendings();
   }

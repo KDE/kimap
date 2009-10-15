@@ -52,7 +52,7 @@ GetQuotaJob::~GetQuotaJob()
 void GetQuotaJob::doStart()
 {
   Q_D(GetQuotaJob);
-  d->tag = d->sessionInternal()->sendCommand( "GETQUOTA", '\"' + d->root + '\"');
+  d->tags << d->sessionInternal()->sendCommand( "GETQUOTA", '\"' + d->root + '\"');
 }
 
 void GetQuotaJob::handleResponse(const Message &response)

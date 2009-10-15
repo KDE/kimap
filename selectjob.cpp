@@ -135,7 +135,7 @@ void SelectJob::doStart()
     command = "EXAMINE";
   }
 
-  d->tag = d->sessionInternal()->sendCommand( command, '\"'+KIMAP::encodeImapFolderName( d->mailBox.toUtf8() )+'\"' );
+  d->tags << d->sessionInternal()->sendCommand( command, '\"'+KIMAP::encodeImapFolderName( d->mailBox.toUtf8() )+'\"' );
 }
 
 void SelectJob::handleResponse( const Message &response )
