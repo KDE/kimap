@@ -50,7 +50,9 @@ namespace KIMAP
       ListJob * const q;
 
       bool includeUnsubscribed;
+      QList<MailBoxDescriptor> namespaces;
       QByteArray command;
+
       QList<MailBoxDescriptor> descriptors;
       QMap< MailBoxDescriptor, QList<QByteArray> > flags;
 
@@ -86,6 +88,18 @@ bool ListJob::isIncludeUnsubscribed() const
   return d->includeUnsubscribed;
 }
 
+void ListJob::setQueriedNamespaces( const QList<MailBoxDescriptor> &namespaces )
+{
+  Q_D(ListJob);
+  d->namespaces = namespaces;
+}
+
+QList<MailBoxDescriptor> ListJob::queriedNamespaces() const
+{
+  Q_D(const ListJob);
+  return d->namespaces;
+}
+
 QList<MailBoxDescriptor> ListJob::mailBoxes() const
 {
   Q_D(const ListJob);
@@ -108,7 +122,24 @@ void ListJob::doStart()
   }
 
   d->emitPendingsTimer.start( 100 );
-  d->tags << d->sessionInternal()->sendCommand( d->command, "\"\" *" );
+
+  if ( d->namespaces.isEmpty() ) {
+    d->tags << d->sessionInternal()->sendCommand( d->command, "\"\" *" );
+  } else {
+    foreach ( const MailBoxDescriptor &descriptor, d->namespaces ) {
+      QString parameters = "\"\" \"%1*\"";
+
+      if ( descriptor.name.endsWith( descriptor.separator ) ) {
+        QString name = encodeImapFolderName( descriptor.name );
+        name.chop( 1 );
+        d->tags << d->sessionInternal()->sendCommand( d->command,
+                                                      parameters.arg( name ).toUtf8() );
+      }
+
+      d->tags << d->sessionInternal()->sendCommand( d->command,
+                                                    parameters.arg( descriptor.name ).toUtf8() );
+    }
+  }
 }
 
 void ListJob::handleResponse( const Message &response )

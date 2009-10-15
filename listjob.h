@@ -60,6 +60,9 @@ class KIMAP_EXPORT ListJob : public Job
     void setIncludeUnsubscribed( bool include );
     bool isIncludeUnsubscribed() const;
 
+    void setQueriedNamespaces( const QList<MailBoxDescriptor> &namespaces );
+    QList<MailBoxDescriptor> queriedNamespaces() const;
+
     QList<MailBoxDescriptor> mailBoxes() const;
     QMap< MailBoxDescriptor, QList<QByteArray> > flags() const;
 
