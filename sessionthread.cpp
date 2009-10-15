@@ -83,7 +83,12 @@ void SessionThread::readMessage()
   try {
     while ( !m_stream->atCommandEnd() ) {
       if ( m_stream->hasString() ) {
-        *payload << Message::Part(m_stream->readString());
+        QByteArray string = m_stream->readString();
+        if ( string == "NIL" ) {
+          *payload << Message::Part( QList<QByteArray>() );
+        } else {
+          *payload << Message::Part(string);
+        }
       } else if ( m_stream->hasList() ) {
         *payload << Message::Part(m_stream->readParenthesizedList());
       } else if ( m_stream->hasResponseCode() ) {

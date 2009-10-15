@@ -368,10 +368,6 @@ QByteArray ImapStreamParser::parseQuotedString()
       end = m_data.length();
 
     result = m_data.mid( m_position, end - m_position );
-
-    // transform unquoted NIL
-    if ( result == "NIL" )
-      result.clear();
   }
 
   // strip quotes
