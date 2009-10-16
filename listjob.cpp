@@ -127,7 +127,7 @@ void ListJob::doStart()
     d->tags << d->sessionInternal()->sendCommand( d->command, "\"\" *" );
   } else {
     foreach ( const MailBoxDescriptor &descriptor, d->namespaces ) {
-      QString parameters = "\"\" \"%1*\"";
+      QString parameters = "\"\" \"%1\"";
 
       if ( descriptor.name.endsWith( descriptor.separator ) ) {
         QString name = encodeImapFolderName( descriptor.name );
@@ -137,7 +137,7 @@ void ListJob::doStart()
       }
 
       d->tags << d->sessionInternal()->sendCommand( d->command,
-                                                    parameters.arg( descriptor.name ).toUtf8() );
+                                                    parameters.arg( descriptor.name+'*' ).toUtf8() );
     }
   }
 }
