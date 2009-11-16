@@ -20,6 +20,7 @@
 #include "fetchjob.h"
 
 #include <QtCore/QTimer>
+#include <KDE/KDebug>
 #include <KDE/KLocale>
 
 #include "job_p.h"
@@ -262,6 +263,11 @@ void FetchJob::handleResponse( const Message &response )
             it!=content.constEnd(); ++it ) {
         QByteArray str = *it;
         ++it;
+
+        if ( it==content.constEnd() ) { // Uh oh, message was truncated?
+          kWarning() << "FETCH reply got truncated, skipping.";
+          break;
+        }
 
         if ( str=="UID" ) {
           d->uids[id] = it->toLongLong();
