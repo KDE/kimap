@@ -38,7 +38,7 @@ void testCapabilities_data() {
   QStringList response;
   QStringList capabilities;
   response << "* CAPABILITY IMAP4rev1 STARTTLS AUTH=GSSAPI" << "A000001 OK CAPABILITY completed";
-  capabilities << "IMAP4rev1" << "STARTTLS" <<  "AUTH=GSSAPI";
+  capabilities << "IMAP4REV1" << "STARTTLS" <<  "AUTH=GSSAPI";
   QTest::newRow( "good" ) << response << capabilities;
 
   response.clear();
@@ -49,7 +49,7 @@ void testCapabilities_data() {
   response.clear();
   capabilities.clear();
   response << "* CAPABILITY IMAP4rev1 STARTTLS AUTH=PLAIN" << "* some response" << "A000001 OK CAPABILITY completed";
-  capabilities << "IMAP4rev1" << "STARTTLS" <<  "AUTH=PLAIN";
+  capabilities << "IMAP4REV1" << "STARTTLS" <<  "AUTH=PLAIN";
   QTest::newRow( "extra-untagged" ) << response << capabilities;;
 }
 
