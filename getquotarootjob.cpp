@@ -138,8 +138,9 @@ QMap<QByteArray, qint64> GetQuotaRootJob::allUsages(const QByteArray &root) cons
   QMap<QByteArray, qint64> result;
 
   if (d->quotas.contains(root)) {
-    QMap< QByteArray, QPair<qint64, qint64> > quota = d->quotas[root];
-    foreach (const QByteArray &resource, quota.keys()) {
+    const QMap< QByteArray, QPair<qint64, qint64> > quota = d->quotas[root];
+    const QList<QByteArray> resources = quota.keys();
+    foreach (const QByteArray &resource, resources) {
       result[resource] = quota[resource].first;
     }
   }
@@ -154,8 +155,9 @@ QMap<QByteArray, qint64> GetQuotaRootJob::allLimits(const QByteArray &root) cons
   QMap<QByteArray, qint64> result;
 
   if (d->quotas.contains(root)) {
-    QMap< QByteArray, QPair<qint64, qint64> > quota = d->quotas[root];
-    foreach (const QByteArray &resource, quota.keys()) {
+    const QMap< QByteArray, QPair<qint64, qint64> > quota = d->quotas[root];
+    const QList<QByteArray> resources = quota.keys();
+    foreach (const QByteArray &resource, resources) {
       result[resource] = quota[resource].second;
     }
   }
