@@ -396,7 +396,7 @@ const QString KIMAP::decodeRFC2047String( const QString &str,
       cstr = QByteArray (mid).left( (int)( mid - pos - 1 ) );
       if ( encoding == 'Q' ) {
         // decode quoted printable text
-        for ( i = cstr.length () - 1; i >= 0; i-- ) {
+        for ( i = cstr.length () - 1; i >= 0; --i ) {
           if ( cstr[i] == '_' ) {
             cstr[i] = ' ';
           }
@@ -412,7 +412,7 @@ const QString KIMAP::decodeRFC2047String( const QString &str,
       }
       *pos = ch;
       int len = cstr.length();
-      for ( i = 0; i < len; i++ ) {
+      for ( i = 0; i < len; ++i ) {
         result += cstr[i];
       }
 
@@ -475,7 +475,7 @@ const QByteArray KIMAP::encodeRFC2047String( const QByteArray &str )
       numQuotes = 1;
       while ( *l ) {
         /* The encoded word must be limited to 75 character */
-        for ( i = 0; i < 16; i++ ) {
+        for ( i = 0; i < 16; ++i ) {
           if ( *l == especials[i] ) {
             numQuotes++;
           }
@@ -518,7 +518,7 @@ const QByteArray KIMAP::encodeRFC2047String( const QByteArray &str )
       while ( latin < stop ) {
         // can add up to 3 chars/iteration
         numQuotes = 0;
-        for ( i = 0; i < 16; i++ ) {
+        for ( i = 0; i < 16; ++i ) {
           if ( *latin == especials[i] ) {
             numQuotes = 1;
           }
@@ -588,7 +588,7 @@ const QString KIMAP::encodeRFC2231String( const QString &str )
   l = latin;
   while ( *l ) {
     quote = *l < 0;
-    for ( i = 0; i < 16; i++ ) {
+    for ( i = 0; i < 16; ++i ) {
       if ( *l == especials[i] ) {
         quote = true;
       }
