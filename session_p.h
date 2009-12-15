@@ -73,6 +73,7 @@ class SessionPrivate : public QObject
 
     Session *const q;
 
+    bool isSocketConnected;
     Session::State state;
 
     SessionThread *thread;

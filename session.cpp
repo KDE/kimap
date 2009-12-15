@@ -41,6 +41,7 @@ using namespace KIMAP;
 Session::Session( const QString &hostName, quint16 port, QObject *parent)
   : QObject(parent), d(new SessionPrivate(this))
 {
+  d->isSocketConnected = false;
   d->state = Disconnected;
   d->jobRunning = false;
 
@@ -116,7 +117,7 @@ void SessionPrivate::startNext()
 
 void SessionPrivate::doStartNext()
 {
-  if ( queue.isEmpty() || jobRunning || state==Session::Disconnected ) {
+  if ( queue.isEmpty() || jobRunning || !isSocketConnected ) {
     return;
   }
 
@@ -248,11 +249,13 @@ void SessionPrivate::sendData( const QByteArray &data )
 
 void SessionPrivate::socketConnected()
 {
+  isSocketConnected = true;
   startNext();
 }
 
 void SessionPrivate::socketDisconnected()
 {
+  isSocketConnected = false;
   state = Session::Disconnected;
   thread->closeSocket();
 
