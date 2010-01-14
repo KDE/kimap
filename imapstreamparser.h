@@ -39,7 +39,7 @@ class ImapParserException : public std::exception
     ImapParserException( const char *what ) throw() : mWhat( what ) {}
     ImapParserException( const QByteArray &what ) throw() : mWhat( what ) {}
     ImapParserException( const QString &what ) throw() : mWhat( what.toUtf8() ) {}
-    ImapParserException( const ImapParserException &other ) throw() : mWhat( other.what() ) {}
+    ImapParserException( const ImapParserException &other ) throw() : std::exception( other ), mWhat( other.what() ) {}
     virtual ~ImapParserException() throw() {}
     const char *what() const throw() { return mWhat.constData(); }
     virtual const char *type() const throw() { return "ImapParserException"; }
