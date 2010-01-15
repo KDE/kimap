@@ -29,7 +29,7 @@ using namespace KIMAP;
 
 QMap<QByteArray, QPair<qint64, qint64> > QuotaJobBasePrivate::readQuota( const Message::Part &content )
 {
-  QMap<QByteArray, QPair<qint64, qint64> > quota;
+  QMap<QByteArray, QPair<qint64, qint64> > quotaMap;
   QList<QByteArray> quotas = content.toList();
 
   int i = 0;
@@ -37,11 +37,11 @@ QMap<QByteArray, QPair<qint64, qint64> > QuotaJobBasePrivate::readQuota( const M
     QByteArray resource = quotas[i].toUpper();
     qint64 usage = quotas[i+1].toInt();
     qint64 limit = quotas[i+2].toInt();
-    quota[resource] = qMakePair(usage, limit);
+    quotaMap[resource] = qMakePair(usage, limit);
     i += 3;
   }
 
-  return quota;
+  return quotaMap;
 }
 
 QuotaJobBase::QuotaJobBase( Session *session )
