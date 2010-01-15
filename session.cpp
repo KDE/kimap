@@ -129,6 +129,7 @@ void SessionPrivate::doStartNext()
 
 void SessionPrivate::jobDone( KJob *job )
 {
+  Q_UNUSED( job );
   Q_ASSERT( job == currentJob );
 
   jobRunning = false;
