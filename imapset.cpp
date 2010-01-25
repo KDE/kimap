@@ -93,6 +93,8 @@ ImapInterval::Id ImapInterval::size() const
 {
   if ( !d->begin && !d->end )
     return 0;
+  if ( d->begin && !d->end )
+    return Q_INT64_C( 0x7FFFFFFFFFFFFFFF ) - d->begin + 1;
   return d->end - d->begin + 1;
 }
 

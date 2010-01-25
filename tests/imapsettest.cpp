@@ -40,6 +40,7 @@ private Q_SLOTS:
     QTest::newRow( "empty set" ) << ImapSet() << QByteArray();
     QTest::newRow( "unique value" ) << ImapSet( 7 ) << QByteArray( "7" );
     QTest::newRow( "single interval" ) << ImapSet( 7, 10 ) << QByteArray( "7:10" );
+    QTest::newRow( "single interval with no upper bound" ) << ImapSet( 1, 0 ) << QByteArray( "1:*" );
 
     set = ImapSet( 7, 10 );
     set.add( ImapInterval( 12, 14 ) );

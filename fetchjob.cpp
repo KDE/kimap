@@ -125,6 +125,7 @@ FetchJob::~FetchJob()
 void FetchJob::setSequenceSet( const ImapSet &set )
 {
   Q_D(FetchJob);
+  Q_ASSERT( !set.toImapSequenceSet().trimmed().isEmpty() );
   d->set = set;
 }
 
