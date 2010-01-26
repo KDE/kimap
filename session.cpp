@@ -54,6 +54,7 @@ Session::Session( const QString &hostName, quint16 port, QObject *parent)
 
 Session::~Session()
 {
+  delete d->uiProxy;
   delete d->thread;
 }
 
@@ -92,7 +93,8 @@ void SessionPrivate::handleSslError(const KSslErrorUiData& errorData)
 }
 
 SessionPrivate::SessionPrivate( Session *session )
-  : q(session),
+  : QObject( session ),
+    q(session),
     state(Session::Disconnected),
     uiProxy(0),
     currentJob(0),

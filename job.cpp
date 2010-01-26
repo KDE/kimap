@@ -28,13 +28,13 @@
 using namespace KIMAP;
 
 Job::Job( Session *session )
-  : d_ptr(new JobPrivate(session, i18n("Job")))
+  : KJob( session ), d_ptr(new JobPrivate(session, i18n("Job")))
 {
 
 }
 
 Job::Job( JobPrivate &dd )
-  : d_ptr(&dd)
+  : KJob( dd.m_session ), d_ptr(&dd)
 {
 
 }
