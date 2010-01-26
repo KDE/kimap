@@ -49,6 +49,7 @@ StoreJob::StoreJob( Session *session )
   : Job( *new StoreJobPrivate(session, i18n("Store")) )
 {
   Q_D(StoreJob);
+  d->uidBased = false;
   d->mode = SetFlags;
 }
 
