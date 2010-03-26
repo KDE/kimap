@@ -52,7 +52,7 @@ class SessionTest : public QObject
   private slots:
     void shouldRespectStartOrder()
     {
-      KIMAP::Session s("mail.kdab.net", 143);
+      KIMAP::Session s("mail.kdab.com", 143);
       MockJob *j1 = new MockJob(&s);
       connect(j1, SIGNAL(result(KJob*)), this, SLOT(jobDone(KJob*)));
       MockJob *j2 = new MockJob(&s);
