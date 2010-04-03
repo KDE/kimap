@@ -91,6 +91,7 @@ class KIMAP_EXPORT LoginJob : public Job
      *       Not used in server communication.
      * @param mode the auth mode
      * @return string representation of mode
+     * @since 4.5
      */
     static QString authenticationModeString( AuthenticationMode mode );
 
