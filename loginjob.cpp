@@ -437,9 +437,9 @@ QString LoginJob::authenticationModeString( LoginJob::AuthenticationMode mode )
     case NTLM:
       return "NTLM";
     case ClearText:
-      return "Clear text";
+      return i18nc( "Authentication method", "Clear text" );
     case Anonymous:
-      return "Anonymous";
+      return i18nc( "Authentication method", "Anonymous" );
     default:
       break;
   }
