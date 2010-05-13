@@ -504,7 +504,8 @@ QByteArray ImapStreamParser::readUntilCommandEnd()
       break; //command end
       ++i;
   }
-  m_position = i + 1;
+  while ( m_data[i] == '\n' || m_data[i] == '\r' ) ++i;
+  m_position = i;
   return result;
 }
 
