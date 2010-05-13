@@ -39,7 +39,7 @@ public:
 private Q_SLOTS:
     void newConnection();
     void dataAvailable();
-    
+
 private:
     QStringList m_data;
     QTcpServer *m_tcpServer;

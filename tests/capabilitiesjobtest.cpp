@@ -18,7 +18,7 @@
 
 #include <qtest_kde.h>
 
-#include "fakeserver.h"
+#include "kimaptest/fakeserver.h"
 #include "kimap/session.h"
 #include "kimap/capabilitiesjob.h"
 
@@ -75,6 +75,6 @@ void testCapabilities()
 
 };
 
-QTEST_KDEMAIN( CapabilitiesJobTest, NoGUI )
+QTEST_KDEMAIN_CORE( CapabilitiesJobTest )
 
 #include "capabilitiesjobtest.moc"

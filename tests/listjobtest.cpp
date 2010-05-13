@@ -18,7 +18,7 @@
 
 #include <qtest_kde.h>
 
-#include "fakeserver.h"
+#include "kimaptest/fakeserver.h"
 #include "kimap/session.h"
 #include "kimap/listjob.h"
 
@@ -130,6 +130,6 @@ void testList()
 
 };
 
-QTEST_KDEMAIN( ListJobTest, NoGUI )
+QTEST_KDEMAIN_CORE( ListJobTest )
 
 #include "listjobtest.moc"

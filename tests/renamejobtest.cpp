@@ -18,7 +18,7 @@
 
 #include <qtest_kde.h>
 
-#include "fakeserver.h"
+#include "kimaptest/fakeserver.h"
 #include "kimap/session.h"
 #include "kimap/renamejob.h"
 
@@ -78,6 +78,6 @@ void testRename()
 
 };
 
-QTEST_KDEMAIN( RenameJobTest, NoGUI )
+QTEST_KDEMAIN_CORE( RenameJobTest )
 
 #include "renamejobtest.moc"

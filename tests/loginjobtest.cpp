@@ -18,7 +18,7 @@
 
 #include <qtest_kde.h>
 
-#include "fakeserver.h"
+#include "kimaptest/fakeserver.h"
 #include "kimap/session.h"
 #include "kimap/loginjob.h"
 
@@ -57,6 +57,6 @@ void testClearTextLogin()
 
 };
 
-QTEST_KDEMAIN( LoginJobTest, NoGUI )
+QTEST_KDEMAIN_CORE( LoginJobTest )
 
 #include "loginjobtest.moc"

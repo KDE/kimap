@@ -71,6 +71,6 @@ private Q_SLOTS:
   }
 };
 
-QTEST_KDEMAIN( ImapSetTest, NoGUI )
+QTEST_KDEMAIN_CORE( ImapSetTest )
 
 #include "imapsettest.moc"

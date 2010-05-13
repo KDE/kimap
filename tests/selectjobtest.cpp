@@ -18,7 +18,7 @@
 
 #include <qtest_kde.h>
 
-#include "fakeserver.h"
+#include "kimaptest/fakeserver.h"
 #include "kimap/loginjob.h"
 #include "kimap/session.h"
 #include "kimap/selectjob.h"
@@ -132,6 +132,6 @@ void testSeveralSelect()
 
 };
 
-QTEST_KDEMAIN( SelectJobTest, NoGUI )
+QTEST_KDEMAIN_CORE( SelectJobTest )
 
 #include "selectjobtest.moc"

@@ -18,7 +18,7 @@
 
 #include <qtest_kde.h>
 
-#include "fakeserver.h"
+#include "kimaptest/fakeserver.h"
 #include "kimap/session.h"
 #include "kimap/logoutjob.h"
 #include "kimap/loginjob.h"
@@ -76,6 +76,6 @@ void testLogoutUntagged()
 
 };
 
-QTEST_KDEMAIN( LogoutJobTest, NoGUI )
+QTEST_KDEMAIN_CORE( LogoutJobTest )
 
 #include "logoutjobtest.moc"

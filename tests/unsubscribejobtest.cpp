@@ -18,7 +18,7 @@
 
 #include <qtest_kde.h>
 
-#include "fakeserver.h"
+#include "kimaptest/fakeserver.h"
 #include "kimap/session.h"
 #include "kimap/unsubscribejob.h"
 
@@ -74,6 +74,6 @@ void testUnsubscribe()
 
 };
 
-QTEST_KDEMAIN( UnsubscribeJobTest, NoGUI )
+QTEST_KDEMAIN_CORE( UnsubscribeJobTest )
 
 #include "unsubscribejobtest.moc"

@@ -18,7 +18,7 @@
 
 #include <qtest_kde.h>
 
-#include "fakeserver.h"
+#include "kimaptest/fakeserver.h"
 #include "kimap/session.h"
 #include "kimap/deletejob.h"
 
@@ -80,6 +80,6 @@ void testDelete()
 
 };
 
-QTEST_KDEMAIN( DeleteJobTest, NoGUI )
+QTEST_KDEMAIN_CORE( DeleteJobTest )
 
 #include "deletejobtest.moc"

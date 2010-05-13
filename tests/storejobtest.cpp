@@ -18,7 +18,7 @@
 
 #include <qtest_kde.h>
 
-#include "fakeserver.h"
+#include "kimaptest/fakeserver.h"
 #include "kimap/session.h"
 #include "kimap/storejob.h"
 
@@ -85,6 +85,6 @@ void testStore()
 
 };
 
-QTEST_KDEMAIN( StoreJobTest, NoGUI )
+QTEST_KDEMAIN_CORE( StoreJobTest )
 
 #include "storejobtest.moc"

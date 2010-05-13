@@ -18,7 +18,7 @@
 
 #include <qtest_kde.h>
 
-#include "fakeserver.h"
+#include "kimaptest/fakeserver.h"
 #include "kimap/session.h"
 #include "kimap/createjob.h"
 
@@ -76,6 +76,6 @@ void testCreate()
 
 };
 
-QTEST_KDEMAIN( CreateJobTest, NoGUI )
+QTEST_KDEMAIN_CORE( CreateJobTest )
 
 #include "createjobtest.moc"

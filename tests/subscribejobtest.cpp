@@ -18,7 +18,7 @@
 
 #include <qtest_kde.h>
 
-#include "fakeserver.h"
+#include "kimaptest/fakeserver.h"
 #include "kimap/session.h"
 #include "kimap/subscribejob.h"
 
@@ -31,7 +31,7 @@ Q_DECLARE_METATYPE(QList<QByteArray>)
 class SubscribeJobTest: public QObject {
   Q_OBJECT
 
-private Q_SLOTS:    
+private Q_SLOTS:
 
 void testSubscribe_data() {
   QTest::addColumn<QString>( "mailbox" );
@@ -74,6 +74,6 @@ void testSubscribe()
 
 };
 
-QTEST_KDEMAIN( SubscribeJobTest, NoGUI )
+QTEST_KDEMAIN_CORE( SubscribeJobTest )
 
 #include "subscribejobtest.moc"
