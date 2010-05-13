@@ -84,17 +84,6 @@ class KIMAP_EXPORT LoginJob : public Job
 
     void setAuthenticationMode( AuthenticationMode mode );
 
-    /**
-     * Convienence function
-     * Returns a string representation of the authentication mode.
-     * @note String is a "Pretty String" -> Designed to be shown to the user.
-     *       Not used in server communication.
-     * @param mode the auth mode
-     * @return string representation of mode
-     * @since 4.5
-     */
-    static QString authenticationModeString( AuthenticationMode mode );
-
   protected:
     virtual void doStart();
     virtual void handleResponse( const Message &response );

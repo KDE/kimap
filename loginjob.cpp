@@ -421,31 +421,6 @@ void LoginJob::setAuthenticationMode(AuthenticationMode mode)
   }
 }
 
-QString LoginJob::authenticationModeString( LoginJob::AuthenticationMode mode )
-{
-  switch ( mode ) {
-    case Login:
-      return "LOGIN";
-    case Plain:
-      return "PLAIN";
-    case CramMD5:
-      return "CRAM-MD5";
-    case DigestMD5:
-      return "DIGEST-MD5";
-    case GSSAPI:
-      return "GSSAPI";
-    case NTLM:
-      return "NTLM";
-    case ClearText:
-      return i18nc( "Authentication method", "Clear text" );
-    case Anonymous:
-      return i18nc( "Authentication method", "Anonymous" );
-    default:
-      break;
-  }
-  return QString();
-}
-
 void LoginJob::connectionLost()
 {
   Q_D(LoginJob);
