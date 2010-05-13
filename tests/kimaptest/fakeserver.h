@@ -26,6 +26,8 @@
 #include <QThread>
 #include <QMutex>
 
+#include "kimap/imapstreamparser.h"
+
 class FakeServer : public QThread
 {
     Q_OBJECT
@@ -45,6 +47,7 @@ private:
     QTcpServer *m_tcpServer;
     QMutex m_mutex;
     QTcpSocket* tcpServerConnection;
+    KIMAP::ImapStreamParser *streamParser;
 };
 
 #endif

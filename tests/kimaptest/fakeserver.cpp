@@ -42,21 +42,21 @@ void FakeServer::dataAvailable()
 {
     QMutexLocker locker(&m_mutex);
 
-    QByteArray data = tcpServerConnection->readAll();
-//     kDebug() << "R: " << data.trimmed();
+    while ( tcpServerConnection->bytesAvailable()>0 ) {
+        QByteArray data = streamParser->readUntilCommandEnd();
+        kDebug() << "C: " << data;
+        Q_ASSERT( !m_data.isEmpty() );
 
-    Q_ASSERT( !m_data.isEmpty() );
+        QByteArray toWrite = QString( m_data.takeFirst() + "\r\n" ).toLatin1();
 
-    QByteArray toWrite = QString( m_data.takeFirst() + "\r\n" ).toLatin1();
-//     kDebug() << "S: " << toWrite.trimmed();
-
-    Q_FOREVER {
-        tcpServerConnection->write( toWrite );
-        if (toWrite.startsWith("* ")) {
-          toWrite = QString( m_data.takeFirst() + "\r\n" ).toLatin1();
-//           kDebug() << "S: " << toWrite.trimmed();
-        } else
-          break;
+        Q_FOREVER {
+            tcpServerConnection->write( toWrite );
+            if (toWrite.startsWith("* ")) {
+                toWrite = QString( m_data.takeFirst() + "\r\n" ).toLatin1();
+//              kDebug() << "S: " << toWrite.trimmed();
+            } else
+                break;
+        }
     }
 }
 
@@ -65,6 +65,7 @@ void FakeServer::newConnection()
     QMutexLocker locker(&m_mutex);
 
     tcpServerConnection = m_tcpServer->nextPendingConnection();
+    streamParser = new KIMAP::ImapStreamParser( tcpServerConnection );
     tcpServerConnection->write( QByteArray( "* OK localhost Test Library server ready\r\n" ) );
     connect(tcpServerConnection, SIGNAL(readyRead()), this, SLOT(dataAvailable()));
 }

@@ -6,6 +6,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 set(kimaptest_LIB_SRCS
    fakeserver.cpp
+   ../../imapstreamparser.cpp
 )
 
 kde4_add_library(kimaptest STATIC ${kimaptest_LIB_SRCS})
