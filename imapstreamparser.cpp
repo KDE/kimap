@@ -2,6 +2,9 @@
     Copyright (c) 2006 - 2007 Volker Krause <vkrause@kde.org>
     Copyright (c) 2009 Andras Mantia <amantia@kde.org>
 
+    Copyright (c) 2010 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+    Author: Kevin Ottens <kevin@kdab.com>
+
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Library General Public License as published by
     the Free Software Foundation; either version 2 of the License, or (at your
@@ -499,13 +502,13 @@ QByteArray ImapStreamParser::readUntilCommandEnd()
       paranthesisBalance++;
     if ( m_data[i] == ')' )
       paranthesisBalance--;
-    result.append( m_data[i]);
     if ( ( i == m_data.length() && paranthesisBalance == 0 ) || m_data[i] == '\n'  || m_data[i] == '\r')
       break; //command end
-      ++i;
+    result.append( m_data[i]);
+    ++i;
   }
-  while ( m_data[i] == '\n' || m_data[i] == '\r' ) ++i;
   m_position = i;
+  atCommandEnd();
   return result;
 }
 
