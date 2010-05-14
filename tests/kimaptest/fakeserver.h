@@ -1,6 +1,9 @@
 /*
    Copyright (C) 2008 Omat Holding B.V. <info@omat.nl>
 
+   Copyright (C) 2010 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+   Author: Kevin Ottens <kevin@kdab.com>
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
    License as published by the Free Software Foundation; either
@@ -28,25 +31,33 @@
 
 #include "kimap/imapstreamparser.h"
 
+Q_DECLARE_METATYPE( QList<QByteArray> )
+
 class FakeServer : public QThread
 {
     Q_OBJECT
 
 public:
+    static QByteArray preauth();
+    static QByteArray greeting();
+
     FakeServer( QObject* parent = 0 );
     ~FakeServer();
     virtual void run();
-    void setResponse( const QStringList& data );
+    void setScenario( const QList<QByteArray> &scenario );
 
 private Q_SLOTS:
     void newConnection();
     void dataAvailable();
 
 private:
-    QStringList m_data;
+    void writeServerPart();
+    void readClientPart();
+
+    QList<QByteArray> m_scenario;
     QTcpServer *m_tcpServer;
     QMutex m_mutex;
-    QTcpSocket* tcpServerConnection;
+    QTcpSocket *tcpServerConnection;
     KIMAP::ImapStreamParser *streamParser;
 };
 

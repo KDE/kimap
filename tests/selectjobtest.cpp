@@ -1,6 +1,9 @@
 /*
    Copyright (C) 2009 Andras Mantia <amantia@kde.org>
 
+   Copyright (c) 2010 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+   Author: Kevin Ottens <kevin@kdab.com>
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
    License as published by the Free Software Foundation; either
@@ -27,15 +30,13 @@
 #include <QtTest>
 #include <KDebug>
 
-Q_DECLARE_METATYPE(QList<QByteArray>)
-
 class SelectJobTest: public QObject {
   Q_OBJECT
 
 private Q_SLOTS:
 
 void testSingleSelect_data() {
-  QTest::addColumn<QStringList>( "response" );
+  QTest::addColumn<QList<QByteArray> >( "scenario" );
   QTest::addColumn<QList<QByteArray> >( "flags" );
   QTest::addColumn<QList<QByteArray> >( "permanentflags" );
   QTest::addColumn<int>( "messagecount" );
@@ -44,40 +45,44 @@ void testSingleSelect_data() {
   QTest::addColumn<qint64>( "uidValidity" );
   QTest::addColumn<qint64>( "nextUid" );
 
-  QStringList response;
+  QList<QByteArray> scenario;
   QList<QByteArray> flags;
   QList<QByteArray> permanentflags;
-  response << "* 172 EXISTS" << "* 1 RECENT" << "* OK [UNSEEN 12] Message 12 is first unseen" << "* OK [UIDVALIDITY 3857529045] UIDs valid" << "* OK [UIDNEXT 4392] Predicted next UID" << "* FLAGS (\\Answered \\Flagged \\Deleted \\Seen \\Draft)" << "* OK [PERMANENTFLAGS (\\Deleted \\Seen \\*)] Limited" << "A000002 OK [READ-WRITE] SELECT completed";
+  scenario << FakeServer::preauth()
+           << "C: A000001 SELECT \"INBOX\""
+           << "S: * 172 EXISTS"
+           << "S: * 1 RECENT"
+           << "S: * OK [UNSEEN 12] Message 12 is first unseen"
+           << "S: * OK [UIDVALIDITY 3857529045] UIDs valid"
+           << "S: * OK [UIDNEXT 4392] Predicted next UID"
+           << "S: * FLAGS (\\Answered \\Flagged \\Deleted \\Seen \\Draft)"
+           << "S: * OK [PERMANENTFLAGS (\\Deleted \\Seen \\*)] Limited"
+           << "S: A000001 OK [READ-WRITE] SELECT completed";
+
   flags << "\\Answered" << "\\Flagged" << "\\Deleted" << "\\Seen" << "\\Draft";
   permanentflags << "\\Deleted" << "\\Seen" << "\\*";
-  QTest::newRow( "good" ) << response << flags << permanentflags << 172 << 1 << 12 << (qint64)3857529045 << (qint64)4392;
+  QTest::newRow( "good" ) << scenario << flags << permanentflags << 172 << 1 << 12 << (qint64)3857529045 << (qint64)4392;
 
-  response.clear();
+  scenario.clear();
   flags.clear();
   permanentflags.clear();
-  response << "A000002 BAD command unknown or arguments invalid";
-  QTest::newRow( "bad" ) << response << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << (qint64)0;
+  scenario << FakeServer::preauth()
+           << "C: A000001 SELECT \"INBOX\""
+           << "S: A000001 BAD command unknown or arguments invalid";
+  QTest::newRow( "bad" ) << scenario << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << (qint64)0;
 
-  response.clear();
+  scenario.clear();
   flags.clear();
   permanentflags.clear();
-  response << "A000002 NO select failure";
-  QTest::newRow( "no" ) << response << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << (qint64)0;
+  scenario << FakeServer::preauth()
+           << "C: A000001 SELECT \"INBOX\""
+           << "S: A000001 NO select failure";
+  QTest::newRow( "no" ) << scenario << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << (qint64)0;
 }
 
 void testSingleSelect()
 {
-    FakeServer fakeServer;
-    fakeServer.start();
-    KIMAP::Session session("127.0.0.1", 5989);
-
-    fakeServer.setResponse( QStringList() << "A000001 OK User logged in" );
-    KIMAP::LoginJob *login = new KIMAP::LoginJob(&session);
-    login->setUserName("user");
-    login->setPassword("password");
-    QVERIFY(login->exec());
-
-    QFETCH( QStringList, response );
+    QFETCH( QList<QByteArray>, scenario );
     QFETCH( QList<QByteArray>, flags );
     QFETCH( QList<QByteArray>, permanentflags );
     QFETCH( int, messagecount);
@@ -86,13 +91,17 @@ void testSingleSelect()
     QFETCH( qint64, uidValidity);
     QFETCH( qint64, nextUid);
 
-    fakeServer.setResponse( response );
+    FakeServer fakeServer;
+    fakeServer.setScenario( scenario );
+    fakeServer.start();
+
+    KIMAP::Session session("127.0.0.1", 5989);
 
     KIMAP::SelectJob *job = new KIMAP::SelectJob(&session);
     job->setMailBox("INBOX");
-    QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
-    QEXPECT_FAIL("no" , "Expected failure on NO response", Continue);
     bool result = job->exec();
+    QEXPECT_FAIL("bad" , "Expected failure on BAD scenario", Continue);
+    QEXPECT_FAIL("no" , "Expected failure on NO scenario", Continue);
     QVERIFY(result);
     if (result) {
       QCOMPARE(job->flags(), flags);
@@ -103,27 +112,28 @@ void testSingleSelect()
       QCOMPARE(job->uidValidity(), uidValidity);
       QCOMPARE(job->nextUid(), nextUid);
     }
+
     fakeServer.quit();
 }
 
 void testSeveralSelect()
 {
     FakeServer fakeServer;
+    fakeServer.setScenario( QList<QByteArray>()
+        << FakeServer::preauth()
+        << "C: A000001 SELECT \"INBOX\""
+        << "S: A000001 OK [READ-WRITE] SELECT completed"
+        << "C: A000002 SELECT \"INBOX/Foo\""
+        << "S: A000002 OK [READ-WRITE] SELECT completed"
+    );
     fakeServer.start();
+
     KIMAP::Session session("127.0.0.1", 5989);
 
-    fakeServer.setResponse( QStringList() << "A000001 OK User logged in" );
-    KIMAP::LoginJob *login = new KIMAP::LoginJob(&session);
-    login->setUserName("user");
-    login->setPassword("password");
-    QVERIFY(login->exec());
-
-    fakeServer.setResponse( QStringList() << "A000002 OK [READ-WRITE] SELECT completed" );
     KIMAP::SelectJob *job = new KIMAP::SelectJob(&session);
     job->setMailBox("INBOX");
     QVERIFY(job->exec());
 
-    fakeServer.setResponse( QStringList() << "A000003 OK [READ-WRITE] SELECT completed" );
     job = new KIMAP::SelectJob(&session);
     job->setMailBox("INBOX/Foo");
     QVERIFY(job->exec());

@@ -1,21 +1,24 @@
-/**
-  * This file is part of the KDE project
-  * Copyright (C) 2008 Kevin Ottens <ervin@kde.org>
-  *
-  * This library is free software; you can redistribute it and/or
-  * modify it under the terms of the GNU Library General Public
-  * License as published by the Free Software Foundation; either
-  * version 2 of the License, or (at your option) any later version.
-  *
-  * This library is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  * Library General Public License for more details.
-  *
-  * You should have received a copy of the GNU Library General Public License
-  * along with this library; see the file COPYING.LIB.  If not, write to
-  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-  * Boston, MA 02110-1301, USA.
+/*
+    This file is part of the KDE project
+    Copyright (C) 2008 Kevin Ottens <ervin@kde.org>
+
+    Copyright (c) 2010 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+    Author: Kevin Ottens <kevin@kdab.com>
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
   */
 
 #include <QtCore/QEventLoop>
@@ -24,6 +27,7 @@
 
 #include "session.h"
 #include "job.h"
+#include "kimaptest/fakeserver.h"
 
 class MockJob : public KIMAP::Job
 {
@@ -35,7 +39,7 @@ class MockJob : public KIMAP::Job
 
     virtual void doStart()
     {
-      QTimer::singleShot(1000, this, SLOT(done()));
+      QTimer::singleShot(10, this, SLOT(done()));
     }
 
   private slots:
@@ -50,9 +54,39 @@ class SessionTest : public QObject
   Q_OBJECT
 
   private slots:
+    void shouldStartDisconnected()
+    {
+      FakeServer fakeServer;
+      fakeServer.setScenario( QList<QByteArray>()
+         << FakeServer::greeting()
+      );
+      fakeServer.start();
+      KIMAP::Session s( "127.0.0.1", 5989 );
+      QCOMPARE( ( int )s.state(), ( int )KIMAP::Session::Disconnected );
+      QTest::qWait( 500 );
+      QCOMPARE( ( int )s.state(), ( int )KIMAP::Session::NotAuthenticated );
+    }
+
+    void shouldSupportPreauth()
+    {
+      FakeServer fakeServer;
+      fakeServer.setScenario( QList<QByteArray>()
+         << FakeServer::preauth()
+      );
+      fakeServer.start();
+
+      KIMAP::Session s( "127.0.0.1", 5989 );
+      QCOMPARE( ( int )s.state(), ( int )KIMAP::Session::Disconnected );
+      QTest::qWait( 500 );
+      QCOMPARE( ( int )s.state(), ( int )KIMAP::Session::Authenticated );
+    }
+
     void shouldRespectStartOrder()
     {
-      KIMAP::Session s("mail.kdab.com", 143);
+      FakeServer fakeServer;
+      fakeServer.start();
+
+      KIMAP::Session s("127.0.0.1", 5989);
       MockJob *j1 = new MockJob(&s);
       connect(j1, SIGNAL(result(KJob*)), this, SLOT(jobDone(KJob*)));
       MockJob *j2 = new MockJob(&s);

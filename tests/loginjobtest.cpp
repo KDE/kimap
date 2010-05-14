@@ -1,6 +1,9 @@
 /*
    Copyright (C) 2009 Andras Mantia <amantia@kde.org>
 
+   Copyright (c) 2010 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+   Author: Kevin Ottens <kevin@kdab.com>
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
    License as published by the Free Software Foundation; either
@@ -29,16 +32,21 @@
 class LoginJobTest: public QObject {
   Q_OBJECT
 
-private Q_SLOTS:    
+private Q_SLOTS:
 
 void testClearTextLogin()
 {
     FakeServer fakeServer;
+    fakeServer.setScenario( QList<QByteArray>()
+        << FakeServer::greeting()
+        << "C: A000001 LOGIN user password"
+        << "S: A000001 OK User logged in"
+        << "C: A000002 LOGIN user_bad password"
+        << "S: A000002 NO Login failed: authentication failure"
+    );
     fakeServer.start();
+
     KIMAP::Session *session = new KIMAP::Session("127.0.0.1", 5989);
-    QStringList list;
-    list << "A000001 OK User logged in" << "A000002 NO Login failed: authentication failure" ;
-    fakeServer.setResponse( list );
 
     KIMAP::LoginJob *login = new KIMAP::LoginJob(session);
     login->setUserName("user");
@@ -48,8 +56,9 @@ void testClearTextLogin()
     login = new KIMAP::LoginJob(session);
     login->setUserName("user_bad");
     login->setPassword("password");
+    bool result = login->exec();
     QEXPECT_FAIL("","Login with bad user name", Continue);
-    QVERIFY(login->exec());
+    QVERIFY(result);
 
     fakeServer.quit();
     delete session;

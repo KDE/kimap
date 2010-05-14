@@ -1,6 +1,9 @@
 /*
    Copyright (C) 2009 Andras Mantia <amantia@kde.org>
 
+   Copyright (c) 2010 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+   Author: Kevin Ottens <kevin@kdab.com>
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
    License as published by the Free Software Foundation; either
@@ -26,8 +29,6 @@
 #include <QtTest>
 #include <KDebug>
 
-Q_DECLARE_METATYPE(QList<QByteArray>)
-
 class CreateJobTest: public QObject {
   Q_OBJECT
 
@@ -35,36 +36,42 @@ private Q_SLOTS:
 
 void testCreate_data() {
   QTest::addColumn<QString>( "mailbox" );
-  QTest::addColumn<QStringList>( "response" );
+  QTest::addColumn<QList<QByteArray> >( "scenario" );
 
-  QStringList response;
-  response << "A000001 OK CREATE completed";
-  QTest::newRow( "good" ) << "INBOX" << response;
+  QList<QByteArray> scenario;
+  scenario << FakeServer::preauth()
+           << "C: A000001 CREATE \"INBOX\""
+           << "S: A000001 OK CREATE completed";
+  QTest::newRow( "good" ) << "INBOX" << scenario;
 
-  response.clear();
-  response << "A000001 BAD command unknown or arguments invalid";
-  QTest::newRow( "bad" ) << "INBOX-FAIL-BAD" << response;
+  scenario.clear();
+  scenario << FakeServer::preauth()
+           << "C: A000001 CREATE \"INBOX-FAIL-BAD\""
+           << "S: A000001 BAD command unknown or arguments invalid";
+  QTest::newRow( "bad" ) << "INBOX-FAIL-BAD" << scenario;
 
-  response.clear();
-  response << "A000001 NO create failure";
-  QTest::newRow( "no" ) << "INBOX-FAIL-NO" << response;
+  scenario.clear();
+  scenario << FakeServer::preauth()
+           << "C: A000001 CREATE \"INBOX-FAIL-NO\""
+           << "S: A000001 NO create failure";
+  QTest::newRow( "no" ) << "INBOX-FAIL-NO" << scenario;
 }
 
 void testCreate()
 {
+    QFETCH( QString, mailbox );
+    QFETCH( QList<QByteArray>, scenario );
+
     FakeServer fakeServer;
+    fakeServer.setScenario( scenario );
     fakeServer.start();
     KIMAP::Session session("127.0.0.1", 5989);
-    QFETCH( QString, mailbox );
-    QFETCH( QStringList, response );
-
-    fakeServer.setResponse( response );
 
     KIMAP::CreateJob *job = new KIMAP::CreateJob(&session);
     job->setMailBox(mailbox);
+    bool result = job->exec();
     QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
     QEXPECT_FAIL("no" , "Expected failure on NO response", Continue);
-    bool result = job->exec();
     QVERIFY(result);
     if (result) {
       QCOMPARE(job->mailBox(), mailbox);

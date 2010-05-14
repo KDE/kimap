@@ -1,6 +1,9 @@
 /*
    Copyright (C) 2009 Andras Mantia <amantia@kde.org>
 
+   Copyright (c) 2010 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+   Author: Kevin Ottens <kevin@kdab.com>
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
    License as published by the Free Software Foundation; either
@@ -35,11 +38,17 @@ private Q_SLOTS:
 
 void testList_data() {
   QTest::addColumn<bool>( "unsubscribed" );
-  QTest::addColumn<QStringList>( "response" );
+  QTest::addColumn<QList<QByteArray> >( "scenario" );
   QTest::addColumn<QList<KIMAP::MailBoxDescriptor> >( "listresult" );
 
-  QStringList response;
-  response << "* LIST ( \\HasChildren ) / INBOX "<< "* LIST ( \\HasNoChildren ) / INBOX/&AOQ- &APY- &APw- @ &IKw- "<< "* LIST ( \\HasChildren ) / INBOX/lost+found " << "* LIST ( \\HasNoChildren ) / \"INBOX/lost+found/Calendar Public-20080128\" " << "A000001 OK LIST completed";
+  QList<QByteArray> scenario;
+  scenario << FakeServer::preauth()
+           << "C: A000001 LIST \"\" *"
+           << "S: * LIST ( \\HasChildren ) / INBOX "
+           << "S: * LIST ( \\HasNoChildren ) / INBOX/&AOQ- &APY- &APw- @ &IKw- "
+           << "S: * LIST ( \\HasChildren ) / INBOX/lost+found "
+           << "S: * LIST ( \\HasNoChildren ) / \"INBOX/lost+found/Calendar Public-20080128\" "
+           << "S: A000001 OK LIST completed";
   KIMAP::MailBoxDescriptor descriptor;
   QList<KIMAP::MailBoxDescriptor> listresult;
 
@@ -56,10 +65,17 @@ void testList_data() {
   descriptor.name = "INBOX/lost+found/Calendar Public-20080128";
   listresult << descriptor;
 
-  QTest::newRow( "normal" ) << true << response << listresult;
+  QTest::newRow( "normal" ) << true << scenario << listresult;
 
-  response.clear();
-  response << "* LSUB ( \\HasChildren ) / INBOX " <<  "* LSUB ( ) / INBOX/Calendar/3196 " << "* LSUB ( \\HasChildren ) / INBOX/Calendar/ff " << "* LSUB ( ) / INBOX/Calendar/ff/hgh "<< "* LSUB ( ) / user/test2/Calendar " << "A000001 OK LSUB completed";
+  scenario.clear();
+  scenario << FakeServer::preauth()
+           << "C: A000001 LSUB \"\" *"
+           << "S: * LSUB ( \\HasChildren ) / INBOX"
+           << "S: * LSUB ( ) / INBOX/Calendar/3196"
+           << "S: * LSUB ( \\HasChildren ) / INBOX/Calendar/ff"
+           << "S: * LSUB ( ) / INBOX/Calendar/ff/hgh"
+           << "S: * LSUB ( ) / user/test2/Calendar"
+           << "S: A000001 OK LSUB completed";
   listresult.clear();
 
   descriptor.separator = '/';
@@ -78,43 +94,51 @@ void testList_data() {
   descriptor.name = "user/test2/Calendar";
   listresult << descriptor;
 
-  QTest::newRow( "subscribed" ) << false << response << listresult;
+  QTest::newRow( "subscribed" ) << false << scenario << listresult;
 
-  response.clear();
-  response << "* LIST ( \\HasNoChildren ) / INBOX/lost+found/Calendar Public-20080128 " << "A000001 OK LIST completed";
+  scenario.clear();
+  scenario << FakeServer::preauth()
+           << "C: A000001 LIST \"\" *"
+           << "S: * LIST ( \\HasNoChildren ) / INBOX/lost+found/Calendar Public-20080128"
+           << "S: A000001 OK LIST completed";
   listresult.clear();
   descriptor.separator = '/';
   descriptor.name = "INBOX/lost+found/Calendar Public-20080128";
   listresult << descriptor;
 
-  QTest::newRow( "unquoted-space" ) << true << response << listresult;
+  QTest::newRow( "unquoted-space" ) << true << scenario << listresult;
 
-  response.clear();
-  response << "A000001 BAD command unknown or arguments invalid";
+  scenario.clear();
+  scenario << FakeServer::preauth()
+           << "C: A000001 LIST \"\" *"
+           << "S: A000001 BAD command unknown or arguments invalid";
   listresult.clear();
-  QTest::newRow( "bad" ) << true << response << listresult;
+  QTest::newRow( "bad" ) << true << scenario << listresult;
 
-  response.clear();
-  response << "A000001 NO list failure";
-  QTest::newRow( "no" ) << true << response << listresult;
+  scenario.clear();
+  scenario << FakeServer::preauth()
+           << "C: A000001 LIST \"\" *"
+           << "S: A000001 NO list failure";
+  QTest::newRow( "no" ) << true << scenario << listresult;
 }
 
 void testList()
 {
-    FakeServer fakeServer;
-    fakeServer.start();
-    KIMAP::Session session("127.0.0.1", 5989);
     QFETCH( bool, unsubscribed);
-    QFETCH( QStringList, response );
+    QFETCH( QList<QByteArray>, scenario );
     QFETCH( QList<KIMAP::MailBoxDescriptor>, listresult );
 
-    fakeServer.setResponse( response );
+    FakeServer fakeServer;
+    fakeServer.setScenario( scenario );
+    fakeServer.start();
+
+    KIMAP::Session session("127.0.0.1", 5989);
 
     KIMAP::ListJob *job = new KIMAP::ListJob(&session);
     job->setIncludeUnsubscribed(unsubscribed);
+    bool result = job->exec();
     QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
     QEXPECT_FAIL("no" , "Expected failure on NO response", Continue);
-    bool result = job->exec();
     QVERIFY(result);
     if (result) {
       //kDebug() << job->mailBoxes().first().name;

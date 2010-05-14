@@ -1,6 +1,9 @@
 /*
    Copyright (C) 2008 Omat Holding B.V. <info@omat.nl>
 
+   Copyright (C) 2010 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+   Author: Kevin Ottens <kevin@kdab.com>
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
    License as published by the Free Software Foundation; either
@@ -25,6 +28,17 @@
 
 // KDE
 #include <KDebug>
+#include <qtest_kde.h>
+
+QByteArray FakeServer::preauth()
+{
+    return "S: * PREAUTH localhost Test Library server ready";
+}
+
+QByteArray FakeServer::greeting()
+{
+    return "S: * OK localhost Test Library server ready";
+}
 
 FakeServer::FakeServer( QObject* parent ) : QThread( parent )
 {
@@ -42,22 +56,8 @@ void FakeServer::dataAvailable()
 {
     QMutexLocker locker(&m_mutex);
 
-    while ( tcpServerConnection->bytesAvailable()>0 ) {
-        QByteArray data = streamParser->readUntilCommandEnd();
-        kDebug() << "C: " << data;
-        Q_ASSERT( !m_data.isEmpty() );
-
-        QByteArray toWrite = QString( m_data.takeFirst() + "\r\n" ).toLatin1();
-
-        Q_FOREVER {
-            tcpServerConnection->write( toWrite );
-            if (toWrite.startsWith("* ")) {
-                toWrite = QString( m_data.takeFirst() + "\r\n" ).toLatin1();
-//              kDebug() << "S: " << toWrite.trimmed();
-            } else
-                break;
-        }
-    }
+    readClientPart();
+    writeServerPart();
 }
 
 void FakeServer::newConnection()
@@ -65,9 +65,10 @@ void FakeServer::newConnection()
     QMutexLocker locker(&m_mutex);
 
     tcpServerConnection = m_tcpServer->nextPendingConnection();
-    streamParser = new KIMAP::ImapStreamParser( tcpServerConnection );
-    tcpServerConnection->write( QByteArray( "* OK localhost Test Library server ready\r\n" ) );
     connect(tcpServerConnection, SIGNAL(readyRead()), this, SLOT(dataAvailable()));
+    streamParser = new KIMAP::ImapStreamParser( tcpServerConnection );
+
+    writeServerPart();
 }
 
 void FakeServer::run()
@@ -84,11 +85,38 @@ void FakeServer::run()
     delete m_tcpServer;
 }
 
-void FakeServer::setResponse( const QStringList& data )
+void FakeServer::setScenario( const QList<QByteArray> &scenario )
 {
     QMutexLocker locker(&m_mutex);
 
-    m_data+= data;
+    m_scenario.clear();
+    m_scenario+= scenario;
+}
+
+void FakeServer::writeServerPart()
+{
+    while ( !m_scenario.isEmpty()
+         && m_scenario.first().startsWith( "S: " ) ) {
+      QByteArray payload = m_scenario.takeFirst().mid( 3 );
+      tcpServerConnection->write( payload + "\r\n" );
+    }
+
+    if ( !m_scenario.isEmpty() ) {
+      QVERIFY( m_scenario.first().startsWith( "C: " ) );
+    }
+}
+
+void FakeServer::readClientPart()
+{
+    while ( !m_scenario.isEmpty()
+         && m_scenario.first().startsWith( "C: " ) ) {
+        QByteArray data = streamParser->readUntilCommandEnd();
+        QCOMPARE( "C: "+data.trimmed(), m_scenario.takeFirst() );
+    }
+
+    if ( !m_scenario.isEmpty() ) {
+      QVERIFY( m_scenario.first().startsWith( "S: " ) );
+    }
 }
 
 #include "fakeserver.moc"

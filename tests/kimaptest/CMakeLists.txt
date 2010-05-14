@@ -10,7 +10,7 @@ set(kimaptest_LIB_SRCS
 )
 
 kde4_add_library(kimaptest STATIC ${kimaptest_LIB_SRCS})
-target_link_libraries(kimaptest ${KDE4_KDECORE_LIBS} ${QT_QTNETWORK_LIBRARY})
+target_link_libraries(kimaptest ${KDE4_KDECORE_LIBS} ${QT_QTNETWORK_LIBRARY} ${QT_QTTEST_LIBRARY})
 install(TARGETS kimaptest ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############

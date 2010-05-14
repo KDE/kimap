@@ -1,6 +1,9 @@
 /*
    Copyright (C) 2009 Andras Mantia <amantia@kde.org>
 
+   Copyright (c) 2010 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+   Author: Kevin Ottens <kevin@kdab.com>
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
    License as published by the Free Software Foundation; either
@@ -26,8 +29,6 @@
 #include <QtTest>
 #include <KDebug>
 
-Q_DECLARE_METATYPE(QList<QByteArray>)
-
 class SubscribeJobTest: public QObject {
   Q_OBJECT
 
@@ -35,36 +36,43 @@ private Q_SLOTS:
 
 void testSubscribe_data() {
   QTest::addColumn<QString>( "mailbox" );
-  QTest::addColumn<QStringList>( "response" );
+  QTest::addColumn< QList<QByteArray> >( "scenario" );
 
-  QStringList response;
-  response << "A000001 OK CREATE completed";
-  QTest::newRow( "good" ) << "INBOX/foo"  << response ;
+  QList<QByteArray> scenario;
+  scenario << FakeServer::preauth()
+           << "C: A000001 SUBSCRIBE \"INBOX/foo\""
+           << "S: A000001 OK CREATE completed";
+  QTest::newRow( "good" ) << "INBOX/foo"  << scenario ;
 
-  response.clear();
-  response << "A000001 BAD command unknown or arguments invalid";
-  QTest::newRow( "bad" ) << "INBOX-FAIL-BAD" << response;
+  scenario.clear();
+  scenario << FakeServer::preauth()
+           << "C: A000001 SUBSCRIBE \"INBOX-FAIL-BAD\""
+           << "S: A000001 BAD command unknown or arguments invalid";
+  QTest::newRow( "bad" ) << "INBOX-FAIL-BAD" << scenario;
 
-  response.clear();
-  response << "A000001 NO subscribe failure";
-  QTest::newRow( "no" ) << "INBOX-FAIL-NO" << response ;
+  scenario.clear();
+  scenario << FakeServer::preauth()
+           << "C: A000001 SUBSCRIBE \"INBOX-FAIL-NO\""
+           << "S: A000001 NO subscribe failure";
+  QTest::newRow( "no" ) << "INBOX-FAIL-NO" << scenario ;
 }
 
 void testSubscribe()
 {
-    FakeServer fakeServer;
-    fakeServer.start();
-    KIMAP::Session session("127.0.0.1", 5989);
     QFETCH( QString, mailbox );
-    QFETCH( QStringList, response );
+    QFETCH( QList<QByteArray>, scenario );
 
-    fakeServer.setResponse( response );
+    FakeServer fakeServer;
+    fakeServer.setScenario( scenario );
+    fakeServer.start();
+
+    KIMAP::Session session("127.0.0.1", 5989);
 
     KIMAP::SubscribeJob *job = new KIMAP::SubscribeJob(&session);
     job->setMailBox(mailbox);
-    QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
-    QEXPECT_FAIL("no" , "Expected failure on NO response", Continue);
     bool result = job->exec();
+    QEXPECT_FAIL("bad" , "Expected failure on BAD scenario", Continue);
+    QEXPECT_FAIL("no" , "Expected failure on NO scenario", Continue);
     QVERIFY(result);
     QCOMPARE(job->mailBox(), mailbox);
 

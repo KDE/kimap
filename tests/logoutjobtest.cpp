@@ -1,6 +1,9 @@
 /*
    Copyright (C) 2009 Andras Mantia <amantia@kde.org>
 
+   Copyright (c) 2010 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+   Author: Kevin Ottens <kevin@kdab.com>
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
    License as published by the Free Software Foundation; either
@@ -30,16 +33,21 @@
 class LogoutJobTest: public QObject {
   Q_OBJECT
 
-private Q_SLOTS:    
+private Q_SLOTS:
 
 void testLogout()
 {
     FakeServer fakeServer;
+    fakeServer.setScenario( QList<QByteArray>()
+        << FakeServer::greeting()
+        << "C: A000001 LOGIN user password"
+        << "S: A000001 OK User logged in"
+        << "C: A000002 LOGOUT"
+        << "S: A000002 OK LOGOUT completed"
+    );
     fakeServer.start();
+
     KIMAP::Session *session = new KIMAP::Session("127.0.0.1", 5989);
-    QStringList list;
-    list << "A000001 OK User logged in" << "A000002 OK LOGOUT completed" ;
-    fakeServer.setResponse( list );
 
     KIMAP::LoginJob *login = new KIMAP::LoginJob(session);
     login->setUserName("user");
@@ -56,11 +64,17 @@ void testLogout()
 void testLogoutUntagged()
 {
     FakeServer fakeServer;
+    fakeServer.setScenario( QList<QByteArray>()
+        << FakeServer::greeting()
+        << "C: A000001 LOGIN user password"
+        << "S: A000001 OK User logged in"
+        << "C: A000002 LOGOUT"
+        << "S: * some untagged response"
+        << "S: A000002 OK LOGOUT completed"
+    );
     fakeServer.start();
+
     KIMAP::Session *session = new KIMAP::Session("127.0.0.1", 5989);
-    QStringList list;
-    list << "A000001 OK User logged in" << "* some untagged response " << "A000002 OK LOGOUT completed" ;
-    fakeServer.setResponse( list );
 
     KIMAP::LoginJob *login = new KIMAP::LoginJob(session);
     login->setUserName("user");

@@ -1,6 +1,9 @@
 /*
    Copyright (C) 2009 Andras Mantia <amantia@kde.org>
 
+   Copyright (c) 2010 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+   Author: Kevin Ottens <kevin@kdab.com>
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
    License as published by the Free Software Foundation; either
@@ -26,8 +29,6 @@
 #include <QtTest>
 #include <KDebug>
 
-Q_DECLARE_METATYPE(QList<QByteArray>)
-
 class DeleteJobTest: public QObject {
   Q_OBJECT
 
@@ -35,40 +36,49 @@ private Q_SLOTS:
 
 void testDelete_data() {
   QTest::addColumn<QString>( "mailbox" );
-  QTest::addColumn<QStringList>( "response" );
+  QTest::addColumn<QList<QByteArray> >( "scenario" );
 
-  QStringList response;
-  response << "A000001 OK DELETE completed";
-  QTest::newRow( "good" ) << "foo" << response;
+  QList<QByteArray> scenario;
+  scenario << FakeServer::preauth()
+           << "C: A000001 DELETE \"foo\""
+           << "S: A000001 OK DELETE completed";
+  QTest::newRow( "good" ) << "foo" << scenario;
 
-  response.clear();
-  response << "A000001 BAD command unknown or arguments invalid";
-  QTest::newRow( "bad" ) << "foo-BAD" << response;
+  scenario.clear();
+  scenario << FakeServer::preauth()
+           << "C: A000001 DELETE \"foo-BAD\""
+           << "S: A000001 BAD command unknown or arguments invalid";
+  QTest::newRow( "bad" ) << "foo-BAD" << scenario;
 
-  response.clear();
-  response << "A000001 Name \"foo\" has inferior hierarchical names";
-  QTest::newRow( "no" ) << "foo" << response;
+  scenario.clear();
+  scenario << FakeServer::preauth()
+           << "C: A000001 DELETE \"foo\""
+           << "S: A000001 Name \"foo\" has inferior hierarchical names";
+  QTest::newRow( "no" ) << "foo" << scenario;
 
-  response.clear();
-  response << "A000001 OK DELETE completed";
-  QTest::newRow( "hierarchical" ) << "foo/bar" << response;
+  scenario.clear();
+  scenario << FakeServer::preauth()
+           << "C: A000001 DELETE \"foo/bar\""
+           << "S: A000001 OK DELETE completed";
+  QTest::newRow( "hierarchical" ) << "foo/bar" << scenario;
 }
 
 void testDelete()
 {
-    FakeServer fakeServer;
-    fakeServer.start();
-    KIMAP::Session session("127.0.0.1", 5989);
     QFETCH( QString, mailbox );
-    QFETCH( QStringList, response );
+    QFETCH( QList<QByteArray>, scenario );
 
-    fakeServer.setResponse( response );
+    FakeServer fakeServer;
+    fakeServer.setScenario( scenario );
+    fakeServer.start();
+
+    KIMAP::Session session("127.0.0.1", 5989);
 
     KIMAP::DeleteJob *job = new KIMAP::DeleteJob(&session);
     job->setMailBox(mailbox);
+    bool result = job->exec();
     QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
     QEXPECT_FAIL("no" , "Expected failure on NO response", Continue);
-    bool result = job->exec();
     QVERIFY(result);
     if (result) {
       QCOMPARE(job->mailBox(), mailbox);
