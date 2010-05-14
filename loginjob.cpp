@@ -167,6 +167,15 @@ void LoginJob::setPassword( const QString &password )
 void LoginJob::doStart()
 {
   Q_D(LoginJob);
+
+  // Don't authenticate on a session in the authenticated state
+  if ( session()->state() != Session::NotAuthenticated ) {
+    setError( UserDefinedError );
+    setErrorText( i18n("IMAP session in the wrong state for authentication") );
+    emitResult();
+    return;
+  }
+
   if (d->encryptionMode == SslV2 || d->encryptionMode == SslV3 || d->encryptionMode == SslV3_1 || d->encryptionMode == AnySslVersion) {
     KTcpSocket::SslVersion version = KTcpSocket::SslV2;
     if (d->encryptionMode == SslV3)

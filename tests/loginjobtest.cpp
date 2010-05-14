@@ -34,34 +34,55 @@ class LoginJobTest: public QObject {
 
 private Q_SLOTS:
 
-void testClearTextLogin()
+void shouldHandleLogin_data()
 {
-    FakeServer fakeServer;
-    fakeServer.setScenario( QList<QByteArray>()
-        << FakeServer::greeting()
-        << "C: A000001 LOGIN user password"
-        << "S: A000001 OK User logged in"
-        << "C: A000002 LOGIN user_bad password"
-        << "S: A000002 NO Login failed: authentication failure"
-    );
-    fakeServer.start();
+  QTest::addColumn<QString>( "user" );
+  QTest::addColumn<QString>( "password" );
+  QTest::addColumn< QList<QByteArray> >( "scenario" );
 
-    KIMAP::Session *session = new KIMAP::Session("127.0.0.1", 5989);
+  QList<QByteArray> scenario;
+  scenario << FakeServer::greeting()
+           << "C: A000001 LOGIN user password"
+           << "S: A000001 OK User logged in";
 
-    KIMAP::LoginJob *login = new KIMAP::LoginJob(session);
-    login->setUserName("user");
-    login->setPassword("password");
-    QVERIFY(login->exec());
+  QTest::newRow( "success" ) << "user" << "password" << scenario;
 
-    login = new KIMAP::LoginJob(session);
-    login->setUserName("user_bad");
-    login->setPassword("password");
-    bool result = login->exec();
-    QEXPECT_FAIL("","Login with bad user name", Continue);
-    QVERIFY(result);
+  scenario.clear();
+  scenario << FakeServer::greeting()
+           << "C: A000001 LOGIN user_bad password"
+           << "S: A000001 NO Login failed: authentication failure";
 
-    fakeServer.quit();
-    delete session;
+  QTest::newRow( "wrong login" ) << "user" << "password" << scenario;
+
+  scenario.clear();
+  scenario << FakeServer::preauth();
+
+  QTest::newRow( "already authenticated" ) << "user" << "password" << scenario;
+}
+
+void shouldHandleLogin()
+{
+  QFETCH( QString, user );
+  QFETCH( QString, password );
+  QFETCH( QList<QByteArray>, scenario );
+
+  FakeServer fakeServer;
+  fakeServer.setScenario( scenario );
+  fakeServer.start();
+
+  KIMAP::Session *session = new KIMAP::Session("127.0.0.1", 5989);
+
+  KIMAP::LoginJob *login = new KIMAP::LoginJob(session);
+  login->setUserName(user);
+  login->setPassword(password);
+  bool result = login->exec();
+
+  QEXPECT_FAIL("wrong login","Login with bad user name", Continue);
+  QEXPECT_FAIL("already authenticated","Trying to log on an already authenticated session", Continue);
+  QVERIFY(result);
+
+  fakeServer.quit();
+  delete session;
 }
 
 };
