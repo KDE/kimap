@@ -52,7 +52,7 @@ void shouldHandleLogin_data()
            << "C: A000001 LOGIN user_bad password"
            << "S: A000001 NO Login failed: authentication failure";
 
-  QTest::newRow( "wrong login" ) << "user" << "password" << scenario;
+  QTest::newRow( "wrong login" ) << "user_bad" << "password" << scenario;
 
   scenario.clear();
   scenario << FakeServer::preauth();
