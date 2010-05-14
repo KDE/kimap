@@ -178,6 +178,7 @@ void LoginJob::doStart()
     d->sessionInternal()->startSsl(version);
   } else  if (d->encryptionMode == Unencrypted ) {
     if (d->authMode.isEmpty()) {
+      d->authState = LoginJobPrivate::Login;
       d->tags << d->sessionInternal()->sendCommand( "LOGIN",
                                                   quoteIMAP( d->userName ).toUtf8()
                                                  +' '
@@ -205,7 +206,20 @@ void LoginJob::handleResponse( const Message &response )
     commandName = i18n("StartTls");
   }
 
-  if ( !response.content.isEmpty()
+  if ( !response.content.isEmpty() && response.content.first().toString()=="+" ) {
+    if ( response.content.size()>1 && response.content.at( 1 ).toString()=="OK" ) {
+      return;
+    }
+
+    QByteArray challengeResponse;
+    challengeResponse+= '\0';
+    challengeResponse+= d->userName.toUtf8();
+    challengeResponse+= '\0';
+    challengeResponse+= d->password.toUtf8();
+    challengeResponse = challengeResponse.toBase64();
+    d->sessionInternal()->sendData( challengeResponse );
+
+  } else if ( !response.content.isEmpty()
        && d->tags.contains( response.content.first().toString() ) ) {
     if ( response.content.size() < 2 ) {
       setErrorText( i18n("%1 failed, malformed reply from the server.", commandName) );
@@ -330,7 +344,11 @@ bool LoginJobPrivate::startAuthentication()
   QByteArray tmp = QByteArray::fromRawData( out, outlen );
   QByteArray challenge = tmp.toBase64();
 
-  tags << sessionInternal()->sendCommand( "AUTHENTICATE", authMode.toLatin1() + ' ' + challenge );
+  if ( challenge.isEmpty() ) {
+    tags << sessionInternal()->sendCommand( "AUTHENTICATE", authMode.toLatin1() );
+  } else {
+    tags << sessionInternal()->sendCommand( "AUTHENTICATE", authMode.toLatin1() + ' ' + challenge );
+  }
 
   return true;
 }
