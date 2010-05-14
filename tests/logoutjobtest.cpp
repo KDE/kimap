@@ -39,20 +39,13 @@ void testLogout()
 {
     FakeServer fakeServer;
     fakeServer.setScenario( QList<QByteArray>()
-        << FakeServer::greeting()
-        << "C: A000001 LOGIN user password"
-        << "S: A000001 OK User logged in"
-        << "C: A000002 LOGOUT"
-        << "S: A000002 OK LOGOUT completed"
+        << FakeServer::preauth()
+        << "C: A000001 LOGOUT"
+        << "S: A000001 OK LOGOUT completed"
     );
     fakeServer.start();
 
     KIMAP::Session *session = new KIMAP::Session("127.0.0.1", 5989);
-
-    KIMAP::LoginJob *login = new KIMAP::LoginJob(session);
-    login->setUserName("user");
-    login->setPassword("password");
-    login->exec();
 
     KIMAP::LogoutJob *logout = new KIMAP::LogoutJob(session);
     QVERIFY(logout->exec());
@@ -65,21 +58,14 @@ void testLogoutUntagged()
 {
     FakeServer fakeServer;
     fakeServer.setScenario( QList<QByteArray>()
-        << FakeServer::greeting()
-        << "C: A000001 LOGIN user password"
-        << "S: A000001 OK User logged in"
-        << "C: A000002 LOGOUT"
+        << FakeServer::preauth()
+        << "C: A000001 LOGOUT"
         << "S: * some untagged response"
-        << "S: A000002 OK LOGOUT completed"
+        << "S: A000001 OK LOGOUT completed"
     );
     fakeServer.start();
 
     KIMAP::Session *session = new KIMAP::Session("127.0.0.1", 5989);
-
-    KIMAP::LoginJob *login = new KIMAP::LoginJob(session);
-    login->setUserName("user");
-    login->setPassword("password");
-    login->exec();
 
     KIMAP::LogoutJob *logout = new KIMAP::LogoutJob(session);
     QVERIFY(logout->exec());
