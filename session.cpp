@@ -32,6 +32,7 @@
 
 #include "job.h"
 #include "message_p.h"
+#include "sessionlogger_p.h"
 #include "sessionthread_p.h"
 #include "rfccodecs.h"
 
@@ -44,6 +45,10 @@ using namespace KIMAP;
 Session::Session( const QString &hostName, quint16 port, QObject *parent)
   : QObject(parent), d(new SessionPrivate(this))
 {
+  if ( !qgetenv( "KIMAP_LOGFILE" ).isEmpty() ) {
+    d->logger = SessionLogger::self();
+  }
+
   d->isSocketConnected = false;
   d->state = Disconnected;
   d->jobRunning = false;
@@ -99,6 +104,7 @@ SessionPrivate::SessionPrivate( Session *session )
   : QObject( session ),
     q(session),
     state(Session::Disconnected),
+    logger(0),
     uiProxy(0),
     currentJob(0),
     tagCount(0)
@@ -151,6 +157,10 @@ void SessionPrivate::jobDestroyed( QObject *job )
 
 void SessionPrivate::responseReceived( const Message &response )
 {
+  if ( logger && ( state==Session::Authenticated || state==Session::Selected ) ) {
+    logger->dataReceived( response.toString() );
+  }
+
   QByteArray tag;
   QByteArray code;
 
@@ -251,6 +261,10 @@ QByteArray SessionPrivate::sendCommand( const QByteArray &command, const QByteAr
 
 void SessionPrivate::sendData( const QByteArray &data )
 {
+  if ( logger && ( state==Session::Authenticated || state==Session::Selected ) ) {
+    logger->dataSent( data );
+  }
+
   thread->sendData(data+"\r\n");
 }
 
@@ -262,6 +276,11 @@ void SessionPrivate::socketConnected()
 
 void SessionPrivate::socketDisconnected()
 {
+  if ( logger && ( state==Session::Authenticated || state==Session::Selected ) ) {
+    logger->disconnectionOccured();
+  }
+
+
   isSocketConnected = false;
   state = Session::Disconnected;
   thread->closeSocket();

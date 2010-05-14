@@ -34,6 +34,7 @@ namespace KIMAP {
 
 class Job;
 struct Message;
+class SessionLogger;
 class SessionThread;
 class SessionUiProxy;
 
@@ -76,6 +77,7 @@ class SessionPrivate : public QObject
     bool isSocketConnected;
     Session::State state;
 
+    SessionLogger *logger;
     SessionThread *thread;
     SessionUiProxy *uiProxy;
 

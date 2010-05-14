@@ -22,6 +22,7 @@ set(kimap_LIB_SRCS
    rfccodecs.cpp
    selectjob.cpp
    session.cpp
+   sessionlogger.cpp
    sessionthread.cpp
    closejob.cpp
    expungejob.cpp
