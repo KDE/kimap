@@ -44,10 +44,10 @@ void testList_data() {
   QList<QByteArray> scenario;
   scenario << FakeServer::preauth()
            << "C: A000001 LIST \"\" *"
-           << "S: * LIST ( \\HasChildren ) / INBOX "
-           << "S: * LIST ( \\HasNoChildren ) / INBOX/&AOQ- &APY- &APw- @ &IKw- "
-           << "S: * LIST ( \\HasChildren ) / INBOX/lost+found "
-           << "S: * LIST ( \\HasNoChildren ) / \"INBOX/lost+found/Calendar Public-20080128\" "
+           << "S: * LIST ( \\HasChildren ) / INBOX"
+           << "S: * LIST ( \\HasNoChildren ) / INBOX/&AOQ- &APY- &APw- @ &IKw-"
+           << "S: * LIST ( \\HasChildren ) / INBOX/lost+found"
+           << "S: * LIST ( \\HasNoChildren ) / \"INBOX/lost+found/Calendar Public-20080128\""
            << "S: A000001 OK LIST completed";
   KIMAP::MailBoxDescriptor descriptor;
   QList<KIMAP::MailBoxDescriptor> listresult;
