@@ -56,6 +56,8 @@ void FakeServer::dataAvailable()
 {
     QMutexLocker locker(&m_mutex);
 
+    QVERIFY( !m_scenario.isEmpty() );
+
     readClientPart();
     writeServerPart();
 }
