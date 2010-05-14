@@ -91,8 +91,27 @@ void FakeServer::setScenario( const QList<QByteArray> &scenario )
 {
     QMutexLocker locker(&m_mutex);
 
-    m_scenario.clear();
-    m_scenario+= scenario;
+    m_scenario = scenario;
+}
+
+void FakeServer::loadScenario( const QString &fileName )
+{
+  QFile file( fileName );
+  file.open( QFile::ReadOnly );
+
+  QList<QByteArray> scenario;
+
+  // When loading from files we never have the authentication phase
+  // force jumping directly to authenticated state.
+  scenario << preauth();
+
+  while ( !file.atEnd() ) {
+    scenario << file.readLine().trimmed();
+  }
+
+  file.close();
+
+  setScenario( scenario );
 }
 
 void FakeServer::writeServerPart()

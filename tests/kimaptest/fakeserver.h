@@ -44,7 +44,9 @@ public:
     FakeServer( QObject* parent = 0 );
     ~FakeServer();
     virtual void run();
+
     void setScenario( const QList<QByteArray> &scenario );
+    void loadScenario( const QString &fileName );
 
 private Q_SLOTS:
     void newConnection();

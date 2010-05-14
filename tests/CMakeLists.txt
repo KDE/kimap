@@ -9,6 +9,7 @@ MACRO(KIMAP_UNIT_TESTS)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
     target_link_libraries(${_testname} ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY}
                           kimap kimaptest kmime)
+    add_definitions(-DTEST_DATA="\\"${CMAKE_CURRENT_SOURCE_DIR}\\"")
   ENDFOREACH(_testname)
 ENDMACRO(KIMAP_UNIT_TESTS)
 
@@ -23,6 +24,7 @@ ENDMACRO(KIMAP_EXECUTABLE_TESTS)
 ########### automated tests ###############
 
 KIMAP_UNIT_TESTS(
+  fakeservertest
   testrfccodecs
   testsession
   loginjobtest
