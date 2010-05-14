@@ -198,7 +198,7 @@ void FetchJob::doStart()
   switch ( d->scope.mode ) {
   case FetchScope::Headers:
     if ( d->scope.parts.isEmpty() ) {
-      parameters+="(RFC822.SIZE INTERNALDATE BODY.PEEK[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT)] FLAGS UID)";
+      parameters+="(RFC822.SIZE INTERNALDATE BODY.PEEK[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT DATE)] FLAGS UID)";
     } else {
       parameters+='(';
       foreach ( const QByteArray &part, d->scope.parts ) {
