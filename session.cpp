@@ -118,7 +118,9 @@ void SessionPrivate::addJob(Job *job)
   QObject::connect( job, SIGNAL(result(KJob*)), q, SLOT(jobDone(KJob*)) );
   QObject::connect( job, SIGNAL(destroyed(QObject*)), q, SLOT(jobDestroyed(QObject*)) );
 
-  startNext();
+  if ( state!=Session::Disconnected ) {
+    startNext();
+  }
 }
 
 void SessionPrivate::startNext()
@@ -271,7 +273,6 @@ void SessionPrivate::sendData( const QByteArray &data )
 void SessionPrivate::socketConnected()
 {
   isSocketConnected = true;
-  startNext();
 }
 
 void SessionPrivate::socketDisconnected()

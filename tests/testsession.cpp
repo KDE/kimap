@@ -84,6 +84,9 @@ class SessionTest : public QObject
     void shouldRespectStartOrder()
     {
       FakeServer fakeServer;
+      fakeServer.setScenario( QList<QByteArray>()
+         << FakeServer::greeting()
+      );
       fakeServer.start();
 
       KIMAP::Session s("127.0.0.1", 5989);
