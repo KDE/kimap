@@ -1,6 +1,9 @@
 /*
     Copyright (c) 2009 Kevin Ottens <ervin@kde.org>
 
+    Copyright (c) 2010 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+    Author: Kevin Ottens <kevin@kdab.com>
+
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Library General Public License as published by
     the Free Software Foundation; either version 2 of the License, or (at your
@@ -214,7 +217,9 @@ void SessionPrivate::responseReceived( const Message &response )
   if ( currentJob!=0 ) {
     currentJob->handleResponse( response );
   } else {
-    qWarning() << "A message was received from the server with no job to handle it";
+    qWarning() << "A message was received from the server with no job to handle it:"
+               << response.toString()
+               << '('+response.toString().toHex()+')';
   }
 }
 
@@ -226,9 +231,8 @@ QByteArray SessionPrivate::sendCommand( const QByteArray &command, const QByteAr
   if ( !args.isEmpty() ) {
     payload+= ' '+args;
   }
-  payload+="\r\n";
 
-  thread->sendData(payload);
+  sendData( payload );
 
   if ( command=="LOGIN" || command=="AUTHENTICATE" ) {
     authTag = tag;
