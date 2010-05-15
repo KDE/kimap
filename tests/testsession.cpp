@@ -114,6 +114,59 @@ class SessionTest : public QObject
       QCOMPARE(m_jobs[3], j1);
     }
 
+    void shouldManageQueueSize()
+    {
+      FakeServer fakeServer;
+      fakeServer.setScenario( QList<QByteArray>()
+         << FakeServer::greeting()
+      );
+      fakeServer.start();
+
+      KIMAP::Session s("127.0.0.1", 5989);
+
+      QSignalSpy queueSpy(&s, SIGNAL(jobQueueSizeChanged(int)));
+
+      QCOMPARE( s.jobQueueSize(), 0 );
+
+      MockJob *j1 = new MockJob(&s);
+      MockJob *j2 = new MockJob(&s);
+      MockJob *j3 = new MockJob(&s);
+      MockJob *j4 = new MockJob(&s);
+      connect(j4, SIGNAL(result(KJob*)), &m_eventLoop, SLOT(quit()));
+
+      QCOMPARE( s.jobQueueSize(), 0 );
+
+      j1->start();
+      QCOMPARE( s.jobQueueSize(), 1 );
+      QCOMPARE( queueSpy.size(), 1 );
+      QCOMPARE( queueSpy.at( 0 ).at( 0 ).toInt(), 1 );
+
+      j2->start();
+      QCOMPARE( s.jobQueueSize(), 2 );
+      QCOMPARE( queueSpy.size(), 2 );
+      QCOMPARE( queueSpy.at( 1 ).at( 0 ).toInt(), 2 );
+
+      j3->start();
+      QCOMPARE( s.jobQueueSize(), 3 );
+      QCOMPARE( queueSpy.size(), 3 );
+      QCOMPARE( queueSpy.at( 2 ).at( 0 ).toInt(), 3 );
+
+      j4->start();
+      QCOMPARE( s.jobQueueSize(), 4 );
+      QCOMPARE( queueSpy.size(), 4 );
+      QCOMPARE( queueSpy.at( 3 ).at( 0 ).toInt(), 4 );
+
+      queueSpy.clear();
+      m_eventLoop.exec();
+
+      QCOMPARE( s.jobQueueSize(), 0 );
+
+      QCOMPARE( queueSpy.at( 0 ).at( 0 ).toInt(), 3 );
+      QCOMPARE( queueSpy.at( 1 ).at( 0 ).toInt(), 2 );
+      QCOMPARE( queueSpy.at( 2 ).at( 0 ).toInt(), 1 );
+      QCOMPARE( queueSpy.at( 3 ).at( 0 ).toInt(), 0 );
+    }
+
   public slots:
     void jobDone(KJob *job)
     {

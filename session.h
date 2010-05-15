@@ -58,6 +58,11 @@ class KIMAP_EXPORT Session : public QObject
      */
     void setUiProxy(SessionUiProxy *proxy);
 
+    int jobQueueSize() const;
+
+  Q_SIGNALS:
+    void jobQueueSizeChanged( int queueSize );
+
   private:
     Q_PRIVATE_SLOT( d, void doStartNext() )
     Q_PRIVATE_SLOT( d, void jobDone( KJob* ) )

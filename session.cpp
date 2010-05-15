@@ -91,6 +91,11 @@ QByteArray Session::serverGreeting() const
   return d->greeting;
 }
 
+int Session::jobQueueSize() const
+{
+  return d->queue.size() + ( d->jobRunning ? 1 : 0 );
+}
+
 void SessionPrivate::handleSslError(const KSslErrorUiData& errorData)
 {
   if (uiProxy && uiProxy->ignoreSslError(errorData)) {
@@ -114,6 +119,7 @@ SessionPrivate::SessionPrivate( Session *session )
 void SessionPrivate::addJob(Job *job)
 {
   queue.append(job);
+  emit q->jobQueueSizeChanged( q->jobQueueSize() );
 
   QObject::connect( job, SIGNAL(result(KJob*)), q, SLOT(jobDone(KJob*)) );
   QObject::connect( job, SIGNAL(destroyed(QObject*)), q, SLOT(jobDestroyed(QObject*)) );
@@ -147,6 +153,7 @@ void SessionPrivate::jobDone( KJob *job )
 
   jobRunning = false;
   currentJob = 0;
+  emit q->jobQueueSizeChanged( q->jobQueueSize() );
   startNext();
 }
 
