@@ -28,26 +28,7 @@
 #include "session.h"
 #include "job.h"
 #include "kimaptest/fakeserver.h"
-
-class MockJob : public KIMAP::Job
-{
-  Q_OBJECT
-
-  public:
-    MockJob(KIMAP::Session *session)
-      : KIMAP::Job(session) { }
-
-    virtual void doStart()
-    {
-      QTimer::singleShot(10, this, SLOT(done()));
-    }
-
-  private slots:
-    void done()
-    {
-      emitResult();
-    }
-};
+#include "kimaptest/mockjob.h"
 
 class SessionTest : public QObject
 {
