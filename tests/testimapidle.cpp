@@ -111,7 +111,7 @@ int main( int argc, char **argv )
 
   kDebug() << "Start idling...";
   IdleJob *idle = new IdleJob(&session);
-  QObject::connect(idle, SIGNAL(mailBoxStats(IdleJob*, QString, int, int)),
+  QObject::connect(idle, SIGNAL(mailBoxStats(KIMAP::IdleJob*, QString, int, int)),
                    idle, SLOT(stop()));
   idle->exec();
   kDebug() << "Idling done for" << idle->lastMailBox()
