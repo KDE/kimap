@@ -54,11 +54,13 @@ SessionLogger *SessionLogger::self()
 void SessionLogger::dataSent( const QByteArray &data )
 {
   m_file.write( "C: "+data.trimmed()+'\n' );
+  m_file.flush();
 }
 
 void SessionLogger::dataReceived( const QByteArray &data )
 {
   m_file.write( "S: "+data.trimmed()+'\n' );
+  m_file.flush();
 }
 
 void SessionLogger::disconnectionOccured()
