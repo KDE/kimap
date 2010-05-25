@@ -280,6 +280,9 @@ void SessionPrivate::sendData( const QByteArray &data )
 void SessionPrivate::socketConnected()
 {
   isSocketConnected = true;
+  if ( state == Session::Disconnected ) {
+    startNext();
+  }
 }
 
 void SessionPrivate::socketDisconnected()
