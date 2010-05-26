@@ -63,6 +63,7 @@ class SessionThread : public QThread
     void writeDataQueue();
     void sslConnected();
     void sslErrorHandlerResponse(bool result);
+    void doCloseSocket();
 
   private:
     QString m_hostName;

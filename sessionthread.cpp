@@ -121,7 +121,14 @@ void SessionThread::closeSocket()
   QMutexLocker locker(&m_mutex);
 
   m_encryptedMode = false;
-  QMetaObject::invokeMethod( m_socket, "close" );
+  QTimer::singleShot( 0, this, SLOT( doCloseSocket() ) );
+}
+
+void SessionThread::doCloseSocket()
+{
+  QMutexLocker locker(&m_mutex);
+
+  m_socket->close();
 }
 
 void SessionThread::reconnect()
