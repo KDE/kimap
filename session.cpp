@@ -31,6 +31,7 @@
 #include <KDE/KLocale>
 
 #include "job.h"
+#include "loginjob.h"
 #include "message_p.h"
 #include "sessionlogger_p.h"
 #include "sessionthread_p.h"
@@ -280,7 +281,17 @@ void SessionPrivate::sendData( const QByteArray &data )
 void SessionPrivate::socketConnected()
 {
   isSocketConnected = true;
-  if ( state == Session::Disconnected ) {
+
+  bool willUseSsl = false;
+  if ( !queue.isEmpty() ) {
+    KIMAP::LoginJob *login = qobject_cast<KIMAP::LoginJob*>( queue.first() );
+    willUseSsl = ( login->encryptionMode() == KIMAP::LoginJob::SslV2 )
+              || ( login->encryptionMode() == KIMAP::LoginJob::SslV3 )
+              || ( login->encryptionMode() == KIMAP::LoginJob::SslV3_1 )
+              || ( login->encryptionMode() == KIMAP::LoginJob::AnySslVersion );
+  }
+
+  if ( state == Session::Disconnected && willUseSsl ) {
     startNext();
   }
 }
