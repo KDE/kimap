@@ -285,10 +285,12 @@ void SessionPrivate::socketConnected()
   bool willUseSsl = false;
   if ( !queue.isEmpty() ) {
     KIMAP::LoginJob *login = qobject_cast<KIMAP::LoginJob*>( queue.first() );
-    willUseSsl = ( login->encryptionMode() == KIMAP::LoginJob::SslV2 )
-              || ( login->encryptionMode() == KIMAP::LoginJob::SslV3 )
-              || ( login->encryptionMode() == KIMAP::LoginJob::SslV3_1 )
-              || ( login->encryptionMode() == KIMAP::LoginJob::AnySslVersion );
+    if ( login ) {
+      willUseSsl = ( login->encryptionMode() == KIMAP::LoginJob::SslV2 )
+                || ( login->encryptionMode() == KIMAP::LoginJob::SslV3 )
+                || ( login->encryptionMode() == KIMAP::LoginJob::SslV3_1 )
+                || ( login->encryptionMode() == KIMAP::LoginJob::AnySslVersion );
+    }
   }
 
   if ( state == Session::Disconnected && willUseSsl ) {
