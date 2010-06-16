@@ -29,7 +29,10 @@
 #include <QThread>
 #include <QMutex>
 
-#include "kimap/imapstreamparser.h"
+namespace KIMAP
+{
+  class ImapStreamParser;
+}
 
 Q_DECLARE_METATYPE( QList<QByteArray> )
 
@@ -48,6 +51,8 @@ public:
     void setScenario( const QList<QByteArray> &scenario );
     void loadScenario( const QString &fileName );
 
+    bool isScenarioDone() const;
+
 private Q_SLOTS:
     void newConnection();
     void dataAvailable();
@@ -58,7 +63,7 @@ private:
 
     QList<QByteArray> m_scenario;
     QTcpServer *m_tcpServer;
-    QMutex m_mutex;
+    mutable QMutex m_mutex;
     QTcpSocket *tcpServerConnection;
     KIMAP::ImapStreamParser *streamParser;
 };

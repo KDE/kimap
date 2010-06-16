@@ -30,6 +30,8 @@
 #include <KDebug>
 #include <qtest_kde.h>
 
+#include "kimap/imapstreamparser.h"
+
 QByteArray FakeServer::preauth()
 {
     return "S: * PREAUTH localhost Test Library server ready";
@@ -76,6 +78,7 @@ void FakeServer::newConnection()
 void FakeServer::run()
 {
     m_tcpServer = new QTcpServer();
+    tcpServerConnection = 0;
     if ( !m_tcpServer->listen( QHostAddress( QHostAddress::LocalHost ), 5989 ) ) {
         kFatal() << "Unable to start the server";
     }
@@ -83,7 +86,9 @@ void FakeServer::run()
     connect(m_tcpServer, SIGNAL(newConnection()), this, SLOT(newConnection()));
 
     exec();
-    disconnect(tcpServerConnection, SIGNAL(readyRead()), this, SLOT(dataAvailable()));
+    if ( tcpServerConnection ) {
+      disconnect(tcpServerConnection, SIGNAL(readyRead()), this, SLOT(dataAvailable()));
+    }
     delete m_tcpServer;
 }
 
@@ -112,6 +117,13 @@ void FakeServer::loadScenario( const QString &fileName )
   file.close();
 
   setScenario( scenario );
+}
+
+bool FakeServer::isScenarioDone() const
+{
+  QMutexLocker locker(&m_mutex);
+
+  return m_scenario.isEmpty();
 }
 
 void FakeServer::writeServerPart()
