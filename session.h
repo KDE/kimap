@@ -24,11 +24,12 @@
 
 #include <QtCore/QObject>
 
+#include "sessionuiproxy.h"
+
 class KSslErrorUiData;
 
 namespace KIMAP {
 
-class SessionUiProxy;
 class SessionPrivate;
 class JobPrivate;
 struct Message;
@@ -56,7 +57,14 @@ class KIMAP_EXPORT Session : public QObject
      * Sets an ui proxy that displays the error messages and waits for user feedback.
      * @param proxy the ui proxy object
      */
-    void setUiProxy(SessionUiProxy *proxy);
+    void setUiProxy(SessionUiProxy::Ptr proxy);
+
+    /**
+     * Sets an ui proxy that displays the error messages and waits for user feedback.
+     * @param proxy the ui proxy object
+     * @deprecated Use the shared pointer version instead
+     */
+    KDE_DEPRECATED void setUiProxy(SessionUiProxy *proxy);
 
     int jobQueueSize() const;
 

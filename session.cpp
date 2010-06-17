@@ -66,9 +66,14 @@ Session::~Session()
   delete d->thread;
 }
 
+void Session::setUiProxy(SessionUiProxy::Ptr proxy)
+{
+  d->uiProxy = proxy;
+}
+
 void Session::setUiProxy(SessionUiProxy *proxy)
 {
-  d->uiProxy = SessionUiProxyPtr( proxy );
+  setUiProxy( SessionUiProxy::Ptr( proxy ) );
 }
 
 QString Session::hostName() const

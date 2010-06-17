@@ -73,7 +73,7 @@ int main( int argc, char **argv )
   QApplication app(argc, argv);
   Session session(server, port);
   UiProxy *proxy = new UiProxy();
-  session.setUiProxy(proxy);
+  session.setUiProxy(UiProxy::Ptr( proxy ));
 
   kDebug() << "Logging in...";
   LoginJob *login = new LoginJob(&session);

@@ -30,14 +30,12 @@ class KSslErrorUiData;
 
 namespace KIMAP {
 
-class SessionUiProxy;
-
-typedef boost::shared_ptr<SessionUiProxy> SessionUiProxyPtr;
-
 /** @short Interface to display communication errors and wait for user feedback. */
 class KIMAP_EXPORT SessionUiProxy
 {
   public:
+    typedef boost::shared_ptr<SessionUiProxy> Ptr;
+
     virtual ~SessionUiProxy() {};
     /**
      * Show an SSL error and ask the user whether it should be ignored or not.

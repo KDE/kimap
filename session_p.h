@@ -79,7 +79,7 @@ class SessionPrivate : public QObject
 
     SessionLogger *logger;
     SessionThread *thread;
-    SessionUiProxyPtr uiProxy;
+    SessionUiProxy::Ptr uiProxy;
 
     bool jobRunning;
     Job *currentJob;
