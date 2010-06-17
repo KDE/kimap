@@ -63,13 +63,12 @@ Session::Session( const QString &hostName, quint16 port, QObject *parent)
 
 Session::~Session()
 {
-  delete d->uiProxy;
   delete d->thread;
 }
 
 void Session::setUiProxy(SessionUiProxy *proxy)
 {
-  d->uiProxy = proxy;
+  d->uiProxy = SessionUiProxyPtr( proxy );
 }
 
 QString Session::hostName() const
@@ -111,7 +110,6 @@ SessionPrivate::SessionPrivate( Session *session )
     q(session),
     state(Session::Disconnected),
     logger(0),
-    uiProxy(0),
     currentJob(0),
     tagCount(0)
 {

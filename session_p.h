@@ -21,6 +21,7 @@
 #define KIMAP_SESSION_P_H
 
 #include "session.h"
+#include "sessionuiproxy.h"
 
 #include <ktcpsocket.h>
 
@@ -36,7 +37,6 @@ class Job;
 struct Message;
 class SessionLogger;
 class SessionThread;
-class SessionUiProxy;
 
 class SessionPrivate : public QObject
 {
@@ -79,7 +79,7 @@ class SessionPrivate : public QObject
 
     SessionLogger *logger;
     SessionThread *thread;
-    SessionUiProxy *uiProxy;
+    SessionUiProxyPtr uiProxy;
 
     bool jobRunning;
     Job *currentJob;

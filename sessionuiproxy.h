@@ -20,6 +20,8 @@
 #ifndef KIMAP_SESSIONUIPROXY_H
 #define KIMAP_SESSIONUIPROXY_H
 
+#include <boost/shared_ptr.hpp>
+
 #include "kimap_export.h"
 
 #include "job.h"
@@ -27,6 +29,10 @@
 class KSslErrorUiData;
 
 namespace KIMAP {
+
+class SessionUiProxy;
+
+typedef boost::shared_ptr<SessionUiProxy> SessionUiProxyPtr;
 
 /** @short Interface to display communication errors and wait for user feedback. */
 class KIMAP_EXPORT SessionUiProxy
