@@ -58,27 +58,33 @@ void FakeServer::dataAvailable()
 {
     QMutexLocker locker(&m_mutex);
 
-    QVERIFY( !m_scenario.isEmpty() );
+    QTcpSocket *socket = qobject_cast<QTcpSocket*>( sender() );
+    Q_ASSERT( socket!=0 );
 
-    readClientPart();
-    writeServerPart();
+    int scenarioNumber = m_clientSockets.indexOf( socket );
+
+    QVERIFY( !m_scenarios[scenarioNumber].isEmpty() );
+
+    readClientPart( scenarioNumber );
+    writeServerPart( scenarioNumber );
 }
 
 void FakeServer::newConnection()
 {
     QMutexLocker locker(&m_mutex);
 
-    tcpServerConnection = m_tcpServer->nextPendingConnection();
-    connect(tcpServerConnection, SIGNAL(readyRead()), this, SLOT(dataAvailable()));
-    streamParser = new KIMAP::ImapStreamParser( tcpServerConnection );
+    m_clientSockets << m_tcpServer->nextPendingConnection();
+    connect(m_clientSockets.last(), SIGNAL(readyRead()), this, SLOT(dataAvailable()));
+    m_clientParsers << new KIMAP::ImapStreamParser( m_clientSockets.last() );
 
-    writeServerPart();
+    QVERIFY( m_clientSockets.size() <= m_scenarios.size() );
+
+    writeServerPart( m_clientSockets.size() - 1 );
 }
 
 void FakeServer::run()
 {
     m_tcpServer = new QTcpServer();
-    tcpServerConnection = 0;
     if ( !m_tcpServer->listen( QHostAddress( QHostAddress::LocalHost ), 5989 ) ) {
         kFatal() << "Unable to start the server";
     }
@@ -86,9 +92,10 @@ void FakeServer::run()
     connect(m_tcpServer, SIGNAL(newConnection()), this, SLOT(newConnection()));
 
     exec();
-    if ( tcpServerConnection ) {
-      disconnect(tcpServerConnection, SIGNAL(readyRead()), this, SLOT(dataAvailable()));
-    }
+
+    qDeleteAll( m_clientParsers );
+    qDeleteAll( m_clientSockets );
+
     delete m_tcpServer;
 }
 
@@ -96,10 +103,18 @@ void FakeServer::setScenario( const QList<QByteArray> &scenario )
 {
     QMutexLocker locker(&m_mutex);
 
-    m_scenario = scenario;
+    m_scenarios.clear();
+    m_scenarios << scenario;
 }
 
-void FakeServer::loadScenario( const QString &fileName )
+void FakeServer::addScenario( const QList<QByteArray> &scenario )
+{
+    QMutexLocker locker(&m_mutex);
+
+    m_scenarios << scenario;
+}
+
+void FakeServer::addScenarioFromFile( const QString &fileName )
 {
   QFile file( fileName );
   file.open( QFile::ReadOnly );
@@ -116,40 +131,67 @@ void FakeServer::loadScenario( const QString &fileName )
 
   file.close();
 
-  setScenario( scenario );
+  addScenario( scenario );
 }
 
-bool FakeServer::isScenarioDone() const
+bool FakeServer::isScenarioDone( int scenarioNumber ) const
 {
   QMutexLocker locker(&m_mutex);
 
-  return m_scenario.isEmpty();
+  if ( scenarioNumber < m_scenarios.size() ) {
+    return m_scenarios[scenarioNumber].isEmpty();
+  } else {
+    return true; // Non existent hence empty, right?
+  }
 }
 
-void FakeServer::writeServerPart()
+bool FakeServer::isAllScenarioDone() const
 {
-    while ( !m_scenario.isEmpty()
-         && m_scenario.first().startsWith( "S: " ) ) {
-      QByteArray payload = m_scenario.takeFirst().mid( 3 );
-      tcpServerConnection->write( payload + "\r\n" );
-    }
+  QMutexLocker locker( &m_mutex );
 
-    if ( !m_scenario.isEmpty() ) {
-      QVERIFY( m_scenario.first().startsWith( "C: " ) );
+  foreach ( const QList<QByteArray> &scenario, m_scenarios ) {
+    if ( !scenario.isEmpty() ) {
+      return false;
     }
+  }
+
+  return true;
 }
 
-void FakeServer::readClientPart()
+void FakeServer::writeServerPart( int scenarioNumber )
 {
-    while ( !m_scenario.isEmpty()
-         && m_scenario.first().startsWith( "C: " ) ) {
-        QByteArray data = streamParser->readUntilCommandEnd();
-        QCOMPARE( "C: "+data.trimmed(), m_scenario.takeFirst() );
+    QList<QByteArray> scenario = m_scenarios[scenarioNumber];
+    QTcpSocket *clientSocket = m_clientSockets[scenarioNumber];
+
+    while ( !scenario.isEmpty()
+         && scenario.first().startsWith( "S: " ) ) {
+      QByteArray payload = scenario.takeFirst().mid( 3 );
+      clientSocket->write( payload + "\r\n" );
     }
 
-    if ( !m_scenario.isEmpty() ) {
-      QVERIFY( m_scenario.first().startsWith( "S: " ) );
+    if ( !scenario.isEmpty() ) {
+      QVERIFY( scenario.first().startsWith( "C: " ) );
     }
+
+    m_scenarios[scenarioNumber] = scenario;
+}
+
+void FakeServer::readClientPart( int scenarioNumber )
+{
+    QList<QByteArray> scenario = m_scenarios[scenarioNumber];
+    KIMAP::ImapStreamParser *clientParser = m_clientParsers[scenarioNumber];
+
+    while ( !scenario.isEmpty()
+         && scenario.first().startsWith( "C: " ) ) {
+        QByteArray data = clientParser->readUntilCommandEnd();
+        QCOMPARE( "C: "+data.trimmed(), scenario.takeFirst() );
+    }
+
+    if ( !scenario.isEmpty() ) {
+      QVERIFY( scenario.first().startsWith( "S: " ) );
+    }
+
+    m_scenarios[scenarioNumber] = scenario;
 }
 
 #include "fakeserver.moc"

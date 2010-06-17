@@ -48,7 +48,7 @@ void testLoadScenario() {
   listresult << descriptor;
 
   FakeServer fakeServer;
-  fakeServer.loadScenario( TEST_DATA "/fakeserverscenario.log" );
+  fakeServer.addScenarioFromFile( TEST_DATA "/fakeserverscenario.log" );
   fakeServer.start();
 
   KIMAP::Session session("127.0.0.1", 5989);

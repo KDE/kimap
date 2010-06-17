@@ -49,23 +49,26 @@ public:
     virtual void run();
 
     void setScenario( const QList<QByteArray> &scenario );
-    void loadScenario( const QString &fileName );
 
-    bool isScenarioDone() const;
+    void addScenario( const QList<QByteArray> &scenario );
+    void addScenarioFromFile( const QString &fileName );
+
+    bool isScenarioDone( int scenarioNumber ) const;
+    bool isAllScenarioDone() const;
 
 private Q_SLOTS:
     void newConnection();
     void dataAvailable();
 
 private:
-    void writeServerPart();
-    void readClientPart();
+    void writeServerPart( int scenarioNumber );
+    void readClientPart( int scenarioNumber );
 
-    QList<QByteArray> m_scenario;
+    QList< QList<QByteArray> > m_scenarios;
     QTcpServer *m_tcpServer;
     mutable QMutex m_mutex;
-    QTcpSocket *tcpServerConnection;
-    KIMAP::ImapStreamParser *streamParser;
+    QList<QTcpSocket*> m_clientSockets;
+    QList<KIMAP::ImapStreamParser*> m_clientParsers;
 };
 
 #endif
