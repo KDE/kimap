@@ -86,7 +86,7 @@ void IdleJob::handleResponse( const Message &response )
     }
 
     if ( d->messageCount>=0 && d->recentCount>=0 ) {
-      emit mailBoxStats(this, d->sessionInternal()->selectedMailBox(),
+      emit mailBoxStats(this, d->m_session->selectedMailBox(),
                         d->messageCount, d->recentCount);
 
       d->lastMessageCount = d->messageCount;
@@ -101,7 +101,7 @@ void IdleJob::handleResponse( const Message &response )
 QString KIMAP::IdleJob::lastMailBox() const
 {
   Q_D(const IdleJob);
-  return d->sessionInternal()->selectedMailBox();
+  return d->m_session->selectedMailBox();
 }
 
 int KIMAP::IdleJob::lastMessageCount() const

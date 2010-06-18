@@ -328,9 +328,9 @@ void SessionPrivate::startSsl(const KTcpSocket::SslVersion &version)
   QMetaObject::invokeMethod( thread, "startSsl", Qt::QueuedConnection, Q_ARG(KTcpSocket::SslVersion, version) );
 }
 
-QString SessionPrivate::selectedMailBox() const
+QString Session::selectedMailBox() const
 {
-  return QString::fromUtf8( currentMailBox );
+  return QString::fromUtf8( d->currentMailBox );
 }
 
 #include "session.moc"

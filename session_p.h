@@ -52,8 +52,6 @@ class SessionPrivate : public QObject
     void startSsl(const KTcpSocket::SslVersion &version);
     void sendData( const QByteArray &data );
 
-    QString selectedMailBox() const;
-
     void handleSslError( const KSslErrorUiData &errorData );
 
   Q_SIGNALS:

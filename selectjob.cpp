@@ -188,7 +188,7 @@ void SelectJob::handleResponse( const Message &response )
         qDebug("%s", response.toString().constData());
       }
   } else {
-    Q_ASSERT( error() || d->sessionInternal()->selectedMailBox() == d->mailBox );
+    Q_ASSERT( error() || d->m_session->selectedMailBox() == d->mailBox );
   }
 }
 

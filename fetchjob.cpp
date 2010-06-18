@@ -235,7 +235,7 @@ void FetchJob::doStart()
   }
 
   d->emitPendingsTimer.start( 100 );
-  d->selectedMailBox = d->sessionInternal()->selectedMailBox();
+  d->selectedMailBox = d->m_session->selectedMailBox();
   d->tags << d->sessionInternal()->sendCommand( command, parameters );
 }
 

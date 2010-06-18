@@ -66,6 +66,12 @@ class KIMAP_EXPORT Session : public QObject
      */
     KDE_DEPRECATED void setUiProxy(SessionUiProxy *proxy);
 
+    /**
+     * Returns the currently selected mailbox.
+     * @since 4.5
+     */
+    QString selectedMailBox() const;
+
     int jobQueueSize() const;
 
   Q_SIGNALS:
