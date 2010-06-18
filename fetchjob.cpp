@@ -283,7 +283,9 @@ void FetchJob::handleResponse( const Message &response )
             QByteArray str = *it;
             str.chop(1);
             str.remove(0, 1);
-            d->flags[id] = str.split(' ');
+            if ( !str.isEmpty() ) {
+              d->flags[id] = str.split(' ');
+            }
           } else {
             d->flags[id] << *it;
           }
