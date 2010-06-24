@@ -54,8 +54,13 @@ class SessionPrivate : public QObject
 
     void handleSslError( const KSslErrorUiData &errorData );
 
+    KTcpSocket::SslVersion negotiatedEncryption() const;
+
   Q_SIGNALS:
     void encryptionNegotiationResult(bool);
+
+  private Q_SLOTS:
+    void onEncryptionNegotiationResult(bool isEncrypted, KTcpSocket::SslVersion sslVersion);
 
   private:
     void reconnect();
@@ -91,6 +96,8 @@ class SessionPrivate : public QObject
     QByteArray currentMailBox;
     QByteArray upcomingMailBox;
     quint16 tagCount;
+
+    KTcpSocket::SslVersion sslVersion;
 };
 
 }

@@ -176,16 +176,57 @@ void LoginJob::doStart()
     return;
   }
 
-  if (d->encryptionMode == SslV2 || d->encryptionMode == SslV3 || d->encryptionMode == SslV3_1 || d->encryptionMode == AnySslVersion) {
+  // Trigger encryption negociation only if needed
+  EncryptionMode encryptionMode = d->encryptionMode;
+
+  switch ( d->sessionInternal()->negotiatedEncryption() ) {
+  case KTcpSocket::UnknownSslVersion:
+    break; // Do nothing the encryption mode still needs to be negociated
+
+  // For the other cases, pretend we're going unencrypted as that's the
+  // encryption mode already set on the session
+  // (so for instance we won't issue another STARTTLS for nothing if that's
+  // not needed)
+  case KTcpSocket::SslV2:
+    if ( encryptionMode==SslV2 ) {
+      encryptionMode = Unencrypted;
+    }
+    break;
+  case KTcpSocket::SslV3:
+    if ( encryptionMode==SslV3 ) {
+      encryptionMode = Unencrypted;
+    }
+    break;
+  case KTcpSocket::TlsV1:
+    if ( encryptionMode==TlsV1 ) {
+      encryptionMode = Unencrypted;
+    }
+    break;
+  case KTcpSocket::AnySslVersion:
+    if ( encryptionMode==AnySslVersion ) {
+      encryptionMode = Unencrypted;
+    }
+    break;
+  }
+
+  if (encryptionMode == SslV2
+   || encryptionMode == SslV3
+   || encryptionMode == SslV3_1
+   || encryptionMode == AnySslVersion) {
     KTcpSocket::SslVersion version = KTcpSocket::SslV2;
-    if (d->encryptionMode == SslV3)
+    if (encryptionMode == SslV3)
       version = KTcpSocket::SslV3;
-    if (d->encryptionMode == SslV3_1)
+    if (encryptionMode == SslV3_1)
       version = KTcpSocket::SslV3_1;
-    if (d->encryptionMode == AnySslVersion)
+    if (encryptionMode == AnySslVersion)
       version = KTcpSocket::AnySslVersion;
     d->sessionInternal()->startSsl(version);
-  } else  if (d->encryptionMode == Unencrypted ) {
+
+  } else if (encryptionMode == TlsV1) {
+    d->authState = LoginJobPrivate::StartTls;
+    d->tags << d->sessionInternal()->sendCommand( "STARTTLS" );
+
+  } else  if (encryptionMode == Unencrypted ) {
     if (d->authMode.isEmpty()) {
       d->authState = LoginJobPrivate::Login;
       d->tags << d->sessionInternal()->sendCommand( "LOGIN",
@@ -197,9 +238,6 @@ void LoginJob::doStart()
         emitResult();
       }
     }
-  } else if (d->encryptionMode == TlsV1) {
-    d->authState = LoginJobPrivate::StartTls;
-    d->tags << d->sessionInternal()->sendCommand( "STARTTLS" );
   }
 }
 

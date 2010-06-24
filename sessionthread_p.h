@@ -55,7 +55,7 @@ class SessionThread : public QThread
 
   signals:
     void responseReceived(const KIMAP::Message &response);
-    void encryptionNegotiationResult(bool);
+    void encryptionNegotiationResult(bool, KTcpSocket::SslVersion);
     void sslError(const KSslErrorUiData&);
 
   private slots:

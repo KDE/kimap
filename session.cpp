@@ -55,7 +55,8 @@ Session::Session( const QString &hostName, quint16 port, QObject *parent)
   d->jobRunning = false;
 
   d->thread = new SessionThread(hostName, port, this);
-  connect(d->thread, SIGNAL(encryptionNegotiationResult(bool)), d, SIGNAL(encryptionNegotiationResult(bool)));
+  connect(d->thread, SIGNAL(encryptionNegotiationResult(bool, KTcpSocket::SslVersion)),
+          d, SLOT(onEncryptionNegotiationResult(bool, KTcpSocket::SslVersion)));
   connect(d->thread, SIGNAL(sslError(const KSslErrorUiData&)), this, SLOT(handleSslError(const KSslErrorUiData&)));
 
   d->thread->start();
@@ -116,7 +117,8 @@ SessionPrivate::SessionPrivate( Session *session )
     state(Session::Disconnected),
     logger(0),
     currentJob(0),
-    tagCount(0)
+    tagCount(0),
+    sslVersion(KTcpSocket::UnknownSslVersion)
 {
 }
 
@@ -331,6 +333,21 @@ void SessionPrivate::startSsl(const KTcpSocket::SslVersion &version)
 QString Session::selectedMailBox() const
 {
   return QString::fromUtf8( d->currentMailBox );
+}
+
+void SessionPrivate::onEncryptionNegotiationResult(bool isEncrypted, KTcpSocket::SslVersion version)
+{
+  if ( isEncrypted ) {
+    sslVersion = version;
+  } else {
+    sslVersion = KTcpSocket::UnknownSslVersion;
+  }
+  emit encryptionNegotiationResult( isEncrypted );
+}
+
+KTcpSocket::SslVersion SessionPrivate::negotiatedEncryption() const
+{
+  return sslVersion;
 }
 
 #include "session.moc"

@@ -197,7 +197,7 @@ void SessionThread::sslConnected()
   } else {
     kDebug() << "TLS negotiation done.";
     m_encryptedMode = true;
-    emit encryptionNegotiationResult(true);
+    emit encryptionNegotiationResult(true, m_socket->negotiatedSslVersion());
   }
 }
 
@@ -206,14 +206,14 @@ void SessionThread::sslErrorHandlerResponse(bool response)
   QMutexLocker locker(&m_mutex);
   if (response) {
     m_encryptedMode = true;
-    emit encryptionNegotiationResult(true);
+    emit encryptionNegotiationResult(true, m_socket->negotiatedSslVersion());
   } else {
      m_encryptedMode = false;
      //reconnect in unencrypted mode, so new commands can be issued
      m_socket->disconnectFromHost();
      m_socket->waitForDisconnected();
      m_socket->connectToHost(m_hostName, m_port);
-     emit encryptionNegotiationResult(false);
+     emit encryptionNegotiationResult(false, KTcpSocket::UnknownSslVersion);
   }
 }
 
