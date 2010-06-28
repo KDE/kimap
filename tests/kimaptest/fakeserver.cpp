@@ -169,6 +169,12 @@ void FakeServer::writeServerPart( int scenarioNumber )
       clientSocket->write( payload + "\r\n" );
     }
 
+    if ( !scenario.isEmpty()
+      && scenario.first().startsWith( "X" ) ) {
+      scenario.takeFirst();
+      clientSocket->close();
+    }
+
     if ( !scenario.isEmpty() ) {
       QVERIFY( scenario.first().startsWith( "C: " ) );
     }
