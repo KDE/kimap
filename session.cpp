@@ -378,11 +378,10 @@ int SessionPrivate::socketTimeout() const
 
 void SessionPrivate::startSocketTimer()
 {
-  Q_ASSERT( !socketTimer.isActive() );
-
   if ( socketTimerInterval<0 ) {
     return;
   }
+  Q_ASSERT( !socketTimer.isActive() );
 
   connect( &socketTimer, SIGNAL(timeout()),
            this, SLOT(onSocketTimeout()) );
@@ -393,11 +392,10 @@ void SessionPrivate::startSocketTimer()
 
 void SessionPrivate::stopSocketTimer()
 {
-  Q_ASSERT( socketTimer.isActive() );
-
   if ( socketTimerInterval<0 ) {
     return;
   }
+  Q_ASSERT( socketTimer.isActive() );
 
   socketTimer.stop();
 
