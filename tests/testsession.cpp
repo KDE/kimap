@@ -148,6 +148,42 @@ class SessionTest : public QObject
       QCOMPARE( queueSpy.at( 3 ).at( 0 ).toInt(), 0 );
     }
 
+    void shouldTimeoutOnNoReply()
+    {
+      FakeServer fakeServer;
+      fakeServer.setScenario( QList<QByteArray>()
+         << FakeServer::preauth()
+         << "C: A000001 DUMMY"
+         << "S: * DUMMY"
+         << "S: * DUMMY"
+         << "S: * DUMMY"
+         << "S: * DUMMY"
+         << "S: * DUMMY"
+         << "S: * DUMMY"
+         << "S: * DUMMY"
+         << "S: * DUMMY"
+         << "S: * DUMMY"
+         << "S: * DUMMY"
+         << "S: * DUMMY"
+         << "S: * DUMMY"
+         << "S: * DUMMY"
+         // We never get a OK or anything, so the job can't normally complete
+      );
+      fakeServer.start();
+
+      KIMAP::Session s( "127.0.0.1", 5989 );
+
+      QSignalSpy spy(&s, SIGNAL(connectionLost()));
+
+      MockJob *mock = new MockJob(&s);
+      mock->setCommand("DUMMY");
+
+      mock->exec();
+      // We expect to get an error here due to some timeout
+      QVERIFY( mock->error()!=0 );
+      QCOMPARE( spy.count(), 1 );
+    }
+
   public slots:
     void jobDone(KJob *job)
     {

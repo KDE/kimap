@@ -23,23 +23,58 @@
 
 #include "mockjob.h"
 
+#include "../../job_p.h"
 #include "../../session.h"
+#include "../../session_p.h"
 
 #include <QtCore/QTimer>
 
+class MockJobPrivate : public KIMAP::JobPrivate
+{
+public:
+  MockJobPrivate( KIMAP::Session *session, const QString& name ) : KIMAP::JobPrivate(session, name) { }
+  ~MockJobPrivate() { }
+
+  QByteArray command;
+};
+
 MockJob::MockJob(KIMAP::Session *session)
-  : KIMAP::Job(session)
+  : KIMAP::Job( *new MockJobPrivate(session, i18n("Mock")) )
 {
 }
 
 void MockJob::doStart()
 {
-  QTimer::singleShot(10, this, SLOT(done()));
+  Q_D(MockJob);
+  if ( isNull() ) {
+    QTimer::singleShot(10, this, SLOT(done()));
+  } else {
+    d->sessionInternal()->setSocketTimeout( 10 );
+    d->tags << d->sessionInternal()->sendCommand( d->command );
+  }
 }
 
 void MockJob::done()
 {
   emitResult();
+}
+
+void MockJob::setCommand(const QByteArray &command)
+{
+  Q_D(MockJob);
+  d->command = command;
+}
+
+QByteArray MockJob::command() const
+{
+  Q_D(const MockJob);
+  return d->command;
+}
+
+bool MockJob::isNull() const
+{
+  Q_D(const MockJob);
+  return d->command.isEmpty();
 }
 
 #include "mockjob.moc"

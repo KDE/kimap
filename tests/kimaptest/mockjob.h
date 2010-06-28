@@ -26,12 +26,19 @@
 
 #include <kimap/job.h>
 
+class MockJobPrivate;
+
 class MockJob : public KIMAP::Job
 {
   Q_OBJECT
+  Q_DECLARE_PRIVATE(MockJob)
 
   public:
     MockJob(KIMAP::Session *session);
+
+    void setCommand(const QByteArray &command);
+    QByteArray command() const;
+    bool isNull() const;
 
     virtual void doStart();
 
