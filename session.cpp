@@ -118,7 +118,8 @@ SessionPrivate::SessionPrivate( Session *session )
     logger(0),
     currentJob(0),
     tagCount(0),
-    sslVersion(KTcpSocket::UnknownSslVersion)
+    sslVersion(KTcpSocket::UnknownSslVersion),
+    socketTimerInterval(30000) // By default timeouts on 30s
 {
 }
 
@@ -146,6 +147,7 @@ void SessionPrivate::doStartNext()
     return;
   }
 
+  startSocketTimer();
   jobRunning = true;
 
   currentJob = queue.dequeue();
@@ -156,6 +158,13 @@ void SessionPrivate::jobDone( KJob *job )
 {
   Q_UNUSED( job );
   Q_ASSERT( job == currentJob );
+
+  // If we're in disconnected state it's because we ended up
+  // here because the inactivity timer triggered, so no need to
+  // stop it (it is single shot)
+  if ( state!=Session::Disconnected ) {
+    stopSocketTimer();
+  }
 
   jobRunning = false;
   currentJob = 0;
@@ -240,6 +249,7 @@ void SessionPrivate::responseReceived( const Message &response )
 
   // If a job is running forward it the response
   if ( currentJob!=0 ) {
+    restartSocketTimer();
     currentJob->handleResponse( response );
   } else {
     qWarning() << "A message was received from the server with no job to handle it:"
@@ -276,6 +286,8 @@ QByteArray SessionPrivate::sendCommand( const QByteArray &command, const QByteAr
 
 void SessionPrivate::sendData( const QByteArray &data )
 {
+  restartSocketTimer();
+
   if ( logger && ( state==Session::Authenticated || state==Session::Selected ) ) {
     logger->dataSent( data );
   }
@@ -309,6 +321,10 @@ void SessionPrivate::socketDisconnected()
     logger->disconnectionOccured();
   }
 
+
+  if ( state==Session::Authenticated || state==Session::Selected ) {
+    emit q->connectionLost();
+  }
 
   isSocketConnected = false;
   state = Session::Disconnected;
@@ -348,6 +364,56 @@ void SessionPrivate::onEncryptionNegotiationResult(bool isEncrypted, KTcpSocket:
 KTcpSocket::SslVersion SessionPrivate::negotiatedEncryption() const
 {
   return sslVersion;
+}
+
+void SessionPrivate::setSocketTimeout( int ms )
+{
+  socketTimerInterval = ms;
+}
+
+int SessionPrivate::socketTimeout() const
+{
+  return socketTimerInterval;
+}
+
+void SessionPrivate::startSocketTimer()
+{
+  Q_ASSERT( !socketTimer.isActive() );
+
+  if ( socketTimerInterval<0 ) {
+    return;
+  }
+
+  connect( &socketTimer, SIGNAL(timeout()),
+           this, SLOT(onSocketTimeout()) );
+
+  socketTimer.setSingleShot( true );
+  socketTimer.start( socketTimerInterval );
+}
+
+void SessionPrivate::stopSocketTimer()
+{
+  Q_ASSERT( socketTimer.isActive() );
+
+  if ( socketTimerInterval<0 ) {
+    return;
+  }
+
+  socketTimer.stop();
+
+  disconnect( &socketTimer, SIGNAL(timeout()),
+              this, SLOT(onSocketTimeout()) );
+}
+
+void SessionPrivate::restartSocketTimer()
+{
+  stopSocketTimer();
+  startSocketTimer();
+}
+
+void SessionPrivate::onSocketTimeout()
+{
+  socketDisconnected();
 }
 
 #include "session.moc"
