@@ -34,7 +34,8 @@ namespace KIMAP
       IdleJobPrivate( IdleJob *job, Session *session, const QString& name )
         : JobPrivate( session, name ), q(job),
           messageCount( -1 ), recentCount( -1 ),
-          lastMessageCount( -1 ), lastRecentCount( -1 ) { }
+          lastMessageCount( -1 ), lastRecentCount( -1 ),
+          originalSocketTimeout( -1 ) { }
       ~IdleJobPrivate() { }
 
       IdleJob * const q;
@@ -44,6 +45,8 @@ namespace KIMAP
 
       int lastMessageCount;
       int lastRecentCount;
+
+      int originalSocketTimeout;
   };
 }
 
@@ -61,12 +64,15 @@ IdleJob::~IdleJob()
 void KIMAP::IdleJob::stop()
 {
   Q_D(IdleJob);
+  d->sessionInternal()->setSocketTimeout( d->originalSocketTimeout );
   d->sessionInternal()->sendData( "DONE" );
 }
 
 void IdleJob::doStart()
 {
   Q_D(IdleJob);
+  d->originalSocketTimeout = d->sessionInternal()->socketTimeout();
+  d->sessionInternal()->setSocketTimeout( -1 );
   d->tags << d->sessionInternal()->sendCommand( "IDLE" );
 }
 

@@ -28,6 +28,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QQueue>
 #include <QtCore/QString>
+#include <QtCore/QTimer>
 
 class KJob;
 
@@ -38,7 +39,7 @@ struct Message;
 class SessionLogger;
 class SessionThread;
 
-class SessionPrivate : public QObject
+class KIMAP_EXPORT SessionPrivate : public QObject
 {
   Q_OBJECT
 
@@ -56,15 +57,17 @@ class SessionPrivate : public QObject
 
     KTcpSocket::SslVersion negotiatedEncryption() const;
 
+    void setSocketTimeout( int ms );
+    int socketTimeout() const;
+
   Q_SIGNALS:
     void encryptionNegotiationResult(bool);
 
   private Q_SLOTS:
     void onEncryptionNegotiationResult(bool isEncrypted, KTcpSocket::SslVersion sslVersion);
+    void onSocketTimeout();
 
   private:
-    void reconnect();
-
     void startNext();
     void doStartNext();
     void jobDone( KJob *job );
@@ -74,6 +77,10 @@ class SessionPrivate : public QObject
     void socketConnected();
     void socketDisconnected();
     void socketError();
+
+    void startSocketTimer();
+    void stopSocketTimer();
+    void restartSocketTimer();
 
     Session *const q;
 
@@ -98,6 +105,9 @@ class SessionPrivate : public QObject
     quint16 tagCount;
 
     KTcpSocket::SslVersion sslVersion;
+
+    int socketTimerInterval;
+    QTimer socketTimer;
 };
 
 }
