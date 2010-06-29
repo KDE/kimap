@@ -368,7 +368,17 @@ KTcpSocket::SslVersion SessionPrivate::negotiatedEncryption() const
 
 void SessionPrivate::setSocketTimeout( int ms )
 {
+  bool timerActive = socketTimer.isActive();
+
+  if ( timerActive ) {
+    stopSocketTimer();
+  }
+
   socketTimerInterval = ms;
+
+  if ( timerActive ) {
+    startSocketTimer();
+  }
 }
 
 int SessionPrivate::socketTimeout() const
