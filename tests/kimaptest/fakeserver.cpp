@@ -189,8 +189,10 @@ void FakeServer::readClientPart( int scenarioNumber )
 
     while ( !scenario.isEmpty()
          && scenario.first().startsWith( "C: " ) ) {
-        QByteArray data = clientParser->readUntilCommandEnd();
-        QCOMPARE( "C: "+data.trimmed(), scenario.takeFirst() );
+        QByteArray received = "C: "+clientParser->readUntilCommandEnd().trimmed();
+        QByteArray expected = scenario.takeFirst();
+        QCOMPARE( QString::fromUtf8( received ), QString::fromUtf8( expected ) );
+        QCOMPARE( received, expected );
     }
 
     if ( !scenario.isEmpty() ) {
