@@ -63,8 +63,8 @@ class KIMAP_EXPORT ListJob : public Job
     void setQueriedNamespaces( const QList<MailBoxDescriptor> &namespaces );
     QList<MailBoxDescriptor> queriedNamespaces() const;
 
-    QList<MailBoxDescriptor> mailBoxes() const;
-    QMap< MailBoxDescriptor, QList<QByteArray> > flags() const;
+    KDE_DEPRECATED QList<MailBoxDescriptor> mailBoxes() const;
+    KDE_DEPRECATED QMap< MailBoxDescriptor, QList<QByteArray> > flags() const;
 
   Q_SIGNALS:
     void mailBoxesReceived( const QList<KIMAP::MailBoxDescriptor> &descriptors,

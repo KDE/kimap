@@ -30,6 +30,7 @@
 #include <KDebug>
 
 Q_DECLARE_METATYPE(QList<KIMAP::MailBoxDescriptor>)
+Q_DECLARE_METATYPE(QList< QList<QByteArray> >)
 
 class ListJobTest: public QObject {
   Q_OBJECT
@@ -136,15 +137,25 @@ void testList()
 
     KIMAP::ListJob *job = new KIMAP::ListJob(&session);
     job->setIncludeUnsubscribed(unsubscribed);
+
+    QSignalSpy spy( job, SIGNAL(mailBoxesReceived(const QList<KIMAP::MailBoxDescriptor>&,
+                                                  const QList< QList<QByteArray> >&)) );
+
     bool result = job->exec();
     QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
     QEXPECT_FAIL("no" , "Expected failure on NO response", Continue);
     QVERIFY(result);
     if (result) {
-      //kDebug() << job->mailBoxes().first().name;
+      QVERIFY( spy.count()>0 );
+      QList<KIMAP::MailBoxDescriptor> mailBoxes;
+
+      for ( int i=0; i<spy.count(); i++ ) {
+        mailBoxes+= spy.at( i ).at( 0 ).value< QList<KIMAP::MailBoxDescriptor> >();
+      }
+
+      //kDebug() << mailBoxes.first().name;
       //kDebug() << listresult.first().name;
-      QCOMPARE(job->mailBoxes(), listresult);
-      //       kDebug() << job->flags();
+      QCOMPARE(mailBoxes, listresult);
     }
 //     QCOMPARE(job->mailBox(), mailbox);
 

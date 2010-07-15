@@ -41,24 +41,6 @@ namespace KIMAP
       QByteArray parseSentence( const QByteArray &structure, int &pos );
       void skipLeadingSpaces( const QByteArray &structure, int &pos );
 
-      MessagePtr message(int id)
-      {
-        if ( !messages.contains(id) ) {
-          messages[id] = MessagePtr(new KMime::Message);
-        }
-
-        return messages[id];
-      }
-
-      ContentPtr part(int id, QByteArray partName)
-      {
-        if ( !parts[id].contains(partName) ) {
-          parts[id][partName] = ContentPtr(new KMime::Content);
-        }
-
-        return parts[id][partName];
-      }
-
       void emitPendings()
       {
         if ( pendingUids.isEmpty() ) {
@@ -91,12 +73,6 @@ namespace KIMAP
       bool uidBased;
       FetchJob::FetchScope scope;
       QString selectedMailBox;
-
-      QMap<qint64, MessagePtr> messages;
-      QMap<qint64, MessageParts> parts;
-      QMap<qint64, MessageFlags> flags;
-      QMap<qint64, qint64> sizes;
-      QMap<qint64, qint64> uids;
 
       QTimer emitPendingsTimer;
       QMap<qint64, MessagePtr> pendingMessages;
@@ -161,32 +137,27 @@ FetchJob::FetchScope FetchJob::scope() const
 
 QMap<qint64, MessagePtr> FetchJob::messages() const
 {
-  Q_D(const FetchJob);
-  return d->messages;
+  return QMap<qint64, MessagePtr>();
 }
 
 QMap<qint64, MessageParts> FetchJob::parts() const
 {
-  Q_D(const FetchJob);
-  return d->parts;
+  return QMap<qint64, MessageParts>();
 }
 
 QMap<qint64, MessageFlags> FetchJob::flags() const
 {
-  Q_D(const FetchJob);
-  return d->flags;
+  return QMap<qint64, MessageFlags>();
 }
 
 QMap<qint64, qint64> FetchJob::sizes() const
 {
-  Q_D(const FetchJob);
-  return d->sizes;
+  return QMap<qint64, qint64>();
 }
 
 QMap<qint64, qint64> FetchJob::uids() const
 {
-  Q_D(const FetchJob);
-  return d->uids;
+  return QMap<qint64, qint64>();
 }
 
 void FetchJob::doStart()
@@ -260,6 +231,10 @@ void FetchJob::handleResponse( const Message &response )
       qint64 id = response.content[1].toString().toLongLong();
       QList<QByteArray> content = response.content[3].toList();
 
+      MessagePtr message( new KMime::Message );
+      bool shouldParseMessage = false;
+      MessageParts parts;
+
       for ( QList<QByteArray>::ConstIterator it = content.constBegin();
             it!=content.constEnd(); ++it ) {
         QByteArray str = *it;
@@ -271,29 +246,26 @@ void FetchJob::handleResponse( const Message &response )
         }
 
         if ( str=="UID" ) {
-          d->uids[id] = it->toLongLong();
-          d->pendingUids[id] = d->uids[id];
+          d->pendingUids[id] = it->toLongLong();
         } else if ( str=="RFC822.SIZE" ) {
-          d->sizes[id] = it->toLongLong();
-          d->pendingSizes[id] = d->sizes[id];
+          d->pendingSizes[id] = it->toLongLong();
         } else if ( str=="INTERNALDATE" ) {
-          d->message(id)->date()->setDateTime( KDateTime::fromString( *it, KDateTime::RFCDate ) );
+          message->date()->setDateTime( KDateTime::fromString( *it, KDateTime::RFCDate ) );
         } else if ( str=="FLAGS" ) {
           if ( (*it).startsWith('(') && (*it).endsWith(')') ) {
             QByteArray str = *it;
             str.chop(1);
             str.remove(0, 1);
             if ( !str.isEmpty() ) {
-              d->flags[id] = str.split(' ');
+              d->pendingFlags[id] = str.split(' ');
             }
           } else {
-            d->flags[id] << *it;
+            d->pendingFlags[id] << *it;
           }
-          d->pendingFlags[id] = d->flags[id];
         } else if ( str=="BODYSTRUCTURE" ) {
           int pos = 0;
-          d->parseBodyStructure(*it, pos, d->message(id).get());
-          d->message(id)->assemble();
+          d->parseBodyStructure(*it, pos, message.get());
+          message->assemble();
         } else if ( str.startsWith( "BODY[") ) { //krazy:exclude=strings
           if ( !str.endsWith(']') ) { // BODY[ ... ] might have been split, skip until we find the ]
             while ( !(*it).endsWith(']') ) ++it;
@@ -304,34 +276,41 @@ void FetchJob::handleResponse( const Message &response )
           if ( (index=str.indexOf("HEADER"))>0 || (index=str.indexOf("MIME"))>0 ) { // headers
             if ( str[index-1]=='.' ) {
               QByteArray partId = str.mid( 5, index-6 );
-              d->part( id, partId )->setHead(*it);
-              d->part( id, partId )->parse();
+              if ( !parts.contains( partId ) ) {
+                  parts[partId] = ContentPtr( new KMime::Content );
+              }
+              parts[partId]->setHead(*it);
+              parts[partId]->parse();
             } else {
-              d->message(id)->setHead(*it);
-              d->message(id)->parse();
+              message->setHead(*it);
+              shouldParseMessage = true;
             }
           } else { // full payload
             if ( str=="BODY[]" ) {
-              d->message(id)->setContent( KMime::CRLFtoLF(*it) );
-              d->message(id)->parse();
+              message->setContent( KMime::CRLFtoLF(*it) );
+              shouldParseMessage = true;
 
-              d->pendingMessages[id] = d->message(id);
+              d->pendingMessages[id] = message;
             } else {
               QByteArray partId = str.mid( 5, str.size()-6 );
-              d->part( id, partId )->setBody(*it);
-              d->part( id, partId )->parse();
+              parts[partId]->setBody(*it);
+              parts[partId]->parse();
 
-              d->pendingParts[id] = d->parts[id];
+              d->pendingParts[id] = parts;
             }
           }
         }
+      }
+
+      if ( shouldParseMessage ) {
+        message->parse();
       }
 
       // For the headers mode the message is built in several
       // steps, hence why we wait it to be done until putting it
       // in the pending queue.
       if ( d->scope.mode == FetchScope::Headers ) {
-        d->pendingMessages[id] = d->message(id);
+        d->pendingMessages[id] = message;
       }
     }
   }

@@ -68,11 +68,11 @@ class KIMAP_EXPORT FetchJob : public Job
     void setScope( const FetchScope &scope );
     FetchScope scope() const;
 
-    QMap<qint64, MessagePtr> messages() const;
-    QMap<qint64, MessageParts> parts() const;
-    QMap<qint64, MessageFlags> flags() const;
-    QMap<qint64, qint64> sizes() const;
-    QMap<qint64, qint64> uids() const;
+    KDE_DEPRECATED QMap<qint64, MessagePtr> messages() const;
+    KDE_DEPRECATED QMap<qint64, MessageParts> parts() const;
+    KDE_DEPRECATED QMap<qint64, MessageFlags> flags() const;
+    KDE_DEPRECATED QMap<qint64, qint64> sizes() const;
+    KDE_DEPRECATED QMap<qint64, qint64> uids() const;
 
   Q_SIGNALS:
     void headersReceived( const QString &mailBox,

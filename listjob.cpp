@@ -53,9 +53,6 @@ namespace KIMAP
       QList<MailBoxDescriptor> namespaces;
       QByteArray command;
 
-      QList<MailBoxDescriptor> descriptors;
-      QMap< MailBoxDescriptor, QList<QByteArray> > flags;
-
       QTimer emitPendingsTimer;
       QList<MailBoxDescriptor> pendingDescriptors;
       QList< QList<QByteArray> > pendingFlags;
@@ -102,14 +99,12 @@ QList<MailBoxDescriptor> ListJob::queriedNamespaces() const
 
 QList<MailBoxDescriptor> ListJob::mailBoxes() const
 {
-  Q_D(const ListJob);
-  return d->descriptors;
+  return QList<MailBoxDescriptor>();
 }
 
 QMap< MailBoxDescriptor, QList<QByteArray> > ListJob::flags() const
 {
-  Q_D(const ListJob);
-  return d->flags;
+  return QMap< MailBoxDescriptor, QList<QByteArray> >();
 }
 
 void ListJob::doStart()
@@ -172,9 +167,6 @@ void ListJob::handleResponse( const Message &response )
       MailBoxDescriptor mailBoxDescriptor;
       mailBoxDescriptor.separator = QChar( separator[0] );
       mailBoxDescriptor.name = QString::fromUtf8( fullName );
-
-      d->descriptors << mailBoxDescriptor;
-      d->flags[mailBoxDescriptor] = flags;
 
       d->pendingDescriptors << mailBoxDescriptor;
       d->pendingFlags << flags;
