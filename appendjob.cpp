@@ -110,7 +110,6 @@ void AppendJob::doStart()
   }
 
   parameters+=" {"+QByteArray::number(d->content.size())+'}';
-  qDebug("%s", parameters.constData());
 
   d->tags << d->sessionInternal()->sendCommand( "APPEND", parameters );
 }
