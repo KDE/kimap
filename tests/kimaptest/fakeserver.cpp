@@ -75,7 +75,7 @@ void FakeServer::newConnection()
 
     m_clientSockets << m_tcpServer->nextPendingConnection();
     connect(m_clientSockets.last(), SIGNAL(readyRead()), this, SLOT(dataAvailable()));
-    m_clientParsers << new KIMAP::ImapStreamParser( m_clientSockets.last() );
+    m_clientParsers << new KIMAP::ImapStreamParser( m_clientSockets.last(), true );
 
     QVERIFY( m_clientSockets.size() <= m_scenarios.size() );
 

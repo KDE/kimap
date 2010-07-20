@@ -28,12 +28,12 @@
 
 using namespace KIMAP;
 
-ImapStreamParser::ImapStreamParser( QIODevice *socket )
+ImapStreamParser::ImapStreamParser( QIODevice *socket, bool serverModeEnabled )
 {
   m_socket = socket;
+  m_isServerModeEnabled = serverModeEnabled;
   m_position = 0;
   m_literalSize = 0;
-  m_continuationSize = 0;
 }
 
 ImapStreamParser::~ImapStreamParser()
@@ -120,9 +120,8 @@ bool ImapStreamParser::hasLiteral()
       ++m_position;
 
     //FIXME: Makes sense only on the server side?
-    //m_continuationSize = qMin(m_position + m_literalSize - m_data.length(), (qint64)4096);
-    //if (m_continuationSize > 0)
-    //  sendContinuationResponse();
+    if (m_isServerModeEnabled && m_literalSize > 0)
+      sendContinuationResponse( m_literalSize );
     return true;
   } else
   {
@@ -512,10 +511,10 @@ QByteArray ImapStreamParser::readUntilCommandEnd()
   return result;
 }
 
-void ImapStreamParser::sendContinuationResponse()
+void ImapStreamParser::sendContinuationResponse( qint64 size )
 {
   QByteArray block = "+ Ready for literal data (expecting "
-                   + QByteArray::number(  m_continuationSize ) + " bytes)\r\n";
+                   + QByteArray::number( size ) + " bytes)\r\n";
   m_socket->write(block);
   m_socket->waitForBytesWritten(30000);
 }

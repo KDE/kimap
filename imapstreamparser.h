@@ -56,8 +56,10 @@ class KIMAP_EXPORT ImapStreamParser
     /**
      * Construct the parser.
      * @param socket the local socket to work with.
+     * @param serverModeEnabled true if the parser has to assume we're writing a server (e.g. sends
+     * continuation message automatically)
      */
-    ImapStreamParser( QIODevice* socket);
+    ImapStreamParser( QIODevice* socket, bool serverModeEnabled = false);
 
     /**
      * Destructor.
@@ -195,13 +197,13 @@ class KIMAP_EXPORT ImapStreamParser
     /**
      * Inform the client to send more literal data.
      */
-    void sendContinuationResponse();
+    void sendContinuationResponse( qint64 size );
 
     QIODevice *m_socket;
+    bool m_isServerModeEnabled;
     QByteArray m_data;
     int m_position;
     qint64 m_literalSize;
-    qint64 m_continuationSize;
 };
 
 }
