@@ -30,7 +30,20 @@ class Session;
 struct Message;
 class DeleteAclJobPrivate;
 
-
+/**
+ * Removes an identifier from the ACL of a mailbox.
+ *
+ * The user must have the Acl::Right::Admin permission
+ * on the mailbox for this job to succeed (see
+ * MyRightsJob).
+ *
+ * This job can only be run when the session is in the
+ * authenticated (or selected) state.
+ *
+ * This job requires that the server supports the ACL
+ * capability, defined in
+ * <a href="http://www.apps.ietf.org/rfc/rfc4314.html">RFC 4314</a>.
+ */
 class KIMAP_EXPORT DeleteAclJob : public AclJobBase
 {
   Q_OBJECT
@@ -42,7 +55,13 @@ class KIMAP_EXPORT DeleteAclJob : public AclJobBase
     explicit DeleteAclJob( Session *session );
     virtual ~DeleteAclJob();
 
+    /**
+     * Sets the identifier to remove
+     */
     void setIdentifier( const QByteArray &identifier );
+    /**
+     * The identifier that will be removed
+     */
     QByteArray identifier();
 
   protected:
