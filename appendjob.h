@@ -30,6 +30,12 @@ class Session;
 struct Message;
 class AppendJobPrivate;
 
+/**
+ * Appends a message to a mailbox.
+ *
+ * This job can only be run when the session is in the
+ * authenticated (or selected) state.
+ */
 class KIMAP_EXPORT AppendJob : public Job
 {
   Q_OBJECT
@@ -41,15 +47,55 @@ class KIMAP_EXPORT AppendJob : public Job
     AppendJob( Session *session );
     virtual ~AppendJob();
 
+    /**
+     * Set the mailbox to append the message to.
+     *
+     * If the mailbox does not exist, it will not automatically
+     * be created and the command will fail.
+     *
+     * @param mailBox  the (unquoted) name of the mailbox
+     */
     void setMailBox( const QString &mailBox );
+    /**
+     * The mailbox that the message will be appended to.
+     */
     QString mailBox() const;
 
+    /**
+     * Set the flags that should be applied to the appended message.
+     *
+     * @param flags  a list of flags
+     */
     void setFlags( const QList<QByteArray> &flags);
+    /**
+     * The flags that will be set on the appended message.
+     */
     QList<QByteArray> flags() const;
 
+    /**
+     * The content of the message.
+     *
+     * This should be in RFC-2822 format, although some required header
+     * lines may be omitted in certain cases, for example when appending
+     * to a Drafts folder.
+     *
+     * @param content  usually an RFC-2822 message
+     */
     void setContent( const QByteArray &content );
+    /**
+     * The content that the message will have.
+     */
     QByteArray content() const;
 
+    /**
+     * The UID of the new message.
+     *
+     * This will be zero if it is unknown.
+     *
+     * The UID will not be known until the job has been successfully
+     * executed, and it will only be known at all if the server
+     * supports the UIDPLUS extension (RFC 4315).
+     */
     qint64 uid() const;
 
   protected:
