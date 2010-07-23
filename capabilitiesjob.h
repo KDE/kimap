@@ -30,6 +30,18 @@ class Session;
 struct Message;
 class CapabilitiesJobPrivate;
 
+/**
+ * Checks server capabilities.
+ *
+ * This job can be run in any open session.
+ *
+ * This simply asks the server what capabilities it supports
+ * (using the CAPABILITY command) and returns the list
+ * provided by the server.  The list may, therefore, be
+ * inaccurate: the server may claim to support something
+ * it does not implement properly, or it may omit a feature
+ * that it does, in reality, support.
+ */
 class KIMAP_EXPORT CapabilitiesJob : public Job
 {
   Q_OBJECT
@@ -41,9 +53,19 @@ class KIMAP_EXPORT CapabilitiesJob : public Job
     CapabilitiesJob( Session *session );
     virtual ~CapabilitiesJob();
 
+    /**
+     * The capabilities the server claims to support.
+     *
+     * This will return an empty list until the job has completed.
+     */
     QStringList capabilities() const;
 
   Q_SIGNALS:
+    /**
+     * Notifies listeners that the capabilities have been fetched.
+     *
+     * @param capabilities  The capabilities the server claims to support.
+     */
     void capabilitiesReceived( const QStringList &capabilities );
 
   protected:

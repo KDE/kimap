@@ -1,13 +1,23 @@
 /*!
- * @mainpage KIMAP - an API for handling IMAP data.
+ * @mainpage KIMAP - a job-based API for interacting with IMAP servers
  *
  * @section purpose Purpose
  *
- * The kimap library contains an API for the handling of IMAP data.
+ * This library provides a job-based API for interacting with an IMAP4rev1 server.
+ * It manages connections, encryption and parameter quoting and encoding, but
+ * otherwise provides quite a low-level interface to the protocol.  This library
+ * does not implement an IMAP client; it merely makes it easier to do so.
+ *
+ * Users should be familiar with
+ * <a href="http://www.apps.ietf.org/rfc/rfc3501.html" title="IMAP 4rev1">RFC 3501</a>,
+ * as well as other related RFCs such as
+ * <a href="http://www.apps.ietf.org/rfc/rfc4315.html" title="IMAP UIDPLUS extension">RFC 4315</a>
+ * and
+ * <a href="http://www.apps.ietf.org/rfc/rfc2822.html" title="Internet Message Format">RFC 2822</a>,
+ * although the library hides some of the nastier details like the encoding and quoting of
+ * strings.
  *
  * @section desc Description
- *
- * Insert a nice description here.
  *
  * @authors
  * The major authors of this library are:\n

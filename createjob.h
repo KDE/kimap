@@ -30,6 +30,14 @@ class Session;
 struct Message;
 class CreateJobPrivate;
 
+/**
+ * Creates a new mailbox
+ *
+ * This job can only be run when the session is in the
+ * authenticated (or selected) state.
+ *
+ * This job will fail if the mailbox already exists.
+ */
 class KIMAP_EXPORT CreateJob : public Job
 {
   Q_OBJECT
@@ -41,7 +49,16 @@ class KIMAP_EXPORT CreateJob : public Job
     explicit CreateJob( Session *session );
     virtual ~CreateJob();
 
+    /**
+     * Set the name of the new mailbox
+     *
+     * @param mailBox  an (unquoted) identifier that does not correspond
+     *                 to an existing mailbox name
+     */
     void setMailBox( const QString &mailBox );
+    /**
+     * The name of the mailbox that will be created
+     */
     QString mailBox() const;
 
   protected:

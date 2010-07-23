@@ -30,6 +30,24 @@ class Session;
 struct Message;
 class CloseJobPrivate;
 
+/**
+ * Closes the current mailbox.
+ *
+ * This job can only be run when the session is in the selected state.
+ *
+ * Permanently removes all messages that have the \\Deleted
+ * flag set from the currently selected mailbox, and returns
+ * to the authenticated state from the selected state.
+ *
+ * The server will not provide any notifications of which
+ * messages were expunged, so this is quicker than doing
+ * an expunge and then implicitly closing the mailbox
+ * (by selecting or examining another mailbox or logging
+ * out).
+ *
+ * No messages are removed if the mailbox is open in a read-only
+ * state.
+ */
 class KIMAP_EXPORT CloseJob : public Job
 {
   Q_OBJECT

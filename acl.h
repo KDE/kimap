@@ -24,8 +24,14 @@
 
 namespace KIMAP {
 
+/**
+ * Operations for dealing with mailbox permissions.
+ */
 namespace Acl {
 
+/**
+ * Possible rights that can be held for a mailbox
+ */
 enum Right {
   None          = 0x000000,
   Lookup        = 0x000001,
@@ -56,7 +62,19 @@ enum Right {
 
 Q_DECLARE_FLAGS(Rights, Right)
 
+/**
+ * Convert a set of rights into text format
+ *
+ * No modifier flag ('+' or '-') will be included.
+ */
 KIMAP_EXPORT QByteArray rightsToString( Rights rights );
+/**
+ * Convert the text form of a set of rights into a Rights bitflag
+ *
+ * Modifier flags ('+' and '-') are ignored, as are any unknown
+ * characters.  This method will not complain if you give it
+ * something that is not a list of rights.
+ */
 KIMAP_EXPORT Rights rightsFromString( const QByteArray &string );
 
 }

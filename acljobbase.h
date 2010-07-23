@@ -31,8 +31,11 @@ class Session;
 struct Message;
 class AclJobBasePrivate;
 
-/** @short Base class of Acl related jobs. It cannot be used directly, you must subclass it and reimplement at least the
-doStart() method.
+/**
+ * Base class of Acl related jobs.
+ *
+ * This class cannot be used directly, you must subclass it and reimplement
+ * at least the doStart() method.
 */
 class KIMAP_EXPORT AclJobBase : public Job
 {
