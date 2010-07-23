@@ -30,7 +30,29 @@ class Session;
 struct Message;
 class MyRightsJobPrivate;
 
-
+/**
+ * Determine the rights the currently-logged-in user
+ * has on the current mailbox.
+ *
+ * This should take into account the full access control
+ * list.
+ *
+ * The current user must have one of the following rights
+ * on the mailbox for this job to succeed:
+ * - Acl::Right::Lookup
+ * - Acl::Right::Read
+ * - Acl::Right::Insert
+ * - Acl::Right::CreateMailbox
+ * - Acl::Right::DeleteMailbox
+ * - Acl::Right::Admin
+ *
+ * This job can only be run when the session is in the
+ * authenticated (or selected) state.
+ *
+ * This job requires that the server supports the ACL
+ * capability, defined in
+ * <a href="http://www.apps.ietf.org/rfc/rfc4314.html">RFC 4314</a>.
+ */
 class KIMAP_EXPORT MyRightsJob : public AclJobBase
 {
   Q_OBJECT
@@ -42,7 +64,22 @@ class KIMAP_EXPORT MyRightsJob : public AclJobBase
     explicit MyRightsJob( Session *session );
     virtual ~MyRightsJob();
 
+    /**
+     * Check whether the current user has the a particular right
+     * on the mailbox.
+     *
+     * The result of this method is undefined if the job has
+     * not yet completed.
+     *
+     * @param right       the right to check for
+     */
     bool hasRightEnabled(Acl::Right right);
+    /**
+     * Get the rights for the current user on the mailbox.
+     *
+     * The result of this method is undefined if the job has
+     * not yet completed.
+     */
     Acl::Rights rights();
 
   protected:

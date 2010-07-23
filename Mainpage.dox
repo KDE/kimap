@@ -11,9 +11,11 @@
  * Users should be familiar with
  * <a href="http://www.apps.ietf.org/rfc/rfc3501.html" title="IMAP 4rev1">RFC 3501</a>,
  * as well as other related RFCs such as
- * <a href="http://www.apps.ietf.org/rfc/rfc4315.html" title="IMAP UIDPLUS extension">RFC 4315</a>
- * and
+ * <a href="http://www.apps.ietf.org/rfc/rfc4315.html" title="IMAP UIDPLUS extension">RFC 4315</a>,
  * <a href="http://www.apps.ietf.org/rfc/rfc2822.html" title="Internet Message Format">RFC 2822</a>,
+ * <a href="http://www.apps.ietf.org/rfc/rfc4314.html" title="IMAP ACL extension">RFC 4314</a>
+ * and
+ * <a href="http://www.apps.ietf.org/rfc/rfc5257.html" title="IMAP ANNOTATE extension">RFC 5257</a>,
  * although the library hides some of the nastier details like the encoding and quoting of
  * strings.
  *

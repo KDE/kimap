@@ -32,7 +32,7 @@ struct Message;
 class AclJobBasePrivate;
 
 /**
- * Base class of Acl related jobs.
+ * Base class for jobs that operate on mailbox ACLs
  *
  * This class cannot be used directly, you must subclass it and reimplement
  * at least the doStart() method.
@@ -48,13 +48,24 @@ class KIMAP_EXPORT AclJobBase : public Job
     AclJobBase( Session *session );
     virtual ~AclJobBase();
 
+    /**
+     * Used when subclassing to specify how the ACL will be modified.
+     */
     enum AclModifier {
       Add = 0,
       Remove,
       Change
     };
 
+    /**
+     * Set the mailbox to act on
+     *
+     * @param mailBox  the name of an existing mailbox
+     */
     void setMailBox( const QString &mailBox );
+    /**
+     * The mailbox that will be acted upon.
+     */
     QString mailBox() const;
 
   protected:
