@@ -35,12 +35,12 @@ class ListRightsJobPrivate;
  * Lists the possible and automatic rights for
  * an identifier on a mailbox
  *
- * The user must have the Acl::Right::Admin permission
- * on the mailbox for this job to succeed (see
- * MyRightsJob).
- *
  * This job can only be run when the session is in the
  * authenticated (or selected) state.
+ *
+ * The user must have the Acl::Admin permission
+ * on the mailbox for this job to succeed (see
+ * MyRightsJob).
  *
  * This job requires that the server supports the ACL
  * capability, defined in
@@ -88,7 +88,7 @@ class KIMAP_EXPORT ListRightsJob : public AclJobBase
      * regardless of the access control list.
      *
      * For example, under the UNIX permission model, the owner
-     * of a mailbox will always have the Acl::Right::Admin right.
+     * of a mailbox will always have the Acl::Admin right.
      */
     Acl::Rights defaultRights();
 
@@ -103,11 +103,11 @@ class KIMAP_EXPORT ListRightsJob : public AclJobBase
      * For example, under the UNIX permission model, the following
      * rights are all controlled by the "write" flag, and hence
      * must either all be set or all be not set:
-     * - Acl::Right::KeepSeen
-     * - Acl::Right::Write
-     * - Acl::Right::Insert
-     * - Acl::Right::DeleteMessage
-     * - Acl::Right::Expunge
+     * - Acl::KeepSeen
+     * - Acl::Write
+     * - Acl::Insert
+     * - Acl::DeleteMessage
+     * - Acl::Expunge
      */
     QList<Acl::Rights> possibleRights();
 

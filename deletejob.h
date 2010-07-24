@@ -29,6 +29,20 @@ namespace KIMAP {
 class Session;
 class DeleteJobPrivate;
 
+/**
+ * Delete a mailbox
+ *
+ * Note that some servers will refuse to delete a
+ * mailbox unless it is empty (ie: all mails have
+ * had their \Deleted flag set, and then the
+ * mailbox has been expunged).
+ *
+ * This job can only be run when the session is in the
+ * authenticated (or selected) state.
+ *
+ * If the server supports ACLs, you will need the
+ * Acl::DeleteMailbox right on the mailbox.
+ */
 class KIMAP_EXPORT DeleteJob : public Job
 {
   Q_OBJECT
@@ -40,7 +54,13 @@ class KIMAP_EXPORT DeleteJob : public Job
     explicit DeleteJob( Session *session );
     virtual ~DeleteJob();
 
+    /**
+     * Set the mailbox to delete.
+     */
     void setMailBox( const QString &mailBox );
+    /**
+     * The mailbox that will be deleted.
+     */
     QString mailBox() const;
 
   protected:

@@ -37,6 +37,12 @@ class CreateJobPrivate;
  * authenticated (or selected) state.
  *
  * This job will fail if the mailbox already exists.
+ *
+ * If the server supports ACLs, the user must have the
+ * Acl::CreateMailbox permission on the parent
+ * mailbox.  Note that what is meant by "parent mailbox"
+ * depends on the server: . and / are typical hierachy
+ * delimiters.
  */
 class KIMAP_EXPORT CreateJob : public Job
 {

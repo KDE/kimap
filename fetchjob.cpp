@@ -281,6 +281,8 @@ void FetchJob::handleResponse( const Message &response )
               }
               parts[partId]->setHead(*it);
               parts[partId]->parse();
+              // XXX: [alexmerry, 2010-7-24]: (why) does this work without
+              //      d->pendingParts[id] = parts; when in Headers mode?
             } else {
               message->setHead(*it);
               shouldParseMessage = true;

@@ -34,12 +34,12 @@ class GetAclJobPrivate;
 /**
  * Gets the ACL for a mailbox
  *
- * The user must have the Acl::Right::Admin permission
- * on the mailbox for this job to succeed (see
- * MyRightsJob).
- *
  * This job can only be run when the session is in the
  * authenticated (or selected) state.
+ *
+ * The user must have the Acl::Admin permission
+ * on the mailbox for this job to succeed (see
+ * MyRightsJob).
  *
  * This job requires that the server supports the ACL
  * capability, defined in

@@ -35,6 +35,13 @@ class CopyJobPrivate;
  * Copies one or more messages to another mailbox.
  *
  * This job can only be run when the session is in the selected state.
+ *
+ * If the server supports ACLs, the user will need the
+ * Acl::Insert right on the target mailbox.
+ * In order to preserve message flags, the user may also need
+ * some combination of Acl::DeleteMessage,
+ * Acl::KeepSeen and Acl::Write on the
+ * target mailbox.
  */
 class KIMAP_EXPORT CopyJob : public Job
 {

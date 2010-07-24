@@ -46,7 +46,8 @@ class CloseJobPrivate;
  * out).
  *
  * No messages are removed if the mailbox is open in a read-only
- * state.
+ * state, or if the server supports ACLs and the user does not
+ * have the Acl::Expunge right on the mailbox.
  */
 class KIMAP_EXPORT CloseJob : public Job
 {
