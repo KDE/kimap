@@ -62,6 +62,7 @@ void AclJobBasePrivate::setRights(const QByteArray& rights)
 void AclJobBasePrivate::setRights(AclJobBase::AclModifier _modifier, Acl::Rights rights)
 {
   modifier = _modifier;
+  // XXX: [alexmerry, 2010-07-24]: this is REALLY unintuitive behaviour
   rightList|= rights;
 }
 
