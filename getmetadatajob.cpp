@@ -157,7 +157,7 @@ void GetMetaDataJob::addEntry(const QByteArray &entry, const QByteArray &attribu
 {
   Q_D(GetMetaDataJob);
   if (d->serverCapability == Annotatemore && attribute.isNull())
-    qWarning() << "In ANNOTATEMORE mode and attribute must be specified with addEnty!";
+    qWarning() << "In ANNOTATEMORE mode an attribute must be specified with addEntry!";
   d->entries.append(entry);
   d->attributes.append(attribute);
 }
