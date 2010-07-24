@@ -30,8 +30,19 @@ class Session;
 struct Message;
 class MetaDataJobBasePrivate;
 
-/** @short Base class of Metadata/Annotatemore related jobs. It cannot be used directly, you must subclass it and reimplement at least the
-doStart() method.
+/**
+ * Base class for jobs that operate on mailbox metadata
+ *
+ * Provides support for the IMAP METADATA extension; both the
+ * final RFC version
+ * (<a href="http://tools.ietf.org/html/rfc5464">RFC 5464</a>)
+ * and the older, incompatible draft version (known as ANNOTATEMORE)
+ * (<a
+ * href="http://tools.ietf.org/html/draft-daboo-imap-annotatemore-07"
+ * >draft-daboo-imap-annotatemore-07</a>).
+ *
+ * This class cannot be used directly, you must subclass it and reimplement
+ * at least the doStart() method.
 */
 class KIMAP_EXPORT MetaDataJobBase : public Job
 {
@@ -44,23 +55,64 @@ class KIMAP_EXPORT MetaDataJobBase : public Job
     explicit MetaDataJobBase( Session *session );
     virtual ~MetaDataJobBase();
 
+    /**
+     * Represents the capability level of the server.
+     */
     enum ServerCapability {
-      Metadata = 0, //rfc5464
-      Annotatemore //compatibility with draft-daboo-imap-annotatemore-07
+      /**
+       * Used to indicate that the server supports the RFC 5464 version
+       * of the extension.
+       *
+       * This corresponds to the METADATA server capability.
+       */
+      Metadata = 0,
+      /**
+       * Used to indicate that the server supports the
+       * draft-daboo-imap-annotatemore-07 version of the extension.
+       *
+       * This corresponds to the ANNOTATEMORE server capability.
+       */
+      Annotatemore
     };
 
+    /**
+     * Set the mailbox to act on
+     *
+     * This may be an empty string, in which case metadata for the
+     * server (rather than a specific mailbox) will be retreived.
+     *
+     * @param mailBox  the name of an existing mailbox, or an empty string
+     */
     void setMailBox( const QString &mailBox );
+    /**
+     * The mailbox that will be acted upon.
+     *
+     * If this is an empty string, server metadata will be retreived.
+     *
+     * @return  a mailbox name, or an empty string
+     */
     QString mailBox() const;
 
     /**
-     * Set what kind of annotation does the server support. The commands send out depend on the mode set here.
-     * @param capability Metadata (RFC5464 mode) or Annotatemore (draft-daboo-imap-annotatemore-07 mode)
+     * Set what version of the metadata extension to be compatible with.
+     *
+     * This will determine the commands that will be sent to the server.
+     *
+     * The draft for the metadata extension changed in an incompatible
+     * way between versions 7 and 8, and some servers support version 7.
+     * It should be possible to check which version the server supports
+     * using CapabilityJob: servers implementing
+     * draft-daboo-imap-annotatemore-07 should advertise the
+     * ANNOTATEMORE capability, whereas servers implementing the final
+     * RFC 5464 should advertise the METADATA capability.
+     *
+     * The default mode is Metadata.
+     *
+     * @param capability  the version of the extension implemented by the server
      */
-    void setServerCapability(const ServerCapability& capability);
-
+    void setServerCapability( const ServerCapability &capability );
     /**
-     * Check the operating mode.
-     * @return the annotation capability of the server, see ServerCapability
+     * The version of the metadata extension that will be used.
      */
     ServerCapability serverCapability() const;
 
