@@ -35,6 +35,9 @@ class AppendJobPrivate;
  *
  * This job can only be run when the session is in the
  * authenticated (or selected) state.
+ *
+ * If the server supports ACLs, the user will need the
+ * Acl::Insert right on the mailbox.
  */
 class KIMAP_EXPORT AppendJob : public Job
 {

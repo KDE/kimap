@@ -37,17 +37,17 @@ class MyRightsJobPrivate;
  * This should take into account the full access control
  * list.
  *
- * The current user must have one of the following rights
- * on the mailbox for this job to succeed:
- * - Acl::Right::Lookup
- * - Acl::Right::Read
- * - Acl::Right::Insert
- * - Acl::Right::CreateMailbox
- * - Acl::Right::DeleteMailbox
- * - Acl::Right::Admin
- *
  * This job can only be run when the session is in the
  * authenticated (or selected) state.
+ *
+ * The current user must have one of the following rights
+ * on the mailbox for this job to succeed:
+ * - Acl::Lookup
+ * - Acl::Read
+ * - Acl::Insert
+ * - Acl::CreateMailbox
+ * - Acl::DeleteMailbox
+ * - Acl::Admin
  *
  * This job requires that the server supports the ACL
  * capability, defined in

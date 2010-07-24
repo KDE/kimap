@@ -30,6 +30,18 @@ class Session;
 struct Message;
 class ExpungeJobPrivate;
 
+/**
+ * Expunges the deleted messages in the selected mailbox.
+ *
+ * This permanently removes any messages that have the
+ * \Deleted flag set in the selected mailbox.
+ *
+ * This job can only be run when the session is in the
+ * selected state.
+ *
+ * If the server supports ACLs, the user will need the
+ * Acl::Expunge right on the mailbox.
+ */
 class KIMAP_EXPORT ExpungeJob : public Job
 {
   Q_OBJECT
