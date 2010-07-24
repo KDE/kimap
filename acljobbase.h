@@ -34,6 +34,9 @@ class AclJobBasePrivate;
 /**
  * Base class for jobs that operate on mailbox ACLs
  *
+ * Provides support for the IMAP ACL extension, as defined by
+ * <a href="http://www.apps.ietf.org/rfc/rfc4314.html" title="IMAP ACL extension">RFC 4314</a>.
+ *
  * This class cannot be used directly, you must subclass it and reimplement
  * at least the doStart() method.
 */

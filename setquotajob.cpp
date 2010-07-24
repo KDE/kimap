@@ -56,6 +56,7 @@ void SetQuotaJob::doStart()
   QByteArray s;
   s += '(';
   for (QMap<QByteArray, qint64>::ConstIterator it = d->setList.constBegin(); it != d->setList.constEnd(); ++it ) {
+    //XXX: [alexmerry, 2010-07-24]: we're restricting the resource to being an atom, here
     s += it.key() + ' ' + QByteArray::number(it.value()) + ' ';
   }
   if (d->setList.isEmpty()) {
@@ -65,6 +66,7 @@ void SetQuotaJob::doStart()
   }
 
   kDebug() << "SETQUOTA " << '\"' + d->root + "\" " + s;
+  //XXX: [alexmerry, 2010-07-24]: should d->root be quoted properly?
   d->tags << d->sessionInternal()->sendCommand( "SETQUOTA", '\"' + d->root + "\" " + s);
 }
 
