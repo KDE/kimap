@@ -180,6 +180,7 @@ class KIMAP_EXPORT FetchJob : public Job
      */
     FetchScope scope() const;
 
+    // XXX: [alexmerry, 2010-07-24]: BIC?  Behaviour change
     /** @deprecated returns an empty map; use the signals instead */
     KDE_DEPRECATED QMap<qint64, MessagePtr> messages() const;
     /** @deprecated returns an empty map; use the signals instead */
