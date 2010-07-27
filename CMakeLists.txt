@@ -49,7 +49,7 @@ set(kimap_LIB_SRCS
    getmetadatajob.cpp
 )
 
-kde4_add_library(kimap SHARED ${kimap_LIB_SRCS})
+kde4_add_library(kimap ${LIBRARY_TYPE} ${kimap_LIB_SRCS})
 
 target_link_libraries(kimap ${KDE4_KDECORE_LIBS} ${QT_QTNETWORK_LIBRARY} kmime  ${SASL2_LIBRARIES})
 
