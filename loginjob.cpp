@@ -253,7 +253,7 @@ void LoginJob::handleResponse( const Message &response )
     commandName = i18n("StartTls");
   }
 
-  if ( !response.content.isEmpty() && response.content.first().toString()=="+" ) {
+  if ( d->authMode == QLatin1String( "PLAIN" ) && !response.content.isEmpty() && response.content.first().toString()=="+" ) {
     if ( response.content.size()>1 && response.content.at( 1 ).toString()=="OK" ) {
       return;
     }
@@ -320,7 +320,7 @@ void LoginJob::handleResponse( const Message &response )
     }
   } else if ( response.content.size() >= 2 ) {
     if ( d->authState == LoginJobPrivate::Authenticate ) {
-      if (!d->answerChallenge(response.content[1].toString())) {
+      if (!d->answerChallenge(QByteArray::fromBase64(response.content[1].toString()))) {
         emitResult(); //error, we're done
       }
     } else if ( response.content[1].toString()=="CAPABILITY" ) {
