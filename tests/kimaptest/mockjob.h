@@ -28,6 +28,9 @@
 
 class MockJobPrivate;
 
+/**
+ * Provides an easy way to send an arbitrary IMAP client command.
+ */
 class MockJob : public KIMAP::Job
 {
   Q_OBJECT
@@ -36,10 +39,32 @@ class MockJob : public KIMAP::Job
   public:
     MockJob(KIMAP::Session *session);
 
+    /**
+     * Sets the command to execute.
+     *
+     * This should not include the command tag.
+     */
     void setCommand(const QByteArray &command);
+    /**
+     * The command that will be sent.
+     */
     QByteArray command() const;
+    /**
+     * Whether the command is empty.
+     *
+     * Equivalent to command().isEmpty().
+     *
+     * @return @c true if no command is set, @c false otherwise
+     */
     bool isNull() const;
 
+    /**
+     * Starts the job.
+     *
+     * Do not call this directly.  Use start() instead.
+     *
+     * @reimp
+     */
     virtual void doStart();
 
   private slots:
