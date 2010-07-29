@@ -54,6 +54,13 @@ FakeServer::~FakeServer()
   wait();
 }
 
+void FakeServer::startAndWait()
+{
+  start();
+  // this will block until the event queue starts
+  QMetaObject::invokeMethod( this, "started", Qt::BlockingQueuedConnection );
+}
+
 void FakeServer::dataAvailable()
 {
     QMutexLocker locker(&m_mutex);
@@ -97,6 +104,11 @@ void FakeServer::run()
     qDeleteAll( m_clientSockets );
 
     delete m_tcpServer;
+}
+
+void FakeServer::started()
+{
+  // do nothing: this is a dummy slot used by startAndWait()
 }
 
 void FakeServer::setScenario( const QList<QByteArray> &scenario )

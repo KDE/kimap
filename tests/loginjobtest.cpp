@@ -68,7 +68,7 @@ void shouldHandleLogin()
 
   FakeServer fakeServer;
   fakeServer.setScenario( scenario );
-  fakeServer.start();
+  fakeServer.startAndWait();
 
   KIMAP::Session *session = new KIMAP::Session("127.0.0.1", 5989);
 

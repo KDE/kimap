@@ -93,7 +93,7 @@ void testSingleSelect()
 
     FakeServer fakeServer;
     fakeServer.setScenario( scenario );
-    fakeServer.start();
+    fakeServer.startAndWait();
 
     KIMAP::Session session("127.0.0.1", 5989);
 
@@ -126,7 +126,7 @@ void testSeveralSelect()
         << "C: A000002 SELECT \"INBOX/Foo\""
         << "S: A000002 OK [READ-WRITE] SELECT completed"
     );
-    fakeServer.start();
+    fakeServer.startAndWait();
 
     KIMAP::Session session("127.0.0.1", 5989);
 

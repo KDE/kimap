@@ -43,7 +43,7 @@ void testLogout()
         << "C: A000001 LOGOUT"
         << "S: A000001 OK LOGOUT completed"
     );
-    fakeServer.start();
+    fakeServer.startAndWait();
 
     KIMAP::Session *session = new KIMAP::Session("127.0.0.1", 5989);
 
@@ -63,7 +63,7 @@ void testLogoutUntagged()
         << "S: * some untagged response"
         << "S: A000001 OK LOGOUT completed"
     );
-    fakeServer.start();
+    fakeServer.startAndWait();
 
     KIMAP::Session *session = new KIMAP::Session("127.0.0.1", 5989);
 

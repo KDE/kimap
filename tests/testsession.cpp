@@ -41,7 +41,7 @@ class SessionTest : public QObject
       fakeServer.setScenario( QList<QByteArray>()
          << FakeServer::greeting()
       );
-      fakeServer.start();
+      fakeServer.startAndWait();
       KIMAP::Session s( "127.0.0.1", 5989 );
       QCOMPARE( ( int )s.state(), ( int )KIMAP::Session::Disconnected );
       QTest::qWait( 500 );
@@ -54,7 +54,7 @@ class SessionTest : public QObject
       fakeServer.setScenario( QList<QByteArray>()
          << FakeServer::preauth()
       );
-      fakeServer.start();
+      fakeServer.startAndWait();
 
       KIMAP::Session s( "127.0.0.1", 5989 );
       QCOMPARE( ( int )s.state(), ( int )KIMAP::Session::Disconnected );
@@ -68,7 +68,7 @@ class SessionTest : public QObject
       fakeServer.setScenario( QList<QByteArray>()
          << FakeServer::greeting()
       );
-      fakeServer.start();
+      fakeServer.startAndWait();
 
       KIMAP::Session s("127.0.0.1", 5989);
       MockJob *j1 = new MockJob(&s);
@@ -101,7 +101,7 @@ class SessionTest : public QObject
       fakeServer.setScenario( QList<QByteArray>()
          << FakeServer::greeting()
       );
-      fakeServer.start();
+      fakeServer.startAndWait();
 
       KIMAP::Session s("127.0.0.1", 5989);
 
@@ -169,7 +169,7 @@ class SessionTest : public QObject
          << "S: * DUMMY"
          // We never get a OK or anything, so the job can't normally complete
       );
-      fakeServer.start();
+      fakeServer.startAndWait();
 
       KIMAP::Session s( "127.0.0.1", 5989 );
 
