@@ -130,7 +130,7 @@ void testList()
 
     FakeServer fakeServer;
     fakeServer.setScenario( scenario );
-    fakeServer.start();
+    fakeServer.startAndWait();
 
     KIMAP::Session session("127.0.0.1", 5989);
 

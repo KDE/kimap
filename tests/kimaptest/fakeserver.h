@@ -89,7 +89,7 @@ Q_DECLARE_METATYPE( QList<QByteArray> )
  *
  * FakeServer fakeServer;
  * fakeServer.setScenario( scenario );
- * fakeServer.start();
+ * fakeServer.startAndWait();
  *
  * KIMAP::Session session( "127.0.0.1", 5989 );
  * KIMAP::CapabilitiesJob *job = new KIMAP::CapabilitiesJob(&session);
@@ -128,6 +128,13 @@ public:
 
     FakeServer( QObject* parent = 0 );
     ~FakeServer();
+
+    /**
+     * Starts the server and waits for it to be ready
+     *
+     * You should use this instead of start() to avoid race conditions.
+     */
+    void startAndWait();
 
     /**
      * Starts the fake IMAP server
@@ -198,6 +205,7 @@ public:
 private Q_SLOTS:
     void newConnection();
     void dataAvailable();
+    void started();
 
 private:
     void writeServerPart( int scenarioNumber );
