@@ -256,9 +256,7 @@ void FetchJob::handleResponse( const Message &response )
             QByteArray str = *it;
             str.chop(1);
             str.remove(0, 1);
-            if ( !str.isEmpty() ) {
-              d->pendingFlags[id] = str.split(' ');
-            }
+            d->pendingFlags[id] = str.split(' ');
           } else {
             d->pendingFlags[id] << *it;
           }
