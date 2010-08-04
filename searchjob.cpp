@@ -96,7 +96,7 @@ namespace KIMAP
       QMap<int, QByteArray> months;
       SearchJob::SearchLogic logic;
       QList<QByteArray> contents;
-      QList<int> results;
+      QList<qint64> results;
       uint nextContent;
       bool uidBased;
   };
@@ -128,8 +128,15 @@ void SearchJob::doStart()
   } else if (d->logic == SearchJob::Or) {
     searchKey += "OR";
   }
-  Q_FOREACH(const QByteArray &key, d->criterias) {
-    searchKey += " (" + key + ')';
+
+  if ( d->logic == SearchJob::And ) {
+    Q_FOREACH(const QByteArray &key, d->criterias) {
+      searchKey += ' ' + key;
+    }
+  } else {
+    Q_FOREACH(const QByteArray &key, d->criterias) {
+      searchKey += " (" + key + ')';
+    }
   }
 
   QByteArray command = "SEARCH";
@@ -236,16 +243,10 @@ void SearchJob::addSearchCriteria( SearchCriteria criteria, const QByteArray &ar
       break;
     case Keyword:
     case Unkeyword:
+    case Header:
+    case Uid:
       d->criterias.append(d->criteriaMap[criteria] + ' ' + argument);
       break;
-    case Header: {
-      int pos = argument.indexOf(' ');
-      QByteArray fieldName = argument.left(pos);
-      QByteArray content = argument.mid(pos + 1);
-      d->contents.append(content);
-      d->criterias.append(d->criteriaMap[criteria] + ' ' + fieldName + " {" + QByteArray::number(content.size()) + '}');
-      break;
-    }
     default:
       //TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
       kDebug() << "Criteria " << d->criteriaMap[criteria] << " doesn't accept any argument.";
@@ -293,9 +294,20 @@ bool SearchJob::isUidBased() const
   return d->uidBased;
 }
 
-QList<int> SearchJob::foundItems()
+QList<qint64> SearchJob::results() const
 {
   Q_D(const SearchJob);
   return d->results;
 }
+
+QList<int> SearchJob::foundItems()
+{
+  Q_D(const SearchJob);
+
+  QList<int> results;
+  qCopy( d->results.begin(), d->results.end(), results.begin() );
+
+  return results;
+}
+
 #include "searchjob.moc"
