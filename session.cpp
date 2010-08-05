@@ -47,7 +47,7 @@ Session::Session( const QString &hostName, quint16 port, QObject *parent)
   : QObject(parent), d(new SessionPrivate(this))
 {
   if ( !qgetenv( "KIMAP_LOGFILE" ).isEmpty() ) {
-    d->logger = SessionLogger::self();
+    d->logger = new SessionLogger;
   }
 
   d->isSocketConnected = false;
@@ -121,6 +121,11 @@ SessionPrivate::SessionPrivate( Session *session )
     sslVersion(KTcpSocket::UnknownSslVersion),
     socketTimerInterval(30000) // By default timeouts on 30s
 {
+}
+
+SessionPrivate::~SessionPrivate()
+{
+  delete logger;
 }
 
 void SessionPrivate::addJob(Job *job)

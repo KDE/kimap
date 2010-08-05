@@ -31,7 +31,7 @@ class SessionLoggerPrivate;
 class SessionLogger
 {
   public:
-    static SessionLogger *self();
+    SessionLogger();
     ~SessionLogger();
 
     void dataSent( const QByteArray &data );
@@ -39,11 +39,8 @@ class SessionLogger
     void disconnectionOccured();
 
   private:
-    SessionLogger();
-
+    qint64 m_id;
     QFile m_file;
-
-    friend class SessionLoggerPrivate;
 };
 
 }

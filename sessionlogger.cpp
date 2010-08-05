@@ -20,35 +20,25 @@
 
 #include "sessionlogger_p.h"
 
-#include <KDE/KGlobal>
-
-namespace KIMAP
-{
-  class SessionLoggerPrivate
-  {
-  public:
-    SessionLogger instance;
-  };
-}
+#include <unistd.h>
 
 using namespace KIMAP;
 
-K_GLOBAL_STATIC(SessionLoggerPrivate, globalLogger)
-
 SessionLogger::SessionLogger()
-  : m_file( qgetenv( "KIMAP_LOGFILE" ) )
+  : m_id( 0 )
 {
+  static qint64 nextId = 0;
+  m_id = ++nextId;
+
+  m_file.setFileName( qgetenv( "KIMAP_LOGFILE" )
+                    + '.' + QString::number( getpid() )
+                    + '.' + QString::number( m_id ) );
   m_file.open( QFile::WriteOnly );
 }
 
 SessionLogger::~SessionLogger()
 {
   m_file.close();
-}
-
-SessionLogger *SessionLogger::self()
-{
-  return &globalLogger->instance;
 }
 
 void SessionLogger::dataSent( const QByteArray &data )
