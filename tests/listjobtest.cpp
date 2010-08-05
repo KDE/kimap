@@ -112,6 +112,18 @@ void testList_data() {
   scenario.clear();
   scenario << FakeServer::preauth()
            << "C: A000001 LIST \"\" *"
+           << "S: * LIST ( \\NoInferiors ) ( ) INBOX"
+           << "S: A000001 OK LIST completed";
+  listresult.clear();
+  descriptor.separator = '/';
+  descriptor.name = "INBOX";
+  listresult << descriptor;
+
+  QTest::newRow( "separator is empty list" ) << true << scenario << listresult;
+
+  scenario.clear();
+  scenario << FakeServer::preauth()
+           << "C: A000001 LIST \"\" *"
            << "S: A000001 BAD command unknown or arguments invalid";
   listresult.clear();
   QTest::newRow( "bad" ) << true << scenario << listresult;

@@ -155,6 +155,12 @@ void ListJob::handleResponse( const Message &response )
            && response.content[1].toString()==d->command ) {
       QList<QByteArray> flags = response.content[2].toList();
       QByteArray separator = response.content[3].toString();
+      if ( separator.isEmpty() ) {
+        // Defaults to / for servers reporting an empty list
+        // it's supposedly not a problem as servers doing that
+        // only do it for mailboxes with no child.
+        separator = "/";
+      }
       Q_ASSERT(separator.size()==1);
       QByteArray fullName;
       for ( int i=4; i<response.content.size(); i++ ) {
