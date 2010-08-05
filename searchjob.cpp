@@ -130,12 +130,16 @@ void SearchJob::doStart()
   }
 
   if ( d->logic == SearchJob::And ) {
-    Q_FOREACH(const QByteArray &key, d->criterias) {
-      searchKey += ' ' + key;
+    for ( int i = 0; i<d->criterias.size(); i++ ) {
+      const QByteArray key = d->criterias.at( i );
+      if ( i>0 ) searchKey+= ' ';
+      searchKey += key;
     }
   } else {
-    Q_FOREACH(const QByteArray &key, d->criterias) {
-      searchKey += " (" + key + ')';
+    for ( int i = 0; i<d->criterias.size(); i++ ) {
+      const QByteArray key = d->criterias.at( i );
+      if ( i>0 ) searchKey+= ' ';
+      searchKey += '(' + key + ')';
     }
   }
 
