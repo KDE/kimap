@@ -98,3 +98,30 @@ QByteArray KIMAP::Acl::rightsToString( Rights rights )
 
   return result;
 }
+
+KIMAP::Acl::Rights KIMAP::Acl::normalizedRights( KIMAP::Acl::Rights rights )
+{
+  Rights normalized = rights;
+  if ( normalized & Create ) {
+    normalized |= ( CreateMailbox | DeleteMailbox );
+    normalized &= ~Create;
+  }
+  if ( normalized & Delete ) {
+    normalized |= ( DeleteMessage | Expunge );
+    normalized &= ~Delete;
+  }
+  return normalized;
+}
+
+KIMAP::Acl::Rights KIMAP::Acl::denormalizedRights( KIMAP::Acl::Rights rights )
+{
+  Rights denormalized = normalizedRights( rights );
+  if ( denormalized & ( CreateMailbox | DeleteMailbox ) ) {
+    denormalized |= Create;
+  }
+  if ( denormalized & ( DeleteMessage | Expunge ) ) {
+    denormalized |= Delete;
+  }
+  return denormalized;
+}
+

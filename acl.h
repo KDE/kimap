@@ -92,6 +92,19 @@ enum Right {
 Q_DECLARE_FLAGS(Rights, Right)
 
 /**
+ * Returns a rights mask that has no obsolete members anymore, i.e. obsolete flags are removed and
+ * replaced by their successors.
+ * @since 4.6
+ */
+KIMAP_EXPORT Rights normalizedRights( Rights rights );
+
+/**
+ * Returns a rights mask that contains both obsolete and new flags if one of them is set.
+ * @since 4.6
+ */
+KIMAP_EXPORT Rights denormalizedRights( Rights rights );
+
+/**
  * Convert a set of rights into text format
  *
  * No modifier flag ('+' or '-') will be included.
