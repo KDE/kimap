@@ -118,16 +118,12 @@ void SessionThread::readMessage()
 
 void SessionThread::closeSocket()
 {
-  QMutexLocker locker(&m_mutex);
-
-  m_encryptedMode = false;
   QTimer::singleShot( 0, this, SLOT( doCloseSocket() ) );
 }
 
 void SessionThread::doCloseSocket()
 {
-  QMutexLocker locker(&m_mutex);
-
+  m_encryptedMode = false;
   m_socket->close();
 }
 
