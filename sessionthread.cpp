@@ -49,7 +49,10 @@ SessionThread::~SessionThread()
 {
   // don't call quit() directly, this will deadlock in wait() if exec() hasn't run yet
   QMetaObject::invokeMethod( this, "quit" );
-  wait();
+  if ( !wait( 10 * 1000 ) ) {
+    kWarning() << "Session thread refuses to die, killing harder...";
+    terminate();
+  }
 }
 
 void SessionThread::sendData( const QByteArray &payload )
