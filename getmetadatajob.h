@@ -115,7 +115,7 @@ class KIMAP_EXPORT GetMetaDataJob : public MetaDataJobBase
     void setMaximumSize( qint64 size );
 
     /**
-     * Sets whether to retreive children or descendants of the requested entries.
+     * Sets whether to retrieve children or descendants of the requested entries.
      *
      * Metadata entry names are heirachical, much like UNIX path names.
      * It therefore makes sense to ask for an entry and all its children

@@ -176,12 +176,12 @@ void LoginJob::doStart()
     return;
   }
 
-  // Trigger encryption negociation only if needed
+  // Trigger encryption negotiation only if needed
   EncryptionMode encryptionMode = d->encryptionMode;
 
   switch ( d->sessionInternal()->negotiatedEncryption() ) {
   case KTcpSocket::UnknownSslVersion:
-    break; // Do nothing the encryption mode still needs to be negociated
+    break; // Do nothing the encryption mode still needs to be negotiated
 
   // For the other cases, pretend we're going unencrypted as that's the
   // encryption mode already set on the session

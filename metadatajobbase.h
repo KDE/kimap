@@ -79,7 +79,7 @@ class KIMAP_EXPORT MetaDataJobBase : public Job
      * Set the mailbox to act on
      *
      * This may be an empty string, in which case metadata for the
-     * server (rather than a specific mailbox) will be retreived.
+     * server (rather than a specific mailbox) will be retrieved.
      *
      * @param mailBox  the name of an existing mailbox, or an empty string
      */
@@ -87,7 +87,7 @@ class KIMAP_EXPORT MetaDataJobBase : public Job
     /**
      * The mailbox that will be acted upon.
      *
-     * If this is an empty string, server metadata will be retreived.
+     * If this is an empty string, server metadata will be retrieved.
      *
      * @return  a mailbox name, or an empty string
      */

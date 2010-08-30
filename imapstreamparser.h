@@ -59,7 +59,7 @@ class KIMAP_EXPORT ImapStreamParser
      * @param serverModeEnabled true if the parser has to assume we're writing a server (e.g. sends
      * continuation message automatically)
      */
-    ImapStreamParser( QIODevice* socket, bool serverModeEnabled = false);
+    explicit ImapStreamParser( QIODevice *socket, bool serverModeEnabled = false );
 
     /**
      * Destructor.

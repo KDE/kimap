@@ -86,7 +86,7 @@ class KIMAP_EXPORT SetMetaDataJob : public MetaDataJobBase
      * @p name must be a valid ASCII string and may not contain two
      * consecutive forward slashes ('/'), must not end with '/' and
      * must not contain '*', '%', non-ASCII characters or characters
-     * in the ASCII range 0x00 to 0x19 (in practise, all control
+     * in the ASCII range 0x00 to 0x19 (in practice, all control
      * characters should be avoided).  The name is case-insensitive.
      *
      * The first part of the entry name should be "/private" or
