@@ -40,6 +40,7 @@ KIMAP_UNIT_TESTS(
   listjobtest
   storejobtest
   imapsettest
+  idlejobtest
 )
 
 ###########   manual tests  ###############

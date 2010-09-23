@@ -176,9 +176,16 @@ void FakeServer::writeServerPart( int scenarioNumber )
     QTcpSocket *clientSocket = m_clientSockets[scenarioNumber];
 
     while ( !scenario.isEmpty()
-         && scenario.first().startsWith( "S: " ) ) {
-      QByteArray payload = scenario.takeFirst().mid( 3 );
-      clientSocket->write( payload + "\r\n" );
+         && ( scenario.first().startsWith( "S: " ) || scenario.first().startsWith( "W: " ) ) ) {
+      QByteArray rule = scenario.takeFirst();
+
+      if ( rule.startsWith( "S: " ) ) {
+        QByteArray payload = rule.mid( 3 );
+        clientSocket->write( payload + "\r\n" );
+      } else {
+        int timeout = rule.mid( 3 ).toInt();
+        QTest::qWait( timeout );
+      }
     }
 
     if ( !scenario.isEmpty()

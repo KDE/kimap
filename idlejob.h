@@ -122,6 +122,9 @@ class KIMAP_EXPORT IdleJob : public Job
   protected:
     virtual void doStart();
     virtual void handleResponse(const Message &response);
+
+  private:
+    Q_PRIVATE_SLOT( d_func(), void emitStats() )
 };
 
 }

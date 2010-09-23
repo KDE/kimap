@@ -38,7 +38,23 @@ namespace KIMAP
           originalSocketTimeout( -1 ) { }
       ~IdleJobPrivate() { }
 
+      void emitStats()
+      {
+        emitStatsTimer.stop();
+
+        emit q->mailBoxStats(q, m_session->selectedMailBox(),
+                             messageCount, recentCount);
+
+        lastMessageCount = messageCount;
+        lastRecentCount = recentCount;
+
+        messageCount = -1;
+        recentCount = -1;
+      }
+
       IdleJob * const q;
+
+      QTimer emitStatsTimer;
 
       int messageCount;
       int recentCount;
@@ -55,6 +71,9 @@ using namespace KIMAP;
 IdleJob::IdleJob( Session *session )
   : Job( *new IdleJobPrivate(this, session, i18nc("name of the idle job", "Idle")) )
 {
+  Q_D(IdleJob);
+  connect( &d->emitStatsTimer, SIGNAL( timeout() ),
+           this, SLOT( emitStats() ) );
 }
 
 IdleJob::~IdleJob()
@@ -80,26 +99,40 @@ void IdleJob::handleResponse( const Message &response )
 {
   Q_D(IdleJob);
 
+  // We can predict it'll be handled by handleErrorReplies() so emit
+  // pending signals now (if needed) so that result() will really be
+  // the last emitted signal.
+  if ( !response.content.isEmpty()
+       && d->tags.size() == 1
+       && d->tags.contains( response.content.first().toString() )
+       && ( d->messageCount>=0 || d->recentCount>=0 ) ) {
+    d->emitStats();
+  }
+
+
   if (handleErrorReplies(response) == NotHandled ) {
     if ( response.content.size() > 0 && response.content[0].toString()=="+" ) {
       // Got the continuation all is fine
       return;
 
     } else if ( response.content[2].toString()=="EXISTS" ) {
+      if ( d->messageCount>=0 ) {
+        d->emitStats();
+      }
+
       d->messageCount = response.content[1].toString().toInt();
     } else if ( response.content[2].toString()=="RECENT" ) {
+      if ( d->recentCount>=0 ) {
+        d->emitStats();
+      }
+
       d->recentCount = response.content[1].toString().toInt();
     }
 
     if ( d->messageCount>=0 && d->recentCount>=0 ) {
-      emit mailBoxStats(this, d->m_session->selectedMailBox(),
-                        d->messageCount, d->recentCount);
-
-      d->lastMessageCount = d->messageCount;
-      d->lastRecentCount = d->recentCount;
-
-      d->messageCount = -1;
-      d->recentCount = -1;
+      d->emitStats();
+    } else if ( d->messageCount>=0 || d->recentCount>=0 ) {
+      d->emitStatsTimer.start( 200 );
     }
   }
 }
