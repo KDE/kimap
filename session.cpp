@@ -27,7 +27,6 @@
 #include <QtCore/QDebug>
 #include <QtCore/QTimer>
 
-#include <KDE/KMessageBox>
 #include <KDE/KLocale>
 
 #include "job.h"
