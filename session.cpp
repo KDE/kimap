@@ -101,6 +101,11 @@ int Session::jobQueueSize() const
   return d->queue.size() + ( d->jobRunning ? 1 : 0 );
 }
 
+void KIMAP::Session::close()
+{
+  d->socketDisconnected();
+}
+
 void SessionPrivate::handleSslError(const KSslErrorUiData& errorData)
 {
   if (uiProxy && uiProxy->ignoreSslError(errorData)) {

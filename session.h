@@ -74,6 +74,8 @@ class KIMAP_EXPORT Session : public QObject
 
     int jobQueueSize() const;
 
+    void close();
+
   Q_SIGNALS:
     void jobQueueSizeChanged( int queueSize );
     void connectionLost();
