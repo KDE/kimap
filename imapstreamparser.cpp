@@ -79,17 +79,17 @@ bool ImapStreamParser::hasString()
   stripLeadingSpaces();
   int pos = m_position;
   m_position = savedPos;
-  if ( m_data[pos] == '{' )
+  if ( m_data.at(pos) == '{' )
     return true; //literal string
-  if (m_data[pos] == '"' )
+  if (m_data.at(pos) == '"' )
     return true; //quoted string
-  if ( m_data[pos] != ' ' &&
-       m_data[pos] != '(' &&
-       m_data[pos] != ')' &&
-       m_data[pos] != '[' &&
-       m_data[pos] != ']' &&
-       m_data[pos] != '\n' &&
-       m_data[pos] != '\r' )
+  if ( m_data.at(pos) != ' ' &&
+       m_data.at(pos) != '(' &&
+       m_data.at(pos) != ')' &&
+       m_data.at(pos) != '[' &&
+       m_data.at(pos) != ']' &&
+       m_data.at(pos) != '\n' &&
+       m_data.at(pos) != '\r' )
     return true;  //unquoted string
 
   return false; //something else, not a string
@@ -101,7 +101,7 @@ bool ImapStreamParser::hasLiteral()
     throw ImapParserException("Unable to read more data");
   int savedPos = m_position;
   stripLeadingSpaces();
-  if ( m_data[m_position] == '{' )
+  if ( m_data.at(m_position) == '{' )
   {
     int end = -1;
     do {
@@ -114,9 +114,9 @@ bool ImapStreamParser::hasLiteral()
     // strip CRLF
     m_position = end + 1;
 
-    if ( m_position < m_data.length() && m_data[m_position] == '\r' )
+    if ( m_position < m_data.length() && m_data.at(m_position) == '\r' )
       ++m_position;
-    if ( m_position < m_data.length() && m_data[m_position] == '\n' )
+    if ( m_position < m_data.length() && m_data.at(m_position) == '\n' )
       ++m_position;
 
     //FIXME: Makes sense only on the server side?
@@ -152,8 +152,7 @@ QByteArray ImapStreamParser::readLiteralPart()
   m_position += size;
   m_literalSize -= size;
   Q_ASSERT(m_literalSize >= 0);
-  m_data = m_data.right( m_data.size() - m_position );
-  m_position = 0;
+  trimBuffer();
 
   return result;
 }
@@ -166,7 +165,7 @@ bool ImapStreamParser::hasList()
   stripLeadingSpaces();
   int pos = m_position;
   m_position = savedPos;
-  if ( m_data[pos] == '(' )
+  if ( m_data.at(pos) == '(' )
   {
     return true;
   }
@@ -182,7 +181,7 @@ bool ImapStreamParser::atListEnd()
   stripLeadingSpaces();
   int pos = m_position;
   m_position = savedPos;
-  if ( m_data[pos] == ')' )
+  if ( m_data.at(pos) == ')' )
   {
     m_position = pos + 1;
     return true;
@@ -198,7 +197,7 @@ QList<QByteArray> ImapStreamParser::readParenthesizedList()
     throw ImapParserException("Unable to read more data");
 
   stripLeadingSpaces();
-  if ( m_data[m_position] != '(' )
+  if ( m_data.at(m_position) != '(' )
     return result; //no list found
 
   bool concatToLast = false;
@@ -211,14 +210,14 @@ QList<QByteArray> ImapStreamParser::readParenthesizedList()
       m_position = i;
       throw ImapParserException("Unable to read more data");
     }
-    if ( m_data[i] == '(' ) {
+    if ( m_data.at(i) == '(' ) {
       ++count;
       if ( count == 1 )
         sublistbegin = i;
       ++i;
       continue;
     }
-    if ( m_data[i] == ')' ) {
+    if ( m_data.at(i) == ')' ) {
       if ( count <= 0 ) {
         m_position = i + 1;
         return result;
@@ -229,17 +228,17 @@ QList<QByteArray> ImapStreamParser::readParenthesizedList()
       ++i;
       continue;
     }
-    if ( m_data[i] == ' ' ) {
+    if ( m_data.at(i) == ' ' ) {
       ++i;
       continue;
     }
-    if ( m_data[i] == '[' ) {
+    if ( m_data.at(i) == '[' ) {
       concatToLast = true;
       result.last()+='[';
       ++i;
       continue;
     }
-    if ( m_data[i] == ']' ) {
+    if ( m_data.at(i) == ']' ) {
       concatToLast = false;
       result.last()+=']';
       ++i;
@@ -258,7 +257,7 @@ QList<QByteArray> ImapStreamParser::readParenthesizedList()
 
       // We might sometime get some unwanted CRLF, but we're still not at the end
       // of the list, would make further string reads fail so eat the CRLFs.
-      while ( m_data[m_position]=='\r' || m_data[m_position]=='\n' ) {
+      while ( m_data.at(m_position) == '\r' || m_data.at(m_position) == '\n' ) {
         m_position++;
       }
 
@@ -283,7 +282,7 @@ bool ImapStreamParser::hasResponseCode()
   stripLeadingSpaces();
   int pos = m_position;
   m_position = savedPos;
-  if ( m_data[pos] == '[' )
+  if ( m_data.at(pos) == '[' )
   {
     m_position = pos + 1;
     return true;
@@ -300,7 +299,7 @@ bool ImapStreamParser::atResponseCodeEnd()
   stripLeadingSpaces();
   int pos = m_position;
   m_position = savedPos;
-  if ( m_data[pos] == ']' )
+  if ( m_data.at(pos) == ']' )
   {
     m_position = pos + 1;
     return true;
@@ -324,7 +323,7 @@ QByteArray ImapStreamParser::parseQuotedString()
 
   bool foundSlash = false;
   // quoted string
-  if ( m_data[m_position] == '"' ) {
+  if ( m_data.at(m_position) == '"' ) {
     ++m_position;
     int i = m_position;
     Q_FOREVER {
@@ -333,12 +332,12 @@ QByteArray ImapStreamParser::parseQuotedString()
         m_position = i;
         throw ImapParserException("Unable to read more data");
       }
-      if ( m_data[i] == '\\' ) {
+      if ( m_data.at(i) == '\\' ) {
         i += 2;
         foundSlash = true;
         continue;
       }
-      if ( m_data[i] == '"' ) {
+      if ( m_data.at(i) == '"' ) {
         result = m_data.mid( m_position, i - m_position );
         end = i + 1; // skip the '"'
         break;
@@ -357,12 +356,12 @@ QByteArray ImapStreamParser::parseQuotedString()
         m_position = i;
         throw ImapParserException("Unable to read more data");
       }
-      if ( m_data[i] == ' ' || m_data[i] == '(' || m_data[i] == ')' || m_data[i] == '[' || m_data[i] == ']' || m_data[i] == '\n' || m_data[i] == '\r' || m_data[i] == '"') {
+      if ( m_data.at(i) == ' ' || m_data.at(i) == '(' || m_data.at(i) == ')' || m_data.at(i) == '[' || m_data.at(i) == ']' || m_data.at(i) == '\n' || m_data.at(i) == '\r' || m_data.at(i) == '"') {
         end = i;
         reachedInputEnd = false;
         break;
       }
-      if (m_data[i] == '\\')
+      if (m_data.at(i) == '\\')
         foundSlash = true;
       i++;
     }
@@ -415,7 +414,7 @@ qint64 ImapStreamParser::readNumber( bool * ok )
 void ImapStreamParser::stripLeadingSpaces()
 {
   for ( int i = m_position; i < m_data.length(); ++i ) {
-    if ( m_data[i] != ' ' )
+    if ( m_data.at(i) != ' ' )
     {
       m_position = i;
       return;
@@ -455,19 +454,21 @@ int ImapStreamParser::availableDataSize() const
 
 bool ImapStreamParser::atCommandEnd()
 {
-  if ( !waitForMoreData( m_position >= m_data.length() ) )
-    throw ImapParserException("Unable to read more data");
   int savedPos = m_position;
-  stripLeadingSpaces();
-  if ( m_data[m_position] == '\n' || m_data[m_position] == '\r') {
-    if ( m_position < m_data.length() && m_data[m_position] == '\r' )
+  do {
+    if ( !waitForMoreData( m_position >= m_data.length() ) )
+      throw ImapParserException("Unable to read more data");
+    stripLeadingSpaces();
+  } while ( m_position >= m_data.size() );
+
+  if ( m_data.at(m_position) == '\n' || m_data.at(m_position) == '\r') {
+    if ( m_data.at(m_position) == '\r' )
       ++m_position;
-    if ( m_position < m_data.length() && m_data[m_position] == '\n' )
+    if ( m_position < m_data.length() && m_data.at(m_position) == '\n' )
       ++m_position;
 
     // We'd better empty m_data from time to time before it grows out of control
-    m_data = m_data.right(m_data.size()-m_position);
-    m_position = 0;
+    trimBuffer();
 
     return true; //command end
   }
@@ -486,7 +487,7 @@ QByteArray ImapStreamParser::readUntilCommandEnd()
       m_position = i;
       throw ImapParserException("Unable to read more data");
     }
-    if ( m_data[i] == '{' )
+    if ( m_data.at(i) == '{' )
     {
       m_position = i - 1;
       hasLiteral(); //init literal size
@@ -497,13 +498,13 @@ QByteArray ImapStreamParser::readUntilCommandEnd()
       }
       i = m_position;
     }
-    if ( m_data[i] == '(' )
+    if ( m_data.at(i) == '(' )
       paranthesisBalance++;
-    if ( m_data[i] == ')' )
+    if ( m_data.at(i) == ')' )
       paranthesisBalance--;
-    if ( ( i == m_data.length() && paranthesisBalance == 0 ) || m_data[i] == '\n'  || m_data[i] == '\r')
+    if ( ( i == m_data.length() && paranthesisBalance == 0 ) || m_data.at(i) == '\n'  || m_data.at(i) == '\r')
       break; //command end
-    result.append( m_data[i]);
+    result.append( m_data.at(i) );
     ++i;
   }
   m_position = i;
@@ -517,4 +518,12 @@ void ImapStreamParser::sendContinuationResponse( qint64 size )
                    + QByteArray::number( size ) + " bytes)\r\n";
   m_socket->write(block);
   m_socket->waitForBytesWritten(30000);
+}
+
+void ImapStreamParser::trimBuffer()
+{
+  if ( m_position < 4096 ) // right() is expensive, so don't do it for every line
+    return;
+  m_data = m_data.right(m_data.size()-m_position);
+  m_position = 0;
 }

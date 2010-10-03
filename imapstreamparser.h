@@ -199,6 +199,11 @@ class KIMAP_EXPORT ImapStreamParser
      */
     void sendContinuationResponse( qint64 size );
 
+    /**
+     * Remove already read data from the internal buffer if necessary.
+     */
+    void trimBuffer();
+
     QIODevice *m_socket;
     bool m_isServerModeEnabled;
     QByteArray m_data;
