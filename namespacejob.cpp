@@ -42,20 +42,24 @@ namespace KIMAP
         QList<MailBoxDescriptor> result;
 
         foreach ( const QByteArray &namespaceItem, namespaceList ) {
-          ImapStreamParser parser( 0 );
-          parser.setData( namespaceItem );
+            ImapStreamParser parser( 0 );
+            parser.setData( namespaceItem );
 
-          QList<QByteArray> parts = parser.readParenthesizedList();
+            try {
+                QList<QByteArray> parts = parser.readParenthesizedList();
+                if ( parts.size() < 2 ) {
+                    continue;
+                }
+                MailBoxDescriptor descriptor;
+                descriptor.name = QString::fromUtf8( decodeImapFolderName( parts[0] ) );
+                descriptor.separator = QChar( parts[1][0] );
 
-          if ( parts.size() < 2 ) {
-            continue;
-          }
+                result << descriptor;
+            } catch (KIMAP::ImapParserException e) {
+                qWarning() << "The stream parser raised an exception during namespace list parsing:" << e.what();
+                qWarning() << "namespacelist:" << namespaceList;
+            }
 
-          MailBoxDescriptor descriptor;
-          descriptor.name = QString::fromUtf8( decodeImapFolderName( parts[0] ) );
-          descriptor.separator = QChar( parts[1][0] );
-
-          result << descriptor;
         }
 
         return result;
