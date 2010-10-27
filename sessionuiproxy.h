@@ -41,11 +41,11 @@ class KIMAP_EXPORT SessionUiProxy
      * Show an SSL error and ask the user whether it should be ignored or not.
      * The recommended KDE UI is the following:
      * @code
-     * #include <kio/ksslcertificatemanager.h>
+     * #include <kio/ksslui.h>
      * class UiProxy: public SessionUiProxy {
      *   public:
      *     bool ignoreSslError(const KSslErrorUiData& errorData) {
-     *       if (KSslCertificateManager::askIgnoreSslErrors(errorData)) {
+     *       if (KIO::SslUi::askIgnoreSslErrors(errorData)) {
      *         return true;
      *       } else {
      *        return false;
