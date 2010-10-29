@@ -257,7 +257,7 @@ QList<QByteArray> ImapStreamParser::readParenthesizedList()
 
       // We might sometime get some unwanted CRLF, but we're still not at the end
       // of the list, would make further string reads fail so eat the CRLFs.
-      while ( m_data.at(m_position) == '\r' || m_data.at(m_position) == '\n' ) {
+      while ( ( m_position < m_data.size() ) && ( m_data.at(m_position) == '\r' || m_data.at(m_position) == '\n' ) ) {
         m_position++;
       }
 

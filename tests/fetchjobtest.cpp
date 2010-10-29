@@ -27,6 +27,8 @@
 #include <QtTest>
 #include <KDebug>
 
+Q_DECLARE_METATYPE(KIMAP::FetchJob::FetchScope)
+
 class FetchJobTest: public QObject {
   Q_OBJECT
 
@@ -56,10 +58,16 @@ void onHeadersReceived( const QString &/*mailBox*/,
 private Q_SLOTS:
 
 void testFetch_data() {
+  qRegisterMetaType<KIMAP::FetchJob::FetchScope>();
+
   QTest::addColumn<bool>( "uidBased" );
   QTest::addColumn< KIMAP::ImapSet >( "set" );
   QTest::addColumn<int>( "expectedMessageCount" );
   QTest::addColumn< QList<QByteArray> >( "scenario" );
+  QTest::addColumn<KIMAP::FetchJob::FetchScope>( "scope" );
+
+  KIMAP::FetchJob::FetchScope scope;
+  scope.mode = KIMAP::FetchJob::FetchScope::Flags;
 
   QList<QByteArray> scenario;
   scenario << FakeServer::preauth()
@@ -71,7 +79,19 @@ void testFetch_data() {
            << "S: A000001 OK fetch done";
 
   QTest::newRow( "messages have empty flags" ) << false << KIMAP::ImapSet( 1, 4 ) << 4
-                                               << scenario;
+                                               << scenario << scope;
+
+  scenario.clear();
+  // kill the connection part-way through a list, with carriage returns at end
+  // BUG 253619
+  // this should fail, but it shouldn't crash
+  scenario << FakeServer::preauth()
+           << "C: A000001 FETCH 11 (RFC822.SIZE INTERNALDATE BODY.PEEK[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT DATE)] FLAGS UID)"
+           << "S: * 11 FETCH (RFC822.SIZE 770 INTERNALDATE \"11-Oct-2010 03:33:50 +0100\" BODY[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT DATE)] {246}"
+           << "S: From: John Smith <jonathanr.smith@foobarbaz.com>\r\nTo: \"amagicemailaddress@foobarbazbarfoo.com\"\r\n\t<amagicemailaddress@foobarbazbarfoo.com>\r\nDate: Mon, 11 Oct 2010 03:34:48 +0100\r\nSubject: unsubscribe\r\nMessage-ID: <ASDFFDSASDFFDS@foobarbaz.com>\r\n\r\n"
+           << "X";
+  scope.mode = KIMAP::FetchJob::FetchScope::Headers;
+  QTest::newRow( "partial" ) << false << KIMAP::ImapSet( 11, 11 ) << 1 << scenario << scope;
 }
 
 void testFetch()
@@ -80,6 +100,7 @@ void testFetch()
     QFETCH( KIMAP::ImapSet, set );
     QFETCH( int, expectedMessageCount );
     QFETCH( QList<QByteArray>, scenario );
+    QFETCH( KIMAP::FetchJob::FetchScope, scope );
 
     FakeServer fakeServer;
     fakeServer.setScenario( scenario );
@@ -90,8 +111,6 @@ void testFetch()
     KIMAP::FetchJob *job = new KIMAP::FetchJob(&session);
     job->setUidBased( uidBased );
     job->setSequenceSet( set );
-    KIMAP::FetchJob::FetchScope scope;
-    scope.mode = KIMAP::FetchJob::FetchScope::Flags;
     job->setScope( scope );
 
     connect( job, SIGNAL(headersReceived(QString,
@@ -107,9 +126,12 @@ void testFetch()
 
 
     bool result = job->exec();
+    QEXPECT_FAIL("partial" , "Expected failure on partial response", Continue);
     QVERIFY( result );
-    QVERIFY( m_signals.count()>0 );
-    QCOMPARE( m_uids.count(), expectedMessageCount );
+    if ( result ) {
+      QVERIFY( m_signals.count()>0 );
+      QCOMPARE( m_uids.count(), expectedMessageCount );
+    }
 
     QVERIFY( fakeServer.isAllScenarioDone() );
     fakeServer.quit();
