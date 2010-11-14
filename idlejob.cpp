@@ -115,18 +115,20 @@ void IdleJob::handleResponse( const Message &response )
       // Got the continuation all is fine
       return;
 
-    } else if ( response.content[2].toString()=="EXISTS" ) {
-      if ( d->messageCount>=0 ) {
-        d->emitStats();
-      }
+    } else if ( response.content.size() > 2 ) {
+        if ( response.content[2].toString()=="EXISTS" ) {
+        if ( d->messageCount>=0 ) {
+          d->emitStats();
+        }
 
-      d->messageCount = response.content[1].toString().toInt();
-    } else if ( response.content[2].toString()=="RECENT" ) {
-      if ( d->recentCount>=0 ) {
-        d->emitStats();
-      }
+        d->messageCount = response.content[1].toString().toInt();
+      } else if ( response.content[2].toString()=="RECENT" ) {
+        if ( d->recentCount>=0 ) {
+          d->emitStats();
+        }
 
-      d->recentCount = response.content[1].toString().toInt();
+        d->recentCount = response.content[1].toString().toInt();
+      }
     }
 
     if ( d->messageCount>=0 && d->recentCount>=0 ) {
