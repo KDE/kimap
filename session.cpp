@@ -331,7 +331,7 @@ void SessionPrivate::socketDisconnected()
   }
 
 
-  if ( state==Session::Authenticated || state==Session::Selected ) {
+  if ( state != Session::Disconnected ) {
     emit q->connectionLost();
   }
 
@@ -347,7 +347,10 @@ void SessionPrivate::socketDisconnected()
 void SessionPrivate::socketError()
 {
   //qWarning() << "Socket error occurred:" << socket->errorString();
-  socketDisconnected();
+  if ( isSocketConnected )
+    socketDisconnected();
+  else
+    emit q->connectionLost();
 }
 
 void SessionPrivate::startSsl(const KTcpSocket::SslVersion &version)
