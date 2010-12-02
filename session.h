@@ -67,6 +67,13 @@ class KIMAP_EXPORT Session : public QObject
     KDE_DEPRECATED void setUiProxy(SessionUiProxy *proxy);
 
     /**
+     * Set the session timeout. The default is 30 seconds.
+     * @param timeout The socket timeout in seconds, negative values disable the timeout.
+     * @since 4.6
+     */
+    void setTimeout( int timeout );
+
+    /**
      * Returns the currently selected mailbox.
      * @since 4.5
      */

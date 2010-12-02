@@ -27,6 +27,7 @@
 #include <QtCore/QDebug>
 #include <QtCore/QTimer>
 
+#include <KDebug>
 #include <KDE/KLocale>
 
 #include "job.h"
@@ -433,7 +434,13 @@ void SessionPrivate::restartSocketTimer()
 
 void SessionPrivate::onSocketTimeout()
 {
+  kDebug();
   socketDisconnected();
+}
+
+void Session::setTimeout( int timeout )
+{
+  d->setSocketTimeout( timeout * 1000 );
 }
 
 #include "session.moc"
