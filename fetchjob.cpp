@@ -165,6 +165,7 @@ void FetchJob::doStart()
   Q_D(FetchJob);
 
   QByteArray parameters = d->set.toImapSequenceSet()+' ';
+  Q_ASSERT( !parameters.trimmed().isEmpty() );
 
   switch ( d->scope.mode ) {
   case FetchScope::Headers:
