@@ -120,7 +120,7 @@ void SearchJob::doStart()
   QByteArray searchKey;
 
   if (!d->charset.isEmpty()) {
-    searchKey = "[CHARSET] " + d->charset;
+    searchKey = "CHARSET " + d->charset;
   }
 
   if (d->logic == SearchJob::Not) {
