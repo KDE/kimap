@@ -32,7 +32,7 @@ namespace KIMAP
   class ListJobPrivate : public JobPrivate
   {
     public:
-      ListJobPrivate( ListJob *job, Session *session, const QString& name ) : JobPrivate(session, name), q(job), includeUnsubscribed(false) { }
+      ListJobPrivate( ListJob *job, Session *session, const QString& name ) : JobPrivate(session, name), q(job), option(ListJob::NoOption) { }
       ~ListJobPrivate() { }
 
       void emitPendings()
@@ -49,7 +49,7 @@ namespace KIMAP
 
       ListJob * const q;
 
-      bool includeUnsubscribed;
+      ListJob::Option option;
       QList<MailBoxDescriptor> namespaces;
       QByteArray command;
 
@@ -76,13 +76,29 @@ ListJob::~ListJob()
 void ListJob::setIncludeUnsubscribed( bool include )
 {
   Q_D(ListJob);
-  d->includeUnsubscribed = include;
+  if (include) {
+    d->option = ListJob::IncludeUnsubscribed;
+  } else {
+    d->option = ListJob::NoOption;
+  }
 }
 
 bool ListJob::isIncludeUnsubscribed() const
 {
   Q_D(const ListJob);
-  return d->includeUnsubscribed;
+  return ( d->option == ListJob::IncludeUnsubscribed );
+}
+
+void ListJob::setOption( Option option )
+{
+  Q_D(ListJob);
+  d->option = option;
+}
+
+ListJob::Option ListJob::option() const
+{
+  Q_D(const ListJob);
+  return d->option;
 }
 
 void ListJob::setQueriedNamespaces( const QList<MailBoxDescriptor> &namespaces )
@@ -111,9 +127,17 @@ void ListJob::doStart()
 {
   Q_D(ListJob);
 
-  d->command = "LSUB";
-  if (d->includeUnsubscribed) {
+  switch (d->option) {
+    break;
+  case IncludeUnsubscribed:
     d->command = "LIST";
+    break;
+  case IncludeFolderRoleFlags:
+    d->command = "XLIST";
+    break;
+  case NoOption:
+  default:
+    d->command = "LSUB";
   }
 
   d->emitPendingsTimer.start( 100 );

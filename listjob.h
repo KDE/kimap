@@ -54,11 +54,21 @@ class KIMAP_EXPORT ListJob : public Job
   friend class SessionPrivate;
 
   public:
+    enum Option {
+      NoOption = 0x0,         /**< List only subscribed mailboxes. (Uses the LSUB IMAP command.) */
+      IncludeUnsubscribed,    /**< List subscribed and unsubscribed mailboxes. (Uses the LIST IMAP command.) */
+      IncludeFolderRoleFlags  /**< List subscribed and unsubscribed mailboxes with flags to identify standard mailboxes whose name may be localized.
+                                   The server must support the XLIST extension. */
+    };
+
     explicit ListJob( Session *session );
     virtual ~ListJob();
 
-    void setIncludeUnsubscribed( bool include );
-    bool isIncludeUnsubscribed() const;
+    KDE_DEPRECATED void setIncludeUnsubscribed( bool include );
+    KDE_DEPRECATED bool isIncludeUnsubscribed() const;
+
+    void setOption( Option option );
+    Option option() const;
 
     void setQueriedNamespaces( const QList<MailBoxDescriptor> &namespaces );
     QList<MailBoxDescriptor> queriedNamespaces() const;
