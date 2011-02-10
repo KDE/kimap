@@ -39,6 +39,7 @@ private:
   QMap<qint64, qint64> m_sizes;
   QMap<qint64, KIMAP::MessageFlags> m_flags;
   QMap<qint64, KIMAP::MessagePtr> m_messages;
+  QMap<qint64, KIMAP::MessageParts> m_parts;
 
 public slots:
 void onHeadersReceived( const QString &/*mailBox*/,
@@ -54,6 +55,18 @@ void onHeadersReceived( const QString &/*mailBox*/,
     m_messages.unite( messages );
   }
 
+void onMessagesReceived( QString, const QMap<qint64, qint64> uids, const QMap<qint64, KIMAP::MessagePtr> messages )
+{
+  m_signals << "messagesReceived";
+  m_uids.unite( uids );
+  m_messages.unite( messages );
+}
+
+void onPartsReceived( QString, QMap<qint64,qint64> /*uids*/, QMap<qint64, KIMAP::MessageParts> parts)
+{
+  m_signals << "partsReceived";
+  m_parts.unite( parts );
+}
 
 private Q_SLOTS:
 
@@ -141,8 +154,116 @@ void testFetch()
     m_sizes.clear();
     m_flags.clear();
     m_messages.clear();
+    m_parts.clear();
 }
 
+void testFetchStructure()
+{
+  QList<QByteArray> scenario;
+  scenario << FakeServer::preauth()
+           << "C: A000001 FETCH 1:2 (BODYSTRUCTURE UID)"
+           << "S: * 1 FETCH (UID 10 BODYSTRUCTURE (\"TEXT\" \"PLAIN\" (\"CHARSET\" \"ISO-8859-1\") NIL NIL \"7BIT\" 5 1 NIL NIL NIL))"
+           << "S: * 2 FETCH (UID 20 BODYSTRUCTURE ((((\"TEXT\" \"PLAIN\" (\"CHARSET\" \"ISO-8859-1\") NIL NIL \"7BIT\" 72 4 NIL NIL NIL)(\"TEXT\" \"HTML\" (\"CHARSET\" \"ISO-8859-1\") NIL NIL \"QUOTED-PRINTABLE\" 281 5 NIL NIL NIL) \"ALTERNATIVE\" (\"BOUNDARY\" \"0001\") NIL NIL)(\"IMAGE\" \"GIF\" (\"NAME\" \"B56.gif\") \"<B56@goomoji.gmail>\" NIL \"BASE64\" 528 NIL NIL NIL) \"RELATED\" (\"BOUNDARY\" \"0002\") NIL NIL)(\"IMAGE\" \"JPEG\" (\"NAME\" \"photo.jpg\") NIL NIL \"BASE64\" 53338 NIL (\"ATTACHMENT\" (\"FILENAME\" \"photo.jpg\")) NIL) \"MIXED\" (\"BOUNDARY\" \"0003\") NIL NIL))"
+           << "S: A000001 OK fetch done";
+
+  KIMAP::FetchJob::FetchScope scope;
+  scope.mode = KIMAP::FetchJob::FetchScope::Structure;
+
+  FakeServer fakeServer;
+  fakeServer.setScenario( scenario );
+  fakeServer.startAndWait();
+
+  KIMAP::Session session("127.0.0.1", 5989);
+
+  KIMAP::FetchJob *job = new KIMAP::FetchJob(&session);
+  job->setUidBased( false );
+  job->setSequenceSet( KIMAP::ImapSet( 1, 2 ) );
+  job->setScope( scope );
+
+  connect( job, SIGNAL(messagesReceived(QString,QMap<qint64,qint64>,QMap<qint64,KIMAP::MessagePtr>)),
+           SLOT(onMessagesReceived(QString,QMap<qint64,qint64>,QMap<qint64,KIMAP::MessagePtr>)) );
+
+  bool result = job->exec();
+  QVERIFY( result );
+  QVERIFY( m_signals.count() > 0 );
+  QCOMPARE( m_uids.count(), 2 );
+  QCOMPARE( m_messages[1]->attachments().count(), 0 );
+  QCOMPARE( m_messages[2]->attachments().count(), 3 );
+  QCOMPARE( m_messages[2]->attachments().at(2)->contentDisposition()->filename(), QString("photo.jpg") );
+
+  fakeServer.quit();
+
+  m_signals.clear();
+  m_uids.clear();
+  m_sizes.clear();
+  m_flags.clear();
+  m_messages.clear();
+  m_parts.clear();
+}
+
+void testFetchParts()
+{
+  QList<QByteArray> scenario;
+  scenario << FakeServer::preauth()
+           << "C: A000001 FETCH 2 (BODY.PEEK[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT DATE)] BODY.PEEK[1.1.1.MIME] BODY.PEEK[1.1.1] FLAGS UID)"
+           << "S: * 2 FETCH (UID 20 FLAGS (\\Seen) BODY[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT DATE)] {154}\r\nFrom: Joe Smith <smith@example.com>\r\nDate: Wed, 2 Mar 2011 11:33:24 +0700\r\nMessage-ID: <1234@example.com>\r\nSubject: hello\r\nTo: Jane <jane@example.com>\r\n\r\n BODY[1.1.1] {28}\r\nHi Jane, nice to meet you!\r\n BODY[1.1.1.MIME] {48}\r\nContent-Type: text/plain; charset=ISO-8859-1\r\n\r\n)\r\n"
+           << "S: A000001 OK fetch done";
+
+  KIMAP::FetchJob::FetchScope scope;
+  scope.mode = KIMAP::FetchJob::FetchScope::HeaderAndContent;
+  scope.parts.clear();
+  scope.parts.append("1.1.1");
+
+  FakeServer fakeServer;
+  fakeServer.setScenario( scenario );
+  fakeServer.startAndWait();
+
+  KIMAP::Session session("127.0.0.1", 5989);
+
+  KIMAP::FetchJob *job = new KIMAP::FetchJob(&session);
+  job->setUidBased( false );
+  job->setSequenceSet( KIMAP::ImapSet( 2, 2 ) );
+  job->setScope( scope );
+
+  connect ( job, SIGNAL(headersReceived(QString,QMap<qint64,qint64>,QMap<qint64,qint64>,QMap<qint64,KIMAP::MessageFlags>,QMap<qint64,KIMAP::MessagePtr>)),
+            SLOT(onHeadersReceived(QString,QMap<qint64,qint64>,QMap<qint64,qint64>,QMap<qint64,KIMAP::MessageFlags>,QMap<qint64,KIMAP::MessagePtr>)) );
+  connect( job, SIGNAL(partsReceived(QString,QMap<qint64,qint64>,QMap<qint64,KIMAP::MessageParts>)),
+           SLOT(onPartsReceived(QString,QMap<qint64,qint64>,QMap<qint64,KIMAP::MessageParts>)));
+
+  bool result = job->exec();
+
+  QVERIFY( result );
+  QVERIFY( m_signals.count() > 0 );
+  QCOMPARE( m_uids.count(), 1 );
+  QCOMPARE (m_parts.count(), 1 );
+
+  // Check that we received the message header
+  QCOMPARE( m_messages[2]->messageID()->identifier(), QByteArray("1234@example.com") );
+
+  // Check that we recieved the flags
+  QMap<qint64, KIMAP::MessageFlags> expectedFlags;
+  expectedFlags.insert(2, KIMAP::MessageFlags() << "\\Seen");
+  QCOMPARE( m_flags, expectedFlags );
+
+  // Check that we didn't received the full message body, since we only requested a specific part
+  QCOMPARE( m_messages[2]->decodedText().length(), 0 );
+  QCOMPARE( m_messages[2]->attachments().count(), 0);
+
+  // Check that we received the part we requested
+  QByteArray partId = m_parts[2].keys().first();
+  QString text = m_parts[2].value(partId)->decodedText(true, true);
+  QCOMPARE( partId, QByteArray("1.1.1"));
+  QCOMPARE( text, QString("Hi Jane, nice to meet you!")) ;
+
+  fakeServer.quit();
+
+  m_signals.clear();
+  m_uids.clear();
+  m_sizes.clear();
+  m_flags.clear();
+  m_messages.clear();
+  m_parts.clear();
+}
 
 };
 

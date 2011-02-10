@@ -106,7 +106,25 @@ class KIMAP_EXPORT FetchJob : public Job
         /**
          * Fetch the complete message.
          */
-        Full
+        Full,
+        /**
+         * Fetch the message MIME headers and the content of parts specified in the @p parts
+         * field.
+         *
+         * If @p parts is empty, this mode will return the full message, just like
+         * FetchScope::Content
+         *
+         * Use case:
+         * -# Start a FetchJob with the FetchScope::Structure mode to retrieve the structure
+         *    of the message.
+         * -# Parse the structure to identify the parts that are interesting (ie: probably
+         *    everything but attachments).
+         * -# Start another FetchJob with FetchScope::HeaderAndContent to fetch those parts.
+         * -# At the request of the user, you can repeat the step above to fetch the attachments.
+         *
+         * @since 4.7
+         */
+        HeaderAndContent
       };
 
       /**

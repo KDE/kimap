@@ -50,12 +50,13 @@ namespace KIMAP
         if ( !pendingParts.isEmpty() ) {
           emit q->partsReceived( selectedMailBox,
                                  pendingUids, pendingParts );
-
-        } else if ( !pendingSizes.isEmpty() || !pendingFlags.isEmpty() ) {
+        }
+        if ( !pendingSizes.isEmpty() || !pendingFlags.isEmpty() ) {
           emit q->headersReceived( selectedMailBox,
                                    pendingUids, pendingSizes,
                                    pendingFlags, pendingMessages );
-        } else {
+        }
+        if ( !pendingMessages.isEmpty() ) {
           emit q->messagesReceived( selectedMailBox,
                                     pendingUids, pendingMessages );
         }
@@ -199,6 +200,17 @@ void FetchJob::doStart()
   case FetchScope::Full:
     parameters+="(RFC822.SIZE INTERNALDATE BODY.PEEK[] FLAGS UID)";
     break;
+  case FetchScope::HeaderAndContent:
+    if ( d->scope.parts.isEmpty() ) {
+      parameters+="(BODY.PEEK[] FLAGS UID)";
+    } else {
+      parameters+="(BODY.PEEK[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT DATE)]";
+      foreach ( const QByteArray &part, d->scope.parts ) {
+        parameters+=" BODY.PEEK["+part+".MIME] BODY.PEEK["+part+"]";
+      }
+      parameters+=" FLAGS UID)";
+    }
+    break;
   }
 
   QByteArray command = "FETCH";
@@ -265,6 +277,7 @@ void FetchJob::handleResponse( const Message &response )
           int pos = 0;
           d->parseBodyStructure(*it, pos, message.get());
           message->assemble();
+          d->pendingMessages[id] = message;
         } else if ( str.startsWith( "BODY[") ) { //krazy:exclude=strings
           if ( !str.endsWith(']') ) { // BODY[ ... ] might have been split, skip until we find the ]
             while ( !(*it).endsWith(']') ) ++it;
@@ -280,8 +293,7 @@ void FetchJob::handleResponse( const Message &response )
               }
               parts[partId]->setHead(*it);
               parts[partId]->parse();
-              // XXX: [alexmerry, 2010-7-24]: (why) does this work without
-              //      d->pendingParts[id] = parts; when in Headers mode?
+              d->pendingParts[id] = parts;
             } else {
               message->setHead(*it);
               shouldParseMessage = true;
@@ -294,6 +306,9 @@ void FetchJob::handleResponse( const Message &response )
               d->pendingMessages[id] = message;
             } else {
               QByteArray partId = str.mid( 5, str.size()-6 );
+              if ( !parts.contains( partId ) ) {
+                parts[partId] = ContentPtr( new KMime::Content );
+              }
               parts[partId]->setBody(*it);
               parts[partId]->parse();
 
@@ -310,7 +325,7 @@ void FetchJob::handleResponse( const Message &response )
       // For the headers mode the message is built in several
       // steps, hence why we wait it to be done until putting it
       // in the pending queue.
-      if ( d->scope.mode == FetchScope::Headers ) {
+      if ( d->scope.mode == FetchScope::Headers || d->scope.mode == FetchScope::HeaderAndContent ) {
         d->pendingMessages[id] = message;
       }
     }
@@ -343,7 +358,10 @@ void FetchJobPrivate::parseBodyStructure(const QByteArray &structure, int &pos, 
     QByteArray subType = parseString( structure, pos );
     content->contentType()->setMimeType( "MULTIPART/"+subType );
 
-    parseSentence( structure, pos ); // Ditch the parameters... FIXME: Read it to get charset and name
+    QByteArray parameters = parseSentence( structure, pos ); // FIXME: Read the charset
+    if (parameters.contains("BOUNDARY") ) {
+      content->contentType()->setBoundary(parameters.remove(0, parameters.indexOf("BOUNDARY") + 11).split('\"')[0]);
+    }
 
     QByteArray disposition = parseSentence( structure, pos );
     if ( disposition.contains("INLINE") ) {
@@ -385,15 +403,19 @@ void FetchJobPrivate::parsePart( const QByteArray &structure, int &pos, KMime::C
 
   parseString( structure, pos ); // Ditch the encoding too
   parseString( structure, pos ); // ... and the size
-  if ( mainType=="TEXT" ) {
-    parseString( structure, pos ); // ... and the line count
-  }
+  parseString( structure, pos ); // ... and the line count
 
   QByteArray disposition = parseSentence( structure, pos );
   if ( disposition.contains("INLINE") ) {
     content->contentDisposition()->setDisposition( KMime::Headers::CDinline );
   } else if ( disposition.contains("ATTACHMENT") ) {
     content->contentDisposition()->setDisposition( KMime::Headers::CDattachment );
+  }
+  if ( (content->contentDisposition()->disposition() == KMime::Headers::CDattachment
+        || content->contentDisposition()->disposition() == KMime::Headers::CDinline)
+       && disposition.contains("FILENAME") ) {
+    QByteArray filename = disposition.remove(0, disposition.indexOf("FILENAME") + 11).split('\"')[0];
+    content->contentDisposition()->setFilename( filename );
   }
 
   // Consume what's left
