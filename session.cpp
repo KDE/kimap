@@ -92,6 +92,11 @@ Session::State Session::state() const
   return d->state;
 }
 
+QString Session::userName() const
+{
+    return d->userName;
+}
+
 QByteArray Session::serverGreeting() const
 {
   return d->greeting;
@@ -317,6 +322,8 @@ void SessionPrivate::socketConnected()
                 || ( login->encryptionMode() == KIMAP::LoginJob::SslV3 )
                 || ( login->encryptionMode() == KIMAP::LoginJob::SslV3_1 )
                 || ( login->encryptionMode() == KIMAP::LoginJob::AnySslVersion );
+
+      userName = login->userName();
     }
   }
 

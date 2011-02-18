@@ -100,6 +100,7 @@ class KIMAP_EXPORT SessionPrivate : public QObject
     QByteArray selectTag;
     QByteArray closeTag;
 
+    QString userName;
     QByteArray greeting;
     QByteArray currentMailBox;
     QByteArray upcomingMailBox;

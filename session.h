@@ -51,6 +51,14 @@ class KIMAP_EXPORT Session : public QObject
     quint16 port() const;
     State state() const;
 
+    /**
+     * Returns the name that has been set with LoginJob::setUserName()
+     * The user name is useful to uniquely identify an IMAP resource, in combination with the host name
+     * @note If the Session was pre-authenticated, userName() will return an empty string
+     * @since 4.7
+     */
+    QString userName() const;
+
     QByteArray serverGreeting() const;
 
     /**
