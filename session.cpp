@@ -435,7 +435,9 @@ void SessionPrivate::stopSocketTimer()
 
 void SessionPrivate::restartSocketTimer()
 {
-  stopSocketTimer();
+  if ( socketTimer.isActive() ) {
+    stopSocketTimer();
+  }
   startSocketTimer();
 }
 
