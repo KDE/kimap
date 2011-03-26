@@ -23,10 +23,8 @@
 #include <kaboutdata.h>
 #include <kdebug.h>
 #include <qtcpsocket.h>
-#include <qapplication.h>
+#include <QCoreApplication>
 #include <qsignalspy.h>
-#include <kmessagebox.h>
-#include <kio/sslui.h>
 
 #include "kimap/acl.h"
 #include "kimap/session.h"
@@ -60,11 +58,7 @@ using namespace KIMAP;
 class UiProxy: public SessionUiProxy {
   public:
     bool ignoreSslError(const KSslErrorUiData& errorData) {
-      if (KIO::SslUi::askIgnoreSslErrors(errorData, KIO::SslUi::StoreRules)) {
         return true;
-      } else {
-        return false;
-      }
     }
 };
 
@@ -404,7 +398,7 @@ int main( int argc, char **argv )
   kDebug() << "Querying:" << server << port << user << password;
   qDebug();
 
-  QApplication app(argc, argv);
+  QCoreApplication app(argc, argv);
   Session session(server, port);
   UiProxy::Ptr proxy( new UiProxy() );
   session.setUiProxy(proxy);
