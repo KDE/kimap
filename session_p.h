@@ -74,6 +74,7 @@ class KIMAP_EXPORT SessionPrivate : public QObject
     void jobDone( KJob *job );
     void jobDestroyed( QObject *job );
     void responseReceived( const KIMAP::Message &response );
+    void setState(Session::State state);
 
     void socketConnected();
     void socketDisconnected();

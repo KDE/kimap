@@ -214,7 +214,7 @@ void SessionPrivate::responseReceived( const Message &response )
   switch ( state ) {
   case Session::Disconnected:
     if ( code=="OK" ) {
-      state = Session::NotAuthenticated;
+      setState(Session::NotAuthenticated);
 
       Message simplified = response;
       simplified.content.removeFirst(); // Strip the tag
@@ -223,7 +223,7 @@ void SessionPrivate::responseReceived( const Message &response )
 
       startNext();
     } else if ( code=="PREAUTH" ) {
-      state = Session::Authenticated;
+      setState(Session::Authenticated);
 
       Message simplified = response;
       simplified.content.removeFirst(); // Strip the tag
@@ -238,19 +238,19 @@ void SessionPrivate::responseReceived( const Message &response )
     return;
   case Session::NotAuthenticated:
     if ( code=="OK" && tag==authTag ) {
-      state = Session::Authenticated;
+      setState(Session::Authenticated);
     }
     break;
   case Session::Authenticated:
     if ( code=="OK" && tag==selectTag ) {
-      state = Session::Selected;
+      setState(Session::Selected);
       currentMailBox = upcomingMailBox;
     }
     break;
   case Session::Selected:
     if ( ( code=="OK" && tag==closeTag )
       || ( code!="OK" && tag==selectTag) ) {
-      state = Session::Authenticated;
+      setState(Session::Authenticated);
       currentMailBox = QByteArray();
     } else if ( code=="OK" && tag==selectTag ) {
       currentMailBox = upcomingMailBox;
@@ -270,6 +270,15 @@ void SessionPrivate::responseReceived( const Message &response )
     qWarning() << "A message was received from the server with no job to handle it:"
                << response.toString()
                << '('+response.toString().toHex()+')';
+  }
+}
+
+void SessionPrivate::setState(Session::State s)
+{
+  if (s != state) {
+    Session::State oldState = state;
+    state = s;
+    emit q->stateChanged(state, oldState);
   }
 }
 
@@ -340,11 +349,11 @@ void SessionPrivate::socketDisconnected()
 
 
   if ( state != Session::Disconnected ) {
+    setState(Session::Disconnected);
     emit q->connectionLost();
   }
 
   isSocketConnected = false;
-  state = Session::Disconnected;
   thread->closeSocket();
 
   if ( currentJob ) {

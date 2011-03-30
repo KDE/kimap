@@ -94,6 +94,7 @@ class KIMAP_EXPORT Session : public QObject
   Q_SIGNALS:
     void jobQueueSizeChanged( int queueSize );
     void connectionLost();
+    void stateChanged(KIMAP::Session::State newState, KIMAP::Session::State oldState);
 
   private:
     Q_PRIVATE_SLOT( d, void doStartNext() )
