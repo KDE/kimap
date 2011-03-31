@@ -59,6 +59,7 @@ Session::Session( const QString &hostName, quint16 port, QObject *parent)
           d, SLOT(onEncryptionNegotiationResult(bool, KTcpSocket::SslVersion)));
   connect(d->thread, SIGNAL(sslError(const KSslErrorUiData&)), this, SLOT(handleSslError(const KSslErrorUiData&)));
 
+  d->startSocketTimer();
   d->thread->start();
 }
 
@@ -213,6 +214,9 @@ void SessionPrivate::responseReceived( const Message &response )
 
   switch ( state ) {
   case Session::Disconnected:
+    if (socketTimer.isActive()) {
+      stopSocketTimer();
+    }
     if ( code=="OK" ) {
       setState(Session::NotAuthenticated);
 
@@ -233,7 +237,6 @@ void SessionPrivate::responseReceived( const Message &response )
       startNext();
     } else {
       thread->closeSocket();
-      QTimer::singleShot( 1000, thread, SLOT( reconnect() ) );
     }
     return;
   case Session::NotAuthenticated:
@@ -321,6 +324,7 @@ void SessionPrivate::sendData( const QByteArray &data )
 
 void SessionPrivate::socketConnected()
 {
+  stopSocketTimer();
   isSocketConnected = true;
 
   bool willUseSsl = false;
@@ -338,19 +342,28 @@ void SessionPrivate::socketConnected()
 
   if ( state == Session::Disconnected && willUseSsl ) {
     startNext();
+  } else {
+    startSocketTimer();
   }
 }
 
 void SessionPrivate::socketDisconnected()
 {
+  if (socketTimer.isActive()) {
+    stopSocketTimer();
+  }
+
   if ( logger && ( state==Session::Authenticated || state==Session::Selected ) ) {
     logger->disconnectionOccured();
   }
 
-
   if ( state != Session::Disconnected ) {
     setState(Session::Disconnected);
     emit q->connectionLost();
+  }
+
+  if (!isSocketConnected) {
+    emit q->connectionFailed();
   }
 
   isSocketConnected = false;
@@ -363,11 +376,16 @@ void SessionPrivate::socketDisconnected()
 
 void SessionPrivate::socketError()
 {
-  //qWarning() << "Socket error occurred:" << socket->errorString();
-  if ( isSocketConnected )
+  if (socketTimer.isActive()) {
+    stopSocketTimer();
+  }
+
+  if ( isSocketConnected ) {
     socketDisconnected();
-  else
-    emit q->connectionLost();
+  } else {
+    emit q->connectionFailed();
+    emit q->connectionLost();    // KDE5: Remove this. We shouldn't emit connectionLost() if we weren't connected in the first place
+  }
 }
 
 void SessionPrivate::startSsl(const KTcpSocket::SslVersion &version)
@@ -452,7 +470,6 @@ void SessionPrivate::restartSocketTimer()
 
 void SessionPrivate::onSocketTimeout()
 {
-  kDebug();
   socketDisconnected();
 }
 

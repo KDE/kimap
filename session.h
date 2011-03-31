@@ -93,7 +93,29 @@ class KIMAP_EXPORT Session : public QObject
 
   Q_SIGNALS:
     void jobQueueSizeChanged( int queueSize );
-    void connectionLost();
+
+    /**
+      @deprecated
+      Emitted when we loose a previously established connection
+
+      Likely reasons: server closed the connection, loss of internet connectivity, etc...
+
+      For historical reasons, this signal is also emitted in the event of a failed connection, but
+      you should not rely on this behavior.
+
+      New implementations should use connectionFailed() to detect a failure to connec to the host,
+      and stateChanged() to detect a loss of connectivity.
+    */
+    KDE_DEPRECATED void connectionLost();
+
+    /**
+      Emitted when the Session couldn't connect to the host
+
+      Likely reasons: invalid host address, no internet connectivity, firewall blocking rules,
+      etc...
+      @since 4.7
+    */
+    void connectionFailed();
     void stateChanged(KIMAP::Session::State newState, KIMAP::Session::State oldState);
 
   private:

@@ -61,6 +61,64 @@ class SessionTest : public QObject
       QCOMPARE( ( int )qvariant_cast<KIMAP::Session::State>(arguments.at(1)), ( int )KIMAP::Session::Disconnected);
     }
 
+    void shouldFailForInvalidHosts()
+    {
+      KIMAP::Session s( "0.0.0.0", 1234 );
+      s.setTimeout(1); // 1 second timout
+
+      QSignalSpy spyFail(&s, SIGNAL(connectionFailed()));
+      QSignalSpy spyLost(&s, SIGNAL(connectionLost()));
+      QSignalSpy spyState(&s, SIGNAL(stateChanged(KIMAP::Session::State,KIMAP::Session::State)));
+
+      QCOMPARE( ( int )s.state(), ( int )KIMAP::Session::Disconnected );
+
+      QTest::qWait( 500 );
+      QCOMPARE( ( int )s.state(), ( int )KIMAP::Session::Disconnected );
+      QCOMPARE ( spyFail.count(), 1 );
+      QEXPECT_FAIL("", "FIXME KDE5: Don't emit connectionLost() on a failed connection", Continue);
+      QCOMPARE ( spyLost.count(), 0 );
+      QCOMPARE ( spyState.count(), 0 );
+
+      // Wait 800ms more. So now it's 1.3 seconds, check that the socket timeout has correctly been
+      // disabled, and that it hadn't fired unexpectedly.
+      QTest::qWait( 800 );
+      QCOMPARE ( spyFail.count(), 1 );
+    }
+
+    /**
+      Checks that the timeout works when the connection succeeds, but the server doesn't sends anything
+      back to the client. This could happen for example if we connected to a non-IMAP server.
+    */
+    void shouldTimeoutOnNoGreeting()
+    {
+      FakeServer fakeServer;
+      fakeServer.setScenario( QList<QByteArray>() );
+      fakeServer.startAndWait();
+
+      KIMAP::Session s( "127.0.0.1", 5989 );
+      s.setTimeout(2);
+      QSignalSpy spyFail(&s, SIGNAL(connectionFailed()));
+      QSignalSpy spyLost(&s, SIGNAL(connectionLost()));
+      QSignalSpy spyState(&s, SIGNAL(stateChanged(KIMAP::Session::State,KIMAP::Session::State)));
+      QCOMPARE( ( int )s.state(), ( int )KIMAP::Session::Disconnected );
+
+      // Wait 1.8 second. Since the timeout is set to 2 seconds, the socket should be still
+      // disconnected at this point, yet the connectionFailed() signal shouldn't have been emitted.
+      QTest::qWait( 1800 );
+      QCOMPARE( ( int )s.state(), ( int )KIMAP::Session::Disconnected );
+      QCOMPARE ( spyFail.count(), 0 );
+      QCOMPARE ( spyLost.count(), 0 );
+      QCOMPARE ( spyState.count(), 0 );
+
+      // Wait 0.5 second more. Now we are at 2.3 seconds, the socket should have timed out, and the
+      // connectionFailed() signal should have been emitted.
+      QTest::qWait( 500 );
+      QCOMPARE( ( int )s.state(), ( int )KIMAP::Session::Disconnected );
+      QCOMPARE ( spyFail.count(), 1 );
+      QCOMPARE ( spyLost.count(), 0 );
+      QCOMPARE ( spyState.count(), 0 );
+    }
+
     void shouldSupportPreauth()
     {
       FakeServer fakeServer;
@@ -191,7 +249,8 @@ class SessionTest : public QObject
 
       KIMAP::Session s( "127.0.0.1", 5989 );
 
-      QSignalSpy spy(&s, SIGNAL(connectionLost()));
+      QSignalSpy spyFail(&s, SIGNAL(connectionFailed()));
+      QSignalSpy spyLost(&s, SIGNAL(connectionLost()));
       QSignalSpy spyState(&s, SIGNAL(stateChanged(KIMAP::Session::State,KIMAP::Session::State)));
 
       MockJob *mock = new MockJob(&s);
@@ -200,7 +259,8 @@ class SessionTest : public QObject
       mock->exec();
       // We expect to get an error here due to some timeout
       QVERIFY( mock->error()!=0 );
-      QCOMPARE( spy.count(), 1 );
+      QCOMPARE( spyFail.count(), 0 );
+      QCOMPARE( spyLost.count(), 1 );
       QCOMPARE( spyState.count(), 2 ); // Authenticated, Disconnected
     }
 
