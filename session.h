@@ -116,6 +116,18 @@ class KIMAP_EXPORT Session : public QObject
       @since 4.7
     */
     void connectionFailed();
+
+    /**
+      Emitted when the session's state changes.
+
+      You can use this signal to detect a connection loss (ie: stateChanged is emitted with newState
+      == KIMAP::Session::Disconnected)
+
+      If you want to receive the stateChanged arguments in your slot, you must register the State
+      enum with @c Q_DECLARE_METATYPE(KIMAP::Session::State) and @c qRegisterMetaType<KIMAP::Session::State>();
+
+      @since 4.7
+    */
     void stateChanged(KIMAP::Session::State newState, KIMAP::Session::State oldState);
 
   private:
