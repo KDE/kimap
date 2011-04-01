@@ -369,9 +369,7 @@ void SessionPrivate::socketDisconnected()
   isSocketConnected = false;
   thread->closeSocket();
 
-  if ( currentJob ) {
-    currentJob->connectionLost();
-  }
+  clearJobQueue();
 }
 
 void SessionPrivate::socketError()
@@ -385,7 +383,22 @@ void SessionPrivate::socketError()
   } else {
     emit q->connectionFailed();
     emit q->connectionLost();    // KDE5: Remove this. We shouldn't emit connectionLost() if we weren't connected in the first place
+    clearJobQueue();
   }
+}
+
+void SessionPrivate::clearJobQueue()
+{
+  if ( currentJob ) {
+    currentJob->connectionLost();
+  } else if ( !queue.isEmpty() ) {
+    currentJob = queue.takeFirst();
+    currentJob->connectionLost();
+  }
+
+  qDeleteAll(queue);
+  queue.clear();
+  emit q->jobQueueSizeChanged( 0 );
 }
 
 void SessionPrivate::startSsl(const KTcpSocket::SslVersion &version)

@@ -31,6 +31,7 @@
 #include "kimaptest/mockjob.h"
 
 Q_DECLARE_METATYPE(KIMAP::Session::State)
+Q_DECLARE_METATYPE(KJob*)
 
 class SessionTest : public QObject
 {
@@ -262,6 +263,50 @@ class SessionTest : public QObject
       QCOMPARE( spyFail.count(), 0 );
       QCOMPARE( spyLost.count(), 1 );
       QCOMPARE( spyState.count(), 2 ); // Authenticated, Disconnected
+    }
+
+    void shouldFailFirstJobOnConnectionFailed()
+    {
+      qRegisterMetaType<KJob*>();
+
+      FakeServer fakeServer;
+      fakeServer.setScenario( QList<QByteArray>() );
+      fakeServer.startAndWait();
+
+      KIMAP::Session s( "127.0.0.1", 5989 );
+      s.setTimeout(1);
+
+      MockJob *j1 = new MockJob(&s);
+      QSignalSpy spyResult1(j1, SIGNAL(result(KJob*)));
+      QSignalSpy spyDestroyed1(j1, SIGNAL(destroyed()));
+
+      MockJob *j2 = new MockJob(&s);
+      QSignalSpy spyResult2(j2, SIGNAL(result(KJob*)));
+      QSignalSpy spyDestroyed2(j2, SIGNAL(destroyed()));
+
+      MockJob *j3 = new MockJob(&s);
+      QSignalSpy spyResult3(j3, SIGNAL(result(KJob*)));
+      QSignalSpy spyDestroyed3(j3, SIGNAL(destroyed()));
+
+      j1->start();
+      j2->start();
+      j3->start();
+
+      QCOMPARE( s.jobQueueSize(), 3);
+
+      QTest::qWait(1100);
+
+      // Check that only the first job has emitted it's result
+      QCOMPARE( spyResult1.count(), 1 );
+      QCOMPARE( spyResult2.count(), 0 );
+      QCOMPARE( spyResult3.count(), 0 );
+
+      // Check that all jobs have been deleted
+      QCOMPARE( spyDestroyed1.count(), 1 );
+      QCOMPARE( spyDestroyed2.count(), 1 );
+      QCOMPARE( spyDestroyed3.count(), 1 );
+
+      QCOMPARE( s.jobQueueSize(), 0);
     }
 
   public slots:

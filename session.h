@@ -103,16 +103,20 @@ class KIMAP_EXPORT Session : public QObject
       For historical reasons, this signal is also emitted in the event of a failed connection, but
       you should not rely on this behavior.
 
-      New implementations should use connectionFailed() to detect a failure to connec to the host,
+      New implementations should use connectionFailed() to detect a failure to connect to the host,
       and stateChanged() to detect a loss of connectivity.
     */
     KDE_DEPRECATED void connectionLost();
 
     /**
-      Emitted when the Session couldn't connect to the host
+      Emitted when the Session couldn't connect to the host.
 
       Likely reasons: invalid host address, no internet connectivity, firewall blocking rules,
       etc...
+
+      Pending jobs in the queue will be deleted, and the first job in the queue will be failed. (ie:
+      it will have its result signal emitted with a non-zero error code.)
+
       @since 4.7
     */
     void connectionFailed();
