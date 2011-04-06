@@ -69,11 +69,13 @@ namespace KIMAP
       bool startAuthentication();
       bool answerChallenge(const QByteArray &data);
       void sslResponse(bool response);
+      void saveServerGreeting(const Message &response);
 
       LoginJob *q;
 
       QString userName;
       QString password;
+      QString serverGreeting;
 
       LoginJob::EncryptionMode encryptionMode;
       QString authMode;
@@ -283,6 +285,7 @@ void LoginJob::handleResponse( const Message &response )
     } else if ( response.content[1].toString() == "OK")    {
       if (d->authState == LoginJobPrivate::Authenticate) {
         sasl_dispose( &d->conn ); //SASL authentication done
+        d->saveServerGreeting( response );
         emitResult();
       } else if (d->authState == LoginJobPrivate::Capability) {
 
@@ -315,6 +318,7 @@ void LoginJob::handleResponse( const Message &response )
       } else if (d->authState == LoginJobPrivate::StartTls) {
         d->sessionInternal()->startSsl(KTcpSocket::TlsV1);
       } else {
+        d->saveServerGreeting( response );
         emitResult(); //got an OK, command done
       }
     }
@@ -498,5 +502,30 @@ void LoginJob::connectionLost()
 
 }
 
+void LoginJobPrivate::saveServerGreeting(const Message &response)
+{
+  // Concatenate the parts of the server response into a string, while dropping the first two parts
+  // (the response tag and the "OK" code), and being careful not to add useless extra whitespace.
+
+  for ( int i=2; i<response.content.size(); i++) {
+    if ( response.content.at(i).type()==Message::Part::List ) {
+      serverGreeting+='(';
+      foreach ( const QByteArray &item, response.content.at(i).toList() ) {
+        serverGreeting+=item+' ';
+      }
+      serverGreeting.chop(1);
+      serverGreeting+=") ";
+    } else {
+      serverGreeting+=response.content.at(i).toString()+' ';
+    }
+  }
+  serverGreeting.chop(1);
+}
+
+QString LoginJob::serverGreeting() const
+{
+  Q_D(const LoginJob);
+  return d->serverGreeting;
+}
 
 #include "loginjob.moc"

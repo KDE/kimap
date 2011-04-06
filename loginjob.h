@@ -69,6 +69,17 @@ class KIMAP_EXPORT LoginJob : public Job
     void setPassword( const QString &password );
 
     /**
+     * Returns the server greeting, in case of a successful login.
+     * If the login wasn't successful, this method returns an empty string. Use errorString() to
+     * get the error message in this case.
+     *
+     * Note that the content of this response is not defined by the IMAP protocol and is
+     * implementation-dependent.
+     * @since 4.7
+     */
+    QString serverGreeting() const;
+
+    /**
      * Set the encryption mode for the connection. In case an encryption mode is set, the caller
      * MUST check the encryptionMode() result after executing the job, to see if the connection is
      * encrypted or not (e.g handshaking failed).

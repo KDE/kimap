@@ -92,6 +92,61 @@ void shouldHandleLogin()
   delete session;
 }
 
+void shouldSaveServerGreeting_data()
+{
+  QTest::addColumn<QString>( "greeting" );
+  QTest::addColumn< QList<QByteArray> >( "scenario" );
+
+  QList<QByteArray> scenario;
+  scenario << FakeServer::greeting()
+           << "C: A000001 LOGIN \"user\" \"password\""
+           << "S: A000001 OK Welcome John Smith";
+
+  QTest::newRow( "greeting" ) << "Welcome John Smith" << scenario;
+
+  scenario.clear();
+  scenario << FakeServer::greeting()
+           << "C: A000001 LOGIN \"user\" \"password\""
+           << "S: A000001 OK Welcome John Smith (last login: Feb 21, 2010)";
+
+  QTest::newRow( "greeting with parenthesis" ) << "Welcome John Smith (last login: Feb 21, 2010)" << scenario;
+
+  scenario.clear();
+  scenario << FakeServer::greeting()
+           << "C: A000001 LOGIN \"user\" \"password\""
+           << "S: A000001 OK";
+
+  QTest::newRow( "no greeting" ) << "" << scenario;
+
+  scenario.clear();
+  scenario << FakeServer::greeting()
+           << "C: A000001 LOGIN \"user\" \"password\""
+           << "S: A000001 NO Login failed: authentication failure";
+
+  QTest::newRow( "login failed" ) << "" << scenario;
+}
+
+void shouldSaveServerGreeting()
+{
+  QFETCH( QString, greeting );
+  QFETCH( QList<QByteArray>, scenario );
+
+  FakeServer fakeServer;
+  fakeServer.setScenario( scenario );
+  fakeServer.startAndWait();
+
+  KIMAP::Session *session = new KIMAP::Session("127.0.0.1", 5989);
+
+  KIMAP::LoginJob *login = new KIMAP::LoginJob(session);
+  login->setUserName("user");
+  login->setPassword("password");
+  login->exec();
+
+  QCOMPARE(login->serverGreeting(), greeting);
+
+  fakeServer.quit();
+  delete session;
+}
 };
 
 QTEST_KDEMAIN_CORE( LoginJobTest )
