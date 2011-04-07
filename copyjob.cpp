@@ -123,7 +123,7 @@ void CopyJob::handleResponse( const Message &response )
         it != response.responseCode.end(); ++it ) {
     if ( it->toString()=="COPYUID" ) {
       it = it + 3;
-      if ( it != response.responseCode.end() ) {
+      if ( it < response.responseCode.end() ) {
         d->resultingUids = ImapSet::fromImapSequenceSet( it->toString() );
       }
       break;
