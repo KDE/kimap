@@ -230,9 +230,9 @@ void LoginJob::doStart()
     if (d->authMode.isEmpty()) {
       d->authState = LoginJobPrivate::Login;
       d->tags << d->sessionInternal()->sendCommand( "LOGIN",
-                                                  quoteIMAP( d->userName ).toUtf8()
+                                                  '"'+quoteIMAP( d->userName ).toUtf8()+'"'
                                                  +' '
-                                                 +quoteIMAP(d->password ).toUtf8() );
+                                                 +'"'+quoteIMAP(d->password ).toUtf8()+'"' );
     } else {
       if (!d->startAuthentication()) {
         emitResult();

@@ -42,17 +42,24 @@ void shouldHandleLogin_data()
 
   QList<QByteArray> scenario;
   scenario << FakeServer::greeting()
-           << "C: A000001 LOGIN user password"
+           << "C: A000001 LOGIN \"user\" \"password\""
            << "S: A000001 OK User logged in";
 
   QTest::newRow( "success" ) << "user" << "password" << scenario;
 
   scenario.clear();
   scenario << FakeServer::greeting()
-           << "C: A000001 LOGIN user_bad password"
+           << "C: A000001 LOGIN \"user_bad\" \"password\""
            << "S: A000001 NO Login failed: authentication failure";
 
   QTest::newRow( "wrong login" ) << "user_bad" << "password" << scenario;
+
+  scenario.clear();
+  scenario << FakeServer::greeting()
+           << "C: A000001 LOGIN \"user\" \"aa\\\"bb\\\\cc[dd ee\""
+           << "S: A000001 OK User logged in";
+
+  QTest::newRow( "special chars" ) << "user" << "aa\"bb\\cc[dd ee" << scenario;
 
   scenario.clear();
   scenario << FakeServer::preauth();
