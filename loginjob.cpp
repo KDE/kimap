@@ -295,9 +295,9 @@ void LoginJob::handleResponse( const Message &response )
           } else {
             d->authState = LoginJobPrivate::Login;
             d->tags << d->sessionInternal()->sendCommand( "LOGIN",
-                                                        quoteIMAP( d->userName ).toUtf8()
+                                                        '"'+quoteIMAP( d->userName ).toUtf8()+'"'
                                                        +' '
-                                                       +quoteIMAP( d->password ).toUtf8() );
+                                                       +'"'+quoteIMAP( d->password ).toUtf8()+'"');
           }
         }
 
