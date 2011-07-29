@@ -91,8 +91,8 @@ FetchJob::FetchJob( Session *session )
 {
   Q_D(FetchJob);
   d->scope.mode = FetchScope::Content;
-  connect( &d->emitPendingsTimer, SIGNAL( timeout() ),
-           this, SLOT( emitPendings() ) );
+  connect( &d->emitPendingsTimer, SIGNAL(timeout()),
+           this, SLOT(emitPendings()) );
 }
 
 FetchJob::~FetchJob()

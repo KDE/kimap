@@ -60,7 +60,7 @@ void SessionThread::sendData( const QByteArray &payload )
   QMutexLocker locker(&m_mutex);
 
   m_dataQueue.enqueue( payload );
-  QTimer::singleShot( 0, this, SLOT( writeDataQueue() ) );
+  QTimer::singleShot( 0, this, SLOT(writeDataQueue()) );
 }
 
 void SessionThread::writeDataQueue()
@@ -114,14 +114,14 @@ void SessionThread::readMessage()
   }
 
   if ( m_stream->availableDataSize()>1 ) {
-    QTimer::singleShot( 0, this, SLOT( readMessage() ) );
+    QTimer::singleShot( 0, this, SLOT(readMessage()) );
   }
 
 }
 
 void SessionThread::closeSocket()
 {
-  QTimer::singleShot( 0, this, SLOT( doCloseSocket() ) );
+  QTimer::singleShot( 0, this, SLOT(doCloseSocket()) );
 }
 
 void SessionThread::doCloseSocket()
@@ -162,7 +162,7 @@ void SessionThread::run()
   connect( this, SIGNAL(responseReceived(KIMAP::Message)),
            m_session, SLOT(responseReceived(KIMAP::Message)) );
 
-  QTimer::singleShot( 0, this, SLOT( reconnect() ) );
+  QTimer::singleShot( 0, this, SLOT(reconnect()) );
   exec();
 
   delete m_stream;

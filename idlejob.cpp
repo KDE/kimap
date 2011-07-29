@@ -72,8 +72,8 @@ IdleJob::IdleJob( Session *session )
   : Job( *new IdleJobPrivate(this, session, i18nc("name of the idle job", "Idle")) )
 {
   Q_D(IdleJob);
-  connect( &d->emitStatsTimer, SIGNAL( timeout() ),
-           this, SLOT( emitStats() ) );
+  connect( &d->emitStatsTimer, SIGNAL(timeout()),
+           this, SLOT(emitStats()) );
 }
 
 IdleJob::~IdleJob()

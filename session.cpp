@@ -55,9 +55,9 @@ Session::Session( const QString &hostName, quint16 port, QObject *parent)
   d->jobRunning = false;
 
   d->thread = new SessionThread(hostName, port, this);
-  connect(d->thread, SIGNAL(encryptionNegotiationResult(bool, KTcpSocket::SslVersion)),
-          d, SLOT(onEncryptionNegotiationResult(bool, KTcpSocket::SslVersion)));
-  connect(d->thread, SIGNAL(sslError(const KSslErrorUiData&)), this, SLOT(handleSslError(const KSslErrorUiData&)));
+  connect(d->thread, SIGNAL(encryptionNegotiationResult(bool,KTcpSocket::SslVersion)),
+          d, SLOT(onEncryptionNegotiationResult(bool,KTcpSocket::SslVersion)));
+  connect(d->thread, SIGNAL(sslError(KSslErrorUiData)), this, SLOT(handleSslError(KSslErrorUiData)));
 
   d->startSocketTimer();
   d->thread->start();

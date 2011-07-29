@@ -185,7 +185,7 @@ void shouldReactToIdle()
 
     KIMAP::IdleJob *idle = new KIMAP::IdleJob( &session );
 
-    QSignalSpy spy( idle, SIGNAL(mailBoxStats(KIMAP::IdleJob*, const QString&, int, int)) );
+    QSignalSpy spy( idle, SIGNAL(mailBoxStats(KIMAP::IdleJob*,QString,int,int)) );
 
     bool result = idle->exec();
 

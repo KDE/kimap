@@ -65,8 +65,8 @@ ListJob::ListJob( Session *session )
   : Job( *new ListJobPrivate(this, session, i18n("List")) )
 {
   Q_D(ListJob);
-  connect( &d->emitPendingsTimer, SIGNAL( timeout() ),
-           this, SLOT( emitPendings() ) );
+  connect( &d->emitPendingsTimer, SIGNAL(timeout()),
+           this, SLOT(emitPendings()) );
 }
 
 ListJob::~ListJob()
