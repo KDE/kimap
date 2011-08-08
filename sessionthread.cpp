@@ -52,6 +52,8 @@ SessionThread::~SessionThread()
   if ( !wait( 10 * 1000 ) ) {
     kWarning() << "Session thread refuses to die, killing harder...";
     terminate();
+    // Make sure to wait until it's done, otherwise it can crash when the pthread callback is called
+    wait();
   }
 }
 
