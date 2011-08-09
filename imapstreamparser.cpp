@@ -242,6 +242,9 @@ QList<QByteArray> ImapStreamParser::readParenthesizedList()
     }
     if ( m_data.at(i) == '[' ) {
       concatToLast = true;
+      if ( result.isEmpty() ) {
+        result.append( QByteArray() );
+      }
       result.last()+='[';
       ++i;
       continue;

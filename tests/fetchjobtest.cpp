@@ -105,6 +105,17 @@ void testFetch_data() {
            << "X";
   scope.mode = KIMAP::FetchJob::FetchScope::Headers;
   QTest::newRow( "partial" ) << false << KIMAP::ImapSet( 11, 11 ) << 1 << scenario << scope;
+
+
+  scenario.clear();
+  // Important bit here if "([127.0.0.1])" which used to crash the stream parser
+  scenario << FakeServer::preauth()
+           << "C: A000001 FETCH 11 (RFC822.SIZE INTERNALDATE BODY.PEEK[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT DATE)] FLAGS UID)"
+           << "S: * 11 FETCH (RFC822.SIZE 770 INTERNALDATE \"11-Oct-2010 03:33:50 +0100\" BODY[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT DATE)] {246}"
+           << "S: ([127.0.0.1])\r\nDate: Mon, 11 Oct 2010 03:34:48 +0100\r\nSubject: unsubscribe\r\nMessage-ID: <ASDFFDSASDFFDS@foobarbaz.com>\r\n\r\n"
+           << "X";
+  scope.mode = KIMAP::FetchJob::FetchScope::Headers;
+  QTest::newRow( "partial, don't confuse list with square bracket" ) << false << KIMAP::ImapSet( 11, 11 ) << 1 << scenario << scope;
 }
 
 void testFetch()
@@ -140,6 +151,7 @@ void testFetch()
 
     bool result = job->exec();
     QEXPECT_FAIL("partial" , "Expected failure on partial response", Continue);
+    QEXPECT_FAIL("partial, don't confuse list with square bracket" , "Expected failure on partial response", Continue);
     QVERIFY( result );
     if ( result ) {
       QVERIFY( m_signals.count()>0 );
