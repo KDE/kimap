@@ -104,6 +104,9 @@ void SessionThread::readMessage()
           literal+= m_stream->readLiteralPart();
         }
         *payload << Message::Part(literal);
+      } else {
+        // Oops! Something really bad happened
+        throw ImapParserException( "Inconsistent state, probably due to some packet loss" );
       }
     }
 
