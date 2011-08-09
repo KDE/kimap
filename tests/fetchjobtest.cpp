@@ -104,7 +104,7 @@ void testFetch_data() {
            << "S: From: John Smith <jonathanr.smith@foobarbaz.com>\r\nTo: \"amagicemailaddress@foobarbazbarfoo.com\"\r\n\t<amagicemailaddress@foobarbazbarfoo.com>\r\nDate: Mon, 11 Oct 2010 03:34:48 +0100\r\nSubject: unsubscribe\r\nMessage-ID: <ASDFFDSASDFFDS@foobarbaz.com>\r\n\r\n"
            << "X";
   scope.mode = KIMAP::FetchJob::FetchScope::Headers;
-  QTest::newRow( "partial" ) << false << KIMAP::ImapSet( 11, 11 ) << 1 << scenario << scope;
+  QTest::newRow( "connection drop" ) << false << KIMAP::ImapSet( 11, 11 ) << 1 << scenario << scope;
 
 
   scenario.clear();
@@ -115,7 +115,18 @@ void testFetch_data() {
            << "S: ([127.0.0.1])\r\nDate: Mon, 11 Oct 2010 03:34:48 +0100\r\nSubject: unsubscribe\r\nMessage-ID: <ASDFFDSASDFFDS@foobarbaz.com>\r\n\r\n"
            << "X";
   scope.mode = KIMAP::FetchJob::FetchScope::Headers;
-  QTest::newRow( "partial, don't confuse list with square bracket" ) << false << KIMAP::ImapSet( 11, 11 ) << 1 << scenario << scope;
+  QTest::newRow( "buffer overwrite" ) << false << KIMAP::ImapSet( 11, 11 ) << 1 << scenario << scope;
+
+
+  scenario.clear();
+  // We're assuming a buffer overwrite here which made us miss the opening parenthesis
+  // for the properties list
+  scenario << FakeServer::preauth()
+           << "C: A000001 FETCH 11 (RFC822.SIZE INTERNALDATE BODY.PEEK[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT DATE)] FLAGS UID)"
+           << "S: * 11 FETCH {10}doh!\r\n\r\n\r\n)\r\n"
+           << "X";
+  scope.mode = KIMAP::FetchJob::FetchScope::Headers;
+  QTest::newRow( "buffer overwrite 2" ) << false << KIMAP::ImapSet( 11, 11 ) << 1 << scenario << scope;
 }
 
 void testFetch()
@@ -150,8 +161,9 @@ void testFetch()
 
 
     bool result = job->exec();
-    QEXPECT_FAIL("partial" , "Expected failure on partial response", Continue);
-    QEXPECT_FAIL("partial, don't confuse list with square bracket" , "Expected failure on partial response", Continue);
+    QEXPECT_FAIL("connection drop", "Expected failure on connection drop", Continue);
+    QEXPECT_FAIL("buffer overwrite", "Expected failure on confused list", Continue);
+    QEXPECT_FAIL("buffer overwrite 2", "Expected beginning of message missing", Continue);
     QVERIFY( result );
     if ( result ) {
       QVERIFY( m_signals.count()>0 );
