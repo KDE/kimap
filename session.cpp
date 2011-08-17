@@ -110,7 +110,7 @@ int Session::jobQueueSize() const
 
 void KIMAP::Session::close()
 {
-  d->socketDisconnected();
+  d->thread->closeSocket();
 }
 
 void SessionPrivate::handleSslError(const KSslErrorUiData& errorData)
@@ -367,7 +367,6 @@ void SessionPrivate::socketDisconnected()
   }
 
   isSocketConnected = false;
-  thread->closeSocket();
 
   clearJobQueue();
 }
@@ -379,7 +378,7 @@ void SessionPrivate::socketError()
   }
 
   if ( isSocketConnected ) {
-    socketDisconnected();
+    thread->closeSocket();
   } else {
     emit q->connectionFailed();
     emit q->connectionLost();    // KDE5: Remove this. We shouldn't emit connectionLost() if we weren't connected in the first place
@@ -465,7 +464,6 @@ void SessionPrivate::stopSocketTimer()
   if ( socketTimerInterval<0 ) {
     return;
   }
-  Q_ASSERT( socketTimer.isActive() );
 
   socketTimer.stop();
 
@@ -483,7 +481,7 @@ void SessionPrivate::restartSocketTimer()
 
 void SessionPrivate::onSocketTimeout()
 {
-  socketDisconnected();
+  thread->closeSocket();
 }
 
 void Session::setTimeout( int timeout )
