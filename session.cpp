@@ -360,9 +360,7 @@ void SessionPrivate::socketDisconnected()
   if ( state != Session::Disconnected ) {
     setState(Session::Disconnected);
     emit q->connectionLost();
-  }
-
-  if (!isSocketConnected) {
+  } else {
     emit q->connectionFailed();
   }
 
