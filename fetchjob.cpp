@@ -489,7 +489,7 @@ QByteArray FetchJobPrivate::parseString( const QByteArray &structure, int &pos )
         continue;
       }
       if ( structure[pos] == '"' ) {
-        result = structure.mid( start+1, pos - start );
+        result = structure.mid( start+1, pos - start - 1);
         pos++;
         break;
       }
