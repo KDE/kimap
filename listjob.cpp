@@ -184,7 +184,7 @@ void ListJob::handleResponse( const Message &response )
         // Defaults to / for servers reporting an empty list
         // it's supposedly not a problem as servers doing that
         // only do it for mailboxes with no child.
-        separator = "/";
+        separator = "/"; //krazy:exclude=doublequote_chars since a QByteArray
       }
       Q_ASSERT(separator.size()==1);
       QByteArray fullName;

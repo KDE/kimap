@@ -206,7 +206,7 @@ void FetchJob::doStart()
     } else {
       parameters+="(BODY.PEEK[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT DATE)]";
       foreach ( const QByteArray &part, d->scope.parts ) {
-        parameters+=" BODY.PEEK["+part+".MIME] BODY.PEEK["+part+"]";
+        parameters+=" BODY.PEEK["+part+".MIME] BODY.PEEK["+part+"]"; //krazy:exclude=doublequote_chars
       }
       parameters+=" FLAGS UID)";
     }
