@@ -41,6 +41,7 @@ KIMAP_UNIT_TESTS(
   storejobtest
   imapsettest
   idlejobtest
+  quotarootjobtest
 )
 
 ###########   manual tests  ###############

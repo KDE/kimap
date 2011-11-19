@@ -37,7 +37,6 @@ namespace KIMAP
 
       QString mailBox;
       QList<QByteArray> rootList;
-      uint rootIndex;
       QMap< QByteArray, QMap<QByteArray, QPair<qint64, qint64> > > quotas;
   };
 }
@@ -63,21 +62,38 @@ void GetQuotaRootJob::handleResponse(const Message &response)
 {
   Q_D(GetQuotaRootJob);
   if (handleErrorReplies(response) == NotHandled) {
-    if ( response.content.size() >= 4 ) {
+    if ( response.content.size() >= 3 ) {
       if (response.content[1].toString() == "QUOTAROOT" ) {
         d->rootList.clear();
-        int i = 3;
-        while ( i < response.content.size())
-        {
-          d->rootList.append(response.content[i].toString());
-          i++;
+        //some impls don't give the root a name which for us seems as if
+        //there were no message part
+        if ( response.content.size() == 3 ) {
+          d->rootList.append("");
+        } else {
+          int i = 3;
+          while ( i < response.content.size())
+          {
+            d->rootList.append(response.content[i].toString());
+            i++;
+          }
         }
-        d->rootIndex = 0;
       } else
       if (response.content[1].toString() == "QUOTA" ) {
-        //TODO: check if we should use the roots in order it came in QUOTAROOT response or the root name from the QUOTA response itself
-        d->quotas[ d->rootList[d->rootIndex] ] = d->readQuota(response.content[3]);
-        d->rootIndex++;
+        QByteArray rootName;
+        int  quotaContentIndex = 3;
+        //some impls don't give the root a name in the response
+        if (response.content.size() == 3 ) {
+          quotaContentIndex = 2;
+        } else {
+          rootName = response.content[2].toString();
+        }       
+
+        const QMap<QByteArray, QPair<qint64, qint64> >& quota = d->readQuota(response.content[quotaContentIndex]);
+        if (d->quotas.contains(rootName)) {
+          d->quotas[ rootName ].unite(quota);
+        } else {
+          d->quotas[ rootName ] = quota;
+        }
       }
     }
   }
