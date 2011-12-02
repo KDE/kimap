@@ -86,6 +86,14 @@ class KIMAP_EXPORT ListJob : public Job
 
   private:
     Q_PRIVATE_SLOT( d_func(), void emitPendings() )
+
+    /**
+    * @brief Converts a mailbox descriptor's name to uppercase if it is the Inbox or an Inbox subfolder.
+    *  This is according to the RFC3501, 5.1. Mailbox Naming section.
+    *
+    * @param descriptor the descriptor to convert, conversion happens in place
+    **/
+    void convertInboxName( KIMAP::MailBoxDescriptor &descriptor );
 };
 
 }

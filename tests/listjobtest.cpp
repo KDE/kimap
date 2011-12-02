@@ -68,6 +68,31 @@ void testList_data() {
 
   QTest::newRow( "normal" ) << true << scenario << listresult;
 
+  scenario.clear();;
+  scenario << FakeServer::preauth()
+           << "C: A000001 LIST \"\" *"
+           << "S: * LIST ( \\HasChildren ) / Inbox"
+           << "S: * LIST ( \\HasNoChildren ) / Inbox/&AOQ- &APY- &APw- @ &IKw-"
+           << "S: * LIST ( \\HasChildren ) / Inbox/lost+found"
+           << "S: * LIST ( \\HasNoChildren ) / \"Inbox/lost+found/Calendar Public-20080128\""
+           << "S: A000001 OK LIST completed";
+  listresult.clear();
+
+  descriptor.separator = '/';
+  descriptor.name = "INBOX";
+  listresult << descriptor;
+  descriptor.separator = '/';
+  descriptor.name = QString::fromUtf8( "INBOX/ä ö ü @ €" );
+  listresult << descriptor;
+  descriptor.separator = '/';
+  descriptor.name = "INBOX/lost+found";
+  listresult << descriptor;
+  descriptor.separator = '/';
+  descriptor.name = "INBOX/lost+found/Calendar Public-20080128";
+  listresult << descriptor;
+
+  QTest::newRow( "lowercase Inbox" ) << true << scenario << listresult;
+
   scenario.clear();
   scenario << FakeServer::preauth()
            << "C: A000001 LSUB \"\" *"
@@ -96,6 +121,35 @@ void testList_data() {
   listresult << descriptor;
 
   QTest::newRow( "subscribed" ) << false << scenario << listresult;
+
+ scenario.clear();
+  scenario << FakeServer::preauth()
+           << "C: A000001 LSUB \"\" *"
+           << "S: * LSUB ( \\HasChildren ) / Inbox"
+           << "S: * LSUB ( ) / Inbox/Calendar/3196"
+           << "S: * LSUB ( \\HasChildren ) / Inbox/Calendar/ff"
+           << "S: * LSUB ( ) / Inbox/Calendar/ff/hgh"
+           << "S: * LSUB ( ) / user/test2/Calendar"
+           << "S: A000001 OK LSUB completed";
+  listresult.clear();
+
+  descriptor.separator = '/';
+  descriptor.name = "INBOX";
+  listresult << descriptor;
+  descriptor.separator = '/';
+  descriptor.name = "INBOX/Calendar/3196";
+  listresult << descriptor;
+  descriptor.separator = '/';
+  descriptor.name = "INBOX/Calendar/ff";
+  listresult << descriptor;
+  descriptor.separator = '/';
+  descriptor.name = "INBOX/Calendar/ff/hgh";
+  listresult << descriptor;
+  descriptor.separator = '/';
+  descriptor.name = "user/test2/Calendar";
+  listresult << descriptor;
+
+  QTest::newRow( "subscribed, lowercase Inbox" ) << false << scenario << listresult;
 
   scenario.clear();
   scenario << FakeServer::preauth()
