@@ -162,7 +162,14 @@ void SessionThread::run()
            m_session, SLOT(socketConnected()) );
   connect( m_socket, SIGNAL(error(KTcpSocket::Error)),
            m_session, SLOT(socketError()) );
-
+  connect( m_socket, SIGNAL(bytesWritten(qint64)),
+           m_session, SLOT(socketActivity()) );
+  if ( m_socket->metaObject()->indexOfSignal("encryptedBytesWritten(qint64)" ) > -1 ) {
+      connect( m_socket, SIGNAL(encryptedBytesWritten(qint64)), // needs kdelibs > 4.8
+               m_session, SLOT(socketActivity()) );
+  }
+  connect( m_socket, SIGNAL(readyRead()),
+           m_session, SLOT(socketActivity()) );
 
   connect( this, SIGNAL(responseReceived(KIMAP::Message)),
            m_session, SLOT(responseReceived(KIMAP::Message)) );

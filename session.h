@@ -143,6 +143,7 @@ class KIMAP_EXPORT Session : public QObject
     Q_PRIVATE_SLOT( d, void socketConnected() )
     Q_PRIVATE_SLOT( d, void socketDisconnected() )
     Q_PRIVATE_SLOT( d, void socketError() )
+    Q_PRIVATE_SLOT( d, void socketActivity() )
 
     Q_PRIVATE_SLOT( d, void handleSslError( const KSslErrorUiData &errorData ) )
 

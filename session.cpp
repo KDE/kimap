@@ -369,6 +369,11 @@ void SessionPrivate::socketDisconnected()
   clearJobQueue();
 }
 
+void SessionPrivate::socketActivity()
+{
+  restartSocketTimer();
+}
+
 void SessionPrivate::socketError()
 {
   if (socketTimer.isActive()) {
