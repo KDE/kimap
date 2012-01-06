@@ -80,6 +80,7 @@ class KIMAP_EXPORT SessionPrivate : public QObject
     void socketConnected();
     void socketDisconnected();
     void socketError();
+    void socketActivity();
 
     void startSocketTimer();
     void stopSocketTimer();
