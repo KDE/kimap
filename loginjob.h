@@ -59,6 +59,10 @@ class KIMAP_EXPORT LoginJob : public Job
         Anonymous
     };
 
+    enum ErrorCode {
+      ERR_COULD_NOT_CONNECT = KJob::UserDefinedError + 23 // same as in kio
+    };
+
     explicit LoginJob( Session *session );
     virtual ~LoginJob();
 
