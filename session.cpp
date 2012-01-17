@@ -484,6 +484,7 @@ void SessionPrivate::restartSocketTimer()
 
 void SessionPrivate::onSocketTimeout()
 {
+  kDebug() << "Socket timeout!";
   thread->closeSocket();
 }
 

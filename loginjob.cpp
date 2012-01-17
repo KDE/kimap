@@ -497,6 +497,8 @@ void LoginJob::connectionLost()
   //don't emit the result if the connection was lost before getting the tls result, as it can mean
   //the TLS handshake failed and the socket was reconnected in normal mode
   if (d->authState != LoginJobPrivate::StartTls) {
+    setError( ERR_COULD_NOT_CONNECT );
+    setErrorText( i18n("Connection to server lost.") );
     emitResult();
   }
 
