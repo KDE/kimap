@@ -39,6 +39,7 @@ using namespace KIMAP;
 class UiProxy: public SessionUiProxy {
   public:
     bool ignoreSslError(const KSslErrorUiData& errorData) {
+        Q_UNUSED( errorData );
         return true;
     }
 };
