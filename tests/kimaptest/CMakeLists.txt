@@ -20,5 +20,5 @@ install(FILES
   mockjob.h
   DESTINATION ${INCLUDE_INSTALL_DIR}/kimaptest COMPONENT Devel)
 
-endif(KDE4_BUILD_TESTS)
+endif()
 
