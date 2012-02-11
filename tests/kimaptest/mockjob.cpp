@@ -32,10 +32,15 @@
 class MockJobPrivate : public KIMAP::JobPrivate
 {
 public:
-  MockJobPrivate( KIMAP::Session *session, const QString& name ) : KIMAP::JobPrivate(session, name) { }
+  MockJobPrivate( KIMAP::Session *session, const QString& name )
+    : KIMAP::JobPrivate(session, name),
+      timeout(10)
+  { }
+
   ~MockJobPrivate() { }
 
   QByteArray command;
+  int timeout;
 };
 
 MockJob::MockJob(KIMAP::Session *session)
@@ -47,9 +52,9 @@ void MockJob::doStart()
 {
   Q_D(MockJob);
   if ( isNull() ) {
-    QTimer::singleShot(10, this, SLOT(done()));
+    QTimer::singleShot(d->timeout, this, SLOT(done()));
   } else {
-    d->sessionInternal()->setSocketTimeout( 10 );
+    d->sessionInternal()->setSocketTimeout( d->timeout );
     d->tags << d->sessionInternal()->sendCommand( d->command );
   }
 }
@@ -69,6 +74,18 @@ QByteArray MockJob::command() const
 {
   Q_D(const MockJob);
   return d->command;
+}
+
+void MockJob::setTimeout(int timeout)
+{
+  Q_D(MockJob);
+  d->timeout = timeout;
+}
+
+int MockJob::timeout() const
+{
+  Q_D(const MockJob);
+  return d->timeout;
 }
 
 bool MockJob::isNull() const
