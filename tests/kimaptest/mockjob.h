@@ -50,6 +50,14 @@ class MockJob : public KIMAP::Job
      */
     QByteArray command() const;
     /**
+     * Sets the timeout before the job completes.
+     */
+    void setTimeout(int timeout);
+    /**
+     * The timeout used by the job.
+     */
+    int timeout() const;
+    /**
      * Whether the command is empty.
      *
      * Equivalent to command().isEmpty().
