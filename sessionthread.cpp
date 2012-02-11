@@ -107,8 +107,11 @@ void SessionThread::readMessage()
         }
         *payload << Message::Part(literal);
       } else {
-        // Oops! Something really bad happened
-        throw ImapParserException( "Inconsistent state, probably due to some packet loss" );
+        // Oops! Something really bad happened, we won't be able to recover
+        // so close the socket immediately
+        qWarning( "Inconsistent state, probably due to some packet loss" );
+        doCloseSocket();
+        return;
       }
     }
 

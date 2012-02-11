@@ -309,6 +309,39 @@ class SessionTest : public QObject
       QCOMPARE( s.jobQueueSize(), 0);
     }
 
+    void shouldCloseOnInconsistency()
+    {
+      for (int count=0; count<10; count++) {
+        FakeServer fakeServer;
+        fakeServer.setScenario( QList<QByteArray>()
+           << FakeServer::preauth()
+           << "C: A000001 DUMMY"
+           << "S: * DUMMY %"
+           << "S: DUMMY)"
+        );
+        fakeServer.startAndWait();
+
+        KIMAP::Session s( "127.0.0.1", 5989 );
+
+        QSignalSpy spyFail(&s, SIGNAL(connectionFailed()));
+        QSignalSpy spyLost(&s, SIGNAL(connectionLost()));
+        QSignalSpy spyState(&s, SIGNAL(stateChanged(KIMAP::Session::State,KIMAP::Session::State)));
+
+        MockJob *mock = new MockJob(&s);
+        mock->setTimeout(5000);
+        mock->setCommand("DUMMY");
+
+        mock->start();
+        QTest::qWait(250); // Should be plenty
+
+        // We expect to get an error here due to the inconsistency
+        QVERIFY( mock->error()!=0 );
+        QCOMPARE( spyFail.count(), 0 );
+        QCOMPARE( spyLost.count(), 1 );
+        QCOMPARE( spyState.count(), 2 ); // Authenticated, Disconnected
+      }
+    }
+
   public slots:
     void jobDone(KJob *job)
     {
