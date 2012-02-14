@@ -247,6 +247,9 @@ void LoginJob::handleResponse( const Message &response )
 {
   Q_D(LoginJob);
 
+  if ( response.content.isEmpty() )
+    return;
+
   //set the actual command name for standard responses
   QString commandName = i18n("Login");
   if (d->authState == LoginJobPrivate::Capability) {
@@ -255,98 +258,149 @@ void LoginJob::handleResponse( const Message &response )
     commandName = i18n("StartTls");
   }
 
-  if ( d->authMode == QLatin1String( "PLAIN" ) && !response.content.isEmpty() && response.content.first().toString()=="+" ) {
-    if ( response.content.size()>1 && response.content.at( 1 ).toString()=="OK" ) {
-      return;
-    }
+  enum ResponseCode {
+    OK,
+    ERR,
+    UNTAGGED,
+    CONTINUATION,
+    MALFORMED
+  };
 
-    QByteArray challengeResponse;
-    challengeResponse+= '\0';
-    challengeResponse+= d->userName.toUtf8();
-    challengeResponse+= '\0';
-    challengeResponse+= d->password.toUtf8();
-    challengeResponse = challengeResponse.toBase64();
-    d->sessionInternal()->sendData( challengeResponse );
+  QByteArray tag = response.content.first().toString();
+  ResponseCode code;
 
-  } else if ( !response.content.isEmpty()
-       && d->tags.contains( response.content.first().toString() ) ) {
-    if ( response.content.size() < 2 ) {
-      setErrorText( i18n("%1 failed, malformed reply from the server.", commandName) );
+  if ( tag == "+" ) {
+    code = CONTINUATION;
+  } else if ( tag == "*" ) {
+    if ( response.content.size() < 2 )
+      code = MALFORMED; // Received empty untagged response
+    else
+      code = UNTAGGED;
+  } else if ( d->tags.contains(tag) ) {
+    if ( response.content.size() < 2 )
+      code = MALFORMED;
+    else if ( response.content[1].toString() == "OK" )
+      code = OK;
+    else
+      code = ERR;
+  }
+
+  switch (code) {
+    case MALFORMED:
+      // We'll handle it later
+      break;
+
+    case ERR:
+      //server replied with NO or BAD for SASL authentication
+      if (d->authState == LoginJobPrivate::Authenticate)
+        sasl_dispose( &d->conn );
+
+      setError( UserDefinedError );
+      setErrorText( i18n("%1 failed, server replied: %2", commandName, response.toString().constData()) );
       emitResult();
-    } else if ( response.content[1].toString() != "OK" ) {
-        //server replied with NO or BAD for SASL authentication
-        if (d->authState == LoginJobPrivate::Authenticate) {
-          sasl_dispose( &d->conn );
+      return;
+
+    case UNTAGGED:
+      // The only untagged response interesting for us here is CAPABILITY
+      if ( response.content[1].toString() == "CAPABILITY" ) {
+        QList<Message::Part>::const_iterator p = response.content.begin() + 2;
+        while (p != response.content.end()) {
+          QString capability = p->toString();
+          d->capabilities << capability;
+          if (capability == "LOGINDISABLED")
+            d->plainLoginDisabled = true;
+          ++p;
         }
+        kDebug() << "Capabilities updated: " << d->capabilities;
+      }
+      break;
 
-        setError( UserDefinedError );
-        setErrorText( i18n("%1 failed, server replied: %2", commandName, response.toString().constData()) );
-        emitResult();
-    } else if ( response.content[1].toString() == "OK")    {
-      if (d->authState == LoginJobPrivate::Authenticate) {
-        sasl_dispose( &d->conn ); //SASL authentication done
-        d->saveServerGreeting( response );
-        emitResult();
-      } else if (d->authState == LoginJobPrivate::Capability) {
+    case CONTINUATION:
+      if (d->authState != LoginJobPrivate::Authenticate) {
+        // Received unexpected continuation response for something
+        // other than AUTHENTICATE command
+        code = MALFORMED;
+        break;
+      }
 
-        //cleartext login, if enabled
-        if (d->authMode.isEmpty()) {
-          if (d->plainLoginDisabled) {
-            setError( UserDefinedError );
-            setErrorText( i18n("Login failed, plain login is disabled by the server.") );
-            emitResult();
+      if ( d->authMode == QLatin1String( "PLAIN" ) ) {
+        if ( response.content.size()>1 && response.content.at( 1 ).toString()=="OK" ) {
+          return;
+        }
+        QByteArray challengeResponse;
+        challengeResponse+= '\0';
+        challengeResponse+= d->userName.toUtf8();
+        challengeResponse+= '\0';
+        challengeResponse+= d->password.toUtf8();
+        challengeResponse = challengeResponse.toBase64();
+        d->sessionInternal()->sendData( challengeResponse );
+      } else if ( response.content.size() >= 2 ) {
+        if (!d->answerChallenge(QByteArray::fromBase64(response.content[1].toString()))) {
+          emitResult(); //error, we're done
+        }
+      } else {
+        // Received empty continuation for authMode other than PLAIN
+        code = MALFORMED;
+      }
+      break;
+
+    case OK:
+
+      switch (d->authState) {
+        case LoginJobPrivate::StartTls:
+          d->sessionInternal()->startSsl(KTcpSocket::TlsV1);
+          break;
+
+        case LoginJobPrivate::Capability:
+          //cleartext login, if enabled
+          if (d->authMode.isEmpty()) {
+            if (d->plainLoginDisabled) {
+              setError( UserDefinedError );
+              setErrorText( i18n("Login failed, plain login is disabled by the server.") );
+              emitResult();
+            } else {
+              d->authState = LoginJobPrivate::Login;
+              d->tags << d->sessionInternal()->sendCommand( "LOGIN",
+                                                          '"'+quoteIMAP( d->userName ).toUtf8()+'"'
+                                                         +' '
+                                                         +'"'+quoteIMAP( d->password ).toUtf8()+'"');
+            }
           } else {
-            d->authState = LoginJobPrivate::Login;
-            d->tags << d->sessionInternal()->sendCommand( "LOGIN",
-                                                        '"'+quoteIMAP( d->userName ).toUtf8()+'"'
-                                                       +' '
-                                                       +'"'+quoteIMAP( d->password ).toUtf8()+'"');
-          }
-        }
-
-        //find the selected SASL authentication method
-        Q_FOREACH(const QString &capability, d->capabilities) {
-          if (capability.startsWith(QLatin1String("AUTH="))) {
-            QString authType = capability.mid(5);
-            if (authType == d->authMode) {
-                if (!d->startAuthentication()) {
-                  emitResult(); //problem, we're done
+            bool authModeSupported = false;
+            //find the selected SASL authentication method
+            Q_FOREACH(const QString &capability, d->capabilities) {
+              if (capability.startsWith(QLatin1String("AUTH="))) {
+                if (capability.mid(5) == d->authMode) {
+                  authModeSupported = true;
+                  break;
                 }
+              }
+            }
+            if (!authModeSupported) {
+              setError( UserDefinedError );
+              setErrorText( i18n("Login failed, authentication mode %1 is not supported by the server.", d->authMode) );
+              emitResult();
+            } else if (!d->startAuthentication()) {
+              emitResult(); //problem, we're done
             }
           }
-        }
-      } else if (d->authState == LoginJobPrivate::StartTls) {
-        d->sessionInternal()->startSsl(KTcpSocket::TlsV1);
-      } else {
-        d->saveServerGreeting( response );
-        emitResult(); //got an OK, command done
+          break;
+
+        case LoginJobPrivate::Authenticate:
+          sasl_dispose( &d->conn ); //SASL authentication done
+          // Fall through
+        case LoginJobPrivate::Login:
+          d->saveServerGreeting( response );
+          emitResult(); //got an OK, command done
+          break;
+
       }
-    }
-  } else if ( response.content.size() >= 2 ) {
-    if ( d->authState == LoginJobPrivate::Authenticate ) {
-      if (!d->answerChallenge(QByteArray::fromBase64(response.content[1].toString()))) {
-        emitResult(); //error, we're done
-      }
-    } else if ( response.content[1].toString()=="CAPABILITY" ) {
-      bool authModeSupported = d->authMode.isEmpty();
-      for (int i = 2; i < response.content.size(); ++i) {
-        QString capability = response.content[i].toString();
-        d->capabilities << capability;
-        if (capability == "LOGINDISABLED") {
-          d->plainLoginDisabled = true;
-        }
-        QString authMode = capability.mid(5);
-        if (authMode == d->authMode) {
-          authModeSupported = true;
-        }
-      }
-      kDebug() << "Capabilities after STARTTLS: " << d->capabilities;
-      if (!authModeSupported) {
-        setError( UserDefinedError );
-        setErrorText( i18n("Login failed, authentication mode %1 is not supported by the server.", d->authMode) );
-        d->authState = LoginJobPrivate::Login; //just to treat the upcoming OK correctly
-      }
-    }
+
+  }
+
+  if ( code == MALFORMED ) {
+    setErrorText( i18n("%1 failed, malformed reply from the server.", commandName) );
+    emitResult();
   }
 }
 
