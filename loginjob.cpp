@@ -74,6 +74,7 @@ namespace KIMAP
       LoginJob *q;
 
       QString userName;
+      QString authorizationName;
       QString password;
       QString serverGreeting;
 
@@ -109,8 +110,14 @@ bool LoginJobPrivate::sasl_interact()
   while( interact->id != SASL_CB_LIST_END ) {
     kDebug() <<"SASL_INTERACT id:" << interact->id;
     switch( interact->id ) {
-      case SASL_CB_USER:
       case SASL_CB_AUTHNAME:
+        if ( !authorizationName.isEmpty() ) {
+          kDebug() <<"SASL_CB_[AUTHNAME]: '" << authorizationName <<"'";
+          interact->result = strdup( authorizationName.toUtf8() );
+          interact->len = strlen( (const char *) interact->result );
+          break;
+        }
+      case SASL_CB_USER:
         kDebug() <<"SASL_CB_[USER|AUTHNAME]: '" << userName <<"'";
         interact->result = strdup( userName.toUtf8() );
         interact->len = strlen( (const char *) interact->result );
@@ -152,6 +159,18 @@ void LoginJob::setUserName( const QString &userName )
 {
   Q_D(LoginJob);
   d->userName = userName;
+}
+
+QString LoginJob::authorizationName() const
+{
+  Q_D(const LoginJob);
+  return d->authorizationName;
+}
+
+void LoginJob::setAuthorizationName( const QString& authorizationName )
+{
+  Q_D(LoginJob);
+  d->authorizationName = authorizationName;
 }
 
 QString LoginJob::password() const
@@ -328,6 +347,9 @@ void LoginJob::handleResponse( const Message &response )
           return;
         }
         QByteArray challengeResponse;
+        if ( !d->authorizationName.isEmpty() ) {
+          challengeResponse+= d->authorizationName.toUtf8();
+        }
         challengeResponse+= '\0';
         challengeResponse+= d->userName.toUtf8();
         challengeResponse+= '\0';

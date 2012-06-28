@@ -69,6 +69,25 @@ class KIMAP_EXPORT LoginJob : public Job
     QString userName() const;
     void setUserName( const QString &userName );
 
+    /**
+     * Get the authorization identity.
+     * @since 4.10
+     */
+    QString authorizationName() const;
+
+    /**
+     * Set the authorization identity.
+     *
+     * If set, proxy-authentication according to RFC4616 will be used.
+     *
+     * Note that this feature only works with the "PLAIN" AuthenticationMode.
+     *
+     * The @param authorizationName will be used together with the password() to get authenticated as userName() by the authorization of the provided credentials.
+     * This allows to login as a user using the admin credentials and the users name.
+     * @since 4.10
+     */
+    void setAuthorizationName( const QString &authorizationName );
+
     QString password() const;
     void setPassword( const QString &password );
 

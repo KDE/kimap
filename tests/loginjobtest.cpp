@@ -92,6 +92,48 @@ void shouldHandleLogin()
   delete session;
 }
 
+void shouldHandleProxyLogin_data()
+{
+  QTest::addColumn<QString>( "user" );
+  QTest::addColumn<QString>( "proxy" );
+  QTest::addColumn<QString>( "password" );
+  QTest::addColumn< QList<QByteArray> >( "scenario" );
+
+  QList<QByteArray> scenario;
+  scenario << FakeServer::greeting()
+           << "C: A000001 AUTHENTICATE PLAIN"
+           << "C: A000001 LOGIN \"proxy\" \"user\" \"password\""
+           << "S: A000001 OK User logged in";
+
+  QTest::newRow( "success" ) << "user" << "proxy" << "password" << scenario;
+}
+
+void shouldHandleProxyLogin()
+{
+  QFETCH( QString, user );
+  QFETCH( QString, proxy );
+  QFETCH( QString, password );
+  QFETCH( QList<QByteArray>, scenario );
+
+  FakeServer fakeServer;
+  fakeServer.setScenario( scenario );
+  fakeServer.startAndWait();
+
+  KIMAP::Session *session = new KIMAP::Session("127.0.0.1", 5989);
+
+  KIMAP::LoginJob *login = new KIMAP::LoginJob(session);
+  login->setAuthenticationMode(KIMAP::LoginJob::Plain);
+  login->setUserName(user);
+  login->setAuthorizationName(proxy);
+  login->setPassword(password);
+  bool result = login->exec();
+
+  QVERIFY(result);
+
+  fakeServer.quit();
+  delete session;
+}
+
 void shouldSaveServerGreeting_data()
 {
   QTest::addColumn<QString>( "greeting" );
