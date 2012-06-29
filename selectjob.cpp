@@ -20,6 +20,7 @@
 #include "selectjob.h"
 
 #include <KDE/KLocale>
+#include <kdebug.h>
 
 #include "job_p.h"
 #include "message_p.h"
@@ -185,7 +186,7 @@ void SelectJob::handleResponse( const Message &response )
           }
         }
       } else {
-        qDebug("%s", response.toString().constData());
+        kDebug() << response.toString();
       }
   } else {
     Q_ASSERT( error() || d->m_session->selectedMailBox() == d->mailBox );
