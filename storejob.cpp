@@ -136,7 +136,7 @@ void StoreJob::doStart()
   if (!d->flags.isEmpty()) parameters.chop(1);
   parameters+=')';
 
-  qDebug("%s", parameters.constData());
+  kDebug() << parameters;
 
   QByteArray command = "STORE";
   if ( d->uidBased ) {
