@@ -34,7 +34,7 @@ class MockJobPrivate;
 class MockJob : public KIMAP::Job
 {
   Q_OBJECT
-  Q_DECLARE_PRIVATE(MockJob)
+  Q_DECLARE_PRIVATE( MockJob )
 
   public:
     MockJob(KIMAP::Session *session);

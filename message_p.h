@@ -34,9 +34,9 @@ struct Message
         enum Type { String = 0, List };
 
         explicit Part(const QByteArray &string)
-          : m_type(String), m_string(string) { }
+          : m_type( String ), m_string( string ) { }
         explicit Part(const QList<QByteArray> &list)
-          : m_type(List), m_list(list) { }
+          : m_type( List ), m_list( list ) { }
 
         inline Type type() const { return m_type; }
         inline QByteArray toString() const { return m_string; }
@@ -53,22 +53,22 @@ struct Message
       QByteArray result;
 
       foreach ( const Part &part, content ) {
-        if ( part.type()==Part::List ) {
-          result+='(';
+        if ( part.type() == Part::List ) {
+          result += '(';
           foreach ( const QByteArray &item, part.toList() ) {
-            result+= ' ';
-            result+= item;
+            result += ' ';
+            result += item;
           }
-          result+=" ) ";
+          result += " ) ";
         } else {
-          result+= part.toString()+' ';
+          result += part.toString() + ' ';
         }
       }
 
       if ( !responseCode.isEmpty() ) {
         result+="[ ";
         foreach ( const Part &part, responseCode ) {
-          if ( part.type()==Part::List ) {
+          if ( part.type() == Part::List ) {
             result+='(';
             foreach ( const QByteArray &item, part.toList() ) {
               result+= ' ';
@@ -76,7 +76,7 @@ struct Message
             }
             result+=" ) ";
           } else {
-            result+= part.toString()+' ';
+            result+= part.toString() + ' ';
           }
         }
         result+=" ]";
@@ -91,7 +91,7 @@ struct Message
 
 }
 
-Q_DECLARE_METATYPE(KIMAP::Message)
+Q_DECLARE_METATYPE( KIMAP::Message )
 static const int _kimap_messageTypeId = qRegisterMetaType<KIMAP::Message>();
 
 #endif

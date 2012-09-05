@@ -35,7 +35,7 @@ namespace KIMAP
   class SearchJobPrivate : public JobPrivate
   {
     public:
-      SearchJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name), logic(SearchJob::And) {
+      SearchJobPrivate( Session *session, const QString& name ) : JobPrivate( session, name ), logic( SearchJob::And ) {
         criteriaMap[SearchJob::All]  = "ALL";
         criteriaMap[SearchJob::Answered] = "ANSWERED";
         criteriaMap[SearchJob::BCC] = "BCC";
@@ -105,7 +105,7 @@ namespace KIMAP
 using namespace KIMAP;
 
 SearchJob::SearchJob( Session *session )
-  : Job( *new SearchJobPrivate(session, i18nc("Name of the search job", "Search")) )
+  : Job( *new SearchJobPrivate( session, i18nc( "Name of the search job", "Search" ) ) )
 {
 }
 
@@ -115,37 +115,41 @@ SearchJob::~SearchJob()
 
 void SearchJob::doStart()
 {
-  Q_D(SearchJob);
+  Q_D( SearchJob );
 
   QByteArray searchKey;
 
-  if (!d->charset.isEmpty()) {
+  if ( !d->charset.isEmpty() ) {
     searchKey = "CHARSET " + d->charset;
   }
 
-  if (d->logic == SearchJob::Not) {
+  if ( d->logic == SearchJob::Not ) {
     searchKey += "NOT";
-  } else if (d->logic == SearchJob::Or) {
+  } else if ( d->logic == SearchJob::Or ) {
     searchKey += "OR";
   }
 
   if ( d->logic == SearchJob::And ) {
-    for ( int i = 0; i<d->criterias.size(); i++ ) {
+    for ( int i = 0; i < d->criterias.size(); i++ ) {
       const QByteArray key = d->criterias.at( i );
-      if ( i>0 ) searchKey+= ' ';
+      if ( i > 0 ) {
+        searchKey += ' ';
+      }
       searchKey += key;
     }
   } else {
-    for ( int i = 0; i<d->criterias.size(); i++ ) {
+    for ( int i = 0; i < d->criterias.size(); i++ ) {
       const QByteArray key = d->criterias.at( i );
-      if ( i>0 ) searchKey+= ' ';
+      if ( i > 0 ) {
+        searchKey += ' ';
+      }
       searchKey += '(' + key + ')';
     }
   }
 
   QByteArray command = "SEARCH";
   if ( d->uidBased ) {
-    command = "UID "+ command;
+    command = "UID " + command;
   }
 
   d->tags << d->sessionInternal()->sendCommand( command, searchKey );
@@ -153,15 +157,15 @@ void SearchJob::doStart()
 
 void SearchJob::handleResponse( const Message &response )
 {
-  Q_D(SearchJob);
+  Q_D( SearchJob );
 
-  if (handleErrorReplies(response) == NotHandled ) {
+  if ( handleErrorReplies( response ) == NotHandled  ) {
     if ( response.content[0].toString() == "+" ) {
       d->sessionInternal()->sendData( d->contents[d->nextContent] );
       d->nextContent++;
     } else if ( response.content[1].toString() == "SEARCH" ) {
-      for(int i = 2; i < response.content.size(); i++) {
-        d->results.append(response.content[i].toString().toInt());
+      for ( int i = 2; i < response.content.size(); i++ ) {
+        d->results.append( response.content[i].toString().toInt() );
       }
     }
   }
@@ -170,27 +174,27 @@ void SearchJob::handleResponse( const Message &response )
 
 void SearchJob::setCharset( const QByteArray &charset )
 {
-  Q_D(SearchJob);
+  Q_D( SearchJob );
   d->charset = charset;
 }
 
 QByteArray SearchJob::charset() const
 {
-  Q_D(const SearchJob);
+  Q_D( const SearchJob );
   return d->charset;
 }
 
 void SearchJob::setSearchLogic( SearchLogic logic )
 {
-  Q_D(SearchJob);
+  Q_D( SearchJob );
   d->logic = logic;
 }
 
 void SearchJob::addSearchCriteria( SearchCriteria criteria )
 {
-  Q_D(SearchJob);
+  Q_D( SearchJob );
 
-  switch (criteria) {
+  switch ( criteria ) {
     case All:
     case Answered:
     case Deleted:
@@ -205,7 +209,7 @@ void SearchJob::addSearchCriteria( SearchCriteria criteria )
     case Undraft:
     case Unflagged:
     case Unseen:
-      d->criterias.append(d->criteriaMap[criteria]);
+      d->criterias.append( d->criteriaMap[criteria] );
       break;
     default:
       //TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
@@ -214,14 +218,13 @@ void SearchJob::addSearchCriteria( SearchCriteria criteria )
   }
 }
 
-
 void SearchJob::addSearchCriteria( SearchCriteria criteria, int argument )
 {
-  Q_D(SearchJob);
-  switch (criteria) {
+  Q_D( SearchJob );
+  switch ( criteria ) {
     case Larger:
     case Smaller:
-      d->criterias.append(d->criteriaMap[criteria] + ' ' + QByteArray::number(argument));
+      d->criterias.append( d->criteriaMap[criteria] + ' ' + QByteArray::number( argument ) );
       break;
     default:
       //TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
@@ -230,11 +233,10 @@ void SearchJob::addSearchCriteria( SearchCriteria criteria, int argument )
   }
 }
 
-
 void SearchJob::addSearchCriteria( SearchCriteria criteria, const QByteArray &argument )
 {
-  Q_D(SearchJob);
-  switch (criteria) {
+  Q_D( SearchJob );
+  switch ( criteria ) {
     case BCC:
     case Body:
     case CC:
@@ -242,14 +244,14 @@ void SearchJob::addSearchCriteria( SearchCriteria criteria, const QByteArray &ar
     case Subject:
     case Text:
     case To:
-      d->contents.append(argument);
-      d->criterias.append(d->criteriaMap[criteria] + " {" + QByteArray::number(argument.size()) + '}');
+      d->contents.append( argument );
+      d->criterias.append( d->criteriaMap[criteria] + " {" + QByteArray::number( argument.size() ) + '}' );
       break;
     case Keyword:
     case Unkeyword:
     case Header:
     case Uid:
-      d->criterias.append(d->criteriaMap[criteria] + ' ' + argument);
+      d->criterias.append( d->criteriaMap[criteria] + ' ' + argument );
       break;
     default:
       //TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
@@ -260,17 +262,17 @@ void SearchJob::addSearchCriteria( SearchCriteria criteria, const QByteArray &ar
 
 void SearchJob::addSearchCriteria( SearchCriteria criteria, const QDate &argument )
 {
-  Q_D(SearchJob);
-  switch (criteria) {
+  Q_D( SearchJob );
+  switch ( criteria ) {
     case Before:
     case On:
     case SentBefore:
     case SentSince:
     case Since: {
-      QByteArray date = QByteArray::number(argument.day()) + '-';
+      QByteArray date = QByteArray::number( argument.day() ) + '-';
       date += d->months[argument.month()] + '-';
-      date += QByteArray::number(argument.year());
-      d->criterias.append(d->criteriaMap[criteria] + " \"" + date + '\"');
+      date += QByteArray::number( argument.year() );
+      d->criterias.append( d->criteriaMap[criteria] + " \"" + date + '\"' );
       break;
     }
     default:
@@ -282,31 +284,31 @@ void SearchJob::addSearchCriteria( SearchCriteria criteria, const QDate &argumen
 
 void SearchJob::addSearchCriteria( const QByteArray &searchCriteria )
 {
-  Q_D(SearchJob);
-  d->criterias.append(searchCriteria);
+  Q_D( SearchJob );
+  d->criterias.append( searchCriteria );
 }
 
 void SearchJob::setUidBased(bool uidBased)
 {
-  Q_D(SearchJob);
+  Q_D( SearchJob );
   d->uidBased = uidBased;
 }
 
 bool SearchJob::isUidBased() const
 {
-  Q_D(const SearchJob);
+  Q_D( const SearchJob );
   return d->uidBased;
 }
 
 QList<qint64> SearchJob::results() const
 {
-  Q_D(const SearchJob);
+  Q_D( const SearchJob );
   return d->results;
 }
 
 QList<int> SearchJob::foundItems()
 {
-  Q_D(const SearchJob);
+  Q_D( const SearchJob );
 
   QList<int> results;
   qCopy( d->results.begin(), d->results.end(), results.begin() );

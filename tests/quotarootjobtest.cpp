@@ -34,7 +34,7 @@ class QuotaRootJobTest: public QObject {
 private Q_SLOTS:
 
 void testGetQuotaRoot_data() {
-  QTest::addColumn<QString>("mailbox");
+  QTest::addColumn<QString>( "mailbox" );
   QTest::addColumn<QList<QByteArray> >( "roots" );
   QTest::addColumn<QList<QByteArray> >( "resources" );
   QTest::addColumn<QList<qint64> >( "usages" );
@@ -92,7 +92,7 @@ void testGetQuotaRoot_data() {
            << "S: * QUOTA \"root2\" (STORAGE 30 5124)"
            << "S: A000001 OK GETQUOTA completed";
   QTest::newRow( "multiple roots, multiple resource" ) << "INBOX" << roots << resources << usages << limits << scenario;
-  
+
   roots.clear();
   resources.clear();
   usages.clear();
@@ -146,39 +146,38 @@ void testGetQuotaRoot_data() {
 void testGetQuotaRoot()
 {
     QFETCH( QString, mailbox );
-    QFETCH( QList<QByteArray>, roots);
-    QFETCH( QList<QByteArray>, resources);
-    QFETCH( QList<qint64>, usages);
-    QFETCH( QList<qint64>, limits);
+    QFETCH( QList<QByteArray>, roots );
+    QFETCH( QList<QByteArray>, resources );
+    QFETCH( QList<qint64>, usages );
+    QFETCH( QList<qint64>, limits );
     QFETCH( QList<QByteArray>, scenario );
 
     FakeServer fakeServer;
     fakeServer.setScenario( scenario );
     fakeServer.startAndWait();
 
-    KIMAP::Session session("127.0.0.1", 5989);
+    KIMAP::Session session( "127.0.0.1", 5989 );
 
-    KIMAP::GetQuotaRootJob *job = new KIMAP::GetQuotaRootJob(&session);
-    job->setMailBox(mailbox);
+    KIMAP::GetQuotaRootJob *job = new KIMAP::GetQuotaRootJob( &session );
+    job->setMailBox( mailbox );
     bool result = job->exec();
-    QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
-    QEXPECT_FAIL("no" , "Expected failure on NO response", Continue);
-    QVERIFY(result);
-    QEXPECT_FAIL("rootname missmatch" , "Expected failure on rootname missmatch in QUOTAROOT and QUOTA response", Abort);
-    QCOMPARE(job->roots(), roots);
-    for( int rootIdx = 0; rootIdx < roots.size() ;rootIdx++ ) {
-      const QByteArray& root = roots[rootIdx];
-      for( int i = 0; i < resources.size(); i++ ) {
+    QEXPECT_FAIL( "bad" , "Expected failure on BAD response", Continue );
+    QEXPECT_FAIL( "no" , "Expected failure on NO response", Continue );
+    QVERIFY( result );
+    QEXPECT_FAIL( "rootname missmatch" , "Expected failure on rootname missmatch in QUOTAROOT and QUOTA response", Abort );
+    QCOMPARE( job->roots(), roots );
+    for ( int rootIdx = 0; rootIdx < roots.size(); rootIdx++ ) {
+      const QByteArray &root = roots[rootIdx];
+      for ( int i = 0; i < resources.size(); i++ ) {
         int idx = i + rootIdx * roots.size();
         QByteArray resource = resources[i];
-        QCOMPARE(job->limit(root, resource), limits[idx] );
-        QCOMPARE(job->usage(root, resource), usages[idx] );
+        QCOMPARE( job->limit( root, resource ), limits[idx] );
+        QCOMPARE( job->usage( root, resource ), usages[idx] );
       }
     }
 
     fakeServer.quit();
 }
-
 
 };
 

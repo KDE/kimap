@@ -68,21 +68,20 @@ void testRename()
     fakeServer.setScenario( scenario );
     fakeServer.startAndWait();
 
-    KIMAP::Session session("127.0.0.1", 5989);
+    KIMAP::Session session( "127.0.0.1", 5989 );
 
-    KIMAP::RenameJob *job = new KIMAP::RenameJob(&session);
-    job->setSourceMailBox(mailbox);
-    job->setDestinationMailBox(newname);
+    KIMAP::RenameJob *job = new KIMAP::RenameJob( &session );
+    job->setSourceMailBox( mailbox );
+    job->setDestinationMailBox( newname );
     bool result = job->exec();
-    QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
-    QEXPECT_FAIL("no" , "Expected failure on NO response", Continue);
-    QVERIFY(result);
-    QCOMPARE(job->sourceMailBox(), mailbox);
-    QCOMPARE(job->destinationMailBox(), newname);
+    QEXPECT_FAIL( "bad" , "Expected failure on BAD response", Continue );
+    QEXPECT_FAIL( "no" , "Expected failure on NO response", Continue );
+    QVERIFY( result );
+    QCOMPARE( job->sourceMailBox(), mailbox );
+    QCOMPARE( job->destinationMailBox(), newname );
 
     fakeServer.quit();
 }
-
 
 };
 

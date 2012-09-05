@@ -44,7 +44,7 @@ QByteArray FakeServer::greeting()
 
 FakeServer::FakeServer( QObject* parent ) : QThread( parent )
 {
-     moveToThread(this);
+     moveToThread( this );
 }
 
 
@@ -63,10 +63,10 @@ void FakeServer::startAndWait()
 
 void FakeServer::dataAvailable()
 {
-    QMutexLocker locker(&m_mutex);
+    QMutexLocker locker( &m_mutex );
 
     QTcpSocket *socket = qobject_cast<QTcpSocket*>( sender() );
-    Q_ASSERT( socket!=0 );
+    Q_ASSERT( socket != 0 );
 
     int scenarioNumber = m_clientSockets.indexOf( socket );
 
@@ -78,10 +78,10 @@ void FakeServer::dataAvailable()
 
 void FakeServer::newConnection()
 {
-    QMutexLocker locker(&m_mutex);
+    QMutexLocker locker( &m_mutex );
 
     m_clientSockets << m_tcpServer->nextPendingConnection();
-    connect(m_clientSockets.last(), SIGNAL(readyRead()), this, SLOT(dataAvailable()));
+    connect( m_clientSockets.last(), SIGNAL(readyRead()), this, SLOT(dataAvailable()) );
     m_clientParsers << new KIMAP::ImapStreamParser( m_clientSockets.last(), true );
 
     QVERIFY( m_clientSockets.size() <= m_scenarios.size() );
@@ -96,7 +96,7 @@ void FakeServer::run()
         kFatal() << "Unable to start the server";
     }
 
-    connect(m_tcpServer, SIGNAL(newConnection()), this, SLOT(newConnection()));
+    connect( m_tcpServer, SIGNAL(newConnection()), this, SLOT(newConnection()) );
 
     exec();
 
@@ -113,7 +113,7 @@ void FakeServer::started()
 
 void FakeServer::setScenario( const QList<QByteArray> &scenario )
 {
-    QMutexLocker locker(&m_mutex);
+    QMutexLocker locker( &m_mutex );
 
     m_scenarios.clear();
     m_scenarios << scenario;
@@ -121,7 +121,7 @@ void FakeServer::setScenario( const QList<QByteArray> &scenario )
 
 void FakeServer::addScenario( const QList<QByteArray> &scenario )
 {
-    QMutexLocker locker(&m_mutex);
+    QMutexLocker locker( &m_mutex );
 
     m_scenarios << scenario;
 }
@@ -148,7 +148,7 @@ void FakeServer::addScenarioFromFile( const QString &fileName )
 
 bool FakeServer::isScenarioDone( int scenarioNumber ) const
 {
-  QMutexLocker locker(&m_mutex);
+  QMutexLocker locker( &m_mutex );
 
   if ( scenarioNumber < m_scenarios.size() ) {
     return m_scenarios[scenarioNumber].isEmpty();
@@ -175,8 +175,8 @@ void FakeServer::writeServerPart( int scenarioNumber )
     QList<QByteArray> scenario = m_scenarios[scenarioNumber];
     QTcpSocket *clientSocket = m_clientSockets[scenarioNumber];
 
-    while ( !scenario.isEmpty()
-         && ( scenario.first().startsWith( "S: " ) || scenario.first().startsWith( "W: " ) ) ) {
+    while ( !scenario.isEmpty() &&
+            ( scenario.first().startsWith( "S: " ) || scenario.first().startsWith( "W: " ) ) ) {
       QByteArray rule = scenario.takeFirst();
 
       if ( rule.startsWith( "S: " ) ) {
@@ -188,8 +188,8 @@ void FakeServer::writeServerPart( int scenarioNumber )
       }
     }
 
-    if ( !scenario.isEmpty()
-      && scenario.first().startsWith( "X" ) ) {
+    if ( !scenario.isEmpty() &&
+         scenario.first().startsWith( "X" ) ) {
       scenario.takeFirst();
       clientSocket->close();
     }
@@ -206,12 +206,12 @@ void FakeServer::readClientPart( int scenarioNumber )
     QList<QByteArray> scenario = m_scenarios[scenarioNumber];
     KIMAP::ImapStreamParser *clientParser = m_clientParsers[scenarioNumber];
 
-    while ( !scenario.isEmpty()
-         && scenario.first().startsWith( "C: " ) ) {
-        QByteArray received = "C: "+clientParser->readUntilCommandEnd().trimmed();
-        QByteArray expected = scenario.takeFirst();
-        QCOMPARE( QString::fromUtf8( received ), QString::fromUtf8( expected ) );
-        QCOMPARE( received, expected );
+    while ( !scenario.isEmpty() &&
+            scenario.first().startsWith( "C: " ) ) {
+      QByteArray received = "C: "+clientParser->readUntilCommandEnd().trimmed();
+      QByteArray expected = scenario.takeFirst();
+      QCOMPARE( QString::fromUtf8( received ), QString::fromUtf8( expected ) );
+      QCOMPARE( received, expected );
     }
 
     if ( !scenario.isEmpty() ) {

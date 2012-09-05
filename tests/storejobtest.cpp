@@ -74,15 +74,15 @@ void testStore()
     fakeServer.setScenario( scenario );
     fakeServer.startAndWait();
 
-    KIMAP::Session session("127.0.0.1", 5989);
+    KIMAP::Session session( "127.0.0.1", 5989 );
 
-    KIMAP::StoreJob *job = new KIMAP::StoreJob(&session);
+    KIMAP::StoreJob *job = new KIMAP::StoreJob( &session );
     job->setUidBased( uidBased );
     job->setSequenceSet( KIMAP::ImapSet( uidBased ? uid : id ) );
     job->setFlags( flags );
     job->setMode( KIMAP::StoreJob::SetFlags );
     bool result = job->exec();
-    QVERIFY(result);
+    QVERIFY( result );
     if ( uidBased ) {
       QVERIFY( job->resultingFlags().contains( uid ) );
     } else {
@@ -91,7 +91,6 @@ void testStore()
 
     fakeServer.quit();
 }
-
 
 };
 

@@ -30,7 +30,7 @@ namespace KIMAP
   class CloseJobPrivate : public JobPrivate
   {
     public:
-      CloseJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name) { }
+      CloseJobPrivate( Session *session, const QString& name ) : JobPrivate( session, name ) { }
       ~CloseJobPrivate() { }
   };
 }
@@ -38,7 +38,7 @@ namespace KIMAP
 using namespace KIMAP;
 
 CloseJob::CloseJob( Session *session )
-  : Job( *new CloseJobPrivate(session, i18n("Close")) )
+  : Job( *new CloseJobPrivate( session, i18n( "Close" ) ) )
 {
 }
 
@@ -48,7 +48,7 @@ CloseJob::~CloseJob()
 
 void CloseJob::doStart()
 {
-  Q_D(CloseJob);
+  Q_D( CloseJob );
   d->tags << d->sessionInternal()->sendCommand( "CLOSE" );
 }
 

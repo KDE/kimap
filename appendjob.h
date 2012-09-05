@@ -42,7 +42,7 @@ class AppendJobPrivate;
 class KIMAP_EXPORT AppendJob : public Job
 {
   Q_OBJECT
-  Q_DECLARE_PRIVATE(AppendJob)
+  Q_DECLARE_PRIVATE( AppendJob )
 
   friend class SessionPrivate;
 

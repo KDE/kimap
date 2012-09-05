@@ -30,7 +30,7 @@ namespace KIMAP
   class AclJobBasePrivate : public JobPrivate
   {
     public:
-      AclJobBasePrivate( Session *session, const QString& name ) : JobPrivate(session, name), rightList(Acl::None), modifier(AclJobBase::Change)
+      AclJobBasePrivate( Session *session, const QString& name ) : JobPrivate( session, name ), rightList( Acl::None ), modifier( AclJobBase::Change )
       {
       }
       ~AclJobBasePrivate() { }

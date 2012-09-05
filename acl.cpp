@@ -29,8 +29,7 @@ namespace Acl {
 class RightsMap
 {
   public:
-    RightsMap()
-    {
+    RightsMap() {
       map['l'] = Lookup;
       map['r'] = Read;
       map['s'] = KeepSeen;
@@ -60,7 +59,7 @@ class RightsMap
     QMap<char, Right> map;
 };
 
-K_GLOBAL_STATIC(RightsMap, globalRights)
+K_GLOBAL_STATIC( RightsMap, globalRights )
 
 }
 }
@@ -69,11 +68,12 @@ KIMAP::Acl::Rights KIMAP::Acl::rightsFromString( const QByteArray &string )
 {
   Rights result;
 
-  if ( string.isEmpty() )
+  if ( string.isEmpty() ) {
     return result;
+  }
 
   int pos = 0;
-  if ( string[0] == '+' || string[0]== '-') { // Skip modifier if any
+  if ( string[0] == '+' || string[0] == '-' ) { // Skip modifier if any
     pos++;
   }
 
@@ -90,9 +90,9 @@ QByteArray KIMAP::Acl::rightsToString( Rights rights )
 {
   QByteArray result;
 
-  for ( int right = Lookup; right<=Custom9; right<<=1 ) {
+  for ( int right = Lookup; right <= Custom9; right <<= 1 ) {
     if ( rights & right ) {
-      result+= globalRights->map.key( (Right)right );
+      result += globalRights->map.key( (Right)right );
     }
   }
 

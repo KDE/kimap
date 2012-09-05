@@ -30,8 +30,8 @@
 #include "kimaptest/fakeserver.h"
 #include "kimaptest/mockjob.h"
 
-Q_DECLARE_METATYPE(KIMAP::Session::State)
-Q_DECLARE_METATYPE(KJob*)
+Q_DECLARE_METATYPE( KIMAP::Session::State )
+Q_DECLARE_METATYPE( KJob* )
 
 class SessionTest : public QObject
 {
@@ -58,25 +58,25 @@ class SessionTest : public QObject
       QCOMPARE( ( int )s.state(), ( int )KIMAP::Session::NotAuthenticated );
       QCOMPARE( spy.count(), 1 ); // NotAuthenticated
       QList<QVariant> arguments = spy.takeFirst();
-      QCOMPARE( ( int )qvariant_cast<KIMAP::Session::State>(arguments.at(0)), ( int )KIMAP::Session::NotAuthenticated);
-      QCOMPARE( ( int )qvariant_cast<KIMAP::Session::State>(arguments.at(1)), ( int )KIMAP::Session::Disconnected);
+      QCOMPARE( ( int )qvariant_cast<KIMAP::Session::State>( arguments.at( 0 ) ), ( int )KIMAP::Session::NotAuthenticated );
+      QCOMPARE( ( int )qvariant_cast<KIMAP::Session::State>( arguments.at( 1 ) ), ( int )KIMAP::Session::Disconnected );
     }
 
     void shouldFailForInvalidHosts()
     {
       KIMAP::Session s( "0.0.0.0", 1234 );
-      s.setTimeout(1); // 1 second timout
+      s.setTimeout( 1 ); // 1 second timout
 
-      QSignalSpy spyFail(&s, SIGNAL(connectionFailed()));
-      QSignalSpy spyLost(&s, SIGNAL(connectionLost()));
-      QSignalSpy spyState(&s, SIGNAL(stateChanged(KIMAP::Session::State,KIMAP::Session::State)));
+      QSignalSpy spyFail( &s, SIGNAL(connectionFailed()) );
+      QSignalSpy spyLost( &s, SIGNAL(connectionLost()) );
+      QSignalSpy spyState( &s, SIGNAL(stateChanged(KIMAP::Session::State,KIMAP::Session::State)) );
 
       QCOMPARE( ( int )s.state(), ( int )KIMAP::Session::Disconnected );
 
       QTest::qWait( 500 );
       QCOMPARE( ( int )s.state(), ( int )KIMAP::Session::Disconnected );
       QCOMPARE ( spyFail.count(), 1 );
-      QEXPECT_FAIL("", "FIXME KDE5: Don't emit connectionLost() on a failed connection", Continue);
+      QEXPECT_FAIL( "", "FIXME KDE5: Don't emit connectionLost() on a failed connection", Continue );
       QCOMPARE ( spyLost.count(), 0 );
       QCOMPARE ( spyState.count(), 0 );
 
@@ -97,10 +97,10 @@ class SessionTest : public QObject
       fakeServer.startAndWait();
 
       KIMAP::Session s( "127.0.0.1", 5989 );
-      s.setTimeout(2);
-      QSignalSpy spyFail(&s, SIGNAL(connectionFailed()));
-      QSignalSpy spyLost(&s, SIGNAL(connectionLost()));
-      QSignalSpy spyState(&s, SIGNAL(stateChanged(KIMAP::Session::State,KIMAP::Session::State)));
+      s.setTimeout( 2 );
+      QSignalSpy spyFail( &s, SIGNAL(connectionFailed()) );
+      QSignalSpy spyLost( &s, SIGNAL(connectionLost()) );
+      QSignalSpy spyState( &s, SIGNAL(stateChanged(KIMAP::Session::State,KIMAP::Session::State)) );
       QCOMPARE( ( int )s.state(), ( int )KIMAP::Session::Disconnected );
 
       // Wait 1.8 second. Since the timeout is set to 2 seconds, the socket should be still
@@ -135,8 +135,8 @@ class SessionTest : public QObject
       QCOMPARE( ( int )s.state(), ( int )KIMAP::Session::Authenticated );
       QCOMPARE( spy.count(), 1 ); // Authenticated
       QList<QVariant> arguments = spy.takeFirst();
-      QCOMPARE( ( int )qvariant_cast<KIMAP::Session::State>(arguments.at(0)), ( int )KIMAP::Session::Authenticated);
-      QCOMPARE( ( int )qvariant_cast<KIMAP::Session::State>(arguments.at(1)), ( int )KIMAP::Session::Disconnected);
+      QCOMPARE( ( int )qvariant_cast<KIMAP::Session::State>( arguments.at( 0 ) ), ( int )KIMAP::Session::Authenticated );
+      QCOMPARE( ( int )qvariant_cast<KIMAP::Session::State>( arguments.at( 1 ) ), ( int )KIMAP::Session::Disconnected );
     }
 
     void shouldRespectStartOrder()
@@ -147,15 +147,15 @@ class SessionTest : public QObject
       );
       fakeServer.startAndWait();
 
-      KIMAP::Session s("127.0.0.1", 5989);
-      MockJob *j1 = new MockJob(&s);
-      connect(j1, SIGNAL(result(KJob*)), this, SLOT(jobDone(KJob*)));
-      MockJob *j2 = new MockJob(&s);
-      connect(j2, SIGNAL(result(KJob*)), this, SLOT(jobDone(KJob*)));
-      MockJob *j3 = new MockJob(&s);
-      connect(j3, SIGNAL(result(KJob*)), this, SLOT(jobDone(KJob*)));
-      MockJob *j4 = new MockJob(&s);
-      connect(j4, SIGNAL(result(KJob*)), this, SLOT(jobDone(KJob*)));
+      KIMAP::Session s( "127.0.0.1", 5989 );
+      MockJob *j1 = new MockJob( &s );
+      connect( j1, SIGNAL(result(KJob*)), this, SLOT(jobDone(KJob*)) );
+      MockJob *j2 = new MockJob( &s );
+      connect( j2, SIGNAL(result(KJob*)), this, SLOT(jobDone(KJob*)) );
+      MockJob *j3 = new MockJob( &s );
+      connect( j3, SIGNAL(result(KJob*)), this, SLOT(jobDone(KJob*)) );
+      MockJob *j4 = new MockJob( &s );
+      connect( j4, SIGNAL(result(KJob*)), this, SLOT(jobDone(KJob*)) );
 
       j4->start();
       j2->start();
@@ -165,11 +165,11 @@ class SessionTest : public QObject
       m_expectedCalls = 4;
       m_eventLoop.exec();
 
-      QCOMPARE(m_jobs.size(), 4);
-      QCOMPARE(m_jobs[0], j4);
-      QCOMPARE(m_jobs[1], j2);
-      QCOMPARE(m_jobs[2], j3);
-      QCOMPARE(m_jobs[3], j1);
+      QCOMPARE( m_jobs.size(), 4 );
+      QCOMPARE( m_jobs[0], j4 );
+      QCOMPARE( m_jobs[1], j2 );
+      QCOMPARE( m_jobs[2], j3 );
+      QCOMPARE( m_jobs[3], j1 );
     }
 
     void shouldManageQueueSize()
@@ -180,17 +180,17 @@ class SessionTest : public QObject
       );
       fakeServer.startAndWait();
 
-      KIMAP::Session s("127.0.0.1", 5989);
+      KIMAP::Session s( "127.0.0.1", 5989 );
 
-      QSignalSpy queueSpy(&s, SIGNAL(jobQueueSizeChanged(int)));
+      QSignalSpy queueSpy( &s, SIGNAL(jobQueueSizeChanged(int)) );
 
       QCOMPARE( s.jobQueueSize(), 0 );
 
-      MockJob *j1 = new MockJob(&s);
-      MockJob *j2 = new MockJob(&s);
-      MockJob *j3 = new MockJob(&s);
-      MockJob *j4 = new MockJob(&s);
-      connect(j4, SIGNAL(result(KJob*)), &m_eventLoop, SLOT(quit()));
+      MockJob *j1 = new MockJob( &s );
+      MockJob *j2 = new MockJob( &s );
+      MockJob *j3 = new MockJob( &s );
+      MockJob *j4 = new MockJob( &s );
+      connect( j4, SIGNAL(result(KJob*)), &m_eventLoop, SLOT(quit()) );
 
       QCOMPARE( s.jobQueueSize(), 0 );
 
@@ -250,16 +250,16 @@ class SessionTest : public QObject
 
       KIMAP::Session s( "127.0.0.1", 5989 );
 
-      QSignalSpy spyFail(&s, SIGNAL(connectionFailed()));
-      QSignalSpy spyLost(&s, SIGNAL(connectionLost()));
-      QSignalSpy spyState(&s, SIGNAL(stateChanged(KIMAP::Session::State,KIMAP::Session::State)));
+      QSignalSpy spyFail( &s, SIGNAL(connectionFailed()) );
+      QSignalSpy spyLost( &s, SIGNAL(connectionLost()) );
+      QSignalSpy spyState( &s, SIGNAL(stateChanged(KIMAP::Session::State,KIMAP::Session::State)) );
 
-      MockJob *mock = new MockJob(&s);
-      mock->setCommand("DUMMY");
+      MockJob *mock = new MockJob( &s );
+      mock->setCommand( "DUMMY" );
 
       mock->exec();
       // We expect to get an error here due to some timeout
-      QVERIFY( mock->error()!=0 );
+      QVERIFY( mock->error() != 0 );
       QCOMPARE( spyFail.count(), 0 );
       QCOMPARE( spyLost.count(), 1 );
       QCOMPARE( spyState.count(), 2 ); // Authenticated, Disconnected
@@ -274,27 +274,27 @@ class SessionTest : public QObject
       fakeServer.startAndWait();
 
       KIMAP::Session s( "127.0.0.1", 5989 );
-      s.setTimeout(1);
+      s.setTimeout( 1 );
 
-      MockJob *j1 = new MockJob(&s);
-      QSignalSpy spyResult1(j1, SIGNAL(result(KJob*)));
-      QSignalSpy spyDestroyed1(j1, SIGNAL(destroyed()));
+      MockJob *j1 = new MockJob( &s );
+      QSignalSpy spyResult1( j1, SIGNAL(result(KJob*)) );
+      QSignalSpy spyDestroyed1( j1, SIGNAL(destroyed()) );
 
-      MockJob *j2 = new MockJob(&s);
-      QSignalSpy spyResult2(j2, SIGNAL(result(KJob*)));
-      QSignalSpy spyDestroyed2(j2, SIGNAL(destroyed()));
+      MockJob *j2 = new MockJob( &s );
+      QSignalSpy spyResult2( j2, SIGNAL(result(KJob*)) );
+      QSignalSpy spyDestroyed2( j2, SIGNAL(destroyed()) );
 
-      MockJob *j3 = new MockJob(&s);
-      QSignalSpy spyResult3(j3, SIGNAL(result(KJob*)));
-      QSignalSpy spyDestroyed3(j3, SIGNAL(destroyed()));
+      MockJob *j3 = new MockJob( &s );
+      QSignalSpy spyResult3( j3, SIGNAL(result(KJob*)) );
+      QSignalSpy spyDestroyed3( j3, SIGNAL(destroyed()) );
 
       j1->start();
       j2->start();
       j3->start();
 
-      QCOMPARE( s.jobQueueSize(), 3);
+      QCOMPARE( s.jobQueueSize(), 3 );
 
-      QTest::qWait(1100);
+      QTest::qWait( 1100 );
 
       // Check that only the first job has emitted it's result
       QCOMPARE( spyResult1.count(), 1 );
@@ -306,12 +306,12 @@ class SessionTest : public QObject
       QCOMPARE( spyDestroyed2.count(), 1 );
       QCOMPARE( spyDestroyed3.count(), 1 );
 
-      QCOMPARE( s.jobQueueSize(), 0);
+      QCOMPARE( s.jobQueueSize(), 0 );
     }
 
     void shouldCloseOnInconsistency()
     {
-      for (int count=0; count<10; count++) {
+      for ( int count = 0; count < 10; count++ ) {
         FakeServer fakeServer;
         fakeServer.setScenario( QList<QByteArray>()
            << FakeServer::preauth()
@@ -323,19 +323,19 @@ class SessionTest : public QObject
 
         KIMAP::Session s( "127.0.0.1", 5989 );
 
-        QSignalSpy spyFail(&s, SIGNAL(connectionFailed()));
-        QSignalSpy spyLost(&s, SIGNAL(connectionLost()));
-        QSignalSpy spyState(&s, SIGNAL(stateChanged(KIMAP::Session::State,KIMAP::Session::State)));
+        QSignalSpy spyFail( &s, SIGNAL(connectionFailed()) );
+        QSignalSpy spyLost( &s, SIGNAL(connectionLost()) );
+        QSignalSpy spyState( &s, SIGNAL(stateChanged(KIMAP::Session::State,KIMAP::Session::State)) );
 
-        MockJob *mock = new MockJob(&s);
-        mock->setTimeout(5000);
-        mock->setCommand("DUMMY");
+        MockJob *mock = new MockJob( &s );
+        mock->setTimeout( 5000 );
+        mock->setCommand( "DUMMY" );
 
         mock->start();
-        QTest::qWait(250); // Should be plenty
+        QTest::qWait( 250 ); // Should be plenty
 
         // We expect to get an error here due to the inconsistency
-        QVERIFY( mock->error()!=0 );
+        QVERIFY( mock->error() != 0 );
         QCOMPARE( spyFail.count(), 0 );
         QCOMPARE( spyLost.count(), 1 );
         QCOMPARE( spyState.count(), 2 ); // Authenticated, Disconnected
@@ -347,7 +347,7 @@ class SessionTest : public QObject
     {
       m_jobs << job;
 
-      if (m_expectedCalls==m_jobs.size()) {
+      if ( m_expectedCalls == m_jobs.size() ) {
         m_eventLoop.quit();
       }
     }
@@ -358,6 +358,6 @@ class SessionTest : public QObject
     QList<KJob*> m_jobs;
 };
 
-QTEST_MAIN(SessionTest)
+QTEST_MAIN( SessionTest )
 
 #include "testsession.moc"

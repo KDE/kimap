@@ -32,7 +32,7 @@ namespace KIMAP
   {
     public:
       IdleJobPrivate( IdleJob *job, Session *session, const QString& name )
-        : JobPrivate( session, name ), q(job),
+        : JobPrivate( session, name ), q( job ),
           messageCount( -1 ), recentCount( -1 ),
           lastMessageCount( -1 ), lastRecentCount( -1 ),
           originalSocketTimeout( -1 ) { }
@@ -42,8 +42,8 @@ namespace KIMAP
       {
         emitStatsTimer.stop();
 
-        emit q->mailBoxStats(q, m_session->selectedMailBox(),
-                             messageCount, recentCount);
+        emit q->mailBoxStats( q, m_session->selectedMailBox(),
+                              messageCount, recentCount );
 
         lastMessageCount = messageCount;
         lastRecentCount = recentCount;
@@ -69,9 +69,9 @@ namespace KIMAP
 using namespace KIMAP;
 
 IdleJob::IdleJob( Session *session )
-  : Job( *new IdleJobPrivate(this, session, i18nc("name of the idle job", "Idle")) )
+  : Job( *new IdleJobPrivate( this, session, i18nc( "name of the idle job", "Idle" ) ) )
 {
-  Q_D(IdleJob);
+  Q_D( IdleJob );
   connect( &d->emitStatsTimer, SIGNAL(timeout()),
            this, SLOT(emitStats()) );
 }
@@ -82,14 +82,14 @@ IdleJob::~IdleJob()
 
 void KIMAP::IdleJob::stop()
 {
-  Q_D(IdleJob);
+  Q_D( IdleJob );
   d->sessionInternal()->setSocketTimeout( d->originalSocketTimeout );
   d->sessionInternal()->sendData( "DONE" );
 }
 
 void IdleJob::doStart()
 {
-  Q_D(IdleJob);
+  Q_D( IdleJob );
   d->originalSocketTimeout = d->sessionInternal()->socketTimeout();
   d->sessionInternal()->setSocketTimeout( -1 );
   d->tags << d->sessionInternal()->sendCommand( "IDLE" );
@@ -97,33 +97,32 @@ void IdleJob::doStart()
 
 void IdleJob::handleResponse( const Message &response )
 {
-  Q_D(IdleJob);
+  Q_D( IdleJob );
 
   // We can predict it'll be handled by handleErrorReplies() so emit
   // pending signals now (if needed) so that result() will really be
   // the last emitted signal.
-  if ( !response.content.isEmpty()
-       && d->tags.size() == 1
-       && d->tags.contains( response.content.first().toString() )
-       && ( d->messageCount>=0 || d->recentCount>=0 ) ) {
+  if ( !response.content.isEmpty() &&
+       d->tags.size() == 1 &&
+       d->tags.contains( response.content.first().toString() ) &&
+       ( d->messageCount >= 0 || d->recentCount >= 0 ) ) {
     d->emitStats();
   }
 
-
-  if (handleErrorReplies(response) == NotHandled ) {
-    if ( response.content.size() > 0 && response.content[0].toString()=="+" ) {
+  if ( handleErrorReplies( response ) == NotHandled  ) {
+    if ( response.content.size() > 0 && response.content[0].toString() == "+" ) {
       // Got the continuation all is fine
       return;
 
     } else if ( response.content.size() > 2 ) {
-        if ( response.content[2].toString()=="EXISTS" ) {
-        if ( d->messageCount>=0 ) {
+        if ( response.content[2].toString() == "EXISTS" ) {
+        if ( d->messageCount >= 0 ) {
           d->emitStats();
         }
 
         d->messageCount = response.content[1].toString().toInt();
-      } else if ( response.content[2].toString()=="RECENT" ) {
-        if ( d->recentCount>=0 ) {
+      } else if ( response.content[2].toString() == "RECENT" ) {
+        if ( d->recentCount >= 0 ) {
           d->emitStats();
         }
 
@@ -141,19 +140,19 @@ void IdleJob::handleResponse( const Message &response )
 
 QString KIMAP::IdleJob::lastMailBox() const
 {
-  Q_D(const IdleJob);
+  Q_D( const IdleJob );
   return d->m_session->selectedMailBox();
 }
 
 int KIMAP::IdleJob::lastMessageCount() const
 {
-  Q_D(const IdleJob);
+  Q_D( const IdleJob );
   return d->lastMessageCount;
 }
 
 int KIMAP::IdleJob::lastRecentCount() const
 {
-  Q_D(const IdleJob);
+  Q_D( const IdleJob );
   return d->lastRecentCount;
 }
 

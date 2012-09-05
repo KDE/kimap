@@ -27,7 +27,7 @@
 #include <QtTest>
 #include <KDebug>
 
-Q_DECLARE_METATYPE(KIMAP::FetchJob::FetchScope)
+Q_DECLARE_METATYPE( KIMAP::FetchJob::FetchScope )
 
 class FetchJobTest: public QObject {
   Q_OBJECT
@@ -141,9 +141,9 @@ void testFetch()
     fakeServer.setScenario( scenario );
     fakeServer.startAndWait();
 
-    KIMAP::Session session("127.0.0.1", 5989);
+    KIMAP::Session session( "127.0.0.1", 5989 );
 
-    KIMAP::FetchJob *job = new KIMAP::FetchJob(&session);
+    KIMAP::FetchJob *job = new KIMAP::FetchJob( &session );
     job->setUidBased( uidBased );
     job->setSequenceSet( set );
     job->setScope( scope );
@@ -161,12 +161,12 @@ void testFetch()
 
 
     bool result = job->exec();
-    QEXPECT_FAIL("connection drop", "Expected failure on connection drop", Continue);
-    QEXPECT_FAIL("buffer overwrite", "Expected failure on confused list", Continue);
-    QEXPECT_FAIL("buffer overwrite 2", "Expected beginning of message missing", Continue);
+    QEXPECT_FAIL( "connection drop", "Expected failure on connection drop", Continue );
+    QEXPECT_FAIL( "buffer overwrite", "Expected failure on confused list", Continue );
+    QEXPECT_FAIL( "buffer overwrite 2", "Expected beginning of message missing", Continue );
     QVERIFY( result );
     if ( result ) {
-      QVERIFY( m_signals.count()>0 );
+      QVERIFY( m_signals.count() > 0 );
       QCOMPARE( m_uids.count(), expectedMessageCount );
     }
 
@@ -197,9 +197,9 @@ void testFetchStructure()
   fakeServer.setScenario( scenario );
   fakeServer.startAndWait();
 
-  KIMAP::Session session("127.0.0.1", 5989);
+  KIMAP::Session session( "127.0.0.1", 5989 );
 
-  KIMAP::FetchJob *job = new KIMAP::FetchJob(&session);
+  KIMAP::FetchJob *job = new KIMAP::FetchJob( &session );
   job->setUidBased( false );
   job->setSequenceSet( KIMAP::ImapSet( 1, 2 ) );
   job->setScope( scope );
@@ -213,7 +213,7 @@ void testFetchStructure()
   QCOMPARE( m_uids.count(), 2 );
   QCOMPARE( m_messages[1]->attachments().count(), 0 );
   QCOMPARE( m_messages[2]->attachments().count(), 3 );
-  QCOMPARE( m_messages[2]->attachments().at(2)->contentDisposition()->filename(), QString("photo.jpg") );
+  QCOMPARE( m_messages[2]->attachments().at( 2 )->contentDisposition()->filename(), QString( "photo.jpg" ) );
 
   fakeServer.quit();
 
@@ -236,15 +236,15 @@ void testFetchParts()
   KIMAP::FetchJob::FetchScope scope;
   scope.mode = KIMAP::FetchJob::FetchScope::HeaderAndContent;
   scope.parts.clear();
-  scope.parts.append("1.1.1");
+  scope.parts.append( "1.1.1" );
 
   FakeServer fakeServer;
   fakeServer.setScenario( scenario );
   fakeServer.startAndWait();
 
-  KIMAP::Session session("127.0.0.1", 5989);
+  KIMAP::Session session( "127.0.0.1", 5989 );
 
-  KIMAP::FetchJob *job = new KIMAP::FetchJob(&session);
+  KIMAP::FetchJob *job = new KIMAP::FetchJob( &session );
   job->setUidBased( false );
   job->setSequenceSet( KIMAP::ImapSet( 2, 2 ) );
   job->setScope( scope );
@@ -259,25 +259,25 @@ void testFetchParts()
   QVERIFY( result );
   QVERIFY( m_signals.count() > 0 );
   QCOMPARE( m_uids.count(), 1 );
-  QCOMPARE (m_parts.count(), 1 );
+  QCOMPARE( m_parts.count(), 1 );
 
   // Check that we received the message header
-  QCOMPARE( m_messages[2]->messageID()->identifier(), QByteArray("1234@example.com") );
+  QCOMPARE( m_messages[2]->messageID()->identifier(), QByteArray( "1234@example.com" ) );
 
   // Check that we recieved the flags
   QMap<qint64, KIMAP::MessageFlags> expectedFlags;
-  expectedFlags.insert(2, KIMAP::MessageFlags() << "\\Seen");
+  expectedFlags.insert( 2, KIMAP::MessageFlags() << "\\Seen" );
   QCOMPARE( m_flags, expectedFlags );
 
   // Check that we didn't received the full message body, since we only requested a specific part
   QCOMPARE( m_messages[2]->decodedText().length(), 0 );
-  QCOMPARE( m_messages[2]->attachments().count(), 0);
+  QCOMPARE( m_messages[2]->attachments().count(), 0 );
 
   // Check that we received the part we requested
   QByteArray partId = m_parts[2].keys().first();
-  QString text = m_parts[2].value(partId)->decodedText(true, true);
-  QCOMPARE( partId, QByteArray("1.1.1"));
-  QCOMPARE( text, QString("Hi Jane, nice to meet you!")) ;
+  QString text = m_parts[2].value( partId )->decodedText( true, true );
+  QCOMPARE( partId, QByteArray( "1.1.1" ) );
+  QCOMPARE( text, QString( "Hi Jane, nice to meet you!" ) ) ;
 
   fakeServer.quit();
 

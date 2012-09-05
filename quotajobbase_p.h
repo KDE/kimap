@@ -29,7 +29,7 @@ namespace KIMAP
   class QuotaJobBasePrivate : public JobPrivate
   {
     public:
-      QuotaJobBasePrivate( Session *session, const QString& name ) : JobPrivate(session, name)
+      QuotaJobBasePrivate( Session *session, const QString& name ) : JobPrivate( session, name )
       {}
 
       ~QuotaJobBasePrivate() { }

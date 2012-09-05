@@ -32,7 +32,7 @@ namespace KIMAP
   class DeleteJobPrivate : public JobPrivate
   {
     public:
-      DeleteJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name) { }
+      DeleteJobPrivate( Session *session, const QString& name ) : JobPrivate( session, name ) { }
       ~DeleteJobPrivate() { }
 
       QString mailBox;
@@ -42,7 +42,7 @@ namespace KIMAP
 using namespace KIMAP;
 
 DeleteJob::DeleteJob( Session *session )
-  : Job( *new DeleteJobPrivate(session, i18n("Delete")) )
+  : Job( *new DeleteJobPrivate( session, i18n( "Delete" ) ) )
 {
 }
 
@@ -52,19 +52,19 @@ DeleteJob::~DeleteJob()
 
 void DeleteJob::doStart()
 {
-  Q_D(DeleteJob);
-  d->tags << d->sessionInternal()->sendCommand( "DELETE", '\"'+KIMAP::encodeImapFolderName( d->mailBox.toUtf8() )+'\"' );
+  Q_D( DeleteJob );
+  d->tags << d->sessionInternal()->sendCommand( "DELETE", '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + '\"' );
 }
 
 void DeleteJob::setMailBox( const QString &mailBox )
 {
-  Q_D(DeleteJob);
+  Q_D( DeleteJob );
   d->mailBox = mailBox;
 }
 
 QString DeleteJob::mailBox() const
 {
-  Q_D(const DeleteJob);
+  Q_D( const DeleteJob );
   return d->mailBox;
 }
 

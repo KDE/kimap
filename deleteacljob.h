@@ -47,7 +47,7 @@ class DeleteAclJobPrivate;
 class KIMAP_EXPORT DeleteAclJob : public AclJobBase
 {
   Q_OBJECT
-  Q_DECLARE_PRIVATE(DeleteAclJob)
+  Q_DECLARE_PRIVATE( DeleteAclJob )
 
   friend class SessionPrivate;
 

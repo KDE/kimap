@@ -77,16 +77,16 @@ void shouldHandleLogin()
   fakeServer.setScenario( scenario );
   fakeServer.startAndWait();
 
-  KIMAP::Session *session = new KIMAP::Session("127.0.0.1", 5989);
+  KIMAP::Session *session = new KIMAP::Session( "127.0.0.1", 5989 );
 
-  KIMAP::LoginJob *login = new KIMAP::LoginJob(session);
-  login->setUserName(user);
-  login->setPassword(password);
+  KIMAP::LoginJob *login = new KIMAP::LoginJob( session );
+  login->setUserName( user );
+  login->setPassword( password );
   bool result = login->exec();
 
-  QEXPECT_FAIL("wrong login","Login with bad user name", Continue);
-  QEXPECT_FAIL("already authenticated","Trying to log on an already authenticated session", Continue);
-  QVERIFY(result);
+  QEXPECT_FAIL( "wrong login","Login with bad user name", Continue );
+  QEXPECT_FAIL( "already authenticated","Trying to log on an already authenticated session", Continue );
+  QVERIFY( result );
 
   fakeServer.quit();
   delete session;
@@ -119,16 +119,16 @@ void shouldHandleProxyLogin()
   fakeServer.setScenario( scenario );
   fakeServer.startAndWait();
 
-  KIMAP::Session *session = new KIMAP::Session("127.0.0.1", 5989);
+  KIMAP::Session *session = new KIMAP::Session( "127.0.0.1", 5989 );
 
-  KIMAP::LoginJob *login = new KIMAP::LoginJob(session);
-  login->setAuthenticationMode(KIMAP::LoginJob::Plain);
-  login->setUserName(user);
-  login->setAuthorizationName(proxy);
-  login->setPassword(password);
+  KIMAP::LoginJob *login = new KIMAP::LoginJob( session );
+  login->setAuthenticationMode( KIMAP::LoginJob::Plain );
+  login->setUserName( user );
+  login->setAuthorizationName( proxy );
+  login->setPassword( password );
   bool result = login->exec();
 
-  QVERIFY(result);
+  QVERIFY( result );
 
   fakeServer.quit();
   delete session;
@@ -177,14 +177,14 @@ void shouldSaveServerGreeting()
   fakeServer.setScenario( scenario );
   fakeServer.startAndWait();
 
-  KIMAP::Session *session = new KIMAP::Session("127.0.0.1", 5989);
+  KIMAP::Session *session = new KIMAP::Session( "127.0.0.1", 5989 );
 
-  KIMAP::LoginJob *login = new KIMAP::LoginJob(session);
-  login->setUserName("user");
-  login->setPassword("password");
+  KIMAP::LoginJob *login = new KIMAP::LoginJob( session );
+  login->setUserName( "user" );
+  login->setPassword( "password" );
   login->exec();
 
-  QCOMPARE(login->serverGreeting(), greeting);
+  QCOMPARE( login->serverGreeting(), greeting );
 
   fakeServer.quit();
   delete session;

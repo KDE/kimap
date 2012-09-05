@@ -353,8 +353,9 @@ const QString KIMAP::decodeRFC2047String( const QString &str,
     for ( i = 2, pos += 2;
           i < maxLen &&
               ( *pos != '?' && ( ispunct( *pos ) || isalnum ( *pos ) ) );
-          i++ )
+          i++ ) {
       pos++;
+    }
     if ( *pos != '?' || i < 4 || i >= maxLen ) {
       valid = false;
     } else {

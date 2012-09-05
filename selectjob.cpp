@@ -33,8 +33,8 @@ namespace KIMAP
   {
     public:
       SelectJobPrivate( Session *session, const QString& name )
-        : JobPrivate(session, name), readOnly(false), messageCount(-1), recentCount(-1),
-          firstUnseenIndex(-1), uidValidity(-1), nextUid(-1) { }
+        : JobPrivate( session, name ), readOnly( false ), messageCount( -1 ), recentCount( -1 ),
+          firstUnseenIndex( -1 ), uidValidity( -1 ), nextUid( -1 ) { }
       ~SelectJobPrivate() { }
 
       QString mailBox;
@@ -53,7 +53,7 @@ namespace KIMAP
 using namespace KIMAP;
 
 SelectJob::SelectJob( Session *session )
-  : Job( *new SelectJobPrivate(session, i18nc("name of the select job", "Select")) )
+  : Job( *new SelectJobPrivate( session, i18nc( "name of the select job", "Select" ) ) )
 {
 }
 
@@ -63,73 +63,73 @@ SelectJob::~SelectJob()
 
 void SelectJob::setMailBox( const QString &mailBox )
 {
-  Q_D(SelectJob);
+  Q_D( SelectJob );
   d->mailBox = mailBox;
 }
 
 QString SelectJob::mailBox() const
 {
-  Q_D(const SelectJob);
+  Q_D( const SelectJob );
   return d->mailBox;
 }
 
 void SelectJob::setOpenReadOnly( bool readOnly )
 {
-  Q_D(SelectJob);
+  Q_D( SelectJob );
   d->readOnly = readOnly;
 }
 
 bool SelectJob::isOpenReadOnly() const
 {
-  Q_D(const SelectJob);
+  Q_D( const SelectJob );
   return d->readOnly;
 }
 
 QList<QByteArray> SelectJob::flags() const
 {
-  Q_D(const SelectJob);
+  Q_D( const SelectJob );
   return d->flags;
 }
 
 QList<QByteArray> SelectJob::permanentFlags() const
 {
-  Q_D(const SelectJob);
+  Q_D( const SelectJob );
   return d->permanentFlags;
 }
 
 int SelectJob::messageCount() const
 {
-  Q_D(const SelectJob);
+  Q_D( const SelectJob );
   return d->messageCount;
 }
 
 int SelectJob::recentCount() const
 {
-  Q_D(const SelectJob);
+  Q_D( const SelectJob );
   return d->recentCount;
 }
 
 int SelectJob::firstUnseenIndex() const
 {
-  Q_D(const SelectJob);
+  Q_D( const SelectJob );
   return d->firstUnseenIndex;
 }
 
 qint64 SelectJob::uidValidity() const
 {
-  Q_D(const SelectJob);
+  Q_D( const SelectJob );
   return d->uidValidity;
 }
 
 qint64 SelectJob::nextUid() const
 {
-  Q_D(const SelectJob);
+  Q_D( const SelectJob );
   return d->nextUid;
 }
 
 void SelectJob::doStart()
 {
-  Q_D(SelectJob);
+  Q_D( SelectJob );
 
   QByteArray command = "SELECT";
   if ( d->readOnly ) {
@@ -141,47 +141,55 @@ void SelectJob::doStart()
 
 void SelectJob::handleResponse( const Message &response )
 {
-  Q_D(SelectJob);
+  Q_D( SelectJob );
 
-  if ( handleErrorReplies(response) == NotHandled) {
+  if ( handleErrorReplies( response ) == NotHandled ) {
       if ( response.content.size() >= 2 ) {
         QByteArray code = response.content[1].toString();
 
-        if ( code=="OK" ) {
-          if ( response.responseCode.size() < 2 ) return;
+        if ( code == "OK" ) {
+          if ( response.responseCode.size() < 2 ) {
+            return;
+          }
 
           code = response.responseCode[0].toString();
 
-          if ( code=="PERMANENTFLAGS" ) {
+          if ( code == "PERMANENTFLAGS" ) {
             d->permanentFlags = response.responseCode[1].toList();
           } else {
             bool isInt;
 
-            if ( code=="UIDVALIDITY" ) {
-              qint64 value = response.responseCode[1].toString().toLongLong(&isInt);
-              if ( !isInt ) return;
+            if ( code == "UIDVALIDITY" ) {
+              qint64 value = response.responseCode[1].toString().toLongLong( &isInt );
+              if ( !isInt ) {
+                return;
+              }
               d->uidValidity = value;
             } else {
-              qint64 value = response.responseCode[1].toString().toLongLong(&isInt);
-              if ( !isInt ) return;
-              if ( code=="UNSEEN" ) {
+              qint64 value = response.responseCode[1].toString().toLongLong( &isInt );
+              if ( !isInt ) {
+                return;
+              }
+              if ( code == "UNSEEN" ) {
                 d->firstUnseenIndex = value;
-              } else if ( code=="UIDNEXT" ) {
+              } else if ( code == "UIDNEXT" ) {
                 d->nextUid = value;
               }
             }
           }
-        } else if ( code=="FLAGS" ) {
+        } else if ( code == "FLAGS" ) {
           d->flags = response.content[2].toList();
         } else {
           bool isInt;
-          int value = response.content[1].toString().toInt(&isInt);
-          if ( !isInt || response.content.size()<3 ) return;
+          int value = response.content[1].toString().toInt( &isInt );
+          if ( !isInt || response.content.size() < 3 ) {
+            return;
+          }
 
           code = response.content[2].toString();
-          if ( code=="EXISTS" ) {
+          if ( code == "EXISTS" ) {
             d->messageCount = value;
-          } else if ( code=="RECENT" ) {
+          } else if ( code == "RECENT" ) {
             d->recentCount = value;
           }
         }

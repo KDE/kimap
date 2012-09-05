@@ -37,7 +37,7 @@ struct Message;
 class KIMAP_EXPORT Session : public QObject
 {
   Q_OBJECT
-  Q_ENUMS(State)
+  Q_ENUMS( State )
 
   friend class JobPrivate;
 

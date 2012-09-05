@@ -36,13 +36,12 @@ typedef QList<QByteArray> MessageFlags;
 class KIMAP_EXPORT StoreJob : public Job
 {
   Q_OBJECT
-  Q_DECLARE_PRIVATE(StoreJob)
+  Q_DECLARE_PRIVATE( StoreJob )
 
   friend class SessionPrivate;
 
   public:
-    enum StoreMode
-    {
+    enum StoreMode {
       SetFlags,
       AppendFlags,
       RemoveFlags

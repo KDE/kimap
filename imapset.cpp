@@ -80,8 +80,9 @@ ImapInterval::~ ImapInterval()
 
 ImapInterval& ImapInterval::operator =(const ImapInterval & other)
 {
-  if ( this != & other )
+  if ( this != &other ) {
     d = other.d;
+  }
   return *this;
 }
 
@@ -92,10 +93,12 @@ bool ImapInterval::operator ==(const ImapInterval & other) const
 
 ImapInterval::Id ImapInterval::size() const
 {
-  if ( !d->begin && !d->end )
+  if ( !d->begin && !d->end ) {
     return 0;
-  if ( d->begin && !d->end )
+  }
+  if ( d->begin && !d->end ) {
     return Q_INT64_C( 0x7FFFFFFFFFFFFFFF ) - d->begin + 1;
+  }
   return d->end - d->begin + 1;
 }
 
@@ -116,8 +119,9 @@ bool ImapInterval::hasDefinedEnd() const
 
 ImapInterval::Id ImapInterval::end() const
 {
-  if ( hasDefinedEnd() )
+  if ( hasDefinedEnd() ) {
     return d->end;
+  }
   return 0xFFFFFFFF; // should be INT_MAX, but where is that defined again?
 }
 
@@ -137,16 +141,19 @@ void ImapInterval::setEnd(Id value)
 
 QByteArray ImapInterval::toImapSequence() const
 {
-  if ( size() == 0 )
+  if ( size() == 0 ) {
     return QByteArray();
-  if ( size() == 1 )
+  }
+  if ( size() == 1 ) {
     return QByteArray::number( d->begin );
+  }
   QByteArray rv;
   rv += QByteArray::number( d->begin ) + ':';
-  if ( hasDefinedEnd() )
+  if ( hasDefinedEnd() ) {
     rv += QByteArray::number( d->end );
-  else
+  } else {
     rv += '*';
+  }
   return rv;
 }
 
@@ -158,7 +165,7 @@ ImapInterval ImapInterval::fromImapSequence( const QByteArray &sequence )
   }
 
   bool ok = false;
-  Id begin = values[0].toLongLong(&ok);
+  Id begin = values[0].toLongLong( &ok );
 
   if ( !ok ) {
     return ImapInterval();
@@ -172,7 +179,7 @@ ImapInterval ImapInterval::fromImapSequence( const QByteArray &sequence )
     end = 0;
   } else {
     ok = false;
-    end = values[1].toLongLong(&ok);
+    end = values[1].toLongLong( &ok );
     if ( !ok ) {
       return ImapInterval();
     }
@@ -209,8 +216,9 @@ ImapSet::~ImapSet()
 
 ImapSet & ImapSet::operator =(const ImapSet & other)
 {
-  if ( this != &other )
+  if ( this != &other ) {
     d = other.d;
+  }
   return *this;
 }
 
@@ -238,7 +246,7 @@ void ImapSet::add(const QList<Id> & values)
 {
   QList<Id> vals = values;
   qSort( vals );
-  for( int i = 0; i < vals.count(); ++i ) {
+  for ( int i = 0; i < vals.count(); ++i ) {
     const int begin = vals[i];
     Q_ASSERT( begin >= 0 );
     if ( i == vals.count() - 1 ) {
@@ -248,7 +256,7 @@ void ImapSet::add(const QList<Id> & values)
     do {
       ++i;
       Q_ASSERT( vals[i] >= 0 );
-      if ( vals[i] != (vals[i - 1] + 1) ) {
+      if ( vals[i] != ( vals[i - 1] + 1 ) ) {
         --i;
         break;
       }
@@ -276,7 +284,7 @@ QByteArray ImapSet::toImapSequenceSet() const
     QList<QByteArray>::ConstIterator it = rv.constBegin();
     ++it;
     for ( ; it != rv.constEnd(); ++it ) {
-      result += ',' + (*it);
+      result += ',' + ( *it );
     }
   }
 
@@ -289,7 +297,7 @@ ImapSet ImapSet::fromImapSequenceSet( const QByteArray &sequence )
 
   QList<QByteArray> intervals = sequence.split( ',' );
 
-  foreach( const QByteArray &interval, intervals ) {
+  foreach ( const QByteArray &interval, intervals ) {
     if ( !interval.isEmpty() ) {
       result.add( ImapInterval::fromImapSequence( interval ) );
     }

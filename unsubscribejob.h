@@ -32,7 +32,7 @@ class UnsubscribeJobPrivate;
 class KIMAP_EXPORT UnsubscribeJob : public Job
 {
   Q_OBJECT
-  Q_DECLARE_PRIVATE(UnsubscribeJob)
+  Q_DECLARE_PRIVATE( UnsubscribeJob )
 
   friend class SessionPrivate;
 

@@ -89,7 +89,7 @@ enum Right {
   Custom9       = 0x800000  /**< Server-specific right 9 */
 };
 
-Q_DECLARE_FLAGS(Rights, Right)
+Q_DECLARE_FLAGS( Rights, Right )
 
 /**
  * Returns a rights mask that has no obsolete members anymore, i.e. obsolete flags are removed and

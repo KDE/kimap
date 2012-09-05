@@ -37,7 +37,7 @@ QMap<QByteArray, QPair<qint64, qint64> > QuotaJobBasePrivate::readQuota( const M
     QByteArray resource = quotas[i].toUpper();
     qint64 usage = quotas[i+1].toInt();
     qint64 limit = quotas[i+2].toInt();
-    quotaMap[resource] = qMakePair(usage, limit);
+    quotaMap[resource] = qMakePair( usage, limit );
     i += 3;
   }
 
@@ -45,48 +45,42 @@ QMap<QByteArray, QPair<qint64, qint64> > QuotaJobBasePrivate::readQuota( const M
 }
 
 QuotaJobBase::QuotaJobBase( Session *session )
-  : Job( *new QuotaJobBasePrivate(session, i18n("QuotaJobBase")) )
+  : Job( *new QuotaJobBasePrivate( session, i18n( "QuotaJobBase" ) ) )
 {
 }
 
 
 QuotaJobBase::QuotaJobBase( JobPrivate &dd )
-  : Job(dd)
+  : Job( dd )
 {
-
 }
 
 QuotaJobBase::~QuotaJobBase()
 {
 }
 
-
 qint64 QuotaJobBase::usage(const QByteArray& resource)
 {
-  Q_D(QuotaJobBase);
+  Q_D( QuotaJobBase );
 
   QByteArray r = resource.toUpper();
 
-  if (d->quota.contains(r)) {
+  if ( d->quota.contains( r ) ) {
      return d->quota[r].first;
   }
-
   return -1;
 }
 
 qint64 QuotaJobBase::limit(const QByteArray& resource)
 {
-  Q_D(QuotaJobBase);
+  Q_D( QuotaJobBase );
 
   QByteArray r = resource.toUpper();
 
-  if (d->quota.contains(r)) {
+  if ( d->quota.contains( r ) ) {
     return d->quota[r].second;
   }
-
   return -1;
 }
-
-
 
 #include "quotajobbase.moc"

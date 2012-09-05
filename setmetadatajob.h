@@ -68,7 +68,7 @@ class SetMetaDataJobPrivate;
 class KIMAP_EXPORT SetMetaDataJob : public MetaDataJobBase
 {
   Q_OBJECT
-  Q_DECLARE_PRIVATE(SetMetaDataJob)
+  Q_DECLARE_PRIVATE( SetMetaDataJob )
 
   friend class SessionPrivate;
 
@@ -184,7 +184,7 @@ class KIMAP_EXPORT SetMetaDataJob : public MetaDataJobBase
     };
 
     // Q_DECLARE_WHATEVER_THAT_WAS missing
-    Q_DECLARE_FLAGS(MetaDataErrors, MetaDataError)
+    Q_DECLARE_FLAGS( MetaDataErrors, MetaDataError )
 
     /**
      * The metadata errors received from the server.

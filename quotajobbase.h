@@ -42,7 +42,7 @@ class QuotaJobBasePrivate;
 class KIMAP_EXPORT QuotaJobBase : public Job
 {
   Q_OBJECT
-  Q_DECLARE_PRIVATE(QuotaJobBase)
+  Q_DECLARE_PRIVATE( QuotaJobBase )
 
   friend class SessionPrivate;
 

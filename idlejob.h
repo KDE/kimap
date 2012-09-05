@@ -63,7 +63,7 @@ class IdleJobPrivate;
 class KIMAP_EXPORT IdleJob : public Job
 {
   Q_OBJECT
-  Q_DECLARE_PRIVATE(IdleJob)
+  Q_DECLARE_PRIVATE( IdleJob )
 
   public:
     explicit IdleJob( Session *session );

@@ -32,7 +32,7 @@ namespace KIMAP
   class GetMetaDataJobPrivate : public MetaDataJobBasePrivate
   {
     public:
-      GetMetaDataJobPrivate( Session *session, const QString& name ) : MetaDataJobBasePrivate(session, name), maxSize(-1), depth("0") { }
+      GetMetaDataJobPrivate( Session *session, const QString& name ) : MetaDataJobBasePrivate( session, name ), maxSize( -1 ), depth( "0" ) { }
       ~GetMetaDataJobPrivate() { }
 
        qint64 maxSize;
@@ -47,7 +47,7 @@ namespace KIMAP
 using namespace KIMAP;
 
 GetMetaDataJob::GetMetaDataJob( Session *session )
-  : MetaDataJobBase( *new GetMetaDataJobPrivate(session, i18n("GetMetaData")) )
+  : MetaDataJobBase( *new GetMetaDataJobPrivate( session, i18n( "GetMetaData" ) ) )
 {
 }
 
@@ -57,58 +57,65 @@ GetMetaDataJob::~GetMetaDataJob()
 
 void GetMetaDataJob::doStart()
 {
-  Q_D(GetMetaDataJob);
+  Q_D( GetMetaDataJob );
   QByteArray parameters;
   parameters = '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + "\" ";
 
   QByteArray command = "GETMETADATA";
-  if (d->serverCapability == Annotatemore) {
-    d->m_name = i18n("GetAnnotation");
+  if ( d->serverCapability == Annotatemore ) {
+    d->m_name = i18n( "GetAnnotation" );
     command = "GETANNOTATION";
-    if (d->entries.size() > 1)
+    if ( d->entries.size() > 1 ) {
       parameters += '(';
-    Q_FOREACH(const QByteArray &entry, d->entries) {
+    }
+    Q_FOREACH ( const QByteArray &entry, d->entries ) {
       parameters += '\"' + entry + "\" ";
     }
-    if (d->entries.size() > 1)
-      parameters[parameters.length() -1 ] = ')';
-    else
-      parameters.truncate(parameters.length() -1);
+    if ( d->entries.size() > 1 ) {
+      parameters[parameters.length() - 1 ] = ')';
+    } else {
+      parameters.truncate( parameters.length() - 1 );
+    }
 
     parameters += ' ';
 
-    if (d->attributes.size() > 1)
+    if ( d->attributes.size() > 1 ) {
       parameters += '(';
-    Q_FOREACH(const QByteArray &attribute, d->attributes) {
+    }
+    Q_FOREACH ( const QByteArray &attribute, d->attributes ) {
       parameters += '\"' + attribute + "\" ";
     }
-    if (d->attributes.size() > 1)
-      parameters[parameters.length() -1 ] = ')';
-    else
-      parameters.truncate(parameters.length() -1);
+    if ( d->attributes.size() > 1 ) {
+      parameters[parameters.length() - 1 ] = ')';
+    } else {
+      parameters.truncate( parameters.length() - 1 );
+    }
 
   } else {
-    if (d->depth != "0") {
+    if ( d->depth != "0" ) {
       parameters += "(DEPTH " + d->depth;
     }
-    if (d->maxSize != -1) {
-      parameters += "(MAXSIZE " + QByteArray::number(d->maxSize) + ')';
+    if ( d->maxSize != -1 ) {
+      parameters += "(MAXSIZE " + QByteArray::number( d->maxSize ) + ')';
     }
-    if (d->depth != "0") {
+    if ( d->depth != "0" ) {
       parameters += " )";
     }
 
-    if (d->entries.size() > 1)
+    if ( d->entries.size() > 1 ) {
       parameters += '(';
-    Q_FOREACH(const QByteArray &entry, d->entries) {
+    }
+    Q_FOREACH ( const QByteArray &entry, d->entries ) {
       parameters += '\"' + entry + "\" ";
     }
-    if (d->entries.size() > 1)
-      parameters[parameters.length() -1 ] = ')';
+    if ( d->entries.size() > 1 ) {
+      parameters[parameters.length() - 1 ] = ')';
+    }
   }
 
-  if (d->entries.isEmpty()) {
+  if ( d->entries.isEmpty() ) { {
     parameters += ')';
+  }
   }
 
   d->tags << d->sessionInternal()->sendCommand( command, parameters );
@@ -117,34 +124,33 @@ void GetMetaDataJob::doStart()
 
 void GetMetaDataJob::handleResponse( const Message &response )
 {
-  Q_D(GetMetaDataJob);
+  Q_D( GetMetaDataJob );
 //  kDebug() << "GOT: " << response.toString();
 
   //TODO: handle NO error messages having [METADATA MAXSIZE NNN], [METADATA TOOMANY], [METADATA NOPRIVATE] (see rfc5464)
   // or [ANNOTATEMORE TOOBIG], [ANNOTATEMORE TOOMANY] respectively
-  if (handleErrorReplies(response) == NotHandled ) {
+  if ( handleErrorReplies( response ) == NotHandled  ) {
     if ( response.content.size() >= 4 ) {
-      if (d->serverCapability == Annotatemore && response.content[1].toString() == "ANNOTATION" ) {
+      if ( d->serverCapability == Annotatemore && response.content[1].toString() == "ANNOTATION" ) {
         QString mailBox = QString::fromUtf8( KIMAP::decodeImapFolderName( response.content[2].toString() ) );
 
         int i = 3;
-        while (i < response.content.size() - 1) {
+        while ( i < response.content.size() - 1 ) {
           QByteArray entry = response.content[i].toString();
           QList<QByteArray> attributes = response.content[i + 1].toList();
           int j = 0;
-          while ( j < attributes.size() - 1) {
+          while ( j < attributes.size() - 1 ) {
             d->metadata[mailBox][entry][attributes[j]] = attributes[j + 1];
             j += 2;
           }
           i += 2;
         }
-      } else
-      if (d->serverCapability == Metadata && response.content[1].toString() == "METADATA" ) {
+      } else if ( d->serverCapability == Metadata && response.content[1].toString() == "METADATA" ) {
         QString mailBox = QString::fromUtf8( KIMAP::decodeImapFolderName( response.content[2].toString() ) );
 
         QList<QByteArray> entries = response.content[3].toList();
         int i = 0;
-        while ( i < entries.size() - 1) {
+        while ( i < entries.size() - 1 ) {
           d->metadata[mailBox][entries[i]][""] = entries[i + 1];
           i += 2;
         }
@@ -155,25 +161,25 @@ void GetMetaDataJob::handleResponse( const Message &response )
 
 void GetMetaDataJob::addEntry(const QByteArray &entry, const QByteArray &attribute)
 {
-  Q_D(GetMetaDataJob);
-  if (d->serverCapability == Annotatemore && attribute.isNull())
+  Q_D( GetMetaDataJob );
+  if ( d->serverCapability == Annotatemore && attribute.isNull() ) {
     qWarning() << "In ANNOTATEMORE mode an attribute must be specified with addEntry!";
-  d->entries.append(entry);
-  d->attributes.append(attribute);
+  }
+  d->entries.append( entry );
+  d->attributes.append( attribute );
 }
 
 void GetMetaDataJob::setMaximumSize(qint64 size)
 {
-  Q_D(GetMetaDataJob);
+  Q_D( GetMetaDataJob );
   d->maxSize = size;
 }
 
 void GetMetaDataJob::setDepth(Depth depth)
 {
-  Q_D(GetMetaDataJob);
+  Q_D( GetMetaDataJob );
 
-  switch (depth)
-  {
+  switch ( depth ) {
     case OneLevel:
       d->depth = "1"; //krazy:exclude=doublequote_chars
       break;
@@ -187,25 +193,25 @@ void GetMetaDataJob::setDepth(Depth depth)
 
 QByteArray GetMetaDataJob::metaData(const QString &mailBox, const QByteArray &entry, const QByteArray &attribute) const
 {
-  Q_D(const GetMetaDataJob);
+  Q_D( const GetMetaDataJob );
   QByteArray attr = attribute;
 
-  if (d->serverCapability == Metadata)
+  if ( d->serverCapability == Metadata ) {
      attr = "";
-
-  QByteArray result;
-  if (d->metadata.contains(mailBox)) {
-    if (d->metadata[mailBox].contains(entry)) {
-      result = d->metadata[mailBox][entry].value(attr);
-    }
   }
 
+  QByteArray result;
+  if ( d->metadata.contains( mailBox ) ) {
+    if ( d->metadata[mailBox].contains( entry ) ) {
+      result = d->metadata[mailBox][entry].value( attr );
+    }
+  }
   return result;
 }
 
 QMap<QByteArray, QMap<QByteArray, QByteArray> > GetMetaDataJob::allMetaData(const QString &mailBox) const
 {
-  Q_D(const GetMetaDataJob);
+  Q_D( const GetMetaDataJob );
   return d->metadata[mailBox];
 }
 

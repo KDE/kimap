@@ -59,7 +59,7 @@ namespace KIMAP
         Authenticate
       };
 
-      LoginJobPrivate( LoginJob *job, Session *session, const QString& name ) : JobPrivate(session, name), q(job), encryptionMode(LoginJob::Unencrypted),  authState(Login), plainLoginDisabled(false) {
+      LoginJobPrivate( LoginJob *job, Session *session, const QString& name ) : JobPrivate( session, name ), q( job ), encryptionMode( LoginJob::Unencrypted ), authState( Login ), plainLoginDisabled( false ) {
         conn = 0;
         client_interact = 0;
       }
@@ -93,7 +93,7 @@ using namespace KIMAP;
 
 bool LoginJobPrivate::sasl_interact()
 {
-  kDebug() <<"sasl_interact";
+  kDebug() << "sasl_interact";
   sasl_interact_t *interact = client_interact;
 
   //some mechanisms do not require username && pass, so it doesn't need a popup
@@ -107,23 +107,23 @@ bool LoginJobPrivate::sasl_interact()
   }
 
   interact = client_interact;
-  while( interact->id != SASL_CB_LIST_END ) {
-    kDebug() <<"SASL_INTERACT id:" << interact->id;
-    switch( interact->id ) {
+  while ( interact->id != SASL_CB_LIST_END ) {
+    kDebug() << "SASL_INTERACT id:" << interact->id;
+    switch ( interact->id ) {
       case SASL_CB_AUTHNAME:
         if ( !authorizationName.isEmpty() ) {
-          kDebug() <<"SASL_CB_[AUTHNAME]: '" << authorizationName <<"'";
+          kDebug() << "SASL_CB_[AUTHNAME]: '" << authorizationName << "'";
           interact->result = strdup( authorizationName.toUtf8() );
           interact->len = strlen( (const char *) interact->result );
           break;
         }
       case SASL_CB_USER:
-        kDebug() <<"SASL_CB_[USER|AUTHNAME]: '" << userName <<"'";
+        kDebug() << "SASL_CB_[USER|AUTHNAME]: '" << userName << "'";
         interact->result = strdup( userName.toUtf8() );
         interact->len = strlen( (const char *) interact->result );
         break;
       case SASL_CB_PASS:
-        kDebug() <<"SASL_CB_PASS: [hidden]";
+        kDebug() << "SASL_CB_PASS: [hidden]";
         interact->result = strdup( password.toUtf8() );
         interact->len = strlen( (const char *) interact->result );
         break;
@@ -137,12 +137,11 @@ bool LoginJobPrivate::sasl_interact()
   return true;
 }
 
-
 LoginJob::LoginJob( Session *session )
-  : Job( *new LoginJobPrivate(this, session, i18n("Login")) )
+  : Job( *new LoginJobPrivate( this, session, i18n( "Login" ) ) )
 {
-  Q_D(LoginJob);
-  connect(d->sessionInternal(), SIGNAL(encryptionNegotiationResult(bool)), this, SLOT(sslResponse(bool)));
+  Q_D( LoginJob );
+  connect( d->sessionInternal(), SIGNAL(encryptionNegotiationResult(bool)), this, SLOT(sslResponse(bool)) );
 }
 
 LoginJob::~LoginJob()
@@ -151,48 +150,48 @@ LoginJob::~LoginJob()
 
 QString LoginJob::userName() const
 {
-  Q_D(const LoginJob);
+  Q_D( const LoginJob );
   return d->userName;
 }
 
 void LoginJob::setUserName( const QString &userName )
 {
-  Q_D(LoginJob);
+  Q_D( LoginJob );
   d->userName = userName;
 }
 
 QString LoginJob::authorizationName() const
 {
-  Q_D(const LoginJob);
+  Q_D( const LoginJob );
   return d->authorizationName;
 }
 
 void LoginJob::setAuthorizationName( const QString& authorizationName )
 {
-  Q_D(LoginJob);
+  Q_D( LoginJob );
   d->authorizationName = authorizationName;
 }
 
 QString LoginJob::password() const
 {
-  Q_D(const LoginJob);
+  Q_D( const LoginJob );
   return d->password;
 }
 
 void LoginJob::setPassword( const QString &password )
 {
-  Q_D(LoginJob);
+  Q_D( LoginJob );
   d->password = password;
 }
 
 void LoginJob::doStart()
 {
-  Q_D(LoginJob);
+  Q_D( LoginJob );
 
   // Don't authenticate on a session in the authenticated state
   if ( session()->state() == Session::Authenticated || session()->state() == Session::Selected ) {
     setError( UserDefinedError );
-    setErrorText( i18n("IMAP session in the wrong state for authentication") );
+    setErrorText( i18n( "IMAP session in the wrong state for authentication" ) );
     emitResult();
     return;
   }
@@ -209,53 +208,56 @@ void LoginJob::doStart()
   // (so for instance we won't issue another STARTTLS for nothing if that's
   // not needed)
   case KTcpSocket::SslV2:
-    if ( encryptionMode==SslV2 ) {
+    if ( encryptionMode == SslV2 ) {
       encryptionMode = Unencrypted;
     }
     break;
   case KTcpSocket::SslV3:
-    if ( encryptionMode==SslV3 ) {
+    if ( encryptionMode == SslV3 ) {
       encryptionMode = Unencrypted;
     }
     break;
   case KTcpSocket::TlsV1:
-    if ( encryptionMode==TlsV1 ) {
+    if ( encryptionMode == TlsV1 ) {
       encryptionMode = Unencrypted;
     }
     break;
   case KTcpSocket::AnySslVersion:
-    if ( encryptionMode==AnySslVersion ) {
+    if ( encryptionMode == AnySslVersion ) {
       encryptionMode = Unencrypted;
     }
     break;
   }
 
-  if (encryptionMode == SslV2
-   || encryptionMode == SslV3
-   || encryptionMode == SslV3_1
-   || encryptionMode == AnySslVersion) {
+  if ( encryptionMode == SslV2 ||
+       encryptionMode == SslV3 ||
+       encryptionMode == SslV3_1 ||
+       encryptionMode == AnySslVersion ) {
     KTcpSocket::SslVersion version = KTcpSocket::SslV2;
-    if (encryptionMode == SslV3)
+    if ( encryptionMode == SslV3 ) {
       version = KTcpSocket::SslV3;
-    if (encryptionMode == SslV3_1)
+    }
+    if ( encryptionMode == SslV3_1 ) {
       version = KTcpSocket::SslV3_1;
-    if (encryptionMode == AnySslVersion)
+    }
+    if ( encryptionMode == AnySslVersion ) {
       version = KTcpSocket::AnySslVersion;
-    d->sessionInternal()->startSsl(version);
+    }
+    d->sessionInternal()->startSsl( version );
 
-  } else if (encryptionMode == TlsV1) {
+  } else if ( encryptionMode == TlsV1 ) {
     d->authState = LoginJobPrivate::StartTls;
     d->tags << d->sessionInternal()->sendCommand( "STARTTLS" );
 
-  } else  if (encryptionMode == Unencrypted ) {
-    if (d->authMode.isEmpty()) {
+  } else  if ( encryptionMode == Unencrypted  ) {
+    if ( d->authMode.isEmpty() ) {
       d->authState = LoginJobPrivate::Login;
       d->tags << d->sessionInternal()->sendCommand( "LOGIN",
-                                                  '"'+quoteIMAP( d->userName ).toUtf8()+'"'
-                                                 +' '
-                                                 +'"'+quoteIMAP(d->password ).toUtf8()+'"' );
+                                                    '"' + quoteIMAP( d->userName ).toUtf8() + '"' +
+                                                    ' ' +
+                                                    '"' + quoteIMAP( d->password  ).toUtf8() + '"' );
     } else {
-      if (!d->startAuthentication()) {
+      if ( !d->startAuthentication() ) {
         emitResult();
       }
     }
@@ -264,17 +266,18 @@ void LoginJob::doStart()
 
 void LoginJob::handleResponse( const Message &response )
 {
-  Q_D(LoginJob);
+  Q_D( LoginJob );
 
-  if ( response.content.isEmpty() )
+  if ( response.content.isEmpty() ) {
     return;
+  }
 
   //set the actual command name for standard responses
-  QString commandName = i18n("Login");
-  if (d->authState == LoginJobPrivate::Capability) {
-    commandName = i18n("Capability");
-  } else if (d->authState == LoginJobPrivate::StartTls) {
-    commandName = i18n("StartTls");
+  QString commandName = i18n( "Login" );
+  if ( d->authState == LoginJobPrivate::Capability ) {
+    commandName = i18n( "Capability" );
+  } else if ( d->authState == LoginJobPrivate::StartTls ) {
+    commandName = i18n( "StartTls" );
   }
 
   enum ResponseCode {
@@ -291,31 +294,34 @@ void LoginJob::handleResponse( const Message &response )
   if ( tag == "+" ) {
     code = CONTINUATION;
   } else if ( tag == "*" ) {
-    if ( response.content.size() < 2 )
+    if ( response.content.size() < 2 ) {
       code = MALFORMED; // Received empty untagged response
-    else
+    } else {
       code = UNTAGGED;
-  } else if ( d->tags.contains(tag) ) {
-    if ( response.content.size() < 2 )
+    }
+  } else if ( d->tags.contains( tag ) ) {
+    if ( response.content.size() < 2 ) {
       code = MALFORMED;
-    else if ( response.content[1].toString() == "OK" )
+    } else if ( response.content[1].toString() == "OK" ) {
       code = OK;
-    else
+    } else {
       code = ERR;
+    }
   }
 
-  switch (code) {
+  switch ( code ) {
     case MALFORMED:
       // We'll handle it later
       break;
 
     case ERR:
       //server replied with NO or BAD for SASL authentication
-      if (d->authState == LoginJobPrivate::Authenticate)
+      if ( d->authState == LoginJobPrivate::Authenticate ) {
         sasl_dispose( &d->conn );
+      }
 
       setError( UserDefinedError );
-      setErrorText( i18n("%1 failed, server replied: %2", commandName, response.toString().constData()) );
+      setErrorText( i18n( "%1 failed, server replied: %2", commandName, response.toString().constData() ) );
       emitResult();
       return;
 
@@ -323,11 +329,12 @@ void LoginJob::handleResponse( const Message &response )
       // The only untagged response interesting for us here is CAPABILITY
       if ( response.content[1].toString() == "CAPABILITY" ) {
         QList<Message::Part>::const_iterator p = response.content.begin() + 2;
-        while (p != response.content.end()) {
+        while ( p != response.content.end() ) {
           QString capability = p->toString();
           d->capabilities << capability;
-          if (capability == "LOGINDISABLED")
+          if ( capability == "LOGINDISABLED" ) {
             d->plainLoginDisabled = true;
+          }
           ++p;
         }
         kDebug() << "Capabilities updated: " << d->capabilities;
@@ -335,7 +342,7 @@ void LoginJob::handleResponse( const Message &response )
       break;
 
     case CONTINUATION:
-      if (d->authState != LoginJobPrivate::Authenticate) {
+      if ( d->authState != LoginJobPrivate::Authenticate ) {
         // Received unexpected continuation response for something
         // other than AUTHENTICATE command
         code = MALFORMED;
@@ -343,7 +350,7 @@ void LoginJob::handleResponse( const Message &response )
       }
 
       if ( d->authMode == QLatin1String( "PLAIN" ) ) {
-        if ( response.content.size()>1 && response.content.at( 1 ).toString()=="OK" ) {
+        if ( response.content.size()>1 && response.content.at( 1 ).toString() == "OK" ) {
           return;
         }
         QByteArray challengeResponse;
@@ -357,7 +364,7 @@ void LoginJob::handleResponse( const Message &response )
         challengeResponse = challengeResponse.toBase64();
         d->sessionInternal()->sendData( challengeResponse );
       } else if ( response.content.size() >= 2 ) {
-        if (!d->answerChallenge(QByteArray::fromBase64(response.content[1].toString()))) {
+        if ( !d->answerChallenge( QByteArray::fromBase64( response.content[1].toString() ) ) ) {
           emitResult(); //error, we're done
         }
       } else {
@@ -368,41 +375,41 @@ void LoginJob::handleResponse( const Message &response )
 
     case OK:
 
-      switch (d->authState) {
+      switch ( d->authState ) {
         case LoginJobPrivate::StartTls:
-          d->sessionInternal()->startSsl(KTcpSocket::TlsV1);
+          d->sessionInternal()->startSsl( KTcpSocket::TlsV1 );
           break;
 
         case LoginJobPrivate::Capability:
           //cleartext login, if enabled
-          if (d->authMode.isEmpty()) {
-            if (d->plainLoginDisabled) {
+          if ( d->authMode.isEmpty() ) {
+            if ( d->plainLoginDisabled ) {
               setError( UserDefinedError );
-              setErrorText( i18n("Login failed, plain login is disabled by the server.") );
+              setErrorText( i18n( "Login failed, plain login is disabled by the server." ) );
               emitResult();
             } else {
               d->authState = LoginJobPrivate::Login;
               d->tags << d->sessionInternal()->sendCommand( "LOGIN",
-                                                          '"'+quoteIMAP( d->userName ).toUtf8()+'"'
-                                                         +' '
-                                                         +'"'+quoteIMAP( d->password ).toUtf8()+'"');
+                                                            '"' + quoteIMAP( d->userName ).toUtf8() + '"' +
+                                                            ' ' +
+                                                            '"' + quoteIMAP( d->password ).toUtf8() + '"' );
             }
           } else {
             bool authModeSupported = false;
             //find the selected SASL authentication method
-            Q_FOREACH(const QString &capability, d->capabilities) {
-              if (capability.startsWith(QLatin1String("AUTH="))) {
-                if (capability.mid(5) == d->authMode) {
+            Q_FOREACH ( const QString &capability, d->capabilities ) {
+              if ( capability.startsWith( QLatin1String( "AUTH=" ) ) ) {
+                if ( capability.mid( 5 ) == d->authMode ) {
                   authModeSupported = true;
                   break;
                 }
               }
             }
-            if (!authModeSupported) {
+            if ( !authModeSupported ) {
               setError( UserDefinedError );
-              setErrorText( i18n("Login failed, authentication mode %1 is not supported by the server.", d->authMode) );
+              setErrorText( i18n( "Login failed, authentication mode %1 is not supported by the server.", d->authMode ) );
               emitResult();
-            } else if (!d->startAuthentication()) {
+            } else if ( !d->startAuthentication() ) {
               emitResult(); //problem, we're done
             }
           }
@@ -421,7 +428,7 @@ void LoginJob::handleResponse( const Message &response )
   }
 
   if ( code == MALFORMED ) {
-    setErrorText( i18n("%1 failed, malformed reply from the server.", commandName) );
+    setErrorText( i18n( "%1 failed, malformed reply from the server.", commandName ) );
     emitResult();
   }
 }
@@ -429,9 +436,9 @@ void LoginJob::handleResponse( const Message &response )
 bool LoginJobPrivate::startAuthentication()
 {
   //SASL authentication
-  if (!initSASL()) {
+  if ( !initSASL() ) {
     q->setError( LoginJob::UserDefinedError );
-    q->setErrorText( i18n("Login failed, client cannot initialize the SASL library.") );
+    q->setErrorText( i18n( "Login failed, client cannot initialize the SASL library." ) );
     return false;
   }
 
@@ -442,14 +449,14 @@ bool LoginJobPrivate::startAuthentication()
 
   int result = sasl_client_new( "imap", m_session->hostName().toLatin1(), 0, 0, callbacks, 0, &conn );
   if ( result != SASL_OK ) {
-    kDebug() <<"sasl_client_new failed with:" << result;
+    kDebug() << "sasl_client_new failed with:" << result;
     q->setError( LoginJob::UserDefinedError );
     q->setErrorText( QString::fromUtf8( sasl_errdetail( conn ) ) );
     return false;
   }
 
   do {
-    result = sasl_client_start(conn, authMode.toLatin1(), &client_interact, capabilities.contains("SASL-IR") ? &out : 0, &outlen, &mechusing);
+    result = sasl_client_start( conn, authMode.toLatin1(), &client_interact, capabilities.contains( "SASL-IR" ) ? &out : 0, &outlen, &mechusing );
 
     if ( result == SASL_INTERACT ) {
       if ( !sasl_interact() ) {
@@ -461,7 +468,7 @@ bool LoginJobPrivate::startAuthentication()
   } while ( result == SASL_INTERACT );
 
   if ( result != SASL_CONTINUE && result != SASL_OK ) {
-    kDebug() <<"sasl_client_start failed with:" << result;
+    kDebug() << "sasl_client_start failed with:" << result;
     q->setError( LoginJob::UserDefinedError );
     q->setErrorText( QString::fromUtf8( sasl_errdetail( conn ) ) );
     sasl_dispose( &conn );
@@ -487,12 +494,12 @@ bool LoginJobPrivate::answerChallenge(const QByteArray &data)
   const char *out = 0;
   uint outlen = 0;
   do {
-    result = sasl_client_step(conn, challenge.isEmpty() ? 0 : challenge.data(),
-                              challenge.size(),
-                              &client_interact,
-                              &out, &outlen);
+    result = sasl_client_step( conn, challenge.isEmpty() ? 0 : challenge.data(),
+                               challenge.size(),
+                               &client_interact,
+                               &out, &outlen );
 
-    if (result == SASL_INTERACT) {
+    if ( result == SASL_INTERACT ) {
       if ( !sasl_interact() ) {
         q->setError( LoginJob::UserDefinedError ); //TODO: check up the actual error
         sasl_dispose( &conn );
@@ -502,7 +509,7 @@ bool LoginJobPrivate::answerChallenge(const QByteArray &data)
   } while ( result == SASL_INTERACT );
 
   if ( result != SASL_CONTINUE && result != SASL_OK ) {
-    kDebug() <<"sasl_client_step failed with:" << result;
+    kDebug() << "sasl_client_step failed with:" << result;
     q->setError( LoginJob::UserDefinedError ); //TODO: check up the actual error
     q->setErrorText( QString::fromUtf8( sasl_errdetail( conn ) ) );
     sasl_dispose( &conn );
@@ -519,12 +526,12 @@ bool LoginJobPrivate::answerChallenge(const QByteArray &data)
 
 void LoginJobPrivate::sslResponse(bool response)
 {
-  if (response) {
+  if ( response ) {
     authState = LoginJobPrivate::Capability;
     tags << sessionInternal()->sendCommand( "CAPABILITY" );
   } else {
     q->setError( LoginJob::UserDefinedError );
-    q->setErrorText( i18n("Login failed, TLS negotiation failed." ));
+    q->setErrorText( i18n( "Login failed, TLS negotiation failed." ) );
     encryptionMode = LoginJob::Unencrypted;
     q->emitResult();
   }
@@ -532,21 +539,20 @@ void LoginJobPrivate::sslResponse(bool response)
 
 void LoginJob::setEncryptionMode(EncryptionMode mode)
 {
-  Q_D(LoginJob);
+  Q_D( LoginJob );
   d->encryptionMode = mode;
 }
 
 LoginJob::EncryptionMode LoginJob::encryptionMode()
 {
-  Q_D(LoginJob);
+  Q_D( LoginJob );
   return d->encryptionMode;
 }
 
 void LoginJob::setAuthenticationMode(AuthenticationMode mode)
 {
-  Q_D(LoginJob);
-  switch (mode)
-  {
+  Q_D( LoginJob );
+  switch ( mode ) {
     case ClearText: d->authMode = "";
       break;
     case Login: d->authMode = "LOGIN";
@@ -568,13 +574,13 @@ void LoginJob::setAuthenticationMode(AuthenticationMode mode)
 
 void LoginJob::connectionLost()
 {
-  Q_D(LoginJob);
+  Q_D( LoginJob );
 
   //don't emit the result if the connection was lost before getting the tls result, as it can mean
   //the TLS handshake failed and the socket was reconnected in normal mode
-  if (d->authState != LoginJobPrivate::StartTls) {
+  if ( d->authState != LoginJobPrivate::StartTls ) {
     setError( ERR_COULD_NOT_CONNECT );
-    setErrorText( i18n("Connection to server lost.") );
+    setErrorText( i18n( "Connection to server lost." ) );
     emitResult();
   }
 
@@ -585,24 +591,24 @@ void LoginJobPrivate::saveServerGreeting(const Message &response)
   // Concatenate the parts of the server response into a string, while dropping the first two parts
   // (the response tag and the "OK" code), and being careful not to add useless extra whitespace.
 
-  for ( int i=2; i<response.content.size(); i++) {
-    if ( response.content.at(i).type()==Message::Part::List ) {
-      serverGreeting+='(';
-      foreach ( const QByteArray &item, response.content.at(i).toList() ) {
-        serverGreeting+=item+' ';
+  for ( int i = 2; i < response.content.size(); i++ ) {
+    if ( response.content.at( i ).type() == Message::Part::List ) {
+      serverGreeting += '(';
+      foreach ( const QByteArray &item, response.content.at( i ).toList() ) {
+        serverGreeting += item + ' ';
       }
-      serverGreeting.chop(1);
-      serverGreeting+=") ";
+      serverGreeting.chop( 1 );
+      serverGreeting += ") ";
     } else {
-      serverGreeting+=response.content.at(i).toString()+' ';
+      serverGreeting+=response.content.at( i ).toString() + ' ';
     }
   }
-  serverGreeting.chop(1);
+  serverGreeting.chop( 1 );
 }
 
 QString LoginJob::serverGreeting() const
 {
-  Q_D(const LoginJob);
+  Q_D( const LoginJob );
   return d->serverGreeting;
 }
 

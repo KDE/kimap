@@ -65,21 +65,20 @@ void testCreate()
     FakeServer fakeServer;
     fakeServer.setScenario( scenario );
     fakeServer.startAndWait();
-    KIMAP::Session session("127.0.0.1", 5989);
+    KIMAP::Session session( "127.0.0.1", 5989 );
 
-    KIMAP::CreateJob *job = new KIMAP::CreateJob(&session);
-    job->setMailBox(mailbox);
+    KIMAP::CreateJob *job = new KIMAP::CreateJob( &session );
+    job->setMailBox( mailbox );
     bool result = job->exec();
-    QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
-    QEXPECT_FAIL("no" , "Expected failure on NO response", Continue);
-    QVERIFY(result);
-    if (result) {
-      QCOMPARE(job->mailBox(), mailbox);
+    QEXPECT_FAIL( "bad" , "Expected failure on BAD response", Continue );
+    QEXPECT_FAIL( "no" , "Expected failure on NO response", Continue );
+    QVERIFY( result );
+    if ( result ) {
+      QCOMPARE( job->mailBox(), mailbox );
     }
 
     fakeServer.quit();
 }
-
 
 };
 

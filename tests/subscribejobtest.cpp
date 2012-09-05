@@ -66,19 +66,18 @@ void testSubscribe()
     fakeServer.setScenario( scenario );
     fakeServer.startAndWait();
 
-    KIMAP::Session session("127.0.0.1", 5989);
+    KIMAP::Session session( "127.0.0.1", 5989 );
 
-    KIMAP::SubscribeJob *job = new KIMAP::SubscribeJob(&session);
-    job->setMailBox(mailbox);
+    KIMAP::SubscribeJob *job = new KIMAP::SubscribeJob( &session );
+    job->setMailBox( mailbox );
     bool result = job->exec();
-    QEXPECT_FAIL("bad" , "Expected failure on BAD scenario", Continue);
-    QEXPECT_FAIL("no" , "Expected failure on NO scenario", Continue);
-    QVERIFY(result);
-    QCOMPARE(job->mailBox(), mailbox);
+    QEXPECT_FAIL( "bad" , "Expected failure on BAD scenario", Continue );
+    QEXPECT_FAIL( "no" , "Expected failure on NO scenario", Continue );
+    QVERIFY( result );
+    QCOMPARE( job->mailBox(), mailbox );
 
     fakeServer.quit();
 }
-
 
 };
 

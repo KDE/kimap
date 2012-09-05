@@ -46,7 +46,7 @@ class DeleteJobPrivate;
 class KIMAP_EXPORT DeleteJob : public Job
 {
   Q_OBJECT
-  Q_DECLARE_PRIVATE(DeleteJob)
+  Q_DECLARE_PRIVATE( DeleteJob )
 
   friend class SessionPrivate;
 

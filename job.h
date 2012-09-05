@@ -34,7 +34,7 @@ struct Message;
 class KIMAP_EXPORT Job : public KJob
 {
   Q_OBJECT
-  Q_DECLARE_PRIVATE(Job)
+  Q_DECLARE_PRIVATE( Job )
 
   friend class SessionPrivate;
 

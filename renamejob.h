@@ -32,7 +32,7 @@ class RenameJobPrivate;
 class KIMAP_EXPORT RenameJob : public Job
 {
   Q_OBJECT
-  Q_DECLARE_PRIVATE(RenameJob)
+  Q_DECLARE_PRIVATE( RenameJob )
 
   friend class SessionPrivate;
 

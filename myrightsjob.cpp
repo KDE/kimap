@@ -32,7 +32,7 @@ namespace KIMAP
   class MyRightsJobPrivate : public AclJobBasePrivate
   {
     public:
-      MyRightsJobPrivate( Session *session, const QString& name ) : AclJobBasePrivate(session, name), myRights(Acl::None) {}
+      MyRightsJobPrivate( Session *session, const QString& name ) : AclJobBasePrivate( session, name ), myRights( Acl::None ) {}
       ~MyRightsJobPrivate() { }
 
       Acl::Rights myRights;
@@ -42,7 +42,7 @@ namespace KIMAP
 using namespace KIMAP;
 
 MyRightsJob::MyRightsJob( Session *session )
-  : AclJobBase( *new MyRightsJobPrivate(session, i18n("MyRights") ))
+  : AclJobBase( *new MyRightsJobPrivate( session, i18n( "MyRights" ) ) )
 {
 }
 
@@ -52,18 +52,18 @@ MyRightsJob::~MyRightsJob()
 
 void MyRightsJob::doStart()
 {
-  Q_D(MyRightsJob);
+  Q_D( MyRightsJob );
 
-  d->tags << d->sessionInternal()->sendCommand( "MYRIGHTS", '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + '\"');
+  d->tags << d->sessionInternal()->sendCommand( "MYRIGHTS", '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + '\"' );
 }
 
 void MyRightsJob::handleResponse( const Message &response )
 {
-  Q_D(MyRightsJob);
+  Q_D( MyRightsJob );
 
-  if (handleErrorReplies(response) == NotHandled) {
-    if ( response.content.size() == 4
-         && response.content[1].toString() == "MYRIGHTS" ) {
+  if ( handleErrorReplies( response ) == NotHandled ) {
+    if ( response.content.size() == 4 &&
+         response.content[1].toString() == "MYRIGHTS" ) {
       d->myRights = Acl::rightsFromString( response.content[3].toString() );
     }
   }
@@ -71,13 +71,13 @@ void MyRightsJob::handleResponse( const Message &response )
 
 bool MyRightsJob::hasRightEnabled(Acl::Right right)
 {
-  Q_D(MyRightsJob);
+  Q_D( MyRightsJob );
   return d->myRights & right;
 }
 
 Acl::Rights MyRightsJob::rights()
 {
-  Q_D(MyRightsJob);
+  Q_D( MyRightsJob );
   return d->myRights;
 }
 

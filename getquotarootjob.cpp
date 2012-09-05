@@ -32,7 +32,7 @@ namespace KIMAP
   class GetQuotaRootJobPrivate : public QuotaJobBasePrivate
   {
     public:
-      GetQuotaRootJobPrivate( Session *session, const QString& name ) : QuotaJobBasePrivate(session, name) { }
+      GetQuotaRootJobPrivate( Session *session, const QString& name ) : QuotaJobBasePrivate( session, name ) { }
       ~GetQuotaRootJobPrivate() { }
 
       QString mailBox;
@@ -44,7 +44,7 @@ namespace KIMAP
 using namespace KIMAP;
 
 GetQuotaRootJob::GetQuotaRootJob( Session *session )
-  : QuotaJobBase( *new GetQuotaRootJobPrivate(session, i18n("GetQuotaRoot")) )
+  : QuotaJobBase( *new GetQuotaRootJobPrivate( session, i18n( "GetQuotaRoot" ) ) )
 {
 }
 
@@ -54,43 +54,41 @@ GetQuotaRootJob::~GetQuotaRootJob()
 
 void GetQuotaRootJob::doStart()
 {
-  Q_D(GetQuotaRootJob);
-  d->tags << d->sessionInternal()->sendCommand( "GETQUOTAROOT", '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + '\"');
+  Q_D( GetQuotaRootJob );
+  d->tags << d->sessionInternal()->sendCommand( "GETQUOTAROOT", '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + '\"' );
 }
 
 void GetQuotaRootJob::handleResponse(const Message &response)
 {
-  Q_D(GetQuotaRootJob);
-  if (handleErrorReplies(response) == NotHandled) {
+  Q_D( GetQuotaRootJob );
+  if ( handleErrorReplies( response ) == NotHandled ) {
     if ( response.content.size() >= 3 ) {
-      if (response.content[1].toString() == "QUOTAROOT" ) {
+      if ( response.content[1].toString() == "QUOTAROOT"  ) {
         d->rootList.clear();
         //some impls don't give the root a name which for us seems as if
         //there were no message part
         if ( response.content.size() == 3 ) {
-          d->rootList.append("");
+          d->rootList.append( "" );
         } else {
           int i = 3;
-          while ( i < response.content.size())
-          {
-            d->rootList.append(response.content[i].toString());
+          while ( i < response.content.size() ) {
+            d->rootList.append( response.content[i].toString() );
             i++;
           }
         }
-      } else
-      if (response.content[1].toString() == "QUOTA" ) {
+      } else if ( response.content[1].toString() == "QUOTA"  ) {
         QByteArray rootName;
         int  quotaContentIndex = 3;
         //some impls don't give the root a name in the response
-        if (response.content.size() == 3 ) {
+        if ( response.content.size() == 3  ) {
           quotaContentIndex = 2;
         } else {
           rootName = response.content[2].toString();
-        }       
+        }
 
         const QMap<QByteArray, QPair<qint64, qint64> >& quota = d->readQuota(response.content[quotaContentIndex]);
-        if (d->quotas.contains(rootName)) {
-          d->quotas[ rootName ].unite(quota);
+        if ( d->quotas.contains( rootName ) ) {
+          d->quotas[ rootName ].unite( quota );
         } else {
           d->quotas[ rootName ] = quota;
         }
@@ -99,61 +97,54 @@ void GetQuotaRootJob::handleResponse(const Message &response)
   }
 }
 
-
 void GetQuotaRootJob::setMailBox(const QString& mailBox)
 {
-  Q_D(GetQuotaRootJob);
-
+  Q_D( GetQuotaRootJob );
   d->mailBox = mailBox;
 }
 
 QString GetQuotaRootJob::mailBox() const
 {
-  Q_D(const GetQuotaRootJob);
-
+  Q_D( const GetQuotaRootJob );
   return d->mailBox;
 }
 
 QList<QByteArray> GetQuotaRootJob::roots() const
 {
-  Q_D(const GetQuotaRootJob);
-
+  Q_D( const GetQuotaRootJob );
   return d->rootList;
 }
 
 qint64 GetQuotaRootJob::usage(const QByteArray &root, const QByteArray &resource) const
 {
-  Q_D(const GetQuotaRootJob);
-
+  Q_D( const GetQuotaRootJob );
   QByteArray r = resource.toUpper();
 
-  if (d->quotas.contains(root) && d->quotas[root].contains(r)) {
+  if ( d->quotas.contains( root ) && d->quotas[root].contains( r ) ) {
     return d->quotas[root][r].first;
   }
-
   return -1;
 }
 
 qint64 GetQuotaRootJob::limit(const QByteArray &root, const QByteArray &resource) const
 {
-  Q_D(const GetQuotaRootJob);
+  Q_D( const GetQuotaRootJob );
 
   QByteArray r = resource.toUpper();
 
-  if (d->quotas.contains(root) && d->quotas[root].contains(r)) {
+  if ( d->quotas.contains( root ) && d->quotas[root].contains( r ) ) {
     return d->quotas[root][r].second;
   }
-
   return -1;
 }
 
 QMap<QByteArray, qint64> GetQuotaRootJob::allUsages(const QByteArray &root) const
 {
-  Q_D(const GetQuotaRootJob);
+  Q_D( const GetQuotaRootJob );
 
   QMap<QByteArray, qint64> result;
 
-  if (d->quotas.contains(root)) {
+  if ( d->quotas.contains( root ) ) {
     const QMap< QByteArray, QPair<qint64, qint64> > quota = d->quotas[root];
     QMapIterator<QByteArray, QPair<qint64, qint64> > it( quota );
     while ( it.hasNext() ) {
@@ -161,17 +152,16 @@ QMap<QByteArray, qint64> GetQuotaRootJob::allUsages(const QByteArray &root) cons
       result[it.key()] = it.value().first;
     }
   }
-
   return result;
 }
 
 QMap<QByteArray, qint64> GetQuotaRootJob::allLimits(const QByteArray &root) const
 {
-  Q_D(const GetQuotaRootJob);
+  Q_D( const GetQuotaRootJob );
 
   QMap<QByteArray, qint64> result;
 
-  if (d->quotas.contains(root)) {
+  if ( d->quotas.contains( root ) ) {
     const QMap< QByteArray, QPair<qint64, qint64> > quota = d->quotas[root];
     QMapIterator<QByteArray, QPair<qint64, qint64> > it( quota );
     while ( it.hasNext() ) {
@@ -179,7 +169,6 @@ QMap<QByteArray, qint64> GetQuotaRootJob::allLimits(const QByteArray &root) cons
       result[it.key()] = it.value().second;
     }
   }
-
   return result;
 }
 

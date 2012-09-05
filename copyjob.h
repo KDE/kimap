@@ -46,7 +46,7 @@ class CopyJobPrivate;
 class KIMAP_EXPORT CopyJob : public Job
 {
   Q_OBJECT
-  Q_DECLARE_PRIVATE(CopyJob)
+  Q_DECLARE_PRIVATE( CopyJob )
 
   friend class SessionPrivate;
 

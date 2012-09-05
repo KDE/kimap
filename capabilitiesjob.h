@@ -45,7 +45,7 @@ class CapabilitiesJobPrivate;
 class KIMAP_EXPORT CapabilitiesJob : public Job
 {
   Q_OBJECT
-  Q_DECLARE_PRIVATE(CapabilitiesJob)
+  Q_DECLARE_PRIVATE( CapabilitiesJob )
 
   friend class SessionPrivate;
 

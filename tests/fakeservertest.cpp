@@ -51,15 +51,14 @@ void testLoadScenario() {
   fakeServer.addScenarioFromFile( TEST_DATA "/fakeserverscenario.log" );
   fakeServer.startAndWait();
 
-  KIMAP::Session session("127.0.0.1", 5989);
+  KIMAP::Session session( "127.0.0.1", 5989 );
 
-  KIMAP::ListJob *job = new KIMAP::ListJob(&session);
-  job->setIncludeUnsubscribed(true);
-  QVERIFY(job->exec());
+  KIMAP::ListJob *job = new KIMAP::ListJob( &session );
+  job->setIncludeUnsubscribed( true );
+  QVERIFY( job->exec() );
 
   fakeServer.quit();
 }
-
 
 };
 

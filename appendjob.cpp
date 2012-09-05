@@ -44,7 +44,7 @@ namespace KIMAP
 using namespace KIMAP;
 
 AppendJob::AppendJob( Session *session )
-  : Job( *new AppendJobPrivate(session, i18n("Append")) )
+  : Job( *new AppendJobPrivate( session, i18n( "Append" ) ) )
 {
 }
 
@@ -54,73 +54,73 @@ AppendJob::~AppendJob()
 
 void AppendJob::setMailBox( const QString &mailBox )
 {
-  Q_D(AppendJob);
+  Q_D( AppendJob );
   d->mailBox = mailBox;
 }
 
 QString AppendJob::mailBox() const
 {
-  Q_D(const AppendJob);
+  Q_D( const AppendJob );
   return d->mailBox;
 }
 
 void AppendJob::setFlags( const QList<QByteArray> &flags)
 {
-  Q_D(AppendJob);
+  Q_D( AppendJob );
   d->flags = flags;
 }
 
 QList<QByteArray> AppendJob::flags() const
 {
-  Q_D(const AppendJob);
+  Q_D( const AppendJob );
   return d->flags;
 }
 
 void AppendJob::setContent( const QByteArray &content )
 {
-  Q_D(AppendJob);
+  Q_D( AppendJob );
   d->content = content;
 }
 
 QByteArray AppendJob::content() const
 {
-  Q_D(const AppendJob);
+  Q_D( const AppendJob );
   return d->content;
 }
 
 qint64 AppendJob::uid() const
 {
-  Q_D(const AppendJob);
+  Q_D( const AppendJob );
   return d->uid;
 }
 
 void AppendJob::doStart()
 {
-  Q_D(AppendJob);
+  Q_D( AppendJob );
 
-  QByteArray parameters = '\"'+KIMAP::encodeImapFolderName( d->mailBox.toUtf8() )+'\"';
+  QByteArray parameters = '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + '\"';
 
   if ( !d->flags.isEmpty() ) {
-    parameters+=" (";
+    parameters += " (";
     foreach ( const QByteArray &flag, d->flags ) {
-      parameters+= flag+' ';
+      parameters+= flag + ' ';
     }
-    parameters.chop(1);
-    parameters+=')';
+    parameters.chop( 1 );
+    parameters += ')';
   }
 
-  parameters+=" {"+QByteArray::number(d->content.size())+'}';
+  parameters += " {" + QByteArray::number( d->content.size() ) + '}';
 
   d->tags << d->sessionInternal()->sendCommand( "APPEND", parameters );
 }
 
 void AppendJob::handleResponse( const Message &response )
 {
-  Q_D(AppendJob);
+  Q_D( AppendJob );
 
   for ( QList<Message::Part>::ConstIterator it = response.responseCode.begin();
         it != response.responseCode.end(); ++it ) {
-    if ( it->toString()=="APPENDUID" ) {
+    if ( it->toString() == "APPENDUID" ) {
       it = it + 2;
       if ( it != response.responseCode.end() ) {
         d->uid = it->toString().toLongLong();
@@ -129,7 +129,7 @@ void AppendJob::handleResponse( const Message &response )
     }
   }
 
-  if (handleErrorReplies(response) == NotHandled ) {
+  if ( handleErrorReplies( response ) == NotHandled ) {
     if ( response.content[0].toString() == "+" ) {
       d->sessionInternal()->sendData( d->content );
     }

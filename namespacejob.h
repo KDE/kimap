@@ -34,7 +34,7 @@ class NamespaceJobPrivate;
 class KIMAP_EXPORT NamespaceJob : public Job
 {
   Q_OBJECT
-  Q_DECLARE_PRIVATE(NamespaceJob)
+  Q_DECLARE_PRIVATE( NamespaceJob )
 
   friend class SessionPrivate;
 

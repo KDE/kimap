@@ -45,10 +45,10 @@ void testLogout()
     );
     fakeServer.startAndWait();
 
-    KIMAP::Session *session = new KIMAP::Session("127.0.0.1", 5989);
+    KIMAP::Session *session = new KIMAP::Session( "127.0.0.1", 5989 );
 
-    KIMAP::LogoutJob *logout = new KIMAP::LogoutJob(session);
-    QVERIFY(logout->exec());
+    KIMAP::LogoutJob *logout = new KIMAP::LogoutJob( session );
+    QVERIFY( logout->exec() );
 
     fakeServer.quit();
     delete session;
@@ -65,10 +65,10 @@ void testLogoutUntagged()
     );
     fakeServer.startAndWait();
 
-    KIMAP::Session *session = new KIMAP::Session("127.0.0.1", 5989);
+    KIMAP::Session *session = new KIMAP::Session( "127.0.0.1", 5989 );
 
-    KIMAP::LogoutJob *logout = new KIMAP::LogoutJob(session);
-    QVERIFY(logout->exec());
+    KIMAP::LogoutJob *logout = new KIMAP::LogoutJob( session );
+    QVERIFY( logout->exec() );
 
     fakeServer.quit();
     delete session;

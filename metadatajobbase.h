@@ -47,7 +47,7 @@ class MetaDataJobBasePrivate;
 class KIMAP_EXPORT MetaDataJobBase : public Job
 {
   Q_OBJECT
-  Q_DECLARE_PRIVATE(MetaDataJobBase)
+  Q_DECLARE_PRIVATE( MetaDataJobBase )
 
   friend class SessionPrivate;
 

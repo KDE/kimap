@@ -56,7 +56,7 @@ void AclJobBasePrivate::setRights(const QByteArray& rights)
     break;
   }
 
-  rightList = Acl::rightsFromString(rights);
+  rightList = Acl::rightsFromString( rights );
 }
 
 void AclJobBasePrivate::setRights(AclJobBase::AclModifier _modifier, Acl::Rights rights)
@@ -69,13 +69,13 @@ void AclJobBasePrivate::setRights(AclJobBase::AclModifier _modifier, Acl::Rights
 
 
 AclJobBase::AclJobBase( Session *session )
-  : Job( *new AclJobBasePrivate(session, i18n("AclJobBase")) )
+  : Job( *new AclJobBasePrivate( session, i18n( "AclJobBase" ) ) )
 {
 }
 
 
 AclJobBase::AclJobBase( JobPrivate &dd )
-  : Job(dd)
+  : Job( dd )
 {
 
 }
@@ -87,13 +87,13 @@ AclJobBase::~AclJobBase()
 
 void AclJobBase::setMailBox( const QString &mailBox )
 {
-  Q_D(AclJobBase);
+  Q_D( AclJobBase );
   d->mailBox = mailBox;
 }
 
 QString AclJobBase::mailBox() const
 {
-  Q_D(const AclJobBase);
+  Q_D( const AclJobBase );
   return d->mailBox;
 }
 

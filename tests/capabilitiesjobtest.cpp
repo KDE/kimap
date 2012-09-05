@@ -79,18 +79,17 @@ void testCapabilities()
     FakeServer fakeServer;
     fakeServer.setScenario( scenario );
     fakeServer.startAndWait();
-    KIMAP::Session session("127.0.0.1", 5989);
+    KIMAP::Session session( "127.0.0.1", 5989 );
 
-    KIMAP::CapabilitiesJob *job = new KIMAP::CapabilitiesJob(&session);
+    KIMAP::CapabilitiesJob *job = new KIMAP::CapabilitiesJob( &session );
     bool result = job->exec();
-    QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
-    QVERIFY(result);
-    if (result) {
-      QCOMPARE(job->capabilities(), capabilities);
+    QEXPECT_FAIL( "bad" , "Expected failure on BAD response", Continue );
+    QVERIFY( result );
+    if ( result ) {
+      QCOMPARE( job->capabilities(), capabilities );
     }
     fakeServer.quit();
 }
-
 
 };
 

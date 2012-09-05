@@ -30,7 +30,7 @@ namespace KIMAP
   class MetaDataJobBasePrivate : public JobPrivate
   {
     public:
-      MetaDataJobBasePrivate( Session *session, const QString& name ) : JobPrivate(session, name), serverCapability(MetaDataJobBase::Metadata)
+      MetaDataJobBasePrivate( Session *session, const QString& name ) : JobPrivate( session, name ), serverCapability( MetaDataJobBase::Metadata )
       {}
 
       ~MetaDataJobBasePrivate() { }

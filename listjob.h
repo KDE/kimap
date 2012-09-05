@@ -37,19 +37,19 @@ struct KIMAP_EXPORT MailBoxDescriptor
 
   inline bool operator==(const MailBoxDescriptor &other) const
   {
-    return other.name==name && other.separator==separator;
+    return other.name == name && other.separator == separator;
   }
 
   inline bool operator<(const MailBoxDescriptor &other) const
   {
-    return other.name<name || (other.name==name && other.separator<separator);
+    return other.name < name || ( other.name == name && other.separator < separator );
   }
 };
 
 class KIMAP_EXPORT ListJob : public Job
 {
   Q_OBJECT
-  Q_DECLARE_PRIVATE(ListJob)
+  Q_DECLARE_PRIVATE( ListJob )
 
   friend class SessionPrivate;
 

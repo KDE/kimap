@@ -95,22 +95,22 @@ void testSingleSelect()
     fakeServer.setScenario( scenario );
     fakeServer.startAndWait();
 
-    KIMAP::Session session("127.0.0.1", 5989);
+    KIMAP::Session session( "127.0.0.1", 5989 );
 
-    KIMAP::SelectJob *job = new KIMAP::SelectJob(&session);
-    job->setMailBox("INBOX");
+    KIMAP::SelectJob *job = new KIMAP::SelectJob( &session );
+    job->setMailBox( "INBOX" );
     bool result = job->exec();
-    QEXPECT_FAIL("bad" , "Expected failure on BAD scenario", Continue);
-    QEXPECT_FAIL("no" , "Expected failure on NO scenario", Continue);
-    QVERIFY(result);
-    if (result) {
-      QCOMPARE(job->flags(), flags);
-      QCOMPARE(job->permanentFlags(), permanentflags);
-      QCOMPARE(job->messageCount(), messagecount);
-      QCOMPARE(job->recentCount(), recentcount);
-      QCOMPARE(job->firstUnseenIndex(), firstUnseenIndex);
-      QCOMPARE(job->uidValidity(), uidValidity);
-      QCOMPARE(job->nextUid(), nextUid);
+    QEXPECT_FAIL( "bad" , "Expected failure on BAD scenario", Continue );
+    QEXPECT_FAIL( "no" , "Expected failure on NO scenario", Continue );
+    QVERIFY( result );
+    if ( result ) {
+      QCOMPARE( job->flags(), flags );
+      QCOMPARE( job->permanentFlags(), permanentflags );
+      QCOMPARE( job->messageCount(), messagecount );
+      QCOMPARE( job->recentCount(), recentcount );
+      QCOMPARE( job->firstUnseenIndex(), firstUnseenIndex );
+      QCOMPARE( job->uidValidity(), uidValidity );
+      QCOMPARE( job->nextUid(), nextUid );
     }
 
     fakeServer.quit();
@@ -128,17 +128,16 @@ void testSeveralSelect()
     );
     fakeServer.startAndWait();
 
-    KIMAP::Session session("127.0.0.1", 5989);
+    KIMAP::Session session( "127.0.0.1", 5989 );
 
-    KIMAP::SelectJob *job = new KIMAP::SelectJob(&session);
-    job->setMailBox("INBOX");
-    QVERIFY(job->exec());
+    KIMAP::SelectJob *job = new KIMAP::SelectJob( &session );
+    job->setMailBox( "INBOX" );
+    QVERIFY( job->exec() );
 
-    job = new KIMAP::SelectJob(&session);
-    job->setMailBox("INBOX/Foo");
-    QVERIFY(job->exec());
+    job = new KIMAP::SelectJob( &session );
+    job->setMailBox( "INBOX/Foo" );
+    QVERIFY( job->exec() );
 }
-
 
 };
 

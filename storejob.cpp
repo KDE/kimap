@@ -46,9 +46,9 @@ namespace KIMAP
 using namespace KIMAP;
 
 StoreJob::StoreJob( Session *session )
-  : Job( *new StoreJobPrivate(session, i18n("Store")) )
+  : Job( *new StoreJobPrivate( session, i18n( "Store" ) ) )
 {
-  Q_D(StoreJob);
+  Q_D( StoreJob );
   d->uidBased = false;
   d->mode = SetFlags;
 }
@@ -59,82 +59,84 @@ StoreJob::~StoreJob()
 
 void StoreJob::setSequenceSet( const ImapSet &set )
 {
-  Q_D(StoreJob);
+  Q_D( StoreJob );
   d->set = set;
 }
 
 ImapSet StoreJob::sequenceSet() const
 {
-  Q_D(const StoreJob);
+  Q_D( const StoreJob );
   return d->set;
 }
 
 void StoreJob::setUidBased(bool uidBased)
 {
-  Q_D(StoreJob);
+  Q_D( StoreJob );
   d->uidBased = uidBased;
 }
 
 bool StoreJob::isUidBased() const
 {
-  Q_D(const StoreJob);
+  Q_D( const StoreJob );
   return d->uidBased;
 }
 
 void StoreJob::setFlags( const MessageFlags &flags )
 {
-  Q_D(StoreJob);
+  Q_D( StoreJob );
   d->flags = flags;
 }
 
 MessageFlags StoreJob::flags() const
 {
-  Q_D(const StoreJob);
+  Q_D( const StoreJob );
   return d->flags;
 }
 
 void StoreJob::setMode( StoreMode mode )
 {
-  Q_D(StoreJob);
+  Q_D( StoreJob );
   d->mode = mode;
 }
 
 StoreJob::StoreMode StoreJob::mode() const
 {
-  Q_D(const StoreJob);
+  Q_D( const StoreJob );
   return d->mode;
 }
 
 QMap<int, MessageFlags> StoreJob::resultingFlags() const
 {
-  Q_D(const StoreJob);
+  Q_D( const StoreJob );
   return d->resultingFlags;
 }
 
 void StoreJob::doStart()
 {
-  Q_D(StoreJob);
+  Q_D( StoreJob );
 
   QByteArray parameters = d->set.toImapSequenceSet()+' ';
 
   switch ( d->mode ) {
   case SetFlags:
-    parameters+= "FLAGS";
+    parameters += "FLAGS";
     break;
   case AppendFlags:
-    parameters+= "+FLAGS";
+    parameters += "+FLAGS";
     break;
   case RemoveFlags:
-    parameters+= "-FLAGS";
+    parameters += "-FLAGS";
     break;
   }
 
-  parameters+=" (";
+  parameters += " (";
   foreach ( const QByteArray &flag, d->flags ) {
-    parameters+=flag+' ';
+    parameters += flag + ' ';
   }
-  if (!d->flags.isEmpty()) parameters.chop(1);
-  parameters+=')';
+  if ( !d->flags.isEmpty() ) {
+    parameters.chop( 1 );
+  }
+  parameters += ')';
 
   kDebug() << parameters;
 
@@ -148,12 +150,12 @@ void StoreJob::doStart()
 
 void StoreJob::handleResponse( const Message &response )
 {
-  Q_D(StoreJob);
+  Q_D( StoreJob );
 
-  if (handleErrorReplies(response) == NotHandled ) {
-    if ( response.content.size() == 4
-      && response.content[2].toString()=="FETCH"
-      && response.content[3].type()==Message::Part::List ) {
+  if ( handleErrorReplies( response ) == NotHandled ) {
+    if ( response.content.size() == 4 &&
+         response.content[2].toString() == "FETCH" &&
+         response.content[3].type() == Message::Part::List ) {
 
       int id = response.content[1].toString().toInt();
       qint64 uid = 0;
@@ -163,21 +165,21 @@ void StoreJob::handleResponse( const Message &response )
       QList<QByteArray> content = response.content[3].toList();
 
       for ( QList<QByteArray>::ConstIterator it = content.constBegin();
-            it!=content.constEnd(); ++it ) {
+            it != content.constEnd(); ++it ) {
         QByteArray str = *it;
         ++it;
 
-        if ( str=="FLAGS" ) {
-          if ( (*it).startsWith('(') && (*it).endsWith(')') ) {
+        if ( str == "FLAGS" ) {
+          if ( ( *it ).startsWith( '(' ) && ( *it ).endsWith( ')' ) ) {
             QByteArray str = *it;
-            str.chop(1);
-            str.remove(0, 1);
-            resultingFlags = str.split(' ');
+            str.chop( 1 );
+            str.remove( 0, 1 );
+            resultingFlags = str.split( ' ' );
           } else {
             resultingFlags << *it;
           }
-        } else if ( str=="UID" ) {
-          uid = it->toLongLong(&uidFound);
+        } else if ( str == "UID" ) {
+          uid = it->toLongLong( &uidFound );
         }
       }
 

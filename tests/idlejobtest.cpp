@@ -28,8 +28,8 @@
 #include <QtTest>
 #include <KDebug>
 
-Q_DECLARE_METATYPE(QList<int>)
-Q_DECLARE_METATYPE(KIMAP::IdleJob*)
+Q_DECLARE_METATYPE( QList<int> )
+Q_DECLARE_METATYPE( KIMAP::IdleJob* )
 
 class IdleJobTest: public QObject {
   Q_OBJECT

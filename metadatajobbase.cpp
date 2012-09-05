@@ -28,43 +28,40 @@
 using namespace KIMAP;
 
 MetaDataJobBase::MetaDataJobBase( Session *session )
-  : Job( *new MetaDataJobBasePrivate(session, i18n("MetaDataJobBase")) )
+  : Job( *new MetaDataJobBasePrivate( session, i18n( "MetaDataJobBase" ) ) )
 {
 }
 
-
 MetaDataJobBase::MetaDataJobBase( JobPrivate &dd )
-  : Job(dd)
+  : Job( dd )
 {
-
 }
 
 MetaDataJobBase::~MetaDataJobBase()
 {
 }
 
-
 void MetaDataJobBase::setMailBox( const QString &mailBox )
 {
-  Q_D(MetaDataJobBase);
+  Q_D( MetaDataJobBase );
   d->mailBox = mailBox;
 }
 
 QString MetaDataJobBase::mailBox() const
 {
-  Q_D(const MetaDataJobBase);
+  Q_D( const MetaDataJobBase );
   return d->mailBox;
 }
 
 void MetaDataJobBase::setServerCapability(const ServerCapability& capability)
 {
-  Q_D(MetaDataJobBase);
+  Q_D( MetaDataJobBase );
   d->serverCapability = capability;
 }
 
 MetaDataJobBase::ServerCapability MetaDataJobBase::serverCapability() const
 {
-  Q_D(const MetaDataJobBase);
+  Q_D( const MetaDataJobBase );
   return d->serverCapability;
 }
 

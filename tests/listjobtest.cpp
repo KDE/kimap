@@ -29,8 +29,8 @@
 #include <QtTest>
 #include <KDebug>
 
-Q_DECLARE_METATYPE(QList<KIMAP::MailBoxDescriptor>)
-Q_DECLARE_METATYPE(QList< QList<QByteArray> >)
+Q_DECLARE_METATYPE( QList<KIMAP::MailBoxDescriptor> )
+Q_DECLARE_METATYPE( QList< QList<QByteArray> > )
 
 class ListJobTest: public QObject {
   Q_OBJECT
@@ -199,36 +199,35 @@ void testList()
     fakeServer.setScenario( scenario );
     fakeServer.startAndWait();
 
-    KIMAP::Session session("127.0.0.1", 5989);
+    KIMAP::Session session( "127.0.0.1", 5989 );
 
-    KIMAP::ListJob *job = new KIMAP::ListJob(&session);
-    job->setIncludeUnsubscribed(unsubscribed);
+    KIMAP::ListJob *job = new KIMAP::ListJob( &session );
+    job->setIncludeUnsubscribed( unsubscribed );
 
     QSignalSpy spy( job,
                     SIGNAL(mailBoxesReceived(const QList<KIMAP::MailBoxDescriptor>&,
                                              const QList< QList<QByteArray> >&)) );
 
     bool result = job->exec();
-    QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
-    QEXPECT_FAIL("no" , "Expected failure on NO response", Continue);
-    QVERIFY(result);
-    if (result) {
-      QVERIFY( spy.count()>0 );
+    QEXPECT_FAIL( "bad" , "Expected failure on BAD response", Continue );
+    QEXPECT_FAIL( "no" , "Expected failure on NO response", Continue );
+    QVERIFY( result );
+    if ( result ) {
+      QVERIFY( spy.count() > 0 );
       QList<KIMAP::MailBoxDescriptor> mailBoxes;
 
-      for ( int i=0; i<spy.count(); i++ ) {
+      for ( int i = 0; i < spy.count(); i++ ) {
         mailBoxes+= spy.at( i ).at( 0 ).value< QList<KIMAP::MailBoxDescriptor> >();
       }
 
       //kDebug() << mailBoxes.first().name;
       //kDebug() << listresult.first().name;
-      QCOMPARE(mailBoxes, listresult);
+      QCOMPARE( mailBoxes, listresult );
     }
 //     QCOMPARE(job->mailBox(), mailbox);
 
     fakeServer.quit();
 }
-
 
 };
 

@@ -34,7 +34,7 @@ namespace KIMAP
   class NamespaceJobPrivate : public JobPrivate
   {
     public:
-      NamespaceJobPrivate( Session *session,  const QString& name ) : JobPrivate(session, name) { }
+      NamespaceJobPrivate( Session *session,  const QString& name ) : JobPrivate( session, name ) { }
       ~NamespaceJobPrivate() { }
 
       QList<MailBoxDescriptor> processNamespaceList( const QList<QByteArray> &namespaceList )
@@ -55,7 +55,7 @@ namespace KIMAP
                 descriptor.separator = QChar( parts[1][0] );
 
                 result << descriptor;
-            } catch (KIMAP::ImapParserException e) {
+            } catch ( KIMAP::ImapParserException e ) {
                 qWarning() << "The stream parser raised an exception during namespace list parsing:" << e.what();
                 qWarning() << "namespacelist:" << namespaceList;
             }
@@ -74,7 +74,7 @@ namespace KIMAP
 using namespace KIMAP;
 
 NamespaceJob::NamespaceJob( Session *session )
-  : Job( *new NamespaceJobPrivate(session, i18n("Namespace")) )
+  : Job( *new NamespaceJobPrivate( session, i18n( "Namespace" ) ) )
 {
 }
 
@@ -84,25 +84,25 @@ NamespaceJob::~NamespaceJob()
 
 QList<MailBoxDescriptor> NamespaceJob::personalNamespaces() const
 {
-  Q_D(const NamespaceJob);
+  Q_D( const NamespaceJob );
   return d->personalNamespaces;
 }
 
 QList<MailBoxDescriptor> NamespaceJob::userNamespaces() const
 {
-  Q_D(const NamespaceJob);
+  Q_D( const NamespaceJob );
   return d->userNamespaces;
 }
 
 QList<MailBoxDescriptor> NamespaceJob::sharedNamespaces() const
 {
-  Q_D(const NamespaceJob);
+  Q_D( const NamespaceJob );
   return d->sharedNamespaces;
 }
 
 bool NamespaceJob::containsEmptyNamespace() const
 {
-  Q_D(const NamespaceJob);
+  Q_D( const NamespaceJob );
   QList<MailBoxDescriptor> completeList = d->personalNamespaces
                                         + d->userNamespaces
                                         + d->sharedNamespaces;
@@ -118,16 +118,16 @@ bool NamespaceJob::containsEmptyNamespace() const
 
 void NamespaceJob::doStart()
 {
-  Q_D(NamespaceJob);
+  Q_D( NamespaceJob );
   d->tags << d->sessionInternal()->sendCommand( "NAMESPACE" );
 }
 
 void NamespaceJob::handleResponse( const Message &response )
 {
-  Q_D(NamespaceJob);
-  if (handleErrorReplies(response) == NotHandled) {
-    if ( response.content.size() >= 5
-      && response.content[1].toString()=="NAMESPACE" ) {
+  Q_D( NamespaceJob );
+  if ( handleErrorReplies( response ) == NotHandled ) {
+    if ( response.content.size() >= 5 &&
+         response.content[1].toString() == "NAMESPACE" ) {
       // Personal namespaces
       d->personalNamespaces = d->processNamespaceList( response.content[2].toList() );
 

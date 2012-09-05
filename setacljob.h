@@ -44,7 +44,7 @@ class SetAclJobPrivate;
 class KIMAP_EXPORT SetAclJob : public AclJobBase
 {
   Q_OBJECT
-  Q_DECLARE_PRIVATE(SetAclJob)
+  Q_DECLARE_PRIVATE( SetAclJob )
 
   friend class SessionPrivate;
 

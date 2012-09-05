@@ -37,14 +37,14 @@
 #include "sessionthread_p.h"
 #include "rfccodecs.h"
 
-Q_DECLARE_METATYPE(KTcpSocket::SslVersion)
-Q_DECLARE_METATYPE(QSslSocket::SslMode)
+Q_DECLARE_METATYPE( KTcpSocket::SslVersion )
+Q_DECLARE_METATYPE( QSslSocket::SslMode )
 static const int _kimap_sslVersionId = qRegisterMetaType<KTcpSocket::SslVersion>();
 
 using namespace KIMAP;
 
 Session::Session( const QString &hostName, quint16 port, QObject *parent)
-  : QObject(parent), d(new SessionPrivate(this))
+  : QObject( parent ), d( new SessionPrivate( this ) )
 {
   if ( !qgetenv( "KIMAP_LOGFILE" ).isEmpty() ) {
     d->logger = new SessionLogger;
@@ -54,10 +54,10 @@ Session::Session( const QString &hostName, quint16 port, QObject *parent)
   d->state = Disconnected;
   d->jobRunning = false;
 
-  d->thread = new SessionThread(hostName, port, this);
-  connect(d->thread, SIGNAL(encryptionNegotiationResult(bool,KTcpSocket::SslVersion)),
-          d, SLOT(onEncryptionNegotiationResult(bool,KTcpSocket::SslVersion)));
-  connect(d->thread, SIGNAL(sslError(KSslErrorUiData)), this, SLOT(handleSslError(KSslErrorUiData)));
+  d->thread = new SessionThread( hostName, port, this );
+  connect( d->thread, SIGNAL(encryptionNegotiationResult(bool,KTcpSocket::SslVersion)),
+           d, SLOT(onEncryptionNegotiationResult(bool,KTcpSocket::SslVersion)) );
+  connect( d->thread, SIGNAL(sslError(KSslErrorUiData)), this, SLOT(handleSslError(KSslErrorUiData)) );
 
   d->startSocketTimer();
   d->thread->start();
@@ -115,22 +115,22 @@ void KIMAP::Session::close()
 
 void SessionPrivate::handleSslError(const KSslErrorUiData& errorData)
 {
-  if (uiProxy && uiProxy->ignoreSslError(errorData)) {
-    QMetaObject::invokeMethod( thread, "sslErrorHandlerResponse", Q_ARG(bool, true) );
+  if ( uiProxy && uiProxy->ignoreSslError( errorData ) ) {
+    QMetaObject::invokeMethod( thread, "sslErrorHandlerResponse", Q_ARG( bool, true ) );
   } else {
-    QMetaObject::invokeMethod( thread, "sslErrorHandlerResponse", Q_ARG(bool, false) );
+    QMetaObject::invokeMethod( thread, "sslErrorHandlerResponse", Q_ARG( bool, false ) );
   }
 }
 
 SessionPrivate::SessionPrivate( Session *session )
   : QObject( session ),
-    q(session),
-    state(Session::Disconnected),
-    logger(0),
-    currentJob(0),
-    tagCount(0),
-    sslVersion(KTcpSocket::UnknownSslVersion),
-    socketTimerInterval(30000) // By default timeouts on 30s
+    q( session ),
+    state( Session::Disconnected ),
+    logger( 0 ),
+    currentJob( 0 ),
+    tagCount( 0 ),
+    sslVersion( KTcpSocket::UnknownSslVersion ),
+    socketTimerInterval( 30000 ) // By default timeouts on 30s
 {
 }
 
@@ -141,7 +141,7 @@ SessionPrivate::~SessionPrivate()
 
 void SessionPrivate::addJob(Job *job)
 {
-  queue.append(job);
+  queue.append( job );
   emit q->jobQueueSizeChanged( q->jobQueueSize() );
 
   QObject::connect( job, SIGNAL(result(KJob*)), q, SLOT(jobDone(KJob*)) );
@@ -191,13 +191,14 @@ void SessionPrivate::jobDone( KJob *job )
 void SessionPrivate::jobDestroyed( QObject *job )
 {
   queue.removeAll( static_cast<KIMAP::Job*>( job ) );
-  if ( currentJob == job )
+  if ( currentJob == job ) {
     currentJob = 0;
+  }
 }
 
 void SessionPrivate::responseReceived( const Message &response )
 {
-  if ( logger && ( state==Session::Authenticated || state==Session::Selected ) ) {
+  if ( logger && ( state == Session::Authenticated || state == Session::Selected ) ) {
     logger->dataReceived( response.toString() );
   }
 
@@ -214,11 +215,11 @@ void SessionPrivate::responseReceived( const Message &response )
 
   switch ( state ) {
   case Session::Disconnected:
-    if (socketTimer.isActive()) {
+    if ( socketTimer.isActive() ) {
       stopSocketTimer();
     }
-    if ( code=="OK" ) {
-      setState(Session::NotAuthenticated);
+    if ( code == "OK" ) {
+      setState( Session::NotAuthenticated );
 
       Message simplified = response;
       simplified.content.removeFirst(); // Strip the tag
@@ -226,8 +227,8 @@ void SessionPrivate::responseReceived( const Message &response )
       greeting = simplified.toString().trimmed(); // Save the server greeting
 
       startNext();
-    } else if ( code=="PREAUTH" ) {
-      setState(Session::Authenticated);
+    } else if ( code == "PREAUTH" ) {
+      setState( Session::Authenticated );
 
       Message simplified = response;
       simplified.content.removeFirst(); // Strip the tag
@@ -240,74 +241,79 @@ void SessionPrivate::responseReceived( const Message &response )
     }
     return;
   case Session::NotAuthenticated:
-    if ( code=="OK" && tag==authTag ) {
-      setState(Session::Authenticated);
+    if ( code == "OK" && tag == authTag ) {
+      setState( Session::Authenticated );
     }
     break;
   case Session::Authenticated:
-    if ( code=="OK" && tag==selectTag ) {
-      setState(Session::Selected);
+    if ( code == "OK" && tag == selectTag ) {
+      setState( Session::Selected );
       currentMailBox = upcomingMailBox;
     }
     break;
   case Session::Selected:
-    if ( ( code=="OK" && tag==closeTag )
-      || ( code!="OK" && tag==selectTag) ) {
-      setState(Session::Authenticated);
+    if ( ( code == "OK" && tag == closeTag ) ||
+         ( code != "OK" && tag == selectTag ) ) {
+      setState( Session::Authenticated );
       currentMailBox = QByteArray();
-    } else if ( code=="OK" && tag==selectTag ) {
+    } else if ( code == "OK" && tag == selectTag ) {
       currentMailBox = upcomingMailBox;
     }
     break;
   }
 
-  if (tag==authTag) authTag.clear();
-  if (tag==selectTag) selectTag.clear();
-  if (tag==closeTag) closeTag.clear();
+  if ( tag == authTag ) {
+    authTag.clear();
+  }
+  if ( tag == selectTag ) {
+    selectTag.clear();
+  }
+  if ( tag == closeTag ) {
+    closeTag.clear();
+  }
 
   // If a job is running forward it the response
-  if ( currentJob!=0 ) {
+  if ( currentJob != 0 ) {
     restartSocketTimer();
     currentJob->handleResponse( response );
   } else {
     qWarning() << "A message was received from the server with no job to handle it:"
                << response.toString()
-               << '('+response.toString().toHex()+')';
+               << '(' + response.toString().toHex() + ')';
   }
 }
 
 void SessionPrivate::setState(Session::State s)
 {
-  if (s != state) {
+  if ( s != state ) {
     Session::State oldState = state;
     state = s;
-    emit q->stateChanged(state, oldState);
+    emit q->stateChanged( state, oldState );
   }
 }
 
 QByteArray SessionPrivate::sendCommand( const QByteArray &command, const QByteArray &args )
 {
-  QByteArray tag = 'A' + QByteArray::number(++tagCount).rightJustified(6, '0');
+  QByteArray tag = 'A' + QByteArray::number( ++tagCount ).rightJustified( 6, '0' );
 
-  QByteArray payload = tag+' '+command;
+  QByteArray payload = tag + ' ' + command;
   if ( !args.isEmpty() ) {
-    payload+= ' '+args;
+    payload += ' ' + args;
   }
 
   sendData( payload );
 
-  if ( command=="LOGIN" || command=="AUTHENTICATE" ) {
+  if ( command == "LOGIN" || command == "AUTHENTICATE" ) {
     authTag = tag;
-  } else if ( command=="SELECT" || command=="EXAMINE" ) {
+  } else if ( command == "SELECT" || command == "EXAMINE" ) {
     selectTag = tag;
     upcomingMailBox = args;
     upcomingMailBox.remove( 0, 1 );
     upcomingMailBox.chop( 1 );
     upcomingMailBox = KIMAP::decodeImapFolderName( upcomingMailBox );
-  } else if ( command=="CLOSE" ) {
+  } else if ( command == "CLOSE" ) {
     closeTag = tag;
   }
-
   return tag;
 }
 
@@ -315,11 +321,11 @@ void SessionPrivate::sendData( const QByteArray &data )
 {
   restartSocketTimer();
 
-  if ( logger && ( state==Session::Authenticated || state==Session::Selected ) ) {
+  if ( logger && ( state == Session::Authenticated || state == Session::Selected ) ) {
     logger->dataSent( data );
   }
 
-  thread->sendData(data+"\r\n");
+  thread->sendData( data + "\r\n" );
 }
 
 void SessionPrivate::socketConnected()
@@ -331,10 +337,10 @@ void SessionPrivate::socketConnected()
   if ( !queue.isEmpty() ) {
     KIMAP::LoginJob *login = qobject_cast<KIMAP::LoginJob*>( queue.first() );
     if ( login ) {
-      willUseSsl = ( login->encryptionMode() == KIMAP::LoginJob::SslV2 )
-                || ( login->encryptionMode() == KIMAP::LoginJob::SslV3 )
-                || ( login->encryptionMode() == KIMAP::LoginJob::SslV3_1 )
-                || ( login->encryptionMode() == KIMAP::LoginJob::AnySslVersion );
+      willUseSsl = ( login->encryptionMode() == KIMAP::LoginJob::SslV2 ) ||
+                   ( login->encryptionMode() == KIMAP::LoginJob::SslV3 ) ||
+                   ( login->encryptionMode() == KIMAP::LoginJob::SslV3_1 ) ||
+                   ( login->encryptionMode() == KIMAP::LoginJob::AnySslVersion );
 
       userName = login->userName();
     }
@@ -349,16 +355,16 @@ void SessionPrivate::socketConnected()
 
 void SessionPrivate::socketDisconnected()
 {
-  if (socketTimer.isActive()) {
+  if ( socketTimer.isActive() ) {
     stopSocketTimer();
   }
 
-  if ( logger && ( state==Session::Authenticated || state==Session::Selected ) ) {
+  if ( logger && ( state == Session::Authenticated || state == Session::Selected ) ) {
     logger->disconnectionOccured();
   }
 
   if ( state != Session::Disconnected ) {
-    setState(Session::Disconnected);
+    setState( Session::Disconnected );
     emit q->connectionLost();
   } else {
     emit q->connectionFailed();
@@ -376,7 +382,7 @@ void SessionPrivate::socketActivity()
 
 void SessionPrivate::socketError()
 {
-  if (socketTimer.isActive()) {
+  if ( socketTimer.isActive() ) {
     stopSocketTimer();
   }
 
@@ -398,14 +404,14 @@ void SessionPrivate::clearJobQueue()
     currentJob->connectionLost();
   }
 
-  qDeleteAll(queue);
+  qDeleteAll( queue );
   queue.clear();
   emit q->jobQueueSizeChanged( 0 );
 }
 
 void SessionPrivate::startSsl(const KTcpSocket::SslVersion &version)
 {
-  QMetaObject::invokeMethod( thread, "startSsl", Qt::QueuedConnection, Q_ARG(KTcpSocket::SslVersion, version) );
+  QMetaObject::invokeMethod( thread, "startSsl", Qt::QueuedConnection, Q_ARG( KTcpSocket::SslVersion, version ) );
 }
 
 QString Session::selectedMailBox() const
@@ -450,7 +456,7 @@ int SessionPrivate::socketTimeout() const
 
 void SessionPrivate::startSocketTimer()
 {
-  if ( socketTimerInterval<0 ) {
+  if ( socketTimerInterval < 0 ) {
     return;
   }
   Q_ASSERT( !socketTimer.isActive() );
@@ -464,7 +470,7 @@ void SessionPrivate::startSocketTimer()
 
 void SessionPrivate::stopSocketTimer()
 {
-  if ( socketTimerInterval<0 ) {
+  if ( socketTimerInterval < 0 ) {
     return;
   }
 

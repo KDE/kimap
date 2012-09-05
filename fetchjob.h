@@ -56,7 +56,7 @@ typedef QList<QByteArray> MessageFlags;
 class KIMAP_EXPORT FetchJob : public Job
 {
   Q_OBJECT
-  Q_DECLARE_PRIVATE(FetchJob)
+  Q_DECLARE_PRIVATE( FetchJob )
 
   friend class SessionPrivate;
 

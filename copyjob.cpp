@@ -34,7 +34,7 @@ namespace KIMAP
   class CopyJobPrivate : public JobPrivate
   {
     public:
-      CopyJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name) { }
+      CopyJobPrivate( Session *session, const QString& name ) : JobPrivate( session, name ) { }
       ~CopyJobPrivate() { }
 
       QString mailBox;
@@ -47,9 +47,9 @@ namespace KIMAP
 using namespace KIMAP;
 
 CopyJob::CopyJob( Session *session )
-  : Job( *new CopyJobPrivate(session, i18n("Copy")) )
+  : Job( *new CopyJobPrivate( session, i18n( "Copy" ) ) )
 {
-  Q_D(CopyJob);
+  Q_D( CopyJob );
   d->uidBased = false;
 }
 
@@ -59,53 +59,53 @@ CopyJob::~CopyJob()
 
 void CopyJob::setMailBox( const QString &mailBox )
 {
-  Q_D(CopyJob);
+  Q_D( CopyJob );
   d->mailBox = mailBox;
 }
 
 QString CopyJob::mailBox() const
 {
-  Q_D(const CopyJob);
+  Q_D( const CopyJob );
   return d->mailBox;
 }
 
 void CopyJob::setSequenceSet( const ImapSet &set )
 {
-  Q_D(CopyJob);
+  Q_D( CopyJob );
   d->set = set;
 }
 
 ImapSet CopyJob::sequenceSet() const
 {
-  Q_D(const CopyJob);
+  Q_D( const CopyJob );
   return d->set;
 }
 
 
 void CopyJob::setUidBased( bool uidBased )
 {
-  Q_D(CopyJob);
+  Q_D( CopyJob );
   d->uidBased = uidBased;
 }
 
 bool CopyJob::isUidBased() const
 {
-  Q_D(const CopyJob);
+  Q_D( const CopyJob );
   return d->uidBased;
 }
 
 ImapSet CopyJob::resultingUids() const
 {
-  Q_D(const CopyJob);
+  Q_D( const CopyJob );
   return d->resultingUids;
 }
 
 void CopyJob::doStart()
 {
-  Q_D(CopyJob);
+  Q_D( CopyJob );
 
   QByteArray parameters = d->set.toImapSequenceSet()+' ';
-  parameters+= '\"'+KIMAP::encodeImapFolderName( d->mailBox.toUtf8() )+'\"';
+  parameters += '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + '\"';
 
   QByteArray command = "COPY";
   if ( d->uidBased ) {
@@ -117,11 +117,11 @@ void CopyJob::doStart()
 
 void CopyJob::handleResponse( const Message &response )
 {
-  Q_D(CopyJob);
+  Q_D( CopyJob );
 
   for ( QList<Message::Part>::ConstIterator it = response.responseCode.begin();
         it != response.responseCode.end(); ++it ) {
-    if ( it->toString()=="COPYUID" ) {
+    if ( it->toString() == "COPYUID" ) {
       it = it + 3;
       if ( it < response.responseCode.end() ) {
         d->resultingUids = ImapSet::fromImapSequenceSet( it->toString() );

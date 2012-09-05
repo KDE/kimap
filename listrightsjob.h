@@ -49,7 +49,7 @@ class ListRightsJobPrivate;
 class KIMAP_EXPORT ListRightsJob : public AclJobBase
 {
   Q_OBJECT
-  Q_DECLARE_PRIVATE(ListRightsJob)
+  Q_DECLARE_PRIVATE( ListRightsJob )
 
   friend class SessionPrivate;
 

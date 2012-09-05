@@ -32,7 +32,7 @@ namespace KIMAP
   class SubscribeJobPrivate : public JobPrivate
   {
     public:
-      SubscribeJobPrivate( Session *session, const QString& name ) : JobPrivate(session, name) { }
+      SubscribeJobPrivate( Session *session, const QString& name ) : JobPrivate( session, name ) { }
       ~SubscribeJobPrivate() { }
 
       QString mailBox;
@@ -42,7 +42,7 @@ namespace KIMAP
 using namespace KIMAP;
 
 SubscribeJob::SubscribeJob( Session *session )
-  : Job( *new SubscribeJobPrivate(session, i18n("Subscribe")) )
+  : Job( *new SubscribeJobPrivate( session, i18n( "Subscribe" ) ) )
 {
 }
 
@@ -52,21 +52,20 @@ SubscribeJob::~SubscribeJob()
 
 void SubscribeJob::doStart()
 {
-  Q_D(SubscribeJob);
-  d->tags << d->sessionInternal()->sendCommand( "SUBSCRIBE", '\"'+KIMAP::encodeImapFolderName( d->mailBox.toUtf8() )+'\"' );
+  Q_D( SubscribeJob );
+  d->tags << d->sessionInternal()->sendCommand( "SUBSCRIBE", '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + '\"' );
 }
 
 void SubscribeJob::setMailBox( const QString &mailBox )
 {
-  Q_D(SubscribeJob);
+  Q_D( SubscribeJob );
   d->mailBox = mailBox;
 }
 
 QString SubscribeJob::mailBox() const
 {
-  Q_D(const SubscribeJob);
+  Q_D( const SubscribeJob );
   return d->mailBox;
 }
-
 
 #include "subscribejob.moc"

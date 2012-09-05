@@ -32,7 +32,7 @@ namespace KIMAP
   class SetMetaDataJobPrivate : public MetaDataJobBasePrivate
   {
     public:
-      SetMetaDataJobPrivate( Session *session, const QString& name ) : MetaDataJobBasePrivate(session, name), metaDataErrors(0), maxAcceptedSize(-1) { }
+      SetMetaDataJobPrivate( Session *session, const QString& name ) : MetaDataJobBasePrivate( session, name ), metaDataErrors( 0 ), maxAcceptedSize( -1 ) { }
       ~SetMetaDataJobPrivate() { }
 
       QMap<QByteArray, QByteArray> entries;
@@ -46,7 +46,7 @@ namespace KIMAP
 using namespace KIMAP;
 
 SetMetaDataJob::SetMetaDataJob( Session *session )
-  : MetaDataJobBase( *new SetMetaDataJobPrivate(session, i18n("SetMetaData")) )
+  : MetaDataJobBase( *new SetMetaDataJobPrivate( session, i18n( "SetMetaData" ) ) )
 {
 }
 
@@ -56,32 +56,32 @@ SetMetaDataJob::~SetMetaDataJob()
 
 void SetMetaDataJob::doStart()
 {
-  Q_D(SetMetaDataJob);
+  Q_D( SetMetaDataJob );
   QByteArray parameters;
   parameters = '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + "\" ";
   d->entriesIt = d->entries.constBegin();
 
   QByteArray command = "SETMETADATA";
-  if (d->serverCapability == Annotatemore) {
+  if ( d->serverCapability == Annotatemore ) {
     command = "SETANNOTATION";
     parameters += '\"' + d->entryName + "\" (";
-    d->m_name = i18n("SetAnnotation");
-    if (!d->entries.isEmpty()) {
-      for (; d->entriesIt != d->entries.constEnd(); ++d->entriesIt) {
-        parameters  += '\"' + d->entriesIt.key() + "\" \"" + d->entriesIt.value() + "\" ";
+    d->m_name = i18n( "SetAnnotation" );
+    if ( !d->entries.isEmpty() ) {
+      for ( ; d->entriesIt != d->entries.constEnd(); ++d->entriesIt ) {
+        parameters += '\"' + d->entriesIt.key() + "\" \"" + d->entriesIt.value() + "\" ";
       }
       parameters[parameters.length() - 1] = ')';
     }
   } else {
     parameters += '(';
-    if (!d->entries.isEmpty()) {
+    if ( !d->entries.isEmpty() ) {
       parameters += '\"' + d->entriesIt.key() + '\"';
       parameters += ' ';
-      parameters +=" {" + QByteArray::number(d->entriesIt.value().size()) + '}';
+      parameters += " {" + QByteArray::number( d->entriesIt.value().size() ) + '}';
     }
   }
 
-  if (d->entries.isEmpty()) {
+  if ( d->entries.isEmpty() ) {
     parameters += ')';
   }
 
@@ -91,42 +91,44 @@ void SetMetaDataJob::doStart()
 
 void SetMetaDataJob::handleResponse( const Message &response )
 {
-  Q_D(SetMetaDataJob);
+  Q_D( SetMetaDataJob );
 
   //TODO: Test if a server can really return more then one untagged NO response. If not, no need to OR the error codes
-  if ( !response.content.isEmpty()
-        && d->tags.contains( response.content.first().toString() ) ) {
+  if ( !response.content.isEmpty() &&
+       d->tags.contains( response.content.first().toString() ) ) {
     if ( response.content[1].toString() == "NO" ) {
       setError( UserDefinedError );
-      setErrorText( i18n("%1 failed, server replied: %2", d->m_name, response.toString().constData()) );
-      if (response.content[2].toString() == "[ANNOTATEMORE TOOMANY]" || response.content[2].toString() == "[METADATA TOOMANY]") {
+      setErrorText( i18n( "%1 failed, server replied: %2", d->m_name, response.toString().constData() ) );
+      if ( response.content[2].toString() == "[ANNOTATEMORE TOOMANY]" ||
+           response.content[2].toString() == "[METADATA TOOMANY]" ) {
         d->metaDataErrors |= TooMany;
-      } else if (response.content[2].toString() == "[ANNOTATEMORE TOOBIG]" || response.content[2].toString().startsWith("[METADATA MAXSIZE")) {
+      } else if ( response.content[2].toString() == "[ANNOTATEMORE TOOBIG]" ||
+                  response.content[2].toString().startsWith( "[METADATA MAXSIZE" ) ) {
         d->metaDataErrors |= TooBig;
         d->maxAcceptedSize = -1;
-        if (response.content[2].toString().startsWith("[METADATA MAXSIZE")) { //krazy:exclude=strings
+        if ( response.content[2].toString().startsWith( "[METADATA MAXSIZE" ) ) { //krazy:exclude=strings
           QByteArray max = response.content[2].toString();
-          max.replace("[METADATA MAXSIZE",""); //krazy:exclude=doublequote_chars
-          max.replace("]", "");                //krazy:exclude=doublequote_chars
+          max.replace( "[METADATA MAXSIZE", "" ); //krazy:exclude=doublequote_chars
+          max.replace( "]", "" );                 //krazy:exclude=doublequote_chars
           d->maxAcceptedSize = max.toLongLong();
         }
-      } else if (response.content[2].toString() == "[METADATA NOPRIVATE]") {
+      } else if ( response.content[2].toString() == "[METADATA NOPRIVATE]" ) {
         d->metaDataErrors |= NoPrivate;
       }
     } else if ( response.content.size() < 2 ) {
-      setErrorText( i18n("%1 failed, malformed reply from the server.", d->m_name) );
+      setErrorText( i18n( "%1 failed, malformed reply from the server.", d->m_name ) );
     } else if ( response.content[1].toString() != "OK" ) {
       setError( UserDefinedError );
-      setErrorText( i18n("%1 failed, server replied: %2", d->m_name, response.toString().constData()) );
+      setErrorText( i18n( "%1 failed, server replied: %2", d->m_name, response.toString().constData() ) );
     }
     emitResult();
    } else if ( d->serverCapability == Metadata && response.content[0].toString() == "+" ) {
       QByteArray content = d->entriesIt.value();
       ++d->entriesIt;
-     if (d->entriesIt == d->entries.constEnd()) {
+     if ( d->entriesIt == d->entries.constEnd() ) {
        content += ')';
      } else {
-       content +=" {" + QByteArray::number(d->entriesIt.value().size()) + '}';
+       content += " {" + QByteArray::number( d->entriesIt.value().size() ) + '}';
      }
 //      kDebug() << "SENT: " << content;
      d->sessionInternal()->sendData( content );
@@ -135,19 +137,19 @@ void SetMetaDataJob::handleResponse( const Message &response )
 
 void SetMetaDataJob::addMetaData(const QByteArray &name, const QByteArray &value)
 {
-  Q_D(SetMetaDataJob);
+  Q_D( SetMetaDataJob );
   d->entries[name] = value;
 }
 
 void SetMetaDataJob::setEntry(const QByteArray &entry)
 {
-  Q_D(SetMetaDataJob);
+  Q_D( SetMetaDataJob );
   d->entryName = entry;
 }
 
 SetMetaDataJob::MetaDataErrors SetMetaDataJob::metaDataErrors() const
 {
-  Q_D(const SetMetaDataJob);
+  Q_D( const SetMetaDataJob );
   return d->metaDataErrors;
 }
 

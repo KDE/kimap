@@ -72,21 +72,20 @@ void testDelete()
     fakeServer.setScenario( scenario );
     fakeServer.startAndWait();
 
-    KIMAP::Session session("127.0.0.1", 5989);
+    KIMAP::Session session( "127.0.0.1", 5989 );
 
-    KIMAP::DeleteJob *job = new KIMAP::DeleteJob(&session);
-    job->setMailBox(mailbox);
+    KIMAP::DeleteJob *job = new KIMAP::DeleteJob( &session );
+    job->setMailBox( mailbox );
     bool result = job->exec();
-    QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
-    QEXPECT_FAIL("no" , "Expected failure on NO response", Continue);
-    QVERIFY(result);
-    if (result) {
-      QCOMPARE(job->mailBox(), mailbox);
+    QEXPECT_FAIL( "bad" , "Expected failure on BAD response", Continue );
+    QEXPECT_FAIL( "no" , "Expected failure on NO response", Continue );
+    QVERIFY( result );
+    if ( result ) {
+      QCOMPARE( job->mailBox(), mailbox );
     }
 
     fakeServer.quit();
 }
-
 
 };
 
