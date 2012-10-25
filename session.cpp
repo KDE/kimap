@@ -499,5 +499,5 @@ void Session::setTimeout( int timeout )
   d->setSocketTimeout( timeout * 1000 );
 }
 
-#include "session.moc"
-#include "session_p.moc"
+#include "moc_session.cpp"
+#include "moc_session_p.cpp"

@@ -81,4 +81,3 @@ Acl::Rights MyRightsJob::rights()
   return d->myRights;
 }
 
-#include "myrightsjob.moc"

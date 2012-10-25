@@ -543,4 +543,4 @@ void FetchJobPrivate::skipLeadingSpaces( const QByteArray &structure, int &pos )
   }
 }
 
-#include "fetchjob.moc"
+#include "moc_fetchjob.cpp"

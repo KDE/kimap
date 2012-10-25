@@ -97,4 +97,3 @@ QString AclJobBase::mailBox() const
   return d->mailBox;
 }
 
-#include "acljobbase.moc"

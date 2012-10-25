@@ -68,4 +68,3 @@ QString DeleteJob::mailBox() const
   return d->mailBox;
 }
 
-#include "deletejob.moc"

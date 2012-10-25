@@ -83,4 +83,3 @@ QString RenameJob::destinationMailBox() const
 }
 
 
-#include "renamejob.moc"

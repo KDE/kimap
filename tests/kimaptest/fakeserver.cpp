@@ -221,4 +221,3 @@ void FakeServer::readClientPart( int scenarioNumber )
     m_scenarios[scenarioNumber] = scenario;
 }
 
-#include "fakeserver.moc"

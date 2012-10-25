@@ -156,4 +156,4 @@ int KIMAP::IdleJob::lastRecentCount() const
   return d->lastRecentCount;
 }
 
-#include "idlejob.moc"
+#include "moc_idlejob.cpp"

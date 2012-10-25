@@ -136,4 +136,3 @@ void AppendJob::handleResponse( const Message &response )
   }
 }
 
-#include "appendjob.moc"

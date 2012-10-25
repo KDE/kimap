@@ -140,4 +140,3 @@ void NamespaceJob::handleResponse( const Message &response )
   }
 }
 
-#include "namespacejob.moc"

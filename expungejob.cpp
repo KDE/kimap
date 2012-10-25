@@ -81,4 +81,3 @@ void ExpungeJob::handleResponse( const Message &response )
   }
 }
 
-#include "expungejob.moc"

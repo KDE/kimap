@@ -219,4 +219,4 @@ void ListJob::convertInboxName(KIMAP::MailBoxDescriptor& descriptor)
        }
     }
 }
-#include "listjob.moc"
+#include "moc_listjob.cpp"

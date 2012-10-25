@@ -89,4 +89,3 @@ Job::HandlerResponse Job::handleErrorReplies(const Message &response)
   return NotHandled;
 }
 
-#include "job.moc"

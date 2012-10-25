@@ -612,4 +612,4 @@ QString LoginJob::serverGreeting() const
   return d->serverGreeting;
 }
 
-#include "loginjob.moc"
+#include "moc_loginjob.cpp"

@@ -66,4 +66,3 @@ MetaDataJobBase::ServerCapability MetaDataJobBase::serverCapability() const
 }
 
 
-#include "metadatajobbase.moc"

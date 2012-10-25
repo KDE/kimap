@@ -194,4 +194,3 @@ void StoreJob::handleResponse( const Message &response )
   }
 }
 
-#include "storejob.moc"

@@ -75,4 +75,3 @@ void CapabilitiesJob::handleResponse( const Message &response )
   }
 }
 
-#include "capabilitiesjob.moc"

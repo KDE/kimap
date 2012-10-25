@@ -215,4 +215,3 @@ QMap<QByteArray, QMap<QByteArray, QByteArray> > GetMetaDataJob::allMetaData(cons
   return d->metadata[mailBox];
 }
 
-#include "getmetadatajob.moc"

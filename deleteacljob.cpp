@@ -69,4 +69,3 @@ QByteArray DeleteAclJob::identifier()
   return d->identifier();
 }
 
-#include "deleteacljob.moc"

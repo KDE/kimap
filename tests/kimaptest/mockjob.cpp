@@ -94,4 +94,3 @@ bool MockJob::isNull() const
   return d->command.isEmpty();
 }
 
-#include "mockjob.moc"

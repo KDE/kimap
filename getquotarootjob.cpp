@@ -172,4 +172,3 @@ QMap<QByteArray, qint64> GetQuotaRootJob::allLimits(const QByteArray &root) cons
   return result;
 }
 
-#include "getquotarootjob.moc"

@@ -52,4 +52,3 @@ void CloseJob::doStart()
   d->tags << d->sessionInternal()->sendCommand( "CLOSE" );
 }
 
-#include "closejob.moc"

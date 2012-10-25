@@ -68,4 +68,3 @@ QString CreateJob::mailBox() const
   return d->mailBox;
 }
 
-#include "createjob.moc"

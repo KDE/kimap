@@ -232,5 +232,5 @@ void SessionThread::sslErrorHandlerResponse(bool response)
   }
 }
 
-#include "sessionthread_p.moc"
+#include "moc_sessionthread_p.cpp"
 

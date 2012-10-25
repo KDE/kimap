@@ -105,4 +105,3 @@ QList<Acl::Rights> ListRightsJob::possibleRights()
 }
 
 
-#include "listrightsjob.moc"

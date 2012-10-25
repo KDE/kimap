@@ -153,4 +153,3 @@ SetMetaDataJob::MetaDataErrors SetMetaDataJob::metaDataErrors() const
   return d->metaDataErrors;
 }
 
-#include "setmetadatajob.moc"

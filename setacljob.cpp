@@ -78,4 +78,3 @@ QByteArray SetAclJob::identifier()
   return d->identifier();
 }
 
-#include "setacljob.moc"

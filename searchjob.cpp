@@ -316,4 +316,3 @@ QList<int> SearchJob::foundItems()
   return results;
 }
 
-#include "searchjob.moc"

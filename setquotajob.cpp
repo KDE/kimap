@@ -102,4 +102,3 @@ QByteArray SetQuotaJob::root() const
   return d->root;
 }
 
-#include "setquotajob.moc"

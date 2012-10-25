@@ -79,4 +79,3 @@ QByteArray GetQuotaJob::root() const
   return d->root;
 }
 
-#include "getquotajob.moc"

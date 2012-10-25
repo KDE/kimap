@@ -201,4 +201,3 @@ void SelectJob::handleResponse( const Message &response )
   }
 }
 
-#include "selectjob.moc"

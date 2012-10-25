@@ -133,4 +133,3 @@ void CopyJob::handleResponse( const Message &response )
   handleErrorReplies( response );
 }
 
-#include "copyjob.moc"
