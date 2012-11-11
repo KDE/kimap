@@ -37,7 +37,8 @@ static const int _kimap_sslErrorUiData = qRegisterMetaType<KSslErrorUiData>();
 
 SessionThread::SessionThread( const QString &hostName, quint16 port, Session *parent )
   : QThread(), m_hostName( hostName ), m_port( port ),
-    m_session( parent ), m_socket( 0 ), m_stream( 0 ), m_encryptedMode( false )
+    m_session( parent ), m_socket( 0 ), m_stream( 0 ), m_encryptedMode( false ),
+    triedSslVersions( 0 ), doSslFallback( false )
 {
   // Yeah, sounds weird, but QThread object is linked to the parent
   // thread not to itself, and I'm too lazy to introduce yet another
@@ -160,11 +161,11 @@ void SessionThread::run()
            this, SLOT(readMessage()), Qt::QueuedConnection );
 
   connect( m_socket, SIGNAL(disconnected()),
-           m_session, SLOT(socketDisconnected()) );
+           this, SLOT(socketDisconnected()) );
   connect( m_socket, SIGNAL(connected()),
            m_session, SLOT(socketConnected()) );
   connect( m_socket, SIGNAL(error(KTcpSocket::Error)),
-           m_session, SLOT(socketError()) );
+           this, SLOT(socketError()) );
   connect( m_socket, SIGNAL(bytesWritten(qint64)),
            m_session, SLOT(socketActivity()) );
   if ( m_socket->metaObject()->indexOfSignal( "encryptedBytesWritten(qint64)" ) > -1 ) {
@@ -188,10 +189,48 @@ void SessionThread::startSsl(const KTcpSocket::SslVersion &version)
 {
   QMutexLocker locker( &m_mutex );
 
-  m_socket->setAdvertisedSslVersion( version );
+  if ( version == KTcpSocket::AnySslVersion ) {
+    doSslFallback = true;
+    if ( m_socket->advertisedSslVersion() == KTcpSocket::UnknownSslVersion ) {
+      m_socket->setAdvertisedSslVersion( KTcpSocket::AnySslVersion );
+    } else if ( !( triedSslVersions & KTcpSocket::TlsV1 ) ) {
+      triedSslVersions |= KTcpSocket::TlsV1;
+      m_socket->setAdvertisedSslVersion( KTcpSocket::TlsV1 );
+    } else if ( !( triedSslVersions & KTcpSocket::SslV3 ) ) {
+      triedSslVersions |= KTcpSocket::SslV3;
+      m_socket->setAdvertisedSslVersion( KTcpSocket::SslV3 );
+    } else if ( !( triedSslVersions & KTcpSocket::SslV2 ) ) {
+      triedSslVersions |= KTcpSocket::SslV2;
+      m_socket->setAdvertisedSslVersion( KTcpSocket::SslV2 );
+      doSslFallback = false;
+    }
+  } else {
+    m_socket->setAdvertisedSslVersion( version );
+  }
+
   m_socket->ignoreSslErrors();
   connect( m_socket, SIGNAL(encrypted()), this, SLOT(sslConnected()) );
   m_socket->startClientEncryption();
+}
+
+void SessionThread::socketDisconnected()
+{
+  if ( doSslFallback ) {
+    reconnect();
+  } else {
+    QMetaObject::invokeMethod( m_session, "socketDisconnected" );
+  }
+}
+
+void SessionThread::socketError()
+{
+  QMutexLocker locker( &m_mutex );
+
+  if ( doSslFallback ) {
+    m_socket->disconnectFromHost();
+  } else {
+    QMetaObject::invokeMethod( m_session, "socketError" );
+  }
 }
 
 void SessionThread::sslConnected()
@@ -210,6 +249,7 @@ void SessionThread::sslConnected()
      KSslErrorUiData errorData( m_socket );
      emit sslError( errorData );
   } else {
+    doSslFallback = false;
     kDebug() << "TLS negotiation done.";
     m_encryptedMode = true;
     emit encryptionNegotiationResult( true, m_socket->negotiatedSslVersion() );
