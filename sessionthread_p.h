@@ -64,6 +64,8 @@ class SessionThread : public QThread
     void sslConnected();
     void sslErrorHandlerResponse(bool result);
     void doCloseSocket();
+    void socketError();
+    void socketDisconnected();
 
   private:
     QString m_hostName;
@@ -78,6 +80,8 @@ class SessionThread : public QThread
     QMutex m_mutex;
 
     bool m_encryptedMode;
+    KTcpSocket::SslVersions triedSslVersions;
+    bool doSslFallback;
 };
 
 }
