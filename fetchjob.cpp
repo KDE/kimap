@@ -538,7 +538,7 @@ QByteArray FetchJobPrivate::parseString( const QByteArray &structure, int &pos )
 
 void FetchJobPrivate::skipLeadingSpaces( const QByteArray &structure, int &pos )
 {
-  while ( structure[pos] == ' ' && pos < structure.size() ) {
+  while ( pos < structure.size() && structure[pos] == ' '  ) {
     pos++;
   }
 }
