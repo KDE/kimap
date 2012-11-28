@@ -225,8 +225,8 @@ void SessionThread::socketDisconnected()
 void SessionThread::socketError()
 {
   QMutexLocker locker( &m_mutex );
-
   if ( doSslFallback ) {
+    locker.unlock(); // disconnectFromHost() ends up calling reconnect()
     m_socket->disconnectFromHost();
   } else {
     QMetaObject::invokeMethod( m_session, "socketError" );
