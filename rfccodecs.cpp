@@ -331,7 +331,7 @@ const QString KIMAP::decodeRFC2047String( const QString &str,
   }
 
   // FIXME get rid of the conversion?
-  QByteArray aStr = str.toAscii ();  // QString.length() means Unicode chars
+  QByteArray aStr = str.toLatin1 ();  // QString.length() means Unicode chars
   QByteArray result;
   char *pos, *beg, *end, *mid = 0;
   QByteArray cstr;
@@ -428,7 +428,7 @@ const QString KIMAP::decodeRFC2047String( const QString &str,
     }
   }
   if ( !charset.isEmpty () ) {
-    QTextCodec *aCodec = codecForName( charset.toAscii () );
+    QTextCodec *aCodec = codecForName( charset.toLatin1 () );
     if ( aCodec ) {
 //    kDebug() << "Codec is" << aCodec->name();
       return aCodec->toUnicode( result );
