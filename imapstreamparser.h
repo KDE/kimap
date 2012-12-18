@@ -36,9 +36,9 @@ namespace KIMAP {
 class ImapParserException : public std::exception
 {
   public:
-    ImapParserException( const char *what ) throw() : mWhat( what ) {}
-    ImapParserException( const QByteArray &what ) throw() : mWhat( what ) {}
-    ImapParserException( const QString &what ) throw() : mWhat( what.toUtf8() ) {}
+    explicit ImapParserException( const char *what ) throw() : mWhat( what ) {}
+    explicit ImapParserException( const QByteArray &what ) throw() : mWhat( what ) {}
+    explicit ImapParserException( const QString &what ) throw() : mWhat( what.toUtf8() ) {}
     ImapParserException( const ImapParserException &other ) throw() : std::exception( other ), mWhat( other.what() ) {}
     virtual ~ImapParserException() throw() {}
     const char *what() const throw() { return mWhat.constData(); }

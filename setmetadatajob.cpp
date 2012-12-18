@@ -103,7 +103,7 @@ void SetMetaDataJob::handleResponse( const Message &response )
            response.content[2].toString() == "[METADATA TOOMANY]" ) {
         d->metaDataErrors |= TooMany;
       } else if ( response.content[2].toString() == "[ANNOTATEMORE TOOBIG]" ||
-                  response.content[2].toString().startsWith( "[METADATA MAXSIZE" ) ) {
+                  response.content[2].toString().startsWith( "[METADATA MAXSIZE" ) ) { //krazy:exclude=strings
         d->metaDataErrors |= TooBig;
         d->maxAcceptedSize = -1;
         if ( response.content[2].toString().startsWith( "[METADATA MAXSIZE" ) ) { //krazy:exclude=strings
