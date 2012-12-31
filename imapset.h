@@ -199,6 +199,7 @@ class KIMAP_EXPORT ImapSet
     /**
       Adds the given ImapInterval to this set.
       No interval merging is performed.
+      @param interval the interval to add
     */
     void add( const ImapInterval &interval );
 

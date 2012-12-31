@@ -94,12 +94,14 @@ Q_DECLARE_FLAGS( Rights, Right )
 /**
  * Returns a rights mask that has no obsolete members anymore, i.e. obsolete flags are removed and
  * replaced by their successors.
+ * @param rights set of #Rights flags to normalize
  * @since 4.6
  */
 KIMAP_EXPORT Rights normalizedRights( Rights rights );
 
 /**
  * Returns a rights mask that contains both obsolete and new flags if one of them is set.
+ * @param rights set of #Rights flags to augment
  * @since 4.6
  */
 KIMAP_EXPORT Rights denormalizedRights( Rights rights );

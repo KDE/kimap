@@ -60,7 +60,7 @@ class KIMAP_EXPORT GetQuotaJob : public QuotaJobBase
 
     /**
      * Set the quota root to get the resource limits for.
-     *
+     * @param root the quota root to set
      * @see GetQuotaRootJob
      */
     void setRoot(const QByteArray &root);
