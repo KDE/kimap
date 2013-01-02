@@ -84,6 +84,7 @@ class KIMAP_EXPORT SetQuotaJob : public QuotaJobBase
      * may create it and change the quota roots for any number of
      * existing mailboxes in an implementation-defined manner.
      *
+     * @param root the quota root to set, in bytes
      * @see GetQuotaRootJob
      */
     void setRoot( const QByteArray &root );

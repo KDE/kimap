@@ -96,6 +96,7 @@ class KIMAP_EXPORT SetAclJob : public AclJobBase
      * Note that negative rights override positive rights: if
      * "fred" and "-fred" are both assigned the 'w' right, the
      * user "fred" will not have the 'w' right.
+     * @param identifier the identifier to set
      */
     void setIdentifier( const QByteArray &identifier );
     /**
