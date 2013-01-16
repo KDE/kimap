@@ -37,7 +37,8 @@ static const int _kimap_sslErrorUiData = qRegisterMetaType<KSslErrorUiData>();
 
 SessionThread::SessionThread( const QString &hostName, quint16 port, Session *parent )
   : QThread(), m_hostName( hostName ), m_port( port ),
-    m_session( parent ), m_socket( 0 ), m_stream( 0 ), m_encryptedMode( false ),
+    m_session( parent ), m_socket( 0 ), m_stream( 0 ), m_mutex( QMutex::Recursive ),
+    m_encryptedMode( false ),
     triedSslVersions( 0 ), doSslFallback( false )
 {
   // Yeah, sounds weird, but QThread object is linked to the parent
