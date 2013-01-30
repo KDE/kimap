@@ -20,6 +20,8 @@
 
 #include "sessionlogger_p.h"
 
+#include <KDebug>
+
 #include <unistd.h>
 
 using namespace KIMAP;
@@ -33,7 +35,9 @@ SessionLogger::SessionLogger()
   m_file.setFileName( qgetenv( "KIMAP_LOGFILE" )
                     + '.' + QString::number( getpid() )
                     + '.' + QString::number( m_id ) );
-  m_file.open( QFile::WriteOnly );
+  if (!m_file.open( QFile::WriteOnly )) {
+     kDebug()<<" m_file can be open in write only";
+  }
 }
 
 SessionLogger::~SessionLogger()
