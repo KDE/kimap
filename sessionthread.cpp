@@ -161,8 +161,9 @@ void SessionThread::run()
   connect( m_socket, SIGNAL(readyRead()),
            this, SLOT(readMessage()), Qt::QueuedConnection );
 
+  // Delay the call to socketDisconnected so that it finishes disconnecting before we call reconnect()
   connect( m_socket, SIGNAL(disconnected()),
-           this, SLOT(socketDisconnected()) );
+           this, SLOT(socketDisconnected()), Qt::QueuedConnection );
   connect( m_socket, SIGNAL(connected()),
            m_session, SLOT(socketConnected()) );
   connect( m_socket, SIGNAL(error(KTcpSocket::Error)),
