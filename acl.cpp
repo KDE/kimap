@@ -59,7 +59,7 @@ class RightsMap
     QMap<char, Right> map;
 };
 
-K_GLOBAL_STATIC( RightsMap, globalRights )
+Q_GLOBAL_STATIC(RightsMap, globalRights)
 
 }
 }
