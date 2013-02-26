@@ -19,7 +19,7 @@
 
 #include "getmetadatajob.h"
 
-#include <KDE/KLocale>
+#include <KDE/KLocalizedString>
 #include <KDE/KDebug>
 
 #include "metadatajobbase_p.h"

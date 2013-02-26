@@ -19,7 +19,7 @@
 
 #include "listrightsjob.h"
 
-#include <KDE/KLocale>
+#include <KDE/KLocalizedString>
 #include <KDE/KDebug>
 
 #include "acljobbase_p.h"

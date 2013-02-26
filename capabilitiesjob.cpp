@@ -19,7 +19,7 @@
 
 #include "capabilitiesjob.h"
 
-#include <KDE/KLocale>
+#include <KDE/KLocalizedString>
 
 #include "job_p.h"
 #include "message_p.h"

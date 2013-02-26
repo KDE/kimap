@@ -21,7 +21,7 @@
 
 #include "loginjob.h"
 
-#include <KDE/KLocale>
+#include <KDE/KLocalizedString>
 #include <KDE/KDebug>
 #include <ktcpsocket.h>
 

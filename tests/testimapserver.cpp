@@ -22,6 +22,7 @@
 #include <kcomponentdata.h>
 #include <kaboutdata.h>
 #include <kdebug.h>
+#include <klocalizedstring.h>
 #include <qtcpsocket.h>
 #include <QCoreApplication>
 #include <qsignalspy.h>

@@ -20,6 +20,7 @@
 
 #include <kcomponentdata.h>
 #include <kaboutdata.h>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 #include <qtcpsocket.h>
 #include <QCoreApplication>

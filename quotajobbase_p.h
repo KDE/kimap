@@ -24,6 +24,8 @@
 #include "message_p.h"
 #include "session.h"
 
+#include <QMap>
+
 namespace KIMAP
 {
   class QuotaJobBasePrivate : public JobPrivate

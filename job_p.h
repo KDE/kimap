@@ -21,7 +21,7 @@
 #define KIMAP_JOB_P_H
 
 #include "session.h"
-#include <KDE/KLocale>
+#include <KDE/KLocalizedString>
 
 namespace KIMAP {
 

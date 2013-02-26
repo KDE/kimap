@@ -22,7 +22,7 @@
 #include "message_p.h"
 #include "session_p.h"
 
-#include <KDE/KLocale>
+#include <KDE/KLocalizedString>
 #include <KDE/KDebug>
 
 using namespace KIMAP;

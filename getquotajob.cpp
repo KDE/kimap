@@ -19,7 +19,7 @@
 
 #include "getquotajob.h"
 
-#include <KDE/KLocale>
+#include <KDE/KLocalizedString>
 #include <KDE/KDebug>
 
 #include "quotajobbase_p.h"
