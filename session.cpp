@@ -404,7 +404,8 @@ void SessionPrivate::clearJobQueue()
     currentJob->connectionLost();
   }
 
-  qDeleteAll( queue );
+  QQueue<Job*> queueCopy = queue; // copy because jobDestroyed calls removeAll
+  qDeleteAll(queueCopy);
   queue.clear();
   emit q->jobQueueSizeChanged( 0 );
 }
