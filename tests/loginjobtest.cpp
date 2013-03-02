@@ -102,6 +102,7 @@ void shouldHandleProxyLogin_data()
   QList<QByteArray> scenario;
   scenario << FakeServer::greeting()
            << "C: A000001 AUTHENTICATE PLAIN"
+           << "S: A000001 OK (success)"
            << "C: A000001 LOGIN \"proxy\" \"user\" \"password\""
            << "S: A000001 OK User logged in";
 
