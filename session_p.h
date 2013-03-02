@@ -54,8 +54,6 @@ class KIMAP_EXPORT SessionPrivate : public QObject
     void startSsl(const KTcpSocket::SslVersion &version);
     void sendData( const QByteArray &data );
 
-    void handleSslError( const KSslErrorUiData &errorData );
-
     KTcpSocket::SslVersion negotiatedEncryption() const;
 
     void setSocketTimeout( int ms );
@@ -68,19 +66,22 @@ class KIMAP_EXPORT SessionPrivate : public QObject
     void onEncryptionNegotiationResult(bool isEncrypted, KTcpSocket::SslVersion sslVersion);
     void onSocketTimeout();
 
-  private:
-    void startNext();
     void doStartNext();
-    void jobDone( KJob *job );
-    void jobDestroyed( QObject *job );
-    void clearJobQueue();
-    void responseReceived( const KIMAP::Message &response );
-    void setState(Session::State state);
+    void jobDone( KJob* );
+    void jobDestroyed( QObject* );
+    void responseReceived( const KIMAP::Message& );
 
     void socketConnected();
     void socketDisconnected();
     void socketError();
     void socketActivity();
+
+    void handleSslError( const KSslErrorUiData &errorData );
+
+  private:
+    void startNext();
+    void clearJobQueue();
+    void setState(Session::State state);
 
     void startSocketTimer();
     void stopSocketTimer();
