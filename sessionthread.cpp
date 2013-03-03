@@ -137,7 +137,7 @@ void SessionThread::readMessage()
 // Called in main thread
 void SessionThread::closeSocket()
 {
-  QMetaObject::invokeMethod( this, "doCloseSocket" );
+  QMetaObject::invokeMethod( this, "doCloseSocket", Qt::QueuedConnection );
 }
 
 // Called in secondary thread
