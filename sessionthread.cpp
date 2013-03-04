@@ -42,7 +42,7 @@ SessionThread::SessionThread( const QString &hostName, quint16 port )
 {
   // Just like the Qt docs now recommend, for event-driven threads:
   // don't derive from QThread, create one directly and move the object to it.
-  QThread* thread = new QThread( this );
+  QThread* thread = new QThread();
   moveToThread( thread );
   thread->start();
   QMetaObject::invokeMethod( this, "threadInit" );
@@ -57,6 +57,7 @@ SessionThread::~SessionThread()
     // Make sure to wait until it's done, otherwise it can crash when the pthread callback is called
     thread()->wait();
   }
+  delete thread();
 }
 
 // Called in primary thread
