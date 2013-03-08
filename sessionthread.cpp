@@ -143,7 +143,7 @@ void SessionThread::doCloseSocket()
 void SessionThread::reconnect()
 {
   QMutexLocker locker( &m_mutex );
-
+  kDebug() << this << "state=" << m_socket->state();
   if ( m_socket->state() != SessionSocket::ConnectedState &&
        m_socket->state() != SessionSocket::ConnectingState ) {
     if ( m_encryptedMode ) {
@@ -227,6 +227,7 @@ void SessionThread::socketDisconnected()
 void SessionThread::socketError()
 {
   QMutexLocker locker( &m_mutex );
+  kDebug() << error;
   if ( doSslFallback ) {
     locker.unlock(); // disconnectFromHost() ends up calling reconnect()
     m_socket->disconnectFromHost();
