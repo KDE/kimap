@@ -20,12 +20,13 @@
 #include "sessionthread_p.h"
 
 #include <QtCore/QDebug>
-#include <QtCore/QThread>
+#include <QtCore/QTimer>
 
 #include <KDE/KDebug>
 
 #include "imapstreamparser.h"
 #include "message_p.h"
+#include "session.h"
 
 using namespace KIMAP;
 
@@ -34,47 +35,40 @@ Q_DECLARE_METATYPE( KSslErrorUiData )
 static const int _kimap_socketErrorTypeId = qRegisterMetaType<KTcpSocket::Error>();
 static const int _kimap_sslErrorUiData = qRegisterMetaType<KSslErrorUiData>();
 
-SessionThread::SessionThread( const QString &hostName, quint16 port )
-  : QObject(), m_hostName( hostName ), m_port( port ),
-    m_socket( 0 ), m_stream( 0 ), m_mutex(),
+SessionThread::SessionThread( const QString &hostName, quint16 port, Session *parent )
+  : QThread(), m_hostName( hostName ), m_port( port ),
+    m_session( parent ), m_socket( 0 ), m_stream( 0 ), m_mutex( QMutex::Recursive ),
     m_encryptedMode( false ),
     triedSslVersions( 0 ), doSslFallback( false )
 {
-  // Just like the Qt docs now recommend, for event-driven threads:
-  // don't derive from QThread, create one directly and move the object to it.
-  QThread* thread = new QThread();
-  moveToThread( thread );
-  thread->start();
-  QMetaObject::invokeMethod( this, "threadInit" );
+  // Yeah, sounds weird, but QThread object is linked to the parent
+  // thread not to itself, and I'm too lazy to introduce yet another
+  // internal QObject
+  moveToThread( this );
 }
 
 SessionThread::~SessionThread()
 {
-  QMetaObject::invokeMethod( this, "threadQuit" );
-  if ( !thread()->wait( 10 * 1000 ) ) {
+  // don't call quit() directly, this will deadlock in wait() if exec() hasn't run yet
+  QMetaObject::invokeMethod( this, "quit" );
+  if ( !wait( 10 * 1000 ) ) {
     kWarning() << "Session thread refuses to die, killing harder...";
-    thread()->terminate();
+    terminate();
     // Make sure to wait until it's done, otherwise it can crash when the pthread callback is called
-    thread()->wait();
+    wait();
   }
-  delete thread();
 }
 
-// Called in primary thread
 void SessionThread::sendData( const QByteArray &payload )
 {
   QMutexLocker locker( &m_mutex );
 
   m_dataQueue.enqueue( payload );
-  QMetaObject::invokeMethod( this, "writeDataQueue" );
+  QTimer::singleShot( 0, this, SLOT(writeDataQueue()) );
 }
 
-// Called in secondary thread
 void SessionThread::writeDataQueue()
 {
-  Q_ASSERT( QThread::currentThread() == thread() );
-  if ( !m_socket )
-    return;
   QMutexLocker locker( &m_mutex );
 
   while ( !m_dataQueue.isEmpty() ) {
@@ -82,11 +76,11 @@ void SessionThread::writeDataQueue()
   }
 }
 
-// Called in secondary thread
 void SessionThread::readMessage()
 {
-  Q_ASSERT( QThread::currentThread() == thread() );
-  if ( !m_stream || m_stream->availableDataSize() == 0 ) {
+  QMutexLocker locker( &m_mutex );
+
+  if ( m_stream->availableDataSize() == 0 ) {
     return;
   }
 
@@ -130,33 +124,26 @@ void SessionThread::readMessage()
   }
 
   if ( m_stream->availableDataSize() > 1 ) {
-    QMetaObject::invokeMethod( this, "readMessage", Qt::QueuedConnection );
+    QTimer::singleShot( 0, this, SLOT(readMessage()) );
   }
 
 }
 
-// Called in main thread
 void SessionThread::closeSocket()
 {
-  QMetaObject::invokeMethod( this, "doCloseSocket", Qt::QueuedConnection );
+  QTimer::singleShot( 0, this, SLOT(doCloseSocket()) );
 }
 
-// Called in secondary thread
 void SessionThread::doCloseSocket()
 {
-  Q_ASSERT( QThread::currentThread() == thread() );
-  if ( !m_socket )
-    return;
   m_encryptedMode = false;
   m_socket->close();
 }
 
-// Called in secondary thread
 void SessionThread::reconnect()
 {
-  Q_ASSERT( QThread::currentThread() == thread() );
-  if ( m_socket == 0 ) // threadQuit already called
-    return;
+  QMutexLocker locker( &m_mutex );
+
   if ( m_socket->state() != SessionSocket::ConnectedState &&
        m_socket->state() != SessionSocket::ConnectingState ) {
     if ( m_encryptedMode ) {
@@ -167,57 +154,43 @@ void SessionThread::reconnect()
   }
 }
 
-// Called in secondary thread
-void SessionThread::threadInit()
+void SessionThread::run()
 {
-  Q_ASSERT( QThread::currentThread() == thread() );
   m_socket = new SessionSocket;
   m_stream = new ImapStreamParser( m_socket );
   connect( m_socket, SIGNAL(readyRead()),
            this, SLOT(readMessage()), Qt::QueuedConnection );
 
-  // Delay the call to slotSocketDisconnected so that it finishes disconnecting before we call reconnect()
+  // Delay the call to socketDisconnected so that it finishes disconnecting before we call reconnect()
   connect( m_socket, SIGNAL(disconnected()),
-           this, SLOT(slotSocketDisconnected()), Qt::QueuedConnection );
+           this, SLOT(socketDisconnected()), Qt::QueuedConnection );
   connect( m_socket, SIGNAL(connected()),
-           this, SIGNAL(socketConnected()) );
+           m_session, SLOT(socketConnected()) );
   connect( m_socket, SIGNAL(error(KTcpSocket::Error)),
-           this, SLOT(socketError(KTcpSocket::Error)) );
+           this, SLOT(socketError()) );
   connect( m_socket, SIGNAL(bytesWritten(qint64)),
-           this, SIGNAL(socketActivity()) );
+           m_session, SLOT(socketActivity()) );
   if ( m_socket->metaObject()->indexOfSignal( "encryptedBytesWritten(qint64)" ) > -1 ) {
       connect( m_socket, SIGNAL(encryptedBytesWritten(qint64)), // needs kdelibs > 4.8
-               this, SIGNAL(socketActivity()) );
+               m_session, SLOT(socketActivity()) );
   }
   connect( m_socket, SIGNAL(readyRead()),
-           this, SIGNAL(socketActivity()) );
+           m_session, SLOT(socketActivity()) );
 
-  QMetaObject::invokeMethod(this, "reconnect", Qt::QueuedConnection);
-}
+  connect( this, SIGNAL(responseReceived(KIMAP::Message)),
+           m_session, SLOT(responseReceived(KIMAP::Message)) );
 
-// Called in secondary thread
-void SessionThread::threadQuit()
-{
-  Q_ASSERT( QThread::currentThread() == thread() );
+  QTimer::singleShot( 0, this, SLOT(reconnect()) );
+  exec();
+
   delete m_stream;
-  m_stream = 0;
   delete m_socket;
-  m_socket = 0;
-  thread()->quit();
 }
 
-// Called in primary thread
-void SessionThread::startSsl( KTcpSocket::SslVersion version )
+void SessionThread::startSsl(const KTcpSocket::SslVersion &version)
 {
-  QMetaObject::invokeMethod( this, "doStartSsl", Q_ARG(KTcpSocket::SslVersion, version) );
-}
+  QMutexLocker locker( &m_mutex );
 
-// Called in secondary thread (via invokeMethod)
-void SessionThread::doStartSsl( KTcpSocket::SslVersion version )
-{
-  Q_ASSERT( QThread::currentThread() == thread() );
-  if ( !m_socket )
-    return;
   if ( version == KTcpSocket::AnySslVersion ) {
     doSslFallback = true;
     if ( m_socket->advertisedSslVersion() == KTcpSocket::UnknownSslVersion ) {
@@ -242,37 +215,29 @@ void SessionThread::doStartSsl( KTcpSocket::SslVersion version )
   m_socket->startClientEncryption();
 }
 
-// Called in secondary thread
-void SessionThread::slotSocketDisconnected()
+void SessionThread::socketDisconnected()
 {
-  Q_ASSERT( QThread::currentThread() == thread() );
   if ( doSslFallback ) {
     reconnect();
   } else {
-    emit socketDisconnected();
+    QMetaObject::invokeMethod( m_session, "socketDisconnected" );
   }
 }
 
-// Called in secondary thread
-void SessionThread::socketError(KTcpSocket::Error error)
+void SessionThread::socketError()
 {
-  Q_ASSERT( QThread::currentThread() == thread() );
-  if ( !m_socket )
-    return;
-  Q_UNUSED( error ); // can be used for debugging
+  QMutexLocker locker( &m_mutex );
   if ( doSslFallback ) {
+    locker.unlock(); // disconnectFromHost() ends up calling reconnect()
     m_socket->disconnectFromHost();
   } else {
-    emit socketError();
+    QMetaObject::invokeMethod( m_session, "socketError" );
   }
 }
 
-// Called in secondary thread
 void SessionThread::sslConnected()
 {
-  Q_ASSERT( QThread::currentThread() == thread() );
-  if ( !m_socket )
-    return;
+  QMutexLocker locker( &m_mutex );
   KSslCipher cipher = m_socket->sessionCipher();
 
   if ( m_socket->sslErrors().count() > 0 ||
@@ -295,15 +260,7 @@ void SessionThread::sslConnected()
 
 void SessionThread::sslErrorHandlerResponse(bool response)
 {
-  QMetaObject::invokeMethod(this, "doSslErrorHandlerResponse", Q_ARG(bool, response));
-}
-
-// Called in secondary thread (via invokeMethod)
-void SessionThread::doSslErrorHandlerResponse(bool response)
-{
-  Q_ASSERT( QThread::currentThread() == thread() );
-  if ( !m_socket )
-    return;
+  QMutexLocker locker( &m_mutex );
   if ( response ) {
     m_encryptedMode = true;
     emit encryptionNegotiationResult( true, m_socket->negotiatedSslVersion() );
