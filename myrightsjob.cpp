@@ -80,4 +80,3 @@ Acl::Rights MyRightsJob::rights()
   Q_D( MyRightsJob );
   return d->myRights;
 }
-

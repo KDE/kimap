@@ -79,7 +79,6 @@ void ListRightsJob::handleResponse( const Message &response )
   }
 }
 
-
 void ListRightsJob::setIdentifier( const QByteArray &identifier )
 {
   Q_D( ListRightsJob );
@@ -103,5 +102,3 @@ QList<Acl::Rights> ListRightsJob::possibleRights()
   Q_D( ListRightsJob );
   return d->possibleRights;
 }
-
-

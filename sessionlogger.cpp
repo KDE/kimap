@@ -61,6 +61,3 @@ void SessionLogger::disconnectionOccured()
 {
   m_file.write( "X\n" );
 }
-
-
-

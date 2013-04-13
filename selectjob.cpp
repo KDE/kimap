@@ -200,4 +200,3 @@ void SelectJob::handleResponse( const Message &response )
     Q_ASSERT( error() || d->m_session->selectedMailBox() == d->mailBox );
   }
 }
-

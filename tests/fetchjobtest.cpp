@@ -106,7 +106,6 @@ void testFetch_data() {
   scope.mode = KIMAP::FetchJob::FetchScope::Headers;
   QTest::newRow( "connection drop" ) << false << KIMAP::ImapSet( 11, 11 ) << 1 << scenario << scope;
 
-
   scenario.clear();
   // Important bit here if "([127.0.0.1])" which used to crash the stream parser
   scenario << FakeServer::preauth()
@@ -116,7 +115,6 @@ void testFetch_data() {
            << "X";
   scope.mode = KIMAP::FetchJob::FetchScope::Headers;
   QTest::newRow( "buffer overwrite" ) << false << KIMAP::ImapSet( 11, 11 ) << 1 << scenario << scope;
-
 
   scenario.clear();
   // We're assuming a buffer overwrite here which made us miss the opening parenthesis
@@ -158,7 +156,6 @@ void testFetch()
                                           QMap<qint64, qint64>,
                                           QMap<qint64, KIMAP::MessageFlags>,
                                           QMap<qint64, KIMAP::MessagePtr>)) );
-
 
     bool result = job->exec();
     QEXPECT_FAIL( "connection drop", "Expected failure on connection drop", Continue );

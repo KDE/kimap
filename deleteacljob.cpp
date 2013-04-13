@@ -68,4 +68,3 @@ QByteArray DeleteAclJob::identifier()
   Q_D( DeleteAclJob );
   return d->identifier();
 }
-

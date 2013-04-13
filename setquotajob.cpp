@@ -80,7 +80,6 @@ void SetQuotaJob::handleResponse(const Message &response)
   }
 }
 
-
 void SetQuotaJob::setQuota(const QByteArray &resource, qint64 limit)
 {
   Q_D( SetQuotaJob );
@@ -101,4 +100,3 @@ QByteArray SetQuotaJob::root() const
 
   return d->root;
 }
-

@@ -124,4 +124,3 @@ KIMAP::Acl::Rights KIMAP::Acl::denormalizedRights( KIMAP::Acl::Rights rights )
   }
   return denormalized;
 }
-

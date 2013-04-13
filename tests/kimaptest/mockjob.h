@@ -80,4 +80,3 @@ class MockJob : public KIMAP::Job
 };
 
 #endif
-

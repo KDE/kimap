@@ -67,5 +67,3 @@ QString UnsubscribeJob::mailBox() const
   Q_D( const UnsubscribeJob );
   return d->mailBox;
 }
-
-

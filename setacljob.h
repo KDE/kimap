@@ -30,7 +30,6 @@ class Session;
 struct Message;
 class SetAclJobPrivate;
 
-
 /**
  * Sets the rights that correspond to an identifier on a mailbox
  *

@@ -49,7 +49,6 @@ QuotaJobBase::QuotaJobBase( Session *session )
 {
 }
 
-
 QuotaJobBase::QuotaJobBase( JobPrivate &dd )
   : Job( dd )
 {
@@ -82,4 +81,3 @@ qint64 QuotaJobBase::limit(const QByteArray& resource)
   }
   return -1;
 }
-

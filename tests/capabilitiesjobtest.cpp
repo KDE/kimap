@@ -29,7 +29,6 @@
 #include <QtTest>
 #include <KDebug>
 
-
 class CapabilitiesJobTest: public QObject {
   Q_OBJECT
 
@@ -48,16 +47,12 @@ void testCapabilities_data() {
   capabilities << "IMAP4REV1" << "STARTTLS" <<  "AUTH=GSSAPI";
   QTest::newRow( "good" ) << scenario << capabilities;
 
-
-
   scenario.clear();
   capabilities.clear();
   scenario << "S: * PREAUTH"
            << "C: A000001 CAPABILITY"
            << "S: A000001 BAD command unknown or arguments invalid";
   QTest::newRow( "bad" ) << scenario << capabilities;
-
-
 
   scenario.clear();
   capabilities.clear();

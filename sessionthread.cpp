@@ -318,4 +318,3 @@ void SessionThread::doSslErrorHandlerResponse(bool response)
 }
 
 #include "moc_sessionthread_p.cpp"
-

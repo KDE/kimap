@@ -74,4 +74,3 @@ void CapabilitiesJob::handleResponse( const Message &response )
     }
   }
 }
-

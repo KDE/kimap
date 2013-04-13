@@ -47,7 +47,6 @@ FakeServer::FakeServer( QObject* parent ) : QThread( parent )
      moveToThread( this );
 }
 
-
 FakeServer::~FakeServer()
 {
   quit();
@@ -220,4 +219,3 @@ void FakeServer::readClientPart( int scenarioNumber )
 
     m_scenarios[scenarioNumber] = scenario;
 }
-

@@ -81,7 +81,6 @@ ImapSet CopyJob::sequenceSet() const
   return d->set;
 }
 
-
 void CopyJob::setUidBased( bool uidBased )
 {
   Q_D( CopyJob );
@@ -132,4 +131,3 @@ void CopyJob::handleResponse( const Message &response )
 
   handleErrorReplies( response );
 }
-

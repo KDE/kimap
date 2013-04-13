@@ -67,4 +67,3 @@ QString DeleteJob::mailBox() const
   Q_D( const DeleteJob );
   return d->mailBox;
 }
-

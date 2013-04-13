@@ -135,4 +135,3 @@ void AppendJob::handleResponse( const Message &response )
     }
   }
 }
-

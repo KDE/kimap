@@ -78,4 +78,3 @@ QByteArray GetQuotaJob::root() const
   Q_D( const GetQuotaJob );
   return d->root;
 }
-

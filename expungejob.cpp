@@ -80,4 +80,3 @@ void ExpungeJob::handleResponse( const Message &response )
 
   }
 }
-
