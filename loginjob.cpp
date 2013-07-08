@@ -288,7 +288,7 @@ void LoginJob::handleResponse( const Message &response )
   };
 
   QByteArray tag = response.content.first().toString();
-  ResponseCode code;
+  ResponseCode code = OK;
 
   if ( tag == "+" ) {
     code = CONTINUATION;
