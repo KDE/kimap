@@ -30,7 +30,6 @@ class Session;
 struct Message;
 class ListRightsJobPrivate;
 
-
 /**
  * Lists the possible and automatic rights for
  * an identifier on a mailbox

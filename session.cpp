@@ -54,13 +54,23 @@ Session::Session( const QString &hostName, quint16 port, QObject *parent)
   d->state = Disconnected;
   d->jobRunning = false;
 
-  d->thread = new SessionThread( hostName, port, this );
+  d->thread = new SessionThread( hostName, port );
   connect( d->thread, SIGNAL(encryptionNegotiationResult(bool,KTcpSocket::SslVersion)),
            d, SLOT(onEncryptionNegotiationResult(bool,KTcpSocket::SslVersion)) );
-  connect( d->thread, SIGNAL(sslError(KSslErrorUiData)), this, SLOT(handleSslError(KSslErrorUiData)) );
+  connect( d->thread, SIGNAL(sslError(KSslErrorUiData)),
+           d, SLOT(handleSslError(KSslErrorUiData)) );
+  connect( d->thread, SIGNAL(socketDisconnected()),
+           d, SLOT(socketDisconnected()) );
+  connect( d->thread, SIGNAL(responseReceived(KIMAP::Message)),
+           d, SLOT(responseReceived(KIMAP::Message)) );
+  connect( d->thread, SIGNAL(socketConnected()),
+           d, SLOT(socketConnected()) );
+  connect( d->thread, SIGNAL(socketActivity()),
+           d, SLOT(socketActivity()) );
+  connect( d->thread, SIGNAL(socketError()),
+           d, SLOT(socketError()) );
 
   d->startSocketTimer();
-  d->thread->start();
 }
 
 Session::~Session()
@@ -115,11 +125,8 @@ void KIMAP::Session::close()
 
 void SessionPrivate::handleSslError(const KSslErrorUiData& errorData)
 {
-  if ( uiProxy && uiProxy->ignoreSslError( errorData ) ) {
-    QMetaObject::invokeMethod( thread, "sslErrorHandlerResponse", Q_ARG( bool, true ) );
-  } else {
-    QMetaObject::invokeMethod( thread, "sslErrorHandlerResponse", Q_ARG( bool, false ) );
-  }
+  const bool ignoreSslError = uiProxy && uiProxy->ignoreSslError( errorData );
+  thread->sslErrorHandlerResponse(ignoreSslError);
 }
 
 SessionPrivate::SessionPrivate( Session *session )
@@ -144,17 +151,17 @@ void SessionPrivate::addJob(Job *job)
   queue.append( job );
   emit q->jobQueueSizeChanged( q->jobQueueSize() );
 
-  QObject::connect( job, SIGNAL(result(KJob*)), q, SLOT(jobDone(KJob*)) );
-  QObject::connect( job, SIGNAL(destroyed(QObject*)), q, SLOT(jobDestroyed(QObject*)) );
+  QObject::connect( job, SIGNAL(result(KJob*)), this, SLOT(jobDone(KJob*)) );
+  QObject::connect( job, SIGNAL(destroyed(QObject*)), this, SLOT(jobDestroyed(QObject*)) );
 
-  if ( state!=Session::Disconnected ) {
+  if ( state != Session::Disconnected ) {
     startNext();
   }
 }
 
 void SessionPrivate::startNext()
 {
-  QTimer::singleShot( 0, q, SLOT(doStartNext()) );
+  QMetaObject::invokeMethod( this, "doStartNext" );
 }
 
 void SessionPrivate::doStartNext()
@@ -412,7 +419,7 @@ void SessionPrivate::clearJobQueue()
 
 void SessionPrivate::startSsl(const KTcpSocket::SslVersion &version)
 {
-  QMetaObject::invokeMethod( thread, "startSsl", Qt::QueuedConnection, Q_ARG( KTcpSocket::SslVersion, version ) );
+  thread->startSsl( version );
 }
 
 QString Session::selectedMailBox() const

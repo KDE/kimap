@@ -30,7 +30,6 @@ class Session;
 struct Message;
 class GetAclJobPrivate;
 
-
 /**
  * Gets the ACL for a mailbox
  *

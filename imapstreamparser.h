@@ -86,7 +86,6 @@ class KIMAP_EXPORT ImapStreamParser
      */
     QList<QByteArray> readParenthesizedList();
 
-
     /**
      * Get the next data as a number. This call might block.
      * @param ok true if the data found was a number
@@ -180,7 +179,6 @@ class KIMAP_EXPORT ImapStreamParser
     int availableDataSize() const;
 
     void setData( const QByteArray &data );
-
 
   private:
     void stripLeadingSpaces();

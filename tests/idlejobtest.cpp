@@ -54,7 +54,6 @@ void shouldReactToIdle_data()
   QList<int> expectedMessageCounts;
   QList<int> expectedRecentCounts;
 
-
   scenario.clear();
   scenario << FakeServer::preauth()
            << "C: A000001 SELECT \"INBOX/Foo\""
@@ -77,7 +76,6 @@ void shouldReactToIdle_data()
 
   QTest::newRow( "normal" ) << scenario << expectedMailBox << expectedMessageCounts << expectedRecentCounts;
 
-
   scenario.clear();
   scenario << FakeServer::preauth()
            << "C: A000001 SELECT \"INBOX/Foo\""
@@ -97,7 +95,6 @@ void shouldReactToIdle_data()
   expectedRecentCounts << 0 << 1;
 
   QTest::newRow( "only RECENT" ) << scenario << expectedMailBox << expectedMessageCounts << expectedRecentCounts;
-
 
   scenario.clear();
   scenario << FakeServer::preauth()
@@ -119,7 +116,6 @@ void shouldReactToIdle_data()
 
   QTest::newRow( "only EXISTS" ) << scenario << expectedMailBox << expectedMessageCounts << expectedRecentCounts;
 
-
   scenario.clear();
   scenario << FakeServer::preauth()
            << "C: A000001 SELECT \"INBOX/Foo\""
@@ -140,7 +136,6 @@ void shouldReactToIdle_data()
   expectedRecentCounts << 1;
 
   QTest::newRow( "under 200ms, same notification" ) << scenario << expectedMailBox << expectedMessageCounts << expectedRecentCounts;
-
 
   scenario.clear();
   scenario << FakeServer::preauth()
@@ -207,7 +202,6 @@ void shouldReactToIdle()
 
     fakeServer.quit();
 }
-
 
 };
 

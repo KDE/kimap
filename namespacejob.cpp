@@ -139,4 +139,3 @@ void NamespaceJob::handleResponse( const Message &response )
     }
   }
 }
-

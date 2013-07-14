@@ -2,7 +2,6 @@
     Copyright (c) 2009 Kevin Ottens <ervin@kde.org>
     Copyright (c) 2009 Andras Mantia <amantia@kde.org>
 
-
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Library General Public License as published by
     the Free Software Foundation; either version 2 of the License, or (at your
@@ -289,7 +288,7 @@ void LoginJob::handleResponse( const Message &response )
   };
 
   QByteArray tag = response.content.first().toString();
-  ResponseCode code;
+  ResponseCode code = OK;
 
   if ( tag == "+" ) {
     code = CONTINUATION;

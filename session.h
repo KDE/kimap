@@ -135,18 +135,6 @@ class KIMAP_EXPORT Session : public QObject
     void stateChanged(KIMAP::Session::State newState, KIMAP::Session::State oldState);
 
   private:
-    Q_PRIVATE_SLOT( d, void doStartNext() )
-    Q_PRIVATE_SLOT( d, void jobDone( KJob* ) )
-    Q_PRIVATE_SLOT( d, void jobDestroyed( QObject* ) )
-    Q_PRIVATE_SLOT( d, void responseReceived( const KIMAP::Message& ) )
-
-    Q_PRIVATE_SLOT( d, void socketConnected() )
-    Q_PRIVATE_SLOT( d, void socketDisconnected() )
-    Q_PRIVATE_SLOT( d, void socketError() )
-    Q_PRIVATE_SLOT( d, void socketActivity() )
-
-    Q_PRIVATE_SLOT( d, void handleSslError( const KSslErrorUiData &errorData ) )
-
     friend class SessionPrivate;
     SessionPrivate *const d;
 };

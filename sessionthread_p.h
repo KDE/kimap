@@ -22,7 +22,6 @@
 
 #include <QtCore/QMutex>
 #include <QtCore/QQueue>
-#include <QtCore/QThread>
 
 #include <ktcpsocket.h>
 
@@ -32,51 +31,57 @@ namespace KIMAP {
 
 class ImapStreamParser;
 struct Message;
-class Session;
 
-class SessionThread : public QThread
+class SessionThread : public QObject
 {
   Q_OBJECT
 
   public:
-    explicit SessionThread( const QString &hostName, quint16 port, Session *parent );
+    explicit SessionThread( const QString &hostName, quint16 port );
     ~SessionThread();
 
     inline QString hostName() { return m_hostName; }
     inline quint16 port() { return m_port; }
 
     void sendData( const QByteArray &payload );
-    void run();
 
   public slots:
     void closeSocket();
-    void reconnect();
-    void startSsl(const KTcpSocket::SslVersion &version);
+    void startSsl(KTcpSocket::SslVersion version);
+    void sslErrorHandlerResponse(bool result);
 
   signals:
+    void socketConnected();
+    void socketDisconnected();
+    void socketActivity();
+    void socketError();
     void responseReceived(const KIMAP::Message &response);
     void encryptionNegotiationResult(bool, KTcpSocket::SslVersion);
     void sslError(const KSslErrorUiData&);
 
   private slots:
+    void reconnect();
+    void threadInit();
+    void threadQuit();
     void readMessage();
     void writeDataQueue();
     void sslConnected();
-    void sslErrorHandlerResponse(bool result);
     void doCloseSocket();
-    void socketError();
-    void socketDisconnected();
+    void socketError(KTcpSocket::Error);
+    void slotSocketDisconnected();
+    void doStartSsl(KTcpSocket::SslVersion);
+    void doSslErrorHandlerResponse(bool result);
 
   private:
     QString m_hostName;
     quint16 m_port;
 
-    Session *m_session;
     SessionSocket *m_socket;
     ImapStreamParser *m_stream;
 
     QQueue<QByteArray> m_dataQueue;
 
+    // Protects m_dataQueue
     QMutex m_mutex;
 
     bool m_encryptedMode;

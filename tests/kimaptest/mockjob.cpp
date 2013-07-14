@@ -93,4 +93,3 @@ bool MockJob::isNull() const
   Q_D( const MockJob );
   return d->command.isEmpty();
 }
-

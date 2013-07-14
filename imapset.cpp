@@ -56,7 +56,6 @@ class ImapSet::Private : public QSharedData
     ImapInterval::List intervals;
 };
 
-
 ImapInterval::ImapInterval() :
     d( new Private )
 {
@@ -327,4 +326,3 @@ QDebug& operator<<( QDebug &d, const ImapSet &set )
   d << set.toImapSequenceSet();
   return d;
 }
-

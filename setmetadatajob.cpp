@@ -152,4 +152,3 @@ SetMetaDataJob::MetaDataErrors SetMetaDataJob::metaDataErrors() const
   Q_D( const SetMetaDataJob );
   return d->metaDataErrors;
 }
-

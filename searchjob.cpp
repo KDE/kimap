@@ -89,7 +89,6 @@ namespace KIMAP
       }
       ~SearchJobPrivate() { }
 
-
       QByteArray charset;
       QList<QByteArray> criterias;
       QMap<SearchJob::SearchCriteria, QByteArray > criteriaMap;
@@ -170,7 +169,6 @@ void SearchJob::handleResponse( const Message &response )
     }
   }
 }
-
 
 void SearchJob::setCharset( const QByteArray &charset )
 {
@@ -315,4 +313,3 @@ QList<int> SearchJob::foundItems()
 
   return results;
 }
-

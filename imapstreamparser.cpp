@@ -48,7 +48,6 @@ QString ImapStreamParser::readUtf8String()
   return result;
 }
 
-
 QByteArray ImapStreamParser::readString()
 {
   QByteArray result;

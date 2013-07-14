@@ -344,7 +344,6 @@ void FetchJobPrivate::parseBodyStructure(const QByteArray &structure, int &pos, 
 
   pos++;
 
-
   if ( structure[pos] != '(' ) { // simple part
     pos--;
     parsePart( structure, pos, content );

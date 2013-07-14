@@ -56,4 +56,3 @@ void LogoutJob::connectionLost()
 {
   emitResult();
 }
-

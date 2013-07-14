@@ -193,4 +193,3 @@ void StoreJob::handleResponse( const Message &response )
     }
   }
 }
-

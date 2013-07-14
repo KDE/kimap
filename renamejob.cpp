@@ -81,5 +81,3 @@ QString RenameJob::destinationMailBox() const
   Q_D( const RenameJob );
   return d->destinationMailBox;
 }
-
-

@@ -64,5 +64,3 @@ MetaDataJobBase::ServerCapability MetaDataJobBase::serverCapability() const
   Q_D( const MetaDataJobBase );
   return d->serverCapability;
 }
-
-
