@@ -141,10 +141,12 @@ LoginJob::LoginJob( Session *session )
 {
   Q_D( LoginJob );
   connect( d->sessionInternal(), SIGNAL(encryptionNegotiationResult(bool)), this, SLOT(sslResponse(bool)) );
+  kDebug() << this;
 }
 
 LoginJob::~LoginJob()
 {
+  kDebug() << this;
 }
 
 QString LoginJob::userName() const
@@ -187,6 +189,7 @@ void LoginJob::doStart()
 {
   Q_D( LoginJob );
 
+  kDebug() << this;
   // Don't authenticate on a session in the authenticated state
   if ( session()->state() == Session::Authenticated || session()->state() == Session::Selected ) {
     setError( UserDefinedError );
@@ -251,6 +254,7 @@ void LoginJob::doStart()
   } else  if ( encryptionMode == Unencrypted  ) {
     if ( d->authMode.isEmpty() ) {
       d->authState = LoginJobPrivate::Login;
+      kDebug() << "sending LOGIN";
       d->tags << d->sessionInternal()->sendCommand( "LOGIN",
                                                     '"' + quoteIMAP( d->userName ).toUtf8() + '"' +
                                                     ' ' +
@@ -289,6 +293,8 @@ void LoginJob::handleResponse( const Message &response )
 
   QByteArray tag = response.content.first().toString();
   ResponseCode code = OK;
+
+  kDebug() << commandName << tag;
 
   if ( tag == "+" ) {
     code = CONTINUATION;

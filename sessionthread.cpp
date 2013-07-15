@@ -148,6 +148,7 @@ void SessionThread::doCloseSocket()
   if ( !m_socket )
     return;
   m_encryptedMode = false;
+  kDebug() << "close";
   m_socket->close();
 }
 
@@ -160,8 +161,10 @@ void SessionThread::reconnect()
   if ( m_socket->state() != SessionSocket::ConnectedState &&
        m_socket->state() != SessionSocket::ConnectingState ) {
     if ( m_encryptedMode ) {
+      kDebug() << "connectToHostEncrypted" << m_hostName << m_port;
       m_socket->connectToHostEncrypted( m_hostName, m_port );
     } else {
+      kDebug() << "connectToHost" << m_hostName << m_port;
       m_socket->connectToHost( m_hostName, m_port );
     }
   }
