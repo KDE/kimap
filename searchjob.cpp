@@ -123,9 +123,9 @@ void SearchJob::doStart()
   }
 
   if ( d->logic == SearchJob::Not ) {
-    searchKey += "NOT";
-  } else if ( d->logic == SearchJob::Or ) {
-    searchKey += "OR";
+    searchKey += "NOT ";
+  } else if ( d->logic == SearchJob::Or && d->criterias.size() > 1 ) {
+    searchKey += "OR ";
   }
 
   if ( d->logic == SearchJob::And ) {
