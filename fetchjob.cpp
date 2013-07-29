@@ -86,11 +86,17 @@ namespace KIMAP
 
 using namespace KIMAP;
 
+FetchJob::FetchScope::FetchScope():
+  mode( FetchScope::Content ),
+  changedSince( -1 )
+{
+
+}
+
 FetchJob::FetchJob( Session *session )
   : Job( *new FetchJobPrivate( this, session, i18n( "Fetch" ) ) )
 {
   Q_D( FetchJob );
-  d->scope.mode = FetchScope::Content;
   connect( &d->emitPendingsTimer, SIGNAL(timeout()),
            this, SLOT(emitPendings()) );
 }
@@ -211,6 +217,10 @@ void FetchJob::doStart()
       parameters += " FLAGS UID)";
     }
     break;
+  }
+
+  if ( d->scope.changedSince > -1 ) {
+    parameters += " (CHANGEDSINCE " + QByteArray::number( d->scope.changedSince ) + ")";
   }
 
   QByteArray command = "FETCH";

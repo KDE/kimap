@@ -68,8 +68,11 @@ class KIMAP_EXPORT FetchJob : public Job
      * what is fetched that the IMAP FETCH command normally
      * does, but the common cases are catered for.
      */
-    struct FetchScope
+    class FetchScope
     {
+    public:
+      FetchScope();
+
       /**
        * Used to indicate what part of the message should be fetched.
        */
@@ -148,6 +151,17 @@ class KIMAP_EXPORT FetchJob : public Job
        * Specify what message data should be fetched.
        */
       Mode mode;
+
+      /**
+       * Specify to fetch only items with mod-sequence higher then @p changedSince.
+       *
+       * The server must have CONDSTORE capability (RFC4551).
+       *
+       * Default value is -1 (ignored).
+       *
+       * @since 4.12
+       */
+      qint64 changedSince;
     };
 
     explicit FetchJob( Session *session );

@@ -57,6 +57,15 @@ class KIMAP_EXPORT SelectJob : public Job
     qint64 uidValidity() const;
     qint64 nextUid() const;
 
+    /**
+     * @return Highest mod-sequence value of all messages in the mailbox or -1
+     * if the server does not have CONDSTORE capability (RFC4551) or does not
+     * support persistent storage of mod-sequences.
+     *
+     * @since 4.12
+     */
+    qint64 highestModSequence() const;
+
   protected:
     virtual void doStart();
     virtual void handleResponse( const Message &response );

@@ -44,6 +44,7 @@ void testSingleSelect_data() {
   QTest::addColumn<int>( "firstUnseenIndex" );
   QTest::addColumn<qint64>( "uidValidity" );
   QTest::addColumn<qint64>( "nextUid" );
+  QTest::addColumn<qint64>( "highestmodseq" );
 
   QList<QByteArray> scenario;
   QList<QByteArray> flags;
@@ -55,13 +56,14 @@ void testSingleSelect_data() {
            << "S: * OK [UNSEEN 12] Message 12 is first unseen"
            << "S: * OK [UIDVALIDITY 3857529045] UIDs valid"
            << "S: * OK [UIDNEXT 4392] Predicted next UID"
+           << "S: * OK [HIGHESTMODSEQ 123456789]"
            << "S: * FLAGS (\\Answered \\Flagged \\Deleted \\Seen \\Draft)"
            << "S: * OK [PERMANENTFLAGS (\\Deleted \\Seen \\*)] Limited"
            << "S: A000001 OK [READ-WRITE] SELECT completed";
 
   flags << "\\Answered" << "\\Flagged" << "\\Deleted" << "\\Seen" << "\\Draft";
   permanentflags << "\\Deleted" << "\\Seen" << "\\*";
-  QTest::newRow( "good" ) << scenario << flags << permanentflags << 172 << 1 << 12 << (qint64)3857529045 << (qint64)4392;
+  QTest::newRow( "good" ) << scenario << flags << permanentflags << 172 << 1 << 12 << (qint64)3857529045 << (qint64)4392 << (qint64)123456789;
 
   scenario.clear();
   flags.clear();
@@ -69,7 +71,7 @@ void testSingleSelect_data() {
   scenario << FakeServer::preauth()
            << "C: A000001 SELECT \"INBOX\""
            << "S: A000001 BAD command unknown or arguments invalid";
-  QTest::newRow( "bad" ) << scenario << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << (qint64)0;
+  QTest::newRow( "bad" ) << scenario << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << (qint64)0 << (qint64)-1;
 
   scenario.clear();
   flags.clear();
@@ -77,7 +79,7 @@ void testSingleSelect_data() {
   scenario << FakeServer::preauth()
            << "C: A000001 SELECT \"INBOX\""
            << "S: A000001 NO select failure";
-  QTest::newRow( "no" ) << scenario << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << (qint64)0;
+  QTest::newRow( "no" ) << scenario << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << (qint64)0 << (qint64)-1;
 }
 
 void testSingleSelect()
@@ -90,6 +92,7 @@ void testSingleSelect()
     QFETCH( int, firstUnseenIndex);
     QFETCH( qint64, uidValidity);
     QFETCH( qint64, nextUid);
+    QFETCH( qint64, highestmodseq );
 
     FakeServer fakeServer;
     fakeServer.setScenario( scenario );
@@ -111,6 +114,7 @@ void testSingleSelect()
       QCOMPARE( job->firstUnseenIndex(), firstUnseenIndex );
       QCOMPARE( job->uidValidity(), uidValidity );
       QCOMPARE( job->nextUid(), nextUid );
+      QCOMPARE( job->highestModSequence(), highestmodseq );
     }
 
     fakeServer.quit();

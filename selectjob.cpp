@@ -34,7 +34,7 @@ namespace KIMAP
     public:
       SelectJobPrivate( Session *session, const QString& name )
         : JobPrivate( session, name ), readOnly( false ), messageCount( -1 ), recentCount( -1 ),
-          firstUnseenIndex( -1 ), uidValidity( -1 ), nextUid( -1 ) { }
+          firstUnseenIndex( -1 ), uidValidity( -1 ), nextUid( -1 ), highestmodseq( -1 ) { }
       ~SelectJobPrivate() { }
 
       QString mailBox;
@@ -47,6 +47,7 @@ namespace KIMAP
       int firstUnseenIndex;
       qint64 uidValidity;
       qint64 nextUid;
+      qint64 highestmodseq;
   };
 }
 
@@ -127,6 +128,12 @@ qint64 SelectJob::nextUid() const
   return d->nextUid;
 }
 
+qint64 SelectJob::highestModSequence() const
+{
+  Q_D( const SelectJob );
+  return d->highestmodseq;
+}
+
 void SelectJob::doStart()
 {
   Q_D( SelectJob );
@@ -158,23 +165,18 @@ void SelectJob::handleResponse( const Message &response )
             d->permanentFlags = response.responseCode[1].toList();
           } else {
             bool isInt;
-
+            qint64 value = response.responseCode[1].toString().toLongLong( &isInt );
+            if ( !isInt ) {
+              return;
+            }
             if ( code == "UIDVALIDITY" ) {
-              qint64 value = response.responseCode[1].toString().toLongLong( &isInt );
-              if ( !isInt ) {
-                return;
-              }
               d->uidValidity = value;
-            } else {
-              qint64 value = response.responseCode[1].toString().toLongLong( &isInt );
-              if ( !isInt ) {
-                return;
-              }
-              if ( code == "UNSEEN" ) {
-                d->firstUnseenIndex = value;
-              } else if ( code == "UIDNEXT" ) {
-                d->nextUid = value;
-              }
+            } else if ( code == "UNSEEN" ) {
+              d->firstUnseenIndex = value;
+            } else if ( code == "UIDNEXT" ) {
+              d->nextUid = value;
+            } else if ( code == "HIGHESTMODSEQ" ) {
+              d->highestmodseq = value;
             }
           }
         } else if ( code == "FLAGS" ) {

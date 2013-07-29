@@ -81,8 +81,22 @@ void testFetch_data() {
 
   KIMAP::FetchJob::FetchScope scope;
   scope.mode = KIMAP::FetchJob::FetchScope::Flags;
+  scope.changedSince = 123456789;
 
   QList<QByteArray> scenario;
+  scenario << FakeServer::preauth()
+           << "C: A000001 FETCH 1:4 (FLAGS UID) (CHANGEDSINCE 123456789)"
+           << "S: * 1 FETCH ( FLAGS () UID 1 )"
+           << "S: * 2 FETCH ( FLAGS () UID 2 )"
+           << "S: * 3 FETCH ( FLAGS () UID 3 )"
+           << "S: * 4 FETCH ( FLAGS () UID 4 )"
+           << "S: A000001 OK fetch done";
+
+  QTest::newRow( "messages have empty flags (with changedsince)" ) << false << KIMAP::ImapSet( 1, 4 ) << 4
+                                               << scenario << scope;
+
+  scenario.clear();
+  scope.changedSince = -1;
   scenario << FakeServer::preauth()
            << "C: A000001 FETCH 1:4 (FLAGS UID)"
            << "S: * 1 FETCH ( FLAGS () UID 1 )"
