@@ -34,7 +34,8 @@ namespace KIMAP
     public:
       SelectJobPrivate( Session *session, const QString& name )
         : JobPrivate( session, name ), readOnly( false ), messageCount( -1 ), recentCount( -1 ),
-          firstUnseenIndex( -1 ), uidValidity( -1 ), nextUid( -1 ), highestmodseq( -1 ) { }
+          firstUnseenIndex( -1 ), uidValidity( -1 ), nextUid( -1 ), highestmodseq( 0 ),
+          condstoreEnabled( false ) { }
       ~SelectJobPrivate() { }
 
       QString mailBox;
@@ -47,7 +48,8 @@ namespace KIMAP
       int firstUnseenIndex;
       qint64 uidValidity;
       qint64 nextUid;
-      qint64 highestmodseq;
+      quint64 highestmodseq;
+      bool condstoreEnabled;
   };
 }
 
@@ -128,11 +130,24 @@ qint64 SelectJob::nextUid() const
   return d->nextUid;
 }
 
-qint64 SelectJob::highestModSequence() const
+quint64 SelectJob::highestModSequence() const
 {
   Q_D( const SelectJob );
   return d->highestmodseq;
 }
+
+void SelectJob::setCondstoreEnabled( bool enable )
+{
+  Q_D( SelectJob );
+  d->condstoreEnabled = enable;
+}
+
+bool SelectJob::condstoreEnabled() const
+{
+  Q_D( const SelectJob );
+  return d->condstoreEnabled;
+}
+
 
 void SelectJob::doStart()
 {
@@ -143,7 +158,13 @@ void SelectJob::doStart()
     command = "EXAMINE";
   }
 
-  d->tags << d->sessionInternal()->sendCommand( command, '\"'+KIMAP::encodeImapFolderName( d->mailBox.toUtf8() )+'\"' );
+  QByteArray params = '\"'+KIMAP::encodeImapFolderName( d->mailBox.toUtf8() )+'\"';
+
+  if ( d->condstoreEnabled ) {
+    params += " (CONDSTORE)";
+  }
+
+  d->tags << d->sessionInternal()->sendCommand( command, params );
 }
 
 void SelectJob::handleResponse( const Message &response )
@@ -163,6 +184,13 @@ void SelectJob::handleResponse( const Message &response )
 
           if ( code == "PERMANENTFLAGS" ) {
             d->permanentFlags = response.responseCode[1].toList();
+          } else if ( code == "HIGHESTMODSEQ" ) {
+            bool isInt;
+            quint64 value = response.responseCode[1].toString().toULongLong( &isInt );
+            if ( !isInt ) {
+              return;
+            }
+            d->highestmodseq = value;
           } else {
             bool isInt;
             qint64 value = response.responseCode[1].toString().toLongLong( &isInt );
@@ -175,8 +203,6 @@ void SelectJob::handleResponse( const Message &response )
               d->firstUnseenIndex = value;
             } else if ( code == "UIDNEXT" ) {
               d->nextUid = value;
-            } else if ( code == "HIGHESTMODSEQ" ) {
-              d->highestmodseq = value;
             }
           }
         } else if ( code == "FLAGS" ) {

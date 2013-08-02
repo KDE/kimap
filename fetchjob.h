@@ -157,11 +157,11 @@ class KIMAP_EXPORT FetchJob : public Job
        *
        * The server must have CONDSTORE capability (RFC4551).
        *
-       * Default value is -1 (ignored).
+       * Default value is 0 (ignored).
        *
        * @since 4.12
        */
-      qint64 changedSince;
+      quint64 changedSince;
     };
 
     explicit FetchJob( Session *session );

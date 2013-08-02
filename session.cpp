@@ -316,7 +316,7 @@ QByteArray SessionPrivate::sendCommand( const QByteArray &command, const QByteAr
     selectTag = tag;
     upcomingMailBox = args;
     upcomingMailBox.remove( 0, 1 );
-    upcomingMailBox.chop( 1 );
+    upcomingMailBox = upcomingMailBox.left( upcomingMailBox.indexOf( '\"') );
     upcomingMailBox = KIMAP::decodeImapFolderName( upcomingMailBox );
   } else if ( command == "CLOSE" ) {
     closeTag = tag;

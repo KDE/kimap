@@ -96,7 +96,7 @@ void testFetch_data() {
                                                << scenario << scope;
 
   scenario.clear();
-  scope.changedSince = -1;
+  scope.changedSince = 0;
   scenario << FakeServer::preauth()
            << "C: A000001 FETCH 1:4 (FLAGS UID)"
            << "S: * 1 FETCH ( FLAGS () UID 1 )"

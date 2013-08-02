@@ -88,7 +88,7 @@ using namespace KIMAP;
 
 FetchJob::FetchScope::FetchScope():
   mode( FetchScope::Content ),
-  changedSince( -1 )
+  changedSince( 0 )
 {
 
 }
@@ -219,7 +219,7 @@ void FetchJob::doStart()
     break;
   }
 
-  if ( d->scope.changedSince > -1 ) {
+  if ( d->scope.changedSince > 0 ) {
     parameters += " (CHANGEDSINCE " + QByteArray::number( d->scope.changedSince ) + ")";
   }
 
