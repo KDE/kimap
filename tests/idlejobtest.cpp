@@ -29,6 +29,7 @@
 #include <KDebug>
 
 Q_DECLARE_METATYPE( QList<int> )
+Q_DECLARE_METATYPE( QList<qint64> )
 Q_DECLARE_METATYPE( KIMAP::IdleJob* )
 
 class IdleJobTest: public QObject {
@@ -48,11 +49,13 @@ void shouldReactToIdle_data()
   QTest::addColumn<QString>( "expectedMailBox" );
   QTest::addColumn< QList<int> >( "expectedMessageCounts" );
   QTest::addColumn< QList<int> >( "expectedRecentCounts" );
+  QTest::addColumn< QList<qint64> >( "expectedFlagsNotifications" );
 
   QList<QByteArray> scenario;
   QString expectedMailBox;
   QList<int> expectedMessageCounts;
   QList<int> expectedRecentCounts;
+  QList<qint64> expectedFlagsNotifications;
 
   scenario.clear();
   scenario << FakeServer::preauth()
@@ -74,7 +77,7 @@ void shouldReactToIdle_data()
   expectedMessageCounts << 1 << 2;
   expectedRecentCounts << 0 << 1;
 
-  QTest::newRow( "normal" ) << scenario << expectedMailBox << expectedMessageCounts << expectedRecentCounts;
+  QTest::newRow( "normal" ) << scenario << expectedMailBox << expectedMessageCounts << expectedRecentCounts << expectedFlagsNotifications;
 
   scenario.clear();
   scenario << FakeServer::preauth()
@@ -94,7 +97,7 @@ void shouldReactToIdle_data()
   expectedMessageCounts << -1 << -1;
   expectedRecentCounts << 0 << 1;
 
-  QTest::newRow( "only RECENT" ) << scenario << expectedMailBox << expectedMessageCounts << expectedRecentCounts;
+  QTest::newRow( "only RECENT" ) << scenario << expectedMailBox << expectedMessageCounts << expectedRecentCounts << expectedFlagsNotifications;
 
   scenario.clear();
   scenario << FakeServer::preauth()
@@ -114,7 +117,7 @@ void shouldReactToIdle_data()
   expectedMessageCounts << 1 << 2;
   expectedRecentCounts << -1 << -1;
 
-  QTest::newRow( "only EXISTS" ) << scenario << expectedMailBox << expectedMessageCounts << expectedRecentCounts;
+  QTest::newRow( "only EXISTS" ) << scenario << expectedMailBox << expectedMessageCounts << expectedRecentCounts << expectedFlagsNotifications;
 
   scenario.clear();
   scenario << FakeServer::preauth()
@@ -135,7 +138,7 @@ void shouldReactToIdle_data()
   expectedMessageCounts << 2;
   expectedRecentCounts << 1;
 
-  QTest::newRow( "under 200ms, same notification" ) << scenario << expectedMailBox << expectedMessageCounts << expectedRecentCounts;
+  QTest::newRow( "under 200ms, same notification" ) << scenario << expectedMailBox << expectedMessageCounts << expectedRecentCounts << expectedFlagsNotifications;
 
   scenario.clear();
   scenario << FakeServer::preauth()
@@ -156,7 +159,26 @@ void shouldReactToIdle_data()
   expectedMessageCounts << 2 << -1;
   expectedRecentCounts << -1 << 1;
 
-  QTest::newRow( "above 200ms, two notifications" ) << scenario << expectedMailBox << expectedMessageCounts << expectedRecentCounts;
+  QTest::newRow( "above 200ms, two notifications" ) << scenario << expectedMailBox << expectedMessageCounts << expectedRecentCounts << expectedFlagsNotifications;
+
+  scenario.clear();
+  scenario << FakeServer::preauth()
+           << "C: A000001 SELECT \"INBOX/Foo\""
+           << "S: A000001 OK SELECT done"
+           << "C: A000002 IDLE"
+           << "S: + OK"
+           << "S: * 1 FETCH (FLAGS ())"
+           << "W: 200"
+           << "S: * 2 FETCH (FLAGS (\\Seen))"
+           << "S: A000002 OK done idling";
+
+  expectedMailBox = "INBOX/Foo";
+
+  expectedMessageCounts.clear();
+  expectedRecentCounts.clear();
+  expectedFlagsNotifications << 1 << 2;
+
+  QTest::newRow("2 flags change notifications") << scenario << expectedMailBox << expectedMessageCounts << expectedRecentCounts << expectedFlagsNotifications;
 }
 
 void shouldReactToIdle()
@@ -165,6 +187,7 @@ void shouldReactToIdle()
     QFETCH( QString, expectedMailBox );
     QFETCH( QList<int>, expectedMessageCounts );
     QFETCH( QList<int>, expectedRecentCounts );
+    QFETCH( QList<qint64>, expectedFlagsNotifications );
 
     QVERIFY( expectedMessageCounts.size() == expectedRecentCounts.size() );
 
@@ -180,23 +203,33 @@ void shouldReactToIdle()
 
     KIMAP::IdleJob *idle = new KIMAP::IdleJob( &session );
 
-    QSignalSpy spy( idle, SIGNAL(mailBoxStats(KIMAP::IdleJob*,QString,int,int)) );
+    QSignalSpy statsSpy( idle, SIGNAL(mailBoxStats(KIMAP::IdleJob*,QString,int,int)) );
+    QSignalSpy flagsSpy( idle, SIGNAL(mailBoxMessageFlagsChanged(KIMAP::IdleJob*,qint64)) );
 
     bool result = idle->exec();
 
     if ( result ) {
-      QCOMPARE( spy.count(), expectedMessageCounts.size() );
+      QCOMPARE( statsSpy.count(), expectedMessageCounts.size() );
+      QCOMPARE( flagsSpy.count(), expectedFlagsNotifications.size() );
 
-      for ( int i=0; i<spy.count(); i++ ) {
-        const KIMAP::IdleJob *job = spy.at( i ).at( 0 ).value<KIMAP::IdleJob*>();
-        const QString mailBox = spy.at( i ).at( 1 ).toString();
-        const int messageCount = spy.at( i ).at( 2 ).toInt();
-        const int recentCount = spy.at( i ).at( 3 ).toInt();
+      for ( int i = 0 ; i < statsSpy.count(); i++ ) {
+        const KIMAP::IdleJob *job = statsSpy.at( i ).at( 0 ).value<KIMAP::IdleJob*>();
+        const QString mailBox = statsSpy.at( i ).at( 1 ).toString();
+        const int messageCount = statsSpy.at( i ).at( 2 ).toInt();
+        const int recentCount = statsSpy.at( i ).at( 3 ).toInt();
 
         QCOMPARE( job, idle );
         QCOMPARE( mailBox, expectedMailBox );
         QCOMPARE( messageCount, expectedMessageCounts.at( i ) );
         QCOMPARE( recentCount, expectedRecentCounts.at( i ) );
+      }
+
+      for ( int i = 0; i < flagsSpy.count(); i++ ) {
+        const KIMAP::IdleJob *job = flagsSpy.at( i ).at( 0 ).value<KIMAP::IdleJob*>();
+        const qint64 uid = flagsSpy.at( i ).at( 1 ).toLongLong();
+
+        QCOMPARE( job, idle );
+        QCOMPARE( uid, expectedFlagsNotifications.at( i ) );
       }
     }
 

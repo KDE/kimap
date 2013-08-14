@@ -115,7 +115,7 @@ void IdleJob::handleResponse( const Message &response )
       return;
 
     } else if ( response.content.size() > 2 ) {
-        if ( response.content[2].toString() == "EXISTS" ) {
+      if ( response.content[2].toString() == "EXISTS" ) {
         if ( d->messageCount >= 0 ) {
           d->emitStats();
         }
@@ -127,6 +127,9 @@ void IdleJob::handleResponse( const Message &response )
         }
 
         d->recentCount = response.content[1].toString().toInt();
+      } else if ( response.content[2].toString() == "FETCH" ) {
+        const qint64 uid = response.content[1].toString().toLongLong();
+        Q_EMIT mailBoxMessageFlagsChanged( this, uid );
       }
     }
 
