@@ -52,7 +52,7 @@ namespace KIMAP
                 }
                 MailBoxDescriptor descriptor;
                 descriptor.name = QString::fromUtf8( decodeImapFolderName( parts[0] ) );
-                descriptor.separator = QChar( parts[1][0] );
+                descriptor.separator = QLatin1Char( parts[1][0] );
 
                 result << descriptor;
             } catch ( KIMAP::ImapParserException e ) {

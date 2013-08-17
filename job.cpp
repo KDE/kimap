@@ -77,7 +77,7 @@ Job::HandlerResponse Job::handleErrorReplies(const Message &response)
       setErrorText( i18n( "%1 failed, malformed reply from the server.", d->m_name ) );
     } else if ( response.content[1].toString() != "OK" ) {
       setError( UserDefinedError );
-      setErrorText( i18n( "%1 failed, server replied: %2", d->m_name, response.toString().constData() ) );
+      setErrorText( i18n( "%1 failed, server replied: %2", d->m_name, QLatin1String(response.toString().constData()) ) );
     }
     d->tags.removeAll( response.content.first().toString() );
     if ( d->tags.isEmpty() ) { // Only emit result when the last command returned

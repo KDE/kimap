@@ -326,7 +326,7 @@ void LoginJob::handleResponse( const Message &response )
       }
 
       setError( UserDefinedError );
-      setErrorText( i18n( "%1 failed, server replied: %2", commandName, response.toString().constData() ) );
+      setErrorText( i18n( "%1 failed, server replied: %2", commandName, QLatin1String(response.toString().constData()) ) );
       emitResult();
       return;
 
@@ -335,9 +335,9 @@ void LoginJob::handleResponse( const Message &response )
       if ( response.content[1].toString() == "CAPABILITY" ) {
         QList<Message::Part>::const_iterator p = response.content.begin() + 2;
         while ( p != response.content.end() ) {
-          QString capability = p->toString();
+          QString capability = QLatin1String(p->toString());
           d->capabilities << capability;
-          if ( capability == "LOGINDISABLED" ) {
+          if ( capability == QLatin1String("LOGINDISABLED") ) {
             d->plainLoginDisabled = true;
           }
           ++p;
@@ -461,7 +461,7 @@ bool LoginJobPrivate::startAuthentication()
   }
 
   do {
-    result = sasl_client_start( conn, authMode.toLatin1(), &client_interact, capabilities.contains( "SASL-IR" ) ? &out : 0, &outlen, &mechusing );
+    result = sasl_client_start( conn, authMode.toLatin1(), &client_interact, capabilities.contains( QLatin1String("SASL-IR") ) ? &out : 0, &outlen, &mechusing );
 
     if ( result == SASL_INTERACT ) {
       if ( !sasl_interact() ) {
@@ -558,22 +558,22 @@ void LoginJob::setAuthenticationMode(AuthenticationMode mode)
 {
   Q_D( LoginJob );
   switch ( mode ) {
-    case ClearText: d->authMode = "";
+    case ClearText: d->authMode = QLatin1String( "");
       break;
-    case Login: d->authMode = "LOGIN";
+    case Login: d->authMode = QLatin1String("LOGIN");
       break;
-    case Plain: d->authMode = "PLAIN";
+    case Plain: d->authMode = QLatin1String("PLAIN");
       break;
-    case CramMD5: d->authMode = "CRAM-MD5";
+    case CramMD5: d->authMode = QLatin1String("CRAM-MD5");
       break;
-    case DigestMD5: d->authMode = "DIGEST-MD5";
+    case DigestMD5: d->authMode = QLatin1String("DIGEST-MD5");
       break;
-    case GSSAPI: d->authMode = "GSSAPI";
+    case GSSAPI: d->authMode = QLatin1String("GSSAPI");
       break;
-    case Anonymous: d->authMode = "ANONYMOUS";
+    case Anonymous: d->authMode = QLatin1String("ANONYMOUS");
       break;
     default:
-      d->authMode = "";
+      d->authMode = QLatin1String("");
   }
 }
 
@@ -598,14 +598,14 @@ void LoginJobPrivate::saveServerGreeting(const Message &response)
 
   for ( int i = 2; i < response.content.size(); i++ ) {
     if ( response.content.at( i ).type() == Message::Part::List ) {
-      serverGreeting += '(';
+      serverGreeting += QLatin1Char('(');
       foreach ( const QByteArray &item, response.content.at( i ).toList() ) {
-        serverGreeting += item + ' ';
+        serverGreeting += QLatin1String(item) + QLatin1Char(' ');
       }
       serverGreeting.chop( 1 );
-      serverGreeting += ") ";
+      serverGreeting += QLatin1String(") ");
     } else {
-      serverGreeting+=response.content.at( i ).toString() + ' ';
+      serverGreeting+= QLatin1String(response.content.at( i ).toString()) + QLatin1Char(' ');
     }
   }
   serverGreeting.chop( 1 );
