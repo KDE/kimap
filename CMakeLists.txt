@@ -49,6 +49,7 @@ set(kimap_LIB_SRCS
    metadatajobbase.cpp
    setmetadatajob.cpp
    getmetadatajob.cpp
+   global.cpp
 )
 
 kde4_add_library(kimap ${LIBRARY_TYPE} ${kimap_LIB_SRCS})
