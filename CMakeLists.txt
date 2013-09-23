@@ -53,17 +53,20 @@ set(kimap_LIB_SRCS
 )
 
 kde4_add_library(kimap ${LIBRARY_TYPE} ${kimap_LIB_SRCS})
+generate_export_header(kimap)
 
 target_link_libraries(kimap ${KDE4_KDECORE_LIBS} ${QT_QTNETWORK_LIBRARY} kmime  ${SASL2_LIBRARIES})
 
-include_directories( ${CMAKE_SOURCE_DIR}/kioslave ${SASL2_INCLUDE_DIR} ${Boost_INCLUDE_DIR} )
+include_directories( ${CMAKE_SOURCE_DIR}/kioslave ${SASL2_INCLUDE_DIR} ${Boost_INCLUDE_DIR}
+  ${CMAKE_CURRENT_BINARY_DIR}/../kmime
+)
 
 set_target_properties(kimap PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
 install(TARGETS kimap EXPORT kdepimlibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES kimap_export.h acl.h imapset.h job.h appendjob.h capabilitiesjob.h fetchjob.h idlejob.h listjob.h loginjob.h logoutjob.h namespacejob.h rfccodecs.h
+install( FILES ${CMAKE_CURRENT_BINARY_DIR}/kimap_export.h acl.h imapset.h job.h appendjob.h capabilitiesjob.h fetchjob.h idlejob.h listjob.h loginjob.h logoutjob.h namespacejob.h rfccodecs.h
  selectjob.h closejob.h expungejob.h deletejob.h createjob.h subscribejob.h unsubscribejob.h renamejob.h
  session.h sessionuiproxy.h storejob.h copyjob.h searchjob.h acljobbase.h setacljob.h getacljob.h deleteacljob.h
  myrightsjob.h listrightsjob.h quotajobbase.h setquotajob.h getquotajob.h getquotarootjob.h metadatajobbase.h setmetadatajob.h getmetadatajob.h
