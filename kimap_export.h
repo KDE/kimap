@@ -36,4 +36,6 @@
 # endif
 #endif
 
+#define KIMAP_DEPRECATED KDE_DEPRECATED
+
 #endif
