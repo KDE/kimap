@@ -4,6 +4,8 @@ if(KDE4_BUILD_TESTS)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
+include_directories(${CMAKE_BINARY_DIR}/kimap)
+
 set(kimaptest_LIB_SRCS
    fakeserver.cpp
    mockjob.cpp

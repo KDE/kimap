@@ -57,7 +57,10 @@ generate_export_header(kimap)
 
 target_link_libraries(kimap ${KDE4_KDECORE_LIBS} ${QT_QTNETWORK_LIBRARY} kmime  ${SASL2_LIBRARIES})
 
-include_directories( ${CMAKE_SOURCE_DIR}/kioslave ${SASL2_INCLUDE_DIR} ${Boost_INCLUDE_DIR}
+include_directories(
+  ${CMAKE_SOURCE_DIR}/kioslave
+  ${SASL2_INCLUDE_DIR}
+  ${Boost_INCLUDE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}/../kmime
 )
 
