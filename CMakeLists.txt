@@ -52,7 +52,7 @@ set(kimap_LIB_SRCS
    global.cpp
 )
 
-kde4_add_library(kimap ${LIBRARY_TYPE} ${kimap_LIB_SRCS})
+add_library(kimap ${LIBRARY_TYPE} ${kimap_LIB_SRCS})
 generate_export_header(kimap)
 
 target_link_libraries(kimap ${KDE4_KDECORE_LIBS} ${QT_QTNETWORK_LIBRARY} kmime  ${SASL2_LIBRARIES})
