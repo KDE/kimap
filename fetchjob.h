@@ -214,15 +214,15 @@ class KIMAP_EXPORT FetchJob : public Job
 
     // XXX: [alexmerry, 2010-07-24]: BIC?  Behaviour change
     /** @deprecated returns an empty map; use the signals instead */
-    KDE_DEPRECATED QMap<qint64, MessagePtr> messages() const;
+    KIMAP_DEPRECATED QMap<qint64, MessagePtr> messages() const;
     /** @deprecated returns an empty map; use the signals instead */
-    KDE_DEPRECATED QMap<qint64, MessageParts> parts() const;
+    KIMAP_DEPRECATED QMap<qint64, MessageParts> parts() const;
     /** @deprecated returns an empty map; use the signals instead */
-    KDE_DEPRECATED QMap<qint64, MessageFlags> flags() const;
+    KIMAP_DEPRECATED QMap<qint64, MessageFlags> flags() const;
     /** @deprecated returns an empty map; use the signals instead */
-    KDE_DEPRECATED QMap<qint64, qint64> sizes() const;
+    KIMAP_DEPRECATED QMap<qint64, qint64> sizes() const;
     /** @deprecated returns an empty map; use the signals instead */
-    KDE_DEPRECATED QMap<qint64, qint64> uids() const;
+    KIMAP_DEPRECATED QMap<qint64, qint64> uids() const;
 
   Q_SIGNALS:
     /**
