@@ -217,6 +217,9 @@ void FetchJob::doStart()
       parameters += " FLAGS UID)";
     }
     break;
+  case FetchScope::FullHeaders:
+    parameters += "(RFC822.SIZE INTERNALDATE BODY.PEEK[HEADER] FLAGS UID)";
+    break;
   }
 
   if ( d->scope.changedSince > 0 ) {
@@ -337,7 +340,9 @@ void FetchJob::handleResponse( const Message &response )
       // For the headers mode the message is built in several
       // steps, hence why we wait it to be done until putting it
       // in the pending queue.
-      if ( d->scope.mode == FetchScope::Headers || d->scope.mode == FetchScope::HeaderAndContent ) {
+      if ( d->scope.mode == FetchScope::Headers ||
+           d->scope.mode == FetchScope::HeaderAndContent ||
+           d->scope.mode == FetchScope::FullHeaders ) {
         d->pendingMessages[id] = message;
       }
     }

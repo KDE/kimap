@@ -127,7 +127,17 @@ class KIMAP_EXPORT FetchJob : public Job
          *
          * @since 4.7
          */
-        HeaderAndContent
+        HeaderAndContent,
+
+        /**
+         * Fetch message size (in octets), internal date of the message, flags, UID
+         * and all RFC822 headers.
+         *
+         * The @p parts field is ignored when using this scope
+         *
+         * @since 4.12
+         */
+        FullHeaders
       };
 
       /**
