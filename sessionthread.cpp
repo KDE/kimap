@@ -264,7 +264,8 @@ void SessionThread::socketError(KTcpSocket::Error error)
     return;
   Q_UNUSED( error ); // can be used for debugging
   if ( doSslFallback ) {
-    m_socket->disconnectFromHost();
+    //do not call disconnectFromhost here, as that can trigger an error again.
+    m_socket->abort();
   } else {
     emit socketError();
   }
