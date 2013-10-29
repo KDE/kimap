@@ -99,16 +99,14 @@ void GetMetaDataJob::doStart()
       parameters += "(MAXSIZE " + QByteArray::number( d->maxSize ) + ')';
     }
     if ( d->depth != "0" ) {
-      parameters += " )";
+      parameters += ") ";
     }
 
-    if ( d->entries.size() > 1 ) {
+    if ( d->entries.size() >= 1 ) {
       parameters += '(';
-    }
-    Q_FOREACH ( const QByteArray &entry, d->entries ) {
-      parameters += '\"' + entry + "\" ";
-    }
-    if ( d->entries.size() > 1 ) {
+      Q_FOREACH ( const QByteArray &entry, d->entries ) {
+        parameters += entry + " ";
+      }
       parameters[parameters.length() - 1 ] = ')';
     }
   }

@@ -43,6 +43,7 @@ KIMAP_UNIT_TESTS(
   idlejobtest
   quotarootjobtest
   searchjobtest
+  getmetadatajobtest
 )
 
 ###########   manual tests  ###############
