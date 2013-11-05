@@ -44,6 +44,7 @@ KIMAP_UNIT_TESTS(
   quotarootjobtest
   searchjobtest
   getmetadatajobtest
+  streamparsertest
 )
 
 ###########   manual tests  ###############
