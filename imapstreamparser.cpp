@@ -119,7 +119,10 @@ bool ImapStreamParser::hasLiteral()
     m_literalSize = m_data.mid( m_position + 1, end - m_position - 1 ).toInt();
     // strip CRLF
     m_position = end + 1;
-
+    // ensure that the CRLF is available
+    if ( !waitForMoreData( m_position + 1 >= m_data.length() ) ) {
+      throw ImapParserException( "Unable to read more data" );
+    }
     if ( m_position < m_data.length() && m_data.at( m_position ) == '\r' ) {
       ++m_position;
     }
