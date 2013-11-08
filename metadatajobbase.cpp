@@ -27,6 +27,44 @@
 
 using namespace KIMAP;
 
+QByteArray MetaDataJobBasePrivate::addPrefix( const QByteArray &entry, const QByteArray &attribute ) const
+{
+  if (serverCapability == MetaDataJobBase::Annotatemore) {
+    if (attribute == "value.shared") {
+      return QByteArray("/shared").append(entry);
+    } else if (attribute == "value.priv") {
+      return QByteArray("/private").append(entry);
+    }
+  }
+  return entry;
+}
+
+
+QByteArray MetaDataJobBasePrivate::removePrefix( const QByteArray &entry ) const
+{
+  if (serverCapability == MetaDataJobBase::Annotatemore) {
+    if ( entry.startsWith("/shared")) {
+      return entry.mid(QByteArray("/shared").size());
+    }
+    if ( entry.startsWith("/private")) {
+      return entry.mid(QByteArray("/private").size());
+    }
+  }
+  return entry;
+}
+
+QByteArray MetaDataJobBasePrivate::getAttribute( const QByteArray &entry ) const
+{
+  if (serverCapability == MetaDataJobBase::Annotatemore) {
+    if ( entry.startsWith("/shared")) {
+      return QByteArray("value.shared");
+    } else if (entry.startsWith("/private")) {
+      return QByteArray("value.priv");
+    }
+  }
+  return QByteArray();
+}
+
 MetaDataJobBase::MetaDataJobBase( Session *session )
   : Job( *new MetaDataJobBasePrivate( session, i18n( "MetaDataJobBase" ) ) )
 {

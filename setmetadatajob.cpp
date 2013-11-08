@@ -138,7 +138,13 @@ void SetMetaDataJob::handleResponse( const Message &response )
 void SetMetaDataJob::addMetaData(const QByteArray &name, const QByteArray &value)
 {
   Q_D( SetMetaDataJob );
-  d->entries[name] = value;
+  if ( d->serverCapability == Annotatemore && ( name.startsWith( "/shared" ) || name.startsWith( "/private" ) ) ) {
+    const QByteArray &attribute = d->getAttribute( name );
+    d->entries[attribute] = value;
+    d->entryName = d->removePrefix( name );
+  } else {
+    d->entries[name] = value;
+  }
 }
 
 void SetMetaDataJob::setEntry(const QByteArray &entry)

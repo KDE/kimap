@@ -167,6 +167,13 @@ void GetMetaDataJob::addEntry(const QByteArray &entry, const QByteArray &attribu
   d->attributes.append( attribute );
 }
 
+void GetMetaDataJob::addRequestedEntry(const QByteArray &entry)
+{
+  Q_D( GetMetaDataJob );
+  d->entries.append( d->removePrefix(entry) );
+  d->attributes.append( d->getAttribute( entry ) );
+}
+
 void GetMetaDataJob::setMaximumSize(qint64 size)
 {
   Q_D( GetMetaDataJob );
@@ -207,8 +214,30 @@ QByteArray GetMetaDataJob::metaData(const QString &mailBox, const QByteArray &en
   return result;
 }
 
+QByteArray GetMetaDataJob::metaData(const QByteArray& entry) const
+{
+  kDebug() << entry;
+  Q_D( const GetMetaDataJob );
+  return d->metadata.value( d->mailBox ).value( d->removePrefix(entry) ).value( d->getAttribute( entry ) );
+}
+
 QMap<QByteArray, QMap<QByteArray, QByteArray> > GetMetaDataJob::allMetaData(const QString &mailBox) const
 {
   Q_D( const GetMetaDataJob );
   return d->metadata[mailBox];
 }
+
+QMap<QByteArray, QByteArray> GetMetaDataJob::allMetaData() const
+{
+  Q_D( const GetMetaDataJob );
+  const QMap<QByteArray, QMap<QByteArray, QByteArray> > &entries = d->metadata[d->mailBox];
+  QMap<QByteArray, QByteArray> map;
+  foreach(const QByteArray &entry, entries.keys()) {
+    const QMap<QByteArray, QByteArray> &values = entries[entry];
+    foreach(const QByteArray &attribute, values.keys()) {
+      map.insert(d->addPrefix(entry, attribute), values[attribute]);
+    }
+  }
+  return map;
+}
+

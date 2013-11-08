@@ -109,6 +109,10 @@ class KIMAP_EXPORT SetMetaDataJob : public MetaDataJobBase
      * @p value can be any data, although if it is a multi-line string
      * value, CRLF line-endings must be used.
      *
+     * In Annotatemore mode it is possible to prefix the entry name with a /shared or /private prefix, that is automatically translated
+     * to an appropriate value.shared|priv attribute.
+     *
+     * Annotatemore legacy mode:
      * When in Annotatemore mode, this method adds an attribute
      * entry to the list of additions and updates that will be
      * performed on the metadata entry when the job is run.
@@ -129,10 +133,11 @@ class KIMAP_EXPORT SetMetaDataJob : public MetaDataJobBase
      * attributes set by the server, and so cannot be used with
      * SetMetaDataJob.
      *
-     * @param name   the metadata entry name (Metadata mode) in ASCII or
-     *               attribute name (Annotatemore mode) in UTF-8
+     * @param name   the metadata entry name (Metadata or Annotatemore mode) in ASCII or
+     *               attribute name (Annotatemore mode, if used without /shared or /private prefix) in UTF-8
      * @param value  the value of the entry or attribute
      */
+    // KDE5: drop ANNOTATEMORE support
     void addMetaData(const QByteArray &name, const QByteArray &value);
 
     /**
@@ -163,15 +168,11 @@ class KIMAP_EXPORT SetMetaDataJob : public MetaDataJobBase
      * @see setServerCapability()
      *
      * @param entry  the metadata entry name in UTF-8
+     *
+     * @deprecated Use a /shared or /private prefix with addMetaData instead.
      */
-    // KDE5: this API is horrible for Annotatemore mode: use an overload of
-    //       addMetaData() instead:
-    //       void addMetaData(const QString &entry, const QByteArray &value,
-    //                        const QByteArray &encoding = QByteArray(),
-    //                        const QByteArray &language = QByteArray(),
-    //                        const QMap<QString,QByteArray> vendorAttributes =
-    //                        QMap<QString,QByteArray>());
-    void setEntry(const QByteArray &entry);
+    // KDE5: remove
+    KIMAP_DEPRECATED void setEntry(const QByteArray &entry);
 
     /**
      * Possible error codes that may be returned by the server.

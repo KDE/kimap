@@ -51,6 +51,7 @@ KIMAP_UNIT_TESTS(
   searchjobtest
   getmetadatajobtest
   streamparsertest
+  setmetadatajobtest
 )
 
 ###########   manual tests  ###############

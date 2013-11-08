@@ -41,6 +41,7 @@ void metadata_data()
   QTest::addColumn<QMap<QByteArray, QByteArray> >( "expectedAnnotations" );
 
   {
+    //FIXME requesting /shared and getting /private back doesn't make sense => fix scenario
     QList<QByteArray> scenario;
     scenario << FakeServer::preauth()
             << "C: A000001 GETMETADATA \"Folder1\" (DEPTH infinity) (/shared)"
@@ -81,16 +82,89 @@ void metadata()
   getMetadataJob->setServerCapability( KIMAP::MetaDataJobBase::Metadata );
   getMetadataJob->setMailBox( mailbox );
   getMetadataJob->setDepth( KIMAP::GetMetaDataJob::AllLevels );
-  getMetadataJob->addEntry( "/shared" );
+  getMetadataJob->addRequestedEntry( "/shared" );
 
   QVERIFY( getMetadataJob->exec() );
+
   QCOMPARE( getMetadataJob->allMetaData( mailbox ).size(), expectedAnnotations.size() );
+  const QMap <QByteArray, QByteArray> &allMetaData = getMetadataJob->allMetaData();
+  QCOMPARE( allMetaData.size(), expectedAnnotations.size() );
   foreach ( const QByteArray &entry, expectedAnnotations.keys() ) {
     QCOMPARE( getMetadataJob->metaData(mailbox, entry), expectedAnnotations.value(entry) );
+    QCOMPARE( getMetadataJob->metaData(entry), expectedAnnotations.value(entry) );
+    QCOMPARE( allMetaData.value(entry), expectedAnnotations.value(entry) );
   }
 
   fakeServer.quit();
 }
+
+void annotatemore_data()
+{
+  QTest::addColumn<QList<QByteArray> >( "scenario" );
+  QTest::addColumn<QString>( "mailbox" );
+  QTest::addColumn<QMap<QByteArray, QByteArray> >( "expectedAnnotations" );
+  QTest::addColumn<QByteArray>( "entry" );
+
+  {
+    QList<QByteArray> scenario;
+    scenario << FakeServer::preauth()
+            << "C: A000001 GETANNOTATION \"Folder1\" \"*\" \"value.shared\""
+            << "S: * ANNOTATION Folder1 /comment ( value.shared \"Shared comment\" )"
+            << "S: * ANNOTATION Folder1 /comment ( value.priv \"My own comment\" )"
+            << "S: A000001 OK annotations retrieved";
+
+    QMap<QByteArray, QByteArray> expected;
+    expected.insert("/shared/comment", "Shared comment");
+    expected.insert("/private/comment", "My own comment");
+    QTest::newRow( "get all" ) << scenario << "Folder1" << expected << QByteArray("/shared*");
+  }
+  {
+    QList<QByteArray> scenario;
+    scenario << FakeServer::preauth()
+            << "C: A000001 GETANNOTATION \"Folder1\" \"/comment\" \"value.shared\""
+            << "S: * ANNOTATION Folder1 /comment ( value.shared \"Shared comment\" )"
+            << "S: * ANNOTATION Folder1 /comment ( value.priv \"My own comment\" )"
+            << "S: A000001 OK annotations retrieved";
+
+    QMap<QByteArray, QByteArray> expected;
+    expected.insert("/shared/comment", "Shared comment");
+    expected.insert("/private/comment", "My own comment");
+    QTest::newRow( "get single" ) << scenario << "Folder1" << expected << QByteArray("/shared/comment");
+  }
+}
+
+void annotatemore()
+{
+  QFETCH( QList<QByteArray>, scenario );
+  QFETCH( QString, mailbox );
+  QFETCH( MAP, expectedAnnotations );
+  QFETCH( QByteArray, entry );
+
+  FakeServer fakeServer;
+  fakeServer.setScenario( scenario );
+  fakeServer.startAndWait();
+
+  KIMAP::Session session( "127.0.0.1", 5989 );
+
+  KIMAP::GetMetaDataJob *getMetadataJob = new KIMAP::GetMetaDataJob( &session );
+  getMetadataJob->setServerCapability( KIMAP::MetaDataJobBase::Annotatemore );
+  getMetadataJob->setMailBox( mailbox );
+  getMetadataJob->addRequestedEntry( entry );
+
+  QVERIFY( getMetadataJob->exec() );
+
+//   qDebug() << getMetadataJob->allMetaData(mailbox);
+  qDebug() << getMetadataJob->allMetaData();
+  const QMap <QByteArray, QByteArray> &allMetaData = getMetadataJob->allMetaData();
+  QCOMPARE( allMetaData.size(), expectedAnnotations.size() );
+  foreach ( const QByteArray &e, expectedAnnotations.keys() ) {
+    QCOMPARE( getMetadataJob->metaData(e), expectedAnnotations.value(e) );
+    QCOMPARE( allMetaData.value(e), expectedAnnotations.value(e) );
+  }
+
+  fakeServer.quit();
+}
+
 
 };
 
