@@ -23,7 +23,7 @@
 #include <klocale.h>
 #include <klocalizedstring.h>
 #include <kdebug.h>
-#include <qtcpsocket.h>
+#include <ktcpsocket.h> // declares KSslErrorUiData
 #include <QCoreApplication>
 #include <qsignalspy.h>
 
