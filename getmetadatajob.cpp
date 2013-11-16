@@ -146,10 +146,14 @@ void GetMetaDataJob::handleResponse( const Message &response )
       } else if ( d->serverCapability == Metadata && response.content[1].toString() == "METADATA" ) {
         QString mailBox = QString::fromUtf8( KIMAP::decodeImapFolderName( response.content[2].toString() ) );
 
-        QList<QByteArray> entries = response.content[3].toList();
+        const QList<QByteArray> &entries = response.content[3].toList();
         int i = 0;
         while ( i < entries.size() - 1 ) {
-          d->metadata[mailBox][entries[i]][""] = entries[i + 1];
+          const QByteArray &value = entries[i + 1];
+          QByteArray &targetValue = d->metadata[mailBox][entries[i]][""];
+          if ( value != "NIL" ) { //This just indicates no value
+            targetValue = value;
+          }
           i += 2;
         }
       }

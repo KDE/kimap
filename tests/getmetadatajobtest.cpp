@@ -64,6 +64,17 @@ void metadata_data()
     expected.insert("/private/comment", "My own comment");
     QTest::newRow( "combined response" ) << scenario << "Folder1" << expected;
   }
+  {
+    QList<QByteArray> scenario;
+    scenario << FakeServer::preauth()
+            << "C: A000001 GETMETADATA \"Folder1\" (DEPTH infinity) (/shared)"
+            << "S: * METADATA \"Folder1\" (/shared/comment \"NIL\" /private/comment \"NIL\")"
+            << "S: A000001 OK GETMETADATA complete";
+    QMap<QByteArray, QByteArray> expected;
+    expected.insert("/shared/comment", "");
+    expected.insert("/private/comment", "");
+    QTest::newRow( "NIL response" ) << scenario << "Folder1" << expected;
+  }
 }
 
 void metadata()
