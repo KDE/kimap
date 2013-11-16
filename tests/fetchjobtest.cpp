@@ -41,7 +41,7 @@ private:
   QMap<qint64, KIMAP::MessagePtr> m_messages;
   QMap<qint64, KIMAP::MessageParts> m_parts;
 
-public slots:
+public Q_SLOTS:
 void onHeadersReceived( const QString &/*mailBox*/,
                         const QMap<qint64, qint64> &uids,
                         const QMap<qint64, qint64> &sizes,

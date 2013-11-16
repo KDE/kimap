@@ -37,7 +37,7 @@ class SessionTest : public QObject
 {
   Q_OBJECT
 
-  private slots:
+  private Q_SLOTS:
 
     void initTestCase()
     {
@@ -342,7 +342,7 @@ class SessionTest : public QObject
       }
     }
 
-  public slots:
+  public Q_SLOTS:
     void jobDone(KJob *job)
     {
       m_jobs << job;

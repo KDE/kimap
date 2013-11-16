@@ -45,12 +45,12 @@ class SessionThread : public QObject
 
     void sendData( const QByteArray &payload );
 
-  public slots:
+  public Q_SLOTS:
     void closeSocket();
     void startSsl(KTcpSocket::SslVersion version);
     void sslErrorHandlerResponse(bool result);
 
-  signals:
+  Q_SIGNALS:
     void socketConnected();
     void socketDisconnected();
     void socketActivity();
@@ -59,7 +59,7 @@ class SessionThread : public QObject
     void encryptionNegotiationResult(bool, KTcpSocket::SslVersion);
     void sslError(const KSslErrorUiData&);
 
-  private slots:
+  private Q_SLOTS:
     void reconnect();
     void threadInit();
     void threadQuit();
