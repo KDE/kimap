@@ -274,6 +274,7 @@ void SessionThread::socketError(KTcpSocket::Error error)
 // Called in secondary thread
 void SessionThread::sslConnected()
 {
+  doSslFallback = false;
   Q_ASSERT( QThread::currentThread() == thread() );
   if ( !m_socket )
     return;
@@ -290,7 +291,6 @@ void SessionThread::sslConnected()
      KSslErrorUiData errorData( m_socket );
      emit sslError( errorData );
   } else {
-    doSslFallback = false;
     kDebug() << "TLS negotiation done.";
     m_encryptedMode = true;
     emit encryptionNegotiationResult( true, m_socket->negotiatedSslVersion() );
