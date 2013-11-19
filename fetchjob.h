@@ -68,7 +68,7 @@ class KIMAP_EXPORT FetchJob : public Job
      * what is fetched that the IMAP FETCH command normally
      * does, but the common cases are catered for.
      */
-    class FetchScope
+    class KIMAP_EXPORT FetchScope
     {
     public:
       FetchScope();
