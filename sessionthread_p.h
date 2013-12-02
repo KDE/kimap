@@ -85,8 +85,6 @@ class SessionThread : public QObject
     QMutex m_mutex;
 
     bool m_encryptedMode;
-    KTcpSocket::SslVersions triedSslVersions;
-    bool doSslFallback;
 };
 
 }

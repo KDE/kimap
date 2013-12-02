@@ -37,8 +37,7 @@ static const int _kimap_sslErrorUiData = qRegisterMetaType<KSslErrorUiData>();
 SessionThread::SessionThread( const QString &hostName, quint16 port )
   : QObject(), m_hostName( hostName ), m_port( port ),
     m_socket( 0 ), m_stream( 0 ), m_mutex(),
-    m_encryptedMode( false ),
-    triedSslVersions( 0 ), doSslFallback( false )
+    m_encryptedMode( false )
 {
   // Just like the Qt docs now recommend, for event-driven threads:
   // don't derive from QThread, create one directly and move the object to it.
@@ -221,25 +220,8 @@ void SessionThread::doStartSsl( KTcpSocket::SslVersion version )
   Q_ASSERT( QThread::currentThread() == thread() );
   if ( !m_socket )
     return;
-  if ( version == KTcpSocket::AnySslVersion ) {
-    doSslFallback = true;
-    if ( m_socket->advertisedSslVersion() == KTcpSocket::UnknownSslVersion ) {
-      m_socket->setAdvertisedSslVersion( KTcpSocket::AnySslVersion );
-    } else if ( !( triedSslVersions & KTcpSocket::TlsV1 ) ) {
-      triedSslVersions |= KTcpSocket::TlsV1;
-      m_socket->setAdvertisedSslVersion( KTcpSocket::TlsV1 );
-    } else if ( !( triedSslVersions & KTcpSocket::SslV3 ) ) {
-      triedSslVersions |= KTcpSocket::SslV3;
-      m_socket->setAdvertisedSslVersion( KTcpSocket::SslV3 );
-    } else if ( !( triedSslVersions & KTcpSocket::SslV2 ) ) {
-      triedSslVersions |= KTcpSocket::SslV2;
-      m_socket->setAdvertisedSslVersion( KTcpSocket::SslV2 );
-      doSslFallback = false;
-    }
-  } else {
-    m_socket->setAdvertisedSslVersion( version );
-  }
 
+  m_socket->setAdvertisedSslVersion( version );
   m_socket->ignoreSslErrors();
   connect( m_socket, SIGNAL(encrypted()), this, SLOT(sslConnected()) );
   m_socket->startClientEncryption();
@@ -249,11 +231,7 @@ void SessionThread::doStartSsl( KTcpSocket::SslVersion version )
 void SessionThread::slotSocketDisconnected()
 {
   Q_ASSERT( QThread::currentThread() == thread() );
-  if ( doSslFallback ) {
-    reconnect();
-  } else {
-    emit socketDisconnected();
-  }
+  emit socketDisconnected();
 }
 
 // Called in secondary thread
@@ -263,18 +241,12 @@ void SessionThread::socketError(KTcpSocket::Error error)
   if ( !m_socket )
     return;
   Q_UNUSED( error ); // can be used for debugging
-  if ( doSslFallback ) {
-    //do not call disconnectFromhost here, as that can trigger an error again.
-    m_socket->abort();
-  } else {
-    emit socketError();
-  }
+  emit socketError();
 }
 
 // Called in secondary thread
 void SessionThread::sslConnected()
 {
-  doSslFallback = false;
   Q_ASSERT( QThread::currentThread() == thread() );
   if ( !m_socket )
     return;
