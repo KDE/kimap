@@ -9,6 +9,7 @@ include_directories(${CMAKE_BINARY_DIR}/kimap)
 set(kimaptest_LIB_SRCS
    fakeserver.cpp
    mockjob.cpp
+   sslserver.cpp
 )
 
 add_library(kimaptest STATIC ${kimaptest_LIB_SRCS})

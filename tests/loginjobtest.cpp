@@ -29,6 +29,13 @@
 #include <QtTest>
 #include <KDebug>
 
+
+class TestUiProxy: public KIMAP::SessionUiProxy {
+    virtual bool ignoreSslError(const KSslErrorUiData &) {
+      return true;
+    }
+};
+
 class LoginJobTest: public QObject {
   Q_OBJECT
 
@@ -190,6 +197,64 @@ void shouldSaveServerGreeting()
   fakeServer.quit();
   delete session;
 }
+
+void shouldUseSsl_data()
+{
+  QTest::addColumn< QList<QByteArray> >( "scenario" );
+  QTest::addColumn< int >( "serverEncryption" );
+  QTest::addColumn< int >( "clientEncryption" );
+
+  {
+    QList<QByteArray> scenario;
+    scenario << FakeServer::greeting()
+            << "C: A000001 STARTTLS"
+            << "S: A000001 OK"
+            << "C: A000002 CAPABILITY"
+            << "S: A000002 OK"
+            << "C: A000003 LOGIN \"user\" \"password\""
+            << "S: A000003 OK";
+
+    QTest::newRow( "tlsv1" ) << scenario << static_cast<int>(QSsl::TlsV1) << static_cast<int>(KIMAP::LoginJob::TlsV1);
+  }
+  {
+    QList<QByteArray> scenario;
+    scenario << FakeServer::greeting()
+            << "C: A000001 CAPABILITY"
+            << "S: A000001 OK"
+            << "C: A000002 LOGIN \"user\" \"password\""
+            << "S: A000002 OK";
+
+    QTest::newRow( "sslv3" ) << scenario << static_cast<int>(QSsl::SslV3) << static_cast<int>(KIMAP::LoginJob::SslV3);
+    QTest::newRow( "sslv2" ) << scenario << static_cast<int>(QSsl::SslV2) << static_cast<int>(KIMAP::LoginJob::SslV2);
+  }
+}
+
+void shouldUseSsl()
+{
+  QFETCH( QList<QByteArray>, scenario );
+  QFETCH( int, serverEncryption );
+  QFETCH( int, clientEncryption );
+
+  FakeServer fakeServer;
+  fakeServer.setEncrypted( static_cast<QSsl::SslProtocol>(serverEncryption) );
+  fakeServer.setScenario( scenario );
+  fakeServer.startAndWait();
+
+  KIMAP::Session *session = new KIMAP::Session( "127.0.0.1", 5989 );
+
+  KIMAP::SessionUiProxy::Ptr uiProxy(new TestUiProxy);
+  session->setUiProxy(uiProxy);
+
+  KIMAP::LoginJob *login = new KIMAP::LoginJob( session );
+  login->setUserName( "user" );
+  login->setPassword( "password" );
+  login->setEncryptionMode( static_cast<KIMAP::LoginJob::EncryptionMode>(clientEncryption) );
+  QVERIFY( login->exec() );
+
+  fakeServer.quit();
+  delete session;
+}
+
 };
 
 QTEST_KDEMAIN_CORE( LoginJobTest )
