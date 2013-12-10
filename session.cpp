@@ -67,8 +67,8 @@ Session::Session( const QString &hostName, quint16 port, QObject *parent)
            d, SLOT(socketConnected()) );
   connect( d->thread, SIGNAL(socketActivity()),
            d, SLOT(socketActivity()) );
-  connect( d->thread, SIGNAL(socketError()),
-           d, SLOT(socketError()) );
+  connect( d->thread, SIGNAL(socketError(KTcpSocket::Error)),
+           d, SLOT(socketError(KTcpSocket::Error)) );
 
   d->socketTimer.setSingleShot( true );
   connect( &d->socketTimer, SIGNAL(timeout()),
@@ -398,10 +398,17 @@ void SessionPrivate::socketActivity()
   restartSocketTimer();
 }
 
-void SessionPrivate::socketError()
+void SessionPrivate::socketError(KTcpSocket::Error error)
 {
   if ( socketTimer.isActive() ) {
     stopSocketTimer();
+  }
+
+  if ( currentJob ) {
+    currentJob->setSocketError(error);
+  } else if ( !queue.isEmpty() ) {
+    currentJob = queue.takeFirst();
+    currentJob->setSocketError(error);
   }
 
   if ( isSocketConnected ) {

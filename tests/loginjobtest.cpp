@@ -214,6 +214,7 @@ void shouldUseSsl_data()
             << "C: A000003 LOGIN \"user\" \"password\""
             << "S: A000003 OK";
 
+    //KIMAP ties tlsv1 to starttls
     QTest::newRow( "tlsv1" ) << scenario << static_cast<int>(QSsl::TlsV1) << static_cast<int>(KIMAP::LoginJob::TlsV1);
   }
   {
@@ -226,6 +227,10 @@ void shouldUseSsl_data()
 
     QTest::newRow( "sslv3" ) << scenario << static_cast<int>(QSsl::SslV3) << static_cast<int>(KIMAP::LoginJob::SslV3);
     QTest::newRow( "sslv2" ) << scenario << static_cast<int>(QSsl::SslV2) << static_cast<int>(KIMAP::LoginJob::SslV2);
+    //AnySslVersion doesn't mean the server can force a specific version (e.g. openssl always starts with a sslv2 hello)
+    QTest::newRow( "any protocol with anyssl version" ) << scenario << static_cast<int>(QSsl::AnyProtocol) << static_cast<int>(KIMAP::LoginJob::AnySslVersion);
+    //KIMAP and KTcpSocket use SslV3_1 but really mean tls without starttls
+    QTest::newRow( "sslv3_1" ) << scenario << static_cast<int>(QSsl::TlsV1SslV3) << static_cast<int>(KIMAP::LoginJob::SslV3_1);
   }
 }
 
@@ -250,6 +255,51 @@ void shouldUseSsl()
   login->setPassword( "password" );
   login->setEncryptionMode( static_cast<KIMAP::LoginJob::EncryptionMode>(clientEncryption) );
   QVERIFY( login->exec() );
+
+  fakeServer.quit();
+  delete session;
+}
+
+void shouldFailOnWrongSslSettings_data()
+{
+  QTest::addColumn< QList<QByteArray> >( "scenario" );
+  QTest::addColumn< int >( "serverEncryption" );
+  QTest::addColumn< int >( "clientEncryption" );
+  QTest::addColumn< int >( "expectedErrorCode" );
+
+  {
+    QList<QByteArray> scenario;
+    scenario << FakeServer::greeting();
+
+    //For some reason only connecting to tlsv1 results in an ssl handshake error, with the wrong version only the server detects the error and disconnects
+//     QTest::newRow( "ssl v3 v2" ) << scenario << static_cast<int>(QSsl::SslV3) << static_cast<int>(KIMAP::LoginJob::SslV2) << static_cast<int>(KJob::UserDefinedError);
+    QTest::newRow( "ssl tlsv1 v3" ) << scenario << static_cast<int>(QSsl::TlsV1) << static_cast<int>(KIMAP::LoginJob::SslV3) << static_cast<int>(KJob::UserDefinedError);
+  }
+}
+
+void shouldFailOnWrongSslSettings()
+{
+  QFETCH( QList<QByteArray>, scenario );
+  QFETCH( int, serverEncryption );
+  QFETCH( int, clientEncryption );
+  QFETCH( int, expectedErrorCode );
+
+  FakeServer fakeServer;
+  fakeServer.setEncrypted( static_cast<QSsl::SslProtocol>(serverEncryption) );
+  fakeServer.setScenario( scenario );
+  fakeServer.startAndWait();
+
+  KIMAP::Session *session = new KIMAP::Session( "127.0.0.1", 5989 );
+
+  KIMAP::SessionUiProxy::Ptr uiProxy(new TestUiProxy);
+  session->setUiProxy(uiProxy);
+
+  KIMAP::LoginJob *login = new KIMAP::LoginJob( session );
+  login->setUserName( "user" );
+  login->setPassword( "password" );
+  login->setEncryptionMode( static_cast<KIMAP::LoginJob::EncryptionMode>(clientEncryption) );
+  QVERIFY( !login->exec() );
+  QCOMPARE( static_cast<int>(login->error()), expectedErrorCode );
 
   fakeServer.quit();
   delete session;

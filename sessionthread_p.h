@@ -54,7 +54,7 @@ class SessionThread : public QObject
     void socketConnected();
     void socketDisconnected();
     void socketActivity();
-    void socketError();
+    void socketError(KTcpSocket::Error);
     void responseReceived(const KIMAP::Message &response);
     void encryptionNegotiationResult(bool, KTcpSocket::SslVersion);
     void sslError(const KSslErrorUiData&);
@@ -67,7 +67,7 @@ class SessionThread : public QObject
     void writeDataQueue();
     void sslConnected();
     void doCloseSocket();
-    void socketError(KTcpSocket::Error);
+    void slotSocketError(KTcpSocket::Error);
     void slotSocketDisconnected();
     void doStartSsl(KTcpSocket::SslVersion);
     void doSslErrorHandlerResponse(bool result);

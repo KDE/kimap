@@ -184,7 +184,7 @@ void SessionThread::threadInit()
   connect( m_socket, SIGNAL(connected()),
            this, SIGNAL(socketConnected()) );
   connect( m_socket, SIGNAL(error(KTcpSocket::Error)),
-           this, SLOT(socketError(KTcpSocket::Error)) );
+           this, SLOT(slotSocketError(KTcpSocket::Error)) );
   connect( m_socket, SIGNAL(bytesWritten(qint64)),
            this, SIGNAL(socketActivity()) );
   if ( m_socket->metaObject()->indexOfSignal( "encryptedBytesWritten(qint64)" ) > -1 ) {
@@ -235,13 +235,13 @@ void SessionThread::slotSocketDisconnected()
 }
 
 // Called in secondary thread
-void SessionThread::socketError(KTcpSocket::Error error)
+void SessionThread::slotSocketError(KTcpSocket::Error error)
 {
   Q_ASSERT( QThread::currentThread() == thread() );
   if ( !m_socket )
     return;
   Q_UNUSED( error ); // can be used for debugging
-  emit socketError();
+  emit socketError(error);
 }
 
 // Called in secondary thread

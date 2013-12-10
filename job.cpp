@@ -66,6 +66,12 @@ void Job::connectionLost()
   emitResult();
 }
 
+void Job::setSocketError(KTcpSocket::Error error)
+{
+  Q_D( Job );
+  d->m_socketError = error;
+}
+
 Job::HandlerResponse Job::handleErrorReplies(const Message &response)
 {
   Q_D( Job );

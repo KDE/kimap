@@ -73,7 +73,7 @@ class KIMAP_EXPORT SessionPrivate : public QObject
 
     void socketConnected();
     void socketDisconnected();
-    void socketError();
+    void socketError(KTcpSocket::Error);
     void socketActivity();
 
     void handleSslError( const KSslErrorUiData &errorData );
