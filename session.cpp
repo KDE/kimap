@@ -80,6 +80,7 @@ Session::Session( const QString &hostName, quint16 port, QObject *parent)
 Session::~Session()
 {
   delete d->thread;
+  d->thread = 0;
 }
 
 void Session::setUiProxy(SessionUiProxy::Ptr proxy)
@@ -130,7 +131,10 @@ void KIMAP::Session::close()
 void SessionPrivate::handleSslError(const KSslErrorUiData& errorData)
 {
   const bool ignoreSslError = uiProxy && uiProxy->ignoreSslError( errorData );
-  thread->sslErrorHandlerResponse(ignoreSslError);
+  //ignoreSslError is async, so the thread might already be gone when it returns
+  if ( thread ) {
+    thread->sslErrorHandlerResponse(ignoreSslError);
+  }
 }
 
 SessionPrivate::SessionPrivate( Session *session )
