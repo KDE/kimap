@@ -70,6 +70,10 @@ Session::Session( const QString &hostName, quint16 port, QObject *parent)
   connect( d->thread, SIGNAL(socketError()),
            d, SLOT(socketError()) );
 
+  d->socketTimer.setSingleShot( true );
+  connect( &d->socketTimer, SIGNAL(timeout()),
+           d, SLOT(onSocketTimeout()) );
+
   d->startSocketTimer();
 }
 
@@ -170,7 +174,7 @@ void SessionPrivate::doStartNext()
     return;
   }
 
-  startSocketTimer();
+  restartSocketTimer();
   jobRunning = true;
 
   currentJob = queue.dequeue();
@@ -182,12 +186,7 @@ void SessionPrivate::jobDone( KJob *job )
   Q_UNUSED( job );
   Q_ASSERT( job == currentJob );
 
-  // If we're in disconnected state it's because we ended up
-  // here because the inactivity timer triggered, so no need to
-  // stop it (it is single shot)
-  if ( state!=Session::Disconnected ) {
-    stopSocketTimer();
-  }
+  stopSocketTimer();
 
   jobRunning = false;
   currentJob = 0;
@@ -469,10 +468,6 @@ void SessionPrivate::startSocketTimer()
   }
   Q_ASSERT( !socketTimer.isActive() );
 
-  connect( &socketTimer, SIGNAL(timeout()),
-           this, SLOT(onSocketTimeout()) );
-
-  socketTimer.setSingleShot( true );
   socketTimer.start( socketTimerInterval );
 }
 
@@ -483,9 +478,6 @@ void SessionPrivate::stopSocketTimer()
   }
 
   socketTimer.stop();
-
-  disconnect( &socketTimer, SIGNAL(timeout()),
-              this, SLOT(onSocketTimeout()) );
 }
 
 void SessionPrivate::restartSocketTimer()
