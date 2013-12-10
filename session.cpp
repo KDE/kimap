@@ -219,6 +219,18 @@ void SessionPrivate::responseReceived( const Message &response )
     code = response.content[1].toString();
   }
 
+  // BYE may arrive as part of a LOGOUT sequence or before the server closes the connection after an error.
+  // In any case we should wait until the server closes the connection, so we don't have to do anything.
+  if ( code == "BYE" ) {
+    Message simplified = response;
+    if ( simplified.content.size() >= 2 ) {
+      simplified.content.removeFirst(); // Strip the tag
+      simplified.content.removeFirst(); // Strip the code
+    }
+    kDebug() << "Received BYE: " << simplified.toString();
+    return;
+  }
+
   switch ( state ) {
   case Session::Disconnected:
     if ( socketTimer.isActive() ) {
