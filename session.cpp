@@ -522,5 +522,10 @@ void Session::setTimeout( int timeout )
   d->setSocketTimeout( timeout * 1000 );
 }
 
+int Session::timeout() const
+{
+  return d->socketTimeout() / 1000;
+}
+
 #include "moc_session.cpp"
 #include "moc_session_p.cpp"

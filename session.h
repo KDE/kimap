@@ -82,6 +82,12 @@ class KIMAP_EXPORT Session : public QObject
     void setTimeout( int timeout );
 
     /**
+     * Returns the session timeout.
+     * @since 4.12
+     */
+    int timeout() const;
+
+    /**
      * Returns the currently selected mailbox.
      * @since 4.5
      */
