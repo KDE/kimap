@@ -135,6 +135,7 @@ class KIMAP_EXPORT IdleJob : public Job
 
   private:
     Q_PRIVATE_SLOT( d_func(), void emitStats() )
+    Q_PRIVATE_SLOT( d_func(), void resetTimeout() )
 };
 
 }

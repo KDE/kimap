@@ -236,6 +236,57 @@ void shouldReactToIdle()
     fakeServer.quit();
 }
 
+void shouldResetTimeout_data()
+{
+  QTest::addColumn<QList<QByteArray> >( "scenario" );
+  {
+    QList<QByteArray> scenario;
+    scenario << FakeServer::preauth()
+            << "C: A000001 SELECT \"INBOX\""
+            << "S: A000001 OK SELECT done"
+            << "C: A000002 IDLE"
+            << "S: + OK"
+            << "S: A000002 OK done idling";
+
+    QTest::newRow("good") << scenario;
+  }
+
+  {
+    QList<QByteArray> scenario;
+    scenario << FakeServer::preauth()
+            << "C: A000001 SELECT \"INBOX\""
+            << "S: A000001 OK SELECT done"
+            << "C: A000002 IDLE"
+            << "S: + OK"
+            << "X";
+
+    QTest::newRow("bad") << scenario;
+  }
+}
+
+void shouldResetTimeout()
+{
+  QFETCH( QList<QByteArray>, scenario );
+
+  FakeServer fakeServer;
+  fakeServer.setScenario( scenario );
+  fakeServer.startAndWait();
+
+  KIMAP::Session session( "127.0.0.1", 5989 );
+  const int originalTimeout = session.timeout();
+
+  KIMAP::SelectJob *select = new KIMAP::SelectJob( &session );
+  select->setMailBox( "INBOX" );
+  QVERIFY( select->exec() );
+
+  KIMAP::IdleJob *idle = new KIMAP::IdleJob( &session );
+  idle->exec();
+
+  QCOMPARE( session.timeout(), originalTimeout );
+
+  fakeServer.quit();
+}
+
 };
 
 QTEST_KDEMAIN_CORE( IdleJobTest )

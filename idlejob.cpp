@@ -52,6 +52,11 @@ namespace KIMAP
         recentCount = -1;
       }
 
+      void resetTimeout()
+      {
+        sessionInternal()->setSocketTimeout( originalSocketTimeout );
+      }
+
       IdleJob * const q;
 
       QTimer emitStatsTimer;
@@ -74,6 +79,9 @@ IdleJob::IdleJob( Session *session )
   Q_D( IdleJob );
   connect( &d->emitStatsTimer, SIGNAL(timeout()),
            this, SLOT(emitStats()) );
+
+  connect( this, SIGNAL(result(KJob*)),
+           this, SLOT(resetTimeout()) );
 }
 
 IdleJob::~IdleJob()
