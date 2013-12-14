@@ -1,5 +1,8 @@
 project(kimap)
 
+find_package(Qt5 NO_MODULE REQUIRED COMPONENTS Network)
+find_package(KF5 NO_MODULE REQUIRED COMPONENTS CoreAddons)
+
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=5327 )
 
 add_subdirectory( tests )
@@ -51,7 +54,7 @@ set(kimap_LIB_SRCS
 
 kde4_add_library(kimap ${LIBRARY_TYPE} ${kimap_LIB_SRCS})
 
-target_link_libraries(kimap ${KDE4_KDECORE_LIBS} ${QT_QTNETWORK_LIBRARY} kmime  ${SASL2_LIBRARIES})
+target_link_libraries(kimap KF5::CoreAddons Qt5::Network kmime  ${SASL2_LIBRARIES})
 
 include_directories( ${CMAKE_SOURCE_DIR}/kioslave ${SASL2_INCLUDE_DIR} ${Boost_INCLUDE_DIR} )
 
