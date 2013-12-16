@@ -64,8 +64,8 @@ class KIMAP_EXPORT ListJob : public Job
     explicit ListJob( Session *session );
     virtual ~ListJob();
 
-    KDE_DEPRECATED void setIncludeUnsubscribed( bool include );
-    KDE_DEPRECATED bool isIncludeUnsubscribed() const;
+    KIMAP_DEPRECATED void setIncludeUnsubscribed( bool include );
+    KIMAP_DEPRECATED bool isIncludeUnsubscribed() const;
 
     void setOption( Option option );
     Option option() const;
@@ -73,8 +73,8 @@ class KIMAP_EXPORT ListJob : public Job
     void setQueriedNamespaces( const QList<MailBoxDescriptor> &namespaces );
     QList<MailBoxDescriptor> queriedNamespaces() const;
 
-    KDE_DEPRECATED QList<MailBoxDescriptor> mailBoxes() const;
-    KDE_DEPRECATED QMap< MailBoxDescriptor, QList<QByteArray> > flags() const;
+    KIMAP_DEPRECATED QList<MailBoxDescriptor> mailBoxes() const;
+    KIMAP_DEPRECATED QMap< MailBoxDescriptor, QList<QByteArray> > flags() const;
 
   Q_SIGNALS:
     void mailBoxesReceived( const QList<KIMAP::MailBoxDescriptor> &descriptors,

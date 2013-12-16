@@ -96,7 +96,7 @@ class KIMAP_EXPORT SearchJob : public Job
      * @return the found items
      * @deprecated use results() instead
      */
-    KDE_DEPRECATED QList<int> foundItems();
+    KIMAP_DEPRECATED QList<int> foundItems();
 
     /**
      * Get the search result, as a list of sequence numbers or UIDs, based on the isUidBased status

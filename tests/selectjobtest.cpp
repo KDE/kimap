@@ -44,24 +44,27 @@ void testSingleSelect_data() {
   QTest::addColumn<int>( "firstUnseenIndex" );
   QTest::addColumn<qint64>( "uidValidity" );
   QTest::addColumn<qint64>( "nextUid" );
+  QTest::addColumn<quint64>( "highestmodseq" );
+  QTest::addColumn<bool>( "condstoreEnabled" );
 
   QList<QByteArray> scenario;
   QList<QByteArray> flags;
   QList<QByteArray> permanentflags;
   scenario << FakeServer::preauth()
-           << "C: A000001 SELECT \"INBOX\""
+           << "C: A000001 SELECT \"INBOX\" (CONDSTORE)"
            << "S: * 172 EXISTS"
            << "S: * 1 RECENT"
            << "S: * OK [UNSEEN 12] Message 12 is first unseen"
            << "S: * OK [UIDVALIDITY 3857529045] UIDs valid"
            << "S: * OK [UIDNEXT 4392] Predicted next UID"
+           << "S: * OK [HIGHESTMODSEQ 123456789]"
            << "S: * FLAGS (\\Answered \\Flagged \\Deleted \\Seen \\Draft)"
            << "S: * OK [PERMANENTFLAGS (\\Deleted \\Seen \\*)] Limited"
            << "S: A000001 OK [READ-WRITE] SELECT completed";
 
   flags << "\\Answered" << "\\Flagged" << "\\Deleted" << "\\Seen" << "\\Draft";
   permanentflags << "\\Deleted" << "\\Seen" << "\\*";
-  QTest::newRow( "good" ) << scenario << flags << permanentflags << 172 << 1 << 12 << (qint64)3857529045 << (qint64)4392;
+  QTest::newRow( "good" ) << scenario << flags << permanentflags << 172 << 1 << 12 << (qint64)3857529045 << (qint64)4392 << (quint64)123456789 << true;
 
   scenario.clear();
   flags.clear();
@@ -69,7 +72,7 @@ void testSingleSelect_data() {
   scenario << FakeServer::preauth()
            << "C: A000001 SELECT \"INBOX\""
            << "S: A000001 BAD command unknown or arguments invalid";
-  QTest::newRow( "bad" ) << scenario << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << (qint64)0;
+  QTest::newRow( "bad" ) << scenario << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << (qint64)0 << (quint64)0 << false;
 
   scenario.clear();
   flags.clear();
@@ -77,7 +80,7 @@ void testSingleSelect_data() {
   scenario << FakeServer::preauth()
            << "C: A000001 SELECT \"INBOX\""
            << "S: A000001 NO select failure";
-  QTest::newRow( "no" ) << scenario << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << (qint64)0;
+  QTest::newRow( "no" ) << scenario << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << (qint64)0 << (quint64)0 << false;
 }
 
 void testSingleSelect()
@@ -90,6 +93,8 @@ void testSingleSelect()
     QFETCH( int, firstUnseenIndex);
     QFETCH( qint64, uidValidity);
     QFETCH( qint64, nextUid);
+    QFETCH( quint64, highestmodseq );
+    QFETCH( bool, condstoreEnabled );
 
     FakeServer fakeServer;
     fakeServer.setScenario( scenario );
@@ -98,6 +103,7 @@ void testSingleSelect()
     KIMAP::Session session( "127.0.0.1", 5989 );
 
     KIMAP::SelectJob *job = new KIMAP::SelectJob( &session );
+    job->setCondstoreEnabled( condstoreEnabled );
     job->setMailBox( "INBOX" );
     bool result = job->exec();
     QEXPECT_FAIL( "bad" , "Expected failure on BAD scenario", Continue );
@@ -111,6 +117,7 @@ void testSingleSelect()
       QCOMPARE( job->firstUnseenIndex(), firstUnseenIndex );
       QCOMPARE( job->uidValidity(), uidValidity );
       QCOMPARE( job->nextUid(), nextUid );
+      QCOMPARE( job->highestModSequence(), highestmodseq );
     }
 
     fakeServer.quit();

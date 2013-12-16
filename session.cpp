@@ -67,8 +67,12 @@ Session::Session( const QString &hostName, quint16 port, QObject *parent)
            d, SLOT(socketConnected()) );
   connect( d->thread, SIGNAL(socketActivity()),
            d, SLOT(socketActivity()) );
-  connect( d->thread, SIGNAL(socketError()),
-           d, SLOT(socketError()) );
+  connect( d->thread, SIGNAL(socketError(KTcpSocket::Error)),
+           d, SLOT(socketError(KTcpSocket::Error)) );
+
+  d->socketTimer.setSingleShot( true );
+  connect( &d->socketTimer, SIGNAL(timeout()),
+           d, SLOT(onSocketTimeout()) );
 
   d->startSocketTimer();
 }
@@ -76,6 +80,7 @@ Session::Session( const QString &hostName, quint16 port, QObject *parent)
 Session::~Session()
 {
   delete d->thread;
+  d->thread = 0;
 }
 
 void Session::setUiProxy(SessionUiProxy::Ptr proxy)
@@ -126,7 +131,10 @@ void KIMAP::Session::close()
 void SessionPrivate::handleSslError(const KSslErrorUiData& errorData)
 {
   const bool ignoreSslError = uiProxy && uiProxy->ignoreSslError( errorData );
-  thread->sslErrorHandlerResponse(ignoreSslError);
+  //ignoreSslError is async, so the thread might already be gone when it returns
+  if ( thread ) {
+    thread->sslErrorHandlerResponse(ignoreSslError);
+  }
 }
 
 SessionPrivate::SessionPrivate( Session *session )
@@ -170,7 +178,7 @@ void SessionPrivate::doStartNext()
     return;
   }
 
-  startSocketTimer();
+  restartSocketTimer();
   jobRunning = true;
 
   currentJob = queue.dequeue();
@@ -182,12 +190,7 @@ void SessionPrivate::jobDone( KJob *job )
   Q_UNUSED( job );
   Q_ASSERT( job == currentJob );
 
-  // If we're in disconnected state it's because we ended up
-  // here because the inactivity timer triggered, so no need to
-  // stop it (it is single shot)
-  if ( state!=Session::Disconnected ) {
-    stopSocketTimer();
-  }
+  stopSocketTimer();
 
   jobRunning = false;
   currentJob = 0;
@@ -218,6 +221,18 @@ void SessionPrivate::responseReceived( const Message &response )
 
   if ( response.content.size()>=2 ) {
     code = response.content[1].toString();
+  }
+
+  // BYE may arrive as part of a LOGOUT sequence or before the server closes the connection after an error.
+  // In any case we should wait until the server closes the connection, so we don't have to do anything.
+  if ( code == "BYE" ) {
+    Message simplified = response;
+    if ( simplified.content.size() >= 2 ) {
+      simplified.content.removeFirst(); // Strip the tag
+      simplified.content.removeFirst(); // Strip the code
+    }
+    kDebug() << "Received BYE: " << simplified.toString();
+    return;
   }
 
   switch ( state ) {
@@ -316,7 +331,7 @@ QByteArray SessionPrivate::sendCommand( const QByteArray &command, const QByteAr
     selectTag = tag;
     upcomingMailBox = args;
     upcomingMailBox.remove( 0, 1 );
-    upcomingMailBox.chop( 1 );
+    upcomingMailBox = upcomingMailBox.left( upcomingMailBox.indexOf( '\"') );
     upcomingMailBox = KIMAP::decodeImapFolderName( upcomingMailBox );
   } else if ( command == "CLOSE" ) {
     closeTag = tag;
@@ -387,10 +402,17 @@ void SessionPrivate::socketActivity()
   restartSocketTimer();
 }
 
-void SessionPrivate::socketError()
+void SessionPrivate::socketError(KTcpSocket::Error error)
 {
   if ( socketTimer.isActive() ) {
     stopSocketTimer();
+  }
+
+  if ( currentJob ) {
+    currentJob->setSocketError(error);
+  } else if ( !queue.isEmpty() ) {
+    currentJob = queue.takeFirst();
+    currentJob->setSocketError(error);
   }
 
   if ( isSocketConnected ) {
@@ -469,10 +491,6 @@ void SessionPrivate::startSocketTimer()
   }
   Q_ASSERT( !socketTimer.isActive() );
 
-  connect( &socketTimer, SIGNAL(timeout()),
-           this, SLOT(onSocketTimeout()) );
-
-  socketTimer.setSingleShot( true );
   socketTimer.start( socketTimerInterval );
 }
 
@@ -483,9 +501,6 @@ void SessionPrivate::stopSocketTimer()
   }
 
   socketTimer.stop();
-
-  disconnect( &socketTimer, SIGNAL(timeout()),
-              this, SLOT(onSocketTimeout()) );
 }
 
 void SessionPrivate::restartSocketTimer()
@@ -505,6 +520,11 @@ void SessionPrivate::onSocketTimeout()
 void Session::setTimeout( int timeout )
 {
   d->setSocketTimeout( timeout * 1000 );
+}
+
+int Session::timeout() const
+{
+  return d->socketTimeout() / 1000;
 }
 
 #include "moc_session.cpp"

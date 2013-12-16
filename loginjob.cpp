@@ -141,10 +141,12 @@ LoginJob::LoginJob( Session *session )
 {
   Q_D( LoginJob );
   connect( d->sessionInternal(), SIGNAL(encryptionNegotiationResult(bool)), this, SLOT(sslResponse(bool)) );
+  kDebug() << this;
 }
 
 LoginJob::~LoginJob()
 {
+  kDebug() << this;
 }
 
 QString LoginJob::userName() const
@@ -187,6 +189,7 @@ void LoginJob::doStart()
 {
   Q_D( LoginJob );
 
+  kDebug() << this;
   // Don't authenticate on a session in the authenticated state
   if ( session()->state() == Session::Authenticated || session()->state() == Session::Selected ) {
     setError( UserDefinedError );
@@ -251,6 +254,7 @@ void LoginJob::doStart()
   } else  if ( encryptionMode == Unencrypted  ) {
     if ( d->authMode.isEmpty() ) {
       d->authState = LoginJobPrivate::Login;
+      kDebug() << "sending LOGIN";
       d->tags << d->sessionInternal()->sendCommand( "LOGIN",
                                                     '"' + quoteIMAP( d->userName ).toUtf8() + '"' +
                                                     ' ' +
@@ -290,6 +294,8 @@ void LoginJob::handleResponse( const Message &response )
   QByteArray tag = response.content.first().toString();
   ResponseCode code = OK;
 
+  kDebug() << commandName << tag;
+
   if ( tag == "+" ) {
     code = CONTINUATION;
   } else if ( tag == "*" ) {
@@ -320,7 +326,7 @@ void LoginJob::handleResponse( const Message &response )
       }
 
       setError( UserDefinedError );
-      setErrorText( i18n( "%1 failed, server replied: %2", commandName, response.toString().constData() ) );
+      setErrorText( i18n( "%1 failed, server replied: %2", commandName, QLatin1String(response.toString().constData()) ) );
       emitResult();
       return;
 
@@ -329,9 +335,9 @@ void LoginJob::handleResponse( const Message &response )
       if ( response.content[1].toString() == "CAPABILITY" ) {
         QList<Message::Part>::const_iterator p = response.content.begin() + 2;
         while ( p != response.content.end() ) {
-          QString capability = p->toString();
+          QString capability = QLatin1String(p->toString());
           d->capabilities << capability;
-          if ( capability == "LOGINDISABLED" ) {
+          if ( capability == QLatin1String("LOGINDISABLED") ) {
             d->plainLoginDisabled = true;
           }
           ++p;
@@ -455,7 +461,7 @@ bool LoginJobPrivate::startAuthentication()
   }
 
   do {
-    result = sasl_client_start( conn, authMode.toLatin1(), &client_interact, capabilities.contains( "SASL-IR" ) ? &out : 0, &outlen, &mechusing );
+    result = sasl_client_start( conn, authMode.toLatin1(), &client_interact, capabilities.contains( QLatin1String("SASL-IR") ) ? &out : 0, &outlen, &mechusing );
 
     if ( result == SASL_INTERACT ) {
       if ( !sasl_interact() ) {
@@ -552,22 +558,22 @@ void LoginJob::setAuthenticationMode(AuthenticationMode mode)
 {
   Q_D( LoginJob );
   switch ( mode ) {
-    case ClearText: d->authMode = "";
+    case ClearText: d->authMode = QLatin1String( "");
       break;
-    case Login: d->authMode = "LOGIN";
+    case Login: d->authMode = QLatin1String("LOGIN");
       break;
-    case Plain: d->authMode = "PLAIN";
+    case Plain: d->authMode = QLatin1String("PLAIN");
       break;
-    case CramMD5: d->authMode = "CRAM-MD5";
+    case CramMD5: d->authMode = QLatin1String("CRAM-MD5");
       break;
-    case DigestMD5: d->authMode = "DIGEST-MD5";
+    case DigestMD5: d->authMode = QLatin1String("DIGEST-MD5");
       break;
-    case GSSAPI: d->authMode = "GSSAPI";
+    case GSSAPI: d->authMode = QLatin1String("GSSAPI");
       break;
-    case Anonymous: d->authMode = "ANONYMOUS";
+    case Anonymous: d->authMode = QLatin1String("ANONYMOUS");
       break;
     default:
-      d->authMode = "";
+      d->authMode = QLatin1String("");
   }
 }
 
@@ -578,9 +584,16 @@ void LoginJob::connectionLost()
   //don't emit the result if the connection was lost before getting the tls result, as it can mean
   //the TLS handshake failed and the socket was reconnected in normal mode
   if ( d->authState != LoginJobPrivate::StartTls ) {
-    setError( ERR_COULD_NOT_CONNECT );
-    setErrorText( i18n( "Connection to server lost." ) );
-    emitResult();
+    kWarning() << "Connection to server lost " << d->m_socketError;
+    if ( d->m_socketError == KTcpSocket::SslHandshakeFailedError) {
+      setError( KJob::UserDefinedError );
+      setErrorText( i18n( "SSL handshake failed." ) );
+      emitResult();
+    } else {
+      setError( ERR_COULD_NOT_CONNECT );
+      setErrorText( i18n( "Connection to server lost." ) );
+      emitResult();
+    }
   }
 
 }
@@ -592,14 +605,14 @@ void LoginJobPrivate::saveServerGreeting(const Message &response)
 
   for ( int i = 2; i < response.content.size(); i++ ) {
     if ( response.content.at( i ).type() == Message::Part::List ) {
-      serverGreeting += '(';
+      serverGreeting += QLatin1Char('(');
       foreach ( const QByteArray &item, response.content.at( i ).toList() ) {
-        serverGreeting += item + ' ';
+        serverGreeting += QLatin1String(item) + QLatin1Char(' ');
       }
       serverGreeting.chop( 1 );
-      serverGreeting += ") ";
+      serverGreeting += QLatin1String(") ");
     } else {
-      serverGreeting+=response.content.at( i ).toString() + ' ';
+      serverGreeting+= QLatin1String(response.content.at( i ).toString()) + QLatin1Char(' ');
     }
   }
   serverGreeting.chop( 1 );

@@ -75,7 +75,7 @@ class MockJob : public KIMAP::Job
      */
     virtual void doStart();
 
-  private slots:
+  private Q_SLOTS:
     void done();
 };
 

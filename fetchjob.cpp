@@ -86,11 +86,17 @@ namespace KIMAP
 
 using namespace KIMAP;
 
+FetchJob::FetchScope::FetchScope():
+  mode( FetchScope::Content ),
+  changedSince( 0 )
+{
+
+}
+
 FetchJob::FetchJob( Session *session )
   : Job( *new FetchJobPrivate( this, session, i18n( "Fetch" ) ) )
 {
   Q_D( FetchJob );
-  d->scope.mode = FetchScope::Content;
   connect( &d->emitPendingsTimer, SIGNAL(timeout()),
            this, SLOT(emitPendings()) );
 }
@@ -211,6 +217,13 @@ void FetchJob::doStart()
       parameters += " FLAGS UID)";
     }
     break;
+  case FetchScope::FullHeaders:
+    parameters += "(RFC822.SIZE INTERNALDATE BODY.PEEK[HEADER] FLAGS UID)";
+    break;
+  }
+
+  if ( d->scope.changedSince > 0 ) {
+    parameters += " (CHANGEDSINCE " + QByteArray::number( d->scope.changedSince ) + ")";
   }
 
   QByteArray command = "FETCH";
@@ -263,7 +276,7 @@ void FetchJob::handleResponse( const Message &response )
         } else if ( str == "RFC822.SIZE" ) {
           d->pendingSizes[id] = it->toLongLong();
         } else if ( str == "INTERNALDATE" ) {
-          message->date()->setDateTime( KDateTime::fromString( *it, KDateTime::RFCDate ) );
+          message->date()->setDateTime( KDateTime::fromString( QLatin1String(*it), KDateTime::RFCDate ) );
         } else if ( str == "FLAGS" ) {
           if ( ( *it ).startsWith( '(' ) && ( *it ).endsWith( ')' ) ) {
             QByteArray str = *it;
@@ -327,7 +340,9 @@ void FetchJob::handleResponse( const Message &response )
       // For the headers mode the message is built in several
       // steps, hence why we wait it to be done until putting it
       // in the pending queue.
-      if ( d->scope.mode == FetchScope::Headers || d->scope.mode == FetchScope::HeaderAndContent ) {
+      if ( d->scope.mode == FetchScope::Headers ||
+           d->scope.mode == FetchScope::HeaderAndContent ||
+           d->scope.mode == FetchScope::FullHeaders ) {
         d->pendingMessages[id] = message;
       }
     }
@@ -416,7 +431,7 @@ void FetchJobPrivate::parsePart( const QByteArray &structure, int &pos, KMime::C
          content->contentDisposition()->disposition() == KMime::Headers::CDinline ) &&
        disposition.contains( "FILENAME" ) ) {
     QByteArray filename = disposition.remove( 0, disposition.indexOf( "FILENAME" ) + 11 ).split( '\"' )[0];
-    content->contentDisposition()->setFilename( filename );
+    content->contentDisposition()->setFilename( QLatin1String(filename) );
   }
 
   // Consume what's left

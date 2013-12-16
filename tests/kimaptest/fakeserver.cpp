@@ -21,6 +21,7 @@
 
 // Own
 #include "fakeserver.h"
+#include "sslserver.h"
 
 // Qt
 #include <QDebug>
@@ -42,7 +43,7 @@ QByteArray FakeServer::greeting()
     return "S: * OK localhost Test Library server ready";
 }
 
-FakeServer::FakeServer( QObject* parent ) : QThread( parent )
+FakeServer::FakeServer( QObject* parent ) : QThread( parent ), m_encrypted(false), m_starttls(false)
 {
      moveToThread( this );
 }
@@ -73,6 +74,11 @@ void FakeServer::dataAvailable()
 
     readClientPart( scenarioNumber );
     writeServerPart( scenarioNumber );
+    if (m_starttls) {
+      m_starttls = false;
+      kDebug() << "start tls";
+      static_cast<QSslSocket*>(socket)->startServerEncryption();
+    }
 }
 
 void FakeServer::newConnection()
@@ -88,9 +94,19 @@ void FakeServer::newConnection()
     writeServerPart( m_clientSockets.size() - 1 );
 }
 
+void FakeServer::setEncrypted( QSsl::SslProtocol protocol )
+{
+  m_encrypted = true;
+  m_sslProtocol = protocol;
+}
+
 void FakeServer::run()
 {
-    m_tcpServer = new QTcpServer();
+    if (m_encrypted) {
+        m_tcpServer = new SslServer(m_sslProtocol);
+    } else {
+        m_tcpServer = new QTcpServer();
+    }
     if ( !m_tcpServer->listen( QHostAddress( QHostAddress::LocalHost ), 5989 ) ) {
         kFatal() << "Unable to start the server";
     }
@@ -211,6 +227,9 @@ void FakeServer::readClientPart( int scenarioNumber )
       QByteArray expected = scenario.takeFirst();
       QCOMPARE( QString::fromUtf8( received ), QString::fromUtf8( expected ) );
       QCOMPARE( received, expected );
+      if (received.contains("STARTTLS")) {
+        m_starttls = true;
+      }
     }
 
     if ( !scenario.isEmpty() ) {

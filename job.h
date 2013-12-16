@@ -23,6 +23,7 @@
 #include "kimap_export.h"
 
 #include <KDE/KJob>
+#include <ktcpsocket.h>
 
 namespace KIMAP {
 
@@ -49,6 +50,7 @@ class KIMAP_EXPORT Job : public KJob
     virtual void doStart() = 0;
     virtual void handleResponse(const Message &response);
     virtual void connectionLost();
+    void setSocketError(KTcpSocket::Error);
 
   protected:
     enum HandlerResponse {

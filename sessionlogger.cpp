@@ -32,9 +32,9 @@ SessionLogger::SessionLogger()
   static qint64 nextId = 0;
   m_id = ++nextId;
 
-  m_file.setFileName( qgetenv( "KIMAP_LOGFILE" )
-                    + '.' + QString::number( getpid() )
-                    + '.' + QString::number( m_id ) );
+  m_file.setFileName( QLatin1String(qgetenv( "KIMAP_LOGFILE" ))
+                    + QLatin1Char('.') + QString::number( getpid() )
+                    + QLatin1Char('.') + QString::number( m_id ) );
   if (!m_file.open( QFile::WriteOnly )) {
      kDebug()<<" m_file can be open in write only";
   }

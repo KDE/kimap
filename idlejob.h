@@ -119,12 +119,23 @@ class KIMAP_EXPORT IdleJob : public Job
      */
     void mailBoxStats(KIMAP::IdleJob *job, const QString &mailBox, int messageCount, int recentCount);
 
+    /**
+     * Signals that the server has notified that the some messages flags
+     * have changed
+     *
+     * @param job this object
+     * @param uid UID of message that has changed
+     * @since 4.12
+     */
+    void mailBoxMessageFlagsChanged(KIMAP::IdleJob *job, qint64 uid);
+
   protected:
     virtual void doStart();
     virtual void handleResponse(const Message &response);
 
   private:
     Q_PRIVATE_SLOT( d_func(), void emitStats() )
+    Q_PRIVATE_SLOT( d_func(), void resetTimeout() )
 };
 
 }

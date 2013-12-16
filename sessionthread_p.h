@@ -45,21 +45,21 @@ class SessionThread : public QObject
 
     void sendData( const QByteArray &payload );
 
-  public slots:
+  public Q_SLOTS:
     void closeSocket();
     void startSsl(KTcpSocket::SslVersion version);
     void sslErrorHandlerResponse(bool result);
 
-  signals:
+  Q_SIGNALS:
     void socketConnected();
     void socketDisconnected();
     void socketActivity();
-    void socketError();
+    void socketError(KTcpSocket::Error);
     void responseReceived(const KIMAP::Message &response);
     void encryptionNegotiationResult(bool, KTcpSocket::SslVersion);
     void sslError(const KSslErrorUiData&);
 
-  private slots:
+  private Q_SLOTS:
     void reconnect();
     void threadInit();
     void threadQuit();
@@ -67,7 +67,7 @@ class SessionThread : public QObject
     void writeDataQueue();
     void sslConnected();
     void doCloseSocket();
-    void socketError(KTcpSocket::Error);
+    void slotSocketError(KTcpSocket::Error);
     void slotSocketDisconnected();
     void doStartSsl(KTcpSocket::SslVersion);
     void doSslErrorHandlerResponse(bool result);
@@ -85,8 +85,6 @@ class SessionThread : public QObject
     QMutex m_mutex;
 
     bool m_encryptedMode;
-    KTcpSocket::SslVersions triedSslVersions;
-    bool doSslFallback;
 };
 
 }

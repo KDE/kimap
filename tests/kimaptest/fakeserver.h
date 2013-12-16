@@ -27,6 +27,7 @@
 #include <QTcpServer>
 #include <QThread>
 #include <QMutex>
+#include <QSsl>
 
 namespace KIMAP
 {
@@ -129,6 +130,11 @@ public:
     ~FakeServer();
 
     /**
+     * Sets the encryption mode used by the server socket.
+     */
+    void setEncrypted( QSsl::SslProtocol protocol );
+
+    /**
      * Starts the server and waits for it to be ready
      *
      * You should use this instead of start() to avoid race conditions.
@@ -215,6 +221,9 @@ private:
     mutable QMutex m_mutex;
     QList<QTcpSocket*> m_clientSockets;
     QList<KIMAP::ImapStreamParser*> m_clientParsers;
+    bool m_encrypted;
+    bool m_starttls;
+    QSsl::SslProtocol m_sslProtocol;
 };
 
 #endif

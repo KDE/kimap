@@ -22,6 +22,8 @@
 
 #include "kimap_export.h"
 
+#include <qglobal.h>
+
 namespace KIMAP {
 
 /**

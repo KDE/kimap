@@ -72,7 +72,7 @@ class KIMAP_EXPORT Session : public QObject
      * @param proxy the ui proxy object
      * @deprecated Use the shared pointer version instead
      */
-    KDE_DEPRECATED void setUiProxy(SessionUiProxy *proxy);
+    KIMAP_DEPRECATED void setUiProxy(SessionUiProxy *proxy);
 
     /**
      * Set the session timeout. The default is 30 seconds.
@@ -80,6 +80,12 @@ class KIMAP_EXPORT Session : public QObject
      * @since 4.6
      */
     void setTimeout( int timeout );
+
+    /**
+     * Returns the session timeout.
+     * @since 4.12
+     */
+    int timeout() const;
 
     /**
      * Returns the currently selected mailbox.
@@ -106,7 +112,7 @@ class KIMAP_EXPORT Session : public QObject
       New implementations should use connectionFailed() to detect a failure to connect to the host,
       and stateChanged() to detect a loss of connectivity.
     */
-    KDE_DEPRECATED void connectionLost();
+    KIMAP_DEPRECATED void connectionLost();
 
     /**
       Emitted when the Session couldn't connect to the host.

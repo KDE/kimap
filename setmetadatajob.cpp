@@ -98,7 +98,7 @@ void SetMetaDataJob::handleResponse( const Message &response )
        d->tags.contains( response.content.first().toString() ) ) {
     if ( response.content[1].toString() == "NO" ) {
       setError( UserDefinedError );
-      setErrorText( i18n( "%1 failed, server replied: %2", d->m_name, response.toString().constData() ) );
+      setErrorText( i18n( "%1 failed, server replied: %2", d->m_name, QLatin1String(response.toString().constData()) ) );
       if ( response.content[2].toString() == "[ANNOTATEMORE TOOMANY]" ||
            response.content[2].toString() == "[METADATA TOOMANY]" ) {
         d->metaDataErrors |= TooMany;
@@ -119,7 +119,7 @@ void SetMetaDataJob::handleResponse( const Message &response )
       setErrorText( i18n( "%1 failed, malformed reply from the server.", d->m_name ) );
     } else if ( response.content[1].toString() != "OK" ) {
       setError( UserDefinedError );
-      setErrorText( i18n( "%1 failed, server replied: %2", d->m_name, response.toString().constData() ) );
+      setErrorText( i18n( "%1 failed, server replied: %2", d->m_name, QLatin1String(response.toString().constData()) ) );
     }
     emitResult();
    } else if ( d->serverCapability == Metadata && response.content[0].toString() == "+" ) {
@@ -138,7 +138,13 @@ void SetMetaDataJob::handleResponse( const Message &response )
 void SetMetaDataJob::addMetaData(const QByteArray &name, const QByteArray &value)
 {
   Q_D( SetMetaDataJob );
-  d->entries[name] = value;
+  if ( d->serverCapability == Annotatemore && ( name.startsWith( "/shared" ) || name.startsWith( "/private" ) ) ) {
+    const QByteArray &attribute = d->getAttribute( name );
+    d->entries[attribute] = value;
+    d->entryName = d->removePrefix( name );
+  } else {
+    d->entries[name] = value;
+  }
 }
 
 void SetMetaDataJob::setEntry(const QByteArray &entry)

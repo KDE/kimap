@@ -180,8 +180,8 @@ QString KIMAP::quoteIMAP( const QString &src )
   QString result;
   result.reserve( 2 * len );
   for ( unsigned int i = 0; i < len; i++ ) {
-    if ( src[i] == '"' || src[i] == '\\' ) {
-      result += '\\';
+    if ( src[i] == QLatin1Char('"') || src[i] == QLatin1Char('\\') ) {
+      result += QLatin1Char('\\');
     }
     result += src[i];
   }
@@ -300,7 +300,7 @@ QTextCodec *KIMAP::codecForName( const QString &str )
     return 0;
   }
   return QTextCodec::codecForName ( str.toLower ().
-                                    replace ( "windows", "cp" ).toLatin1 () );
+                                    replace ( QLatin1String("windows"), QLatin1String("cp") ).toLatin1 () );
 }
 
 //-----------------------------------------------------------------------------
@@ -326,7 +326,7 @@ const QString KIMAP::decodeRFC2047String( const QString &str,
                                           QString &language )
 {
   //do we have a rfc string
-  if ( !str.contains( "=?" ) ) {
+  if ( !str.contains( QLatin1String("=?") ) ) {
     return str;
   }
 
@@ -359,8 +359,8 @@ const QString KIMAP::decodeRFC2047String( const QString &str,
     if ( *pos != '?' || i < 4 || i >= maxLen ) {
       valid = false;
     } else {
-      charset = QByteArray( beg, i - 1 );  // -2 + 1 for the zero
-      int pt = charset.lastIndexOf( '*' );
+      charset = QLatin1String(QByteArray( beg, i - 1 ));  // -2 + 1 for the zero
+      int pt = charset.lastIndexOf( QLatin1Char('*') );
       if ( pt != -1 ) {
         // save language for later usage
         language = charset.right( charset.length () - pt - 1 );
@@ -428,19 +428,19 @@ const QString KIMAP::decodeRFC2047String( const QString &str,
     }
   }
   if ( !charset.isEmpty () ) {
-    QTextCodec *aCodec = codecForName( charset.toLatin1 () );
+    QTextCodec *aCodec = codecForName( QLatin1String(charset.toLatin1 ()) );
     if ( aCodec ) {
 //    kDebug() << "Codec is" << aCodec->name();
       return aCodec->toUnicode( result );
     }
   }
-  return result;
+  return QLatin1String(result);
 }
 
 //-----------------------------------------------------------------------------
 const QString KIMAP::encodeRFC2047String( const QString &str )
 {
-  return encodeRFC2047String( str.toLatin1() );
+  return QLatin1String(encodeRFC2047String( str.toLatin1() ));
 }
 
 //-----------------------------------------------------------------------------
@@ -612,20 +612,20 @@ const QString KIMAP::encodeRFC2231String( const QString &str )
     l++;
   }
   free( latin );
-  return result;
+  return QLatin1String(result);
 }
 
 //-----------------------------------------------------------------------------
 const QString KIMAP::decodeRFC2231String( const QString &str )
 {
-  int p = str.indexOf ( '\'' );
+  int p = str.indexOf ( QLatin1Char('\'') );
 
   //see if it is an rfc string
   if ( p < 0 ) {
     return str;
   }
 
-  int l = str.lastIndexOf( '\'' );
+  int l = str.lastIndexOf( QLatin1Char('\'') );
 
   //second is language
   if ( p >= l ) {
@@ -633,9 +633,9 @@ const QString KIMAP::decodeRFC2231String( const QString &str )
   }
 
   //first is charset or empty
-  QString charset = str.left ( p );
+  //QString charset = str.left ( p );
   QString st = str.mid ( l + 1 );
-  QString language = str.mid ( p + 1, l - p - 1 );
+  //QString language = str.mid ( p + 1, l - p - 1 );
 
   //kDebug() << "Charset:" << charset << "Language:" << language;
 

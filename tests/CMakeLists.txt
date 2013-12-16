@@ -1,6 +1,12 @@
 add_subdirectory(kimaptest)
 
-include_directories( ${CMAKE_SOURCE_DIR}/kimap ${Boost_INCLUDE_DIR})
+include_directories(
+  ${CMAKE_SOURCE_DIR}/kimap
+  ${CMAKE_BINARY_DIR}/kimap
+  ${CMAKE_BINARY_DIR}/kmime
+  ${Boost_INCLUDE_DIR}
+)
+
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
 MACRO(KIMAP_UNIT_TESTS)
@@ -42,6 +48,11 @@ KIMAP_UNIT_TESTS(
   imapsettest
   idlejobtest
   quotarootjobtest
+  searchjobtest
+  getmetadatajobtest
+  streamparsertest
+  setmetadatajobtest
+  appendjobtest
 )
 
 ###########   manual tests  ###############

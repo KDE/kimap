@@ -22,6 +22,7 @@
 
 #include "session.h"
 #include <KDE/KLocalizedString>
+#include <ktcpsocket.h>
 
 namespace KIMAP {
 
@@ -30,7 +31,7 @@ class SessionPrivate;
 class JobPrivate
 {
   public:
-    JobPrivate( Session *session, const QString& name ) : m_session( session )  {
+    JobPrivate( Session *session, const QString& name ) : m_session( session ), m_socketError( KTcpSocket::UnknownError )  {
       m_name = name;
     }
     virtual ~JobPrivate() { }
@@ -46,6 +47,7 @@ class JobPrivate
     QList<QByteArray> tags;
     Session *m_session;
     QString m_name;
+    KTcpSocket::Error m_socketError;
 };
 
 }

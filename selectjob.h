@@ -57,6 +57,33 @@ class KIMAP_EXPORT SelectJob : public Job
     qint64 uidValidity() const;
     qint64 nextUid() const;
 
+    /**
+     * @return Highest mod-sequence value of all messages in the mailbox or 0
+     * if the server does not have CONDSTORE capability (RFC4551) or does not
+     * support persistent storage of mod-sequences.
+     *
+     * @since 4.12
+     */
+    quint64 highestModSequence() const;
+
+    /**
+     * Whether to append CONDSTORE parameter to the SELECT command.
+     *
+     * This option is false by default and can be enabled only when server
+     * has CONDSTORE capability (RFC4551), otherwise the SELECT command will
+     * fail.
+     *
+     * @since 4.12
+     */
+    void setCondstoreEnabled( bool enable );
+
+    /**
+     * Returns whether the CONDSTORE parameter will be appended to SELECT command
+     *
+     * @since 4.12
+     */
+    bool condstoreEnabled() const;
+
   protected:
     virtual void doStart();
     virtual void handleResponse( const Message &response );

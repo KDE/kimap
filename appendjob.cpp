@@ -130,7 +130,7 @@ void AppendJob::handleResponse( const Message &response )
   }
 
   if ( handleErrorReplies( response ) == NotHandled ) {
-    if ( response.content[0].toString() == "+" ) {
+    if ( !response.content.isEmpty() && response.content[0].toString() == "+" ) {
       d->sessionInternal()->sendData( d->content );
     }
   }

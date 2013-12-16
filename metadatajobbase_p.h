@@ -35,6 +35,11 @@ namespace KIMAP
 
       ~MetaDataJobBasePrivate() { }
 
+      QByteArray addPrefix( const QByteArray &entry, const QByteArray &attribute ) const;
+      QByteArray removePrefix( const QByteArray & ) const;
+
+      QByteArray getAttribute( const QByteArray &entry ) const;
+
       MetaDataJobBase::ServerCapability serverCapability;
       QString mailBox;
   };
