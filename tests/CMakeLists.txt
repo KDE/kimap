@@ -8,7 +8,7 @@ include_directories(
 )
 
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-
+remove_definitions(-DQT_USE_QSTRINGBUILDER)
 MACRO(KIMAP_UNIT_TESTS)
   FOREACH(_testname ${ARGN})
     kde4_add_unit_test(${_testname} TESTNAME kimap-${_testname} NOGUI ${_testname}.cpp)
