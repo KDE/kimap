@@ -32,6 +32,7 @@ typedef QPair< KIMAP::SearchJob::SearchCriteria, QByteArray > SearchCriteriaValu
 
 Q_DECLARE_METATYPE(QList<SearchCriteriaValuePair>)
 Q_DECLARE_METATYPE(KIMAP::SearchJob::SearchLogic)
+Q_DECLARE_METATYPE(KIMAP::Term)
 
 #define searchPair(a,b) qMakePair<KIMAP::SearchJob::SearchCriteria, QByteArray>( a, b )
 
@@ -111,6 +112,75 @@ void testSearch()
         job->addSearchCriteria( pair.first, pair.second );
       }
     }
+
+    bool result = job->exec();
+    QVERIFY( result );
+    if ( result ) {
+      QList<qint64> foundItems = job->results();
+      QCOMPARE( foundItems.size(), expectedResultsCount );
+    }
+
+    fakeServer.quit();
+}
+
+void testSearchTerm_data() {
+  QTest::addColumn<QList<QByteArray> >( "scenario" );
+  QTest::addColumn<bool>( "uidbased" );
+  QTest::addColumn<int>( "expectedResultsCount" );
+  QTest::addColumn<KIMAP::Term>( "searchTerm" );
+
+  {
+    QList<QByteArray> scenario;
+    scenario << FakeServer::preauth()
+            << "C: A000001 UID SEARCH HEADER Message-Id \"<12345678@mail.box>\""
+            << "S: * SEARCH 10 12"
+            << "S: A000001 OK search done";
+
+    QTest::newRow( "uidbased header search") << scenario << true << 2 << KIMAP::Term("Message-Id", "<12345678@mail.box>");
+  }
+  {
+    QList<QByteArray> scenario;
+    scenario << FakeServer::preauth()
+            << "C: A000001 SEARCH OR NEW HEADER Message-Id \"<12345678@mail.box>\""
+            << "S: * SEARCH"
+            << "S: A000001 OK search done";
+
+    QTest::newRow( "OR search with no results") << scenario << false << 0 << KIMAP::Term(KIMAP::Term::Or, QVector<KIMAP::Term>() << KIMAP::Term(KIMAP::Term::New) << KIMAP::Term("Message-Id", "<12345678@mail.box>"));
+  }
+  {
+    QList<QByteArray> scenario;
+    scenario << FakeServer::preauth()
+            << "C: A000001 SEARCH TO \"<testuser@kde.testserver>\""
+            << "S: * SEARCH 1"
+            << "S: A000001 OK search done";
+    QTest::newRow( "literal data search") << scenario << false << 1 << KIMAP::Term(KIMAP::Term::To, "<testuser@kde.testserver>");
+  }
+  {
+    QList<QByteArray> scenario;
+    scenario << FakeServer::preauth()
+            << "C: A000001 UID SEARCH NOT NEW"
+            << "S: * SEARCH 1 2 3 4 5 6"
+            << "S: A000001 OK search done";
+    QTest::newRow( "uidbased NOT NEW search") << scenario << true << 6 << KIMAP::Term(KIMAP::Term::New).setNegated(true);
+  }
+}
+
+void testSearchTerm()
+{
+    QFETCH( QList<QByteArray>, scenario );
+    QFETCH( bool, uidbased );
+    QFETCH( int, expectedResultsCount );
+    QFETCH( KIMAP::Term, searchTerm );
+
+    FakeServer fakeServer;
+    fakeServer.setScenario( scenario );
+    fakeServer.startAndWait();
+
+    KIMAP::Session session( "127.0.0.1", 5989 );
+
+    KIMAP::SearchJob *job = new KIMAP::SearchJob( &session );
+    job->setUidBased( uidbased );
+    job->setTerm( searchTerm );
 
     bool result = job->exec();
     QVERIFY( result );

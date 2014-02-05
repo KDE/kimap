@@ -1,5 +1,6 @@
 /*
     Copyright (c) 2009 Andras Mantia <amantia@kde.org>
+    Copyright (c) 2014 Christian Mollekopf <mollekopf@kolabsys.com>
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Library General Public License as published by
@@ -28,9 +29,90 @@ class QDate;
 
 namespace KIMAP {
 
+class ImapSet;
+
 class Session;
 struct Message;
 class SearchJobPrivate;
+
+/**
+ * A query term.
+ * Refer to the IMAP RFC for the meaning of the individual terms.
+ * @since 4.13
+ */
+class KIMAP_EXPORT Term
+{
+  public:
+    enum Relation {
+      And,
+      Or
+    };
+
+    enum SearchKey {
+      All,
+      Bcc,
+      Body,
+      Cc,
+      From,
+      Subject,
+      Text,
+      To,
+      Keyword,
+    };
+
+    enum BooleanSearchKey {
+      New,
+      Old,
+      Recent,
+      Seen,
+      Draft,
+      Deleted,
+      Flagged,
+      Answered
+    };
+
+    enum DateSearchKey {
+      Before,
+      On,
+      Since,
+      SentBefore,
+      SentOn,
+      SentSince,
+    };
+    enum NumberSearchKey {
+      Larger,
+      Smaller
+    };
+    enum SequenceSearchKey {
+      Uid,
+      SequenceNumber
+    };
+
+    Term();
+    Term( Relation relation, const QVector<Term> &subterms );
+    Term( SearchKey key, const QString &value );
+    Term( BooleanSearchKey key );
+    Term( DateSearchKey key, const QDate &date );
+    Term( NumberSearchKey key, int value );
+    Term( SequenceSearchKey key, const KIMAP::ImapSet & );
+    Term( const QString &header, const QString &value );
+
+    Term( const Term &other );
+
+    Term& operator=( const Term &other );
+    bool operator==( const Term &other ) const;
+
+    bool isNull() const;
+
+    Term &setFuzzy( bool fuzzy );
+    Term &setNegated( bool negated );
+
+    QByteArray serialize() const;
+
+  private:
+    class Private;
+    QSharedPointer<Private> d;
+};
 
 class KIMAP_EXPORT SearchJob : public Job
 {
@@ -109,8 +191,9 @@ class KIMAP_EXPORT SearchJob : public Job
      * Add a search criteria that doesn't have an argument. Passing a criteria that
      * should have an argument will be ignored.
      * @param criteria a criteria from SearchCriterias
+     * @deprecated since 4.13
      */
-    void addSearchCriteria( SearchCriteria criteria );
+    KIMAP_DEPRECATED void addSearchCriteria( SearchCriteria criteria );
 
     /**
      * Add a search criteria that has one or more space separate string arguments.
@@ -118,8 +201,9 @@ class KIMAP_EXPORT SearchJob : public Job
      * argument will be ignored.
      * @param criteria a criteria from SearchCriterias
      * @param argument the arguments
+     * @deprecated since 4.13
      */
-    void addSearchCriteria( SearchCriteria criteria, const QByteArray &argument );
+    KIMAP_DEPRECATED void addSearchCriteria( SearchCriteria criteria, const QByteArray &argument );
 
     /**
      * Add a search criteria that has an integer argument.
@@ -127,8 +211,9 @@ class KIMAP_EXPORT SearchJob : public Job
      * argument will be ignored.
      * @param criteria a criteria from SearchCriterias
      * @param argument a number argument
+     * @deprecated since 4.13
      */
-    void addSearchCriteria( SearchCriteria criteria, int argument );
+    KIMAP_DEPRECATED void addSearchCriteria( SearchCriteria criteria, int argument );
 
     /**
      * Add a search criteria that has a date as argument.
@@ -136,21 +221,31 @@ class KIMAP_EXPORT SearchJob : public Job
      * argument will be ignored.
      * @param criteria a criteria from SearchCriterias
      * @param argument a date
+     * @deprecated since 4.13
      */
-    void addSearchCriteria( SearchCriteria criteria, const QDate& argument );
+    KIMAP_DEPRECATED void addSearchCriteria( SearchCriteria criteria, const QDate& argument );
 
     /**
      * Add a custom criteria. No checks are done, the data is sent as it is
      * to the server.
      * @param searchCriteria free form search criteria.
+     * @deprecated since 4.13
      */
-    void addSearchCriteria( const QByteArray &searchCriteria );
+    KIMAP_DEPRECATED void addSearchCriteria( const QByteArray &searchCriteria );
 
     /**
      * Set the logic combining the search criterias.
      * @param logic AND (the default), OR, NOT. See SearchLogics.
+     * @deprecated since 4.13
      */
-    void setSearchLogic(SearchLogic logic);
+    KIMAP_DEPRECATED void setSearchLogic(SearchLogic logic);
+
+    /**
+     * Sets the search term.
+     * @param term The search term.
+     * @since 4.13
+     */
+    void setTerm( const Term & );
 
   protected:
     virtual void doStart();
