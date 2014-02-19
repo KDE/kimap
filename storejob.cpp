@@ -115,6 +115,14 @@ void StoreJob::doStart()
 {
   Q_D( StoreJob );
 
+  if ( d->set.isEmpty() ) {
+    kWarning() << "Empty uid set passed to store job";
+    setError( KJob::UserDefinedError );
+    setErrorText( QLatin1String("Empty uid set passed to store job") );
+    emitResult();
+    return;
+  }
+
   QByteArray parameters = d->set.toImapSequenceSet()+' ';
 
   switch ( d->mode ) {
