@@ -20,6 +20,7 @@
 #ifndef KIMAP_APPENDJOB_H
 #define KIMAP_APPENDJOB_H
 
+#include <kdatetime.h>
 #include "kimap_export.h"
 
 #include "job.h"
@@ -74,6 +75,26 @@ class KIMAP_EXPORT AppendJob : public Job
      * The flags that will be set on the appended message.
      */
     QList<QByteArray> flags() const;
+
+    /**
+     * Set the internal date that should be applied to the appended message.
+     *
+     * This is the date/time the IMAP server should set internally for the appended message.
+     * See http://tools.ietf.org/html/rfc3501#section-6.3.11
+     *
+     * If this is not set, the server will use the current date/time.
+     *
+     * @param internalDate  the internal date
+     *
+     * @since 4.13
+     */
+    void setInternalDate( const KDateTime &internalDate );
+    /**
+     * The internal date that will be set on the appended message.
+     *
+     * @since 4.13
+     */
+    KDateTime internalDate() const;
 
     /**
      * The content of the message.
