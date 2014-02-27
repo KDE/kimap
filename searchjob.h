@@ -57,7 +57,7 @@ class KIMAP_EXPORT Term
       Subject,
       Text,
       To,
-      Keyword,
+      Keyword
     };
 
     enum BooleanSearchKey {
@@ -77,7 +77,7 @@ class KIMAP_EXPORT Term
       Since,
       SentBefore,
       SentOn,
-      SentSince,
+      SentSince
     };
     enum NumberSearchKey {
       Larger,
