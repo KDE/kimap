@@ -27,11 +27,261 @@
 #include "job_p.h"
 #include "message_p.h"
 #include "session_p.h"
-
-//TODO: when custom error codes are introduced, handle the NO [TRYCREATE] response
+#include "imapset.h"
 
 namespace KIMAP
 {
+
+
+class Term::Private {
+public:
+  Private(): isFuzzy(false), isNegated(false), isNull(false) {};
+  QByteArray command;
+  bool isFuzzy;
+  bool isNegated;
+  bool isNull;
+};
+
+Term::Term()
+:  d(new Term::Private)
+{
+  d->isNull = true;
+}
+
+Term::Term(Term::Relation relation, const QVector<Term> &subterms)
+:  d(new Term::Private)
+{
+  if (subterms.size() >= 2) {
+    d->command += "(";
+    if (relation == KIMAP::Term::Or) {
+      d->command += "OR ";
+      d->command += subterms.at(0).serialize() + ' ';
+      if (subterms.size() >= 3) {
+        Term t(relation, subterms.mid(1));
+        d->command += t.serialize();
+      } else if (subterms.size() == 2) {
+        d->command += subterms.at(1).serialize();
+      }
+    } else {
+      Q_FOREACH (const Term &t, subterms) {
+        d->command += t.serialize() + ' ';
+      }
+      if (!subterms.isEmpty()) {
+        d->command.chop(1);
+      }
+    }
+    d->command += ")";
+  } else if (subterms.size() == 1) {
+    d->command += subterms.first().serialize();
+  } else {
+    d->isNull = true;
+  }
+}
+
+Term::Term(Term::SearchKey key, const QString& value)
+:  d(new Term::Private)
+{
+  switch(key) {
+    case All:
+      d->command += "ALL";
+      break;
+    case Bcc:
+      d->command += "BCC";
+      break;
+    case Cc:
+      d->command += "CC";
+      break;
+    case Body:
+      d->command += "BODY";
+      break;
+    case From:
+      d->command += "FROM";
+      break;
+    case Keyword:
+      d->command += "KEYWORD";
+      break;
+    case Subject:
+      d->command += "SUBJECT";
+      break;
+    case Text:
+      d->command += "TEXT";
+      break;
+    case To:
+      d->command += "TO";
+      break;
+  }
+  if (key != All) {
+    d->command += " \"" + QByteArray(value.toUtf8().constData()) + "\"";
+  }
+}
+
+Term::Term( const QString &header, const QString &value )
+:  d(new Term::Private)
+{
+  d->command += "HEADER";
+  d->command += ' ' + QByteArray(header.toUtf8().constData());
+  d->command += " \"" + QByteArray(value.toUtf8().constData()) + "\"";
+}
+
+Term::Term(Term::BooleanSearchKey key)
+:  d(new Term::Private)
+{
+  switch (key) {
+    case Answered:
+      d->command = "ANSWERED";
+      break;
+    case Deleted:
+      d->command = "DELETED";
+      break;
+    case Draft:
+      d->command = "DRAFT";
+      break;
+    case Flagged:
+      d->command = "FLAGGED";
+      break;
+    case New:
+      d->command = "NEW";
+      break;
+    case Old:
+      d->command = "OLD";
+      break;
+    case Recent:
+      d->command = "RECENT";
+      break;
+    case Seen:
+      d->command = "SEEN";
+      break;
+  }
+}
+
+QMap<int, QByteArray> initializeMonths()
+{
+  QMap<int, QByteArray> months;
+  //don't use QDate::shortMonthName(), it returns a localized month name
+  months[1] = "Jan";
+  months[2] = "Feb";
+  months[3] = "Mar";
+  months[4] = "Apr";
+  months[5] = "May";
+  months[6] = "Jun";
+  months[7] = "Jul";
+  months[8] = "Aug";
+  months[9] = "Sep";
+  months[10] = "Oct";
+  months[11] = "Nov";
+  months[12] = "Dec";
+  return months;
+}
+
+static QMap<int, QByteArray> months = initializeMonths();
+
+Term::Term(Term::DateSearchKey key, const QDate &date)
+:  d(new Term::Private)
+{
+  switch (key) {
+    case Before:
+      d->command = "BEFORE";
+      break;
+    case On:
+      d->command = "ON";
+      break;
+    case SentBefore:
+      d->command = "SENTBEFORE";
+      break;
+    case SentOn:
+      d->command = "SENTON";
+      break;
+    case SentSince:
+      d->command = "SENTSINCE";
+      break;
+    case Since:
+      d->command = "SINCE";
+      break;
+  }
+  d->command += " \"";
+  d->command += QByteArray::number( date.day() ) + '-';
+  d->command += months[date.month()] + '-';
+  d->command += QByteArray::number( date.year() );
+  d->command += '\"';
+}
+
+Term::Term(Term::NumberSearchKey key, int value)
+:  d(new Term::Private)
+{
+  switch (key) {
+    case Larger:
+      d->command = "LARGER";
+      break;
+    case Smaller:
+      d->command = "SMALLER";
+      break;
+  }
+  d->command += " " + QByteArray::number(value);
+}
+
+Term::Term(Term::SequenceSearchKey key, const ImapSet &set)
+:  d(new Term::Private)
+{
+  switch (key) {
+    case Uid:
+      d->command = "UID";
+      break;
+    case SequenceNumber:
+      break;
+  }
+  d->command += " " + set.toImapSequenceSet();
+}
+
+Term::Term(const Term& other)
+:  d(new Term::Private)
+{
+  *d = *other.d;
+}
+
+Term& Term::operator=(const Term& other)
+{
+  *d = *other.d;
+  return *this;
+}
+
+bool Term::operator==(const Term& other) const
+{
+  return d->command == other.d->command &&
+         d->isNegated == other.d->isNegated &&
+         d->isFuzzy == other.d->isFuzzy;
+}
+
+QByteArray Term::serialize() const
+{
+  QByteArray command;
+  if (d->isFuzzy) {
+    command = "FUZZY ";
+  }
+  if (d->isNegated) {
+    command = "NOT ";
+  }
+  return command + d->command;
+}
+
+Term &Term::setFuzzy(bool fuzzy)
+{
+  d->isFuzzy = fuzzy;
+  return *this;
+}
+
+Term &Term::setNegated(bool negated)
+{
+  d->isNegated = negated;
+  return *this;
+}
+
+bool Term::isNull() const
+{
+  return d->isNull;
+}
+
+//TODO: when custom error codes are introduced, handle the NO [TRYCREATE] response
+
   class SearchJobPrivate : public JobPrivate
   {
     public:
@@ -98,6 +348,7 @@ namespace KIMAP
       QList<qint64> results;
       uint nextContent;
       bool uidBased;
+      Term term;
   };
 }
 
@@ -112,6 +363,12 @@ SearchJob::~SearchJob()
 {
 }
 
+void SearchJob::setTerm(const Term &term)
+{
+  Q_D( SearchJob );
+  d->term = term;
+}
+
 void SearchJob::doStart()
 {
   Q_D( SearchJob );
@@ -122,27 +379,37 @@ void SearchJob::doStart()
     searchKey = "CHARSET " + d->charset;
   }
 
-  if ( d->logic == SearchJob::Not ) {
-    searchKey += "NOT ";
-  } else if ( d->logic == SearchJob::Or && d->criterias.size() > 1 ) {
-    searchKey += "OR ";
-  }
-
-  if ( d->logic == SearchJob::And ) {
-    for ( int i = 0; i < d->criterias.size(); i++ ) {
-      const QByteArray key = d->criterias.at( i );
-      if ( i > 0 ) {
-        searchKey += ' ';
-      }
-      searchKey += key;
+  if (!d->term.isNull()) {
+    const QByteArray term = d->term.serialize();
+    if (term.startsWith('(')) {
+      searchKey += term.mid(1, term.size() - 2);
+    } else {
+      searchKey += term;
     }
   } else {
-    for ( int i = 0; i < d->criterias.size(); i++ ) {
-      const QByteArray key = d->criterias.at( i );
-      if ( i > 0 ) {
-        searchKey += ' ';
+
+    if ( d->logic == SearchJob::Not ) {
+      searchKey += "NOT ";
+    } else if ( d->logic == SearchJob::Or && d->criterias.size() > 1 ) {
+      searchKey += "OR ";
+    }
+
+    if ( d->logic == SearchJob::And ) {
+      for ( int i = 0; i < d->criterias.size(); i++ ) {
+        const QByteArray key = d->criterias.at( i );
+        if ( i > 0 ) {
+          searchKey += ' ';
+        }
+        searchKey += key;
       }
-      searchKey += '(' + key + ')';
+    } else {
+      for ( int i = 0; i < d->criterias.size(); i++ ) {
+        const QByteArray key = d->criterias.at( i );
+        if ( i > 0 ) {
+          searchKey += ' ';
+        }
+        searchKey += '(' + key + ')';
+      }
     }
   }
 
@@ -160,7 +427,11 @@ void SearchJob::handleResponse( const Message &response )
 
   if ( handleErrorReplies( response ) == NotHandled  ) {
     if ( response.content[0].toString() == "+" ) {
-      d->sessionInternal()->sendData( d->contents[d->nextContent] );
+      if (d->term.isNull()) {
+        d->sessionInternal()->sendData( d->contents[d->nextContent] );
+      } else {
+        kWarning() << "The term API only supports inline strings.";
+      }
       d->nextContent++;
     } else if ( response.content[1].toString() == "SEARCH" ) {
       for ( int i = 2; i < response.content.size(); i++ ) {

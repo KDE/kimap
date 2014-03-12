@@ -36,6 +36,7 @@ namespace KIMAP
 
       QString mailBox;
       QList<QByteArray> flags;
+      KDateTime internalDate;
       QByteArray content;
       qint64 uid;
   };
@@ -76,6 +77,18 @@ QList<QByteArray> AppendJob::flags() const
   return d->flags;
 }
 
+void AppendJob::setInternalDate( const KDateTime &internalDate )
+{
+  Q_D( AppendJob );
+  d->internalDate = internalDate;
+}
+
+KDateTime AppendJob::internalDate() const
+{
+  Q_D( const AppendJob );
+  return d->internalDate;
+}
+
 void AppendJob::setContent( const QByteArray &content )
 {
   Q_D( AppendJob );
@@ -107,6 +120,10 @@ void AppendJob::doStart()
     }
     parameters.chop( 1 );
     parameters += ')';
+  }
+
+  if ( !d->internalDate.isNull() ) {
+    parameters += " \"" + d->internalDate.toString( QString::fromAscii( "%d-%:b-%Y %H:%M:%S %z" ) ).toLatin1() + '\"';
   }
 
   parameters += " {" + QByteArray::number( d->content.size() ) + '}';
