@@ -1,79 +1,67 @@
-project(kimap)
+cmake_minimum_required(VERSION 2.8.12)
 
-find_package(Qt5 NO_MODULE REQUIRED COMPONENTS Network)
-find_package(KF5 NO_MODULE REQUIRED COMPONENTS CoreAddons)
+project(Kimap)
 
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=5327 )
+# ECM setup
+find_package(ECM 0.0.11 CONFIG REQUIRED)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
-add_subdirectory( tests )
-add_definitions( -DQT_NO_CAST_FROM_ASCII )
-add_definitions( -DQT_NO_CAST_TO_ASCII )
+include(ECMGenerateHeaders)
+include(ECMGeneratePriFile)
+include(ECMPackageConfigHelpers)
+include(ECMSetupVersion)
+include(FeatureSummary)
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+include(KDEFrameworkCompilerSettings)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
+set(KF5_VERSION "4.97.0")
 
-set(kimap_LIB_SRCS
-   acl.cpp
-   imapset.cpp
-   imapstreamparser.cpp
-   job.cpp
-   appendjob.cpp
-   capabilitiesjob.cpp
-   fetchjob.cpp
-   idlejob.cpp
-   listjob.cpp
-   loginjob.cpp
-   logoutjob.cpp
-   namespacejob.cpp
-   rfccodecs.cpp
-   selectjob.cpp
-   session.cpp
-   sessionlogger.cpp
-   sessionthread.cpp
-   closejob.cpp
-   expungejob.cpp
-   deletejob.cpp
-   createjob.cpp
-   subscribejob.cpp
-   unsubscribejob.cpp
-   renamejob.cpp
-   storejob.cpp
-   copyjob.cpp
-   searchjob.cpp
-   acljobbase.cpp
-   setacljob.cpp
-   getacljob.cpp
-   deleteacljob.cpp
-   myrightsjob.cpp
-   listrightsjob.cpp
-   quotajobbase.cpp
-   setquotajob.cpp
-   getquotajob.cpp
-   getquotarootjob.cpp
-   metadatajobbase.cpp
-   setmetadatajob.cpp
-   getmetadatajob.cpp
-   global.cpp
+ecm_setup_version(${KF5_VERSION} VARIABLE_PREFIX KIMAP
+                        VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kimap_version.h"
+                        PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5ImapConfigVersion.cmake"
+                        SOVERSION 5
 )
 
-add_library(kimap ${LIBRARY_TYPE} ${kimap_LIB_SRCS})
-generate_export_header(kimap)
+########### Find packages ###########
+find_package(KF5 ${KF5_VERSION} CONFIG REQUIRED COMPONENTS CoreAddons)
 
-target_link_libraries(kimap KF5::CoreAddons Qt5::Network kmime  ${SASL2_LIBRARIES})
-
-include_directories(
-  ${CMAKE_SOURCE_DIR}/kioslave
-  ${SASL2_INCLUDE_DIR}
-  ${Boost_INCLUDE_DIR}
-  ${CMAKE_CURRENT_BINARY_DIR}/../kmime
+set(Boost_MINIMUM_VERSION "1.34.0")
+find_package(Boost ${Boost_MINIMUM_VERSION})
+set_package_properties(Boost PROPERTIES
+                             DESCRIPTION "Boost C++ Libraries"
+                             URL "http://www.boost.org"
+                             TYPE REQUIRED
 )
 
-set_target_properties(kimap PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
-install(TARGETS kimap EXPORT kdepimlibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+########### Targets ###########
 
-########### install files ###############
+#add_subdirectory (src)
+#add_subdirectory(autotests)
 
-install( FILES ${CMAKE_CURRENT_BINARY_DIR}/kimap_export.h acl.h imapset.h job.h appendjob.h capabilitiesjob.h fetchjob.h idlejob.h listjob.h loginjob.h logoutjob.h namespacejob.h rfccodecs.h
- selectjob.h closejob.h expungejob.h deletejob.h createjob.h subscribejob.h unsubscribejob.h renamejob.h
- session.h sessionuiproxy.h storejob.h copyjob.h searchjob.h acljobbase.h setacljob.h getacljob.h deleteacljob.h
- myrightsjob.h listrightsjob.h quotajobbase.h setquotajob.h getquotajob.h getquotarootjob.h metadatajobbase.h setmetadatajob.h getmetadatajob.h
- DESTINATION ${INCLUDE_INSTALL_DIR}/kimap  COMPONENT Devel)
+########### CMake Config Files ###########
+set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5Imap")
+
+ecm_configure_package_config_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/KF5ImapConfig.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/KF5ImapConfig.cmake"
+  INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
+)
+
+install(FILES
+  "${CMAKE_CURRENT_BINARY_DIR}/KF5ImapConfig.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/KF5ImapConfigVersion.cmake"
+  DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+  COMPONENT Devel
+)
+
+install(EXPORT KF5ImapTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE KF5ImapTargets.cmake NAMESPACE KF5::)
+
+install(FILES
+   ${CMAKE_CURRENT_BINARY_DIR}/kimap_version.h
+  DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel
+)
+
+if ("${CMAKE_BINARY_DIR}" STREQUAL "${CMAKE_CURRENT_BINARY_DIR}")
+  feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
+endif()
