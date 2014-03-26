@@ -34,6 +34,11 @@ set_package_properties(Boost PROPERTIES
                              TYPE REQUIRED
 )
 
+# FIXME: remove this if/endif when KMime is split.
+if ("${CMAKE_BINARY_DIR}" STREQUAL "${CMAKE_CURRENT_BINARY_DIR}")
+  find_package(KF5KMime ${KF5_VERSION} CONFIG REQUIRED)
+endif()
+
 ########### Targets ###########
 
 add_subdirectory(src)
