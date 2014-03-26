@@ -1,0 +1,17 @@
+@PACKAGE_INIT@
+
+find_dependency(KF5CoreAddons "@KF5_VERSION@")
+find_dependency(Boost "@Boost_MINIMUM_VERSION@")
+find_dependency(Sasl2)
+
+set_package_properties(Boost PROPERTIES
+                             DESCRIPTION "Boost C++ Libraries"
+                             URL "http://www.boost.org"
+)
+
+set_package_properties(Sasl2 PROPERTIES
+                             DESCRIPTION "The Cyrus-sasl library"
+                             URL "http://asg.web.cmu.edu/sasl/sasl-library.html"
+)
+
+include("${CMAKE_CURRENT_LIST_DIR}/KF5ImapTargets.cmake")
