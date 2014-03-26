@@ -1,3 +1,6 @@
+# FIXME: Make it build with this flag
+remove_definitions(-DQT_NO_CAST_FROM_BYTEARRAY)
+
 # Turn exceptions on
 kde_enable_exceptions()
 
@@ -57,11 +60,6 @@ target_link_libraries(KF5Imap
   KF5::KMime
   ${SASL2_LIBRARIES}
 )
-
-# FIXME
-#include_directories(
-#  ${CMAKE_SOURCE_DIR}/kioslave
-#)
 
 set_target_properties(KF5Imap PROPERTIES
     VERSION ${KIMAP_VERSION_STRING}
