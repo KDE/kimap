@@ -4,7 +4,7 @@ project(KImap)
 
 # ECM setup
 find_package(ECM 0.0.11 CONFIG REQUIRED)
-set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${KImap_SOURCE_DIR}/cmake)
 
 include(ECMGenerateHeaders)
 include(ECMGeneratePriFile)
@@ -31,6 +31,13 @@ find_package(Boost ${Boost_MINIMUM_VERSION})
 set_package_properties(Boost PROPERTIES
                              DESCRIPTION "Boost C++ Libraries"
                              URL "http://www.boost.org"
+                             TYPE REQUIRED
+)
+
+find_package(Sasl2)
+set_package_properties(Sasl2 PROPERTIES
+                             DESCRIPTION "The Cyrus-sasl library"
+                             URL "http://asg.web.cmu.edu/sasl/sasl-library.html"
                              TYPE REQUIRED
 )
 
