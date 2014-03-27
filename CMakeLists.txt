@@ -46,12 +46,6 @@ if ("${CMAKE_BINARY_DIR}" STREQUAL "${CMAKE_CURRENT_BINARY_DIR}")
   find_package(KF5KMime ${KF5_VERSION} CONFIG REQUIRED)
 endif()
 
-########### Targets ###########
-
-add_subdirectory(src)
-#add_subdirectory(autotests)
-add_subdirectory(cmake)
-
 ########### CMake Config Files ###########
 set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5Imap")
 
@@ -61,6 +55,12 @@ ecm_configure_package_config_file(
   INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
 )
 
+########### Targets ###########
+add_subdirectory(src)
+#add_subdirectory(autotests)
+add_subdirectory(cmake)
+
+########### Install Files ###########
 install(FILES
   "${CMAKE_CURRENT_BINARY_DIR}/KF5ImapConfig.cmake"
   "${CMAKE_CURRENT_BINARY_DIR}/KF5ImapConfigVersion.cmake"

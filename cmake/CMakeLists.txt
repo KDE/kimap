@@ -1,2 +1,1 @@
-install(FILES FindSasl2.cmake DESTINATION ${DATA_INSTALL_DIR}/cmake/modules)
-
+install(FILES FindSasl2.cmake DESTINATION ${CMAKECONFIG_INSTALL_DIR})
