@@ -52,6 +52,8 @@ add_library(KF5Imap ${kimap_SRCS})
 
 generate_export_header(KF5Imap BASE_NAME kimap)
 
+add_library(KF5::Imap ALIAS KF5Imap)
+
 target_include_directories(KF5Imap INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}/kimap;${Boost_INCLUDE_DIR};${SASL2_INCLUDE_DIR}>")
 target_include_directories(KF5Imap PUBLIC "$<BUILD_INTERFACE:${KImap_SOURCE_DIR}/src;${KImap_BINARY_DIR}/src>")
 
