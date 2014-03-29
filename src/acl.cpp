@@ -21,7 +21,7 @@
 
 #include <QtCore/QByteArray>
 #include <QtCore/QMap>
-#include <KDE/KGlobal>
+#include <kglobal.h>
 
 namespace KIMAP {
 namespace Acl {
