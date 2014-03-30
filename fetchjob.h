@@ -42,6 +42,8 @@ typedef QMap<QByteArray, ContentPtr> MessageParts;
 typedef boost::shared_ptr<KMime::Message> MessagePtr;
 typedef QList<QByteArray> MessageFlags;
 
+typedef QPair<QByteArray, QVariant> MessageAttribute;
+
 /**
  * Fetch message data from the server
  *
@@ -222,6 +224,28 @@ class KIMAP_EXPORT FetchJob : public Job
      */
     FetchScope scope() const;
 
+    // TODO: KF5: Move this to FetchScope
+    /**
+     * Enables retrieving of Gmail-specific extensions
+     *
+     * The FETCH response will contain X-GM-MSGID, X-GM-THRID and X-GM-LABELS
+     *
+     * Do NOT enable this, unless talking to Gmail servers, otherwise the
+     * request may fail.
+     *
+     * @param enabled Whether the Gmail support should be enabled
+     * @since 4.14
+     */
+    void setGmailExtensionsEnabled(bool enabled);
+
+    /**
+     * Returns whether Gmail support is enabled
+     *
+     * @since 4.14
+     * @see setGmailExtensionsEnabled()
+     */
+    bool setGmailExtensionsEnabled() const;
+
     // XXX: [alexmerry, 2010-07-24]: BIC?  Behaviour change
     /** @deprecated returns an empty map; use the signals instead */
     KIMAP_DEPRECATED QMap<qint64, MessagePtr> messages() const;
@@ -272,6 +296,38 @@ class KIMAP_EXPORT FetchJob : public Job
                           const QMap<qint64, KIMAP::MessagePtr> &messages );
 
     /**
+     * An overloaded version of headersReceived(), which includes additional attribute
+     * specified in the FETCH response, but that don't belong to actual content of the
+     * message.
+     *
+     * @param mailBox  the name of the mailbox the fetch job was
+     *                 executed on
+     * @param uids     a map from message sequence numbers to message UIDs;
+     *                 this will always be populated
+     * @param attrs    a map from message sequence numbers to a pair of attribute
+     *                 name and value
+     * @param sizes    a map from message sequence numbers to message sizes
+     *                 (sizes are in octets and refer to the transfer encoding of
+     *                 the message); populated if the scope is FetchScope::Full or
+     *                 FetchScope::Headers
+     * @param flags    a map from message sequence numbers to message flags;
+     *                 populated if the scope is FetchScope::Flags, FetchScope::Full
+     *                 of FetchScope::Headers
+     * @param messages a map from message sequence numbers to message contents (including
+     *                 headers); populated if the scope is FetchScope::Full,
+     *                 FetchScope::Headers or FetchScope::Structure
+     *
+     * @overload
+     * @since 4.14
+     */
+    void headersReceived( const QString &mailBox,
+                          const QMap<qint64, qint64> &uids,
+                          const QMap<qint64, qint64> &sizes,
+                          const QMap<qint64, KIMAP::MessageAttribute > &attrs,
+                          const QMap<qint64, KIMAP::MessageFlags> &flags,
+                          const QMap<qint64, KIMAP::MessagePtr> &messages );
+
+    /**
      * Provides header and message results.
      *
      * This signal will be emitted if the requested scope mode
@@ -293,6 +349,26 @@ class KIMAP_EXPORT FetchJob : public Job
                            const QMap<qint64, qint64> &uids,
                            const QMap<qint64, KIMAP::MessagePtr> &messages );
 
+
+    /**
+     * An overloaded version of messagesReceived(), which includes additional attribute
+     * specified in the FETCH response, but that don't belong to actual content of the
+     * message.
+     *
+     * @param mailBox  the name of the mailbox the fetch job was
+     *                 executed on
+     * @param uids     a map from message sequence numbers to message UIDs
+     * @param attrs    a map from message sequence numbers to pair of attribute
+     *                 name and it's value
+     * @param messages a map from message sequence numbers to message contents
+     *
+     * @overload
+     * @since 4.14
+     */
+    void messagesReceived( const QString &mailBox,
+                           const QMap<qint64, qint64> &uids,
+                           const QMap<qint64, KIMAP::MessageAttribute > &attrs,
+                           const QMap<qint64, KIMAP::MessagePtr> &messages );
     /**
      * Provides header and message results.
      *
@@ -312,6 +388,25 @@ class KIMAP_EXPORT FetchJob : public Job
      */
     void partsReceived( const QString &mailBox,
                         const QMap<qint64, qint64> &uids,
+                        const QMap<qint64, KIMAP::MessageParts> &parts );
+
+   /**
+     * An overloaded version of partsReceived(), which includes additional attribute
+     * specified in the FETCH response, but that don't belong to actual content of the
+     * message.
+     *
+     * @param mailBox  the name of the mailbox the fetch job was
+     *                 executed on
+     * @param uids     a map from message sequence numbers to message UIDs
+     * @param attrs    a map from message sequence numbers to pair of attribute
+     * @param parts    a map from message sequence numbers to message part collections
+     *
+     * @overload
+     * @since 4.14
+     */
+    void partsReceived( const QString &mailBox,
+                        const QMap<qint64, qint64> &uids,
+                        const QMap<qint64, KIMAP::MessageAttribute > &attrs,
                         const QMap<qint64, KIMAP::MessageParts> &parts );
 
   protected:

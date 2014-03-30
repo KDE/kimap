@@ -32,8 +32,15 @@ namespace KIMAP
   class FetchJobPrivate : public JobPrivate
   {
     public:
-      FetchJobPrivate( FetchJob *job, Session *session, const QString& name ) : JobPrivate( session, name ), q( job ), uidBased( false ) { }
-      ~FetchJobPrivate() { }
+      FetchJobPrivate( FetchJob *job, Session *session, const QString& name )
+          : JobPrivate( session, name )
+          , q( job )
+          , uidBased( false )
+          , gmailEnabled(false)
+      { }
+
+      ~FetchJobPrivate()
+      { }
 
       void parseBodyStructure( const QByteArray &structure, int &pos, KMime::Content *content );
       void parsePart( const QByteArray &structure, int &pos, KMime::Content *content );
@@ -50,15 +57,25 @@ namespace KIMAP
         if ( !pendingParts.isEmpty() ) {
           emit q->partsReceived( selectedMailBox,
                                  pendingUids, pendingParts );
+          emit q->partsReceived( selectedMailBox,
+                                 pendingUids, pendingAttributes,
+                                 pendingParts );
         }
         if ( !pendingSizes.isEmpty() || !pendingFlags.isEmpty() ) {
           emit q->headersReceived( selectedMailBox,
                                    pendingUids, pendingSizes,
                                    pendingFlags, pendingMessages );
+          emit q->headersReceived( selectedMailBox,
+                                   pendingUids, pendingSizes,
+                                   pendingAttributes, pendingFlags,
+                                   pendingMessages );
         }
         if ( !pendingMessages.isEmpty() ) {
           emit q->messagesReceived( selectedMailBox,
                                     pendingUids, pendingMessages );
+          emit q->messagesReceived( selectedMailBox,
+                                    pendingUids, pendingAttributes,
+                                    pendingMessages );
         }
 
         pendingUids.clear();
@@ -66,6 +83,7 @@ namespace KIMAP
         pendingParts.clear();
         pendingSizes.clear();
         pendingFlags.clear();
+        pendingAttributes.clear();
       }
 
       FetchJob * const q;
@@ -74,11 +92,13 @@ namespace KIMAP
       bool uidBased;
       FetchJob::FetchScope scope;
       QString selectedMailBox;
+      bool gmailEnabled;
 
       QTimer emitPendingsTimer;
       QMap<qint64, MessagePtr> pendingMessages;
       QMap<qint64, MessageParts> pendingParts;
       QMap<qint64, MessageFlags> pendingFlags;
+      QMap<qint64, MessageAttribute> pendingAttributes;
       QMap<qint64, qint64> pendingSizes;
       QMap<qint64, qint64> pendingUids;
   };
@@ -142,6 +162,18 @@ FetchJob::FetchScope FetchJob::scope() const
   return d->scope;
 }
 
+bool FetchJob::setGmailExtensionsEnabled() const
+{
+  Q_D( const FetchJob );
+  return d->gmailEnabled;
+}
+
+void FetchJob::setGmailExtensionsEnabled( bool enabled )
+{
+  Q_D( FetchJob );
+  d->gmailEnabled = true;
+}
+
 QMap<qint64, MessagePtr> FetchJob::messages() const
 {
   return QMap<qint64, MessagePtr>();
@@ -177,50 +209,55 @@ void FetchJob::doStart()
   switch ( d->scope.mode ) {
   case FetchScope::Headers:
     if ( d->scope.parts.isEmpty() ) {
-      parameters += "(RFC822.SIZE INTERNALDATE BODY.PEEK[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT DATE)] FLAGS UID)";
+      parameters += "(RFC822.SIZE INTERNALDATE BODY.PEEK[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT DATE)] FLAGS UID";
     } else {
       parameters += '(';
       foreach ( const QByteArray &part, d->scope.parts ) {
         parameters += "BODY.PEEK[" + part + ".MIME] ";
       }
-      parameters += "UID)";
+      parameters += "UID";
     }
     break;
   case FetchScope::Flags:
-    parameters += "(FLAGS UID)";
+    parameters += "(FLAGS UID";
     break;
   case FetchScope::Structure:
-    parameters += "(BODYSTRUCTURE UID)";
+    parameters += "(BODYSTRUCTURE UID";
     break;
   case FetchScope::Content:
     if ( d->scope.parts.isEmpty() ) {
-      parameters += "(BODY.PEEK[] UID)";
+      parameters += "(BODY.PEEK[] UID";
     } else {
       parameters += '(';
       foreach ( const QByteArray &part, d->scope.parts ) {
         parameters += "BODY.PEEK[" + part + "] ";
       }
-      parameters += "UID)";
+      parameters += "UID";
     }
     break;
   case FetchScope::Full:
-    parameters += "(RFC822.SIZE INTERNALDATE BODY.PEEK[] FLAGS UID)";
+    parameters += "(RFC822.SIZE INTERNALDATE BODY.PEEK[] FLAGS UID";
     break;
   case FetchScope::HeaderAndContent:
     if ( d->scope.parts.isEmpty() ) {
-      parameters += "(BODY.PEEK[] FLAGS UID)";
+      parameters += "(BODY.PEEK[] FLAGS UID";
     } else {
       parameters += "(BODY.PEEK[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT DATE)]";
       foreach ( const QByteArray &part, d->scope.parts ) {
         parameters += " BODY.PEEK[" + part + ".MIME] BODY.PEEK[" + part + "]"; //krazy:exclude=doublequote_chars
       }
-      parameters += " FLAGS UID)";
+      parameters += " FLAGS UID";
     }
     break;
   case FetchScope::FullHeaders:
-    parameters += "(RFC822.SIZE INTERNALDATE BODY.PEEK[HEADER] FLAGS UID)";
+    parameters += "(RFC822.SIZE INTERNALDATE BODY.PEEK[HEADER] FLAGS UID";
     break;
   }
+
+  if ( d->gmailEnabled ) {
+    parameters += " X-GM-LABELS X-GM-MSGID X-GM-THRID";
+  }
+  parameters += ")";
 
   if ( d->scope.changedSince > 0 ) {
     parameters += " (CHANGEDSINCE " + QByteArray::number( d->scope.changedSince ) + ")";
@@ -286,6 +323,12 @@ void FetchJob::handleResponse( const Message &response )
           } else {
             d->pendingFlags[id] << *it;
           }
+        } else if ( str == "X-GM-LABELS" ) {
+          d->pendingAttributes.insert( id, qMakePair<QByteArray, QVariant>( "X-GM-LABELS", *it ) );
+        } else if ( str == "X-GM-THRID" ) {
+          d->pendingAttributes.insert( id, qMakePair<QByteArray, QVariant>( "X-GM-THRID", *it ) );
+        } else if ( str == "X-GM-MSGID" ) {
+          d->pendingAttributes.insert( id, qMakePair<QByteArray, QVariant>( "X-GM-MSGID", *it ) );
         } else if ( str == "BODYSTRUCTURE" ) {
           int pos = 0;
           d->parseBodyStructure( *it, pos, message.get() );
