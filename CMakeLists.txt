@@ -25,6 +25,11 @@ ecm_setup_version(${KF5_VERSION} VARIABLE_PREFIX KIMAP
 )
 
 ########### Find packages ###########
+# FIXME: remove this if/endif when KMime is split.
+if ("${CMAKE_BINARY_DIR}" STREQUAL "${CMAKE_CURRENT_BINARY_DIR}")
+  find_package(KF5KMime ${KF5_VERSION} CONFIG REQUIRED)
+endif()
+
 find_package(KF5 ${KF5_VERSION} CONFIG REQUIRED COMPONENTS CoreAddons KDE4Support)
 
 set(Boost_MINIMUM_VERSION "1.34.0")
@@ -41,11 +46,6 @@ set_package_properties(Sasl2 PROPERTIES
                              URL "http://asg.web.cmu.edu/sasl/sasl-library.html"
                              TYPE REQUIRED
 )
-
-# FIXME: remove this if/endif when KMime is split.
-if ("${CMAKE_BINARY_DIR}" STREQUAL "${CMAKE_CURRENT_BINARY_DIR}")
-  find_package(KF5KMime ${KF5_VERSION} CONFIG REQUIRED)
-endif()
 
 ########### CMake Config Files ###########
 set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5Imap")
