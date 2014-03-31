@@ -20,7 +20,7 @@
   */
 
 #include <kcomponentdata.h>
-#include <kaboutdata.h>
+#include <k4aboutdata.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <klocalizedstring.h>
@@ -28,32 +28,32 @@
 #include <QCoreApplication>
 #include <qsignalspy.h>
 
-#include "kimap/acl.h"
-#include "kimap/session.h"
-#include "kimap/appendjob.h"
-#include "kimap/capabilitiesjob.h"
-#include "kimap/fetchjob.h"
-#include "kimap/listjob.h"
-#include "kimap/loginjob.h"
-#include "kimap/logoutjob.h"
-#include "kimap/selectjob.h"
-#include "kimap/closejob.h"
-#include "kimap/expungejob.h"
-#include "kimap/createjob.h"
-#include "kimap/deletejob.h"
-#include "kimap/namespacejob.h"
-#include "kimap/subscribejob.h"
-#include "kimap/unsubscribejob.h"
-#include "kimap/renamejob.h"
-#include "kimap/storejob.h"
-#include "kimap/sessionuiproxy.h"
-#include "kimap/setacljob.h"
-#include "kimap/getacljob.h"
-#include "kimap/deleteacljob.h"
-#include "kimap/myrightsjob.h"
-#include "kimap/listrightsjob.h"
-#include "kimap/setmetadatajob.h"
-#include "kimap/getmetadatajob.h"
+#include "acl.h"
+#include "session.h"
+#include "appendjob.h"
+#include "capabilitiesjob.h"
+#include "fetchjob.h"
+#include "listjob.h"
+#include "loginjob.h"
+#include "logoutjob.h"
+#include "selectjob.h"
+#include "closejob.h"
+#include "expungejob.h"
+#include "createjob.h"
+#include "deletejob.h"
+#include "namespacejob.h"
+#include "subscribejob.h"
+#include "unsubscribejob.h"
+#include "renamejob.h"
+#include "storejob.h"
+#include "sessionuiproxy.h"
+#include "setacljob.h"
+#include "getacljob.h"
+#include "deleteacljob.h"
+#include "myrightsjob.h"
+#include "listrightsjob.h"
+#include "setmetadatajob.h"
+#include "getmetadatajob.h"
 
 using namespace KIMAP;
 
@@ -377,7 +377,7 @@ void testDelete(Session *session)
 
 int main( int argc, char **argv )
 {
-  KAboutData about( "TestImapServer", 0, ki18n( "TestImapServer" ), "version" );
+  K4AboutData about( "TestImapServer", 0, ki18n( "TestImapServer" ), "version" );
   KComponentData cData( &about );
 
   if ( argc < 4 ) {

@@ -19,7 +19,7 @@
   */
 
 #include <kcomponentdata.h>
-#include <kaboutdata.h>
+#include <k4aboutdata.h>
 #include <klocale.h>
 #include <klocalizedstring.h>
 #include <kdebug.h>
@@ -27,14 +27,14 @@
 #include <QCoreApplication>
 #include <qsignalspy.h>
 
-#include "kimap/session.h"
-#include "kimap/capabilitiesjob.h"
-#include "kimap/idlejob.h"
-#include "kimap/loginjob.h"
-#include "kimap/logoutjob.h"
-#include "kimap/selectjob.h"
-#include "kimap/closejob.h"
-#include "kimap/sessionuiproxy.h"
+#include "session.h"
+#include "capabilitiesjob.h"
+#include "idlejob.h"
+#include "loginjob.h"
+#include "logoutjob.h"
+#include "selectjob.h"
+#include "closejob.h"
+#include "sessionuiproxy.h"
 
 using namespace KIMAP;
 
@@ -48,7 +48,7 @@ class UiProxy: public SessionUiProxy {
 
 int main( int argc, char **argv )
 {
-  KAboutData about( "TestImapIdle", 0, ki18n( "TestImapIdle" ), "version" );
+  K4AboutData about( "TestImapIdle", 0, ki18n( "TestImapIdle" ), "version" );
   KComponentData cData( &about );
 
   if ( argc < 4 ) {

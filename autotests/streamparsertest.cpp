@@ -18,7 +18,7 @@
 
 #include <qtest_kde.h>
 
-#include "kimap/imapstreamparser.h"
+#include "imapstreamparser.h"
 #include <message_p.h>
 
 #include <QLocalSocket>

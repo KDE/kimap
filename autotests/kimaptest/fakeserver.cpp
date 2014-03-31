@@ -31,7 +31,7 @@
 #include <KDebug>
 #include <qtest_kde.h>
 
-#include "kimap/imapstreamparser.h"
+#include "imapstreamparser.h"
 
 QByteArray FakeServer::preauth()
 {
@@ -108,7 +108,7 @@ void FakeServer::run()
         m_tcpServer = new QTcpServer();
     }
     if ( !m_tcpServer->listen( QHostAddress( QHostAddress::LocalHost ), 5989 ) ) {
-        qFatal() << "Unable to start the server";
+        qFatal("Unable to start the server");
     }
 
     connect( m_tcpServer, SIGNAL(newConnection()), this, SLOT(newConnection()) );

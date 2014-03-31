@@ -1,20 +1,17 @@
-project(kimaptest)
+kde_enable_exceptions()
 
-if(KDE4_BUILD_TESTS)
+include_directories(${KImap_BINARY_DIR}/src)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
-
-include_directories(${CMAKE_BINARY_DIR}/kimap)
-
-set(kimaptest_LIB_SRCS
+set(kimaptest_SRCS
    fakeserver.cpp
    mockjob.cpp
    sslserver.cpp
 )
 
-add_library(kimaptest STATIC ${kimaptest_LIB_SRCS})
+add_library(kimaptest STATIC ${kimaptest_SRCS})
 generate_export_header(kimaptest)
-target_link_libraries(kimaptest ${KDE4_KDECORE_LIBS} ${QT_QTNETWORK_LIBRARY} ${QT_QTTEST_LIBRARY} kimap)
+target_link_libraries(kimaptest KF5Imap Qt5::Test)
+
 install(TARGETS kimaptest ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
@@ -23,6 +20,3 @@ install(FILES
   fakeserver.h
   mockjob.h
   DESTINATION ${INCLUDE_INSTALL_DIR}/kimaptest COMPONENT Devel)
-
-endif()
-

@@ -23,9 +23,9 @@
 
 #include "mockjob.h"
 
-#include "../../job_p.h"
-#include "../../session.h"
-#include "../../session_p.h"
+#include "job_p.h"
+#include "session.h"
+#include "session_p.h"
 
 #include <QtCore/QTimer>
 
