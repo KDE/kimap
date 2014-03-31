@@ -25,7 +25,7 @@ ecm_setup_version(${KF5_VERSION} VARIABLE_PREFIX KIMAP
 )
 
 ########### Find packages ###########
-find_package(KF5 ${KF5_VERSION} CONFIG REQUIRED COMPONENTS CoreAddons)
+find_package(KF5 ${KF5_VERSION} CONFIG REQUIRED COMPONENTS CoreAddons KDE4Support)
 
 set(Boost_MINIMUM_VERSION "1.34.0")
 find_package(Boost ${Boost_MINIMUM_VERSION})
