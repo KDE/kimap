@@ -220,8 +220,8 @@ void testList()
         mailBoxes+= spy.at( i ).at( 0 ).value< QList<KIMAP::MailBoxDescriptor> >();
       }
 
-      //kDebug() << mailBoxes.first().name;
-      //kDebug() << listresult.first().name;
+      //qDebug() << mailBoxes.first().name;
+      //qDebug() << listresult.first().name;
       QCOMPARE( mailBoxes, listresult );
     }
 //     QCOMPARE(job->mailBox(), mailbox);

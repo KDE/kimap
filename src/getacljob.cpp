@@ -60,7 +60,7 @@ void GetAclJob::doStart()
 void GetAclJob::handleResponse( const Message &response )
 {
   Q_D( GetAclJob );
-//   kDebug() << response.toString();
+//   qDebug() << response.toString();
 
   if ( handleErrorReplies( response ) == NotHandled ) {
     if ( response.content.size() >= 4 &&

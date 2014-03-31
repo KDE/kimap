@@ -377,7 +377,7 @@ const QString KIMAP::decodeRFC2047String( const QString &str,
       }
       pos += 3;
       i += 3;
-//  kDebug() << "Charset:" << charset << "- Language:" << language << "-'" << pos << "'";
+//  qDebug() << "Charset:" << charset << "- Language:" << language << "-'" << pos << "'";
     }
     if ( valid ) {
       mid = pos;
@@ -402,10 +402,10 @@ const QString KIMAP::decodeRFC2047String( const QString &str,
             cstr[i] = ' ';
           }
         }
-//    kDebug() << "before QP '"
+//    qDebug() << "before QP '"
 //    << cstr << "'";
         cstr = KCodecs::quotedPrintableDecode( cstr );
-//    kDebug() << "after QP '"
+//    qDebug() << "after QP '"
 //    << cstr << "'";
       } else {
         // decode base64 text
@@ -419,7 +419,7 @@ const QString KIMAP::decodeRFC2047String( const QString &str,
 
       pos = end - 1;
     } else {
-//    kDebug() << "invalid";
+//    qDebug() << "invalid";
       //result += "=?";
       //pos = beg -1; // because pos gets increased shortly afterwards
       pos = beg - 2;
@@ -430,7 +430,7 @@ const QString KIMAP::decodeRFC2047String( const QString &str,
   if ( !charset.isEmpty () ) {
     QTextCodec *aCodec = codecForName( QLatin1String(charset.toLatin1 ()) );
     if ( aCodec ) {
-//    kDebug() << "Codec is" << aCodec->name();
+//    qDebug() << "Codec is" << aCodec->name();
       return aCodec->toUnicode( result );
     }
   }
@@ -637,7 +637,7 @@ const QString KIMAP::decodeRFC2231String( const QString &str )
   QString st = str.mid ( l + 1 );
   //QString language = str.mid ( p + 1, l - p - 1 );
 
-  //kDebug() << "Charset:" << charset << "Language:" << language;
+  //qDebug() << "Charset:" << charset << "Language:" << language;
 
   char ch, ch2;
   p = 0;

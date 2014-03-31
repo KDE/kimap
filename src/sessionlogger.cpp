@@ -36,7 +36,7 @@ SessionLogger::SessionLogger()
                     + QLatin1Char('.') + QString::number( getpid() )
                     + QLatin1Char('.') + QString::number( m_id ) );
   if (!m_file.open( QFile::WriteOnly )) {
-     kDebug()<<" m_file can be open in write only";
+     qDebug()<<" m_file can be open in write only";
   }
 }
 

@@ -76,7 +76,7 @@ void FakeServer::dataAvailable()
     writeServerPart( scenarioNumber );
     if (m_starttls) {
       m_starttls = false;
-      kDebug() << "start tls";
+      qDebug() << "start tls";
       static_cast<QSslSocket*>(socket)->startServerEncryption();
     }
 }
@@ -108,7 +108,7 @@ void FakeServer::run()
         m_tcpServer = new QTcpServer();
     }
     if ( !m_tcpServer->listen( QHostAddress( QHostAddress::LocalHost ), 5989 ) ) {
-        kFatal() << "Unable to start the server";
+        qFatal() << "Unable to start the server";
     }
 
     connect( m_tcpServer, SIGNAL(newConnection()), this, SLOT(newConnection()) );

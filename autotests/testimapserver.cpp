@@ -67,12 +67,12 @@ class UiProxy: public SessionUiProxy {
 void dumpContentHelper(KMime::Content *part, const QString &partId = QString())
 {
   if ( partId.isEmpty() ) {
-    kDebug() << "** Message root **";
+    qDebug() << "** Message root **";
   } else {
-    kDebug() << "** Part" << partId << "**";
+    qDebug() << "** Part" << partId << "**";
   }
 
-  kDebug() << part->head();
+  qDebug() << part->head();
 
   KMime::Content::List children = part->contents();
   for ( int i = 0; i < children.size(); i++ ) {
@@ -95,7 +95,7 @@ void listFolders(Session *session, bool includeUnsubscribed = false, const QStri
   for ( int i = 0; i < count; ++i ) {
     MailBoxDescriptor descriptor = list->mailBoxes()[i];
     if ( descriptor.name.endsWith( nameFilter ) ) {
-      kDebug() << descriptor.separator << descriptor.name;
+      qDebug() << descriptor.separator << descriptor.name;
     }
   }
 
@@ -103,7 +103,7 @@ void listFolders(Session *session, bool includeUnsubscribed = false, const QStri
 
 void testMetaData(Session *session)
 {
-  kDebug() << "TESTING: METADATA commands";
+  qDebug() << "TESTING: METADATA commands";
   CreateJob *create = new CreateJob( session );
   create->setMailBox( "INBOX/TestFolder" );
   create->exec();
@@ -138,7 +138,7 @@ void testMetaData(Session *session)
 
 void testAcl(Session *session, const QString &user)
 {
-  kDebug() << "TESTING: ACL commands";
+  qDebug() << "TESTING: ACL commands";
   CreateJob *create = new CreateJob( session );
   create->setMailBox( "INBOX/TestFolder" );
   create->exec();
@@ -147,32 +147,32 @@ void testAcl(Session *session, const QString &user)
   listRights->setMailBox( "INBOX/TestFolder" );
   listRights->setIdentifier( user.toLatin1() );
   listRights->exec();
-  kDebug() << "Default rights on INBOX/TestFolder: " << Acl::rightsToString( listRights->defaultRights() );
+  qDebug() << "Default rights on INBOX/TestFolder: " << Acl::rightsToString( listRights->defaultRights() );
   QList<Acl::Rights> possible = listRights->possibleRights();
   QStringList strList;
   Q_FOREACH( Acl::Rights r, possible ) {
     strList << Acl::rightsToString( r );
   }
-  kDebug() << "Possible rights on INBOX/TestFolder: " << strList;
+  qDebug() << "Possible rights on INBOX/TestFolder: " << strList;
 
   MyRightsJob *myRights = new MyRightsJob( session );
   myRights->setMailBox( "INBOX/TestFolder" );
   myRights->exec();
 
   Acl::Rights mine = myRights->rights();
-  kDebug() << "My rights on INBOX/TestFolder: " << Acl::rightsToString( mine );
-  kDebug() << "Reading INBOX/TestFolder is possible: " << myRights->hasRightEnabled( Acl::Read );
+  qDebug() << "My rights on INBOX/TestFolder: " << Acl::rightsToString( mine );
+  qDebug() << "Reading INBOX/TestFolder is possible: " << myRights->hasRightEnabled( Acl::Read );
   Q_ASSERT_X( myRights->hasRightEnabled( Acl::Read ), "Reading INBOX is NOT possible", "" );
 
   GetAclJob *getAcl= new GetAclJob( session );
   getAcl->setMailBox( "INBOX/TestFolder" );
   getAcl->exec();
-  kDebug() << "Anyone rights on INBOX/TestFolder: " << getAcl->rights( "anyone" );
+  qDebug() << "Anyone rights on INBOX/TestFolder: " << getAcl->rights( "anyone" );
   Acl::Rights users = getAcl->rights( user.toLatin1() );
-  kDebug() << user << " rights on INBOX/TestFolder: " << Acl::rightsToString( users );
+  qDebug() << user << " rights on INBOX/TestFolder: " << Acl::rightsToString( users );
   Q_ASSERT_X( mine == users, "GETACL returns different rights for the same user", "" );
 
-  kDebug() << "Removing Delete right ";
+  qDebug() << "Removing Delete right ";
   mine = Acl::Delete;
   SetAclJob *setAcl= new SetAclJob( session );
   setAcl->setMailBox( "INBOX/TestFolder" );
@@ -184,9 +184,9 @@ void testAcl(Session *session, const QString &user)
   getAcl->setMailBox( "INBOX/TestFolder" );
   getAcl->exec();
   users = getAcl->rights( user.toLatin1() );
-  kDebug() << user << " rights on INBOX/TestFolder: " << Acl::rightsToString( users );
+  qDebug() << user << " rights on INBOX/TestFolder: " << Acl::rightsToString( users );
 
-  kDebug() << "Adding back Delete right ";
+  qDebug() << "Adding back Delete right ";
   mine = Acl::Delete;
   setAcl= new SetAclJob( session );
   setAcl->setMailBox( "INBOX/TestFolder" );
@@ -198,7 +198,7 @@ void testAcl(Session *session, const QString &user)
   getAcl->setMailBox( "INBOX/TestFolder" );
   getAcl->exec();
   users = getAcl->rights( user.toLatin1() );
-  kDebug() << user << " rights on INBOX/TestFolder: " << Acl::rightsToString( users );
+  qDebug() << user << " rights on INBOX/TestFolder: " << Acl::rightsToString( users );
 
   //cleanup
   DeleteJob *deletejob = new DeleteJob( session );
@@ -208,7 +208,7 @@ void testAcl(Session *session, const QString &user)
 
 void testAppendAndStore(Session *session)
 {
-  kDebug() << "TESTING: APPEND and STORE";
+  qDebug() << "TESTING: APPEND and STORE";
   //setup
   CreateJob *create = new CreateJob( session );
   create->setMailBox( "INBOX/TestFolder" );
@@ -225,14 +225,14 @@ void testAppendAndStore(Session *session)
     "\r\n"
     "Hello Joe, do you think we can meet at 3:30 tomorrow?\r\n";
 
-  kDebug() << "Append a message in INBOX/TestFolder...";
+  qDebug() << "Append a message in INBOX/TestFolder...";
   AppendJob *append = new AppendJob( session );
   append->setMailBox( "INBOX/TestFolder" );
   append->setContent( testMailContent );
   append->exec();
   Q_ASSERT_X( append->error() == 0, "AppendJob", append->errorString().toLocal8Bit() );
 
-  kDebug() << "Read the message back and compare...";
+  qDebug() << "Read the message back and compare...";
   SelectJob *select = new SelectJob( session );
   select->setMailBox( "INBOX/TestFolder" );
   select->exec();
@@ -257,9 +257,9 @@ void testAppendAndStore(Session *session)
   fetch->setScope( scope );
   fetch->exec();
   MessageFlags expectedFlags = fetch->flags()[1];
-  kDebug() << "Read the message flags:" << expectedFlags;
+  qDebug() << "Read the message flags:" << expectedFlags;
 
-  kDebug() << "Add the \\Deleted flag...";
+  qDebug() << "Add the \\Deleted flag...";
   expectedFlags << "\\Deleted";
   qSort( expectedFlags );
   StoreJob *store = new StoreJob( session );
@@ -272,7 +272,7 @@ void testAppendAndStore(Session *session)
   QList<QByteArray> resultingFlags = store->resultingFlags()[1];
   qSort( resultingFlags );
   if ( expectedFlags != resultingFlags ) {
-    kDebug() << resultingFlags;
+    qDebug() << resultingFlags;
   }
   Q_ASSERT( expectedFlags == resultingFlags );
 
@@ -291,25 +291,25 @@ void testAppendAndStore(Session *session)
 
 void testRename(Session *session)
 {
-  kDebug() << "TESTING: RENAME";
+  qDebug() << "TESTING: RENAME";
   //setup
   CreateJob *create = new CreateJob( session );
   create->setMailBox( "INBOX/TestFolder" );
   create->exec();
 
-  kDebug() << "Listing mailboxes with name TestFolder:";
+  qDebug() << "Listing mailboxes with name TestFolder:";
   listFolders( session, true, "TestFolder" );
 
   //actual tests
-  kDebug() << "Renaming to RenamedTestFolder";
+  qDebug() << "Renaming to RenamedTestFolder";
   RenameJob *rename = new RenameJob( session );
   rename->setSourceMailBox( "INBOX/TestFolder" );
   rename->setDestinationMailBox( "INBOX/RenamedTestFolder" );
   rename->exec();
 
-  kDebug() << "Listing mailboxes with name TestFolder:";
+  qDebug() << "Listing mailboxes with name TestFolder:";
   listFolders( session, true, "TestFolder" );
-  kDebug() << "Listing mailboxes with name RenamedTestFolder:";
+  qDebug() << "Listing mailboxes with name RenamedTestFolder:";
   listFolders( session, true, "RenamedTestFolder" );
 
   //cleanup
@@ -323,30 +323,30 @@ void testRename(Session *session)
 
 void testSubscribe(Session *session)
 {
-  kDebug() << "TESTING: SUBSCRIBE/UNSUBSCRIBE";
+  qDebug() << "TESTING: SUBSCRIBE/UNSUBSCRIBE";
   //setup
   CreateJob *create = new CreateJob( session );
   create->setMailBox( "INBOX/TestFolder" );
   create->exec();
 
-  kDebug() << "Listing  subscribed mailboxes with name TestFolder:";
+  qDebug() << "Listing  subscribed mailboxes with name TestFolder:";
   listFolders( session, false, "TestFolder" );
 
   //actual tests
-  kDebug() << "Subscribing to INBOX/TestFolder";
+  qDebug() << "Subscribing to INBOX/TestFolder";
   SubscribeJob *subscribe = new SubscribeJob( session );
   subscribe->setMailBox( "INBOX/TestFolder" );
   subscribe->exec();
 
-  kDebug() << "Listing  subscribed mailboxes with name TestFolder:";
+  qDebug() << "Listing  subscribed mailboxes with name TestFolder:";
   listFolders( session, false, "TestFolder" );
 
-  kDebug() << "Unsubscribing from INBOX/TestFolder";
+  qDebug() << "Unsubscribing from INBOX/TestFolder";
   UnsubscribeJob *unsubscribe = new UnsubscribeJob( session );
   unsubscribe->setMailBox( "INBOX/TestFolder" );
   unsubscribe->exec();
 
-  kDebug() << "Listing  subscribed mailboxes with name TestFolder:";
+  qDebug() << "Listing  subscribed mailboxes with name TestFolder:";
   listFolders( session, false, "TestFolder" );
 
   //cleanup
@@ -357,21 +357,21 @@ void testSubscribe(Session *session)
 
 void testDelete(Session *session)
 {
-  kDebug() << "TESTING: DELETE";
-  kDebug() << "Creating INBOX/TestFolder:";
+  qDebug() << "TESTING: DELETE";
+  qDebug() << "Creating INBOX/TestFolder:";
   CreateJob *create = new CreateJob( session );
   create->setMailBox( "INBOX/TestFolder" );
   create->exec();
 
-  kDebug() << "Listing  with name TestFolder  before DELETE:";
+  qDebug() << "Listing  with name TestFolder  before DELETE:";
   listFolders( session, true, "TestFolder" );
 
-  kDebug() << "Deleting INBOX/TestFolder";
+  qDebug() << "Deleting INBOX/TestFolder";
   DeleteJob *deletejob = new DeleteJob( session );
   deletejob->setMailBox( "INBOX/TestFolder" );
   deletejob->exec();
 
-  kDebug() << "Listing with name TestFolder after DELETE:";
+  qDebug() << "Listing with name TestFolder after DELETE:";
   listFolders( session, true, "TestFolder" );
 }
 
@@ -381,7 +381,7 @@ int main( int argc, char **argv )
   KComponentData cData( &about );
 
   if ( argc < 4 ) {
-    kError() << "Not enough parameters, expecting: <server> <user> <password>";
+    qCritical() << "Not enough parameters, expecting: <server> <user> <password>";
   }
 
   QString server = QString::fromLocal8Bit( argv[1] );
@@ -393,7 +393,7 @@ int main( int argc, char **argv )
   QString user = QString::fromLocal8Bit( argv[2] );
   QString password = QString::fromLocal8Bit( argv[3] );
 
-  kDebug() << "Querying:" << server << port << user << password;
+  qDebug() << "Querying:" << server << port << user << password;
   qDebug();
 
   QCoreApplication app( argc, argv );
@@ -401,7 +401,7 @@ int main( int argc, char **argv )
   UiProxy::Ptr proxy( new UiProxy() );
   session.setUiProxy( proxy );
 
-  kDebug() << "Logging in...";
+  qDebug() << "Logging in...";
   LoginJob *login = new LoginJob( &session );
   //login->setEncryptionMode( LoginJob::TlsV1 );
   //login->setAuthenticationMode( LoginJob::Plain );
@@ -412,7 +412,7 @@ int main( int argc, char **argv )
 
   /*if (login->encryptionMode() == LoginJob::Unencrypted)
   {
-    kDebug() << "Encrypted login not possible, try to log in without encryption";
+    qDebug() << "Encrypted login not possible, try to log in without encryption";
     login = new LoginJob( &session );
     login->setUserName( user );
     login->setPassword( password );
@@ -423,60 +423,60 @@ int main( int argc, char **argv )
 
   }*/
 
-  kDebug() << "Server greeting:" << session.serverGreeting();
+  qDebug() << "Server greeting:" << session.serverGreeting();
 
-  kDebug() << "Asking for capabilities:";
+  qDebug() << "Asking for capabilities:";
   CapabilitiesJob *capabilities = new CapabilitiesJob( &session );
   capabilities->exec();
   Q_ASSERT_X( capabilities->error() == 0, "CapabilitiesJob", capabilities->errorString().toLocal8Bit() );
   Q_ASSERT( session.state() == Session::Authenticated );
-  kDebug() << capabilities->capabilities();
+  qDebug() << capabilities->capabilities();
   qDebug();
 
-  kDebug() << "Asking for namespaces:";
+  qDebug() << "Asking for namespaces:";
   NamespaceJob *namespaces = new NamespaceJob( &session );
   namespaces->exec();
   Q_ASSERT_X( namespaces->error() == 0, "CapabilitiesJob", namespaces->errorString().toLocal8Bit() );
   Q_ASSERT( session.state() == Session::Authenticated );
 
-  kDebug() << "Contains empty namespace:" << namespaces->containsEmptyNamespace();
+  qDebug() << "Contains empty namespace:" << namespaces->containsEmptyNamespace();
 
-  kDebug() << "Personal:";
+  qDebug() << "Personal:";
   foreach ( MailBoxDescriptor ns, namespaces->personalNamespaces() ) {
-    kDebug() << ns.separator << ns.name;
+    qDebug() << ns.separator << ns.name;
   }
 
-  kDebug() << "User:    ";
+  qDebug() << "User:    ";
   foreach ( MailBoxDescriptor ns, namespaces->userNamespaces() ) {
-    kDebug() << ns.separator << ns.name;
+    qDebug() << ns.separator << ns.name;
   }
 
-  kDebug() << "Shared:  ";
+  qDebug() << "Shared:  ";
   foreach ( MailBoxDescriptor ns, namespaces->sharedNamespaces() ) {
-    kDebug() << ns.separator << ns.name;
+    qDebug() << ns.separator << ns.name;
   }
   qDebug();
 
-  kDebug() << "Listing mailboxes:";
+  qDebug() << "Listing mailboxes:";
   listFolders( &session );
   Q_ASSERT( session.state() == Session::Authenticated );
 
-  kDebug() << "Selecting INBOX:";
+  qDebug() << "Selecting INBOX:";
   SelectJob *select = new SelectJob( &session );
   select->setMailBox( "INBOX" );
   select->exec();
   Q_ASSERT_X( select->error() == 0, "SelectJob", select->errorString().toLocal8Bit() );
   Q_ASSERT( session.state() == Session::Selected );
-  kDebug() << "Flags:" << select->flags();
-  kDebug() << "Permanent flags:" << select->permanentFlags();
-  kDebug() << "Total Number of Messages:" << select->messageCount();
-  kDebug() << "Number of recent Messages:" << select->recentCount();
-  kDebug() << "First Unseen Message Index:" << select->firstUnseenIndex();
-  kDebug() << "UID validity:" << select->uidValidity();
-  kDebug() << "Next UID:" << select->nextUid();
+  qDebug() << "Flags:" << select->flags();
+  qDebug() << "Permanent flags:" << select->permanentFlags();
+  qDebug() << "Total Number of Messages:" << select->messageCount();
+  qDebug() << "Number of recent Messages:" << select->recentCount();
+  qDebug() << "First Unseen Message Index:" << select->firstUnseenIndex();
+  qDebug() << "UID validity:" << select->uidValidity();
+  qDebug() << "Next UID:" << select->nextUid();
   qDebug();
 
-  kDebug() << "Fetching first 3 messages headers:";
+  qDebug() << "Fetching first 3 messages headers:";
   FetchJob *fetch = new FetchJob( &session );
   FetchJob::FetchScope scope;
   fetch->setSequenceSet( ImapSet( 1, 3 ) );
@@ -488,16 +488,16 @@ int main( int argc, char **argv )
   Q_ASSERT( session.state() == Session::Selected );
   QMap<qint64, MessagePtr> messages = fetch->messages();
   foreach ( qint64 id, messages.keys() ) {
-    kDebug() << "* Message" << id << "(" << fetch->sizes()[id] << "bytes )";
-    kDebug() << "  From      :" << messages[id]->from()->asUnicodeString();
-    kDebug() << "  To        :" << messages[id]->to()->asUnicodeString();
-    kDebug() << "  Date      :" << messages[id]->date()->asUnicodeString();
-    kDebug() << "  Subject   :" << messages[id]->subject()->asUnicodeString();
-    kDebug() << "  Message-ID:" << messages[id]->messageID()->asUnicodeString();
+    qDebug() << "* Message" << id << "(" << fetch->sizes()[id] << "bytes )";
+    qDebug() << "  From      :" << messages[id]->from()->asUnicodeString();
+    qDebug() << "  To        :" << messages[id]->to()->asUnicodeString();
+    qDebug() << "  Date      :" << messages[id]->date()->asUnicodeString();
+    qDebug() << "  Subject   :" << messages[id]->subject()->asUnicodeString();
+    qDebug() << "  Message-ID:" << messages[id]->messageID()->asUnicodeString();
   }
   qDebug();
 
-  kDebug() << "Fetching first 3 messages flags:";
+  qDebug() << "Fetching first 3 messages flags:";
   fetch = new FetchJob( &session );
   fetch->setSequenceSet( ImapSet( 1, 3 ) );
   scope.parts.clear();
@@ -508,11 +508,11 @@ int main( int argc, char **argv )
   Q_ASSERT( session.state() == Session::Selected );
   QMap<qint64, MessageFlags> flags = fetch->flags();
   foreach ( qint64 id, flags.keys() ) {
-    kDebug() << "* Message" << id << "flags:" << flags[id];
+    qDebug() << "* Message" << id << "flags:" << flags[id];
   }
   qDebug();
 
-  kDebug() << "Fetching first message structure:";
+  qDebug() << "Fetching first message structure:";
   fetch = new FetchJob( &session );
   fetch->setSequenceSet( ImapSet( 1 ) );
   scope.parts.clear();
@@ -525,7 +525,7 @@ int main( int argc, char **argv )
   dumpContentHelper( message.get() );
   qDebug();
 
-  kDebug() << "Fetching first message second part headers:";
+  qDebug() << "Fetching first message second part headers:";
   fetch = new FetchJob( &session );
   fetch->setSequenceSet( ImapSet( 1 ) );
   scope.parts.clear();
@@ -537,18 +537,18 @@ int main( int argc, char **argv )
   Q_ASSERT( session.state() == Session::Selected );
   QMap<qint64, MessageParts> allParts = fetch->parts();
   foreach ( qint64 id, allParts.keys() ) {
-    kDebug() << "* Message" << id << "parts headers";
+    qDebug() << "* Message" << id << "parts headers";
     MessageParts parts = allParts[id];
     foreach ( const QByteArray &partId, parts.keys() ) {
-      kDebug() << "  ** Part" << partId;
-      kDebug() << "     Name       :" << parts[partId]->contentType()->name();
-      kDebug() << "     Mimetype   :" << parts[partId]->contentType()->mimeType();
-      kDebug() << "     Description:" << parts[partId]->contentDescription()->asUnicodeString().simplified();
+      qDebug() << "  ** Part" << partId;
+      qDebug() << "     Name       :" << parts[partId]->contentType()->name();
+      qDebug() << "     Mimetype   :" << parts[partId]->contentType()->mimeType();
+      qDebug() << "     Description:" << parts[partId]->contentDescription()->asUnicodeString().simplified();
     }
   }
   qDebug();
 
-  kDebug() << "Fetching first message second part content:";
+  qDebug() << "Fetching first message second part content:";
   fetch = new FetchJob( &session );
   fetch->setSequenceSet( ImapSet( 1 ) );
   scope.parts.clear();
@@ -562,8 +562,8 @@ int main( int argc, char **argv )
   foreach ( int id, allParts.keys() ) {
     MessageParts parts = allParts[id];
     foreach ( const QByteArray &partId, parts.keys() ) {
-      kDebug() << "* Message" << id << "part" << partId << "content:";
-      kDebug() << parts[partId]->body();
+      qDebug() << "* Message" << id << "part" << partId << "content:";
+      qDebug() << parts[partId]->body();
     }
   }
   qDebug();
@@ -580,17 +580,17 @@ int main( int argc, char **argv )
 
   testMetaData( &session );
 
-  kDebug() << "Expunge INBOX:";
+  qDebug() << "Expunge INBOX:";
   ExpungeJob *expunge = new ExpungeJob( &session );
   expunge->exec();
 
-  kDebug() << "Closing INBOX:";
+  qDebug() << "Closing INBOX:";
   CloseJob *close = new CloseJob( &session );
   close->exec();
   Q_ASSERT( session.state() == Session::Authenticated );
   qDebug();
 
-  kDebug() << "Logging out...";
+  qDebug() << "Logging out...";
   LogoutJob *logout = new LogoutJob( &session );
   logout->exec();
   Q_ASSERT_X( logout->error() == 0, "LogoutJob", logout->errorString().toLocal8Bit() );

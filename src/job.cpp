@@ -75,7 +75,7 @@ void Job::setSocketError(KTcpSocket::Error error)
 Job::HandlerResponse Job::handleErrorReplies(const Message &response)
 {
   Q_D( Job );
-//   kDebug() << response.toString();
+//   qDebug() << response.toString();
 
   if ( !response.content.isEmpty() &&
        d->tags.contains( response.content.first().toString() ) ) {

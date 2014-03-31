@@ -267,7 +267,7 @@ void FetchJob::handleResponse( const Message &response )
         ++it;
 
         if ( it == content.constEnd() ) { // Uh oh, message was truncated?
-          kWarning() << "FETCH reply got truncated, skipping.";
+          qWarning() << "FETCH reply got truncated, skipping.";
           break;
         }
 

@@ -430,7 +430,7 @@ void SearchJob::handleResponse( const Message &response )
       if (d->term.isNull()) {
         d->sessionInternal()->sendData( d->contents[d->nextContent] );
       } else {
-        kWarning() << "The term API only supports inline strings.";
+        qWarning() << "The term API only supports inline strings.";
       }
       d->nextContent++;
     } else if ( response.content[1].toString() == "SEARCH" ) {
@@ -482,7 +482,7 @@ void SearchJob::addSearchCriteria( SearchCriteria criteria )
       break;
     default:
       //TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
-      kDebug() << "Criteria " << d->criteriaMap[criteria] << " needs an argument, but none was specified.";
+      qDebug() << "Criteria " << d->criteriaMap[criteria] << " needs an argument, but none was specified.";
       break;
   }
 }
@@ -497,7 +497,7 @@ void SearchJob::addSearchCriteria( SearchCriteria criteria, int argument )
       break;
     default:
       //TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
-      kDebug() << "Criteria " << d->criteriaMap[criteria] << " doesn't accept an integer as an argument.";
+      qDebug() << "Criteria " << d->criteriaMap[criteria] << " doesn't accept an integer as an argument.";
       break;
   }
 }
@@ -524,7 +524,7 @@ void SearchJob::addSearchCriteria( SearchCriteria criteria, const QByteArray &ar
       break;
     default:
       //TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
-      kDebug() << "Criteria " << d->criteriaMap[criteria] << " doesn't accept any argument.";
+      qDebug() << "Criteria " << d->criteriaMap[criteria] << " doesn't accept any argument.";
       break;
   }
 }
@@ -546,7 +546,7 @@ void SearchJob::addSearchCriteria( SearchCriteria criteria, const QDate &argumen
     }
     default:
       //TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
-      kDebug() << "Criteria " << d->criteriaMap[criteria] << " doesn't accept a date as argument.";
+      qDebug() << "Criteria " << d->criteriaMap[criteria] << " doesn't accept a date as argument.";
       break;
   }
 }

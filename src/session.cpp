@@ -231,7 +231,7 @@ void SessionPrivate::responseReceived( const Message &response )
       simplified.content.removeFirst(); // Strip the tag
       simplified.content.removeFirst(); // Strip the code
     }
-    kDebug() << "Received BYE: " << simplified.toString();
+    qDebug() << "Received BYE: " << simplified.toString();
     return;
   }
 
@@ -513,7 +513,7 @@ void SessionPrivate::restartSocketTimer()
 
 void SessionPrivate::onSocketTimeout()
 {
-  kDebug() << "Socket timeout!";
+  qDebug() << "Socket timeout!";
   thread->closeSocket();
 }
 

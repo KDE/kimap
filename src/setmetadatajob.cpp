@@ -86,7 +86,7 @@ void SetMetaDataJob::doStart()
   }
 
   d->tags << d->sessionInternal()->sendCommand( command, parameters );
-//   kDebug() << "SENT: " << command << " " << parameters;
+//   qDebug() << "SENT: " << command << " " << parameters;
 }
 
 void SetMetaDataJob::handleResponse( const Message &response )
@@ -130,7 +130,7 @@ void SetMetaDataJob::handleResponse( const Message &response )
      } else {
        content += " {" + QByteArray::number( d->entriesIt.value().size() ) + '}';
      }
-//      kDebug() << "SENT: " << content;
+//      qDebug() << "SENT: " << content;
      d->sessionInternal()->sendData( content );
   }
 }

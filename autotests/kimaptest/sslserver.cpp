@@ -95,7 +95,7 @@ void SslServer::incomingConnection(int handle)
 void SslServer::sslErrors(const QList<QSslError> &errors)
 {
   foreach (const QSslError &error, errors) {
-    kWarning() << "Received ssl error: " << error.errorString();
+    qWarning() << "Received ssl error: " << error.errorString();
   }
   QSslSocket *socket = qobject_cast<QSslSocket *>(QObject::sender());
   if(socket) {
@@ -107,7 +107,7 @@ void SslServer::error(QAbstractSocket::SocketError error)
 {
   QSslSocket *socket = qobject_cast<QSslSocket *>(QObject::sender());
   if(socket) {
-    kWarning() << socket->errorString();
+    qWarning() << socket->errorString();
   }
-  kWarning() << error;
+  qWarning() << error;
 }

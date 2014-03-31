@@ -117,13 +117,13 @@ void GetMetaDataJob::doStart()
   }
 
   d->tags << d->sessionInternal()->sendCommand( command, parameters );
-//  kDebug() << "SENT: " << command << " " << parameters;
+//  qDebug() << "SENT: " << command << " " << parameters;
 }
 
 void GetMetaDataJob::handleResponse( const Message &response )
 {
   Q_D( GetMetaDataJob );
-//  kDebug() << "GOT: " << response.toString();
+//  qDebug() << "GOT: " << response.toString();
 
   //TODO: handle NO error messages having [METADATA MAXSIZE NNN], [METADATA TOOMANY], [METADATA NOPRIVATE] (see rfc5464)
   // or [ANNOTATEMORE TOOBIG], [ANNOTATEMORE TOOMANY] respectively
@@ -220,7 +220,7 @@ QByteArray GetMetaDataJob::metaData(const QString &mailBox, const QByteArray &en
 
 QByteArray GetMetaDataJob::metaData(const QByteArray& entry) const
 {
-  kDebug() << entry;
+  qDebug() << entry;
   Q_D( const GetMetaDataJob );
   return d->metadata.value( d->mailBox ).value( d->removePrefix(entry) ).value( d->getAttribute( entry ) );
 }

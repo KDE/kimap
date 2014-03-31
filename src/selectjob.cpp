@@ -222,7 +222,7 @@ void SelectJob::handleResponse( const Message &response )
           }
         }
       } else {
-        kDebug() << response.toString();
+        qDebug() << response.toString();
       }
   } else {
     Q_ASSERT( error() || d->m_session->selectedMailBox() == d->mailBox );

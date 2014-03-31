@@ -76,7 +76,7 @@ void ExpungeJob::handleResponse( const Message &response )
           return;
         }
     }
-    kDebug() << "Unhandled response: " << response.toString().constData();
+    qDebug() << "Unhandled response: " << response.toString().constData();
 
   }
 }

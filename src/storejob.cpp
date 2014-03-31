@@ -116,7 +116,7 @@ void StoreJob::doStart()
   Q_D( StoreJob );
 
   if ( d->set.isEmpty() ) {
-    kWarning() << "Empty uid set passed to store job";
+    qWarning() << "Empty uid set passed to store job";
     setError( KJob::UserDefinedError );
     setErrorText( QLatin1String("Empty uid set passed to store job") );
     emitResult();
@@ -146,7 +146,7 @@ void StoreJob::doStart()
   }
   parameters += ')';
 
-  kDebug() << parameters;
+  qDebug() << parameters;
 
   QByteArray command = "STORE";
   if ( d->uidBased ) {
@@ -196,7 +196,7 @@ void StoreJob::handleResponse( const Message &response )
       } else if ( uidFound ) {
         d->resultingFlags[uid] = resultingFlags;
       } else {
-        kWarning() << "We asked for UID but the server didn't give it back, resultingFlags not stored.";
+        qWarning() << "We asked for UID but the server didn't give it back, resultingFlags not stored.";
       }
     }
   }

@@ -51,7 +51,7 @@ SessionThread::~SessionThread()
 {
   QMetaObject::invokeMethod( this, "threadQuit" );
   if ( !thread()->wait( 10 * 1000 ) ) {
-    kWarning() << "Session thread refuses to die, killing harder...";
+    qWarning() << "Session thread refuses to die, killing harder...";
     thread()->terminate();
     // Make sure to wait until it's done, otherwise it can crash when the pthread callback is called
     thread()->wait();
@@ -147,7 +147,7 @@ void SessionThread::doCloseSocket()
   if ( !m_socket )
     return;
   m_encryptedMode = false;
-  kDebug() << "close";
+  qDebug() << "close";
   m_socket->close();
 }
 
@@ -160,10 +160,10 @@ void SessionThread::reconnect()
   if ( m_socket->state() != SessionSocket::ConnectedState &&
        m_socket->state() != SessionSocket::ConnectingState ) {
     if ( m_encryptedMode ) {
-      kDebug() << "connectToHostEncrypted" << m_hostName << m_port;
+      qDebug() << "connectToHostEncrypted" << m_hostName << m_port;
       m_socket->connectToHostEncrypted( m_hostName, m_port );
     } else {
-      kDebug() << "connectToHost" << m_hostName << m_port;
+      qDebug() << "connectToHost" << m_hostName << m_port;
       m_socket->connectToHost( m_hostName, m_port );
     }
   }
@@ -255,7 +255,7 @@ void SessionThread::sslConnected()
   if ( m_socket->sslErrors().count() > 0 ||
        m_socket->encryptionMode() != KTcpSocket::SslClientMode ||
        cipher.isNull() || cipher.usedBits() == 0 ) {
-     kDebug() << "Initial SSL handshake failed. cipher.isNull() is" << cipher.isNull()
+     qDebug() << "Initial SSL handshake failed. cipher.isNull() is" << cipher.isNull()
               << ", cipher.usedBits() is" << cipher.usedBits()
               << ", the socket says:" <<  m_socket->errorString()
               << "and the list of SSL errors contains"
@@ -263,7 +263,7 @@ void SessionThread::sslConnected()
      KSslErrorUiData errorData( m_socket );
      emit sslError( errorData );
   } else {
-    kDebug() << "TLS negotiation done.";
+    qDebug() << "TLS negotiation done.";
     m_encryptedMode = true;
     emit encryptionNegotiationResult( true, m_socket->negotiatedSslVersion() );
   }
