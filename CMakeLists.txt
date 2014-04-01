@@ -25,12 +25,13 @@ ecm_setup_version(${KF5_VERSION} VARIABLE_PREFIX KIMAP
 )
 
 ########### Find packages ###########
+find_package(KF5CoreAddons ${KF5_VERSION} CONFIG REQUIRED)
+find_package(KF5KDE4Support ${KF5_VERSION} CONFIG REQUIRED)
+
 # FIXME: remove this if/endif when KMime is split.
 if ("${CMAKE_BINARY_DIR}" STREQUAL "${CMAKE_CURRENT_BINARY_DIR}")
   find_package(KF5KMime ${KF5_VERSION} CONFIG REQUIRED)
 endif()
-
-find_package(KF5 ${KF5_VERSION} CONFIG REQUIRED COMPONENTS CoreAddons KDE4Support)
 
 set(Boost_MINIMUM_VERSION "1.34.0")
 find_package(Boost ${Boost_MINIMUM_VERSION})
