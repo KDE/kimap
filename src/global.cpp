@@ -20,4 +20,4 @@
 #include <KGlobal>
 
 //Load i18n catalog
-static const KCatalogLoader loader(QLatin1String("libkimap"));
+static const KCatalogLoader loader(QStringLiteral("libkimap"));

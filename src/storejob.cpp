@@ -118,7 +118,7 @@ void StoreJob::doStart()
   if ( d->set.isEmpty() ) {
     qWarning() << "Empty uid set passed to store job";
     setError( KJob::UserDefinedError );
-    setErrorText( QLatin1String("Empty uid set passed to store job") );
+    setErrorText( QStringLiteral("Empty uid set passed to store job") );
     emitResult();
     return;
   }

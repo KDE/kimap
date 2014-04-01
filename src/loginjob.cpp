@@ -337,7 +337,7 @@ void LoginJob::handleResponse( const Message &response )
         while ( p != response.content.end() ) {
           QString capability = QLatin1String(p->toString());
           d->capabilities << capability;
-          if ( capability == QLatin1String("LOGINDISABLED") ) {
+          if ( capability == QStringLiteral("LOGINDISABLED") ) {
             d->plainLoginDisabled = true;
           }
           ++p;
@@ -461,7 +461,7 @@ bool LoginJobPrivate::startAuthentication()
   }
 
   do {
-    result = sasl_client_start( conn, authMode.toLatin1(), &client_interact, capabilities.contains( QLatin1String("SASL-IR") ) ? &out : 0, &outlen, &mechusing );
+    result = sasl_client_start( conn, authMode.toLatin1(), &client_interact, capabilities.contains( QStringLiteral("SASL-IR") ) ? &out : 0, &outlen, &mechusing );
 
     if ( result == SASL_INTERACT ) {
       if ( !sasl_interact() ) {
@@ -560,20 +560,20 @@ void LoginJob::setAuthenticationMode(AuthenticationMode mode)
   switch ( mode ) {
     case ClearText: d->authMode = QLatin1String( "");
       break;
-    case Login: d->authMode = QLatin1String("LOGIN");
+    case Login: d->authMode = QStringLiteral("LOGIN");
       break;
-    case Plain: d->authMode = QLatin1String("PLAIN");
+    case Plain: d->authMode = QStringLiteral("PLAIN");
       break;
-    case CramMD5: d->authMode = QLatin1String("CRAM-MD5");
+    case CramMD5: d->authMode = QStringLiteral("CRAM-MD5");
       break;
-    case DigestMD5: d->authMode = QLatin1String("DIGEST-MD5");
+    case DigestMD5: d->authMode = QStringLiteral("DIGEST-MD5");
       break;
-    case GSSAPI: d->authMode = QLatin1String("GSSAPI");
+    case GSSAPI: d->authMode = QStringLiteral("GSSAPI");
       break;
-    case Anonymous: d->authMode = QLatin1String("ANONYMOUS");
+    case Anonymous: d->authMode = QStringLiteral("ANONYMOUS");
       break;
     default:
-      d->authMode = QLatin1String("");
+      d->authMode = QStringLiteral("");
   }
 }
 
@@ -610,7 +610,7 @@ void LoginJobPrivate::saveServerGreeting(const Message &response)
         serverGreeting += QLatin1String(item) + QLatin1Char(' ');
       }
       serverGreeting.chop( 1 );
-      serverGreeting += QLatin1String(") ");
+      serverGreeting += QStringLiteral(") ");
     } else {
       serverGreeting+= QLatin1String(response.content.at( i ).toString()) + QLatin1Char(' ');
     }

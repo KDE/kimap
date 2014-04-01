@@ -300,7 +300,7 @@ QTextCodec *KIMAP::codecForName( const QString &str )
     return 0;
   }
   return QTextCodec::codecForName ( str.toLower ().
-                                    replace ( QLatin1String("windows"), QLatin1String("cp") ).toLatin1 () );
+                                    replace ( QStringLiteral("windows"), QStringLiteral("cp") ).toLatin1 () );
 }
 
 //-----------------------------------------------------------------------------
@@ -326,7 +326,7 @@ const QString KIMAP::decodeRFC2047String( const QString &str,
                                           QString &language )
 {
   //do we have a rfc string
-  if ( !str.contains( QLatin1String("=?") ) ) {
+  if ( !str.contains( QStringLiteral("=?") ) ) {
     return str;
   }
 

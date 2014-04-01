@@ -147,7 +147,7 @@ void ListJob::doStart()
     d->tags << d->sessionInternal()->sendCommand( d->command, "\"\" *" );
   } else {
     foreach ( const MailBoxDescriptor &descriptor, d->namespaces ) {
-      QString parameters = QLatin1String("\"\" \"%1\"");
+      QString parameters = QStringLiteral("\"\" \"%1\"");
 
       if ( descriptor.name.endsWith( descriptor.separator ) ) {
         QString name = encodeImapFolderName( descriptor.name );
