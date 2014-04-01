@@ -20,7 +20,7 @@
 #include "selectjob.h"
 
 #include <KDE/KLocalizedString>
-#include <kdebug.h>
+#include <qdebug.h>
 
 #include "job_p.h"
 #include "message_p.h"
