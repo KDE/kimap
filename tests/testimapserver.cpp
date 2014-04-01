@@ -21,7 +21,7 @@
 
 #include <kcomponentdata.h>
 #include <k4aboutdata.h>
-#include <qdebug.h>
+#include <kdebug.h>
 #include <klocale.h>
 #include <klocalizedstring.h>
 #include <qtcpsocket.h>

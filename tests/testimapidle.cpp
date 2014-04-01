@@ -22,7 +22,7 @@
 #include <k4aboutdata.h>
 #include <klocale.h>
 #include <klocalizedstring.h>
-#include <qdebug.h>
+#include <kdebug.h>
 #include <ktcpsocket.h> // declares KSslErrorUiData
 #include <QCoreApplication>
 #include <qsignalspy.h>
