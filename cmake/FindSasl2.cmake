@@ -1,5 +1,3 @@
-# - Try to find the sasl2 directory library
-# Once done this will define
 #
 # - Try to find the sasl2 directory library
 # Once done this will define
