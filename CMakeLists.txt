@@ -44,7 +44,7 @@ set_package_properties(Boost PROPERTIES
 find_package(Sasl2)
 set_package_properties(Sasl2 PROPERTIES
                              DESCRIPTION "The Cyrus-sasl library"
-                             URL "http://asg.web.cmu.edu/sasl/sasl-library.html"
+                             URL "http://www.cyrussasl.org"
                              TYPE REQUIRED
 )
 

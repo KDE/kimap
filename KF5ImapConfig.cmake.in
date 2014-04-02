@@ -13,7 +13,7 @@ set_package_properties(Boost PROPERTIES
 
 set_package_properties(Sasl2 PROPERTIES
                              DESCRIPTION "The Cyrus-sasl library"
-                             URL "http://asg.web.cmu.edu/sasl/sasl-library.html"
+                             URL "http://www.cyrussasl.org"
 )
 
 include("${CMAKE_CURRENT_LIST_DIR}/KF5ImapTargets.cmake")
