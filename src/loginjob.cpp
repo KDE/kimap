@@ -337,7 +337,7 @@ void LoginJob::handleResponse( const Message &response )
         while ( p != response.content.end() ) {
           QString capability = QLatin1String(p->toString());
           d->capabilities << capability;
-          if ( capability == QStringLiteral("LOGINDISABLED") ) {
+          if ( capability == QLatin1String("LOGINDISABLED") ) {
             d->plainLoginDisabled = true;
           }
           ++p;
