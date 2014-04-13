@@ -24,7 +24,7 @@
 
 #include <QTcpSocket>
 #include <QtTest>
-#include <KDebug>
+#include <QDebug>
 #include <KDateTime>
 
 class AppendJobTest: public QObject {

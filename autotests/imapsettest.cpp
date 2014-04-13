@@ -21,7 +21,7 @@
 #include "kimap/imapset.h"
 
 #include <QtTest>
-#include <KDebug>
+#include <QDebug>
 
 using namespace KIMAP;
 

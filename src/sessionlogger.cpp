@@ -20,7 +20,7 @@
 
 #include "sessionlogger_p.h"
 
-#include <KDebug>
+#include <QDebug>
 
 #include <unistd.h>
 

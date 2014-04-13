@@ -20,7 +20,7 @@
 #include <QFile>
 #include <QSslKey>
 
-#include <KDebug>
+#include <QDebug>
 
 
 static QByteArray staticCert() {

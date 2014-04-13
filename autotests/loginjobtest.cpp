@@ -27,7 +27,7 @@
 
 #include <QTcpSocket>
 #include <QtTest>
-#include <KDebug>
+#include <QDebug>
 
 
 class TestUiProxy: public KIMAP::SessionUiProxy {

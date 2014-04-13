@@ -27,7 +27,7 @@
 
 #include <QTcpSocket>
 #include <QtTest>
-#include <KDebug>
+#include <QDebug>
 
 class CapabilitiesJobTest: public QObject {
   Q_OBJECT

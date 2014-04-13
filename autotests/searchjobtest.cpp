@@ -26,7 +26,7 @@
 
 #include <QTcpSocket>
 #include <QtTest>
-#include <KDebug>
+#include <QDebug>
 
 typedef QPair< KIMAP::SearchJob::SearchCriteria, QByteArray > SearchCriteriaValuePair;
 

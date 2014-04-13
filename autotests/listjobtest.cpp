@@ -27,7 +27,7 @@
 
 #include <QTcpSocket>
 #include <QtTest>
-#include <KDebug>
+#include <QDebug>
 
 Q_DECLARE_METATYPE( QList<KIMAP::MailBoxDescriptor> )
 Q_DECLARE_METATYPE( QList< QList<QByteArray> > )

@@ -28,7 +28,7 @@
 
 #include <QTcpSocket>
 #include <QtTest>
-#include <KDebug>
+#include <QDebug>
 
 class LogoutJobTest: public QObject {
   Q_OBJECT

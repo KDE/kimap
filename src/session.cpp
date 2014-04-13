@@ -27,7 +27,7 @@
 #include <QtCore/QDebug>
 #include <QtCore/QTimer>
 
-#include <KDebug>
+#include <QDebug>
 #include <KDE/KLocalizedString>
 
 #include "job.h"

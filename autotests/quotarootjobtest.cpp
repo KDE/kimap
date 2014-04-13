@@ -24,7 +24,7 @@
 
 #include <QTcpSocket>
 #include <QtTest>
-#include <KDebug>
+#include <QDebug>
 
 Q_DECLARE_METATYPE( QList<qint64> );
 

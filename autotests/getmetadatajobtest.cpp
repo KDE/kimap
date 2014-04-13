@@ -24,7 +24,7 @@
 
 #include <QTcpSocket>
 #include <QtTest>
-#include <KDebug>
+#include <QDebug>
 
 typedef QMap<QByteArray,QByteArray> MAP;
 Q_DECLARE_METATYPE(MAP)

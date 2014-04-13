@@ -28,7 +28,7 @@
 
 #include <QTcpSocket>
 #include <QtTest>
-#include <KDebug>
+#include <QDebug>
 
 class SelectJobTest: public QObject {
   Q_OBJECT
