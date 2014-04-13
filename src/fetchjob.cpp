@@ -20,7 +20,7 @@
 #include "fetchjob.h"
 
 #include <QtCore/QTimer>
-#include <KDE/KDebug>
+#include <QDebug>
 #include <KDE/KLocalizedString>
 
 #include "job_p.h"

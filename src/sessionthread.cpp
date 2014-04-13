@@ -22,7 +22,7 @@
 #include <QtCore/QDebug>
 #include <QtCore/QThread>
 
-#include <KDE/KDebug>
+#include <QDebug>
 
 #include "imapstreamparser.h"
 #include "message_p.h"

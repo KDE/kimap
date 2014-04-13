@@ -23,7 +23,7 @@
 #include "session_p.h"
 
 #include <KDE/KLocalizedString>
-#include <KDE/KDebug>
+#include <QDebug>
 
 using namespace KIMAP;
 

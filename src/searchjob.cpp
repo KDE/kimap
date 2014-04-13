@@ -20,7 +20,7 @@
 #include "searchjob.h"
 
 #include <KDE/KLocalizedString>
-#include <KDE/KDebug>
+#include <QDebug>
 
 #include <QtCore/QDate>
 

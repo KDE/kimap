@@ -20,7 +20,7 @@
 #include "setmetadatajob.h"
 
 #include <KDE/KLocalizedString>
-#include <KDE/KDebug>
+#include <QDebug>
 
 #include "metadatajobbase_p.h"
 #include "message_p.h"
