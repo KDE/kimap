@@ -1,7 +1,5 @@
 kde_enable_exceptions()
 
-include_directories(${KImap_BINARY_DIR}/src)
-
 set(kimaptest_SRCS
    fakeserver.cpp
    mockjob.cpp
