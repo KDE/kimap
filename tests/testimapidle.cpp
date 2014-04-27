@@ -77,14 +77,14 @@ int main( int argc, char **argv )
   login->setUserName( user );
   login->setPassword( password );
   login->exec();
-  Q_ASSERT_X( login->error() == 0, "LoginJob", login->errorString().toLocal8Bit() );
+  Q_ASSERT_X( login->error() == 0, "LoginJob", login->errorString().toLocal8Bit().constData() );
   Q_ASSERT( session.state() == Session::Authenticated );
   qDebug();
 
   qDebug() << "Asking for capabilities:";
   CapabilitiesJob *capabilities = new CapabilitiesJob( &session );
   capabilities->exec();
-  Q_ASSERT_X( capabilities->error() == 0, "CapabilitiesJob", capabilities->errorString().toLocal8Bit() );
+  Q_ASSERT_X( capabilities->error() == 0, "CapabilitiesJob", capabilities->errorString().toLocal8Bit().constData() );
   Q_ASSERT( session.state() == Session::Authenticated );
   qDebug() << capabilities->capabilities();
   qDebug();
@@ -95,7 +95,7 @@ int main( int argc, char **argv )
   SelectJob *select = new SelectJob( &session );
   select->setMailBox( "INBOX" );
   select->exec();
-  Q_ASSERT_X( select->error() == 0, "SelectJob", select->errorString().toLocal8Bit() );
+  Q_ASSERT_X( select->error() == 0, "SelectJob", select->errorString().toLocal8Bit().constData() );
   Q_ASSERT( session.state() == Session::Selected );
   qDebug() << "Flags:" << select->flags();
   qDebug() << "Permanent flags:" << select->permanentFlags();
@@ -124,7 +124,7 @@ int main( int argc, char **argv )
   qDebug() << "Logging out...";
   LogoutJob *logout = new LogoutJob( &session );
   logout->exec();
-  Q_ASSERT_X( logout->error() == 0, "LogoutJob", logout->errorString().toLocal8Bit() );
+  Q_ASSERT_X( logout->error() == 0, "LogoutJob", logout->errorString().toLocal8Bit().constData() );
   Q_ASSERT( session.state() == Session::Disconnected );
 
   return 0;

@@ -90,7 +90,7 @@ void listFolders(Session *session, bool includeUnsubscribed = false, const QStri
   ListJob *list = new ListJob( session );
   list->setIncludeUnsubscribed( includeUnsubscribed );
   list->exec();
-  Q_ASSERT_X( list->error() == 0, "ListJob", list->errorString().toLocal8Bit() );
+  Q_ASSERT_X( list->error() == 0, "ListJob", list->errorString().toLocal8Bit().constData() );
   int count = list->mailBoxes().size();
   for ( int i = 0; i < count; ++i ) {
     MailBoxDescriptor descriptor = list->mailBoxes()[i];
@@ -230,7 +230,7 @@ void testAppendAndStore(Session *session)
   append->setMailBox( "INBOX/TestFolder" );
   append->setContent( testMailContent );
   append->exec();
-  Q_ASSERT_X( append->error() == 0, "AppendJob", append->errorString().toLocal8Bit() );
+  Q_ASSERT_X( append->error() == 0, "AppendJob", append->errorString().toLocal8Bit().constData() );
 
   qDebug() << "Read the message back and compare...";
   SelectJob *select = new SelectJob( session );
@@ -245,10 +245,10 @@ void testAppendAndStore(Session *session)
   fetch->setScope( scope );
   fetch->exec();
   MessagePtr message = fetch->messages()[1];
-  Q_ASSERT_X( fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit() );
+  Q_ASSERT_X( fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit().constData() );
   testMailContent.replace( "\r\n", "\n" );
   Q_ASSERT_X( testMailContent == message->head() + "\n" + message->body(),
-              "Message differs from reference", message->head() + "\n"+message->body() );
+              "Message differs from reference", QByteArray(message->head() + "\n" +message->body()).constData() );
 
   fetch = new FetchJob( session );
   fetch->setSequenceSet( ImapSet( 1 ) );
@@ -267,7 +267,7 @@ void testAppendAndStore(Session *session)
   store->setMode( StoreJob::AppendFlags );
   store->setFlags(QList<QByteArray>() << "\\Deleted");
   store->exec();
-  Q_ASSERT_X( store->error() == 0, "StoreJob", store->errorString().toLocal8Bit() );
+  Q_ASSERT_X( store->error() == 0, "StoreJob", store->errorString().toLocal8Bit().constData() );
 
   QList<QByteArray> resultingFlags = store->resultingFlags()[1];
   qSort( resultingFlags );
@@ -417,7 +417,7 @@ int main( int argc, char **argv )
     login->setUserName( user );
     login->setPassword( password );
     login->exec();
-    Q_ASSERT_X( login->error() == 0, "LoginJob", login->errorString().toLocal8Bit() );
+    Q_ASSERT_X( login->error() == 0, "LoginJob", login->errorString().toLocal8Bit().constData() );
     Q_ASSERT( session.state() == Session::Authenticated );
     qDebug();
 
@@ -428,7 +428,7 @@ int main( int argc, char **argv )
   qDebug() << "Asking for capabilities:";
   CapabilitiesJob *capabilities = new CapabilitiesJob( &session );
   capabilities->exec();
-  Q_ASSERT_X( capabilities->error() == 0, "CapabilitiesJob", capabilities->errorString().toLocal8Bit() );
+  Q_ASSERT_X( capabilities->error() == 0, "CapabilitiesJob", capabilities->errorString().toLocal8Bit().constData() );
   Q_ASSERT( session.state() == Session::Authenticated );
   qDebug() << capabilities->capabilities();
   qDebug();
@@ -436,7 +436,7 @@ int main( int argc, char **argv )
   qDebug() << "Asking for namespaces:";
   NamespaceJob *namespaces = new NamespaceJob( &session );
   namespaces->exec();
-  Q_ASSERT_X( namespaces->error() == 0, "CapabilitiesJob", namespaces->errorString().toLocal8Bit() );
+  Q_ASSERT_X( namespaces->error() == 0, "CapabilitiesJob", namespaces->errorString().toLocal8Bit().constData() );
   Q_ASSERT( session.state() == Session::Authenticated );
 
   qDebug() << "Contains empty namespace:" << namespaces->containsEmptyNamespace();
@@ -465,7 +465,7 @@ int main( int argc, char **argv )
   SelectJob *select = new SelectJob( &session );
   select->setMailBox( "INBOX" );
   select->exec();
-  Q_ASSERT_X( select->error() == 0, "SelectJob", select->errorString().toLocal8Bit() );
+  Q_ASSERT_X( select->error() == 0, "SelectJob", select->errorString().toLocal8Bit().constData() );
   Q_ASSERT( session.state() == Session::Selected );
   qDebug() << "Flags:" << select->flags();
   qDebug() << "Permanent flags:" << select->permanentFlags();
@@ -484,7 +484,7 @@ int main( int argc, char **argv )
   scope.mode = FetchJob::FetchScope::Headers;
   fetch->setScope( scope );
   fetch->exec();
-  Q_ASSERT_X( fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit() );
+  Q_ASSERT_X( fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit().constData() );
   Q_ASSERT( session.state() == Session::Selected );
   QMap<qint64, MessagePtr> messages = fetch->messages();
   foreach ( qint64 id, messages.keys() ) {
@@ -504,7 +504,7 @@ int main( int argc, char **argv )
   scope.mode = FetchJob::FetchScope::Flags;
   fetch->setScope( scope );
   fetch->exec();
-  Q_ASSERT_X( fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit() );
+  Q_ASSERT_X( fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit().constData() );
   Q_ASSERT( session.state() == Session::Selected );
   QMap<qint64, MessageFlags> flags = fetch->flags();
   foreach ( qint64 id, flags.keys() ) {
@@ -519,7 +519,7 @@ int main( int argc, char **argv )
   scope.mode = FetchJob::FetchScope::Structure;
   fetch->setScope( scope );
   fetch->exec();
-  Q_ASSERT_X( fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit() );
+  Q_ASSERT_X( fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit().constData() );
   Q_ASSERT( session.state() == Session::Selected );
   MessagePtr message = fetch->messages()[1];
   dumpContentHelper( message.get() );
@@ -533,7 +533,7 @@ int main( int argc, char **argv )
   scope.mode = FetchJob::FetchScope::Headers;
   fetch->setScope( scope );
   fetch->exec();
-  Q_ASSERT_X( fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit() );
+  Q_ASSERT_X( fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit().constData() );
   Q_ASSERT( session.state() == Session::Selected );
   QMap<qint64, MessageParts> allParts = fetch->parts();
   foreach ( qint64 id, allParts.keys() ) {
@@ -556,7 +556,7 @@ int main( int argc, char **argv )
   scope.mode = FetchJob::FetchScope::Content;
   fetch->setScope( scope );
   fetch->exec();
-  Q_ASSERT_X( fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit() );
+  Q_ASSERT_X( fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit().constData() );
   Q_ASSERT( session.state() == Session::Selected );
   allParts = fetch->parts();
   foreach ( int id, allParts.keys() ) {
@@ -593,7 +593,7 @@ int main( int argc, char **argv )
   qDebug() << "Logging out...";
   LogoutJob *logout = new LogoutJob( &session );
   logout->exec();
-  Q_ASSERT_X( logout->error() == 0, "LogoutJob", logout->errorString().toLocal8Bit() );
+  Q_ASSERT_X( logout->error() == 0, "LogoutJob", logout->errorString().toLocal8Bit().constData() );
   Q_ASSERT( session.state() == Session::Disconnected );
 
   return 0;
