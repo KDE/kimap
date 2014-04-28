@@ -54,7 +54,7 @@ generate_export_header(KF5Imap BASE_NAME kimap)
 
 add_library(KF5::Imap ALIAS KF5Imap)
 
-target_include_directories(KF5Imap INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}/kimap;${Boost_INCLUDE_DIR};${Sasl2_INCLUDE_DIR}>")
+target_include_directories(KF5Imap INTERFACE "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KImap;${Boost_INCLUDE_DIR};${Sasl2_INCLUDE_DIR}>")
 target_include_directories(KF5Imap PUBLIC "$<BUILD_INTERFACE:${KImap_SOURCE_DIR}/src;${KImap_BINARY_DIR}/src>")
 
 target_link_libraries(KF5Imap
@@ -115,16 +115,11 @@ ecm_generate_headers(KImap_CamelCase_HEADERS
 install(TARGETS KF5Imap EXPORT KF5ImapTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
-    ${KImap_CamelCase_HEADERS}
-    DESTINATION ${INCLUDE_INSTALL_DIR}/KImap
-    COMPONENT Devel
-)
-
-install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/kimap_export.h
     ${KImap_HEADERS}
     namespacejob.h rfccodecs.h # FIXME these two headers don't have camelcase headers in KDE4
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kimap
+    ${KImap_CamelCase_HEADERS}
+    DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KImap
     COMPONENT Devel
 )
 
