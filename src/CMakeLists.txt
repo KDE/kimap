@@ -59,7 +59,7 @@ target_include_directories(KF5Imap PUBLIC "$<BUILD_INTERFACE:${KImap_SOURCE_DIR}
 
 target_link_libraries(KF5Imap
   KF5::CoreAddons
-  KF5::KMime
+  KF5::Mime
   ${Sasl2_LIBRARIES}
 )
 
@@ -123,5 +123,5 @@ install(FILES
     COMPONENT Devel
 )
 
-ecm_generate_pri_file(BASE_NAME KImap LIB_NAME KF5Imap DEPS "CoreAddons KMime" FILENAME_VAR PRI_FILENAME)
+ecm_generate_pri_file(BASE_NAME KImap LIB_NAME KF5Imap DEPS "CoreAddons Mime" FILENAME_VAR PRI_FILENAME)
 install(FILES ${PRI_FILENAME} DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
