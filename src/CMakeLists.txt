@@ -66,7 +66,7 @@ target_link_libraries(KF5Imap
 set_target_properties(KF5Imap PROPERTIES
     VERSION ${KIMAP_VERSION_STRING}
     SOVERSION ${KIMAP_SOVERSION}
-    EXPORT_NAME KImap
+    EXPORT_NAME Imap
 )
 
 ecm_generate_headers(KImap_CamelCase_HEADERS
