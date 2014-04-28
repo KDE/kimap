@@ -109,7 +109,6 @@ ecm_generate_headers(KImap_CamelCase_HEADERS
   UnsubscribeJob
 
   REQUIRED_HEADERS KImap_HEADERS
-  PREFIX KImap
 )
 
 install(TARGETS KF5Imap EXPORT KF5ImapTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
