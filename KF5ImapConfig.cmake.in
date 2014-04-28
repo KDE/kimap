@@ -7,6 +7,8 @@ find_dependency(KF5Mime "@KF5_VERSION@")
 find_dependency(Boost "@Boost_MINIMUM_VERSION@")
 find_dependency(Sasl2)
 
+include(FeatureSummary)
+
 set_package_properties(Boost PROPERTIES
                              DESCRIPTION "Boost C++ Libraries"
                              URL "http://www.boost.org"
