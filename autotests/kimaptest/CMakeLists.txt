@@ -10,7 +10,7 @@ add_library(kimaptest STATIC ${kimaptest_SRCS})
 generate_export_header(kimaptest)
 target_link_libraries(kimaptest KF5Imap Qt5::Test)
 
-install(TARGETS kimaptest ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kimaptest ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 

@@ -111,7 +111,7 @@ ecm_generate_headers(KImap_CamelCase_HEADERS
   REQUIRED_HEADERS KImap_HEADERS
 )
 
-install(TARGETS KF5Imap EXPORT KF5ImapTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS KF5Imap EXPORT KF5ImapTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/kimap_export.h
