@@ -18,7 +18,7 @@
 
 #include <qtest_kde.h>
 
-#include "kimap/imapset.h"
+#include "imapset.h"
 
 #include <QtTest>
 #include <QDebug>

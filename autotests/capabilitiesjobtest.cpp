@@ -22,8 +22,8 @@
 #include <qtest_kde.h>
 
 #include "kimaptest/fakeserver.h"
-#include "kimap/session.h"
-#include "kimap/capabilitiesjob.h"
+#include "session.h"
+#include "capabilitiesjob.h"
 
 #include <QTcpSocket>
 #include <QtTest>
