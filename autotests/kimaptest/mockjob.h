@@ -24,7 +24,7 @@
 #ifndef MOCKJOB_H
 #define MOCKJOB_H
 
-#include <job.h>
+#include <kimap/job.h>
 
 class MockJobPrivate;
 

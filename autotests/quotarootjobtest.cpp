@@ -19,8 +19,8 @@
 #include <qtest_kde.h>
 
 #include "kimaptest/fakeserver.h"
-#include "session.h"
-#include "getquotarootjob.h"
+#include "kimap/session.h"
+#include "kimap/getquotarootjob.h"
 
 #include <QTcpSocket>
 #include <QtTest>

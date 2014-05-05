@@ -22,9 +22,9 @@
 #include <qtest_kde.h>
 
 #include "kimaptest/fakeserver.h"
-#include "session.h"
-#include "logoutjob.h"
-#include "loginjob.h"
+#include "kimap/session.h"
+#include "kimap/logoutjob.h"
+#include "kimap/loginjob.h"
 
 #include <QTcpSocket>
 #include <QtTest>

@@ -20,9 +20,9 @@
 #include <qtest_kde.h>
 
 #include "kimaptest/fakeserver.h"
-#include "session.h"
-#include "selectjob.h"
-#include "idlejob.h"
+#include "kimap/session.h"
+#include "kimap/selectjob.h"
+#include "kimap/idlejob.h"
 
 #include <QTcpSocket>
 #include <QtTest>
