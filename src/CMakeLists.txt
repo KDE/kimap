@@ -107,6 +107,7 @@ ecm_generate_headers(KImap_CamelCase_HEADERS
   StoreJob
   SubscribeJob
   UnsubscribeJob
+  PREFIX KImap
 
   REQUIRED_HEADERS KImap_HEADERS
 )
@@ -118,9 +119,9 @@ install(FILES
     ${KImap_HEADERS}
     namespacejob.h rfccodecs.h # FIXME these two headers don't have camelcase headers in KDE4
     ${KImap_CamelCase_HEADERS}
-    DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KImap
+    DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KImap/kimap
     COMPONENT Devel
 )
 
-ecm_generate_pri_file(BASE_NAME KImap LIB_NAME KF5Imap DEPS "CoreAddons Mime" FILENAME_VAR PRI_FILENAME INCLUDE_INSTALL_DIR ${KF5_INCLUDE_INSTALL_DIR}/KIma)
+ecm_generate_pri_file(BASE_NAME KImap LIB_NAME KF5Imap DEPS "CoreAddons Mime" FILENAME_VAR PRI_FILENAME INCLUDE_INSTALL_DIR ${KF5_INCLUDE_INSTALL_DIR}/KImap)
 install(FILES ${PRI_FILENAME} DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
