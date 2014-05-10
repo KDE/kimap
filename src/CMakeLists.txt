@@ -20,7 +20,6 @@ set(kimap_SRCS
    getmetadatajob.cpp
    getquotajob.cpp
    getquotarootjob.cpp
-   global.cpp
    idlejob.cpp
    imapset.cpp
    imapstreamparser.cpp
