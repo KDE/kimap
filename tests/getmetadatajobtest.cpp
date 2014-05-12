@@ -295,6 +295,40 @@ void annotatemore()
   fakeServer.quit();
 }
 
+void testAnnotateEntires()
+{
+  FakeServer fakeServer;
+  QList<QByteArray> scenario;
+
+  scenario << FakeServer::preauth()
+    << "C: A000001 GETANNOTATION \"Folder1\""
+    << "S: A000001 OK annotations retrieved"
+    << "C: A000002 GETANNOTATION \"Folder1\" (\"/comment\" \"/motd\") (\"value.shared\" \"value.priv\")"
+    << "S: A000002 OK annotations retrieved";
+  fakeServer.setScenario( scenario );
+  fakeServer.startAndWait();
+
+  KIMAP::Session session(  "127.0.0.1", 5989 );
+
+  //C: A000001 GETANNOTATION "Folder1"
+  KIMAP::GetMetaDataJob *getMetadataJob = new KIMAP::GetMetaDataJob(  &session );
+  getMetadataJob->setServerCapability( KIMAP::MetaDataJobBase::Annotatemore );
+  getMetadataJob->setMailBox( "Folder1" );
+  QVERIFY( getMetadataJob->exec() );
+
+  QCOMPARE( getMetadataJob->allMetaData( "Folder1" ).size(), 0 );
+
+  //C: A000002 GETANNOTATION "Folder1" ("/comment" "/motd") ("value.shared" "value.priv")
+  getMetadataJob = new KIMAP::GetMetaDataJob( &session );
+  getMetadataJob->setServerCapability( KIMAP::MetaDataJobBase::Annotatemore );
+  getMetadataJob->setMailBox( "Folder1" );
+  getMetadataJob->addRequestedEntry( "/shared/comment" );
+  getMetadataJob->addRequestedEntry( "/private/motd" );
+  QVERIFY( getMetadataJob->exec() );
+
+  QVERIFY(fakeServer.isAllScenarioDone());
+  fakeServer.quit();
+}
 
 };
 

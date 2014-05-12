@@ -73,11 +73,8 @@ void GetMetaDataJob::doStart()
     }
     if ( d->entries.size() > 1 ) {
       parameters[parameters.length() - 1 ] = ')';
-    } else {
-      parameters.truncate( parameters.length() - 1 );
+      parameters += ' ';
     }
-
-    parameters += ' ';
 
     if ( d->attributes.size() > 1 ) {
       parameters += '(';
