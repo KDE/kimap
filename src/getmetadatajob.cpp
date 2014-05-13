@@ -73,11 +73,8 @@ void GetMetaDataJob::doStart()
     }
     if ( d->entries.size() > 1 ) {
       parameters[parameters.length() - 1 ] = ')';
-    } else {
-      parameters.truncate( parameters.length() - 1 );
+      parameters += ' ';
     }
-
-    parameters += ' ';
 
     if ( d->attributes.size() > 1 ) {
       parameters += '(';
@@ -92,14 +89,20 @@ void GetMetaDataJob::doStart()
     }
 
   } else {
+
+    QByteArray options;
     if ( d->depth != "0" ) {
-      parameters += "(DEPTH " + d->depth;
+      options = "DEPTH " + d->depth;
     }
     if ( d->maxSize != -1 ) {
-      parameters += "(MAXSIZE " + QByteArray::number( d->maxSize ) + ')';
+      if ( !options.isEmpty() ) {
+        options += ' ';
+      }
+      options += "MAXSIZE " + QByteArray::number( d->maxSize );
     }
-    if ( d->depth != "0" ) {
-      parameters += ") ";
+
+    if ( !options.isEmpty() ) {
+      parameters = "(" + options + ") " + parameters;
     }
 
     if ( d->entries.size() >= 1 ) {
@@ -108,12 +111,9 @@ void GetMetaDataJob::doStart()
         parameters += entry + " ";
       }
       parameters[parameters.length() - 1 ] = ')';
+    } else {
+      parameters.truncate( parameters.length() - 1 );
     }
-  }
-
-  if ( d->entries.isEmpty() ) { {
-    parameters += ')';
-  }
   }
 
   d->tags << d->sessionInternal()->sendCommand( command, parameters );
