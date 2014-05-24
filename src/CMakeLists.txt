@@ -57,8 +57,10 @@ target_include_directories(KF5Imap INTERFACE "$<INSTALL_INTERFACE:${KF5_INCLUDE_
 target_include_directories(KF5Imap PUBLIC "$<BUILD_INTERFACE:${KImap_SOURCE_DIR}/src;${KImap_BINARY_DIR}/src>")
 
 target_link_libraries(KF5Imap
-  KF5::CoreAddons
+PUBLIC
   KF5::Mime
+PRIVATE
+  KF5::CoreAddons
   ${Sasl2_LIBRARIES}
 )
 
