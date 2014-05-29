@@ -216,6 +216,12 @@ void FakeServer::writeServerPart( int scenarioNumber )
     m_scenarios[scenarioNumber] = scenario;
 }
 
+void FakeServer::compareReceived(const QByteArray& received, const QByteArray& expected) const
+{
+    QCOMPARE( QString::fromUtf8( received ), QString::fromUtf8( expected ) );
+    QCOMPARE( received, expected );
+}
+
 void FakeServer::readClientPart( int scenarioNumber )
 {
     QList<QByteArray> scenario = m_scenarios[scenarioNumber];
@@ -225,8 +231,7 @@ void FakeServer::readClientPart( int scenarioNumber )
             scenario.first().startsWith( "C: " ) ) {
       QByteArray received = "C: "+clientParser->readUntilCommandEnd().trimmed();
       QByteArray expected = scenario.takeFirst();
-      QCOMPARE( QString::fromUtf8( received ), QString::fromUtf8( expected ) );
-      QCOMPARE( received, expected );
+      compareReceived(received, expected);
       if (received.contains("STARTTLS")) {
         m_starttls = true;
       }
