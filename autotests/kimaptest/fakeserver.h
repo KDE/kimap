@@ -207,6 +207,13 @@ public:
      */
     bool isAllScenarioDone() const;
 
+protected:
+    /**
+     * Whether the received content is the same as the expected.
+     * Use QCOMPARE, if creating subclasses.
+     */
+    virtual void compareReceived(const QByteArray& received, const QByteArray& expected) const;
+
 private Q_SLOTS:
     void newConnection();
     void dataAvailable();
