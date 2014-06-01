@@ -50,7 +50,7 @@ set_package_properties(Sasl2 PROPERTIES
 
 ########### CMake Config Files ###########
 set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5Imap")
-add_definitions(-DTRANSLATION_DOMAIN=\"libkimap\")
+add_definitions(-DTRANSLATION_DOMAIN=\"libkimap5\")
 
 ecm_configure_package_config_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/KF5ImapConfig.cmake.in"
