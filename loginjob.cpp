@@ -572,6 +572,8 @@ void LoginJob::setAuthenticationMode(AuthenticationMode mode)
       break;
     case Anonymous: d->authMode = QLatin1String("ANONYMOUS");
       break;
+    case XOAuth2: d->authMode = QLatin1String("XOAUTH2");
+      break;
     default:
       d->authMode = QLatin1String("");
   }
