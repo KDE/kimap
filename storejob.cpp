@@ -34,10 +34,37 @@ namespace KIMAP
       StoreJobPrivate( Session *session, const QString& name ) : JobPrivate( session, name ) { }
       ~StoreJobPrivate() { }
 
+      QByteArray addFlags(const QByteArray &param, const MessageFlags &flags) {
+          QByteArray parameters;
+          switch ( mode ) {
+            case StoreJob::SetFlags:
+              parameters += param;
+              break;
+            case StoreJob::AppendFlags:
+              parameters += "+" + param;
+              break;
+            case StoreJob::RemoveFlags:
+              parameters += "-" + param;
+              break;
+          }
+
+          parameters += " (";
+          foreach ( const QByteArray &flag, flags ) {
+            parameters += flag + ' ';
+          }
+          if ( !flags.isEmpty() ) {
+            parameters.chop( 1 );
+          }
+          parameters += ')';
+
+          return parameters;
+      }
+
       ImapSet set;
       bool uidBased;
       StoreJob::StoreMode mode;
       MessageFlags flags;
+      MessageFlags gmLabels;
 
       QMap<int, MessageFlags> resultingFlags;
   };
@@ -93,6 +120,18 @@ MessageFlags StoreJob::flags() const
   return d->flags;
 }
 
+void StoreJob::setGMLabels( const MessageFlags &gmLabels )
+{
+  Q_D( StoreJob );
+  d->gmLabels = gmLabels;
+}
+
+MessageFlags StoreJob::gmLabels() const
+{
+  Q_D( const StoreJob );
+  return d->gmLabels;
+}
+
 void StoreJob::setMode( StoreMode mode )
 {
   Q_D( StoreJob );
@@ -125,32 +164,21 @@ void StoreJob::doStart()
 
   QByteArray parameters = d->set.toImapSequenceSet()+' ';
 
-  switch ( d->mode ) {
-  case SetFlags:
-    parameters += "FLAGS";
-    break;
-  case AppendFlags:
-    parameters += "+FLAGS";
-    break;
-  case RemoveFlags:
-    parameters += "-FLAGS";
-    break;
+  if (!d->flags.isEmpty()) {
+      parameters += d->addFlags("FLAGS", d->flags);
   }
-
-  parameters += " (";
-  foreach ( const QByteArray &flag, d->flags ) {
-    parameters += flag + ' ';
+  if (!d->gmLabels.isEmpty()) {
+      if (!d->flags.isEmpty()) {
+          parameters += ' ';
+      }
+      parameters += d->addFlags("X-GM-LABELS", d->gmLabels);
   }
-  if ( !d->flags.isEmpty() ) {
-    parameters.chop( 1 );
-  }
-  parameters += ')';
 
   kDebug() << parameters;
 
   QByteArray command = "STORE";
   if ( d->uidBased ) {
-    command = "UID "+command;
+    command = "UID " + command;
   }
 
   d->tags << d->sessionInternal()->sendCommand( command, parameters );
