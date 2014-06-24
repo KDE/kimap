@@ -20,7 +20,6 @@
 #include "getquotajob.h"
 
 #include <KDE/KLocalizedString>
-#include <QDebug>
 
 #include "quotajobbase_p.h"
 #include "message_p.h"

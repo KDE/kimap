@@ -20,7 +20,6 @@
 #include "deleteacljob.h"
 
 #include <KDE/KLocalizedString>
-#include <QDebug>
 
 #include "acljobbase_p.h"
 #include "message_p.h"

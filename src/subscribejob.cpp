@@ -20,7 +20,6 @@
 #include "subscribejob.h"
 
 #include <KDE/KLocalizedString>
-#include <QDebug>
 
 #include "job_p.h"
 #include "message_p.h"
