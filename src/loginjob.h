@@ -56,7 +56,8 @@ class KIMAP_EXPORT LoginJob : public Job
         DigestMD5,
         NTLM,
         GSSAPI,
-        Anonymous
+        Anonymous,
+        XOAuth2
     };
 
     enum ErrorCode {

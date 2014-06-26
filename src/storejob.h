@@ -59,6 +59,9 @@ class KIMAP_EXPORT StoreJob : public Job
     void setFlags( const MessageFlags &flags );
     MessageFlags flags() const;
 
+    void setGMLabels( const MessageFlags &gmLabels );
+    MessageFlags gmLabels() const;
+
     void setMode( StoreMode mode );
     StoreMode mode() const;
 
