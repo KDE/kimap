@@ -171,7 +171,7 @@ bool FetchJob::setGmailExtensionsEnabled() const
 void FetchJob::setGmailExtensionsEnabled( bool enabled )
 {
   Q_D( FetchJob );
-  d->gmailEnabled = true;
+  d->gmailEnabled = enabled;
 }
 
 QMap<qint64, MessagePtr> FetchJob::messages() const
