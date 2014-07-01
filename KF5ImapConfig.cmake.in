@@ -3,7 +3,7 @@
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR} ${CMAKE_MODULE_PATH})
 
 find_dependency(KF5CoreAddons "@KF5_VERSION@")
-find_dependency(KF5Mime "@KF5_VERSION@")
+find_dependency(KF5Mime "@KDEPIMLIBS_VERSION@")
 find_dependency(Boost "@Boost_MINIMUM_VERSION@")
 find_dependency(Sasl2)
 

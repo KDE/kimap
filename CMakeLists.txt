@@ -31,7 +31,7 @@ find_package(KF5KDELibs4Support ${KF5_VERSION} CONFIG REQUIRED)
 
 # FIXME: remove this if/endif when KMime is split.
 if ("${CMAKE_BINARY_DIR}" STREQUAL "${CMAKE_CURRENT_BINARY_DIR}")
-  find_package(KF5Mime ${KF5_VERSION} CONFIG REQUIRED)
+  find_package(KF5Mime ${KDEPIMLIBS_VERSION} CONFIG REQUIRED)
 endif()
 
 set(Boost_MINIMUM_VERSION "1.34.0")
