@@ -17,11 +17,11 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include <qtest_kde.h>
+#include <qtest.h>
 
 #include "testrfccodecs.h"
 
-QTEST_KDEMAIN_CORE( RFCCodecsTest )
+QTEST_GUILESS_MAIN( RFCCodecsTest )
 
 #include "rfccodecs.h"
 using namespace KIMAP;

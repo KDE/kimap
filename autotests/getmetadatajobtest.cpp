@@ -16,7 +16,7 @@
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include <qtest_kde.h>
+#include <qtest.h>
 
 #include "kimaptest/fakeserver.h"
 #include "kimap/session.h"
@@ -332,6 +332,6 @@ void testAnnotateEntires()
 
 };
 
-QTEST_KDEMAIN_CORE( GetMetadataJobTest )
+QTEST_GUILESS_MAIN( GetMetadataJobTest )
 
 #include "getmetadatajobtest.moc"

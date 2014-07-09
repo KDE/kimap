@@ -16,7 +16,7 @@
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include <qtest_kde.h>
+#include <qtest.h>
 
 #include "kimap/imapset.h"
 
@@ -71,6 +71,6 @@ private Q_SLOTS:
   }
 };
 
-QTEST_KDEMAIN_CORE( ImapSetTest )
+QTEST_GUILESS_MAIN( ImapSetTest )
 
 #include "imapsettest.moc"

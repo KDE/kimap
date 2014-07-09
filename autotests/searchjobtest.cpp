@@ -17,7 +17,7 @@
  *
  */
 
-#include <qtest_kde.h>
+#include <qtest.h>
 
 #include "kimaptest/fakeserver.h"
 #include "kimap/loginjob.h"
@@ -194,6 +194,6 @@ void testSearchTerm()
 
 };
 
-QTEST_KDEMAIN_CORE( SearchJobTest )
+QTEST_GUILESS_MAIN( SearchJobTest )
 
 #include "searchjobtest.moc"

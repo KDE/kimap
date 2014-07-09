@@ -19,7 +19,7 @@
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include <qtest_kde.h>
+#include <qtest.h>
 
 #include "kimaptest/fakeserver.h"
 #include "kimap/session.h"
@@ -76,6 +76,6 @@ void testLogoutUntagged()
 
 };
 
-QTEST_KDEMAIN_CORE( LogoutJobTest )
+QTEST_GUILESS_MAIN( LogoutJobTest )
 
 #include "logoutjobtest.moc"

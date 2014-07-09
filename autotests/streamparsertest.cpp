@@ -16,7 +16,7 @@
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include <qtest_kde.h>
+#include <qtest.h>
 
 #include "imapstreamparser.h"
 #include <message_p.h>
@@ -166,6 +166,6 @@ private Q_SLOTS:
 
 };
 
-QTEST_KDEMAIN_CORE( StreamParserTest )
+QTEST_GUILESS_MAIN( StreamParserTest )
 
 #include "streamparsertest.moc"

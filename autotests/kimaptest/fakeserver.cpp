@@ -29,7 +29,7 @@
 
 // KDE
 #include <QDebug>
-#include <qtest_kde.h>
+#include <qtest.h>
 
 #include "imapstreamparser.h"
 
