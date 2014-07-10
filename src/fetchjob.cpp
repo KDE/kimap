@@ -21,7 +21,7 @@
 
 #include <QtCore/QTimer>
 #include <QDebug>
-#include <KDE/KLocalizedString>
+#include <KLocalizedString>
 
 #include "job_p.h"
 #include "message_p.h"

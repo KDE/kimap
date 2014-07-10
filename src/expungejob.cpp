@@ -19,7 +19,7 @@
 
 #include "expungejob.h"
 
-#include <KDE/KLocalizedString>
+#include <KLocalizedString>
 #include <QDebug>
 
 #include "job_p.h"

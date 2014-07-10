@@ -19,7 +19,7 @@
 
 #include "myrightsjob.h"
 
-#include <KDE/KLocalizedString>
+#include <KLocalizedString>
 
 #include "acljobbase_p.h"
 #include "message_p.h"

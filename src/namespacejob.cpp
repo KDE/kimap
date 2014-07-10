@@ -20,7 +20,7 @@
 #include "namespacejob.h"
 
 #include <QDebug>
-#include <KDE/KLocalizedString>
+#include <KLocalizedString>
 
 #include "job_p.h"
 #include "listjob.h"

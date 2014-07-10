@@ -23,7 +23,7 @@
 #include "acljobbase.h"
 #include "job_p.h"
 #include "session.h"
-#include <KDE/KLocalizedString>
+#include <KLocalizedString>
 
 namespace KIMAP
 {

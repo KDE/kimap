@@ -19,7 +19,7 @@
 
 #include "setquotajob.h"
 
-#include <KDE/KLocalizedString>
+#include <KLocalizedString>
 #include <QDebug>
 
 #include "quotajobbase_p.h"

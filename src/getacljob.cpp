@@ -19,7 +19,7 @@
 
 #include "getacljob.h"
 
-#include <KDE/KLocalizedString>
+#include <KLocalizedString>
 #include <QDebug>
 
 #include "acljobbase_p.h"

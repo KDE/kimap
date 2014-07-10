@@ -20,7 +20,7 @@
 
 #include "loginjob.h"
 
-#include <KDE/KLocalizedString>
+#include <KLocalizedString>
 #include <QDebug>
 #include <ktcpsocket.h>
 

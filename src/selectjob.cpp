@@ -19,7 +19,7 @@
 
 #include "selectjob.h"
 
-#include <KDE/KLocalizedString>
+#include <KLocalizedString>
 #include <qdebug.h>
 
 #include "job_p.h"

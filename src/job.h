@@ -22,7 +22,7 @@
 
 #include "kimap_export.h"
 
-#include <KDE/KJob>
+#include <KJob>
 #include <ktcpsocket.h>
 
 namespace KIMAP {

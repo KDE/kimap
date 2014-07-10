@@ -20,7 +20,7 @@
 #include "idlejob.h"
 
 #include <QtCore/QTimer>
-#include <KDE/KLocalizedString>
+#include <KLocalizedString>
 
 #include "job_p.h"
 #include "message_p.h"
