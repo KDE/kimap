@@ -21,7 +21,6 @@
 #define KIMAP_JOB_P_H
 
 #include "session.h"
-#include <KLocalizedString>
 #include <ktcpsocket.h>
 
 namespace KIMAP {
