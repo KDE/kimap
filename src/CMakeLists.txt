@@ -63,6 +63,7 @@ PRIVATE
   KF5::KIOCore
   KF5::CoreAddons
   KF5::I18n
+  KF5::KDELibs4Support
   ${Sasl2_LIBRARIES}
 )
 

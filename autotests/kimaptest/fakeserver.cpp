@@ -27,8 +27,8 @@
 #include <QDebug>
 #include <QTcpServer>
 
-// KDE
 #include <QDebug>
+#include <QFile>
 #include <qtest.h>
 
 #include "imapstreamparser.h"
