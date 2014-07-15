@@ -74,7 +74,7 @@ void testStore()
     fakeServer.setScenario( scenario );
     fakeServer.startAndWait();
 
-    KIMAP::Session session( "127.0.0.1", 5989 );
+    KIMAP::Session session( QLatin1String("127.0.0.1"), 5989 );
 
     KIMAP::StoreJob *job = new KIMAP::StoreJob( &session );
     job->setUidBased( uidBased );

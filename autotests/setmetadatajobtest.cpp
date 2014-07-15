@@ -61,7 +61,7 @@ void metadata()
   fakeServer.setScenario( scenario );
   fakeServer.startAndWait();
 
-  KIMAP::Session session( "127.0.0.1", 5989 );
+  KIMAP::Session session( QLatin1String("127.0.0.1"), 5989 );
 
   KIMAP::SetMetaDataJob *setMetadataJob = new KIMAP::SetMetaDataJob( &session );
   setMetadataJob->setServerCapability( KIMAP::MetaDataJobBase::Metadata );
@@ -106,7 +106,7 @@ void annotatemore()
   fakeServer.setScenario( scenario );
   fakeServer.startAndWait();
 
-  KIMAP::Session session( "127.0.0.1", 5989 );
+  KIMAP::Session session( QLatin1String("127.0.0.1"), 5989 );
 
   KIMAP::SetMetaDataJob *setMetadataJob = new KIMAP::SetMetaDataJob( &session );
   setMetadataJob->setServerCapability( KIMAP::MetaDataJobBase::Annotatemore );

@@ -57,9 +57,9 @@ int main( int argc, char **argv )
 
   QString server = QString::fromLocal8Bit( argv[1] );
   int port = 143;
-  if ( server.count( ':' ) == 1 ) {
-    port = server.split( ':' ).last().toInt();
-    server = server.split( ':' ).first();
+  if ( server.count( QLatin1Char(':') ) == 1 ) {
+    port = server.split( QLatin1Char(':') ).last().toInt();
+    server = server.split( QLatin1Char(':') ).first();
   }
   QString user = QString::fromLocal8Bit( argv[2] );
   QString password = QString::fromLocal8Bit( argv[3] );
@@ -93,7 +93,7 @@ int main( int argc, char **argv )
 
   qDebug() << "Selecting INBOX:";
   SelectJob *select = new SelectJob( &session );
-  select->setMailBox( "INBOX" );
+  select->setMailBox( QLatin1String("INBOX") );
   select->exec();
   Q_ASSERT_X( select->error() == 0, "SelectJob", select->errorString().toLocal8Bit().constData() );
   Q_ASSERT( session.state() == Session::Selected );

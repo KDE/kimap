@@ -51,7 +51,7 @@ class SessionTest : public QObject
          << FakeServer::greeting()
       );
       fakeServer.startAndWait();
-      KIMAP::Session s( "127.0.0.1", 5989 );
+      KIMAP::Session s( QLatin1String("127.0.0.1"), 5989 );
       QSignalSpy spy(&s, SIGNAL(stateChanged(KIMAP::Session::State,KIMAP::Session::State)));
       QCOMPARE( ( int )s.state(), ( int )KIMAP::Session::Disconnected );
       QTest::qWait( 600 );
@@ -64,7 +64,7 @@ class SessionTest : public QObject
 
     void shouldFailForInvalidHosts()
     {
-      KIMAP::Session s( "0.0.0.0", 1234 );
+      KIMAP::Session s( QLatin1String("0.0.0.0"), 1234 );
       s.setTimeout( 1 ); // 1 second timout
 
       QSignalSpy spyFail( &s, SIGNAL(connectionFailed()) );
@@ -96,7 +96,7 @@ class SessionTest : public QObject
       fakeServer.setScenario( QList<QByteArray>() );
       fakeServer.startAndWait();
 
-      KIMAP::Session s( "127.0.0.1", 5989 );
+      KIMAP::Session s( QLatin1String("127.0.0.1"), 5989 );
       s.setTimeout( 2 );
       QSignalSpy spyFail( &s, SIGNAL(connectionFailed()) );
       QSignalSpy spyLost( &s, SIGNAL(connectionLost()) );
@@ -128,7 +128,7 @@ class SessionTest : public QObject
       );
       fakeServer.startAndWait();
 
-      KIMAP::Session s( "127.0.0.1", 5989 );
+      KIMAP::Session s( QLatin1String("127.0.0.1"), 5989 );
       QSignalSpy spy(&s, SIGNAL(stateChanged(KIMAP::Session::State,KIMAP::Session::State)));
       QCOMPARE( ( int )s.state(), ( int )KIMAP::Session::Disconnected );
       QTest::qWait( 500 );
@@ -147,7 +147,7 @@ class SessionTest : public QObject
       );
       fakeServer.startAndWait();
 
-      KIMAP::Session s( "127.0.0.1", 5989 );
+      KIMAP::Session s( QLatin1String("127.0.0.1"), 5989 );
       MockJob *j1 = new MockJob( &s );
       connect( j1, SIGNAL(result(KJob*)), this, SLOT(jobDone(KJob*)) );
       MockJob *j2 = new MockJob( &s );
@@ -180,7 +180,7 @@ class SessionTest : public QObject
       );
       fakeServer.startAndWait();
 
-      KIMAP::Session s( "127.0.0.1", 5989 );
+      KIMAP::Session s( QLatin1String("127.0.0.1"), 5989 );
 
       QSignalSpy queueSpy( &s, SIGNAL(jobQueueSizeChanged(int)) );
 
@@ -248,7 +248,7 @@ class SessionTest : public QObject
       );
       fakeServer.startAndWait();
 
-      KIMAP::Session s( "127.0.0.1", 5989 );
+      KIMAP::Session s( QLatin1String("127.0.0.1"), 5989 );
 
       QSignalSpy spyFail( &s, SIGNAL(connectionFailed()) );
       QSignalSpy spyLost( &s, SIGNAL(connectionLost()) );
@@ -273,7 +273,7 @@ class SessionTest : public QObject
       fakeServer.setScenario( QList<QByteArray>() );
       fakeServer.startAndWait();
 
-      KIMAP::Session s( "127.0.0.1", 5989 );
+      KIMAP::Session s( QLatin1String("127.0.0.1"), 5989 );
       s.setTimeout( 1 );
 
       MockJob *j1 = new MockJob( &s );
@@ -321,7 +321,7 @@ class SessionTest : public QObject
         );
         fakeServer.startAndWait();
 
-        KIMAP::Session s( "127.0.0.1", 5989 );
+        KIMAP::Session s( QLatin1String("127.0.0.1"), 5989 );
 
         QSignalSpy spyFail( &s, SIGNAL(connectionFailed()) );
         QSignalSpy spyLost( &s, SIGNAL(connectionLost()) );

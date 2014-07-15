@@ -54,7 +54,7 @@ void testAppend_data() {
     scenario << FakeServer::preauth()
             << "C: A000001 APPEND \"INBOX\" (\\Seen) \"26-Feb-2014 12:38:00 +0000\"  {7}\r\ncontent"
             << "S: A000001 OK APPEND completed. [ APPENDUID 493 2672 ]";
-    QTest::newRow( "good, with internalDate set" ) << "INBOX" << scenario << flags << KDateTime::fromString("2014-02-26T12:38:00Z") << QByteArray("content") << qint64(2672);
+    QTest::newRow( "good, with internalDate set" ) << "INBOX" << scenario << flags << KDateTime::fromString(QLatin1String("2014-02-26T12:38:00Z")) << QByteArray("content") << qint64(2672);
   }
 
   {
@@ -87,7 +87,7 @@ void testAppend()
     FakeServer fakeServer;
     fakeServer.setScenario( scenario );
     fakeServer.startAndWait();
-    KIMAP::Session session( "127.0.0.1", 5989 );
+    KIMAP::Session session( QLatin1String("127.0.0.1"), 5989 );
 
     KIMAP::AppendJob *job = new KIMAP::AppendJob( &session );
     job->setContent( content );

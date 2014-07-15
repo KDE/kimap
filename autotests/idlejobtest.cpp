@@ -69,7 +69,7 @@ void shouldReactToIdle_data()
            << "S: * 2 EXISTS"
            << "S: A000002 OK done idling";
 
-  expectedMailBox = "INBOX/Foo";
+  expectedMailBox = QLatin1String("INBOX/Foo");
 
   expectedMessageCounts.clear();
   expectedRecentCounts.clear();
@@ -89,7 +89,7 @@ void shouldReactToIdle_data()
            << "S: * 1 RECENT"
            << "S: A000002 OK done idling";
 
-  expectedMailBox = "INBOX/Foo";
+  expectedMailBox = QLatin1String("INBOX/Foo");
 
   expectedMessageCounts.clear();
   expectedRecentCounts.clear();
@@ -109,7 +109,7 @@ void shouldReactToIdle_data()
            << "S: * 2 EXISTS"
            << "S: A000002 OK done idling";
 
-  expectedMailBox = "INBOX/Foo";
+  expectedMailBox = QLatin1String("INBOX/Foo");
 
   expectedMessageCounts.clear();
   expectedRecentCounts.clear();
@@ -130,7 +130,7 @@ void shouldReactToIdle_data()
            << "S: * 1 RECENT"
            << "S: A000002 OK done idling";
 
-  expectedMailBox = "INBOX/Foo";
+  expectedMailBox = QLatin1String("INBOX/Foo");
 
   expectedMessageCounts.clear();
   expectedRecentCounts.clear();
@@ -151,7 +151,7 @@ void shouldReactToIdle_data()
            << "S: * 1 RECENT"
            << "S: A000002 OK done idling";
 
-  expectedMailBox = "INBOX/Foo";
+  expectedMailBox = QLatin1String("INBOX/Foo");
 
   expectedMessageCounts.clear();
   expectedRecentCounts.clear();
@@ -172,7 +172,7 @@ void shouldReactToIdle_data()
            << "S: * 2 FETCH (FLAGS (\\Seen))"
            << "S: A000002 OK done idling";
 
-  expectedMailBox = "INBOX/Foo";
+  expectedMailBox = QLatin1String("INBOX/Foo");
 
   expectedMessageCounts.clear();
   expectedRecentCounts.clear();
@@ -195,7 +195,7 @@ void shouldReactToIdle()
     fakeServer.setScenario( scenario );
     fakeServer.startAndWait();
 
-    KIMAP::Session session( "127.0.0.1", 5989 );
+    KIMAP::Session session( QLatin1String("127.0.0.1"), 5989 );
 
     KIMAP::SelectJob *select = new KIMAP::SelectJob( &session );
     select->setMailBox( expectedMailBox );
@@ -272,11 +272,11 @@ void shouldResetTimeout()
   fakeServer.setScenario( scenario );
   fakeServer.startAndWait();
 
-  KIMAP::Session session( "127.0.0.1", 5989 );
+  KIMAP::Session session( QLatin1String("127.0.0.1"), 5989 );
   const int originalTimeout = session.timeout();
 
   KIMAP::SelectJob *select = new KIMAP::SelectJob( &session );
-  select->setMailBox( "INBOX" );
+  select->setMailBox( QLatin1String("INBOX") );
   QVERIFY( select->exec() );
 
   KIMAP::IdleJob *idle = new KIMAP::IdleJob( &session );

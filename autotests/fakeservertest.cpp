@@ -34,24 +34,24 @@ void testLoadScenario() {
   KIMAP::MailBoxDescriptor descriptor;
   QList<KIMAP::MailBoxDescriptor> listresult;
 
-  descriptor.separator = '/';
-  descriptor.name = "INBOX";
+  descriptor.separator = QLatin1Char('/');
+  descriptor.name = QLatin1String("INBOX");
   listresult << descriptor;
-  descriptor.separator = '/';
+  descriptor.separator = QLatin1Char('/');
   descriptor.name = QString::fromUtf8( "INBOX/ä ö ü @ €" );
   listresult << descriptor;
-  descriptor.separator = '/';
-  descriptor.name = "INBOX/lost+found";
+  descriptor.separator = QLatin1Char('/');
+  descriptor.name = QLatin1String("INBOX/lost+found");
   listresult << descriptor;
-  descriptor.separator = '/';
-  descriptor.name = "INBOX/lost+found/Calendar Public-20080128";
+  descriptor.separator = QLatin1Char('/');
+  descriptor.name = QLatin1String("INBOX/lost+found/Calendar Public-20080128");
   listresult << descriptor;
 
   FakeServer fakeServer;
-  fakeServer.addScenarioFromFile( TEST_DATA "/fakeserverscenario.log" );
+  fakeServer.addScenarioFromFile( QString(QLatin1String(TEST_DATA) + QLatin1String("/fakeserverscenario.log") ) );
   fakeServer.startAndWait();
 
-  KIMAP::Session session( "127.0.0.1", 5989 );
+  KIMAP::Session session( QLatin1String("127.0.0.1"), 5989 );
 
   KIMAP::ListJob *job = new KIMAP::ListJob( &session );
   job->setIncludeUnsubscribed( true );

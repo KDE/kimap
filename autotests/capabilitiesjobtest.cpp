@@ -44,7 +44,7 @@ void testCapabilities_data() {
            << "S: A000001 OK CAPABILITY completed";
 
   QStringList capabilities;
-  capabilities << "IMAP4REV1" << "STARTTLS" <<  "AUTH=GSSAPI";
+  capabilities << QLatin1String("IMAP4REV1") << QLatin1String("STARTTLS") <<  QLatin1String("AUTH=GSSAPI");
   QTest::newRow( "good" ) << scenario << capabilities;
 
   scenario.clear();
@@ -62,7 +62,7 @@ void testCapabilities_data() {
            << "S: * some response"
            << "S: A000001 OK CAPABILITY completed";
 
-  capabilities << "IMAP4REV1" << "STARTTLS" <<  "AUTH=PLAIN";
+  capabilities << QLatin1String("IMAP4REV1") << QLatin1String("STARTTLS") <<  QLatin1String("AUTH=PLAIN");
   QTest::newRow( "extra-untagged" ) << scenario << capabilities;;
 }
 
@@ -74,7 +74,7 @@ void testCapabilities()
     FakeServer fakeServer;
     fakeServer.setScenario( scenario );
     fakeServer.startAndWait();
-    KIMAP::Session session( "127.0.0.1", 5989 );
+    KIMAP::Session session( QLatin1String("127.0.0.1"), 5989 );
 
     KIMAP::CapabilitiesJob *job = new KIMAP::CapabilitiesJob( &session );
     bool result = job->exec();

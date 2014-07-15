@@ -91,7 +91,7 @@ Q_DECLARE_METATYPE( QList<QByteArray> )
  * fakeServer.setScenario( scenario );
  * fakeServer.startAndWait();
  *
- * KIMAP::Session session( "127.0.0.1", 5989 );
+ * KIMAP::Session session( QLatin1String("127.0.0.1"), 5989 );
  * KIMAP::CapabilitiesJob *job = new KIMAP::CapabilitiesJob(&session);
  * QVERIFY( job->exec() );
  * // check the returned capabilities

@@ -100,11 +100,11 @@ void testSingleSelect()
     fakeServer.setScenario( scenario );
     fakeServer.startAndWait();
 
-    KIMAP::Session session( "127.0.0.1", 5989 );
+    KIMAP::Session session( QLatin1String("127.0.0.1"), 5989 );
 
     KIMAP::SelectJob *job = new KIMAP::SelectJob( &session );
     job->setCondstoreEnabled( condstoreEnabled );
-    job->setMailBox( "INBOX" );
+    job->setMailBox( QLatin1String("INBOX") );
     bool result = job->exec();
     QEXPECT_FAIL( "bad" , "Expected failure on BAD scenario", Continue );
     QEXPECT_FAIL( "no" , "Expected failure on NO scenario", Continue );
@@ -135,14 +135,14 @@ void testSeveralSelect()
     );
     fakeServer.startAndWait();
 
-    KIMAP::Session session( "127.0.0.1", 5989 );
+    KIMAP::Session session( QLatin1String("127.0.0.1"), 5989 );
 
     KIMAP::SelectJob *job = new KIMAP::SelectJob( &session );
-    job->setMailBox( "INBOX" );
+    job->setMailBox( QLatin1String("INBOX") );
     QVERIFY( job->exec() );
 
     job = new KIMAP::SelectJob( &session );
-    job->setMailBox( "INBOX/Foo" );
+    job->setMailBox( QLatin1String("INBOX/Foo") );
     QVERIFY( job->exec() );
 }
 

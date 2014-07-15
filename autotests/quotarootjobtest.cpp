@@ -156,7 +156,7 @@ void testGetQuotaRoot()
     fakeServer.setScenario( scenario );
     fakeServer.startAndWait();
 
-    KIMAP::Session session( "127.0.0.1", 5989 );
+    KIMAP::Session session( QLatin1String("127.0.0.1"), 5989 );
 
     KIMAP::GetQuotaRootJob *job = new KIMAP::GetQuotaRootJob( &session );
     job->setMailBox( mailbox );

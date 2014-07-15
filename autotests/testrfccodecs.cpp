@@ -36,7 +36,7 @@ void RFCCodecsTest::testIMAPEncoding()
   bEncoded = encodeImapFolderName( QString::fromUtf8( "Test.Frode Rønning" ).toUtf8() );
   QCOMPARE( bEncoded, QString::fromUtf8( "Test.Frode R&APg-nning" ).toUtf8() );
 
-  decoded = decodeImapFolderName( QString( "Test.Frode R&APg-nning" ) );
+  decoded = decodeImapFolderName( QString::fromLatin1( "Test.Frode R&APg-nning" ) );
   QCOMPARE( decoded, QString::fromUtf8( "Test.Frode Rønning" ) );
   bDecoded = decodeImapFolderName( QString::fromUtf8( "Test.Frode Rønning"  ).toUtf8() );
   QCOMPARE( bDecoded, QString::fromUtf8( "Test.Frode Rønning" ).toUtf8() );
@@ -69,10 +69,10 @@ void RFCCodecsTest::testIMAPEncoding()
 
 void RFCCodecsTest::testQuotes()
 {
-  QString test( "tom\"allen" );
-  QCOMPARE( quoteIMAP( test ), QString( "tom\\\"allen" ) );
-  test = "tom\'allen";
-  QCOMPARE( quoteIMAP( test ), QString( "tom\'allen"  ) );
-  test =  "tom\\allen";
-  QCOMPARE( quoteIMAP( test ), QString( "tom\\\\allen"  ) );
+  QString test( QLatin1String("tom\"allen") );
+  QCOMPARE( quoteIMAP( test ), QString::fromLatin1( "tom\\\"allen" ) );
+  test = QLatin1String("tom\'allen");
+  QCOMPARE( quoteIMAP( test ), QString::fromLatin1( "tom\'allen"  ) );
+  test =  QLatin1String("tom\\allen");
+  QCOMPARE( quoteIMAP( test ), QString::fromLatin1( "tom\\\\allen"  ) );
 }
