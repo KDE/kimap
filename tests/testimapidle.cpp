@@ -89,7 +89,7 @@ int main( int argc, char **argv )
   qDebug() << capabilities->capabilities();
   qDebug();
 
-  Q_ASSERT( capabilities->capabilities().contains( "IDLE" ) );
+  Q_ASSERT( capabilities->capabilities().contains( QLatin1String("IDLE") ) );
 
   qDebug() << "Selecting INBOX:";
   SelectJob *select = new SelectJob( &session );
