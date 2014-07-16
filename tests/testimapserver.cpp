@@ -127,8 +127,8 @@ void testMetaData(Session *session)
   getmetadata->setServerCapability( SetMetaDataJob::Annotatemore );
   getmetadata->addEntry( "/*", "value.priv" );
   getmetadata->exec();
-  Q_ASSERT_X( getmetadata->metaData( "INBOX/TestFolder", "/check", "value.priv" ) == "true", "",  "/check metadata should be true" );
-  Q_ASSERT_X( getmetadata->metaData( "INBOX/TestFolder", "/comment", "value.priv" ) == "My new comment", "",  "/check metadata should be My new comment" );
+  Q_ASSERT_X( getmetadata->metaData( QLatin1String("INBOX/TestFolder"), "/check", "value.priv" ) == "true", "",  "/check metadata should be true" );
+  Q_ASSERT_X( getmetadata->metaData( QLatin1String("INBOX/TestFolder"), "/comment", "value.priv" ) == "My new comment", "",  "/check metadata should be My new comment" );
 
   //cleanup
   DeleteJob *deletejob = new DeleteJob( session );
