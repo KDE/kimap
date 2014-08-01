@@ -25,7 +25,8 @@
 #include "acl.h"
 #include "job.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 struct Message;
@@ -42,22 +43,22 @@ class AclJobBasePrivate;
 */
 class KIMAP_EXPORT AclJobBase : public Job
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( AclJobBase )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(AclJobBase)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
-    AclJobBase( Session *session );
+public:
+    AclJobBase(Session *session);
     virtual ~AclJobBase();
 
     /**
      * Used when subclassing to specify how the ACL will be modified.
      */
     enum AclModifier {
-      Add = 0,
-      Remove,
-      Change
+        Add = 0,
+        Remove,
+        Change
     };
 
     /**
@@ -65,14 +66,14 @@ class KIMAP_EXPORT AclJobBase : public Job
      *
      * @param mailBox  the name of an existing mailbox
      */
-    void setMailBox( const QString &mailBox );
+    void setMailBox(const QString &mailBox);
     /**
      * The mailbox that will be acted upon.
      */
     QString mailBox() const;
 
-  protected:
-    explicit AclJobBase( JobPrivate &dd );
+protected:
+    explicit AclJobBase(JobPrivate &dd);
 
 };
 

@@ -24,26 +24,27 @@
 
 #include "job.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 class UnsubscribeJobPrivate;
 
 class KIMAP_EXPORT UnsubscribeJob : public Job
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( UnsubscribeJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(UnsubscribeJob)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
-    explicit UnsubscribeJob( Session *session );
+public:
+    explicit UnsubscribeJob(Session *session);
     virtual ~UnsubscribeJob();
 
-    void setMailBox( const QString &mailBox );
+    void setMailBox(const QString &mailBox);
     QString mailBox() const;
 
-  protected:
+protected:
     virtual void doStart();
 };
 

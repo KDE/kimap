@@ -22,7 +22,8 @@
 
 #include "quotajobbase.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 struct Message;
@@ -49,13 +50,13 @@ class GetQuotaRootJobPrivate;
  */
 class KIMAP_EXPORT GetQuotaRootJob : public QuotaJobBase
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( GetQuotaRootJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(GetQuotaRootJob)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
-    explicit GetQuotaRootJob( Session *session );
+public:
+    explicit GetQuotaRootJob(Session *session);
     virtual ~GetQuotaRootJob();
 
     /**
@@ -113,7 +114,7 @@ class KIMAP_EXPORT GetQuotaRootJob : public QuotaJobBase
      */
     QMap<QByteArray, qint64> allLimits(const QByteArray &root) const;
 
-  protected:
+protected:
     virtual void doStart();
     virtual void handleResponse(const Message &response);
 

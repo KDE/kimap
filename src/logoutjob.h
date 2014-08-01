@@ -24,23 +24,24 @@
 
 #include "job.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 class LogoutJobPrivate;
 
 class KIMAP_EXPORT LogoutJob : public Job
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( LogoutJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(LogoutJob)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
-    explicit LogoutJob( Session *session );
+public:
+    explicit LogoutJob(Session *session);
     virtual ~LogoutJob();
 
-  protected:
+protected:
     virtual void doStart();
     virtual void connectionLost();
 };

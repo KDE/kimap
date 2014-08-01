@@ -24,7 +24,8 @@
 
 #include "metadatajobbase.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 struct Message;
@@ -67,13 +68,13 @@ class SetMetaDataJobPrivate;
  */
 class KIMAP_EXPORT SetMetaDataJob : public MetaDataJobBase
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( SetMetaDataJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(SetMetaDataJob)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
-    explicit SetMetaDataJob( Session *session );
+public:
+    explicit SetMetaDataJob(Session *session);
     virtual ~SetMetaDataJob();
 
     /**
@@ -178,14 +179,14 @@ class KIMAP_EXPORT SetMetaDataJob : public MetaDataJobBase
      * Possible error codes that may be returned by the server.
      */
     enum MetaDataError {
-      NoError = 0,  /**< Used to indicate that no errors have been received */
-      TooMany = 1,  /**< Cannot add a new metadata item, because the limit has already been reached */
-      TooBig = 2,   /**< A metadata value was too big (see maxAcceptedSize()) */
-      NoPrivate = 4 /**< The server does not support private metadata entries */
+        NoError = 0,  /**< Used to indicate that no errors have been received */
+        TooMany = 1,  /**< Cannot add a new metadata item, because the limit has already been reached */
+        TooBig = 2,   /**< A metadata value was too big (see maxAcceptedSize()) */
+        NoPrivate = 4 /**< The server does not support private metadata entries */
     };
 
     // Q_DECLARE_WHATEVER_THAT_WAS missing
-    Q_DECLARE_FLAGS( MetaDataErrors, MetaDataError )
+    Q_DECLARE_FLAGS(MetaDataErrors, MetaDataError)
 
     /**
      * The metadata errors received from the server.
@@ -204,14 +205,14 @@ class KIMAP_EXPORT SetMetaDataJob : public MetaDataJobBase
      */
     qint64 maxAcceptedSize();
 
-  protected:
+protected:
     virtual void doStart();
-    virtual void handleResponse( const Message &response );
+    virtual void handleResponse(const Message &response);
 
 };
 
 }
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( KIMAP::SetMetaDataJob::MetaDataErrors )
+Q_DECLARE_OPERATORS_FOR_FLAGS(KIMAP::SetMetaDataJob::MetaDataErrors)
 
 #endif

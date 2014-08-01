@@ -22,11 +22,11 @@
 
 #include <QDebug>
 
-
-static QByteArray staticCert() {
-  //a dummy certificate
-  return QByteArray(
-"-----BEGIN CERTIFICATE-----\n\
+static QByteArray staticCert()
+{
+    //a dummy certificate
+    return QByteArray(
+               "-----BEGIN CERTIFICATE-----\n\
 MIIB+zCCAWQCCQDBBi7xZ2944DANBgkqhkiG9w0BAQUFADBCMQswCQYDVQQGEwJY\n\
 WDEVMBMGA1UEBwwMRGVmYXVsdCBDaXR5MRwwGgYDVQQKDBNEZWZhdWx0IENvbXBh\n\
 bnkgTHRkMB4XDTEzMTIwNTA5MDcxNVoXDTQxMDQyMjA5MDcxNVowQjELMAkGA1UE\n\
@@ -41,10 +41,11 @@ rOEQiDe3oerErB0x9FMWk7VivEqO5HGEdxy7fGl3vg==\n\
 -----END CERTIFICATE-----");
 }
 
-static QByteArray staticKey() {
-  //a dummy key without password
-  return QByteArray(
-"-----BEGIN RSA PRIVATE KEY-----\n\
+static QByteArray staticKey()
+{
+    //a dummy key without password
+    return QByteArray(
+               "-----BEGIN RSA PRIVATE KEY-----\n\
 MIICXgIBAAKBgQDK5l16pODNfYRD606Pz9DNPyMc5S/CV6q/nqEA4RtnmkuFg96x\n\
 pKpXSUAOJgcqMJFUiuElBd49/vIysnfMTqFscQygiP6S7q201CR8mJ/fTCZtfEtc\n\
 75GqtpiAlbvfSRxuLYnKrtyIQLVJV6IhpqJXbJQUFz8BEMUFzvvfdjTndQIDAQAB\n\
@@ -62,52 +63,52 @@ IiVUnppVeiLFa7ItwHOovgqvWVbePd5xl6+yBGxUXznjWA==\n\
 }
 
 SslServer::SslServer(QSsl::SslProtocol protocol)
-: QTcpServer(),
-  mProtocol(protocol)
+    : QTcpServer(),
+      mProtocol(protocol)
 {
 
 }
 
 void SslServer::incomingConnection(int handle)
 {
-  QSslSocket *socket = new QSslSocket();
-  socket->setSocketDescriptor(handle);
+    QSslSocket *socket = new QSslSocket();
+    socket->setSocketDescriptor(handle);
 
-  socket->setProtocol(mProtocol);
+    socket->setProtocol(mProtocol);
 
-  QSslKey ssl_key(staticKey(), QSsl::Rsa);
-  QSslCertificate ssl_cert(staticCert());
-  Q_ASSERT(ssl_cert.isValid());
+    QSslKey ssl_key(staticKey(), QSsl::Rsa);
+    QSslCertificate ssl_cert(staticCert());
+    Q_ASSERT(ssl_cert.isValid());
 
-  socket->setPrivateKey(ssl_key);
-  socket->setLocalCertificate(ssl_cert);
-  socket->setCaCertificates(QList<QSslCertificate>() << ssl_cert);
-  socket->setPeerVerifyMode(QSslSocket::VerifyNone);
-  socket->ignoreSslErrors();
-  connect(socket, SIGNAL(sslErrors(QList<QSslError>)), this, SLOT(sslErrors(QList<QSslError>)));
-  connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
-  if (mProtocol != QSsl::TlsV1) {
-    socket->startServerEncryption();
-  }
-  addPendingConnection(socket);
+    socket->setPrivateKey(ssl_key);
+    socket->setLocalCertificate(ssl_cert);
+    socket->setCaCertificates(QList<QSslCertificate>() << ssl_cert);
+    socket->setPeerVerifyMode(QSslSocket::VerifyNone);
+    socket->ignoreSslErrors();
+    connect(socket, SIGNAL(sslErrors(QList<QSslError>)), this, SLOT(sslErrors(QList<QSslError>)));
+    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
+    if (mProtocol != QSsl::TlsV1) {
+        socket->startServerEncryption();
+    }
+    addPendingConnection(socket);
 }
 
 void SslServer::sslErrors(const QList<QSslError> &errors)
 {
-  foreach (const QSslError &error, errors) {
-    qWarning() << "Received ssl error: " << error.errorString();
-  }
-  QSslSocket *socket = qobject_cast<QSslSocket *>(QObject::sender());
-  if(socket) {
-    socket->disconnectFromHost();
-  }
+    foreach (const QSslError &error, errors) {
+        qWarning() << "Received ssl error: " << error.errorString();
+    }
+    QSslSocket *socket = qobject_cast<QSslSocket *>(QObject::sender());
+    if (socket) {
+        socket->disconnectFromHost();
+    }
 }
 
 void SslServer::error(QAbstractSocket::SocketError error)
 {
-  QSslSocket *socket = qobject_cast<QSslSocket *>(QObject::sender());
-  if(socket) {
-    qWarning() << socket->errorString();
-  }
-  qWarning() << error;
+    QSslSocket *socket = qobject_cast<QSslSocket *>(QObject::sender());
+    if (socket) {
+        qWarning() << socket->errorString();
+    }
+    qWarning() << error;
 }

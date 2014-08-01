@@ -24,37 +24,38 @@
 
 #include "job.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 class RenameJobPrivate;
 
 class KIMAP_EXPORT RenameJob : public Job
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( RenameJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(RenameJob)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
-    explicit RenameJob( Session *session );
+public:
+    explicit RenameJob(Session *session);
     virtual ~RenameJob();
 
     /**
      * Set the name of the mailbox that will be renamed.
      * @param mailBox the original name of the mailbox
      */
-    void setSourceMailBox( const QString &mailBox );
+    void setSourceMailBox(const QString &mailBox);
     QString sourceMailBox() const;
 
     /**
      * The new name of the mailbox, see setMailBox.
      * @param mailBox the new mailbox name
      */
-    void setDestinationMailBox( const QString &mailBox );
+    void setDestinationMailBox(const QString &mailBox);
     QString destinationMailBox() const;
 
-  protected:
+protected:
     virtual void doStart();
 };
 

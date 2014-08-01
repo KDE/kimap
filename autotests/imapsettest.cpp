@@ -27,50 +27,50 @@ using namespace KIMAP;
 
 class ImapSetTest : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
 private Q_SLOTS:
-  void shouldConvertToAndFromByteArray_data()
-  {
-    ImapSet set;
+    void shouldConvertToAndFromByteArray_data()
+    {
+        ImapSet set;
 
-    QTest::addColumn<ImapSet>( "imapSet" );
-    QTest::addColumn<QByteArray>( "byteArray" );
+        QTest::addColumn<ImapSet>("imapSet");
+        QTest::addColumn<QByteArray>("byteArray");
 
-    QTest::newRow( "empty set" ) << ImapSet() << QByteArray();
-    QTest::newRow( "unique value" ) << ImapSet( 7 ) << QByteArray( "7" );
-    QTest::newRow( "single interval" ) << ImapSet( 7, 10 ) << QByteArray( "7:10" );
-    QTest::newRow( "single interval with no upper bound" ) << ImapSet( 1, 0 ) << QByteArray( "1:*" );
+        QTest::newRow("empty set") << ImapSet() << QByteArray();
+        QTest::newRow("unique value") << ImapSet(7) << QByteArray("7");
+        QTest::newRow("single interval") << ImapSet(7, 10) << QByteArray("7:10");
+        QTest::newRow("single interval with no upper bound") << ImapSet(1, 0) << QByteArray("1:*");
 
-    set = ImapSet( 7, 10 );
-    set.add( ImapInterval( 12, 14 ) );
-    QTest::newRow( "two intervals" ) << set << QByteArray( "7:10,12:14" );
+        set = ImapSet(7, 10);
+        set.add(ImapInterval(12, 14));
+        QTest::newRow("two intervals") << set << QByteArray("7:10,12:14");
 
-    set = ImapSet( 7, 10 );
-    set.add( ImapInterval( 12 ) );
-    QTest::newRow( "two intervals with an infinite one" ) << set << QByteArray( "7:10,12:*" );
+        set = ImapSet(7, 10);
+        set.add(ImapInterval(12));
+        QTest::newRow("two intervals with an infinite one") << set << QByteArray("7:10,12:*");
 
-    set = ImapSet( 7, 10 );
-    set.add( 5 );
-    QTest::newRow( "one interval and a value" ) << set << QByteArray( "7:10,5" );
+        set = ImapSet(7, 10);
+        set.add(5);
+        QTest::newRow("one interval and a value") << set << QByteArray("7:10,5");
 
-    set = ImapSet( 7, 10 );
-    set.add( QList<ImapSet::Id>() << 5 << 3 );
-    QTest::newRow( "one interval and two values" ) << set << QByteArray( "7:10,3,5" );
-  }
+        set = ImapSet(7, 10);
+        set.add(QList<ImapSet::Id>() << 5 << 3);
+        QTest::newRow("one interval and two values") << set << QByteArray("7:10,3,5");
+    }
 
-  void shouldConvertToAndFromByteArray()
-  {
-    QFETCH( ImapSet, imapSet );
-    QFETCH( QByteArray, byteArray );
+    void shouldConvertToAndFromByteArray()
+    {
+        QFETCH(ImapSet, imapSet);
+        QFETCH(QByteArray, byteArray);
 
-    QCOMPARE( QString::fromUtf8( imapSet.toImapSequenceSet() ),
-              QString::fromUtf8( byteArray ) );
-    //qDebug() << "Expects" << imapSet << "got" << ImapSet::fromImapSequenceSet( byteArray );
-    QCOMPARE( ImapSet::fromImapSequenceSet( byteArray ), imapSet );
-  }
+        QCOMPARE(QString::fromUtf8(imapSet.toImapSequenceSet()),
+                 QString::fromUtf8(byteArray));
+        //qDebug() << "Expects" << imapSet << "got" << ImapSet::fromImapSequenceSet( byteArray );
+        QCOMPARE(ImapSet::fromImapSequenceSet(byteArray), imapSet);
+    }
 };
 
-QTEST_GUILESS_MAIN( ImapSetTest )
+QTEST_GUILESS_MAIN(ImapSetTest)
 
 #include "imapsettest.moc"

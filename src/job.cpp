@@ -27,70 +27,70 @@
 
 using namespace KIMAP;
 
-Job::Job( Session *session )
-  : KJob( session ), d_ptr( new JobPrivate( session, i18n( "Job" ) ) )
+Job::Job(Session *session)
+    : KJob(session), d_ptr(new JobPrivate(session, i18n("Job")))
 {
 }
 
-Job::Job( JobPrivate &dd )
-  : KJob( dd.m_session ), d_ptr( &dd )
+Job::Job(JobPrivate &dd)
+    : KJob(dd.m_session), d_ptr(&dd)
 {
 }
 
 Job::~Job()
 {
-  delete d_ptr;
+    delete d_ptr;
 }
 
 Session *Job::session() const
 {
-  Q_D( const Job );
-  return d->m_session;
+    Q_D(const Job);
+    return d->m_session;
 }
 
 void Job::start()
 {
-  Q_D( Job );
-  d->sessionInternal()->addJob( this );
+    Q_D(Job);
+    d->sessionInternal()->addJob(this);
 }
 
 void Job::handleResponse(const Message &response)
 {
-  handleErrorReplies( response );
+    handleErrorReplies(response);
 }
 
 void Job::connectionLost()
 {
-  setError( KJob::UserDefinedError );
-  setErrorText( i18n( "Connection to server lost." ) );
-  emitResult();
+    setError(KJob::UserDefinedError);
+    setErrorText(i18n("Connection to server lost."));
+    emitResult();
 }
 
 void Job::setSocketError(KTcpSocket::Error error)
 {
-  Q_D( Job );
-  d->m_socketError = error;
+    Q_D(Job);
+    d->m_socketError = error;
 }
 
 Job::HandlerResponse Job::handleErrorReplies(const Message &response)
 {
-  Q_D( Job );
+    Q_D(Job);
 //   qDebug() << response.toString();
 
-  if ( !response.content.isEmpty() &&
-       d->tags.contains( response.content.first().toString() ) ) {
-    if ( response.content.size() < 2 ) {
-      setErrorText( i18n( "%1 failed, malformed reply from the server.", d->m_name ) );
-    } else if ( response.content[1].toString() != "OK" ) {
-      setError( UserDefinedError );
-      setErrorText( i18n( "%1 failed, server replied: %2", d->m_name, QLatin1String(response.toString().constData()) ) );
+    if (!response.content.isEmpty() &&
+            d->tags.contains(response.content.first().toString())) {
+        if (response.content.size() < 2) {
+            setErrorText(i18n("%1 failed, malformed reply from the server.", d->m_name));
+        } else if (response.content[1].toString() != "OK") {
+            setError(UserDefinedError);
+            setErrorText(i18n("%1 failed, server replied: %2", d->m_name, QLatin1String(response.toString().constData())));
+        }
+        d->tags.removeAll(response.content.first().toString());
+        if (d->tags.isEmpty()) {   // Only emit result when the last command returned
+            emitResult();
+        }
+        return Handled;
     }
-    d->tags.removeAll( response.content.first().toString() );
-    if ( d->tags.isEmpty() ) { // Only emit result when the last command returned
-      emitResult();
-    }
-    return Handled;
-  }
 
-  return NotHandled;
+    return NotHandled;
 }

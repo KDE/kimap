@@ -29,58 +29,60 @@
 #include <QtTest>
 #include <QDebug>
 
-class SubscribeJobTest: public QObject {
-  Q_OBJECT
+class SubscribeJobTest: public QObject
+{
+    Q_OBJECT
 
 private Q_SLOTS:
 
-void testSubscribe_data() {
-  QTest::addColumn<QString>( "mailbox" );
-  QTest::addColumn< QList<QByteArray> >( "scenario" );
+    void testSubscribe_data()
+    {
+        QTest::addColumn<QString>("mailbox");
+        QTest::addColumn< QList<QByteArray> >("scenario");
 
-  QList<QByteArray> scenario;
-  scenario << FakeServer::preauth()
-           << "C: A000001 SUBSCRIBE \"INBOX/foo\""
-           << "S: A000001 OK CREATE completed";
-  QTest::newRow( "good" ) << "INBOX/foo"  << scenario ;
+        QList<QByteArray> scenario;
+        scenario << FakeServer::preauth()
+                 << "C: A000001 SUBSCRIBE \"INBOX/foo\""
+                 << "S: A000001 OK CREATE completed";
+        QTest::newRow("good") << "INBOX/foo"  << scenario ;
 
-  scenario.clear();
-  scenario << FakeServer::preauth()
-           << "C: A000001 SUBSCRIBE \"INBOX-FAIL-BAD\""
-           << "S: A000001 BAD command unknown or arguments invalid";
-  QTest::newRow( "bad" ) << "INBOX-FAIL-BAD" << scenario;
+        scenario.clear();
+        scenario << FakeServer::preauth()
+                 << "C: A000001 SUBSCRIBE \"INBOX-FAIL-BAD\""
+                 << "S: A000001 BAD command unknown or arguments invalid";
+        QTest::newRow("bad") << "INBOX-FAIL-BAD" << scenario;
 
-  scenario.clear();
-  scenario << FakeServer::preauth()
-           << "C: A000001 SUBSCRIBE \"INBOX-FAIL-NO\""
-           << "S: A000001 NO subscribe failure";
-  QTest::newRow( "no" ) << "INBOX-FAIL-NO" << scenario ;
-}
+        scenario.clear();
+        scenario << FakeServer::preauth()
+                 << "C: A000001 SUBSCRIBE \"INBOX-FAIL-NO\""
+                 << "S: A000001 NO subscribe failure";
+        QTest::newRow("no") << "INBOX-FAIL-NO" << scenario ;
+    }
 
-void testSubscribe()
-{
-    QFETCH( QString, mailbox );
-    QFETCH( QList<QByteArray>, scenario );
+    void testSubscribe()
+    {
+        QFETCH(QString, mailbox);
+        QFETCH(QList<QByteArray>, scenario);
 
-    FakeServer fakeServer;
-    fakeServer.setScenario( scenario );
-    fakeServer.startAndWait();
+        FakeServer fakeServer;
+        fakeServer.setScenario(scenario);
+        fakeServer.startAndWait();
 
-    KIMAP::Session session( QLatin1String("127.0.0.1"), 5989 );
+        KIMAP::Session session(QLatin1String("127.0.0.1"), 5989);
 
-    KIMAP::SubscribeJob *job = new KIMAP::SubscribeJob( &session );
-    job->setMailBox( mailbox );
-    bool result = job->exec();
-    QEXPECT_FAIL( "bad" , "Expected failure on BAD scenario", Continue );
-    QEXPECT_FAIL( "no" , "Expected failure on NO scenario", Continue );
-    QVERIFY( result );
-    QCOMPARE( job->mailBox(), mailbox );
+        KIMAP::SubscribeJob *job = new KIMAP::SubscribeJob(&session);
+        job->setMailBox(mailbox);
+        bool result = job->exec();
+        QEXPECT_FAIL("bad" , "Expected failure on BAD scenario", Continue);
+        QEXPECT_FAIL("no" , "Expected failure on NO scenario", Continue);
+        QVERIFY(result);
+        QCOMPARE(job->mailBox(), mailbox);
 
-    fakeServer.quit();
-}
+        fakeServer.quit();
+    }
 
 };
 
-QTEST_GUILESS_MAIN( SubscribeJobTest )
+QTEST_GUILESS_MAIN(SubscribeJobTest)
 
 #include "subscribejobtest.moc"

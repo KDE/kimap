@@ -25,7 +25,8 @@
 
 #include "job.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 struct Message;
@@ -42,13 +43,13 @@ class AppendJobPrivate;
  */
 class KIMAP_EXPORT AppendJob : public Job
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( AppendJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(AppendJob)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
-    AppendJob( Session *session );
+public:
+    AppendJob(Session *session);
     virtual ~AppendJob();
 
     /**
@@ -59,7 +60,7 @@ class KIMAP_EXPORT AppendJob : public Job
      *
      * @param mailBox  the (unquoted) name of the mailbox
      */
-    void setMailBox( const QString &mailBox );
+    void setMailBox(const QString &mailBox);
     /**
      * The mailbox that the message will be appended to.
      */
@@ -70,7 +71,7 @@ class KIMAP_EXPORT AppendJob : public Job
      *
      * @param flags  a list of flags
      */
-    void setFlags( const QList<QByteArray> &flags);
+    void setFlags(const QList<QByteArray> &flags);
     /**
      * The flags that will be set on the appended message.
      */
@@ -88,7 +89,7 @@ class KIMAP_EXPORT AppendJob : public Job
      *
      * @since 4.13
      */
-    void setInternalDate( const KDateTime &internalDate );
+    void setInternalDate(const KDateTime &internalDate);
     /**
      * The internal date that will be set on the appended message.
      *
@@ -105,7 +106,7 @@ class KIMAP_EXPORT AppendJob : public Job
      *
      * @param content  usually an RFC-2822 message
      */
-    void setContent( const QByteArray &content );
+    void setContent(const QByteArray &content);
     /**
      * The content that the message will have.
      */
@@ -122,7 +123,7 @@ class KIMAP_EXPORT AppendJob : public Job
      */
     qint64 uid() const;
 
-  protected:
+protected:
     virtual void doStart();
     virtual void handleResponse(const Message &response);
 };

@@ -24,25 +24,34 @@
 #include <QtCore/QList>
 #include <QtCore/QMetaType>
 
-namespace KIMAP {
-
-struct Message
+namespace KIMAP
 {
+
+struct Message {
     class Part
     {
-      public:
+    public:
         enum Type { String = 0, List };
 
         explicit Part(const QByteArray &string)
-          : m_type( String ), m_string( string ) { }
+            : m_type(String), m_string(string) { }
         explicit Part(const QList<QByteArray> &list)
-          : m_type( List ), m_list( list ) { }
+            : m_type(List), m_list(list) { }
 
-        inline Type type() const { return m_type; }
-        inline QByteArray toString() const { return m_string; }
-        inline QList<QByteArray> toList() const { return m_list; }
+        inline Type type() const
+        {
+            return m_type;
+        }
+        inline QByteArray toString() const
+        {
+            return m_string;
+        }
+        inline QList<QByteArray> toList() const
+        {
+            return m_list;
+        }
 
-      private:
+    private:
         Type m_type;
         QByteArray m_string;
         QList<QByteArray> m_list;
@@ -50,39 +59,39 @@ struct Message
 
     inline QByteArray toString() const
     {
-      QByteArray result;
+        QByteArray result;
 
-      foreach ( const Part &part, content ) {
-        if ( part.type() == Part::List ) {
-          result += '(';
-          foreach ( const QByteArray &item, part.toList() ) {
-            result += ' ';
-            result += item;
-          }
-          result += " ) ";
-        } else {
-          result += part.toString() + ' ';
-        }
-      }
-
-      if ( !responseCode.isEmpty() ) {
-        result+="[ ";
-        foreach ( const Part &part, responseCode ) {
-          if ( part.type() == Part::List ) {
-            result+='(';
-            foreach ( const QByteArray &item, part.toList() ) {
-              result+= ' ';
-              result+= item;
+        foreach (const Part &part, content) {
+            if (part.type() == Part::List) {
+                result += '(';
+                foreach (const QByteArray &item, part.toList()) {
+                    result += ' ';
+                    result += item;
+                }
+                result += " ) ";
+            } else {
+                result += part.toString() + ' ';
             }
-            result+=" ) ";
-          } else {
-            result+= part.toString() + ' ';
-          }
         }
-        result+=" ]";
-      }
 
-      return result;
+        if (!responseCode.isEmpty()) {
+            result += "[ ";
+            foreach (const Part &part, responseCode) {
+                if (part.type() == Part::List) {
+                    result += '(';
+                    foreach (const QByteArray &item, part.toList()) {
+                        result += ' ';
+                        result += item;
+                    }
+                    result += " ) ";
+                } else {
+                    result += part.toString() + ' ';
+                }
+            }
+            result += " ]";
+        }
+
+        return result;
     }
 
     QList<Part> content;
@@ -91,7 +100,7 @@ struct Message
 
 }
 
-Q_DECLARE_METATYPE( KIMAP::Message )
+Q_DECLARE_METATYPE(KIMAP::Message)
 static const int _kimap_messageTypeId = qRegisterMetaType<KIMAP::Message>();
 
 #endif

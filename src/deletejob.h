@@ -24,7 +24,8 @@
 
 #include "job.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 class DeleteJobPrivate;
@@ -45,25 +46,25 @@ class DeleteJobPrivate;
  */
 class KIMAP_EXPORT DeleteJob : public Job
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( DeleteJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(DeleteJob)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
-    explicit DeleteJob( Session *session );
+public:
+    explicit DeleteJob(Session *session);
     virtual ~DeleteJob();
 
     /**
      * Set the mailbox to delete.
      */
-    void setMailBox( const QString &mailBox );
+    void setMailBox(const QString &mailBox);
     /**
      * The mailbox that will be deleted.
      */
     QString mailBox() const;
 
-  protected:
+protected:
     virtual void doStart();
 };
 

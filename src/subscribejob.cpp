@@ -28,20 +28,20 @@
 
 namespace KIMAP
 {
-  class SubscribeJobPrivate : public JobPrivate
-  {
-    public:
-      SubscribeJobPrivate( Session *session, const QString& name ) : JobPrivate( session, name ) { }
-      ~SubscribeJobPrivate() { }
+class SubscribeJobPrivate : public JobPrivate
+{
+public:
+    SubscribeJobPrivate(Session *session, const QString &name) : JobPrivate(session, name) { }
+    ~SubscribeJobPrivate() { }
 
-      QString mailBox;
-  };
+    QString mailBox;
+};
 }
 
 using namespace KIMAP;
 
-SubscribeJob::SubscribeJob( Session *session )
-  : Job( *new SubscribeJobPrivate( session, i18n( "Subscribe" ) ) )
+SubscribeJob::SubscribeJob(Session *session)
+    : Job(*new SubscribeJobPrivate(session, i18n("Subscribe")))
 {
 }
 
@@ -51,18 +51,18 @@ SubscribeJob::~SubscribeJob()
 
 void SubscribeJob::doStart()
 {
-  Q_D( SubscribeJob );
-  d->tags << d->sessionInternal()->sendCommand( "SUBSCRIBE", '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + '\"' );
+    Q_D(SubscribeJob);
+    d->tags << d->sessionInternal()->sendCommand("SUBSCRIBE", '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8()) + '\"');
 }
 
-void SubscribeJob::setMailBox( const QString &mailBox )
+void SubscribeJob::setMailBox(const QString &mailBox)
 {
-  Q_D( SubscribeJob );
-  d->mailBox = mailBox;
+    Q_D(SubscribeJob);
+    d->mailBox = mailBox;
 }
 
 QString SubscribeJob::mailBox() const
 {
-  Q_D( const SubscribeJob );
-  return d->mailBox;
+    Q_D(const SubscribeJob);
+    return d->mailBox;
 }

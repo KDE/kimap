@@ -31,10 +31,10 @@
 
 namespace KIMAP
 {
-  class ImapStreamParser;
+class ImapStreamParser;
 }
 
-Q_DECLARE_METATYPE( QList<QByteArray> )
+Q_DECLARE_METATYPE(QList<QByteArray>)
 
 /**
  * Pretends to be an IMAP server for the purposes of unit tests.
@@ -126,13 +126,13 @@ public:
      */
     static QByteArray greeting();
 
-    FakeServer( QObject* parent = 0 );
+    FakeServer(QObject *parent = 0);
     ~FakeServer();
 
     /**
      * Sets the encryption mode used by the server socket.
      */
-    void setEncrypted( QSsl::SslProtocol protocol );
+    void setEncrypted(QSsl::SslProtocol protocol);
 
     /**
      * Starts the server and waits for it to be ready
@@ -160,7 +160,7 @@ public:
      * @see addScenario()\n
      * addScenarioFromFile()
      */
-    void setScenario( const QList<QByteArray> &scenario );
+    void setScenario(const QList<QByteArray> &scenario);
 
     /**
      * Adds a new scenario
@@ -175,7 +175,7 @@ public:
      *
      * @param scenario  the scenario as a list of messages
      */
-    void addScenario( const QList<QByteArray> &scenario );
+    void addScenario(const QList<QByteArray> &scenario);
     /**
      * Adds a new scenario from a local file
      *
@@ -192,7 +192,7 @@ public:
      *                  boundaries, and excess whitespace will
      *                  be trimmed from the start and end of lines
      */
-    void addScenarioFromFile( const QString &fileName );
+    void addScenarioFromFile(const QString &fileName);
 
     /**
      * Checks whether a particular scenario has completed
@@ -200,7 +200,7 @@ public:
      * @param scenarioNumber  the number of the scenario to check,
      *                        in order of addition/client connection
      */
-    bool isScenarioDone( int scenarioNumber ) const;
+    bool isScenarioDone(int scenarioNumber) const;
     /**
      * Whether all the scenarios that were added to the fake
      * server have been completed.
@@ -212,7 +212,7 @@ protected:
      * Whether the received content is the same as the expected.
      * Use QCOMPARE, if creating subclasses.
      */
-    virtual void compareReceived(const QByteArray& received, const QByteArray& expected) const;
+    virtual void compareReceived(const QByteArray &received, const QByteArray &expected) const;
 
 private Q_SLOTS:
     void newConnection();
@@ -220,14 +220,14 @@ private Q_SLOTS:
     void started();
 
 private:
-    void writeServerPart( int scenarioNumber );
-    void readClientPart( int scenarioNumber );
+    void writeServerPart(int scenarioNumber);
+    void readClientPart(int scenarioNumber);
 
     QList< QList<QByteArray> > m_scenarios;
     QTcpServer *m_tcpServer;
     mutable QMutex m_mutex;
-    QList<QTcpSocket*> m_clientSockets;
-    QList<KIMAP::ImapStreamParser*> m_clientParsers;
+    QList<QTcpSocket *> m_clientSockets;
+    QList<KIMAP::ImapStreamParser *> m_clientParsers;
     bool m_encrypted;
     bool m_starttls;
     QSsl::SslProtocol m_sslProtocol;

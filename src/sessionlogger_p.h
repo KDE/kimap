@@ -24,21 +24,22 @@
 #include <QtCore/QObject>
 #include <QtCore/QFile>
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class SessionLoggerPrivate;
 
 class SessionLogger
 {
-  public:
+public:
     SessionLogger();
     ~SessionLogger();
 
-    void dataSent( const QByteArray &data );
-    void dataReceived( const QByteArray &data );
+    void dataSent(const QByteArray &data);
+    void dataReceived(const QByteArray &data);
     void disconnectionOccured();
 
-  private:
+private:
     qint64 m_id;
     QFile m_file;
 };

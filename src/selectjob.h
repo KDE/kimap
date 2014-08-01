@@ -24,7 +24,8 @@
 
 #include "job.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 struct Message;
@@ -32,19 +33,19 @@ class SelectJobPrivate;
 
 class KIMAP_EXPORT SelectJob : public Job
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( SelectJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(SelectJob)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
-    explicit SelectJob( Session *session );
+public:
+    explicit SelectJob(Session *session);
     virtual ~SelectJob();
 
-    void setMailBox( const QString &mailBox );
+    void setMailBox(const QString &mailBox);
     QString mailBox() const;
 
-    void setOpenReadOnly( bool readOnly );
+    void setOpenReadOnly(bool readOnly);
     bool isOpenReadOnly() const;
 
     QList<QByteArray> flags() const;
@@ -75,7 +76,7 @@ class KIMAP_EXPORT SelectJob : public Job
      *
      * @since 4.12
      */
-    void setCondstoreEnabled( bool enable );
+    void setCondstoreEnabled(bool enable);
 
     /**
      * Returns whether the CONDSTORE parameter will be appended to SELECT command
@@ -84,9 +85,9 @@ class KIMAP_EXPORT SelectJob : public Job
      */
     bool condstoreEnabled() const;
 
-  protected:
+protected:
     virtual void doStart();
-    virtual void handleResponse( const Message &response );
+    virtual void handleResponse(const Message &response);
 };
 
 }

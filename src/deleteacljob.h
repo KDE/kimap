@@ -24,7 +24,8 @@
 
 #include "acljobbase.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 struct Message;
@@ -46,25 +47,25 @@ class DeleteAclJobPrivate;
  */
 class KIMAP_EXPORT DeleteAclJob : public AclJobBase
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( DeleteAclJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(DeleteAclJob)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
-    explicit DeleteAclJob( Session *session );
+public:
+    explicit DeleteAclJob(Session *session);
     virtual ~DeleteAclJob();
 
     /**
      * Sets the identifier to remove
      */
-    void setIdentifier( const QByteArray &identifier );
+    void setIdentifier(const QByteArray &identifier);
     /**
      * The identifier that will be removed
      */
     QByteArray identifier();
 
-  protected:
+protected:
     virtual void doStart();
 
 };

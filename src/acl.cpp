@@ -22,37 +22,40 @@
 #include <QtCore/QByteArray>
 #include <QtCore/QMap>
 
-namespace KIMAP {
-namespace Acl {
+namespace KIMAP
+{
+namespace Acl
+{
 
 class RightsMap
 {
-  public:
-    RightsMap() {
-      map['l'] = Lookup;
-      map['r'] = Read;
-      map['s'] = KeepSeen;
-      map['w'] = Write;
-      map['i'] = Insert;
-      map['p'] = Post;
-      map['c'] = Create; //TODO: obsolete, keep it?
-      map['d'] = Delete; //TODO: obsolete, keep it?
-      map['k'] = CreateMailbox;
-      map['x'] = DeleteMailbox;
-      map['t'] = DeleteMessage;
-      map['e'] = Expunge;
-      map['a'] = Admin;
-      map['n'] = WriteShared;
-      map['0'] = Custom0;
-      map['1'] = Custom1;
-      map['2'] = Custom2;
-      map['3'] = Custom3;
-      map['4'] = Custom4;
-      map['5'] = Custom5;
-      map['6'] = Custom6;
-      map['7'] = Custom7;
-      map['8'] = Custom8;
-      map['9'] = Custom9;
+public:
+    RightsMap()
+    {
+        map['l'] = Lookup;
+        map['r'] = Read;
+        map['s'] = KeepSeen;
+        map['w'] = Write;
+        map['i'] = Insert;
+        map['p'] = Post;
+        map['c'] = Create; //TODO: obsolete, keep it?
+        map['d'] = Delete; //TODO: obsolete, keep it?
+        map['k'] = CreateMailbox;
+        map['x'] = DeleteMailbox;
+        map['t'] = DeleteMessage;
+        map['e'] = Expunge;
+        map['a'] = Admin;
+        map['n'] = WriteShared;
+        map['0'] = Custom0;
+        map['1'] = Custom1;
+        map['2'] = Custom2;
+        map['3'] = Custom3;
+        map['4'] = Custom4;
+        map['5'] = Custom5;
+        map['6'] = Custom6;
+        map['7'] = Custom7;
+        map['8'] = Custom8;
+        map['9'] = Custom9;
     }
 
     QMap<char, Right> map;
@@ -63,63 +66,63 @@ Q_GLOBAL_STATIC(RightsMap, globalRights)
 }
 }
 
-KIMAP::Acl::Rights KIMAP::Acl::rightsFromString( const QByteArray &string )
+KIMAP::Acl::Rights KIMAP::Acl::rightsFromString(const QByteArray &string)
 {
-  Rights result;
+    Rights result;
 
-  if ( string.isEmpty() ) {
+    if (string.isEmpty()) {
+        return result;
+    }
+
+    int pos = 0;
+    if (string[0] == '+' || string[0] == '-') {   // Skip modifier if any
+        pos++;
+    }
+
+    for (int i = pos; i < string.size(); i++) {
+        if (globalRights->map.contains(string[i])) {
+            result |= globalRights->map[string[i]];
+        }
+    }
+
     return result;
-  }
+}
 
-  int pos = 0;
-  if ( string[0] == '+' || string[0] == '-' ) { // Skip modifier if any
-    pos++;
-  }
+QByteArray KIMAP::Acl::rightsToString(Rights rights)
+{
+    QByteArray result;
 
-  for ( int i = pos; i < string.size(); i++ ) {
-    if ( globalRights->map.contains( string[i] ) ) {
-      result|= globalRights->map[string[i]];
+    for (int right = Lookup; right <= Custom9; right <<= 1) {
+        if (rights & right) {
+            result += globalRights->map.key((Right)right);
+        }
     }
-  }
 
-  return result;
+    return result;
 }
 
-QByteArray KIMAP::Acl::rightsToString( Rights rights )
+KIMAP::Acl::Rights KIMAP::Acl::normalizedRights(KIMAP::Acl::Rights rights)
 {
-  QByteArray result;
-
-  for ( int right = Lookup; right <= Custom9; right <<= 1 ) {
-    if ( rights & right ) {
-      result += globalRights->map.key( (Right)right );
+    Rights normalized = rights;
+    if (normalized & Create) {
+        normalized |= (CreateMailbox | DeleteMailbox);
+        normalized &= ~Create;
     }
-  }
-
-  return result;
+    if (normalized & Delete) {
+        normalized |= (DeleteMessage | Expunge);
+        normalized &= ~Delete;
+    }
+    return normalized;
 }
 
-KIMAP::Acl::Rights KIMAP::Acl::normalizedRights( KIMAP::Acl::Rights rights )
+KIMAP::Acl::Rights KIMAP::Acl::denormalizedRights(KIMAP::Acl::Rights rights)
 {
-  Rights normalized = rights;
-  if ( normalized & Create ) {
-    normalized |= ( CreateMailbox | DeleteMailbox );
-    normalized &= ~Create;
-  }
-  if ( normalized & Delete ) {
-    normalized |= ( DeleteMessage | Expunge );
-    normalized &= ~Delete;
-  }
-  return normalized;
-}
-
-KIMAP::Acl::Rights KIMAP::Acl::denormalizedRights( KIMAP::Acl::Rights rights )
-{
-  Rights denormalized = normalizedRights( rights );
-  if ( denormalized & ( CreateMailbox | DeleteMailbox ) ) {
-    denormalized |= Create;
-  }
-  if ( denormalized & ( DeleteMessage | Expunge ) ) {
-    denormalized |= Delete;
-  }
-  return denormalized;
+    Rights denormalized = normalizedRights(rights);
+    if (denormalized & (CreateMailbox | DeleteMailbox)) {
+        denormalized |= Create;
+    }
+    if (denormalized & (DeleteMessage | Expunge)) {
+        denormalized |= Delete;
+    }
+    return denormalized;
 }

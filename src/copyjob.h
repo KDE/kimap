@@ -25,7 +25,8 @@
 #include "job.h"
 #include "imapset.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 struct Message;
@@ -45,13 +46,13 @@ class CopyJobPrivate;
  */
 class KIMAP_EXPORT CopyJob : public Job
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( CopyJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(CopyJob)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
-    explicit CopyJob( Session *session );
+public:
+    explicit CopyJob(Session *session);
     virtual ~CopyJob();
 
     /**
@@ -64,7 +65,7 @@ class KIMAP_EXPORT CopyJob : public Job
      * @param mailBox  the (unquoted) name of the mailbox where the
      *                 messages should be copied to
      */
-    void setMailBox( const QString &mailBox );
+    void setMailBox(const QString &mailBox);
     /**
      * The destination mailbox
      */
@@ -81,7 +82,7 @@ class KIMAP_EXPORT CopyJob : public Job
      *
      * @param set  the sequence numbers or UIDs of the messages to be copied
      */
-    void setSequenceSet( const ImapSet &set );
+    void setSequenceSet(const ImapSet &set);
     /**
      * The messages that will be copied.
      *
@@ -99,7 +100,7 @@ class KIMAP_EXPORT CopyJob : public Job
      *                  interpreted as UIDs, if @c false it will be interpreted
      *                  as sequence numbers
      */
-    void setUidBased( bool uidBased );
+    void setUidBased(bool uidBased);
     /**
      * How to interpret the sequence set.
      *
@@ -117,7 +118,7 @@ class KIMAP_EXPORT CopyJob : public Job
      */
     ImapSet resultingUids() const;
 
-  protected:
+protected:
     virtual void doStart();
     virtual void handleResponse(const Message &response);
 };

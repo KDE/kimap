@@ -26,52 +26,52 @@
 
 using namespace KIMAP;
 
-void AclJobBasePrivate::setIdentifier( const QByteArray &identifier )
+void AclJobBasePrivate::setIdentifier(const QByteArray &identifier)
 {
-  id = identifier;
+    id = identifier;
 }
 
 QByteArray AclJobBasePrivate::identifier() const
 {
-  return id;
+    return id;
 }
 
 bool AclJobBasePrivate::hasRightEnabled(Acl::Right right)
 {
-  return rightList & right;
+    return rightList & right;
 }
 
-void AclJobBasePrivate::setRights(const QByteArray& rights)
+void AclJobBasePrivate::setRights(const QByteArray &rights)
 {
-  switch ( rights[0] ) {
-  case '+':
-    modifier = AclJobBase::Add;
-    break;
-  case '-':
-    modifier = AclJobBase::Remove;
-    break;
-  default:
-    modifier = AclJobBase::Change;
-    break;
-  }
+    switch (rights[0]) {
+    case '+':
+        modifier = AclJobBase::Add;
+        break;
+    case '-':
+        modifier = AclJobBase::Remove;
+        break;
+    default:
+        modifier = AclJobBase::Change;
+        break;
+    }
 
-  rightList = Acl::rightsFromString( rights );
+    rightList = Acl::rightsFromString(rights);
 }
 
 void AclJobBasePrivate::setRights(AclJobBase::AclModifier _modifier, Acl::Rights rights)
 {
-  modifier = _modifier;
-  // XXX: [alexmerry, 2010-07-24]: this is REALLY unintuitive behaviour
-  rightList|= rights;
+    modifier = _modifier;
+    // XXX: [alexmerry, 2010-07-24]: this is REALLY unintuitive behaviour
+    rightList |= rights;
 }
 
-AclJobBase::AclJobBase( Session *session )
-  : Job( *new AclJobBasePrivate( session, i18n( "AclJobBase" ) ) )
+AclJobBase::AclJobBase(Session *session)
+    : Job(*new AclJobBasePrivate(session, i18n("AclJobBase")))
 {
 }
 
-AclJobBase::AclJobBase( JobPrivate &dd )
-  : Job( dd )
+AclJobBase::AclJobBase(JobPrivate &dd)
+    : Job(dd)
 {
 
 }
@@ -80,14 +80,14 @@ AclJobBase::~AclJobBase()
 {
 }
 
-void AclJobBase::setMailBox( const QString &mailBox )
+void AclJobBase::setMailBox(const QString &mailBox)
 {
-  Q_D( AclJobBase );
-  d->mailBox = mailBox;
+    Q_D(AclJobBase);
+    d->mailBox = mailBox;
 }
 
 QString AclJobBase::mailBox() const
 {
-  Q_D( const AclJobBase );
-  return d->mailBox;
+    Q_D(const AclJobBase);
+    return d->mailBox;
 }

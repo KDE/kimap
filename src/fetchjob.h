@@ -30,7 +30,8 @@
 
 #include <boost/shared_ptr.hpp>
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 struct Message;
@@ -57,12 +58,12 @@ typedef QPair<QByteArray, QVariant> MessageAttribute;
  */
 class KIMAP_EXPORT FetchJob : public Job
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( FetchJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(FetchJob)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
+public:
     /**
      * Used to indicate what message data should be fetched.
      *
@@ -73,110 +74,110 @@ class KIMAP_EXPORT FetchJob : public Job
     class KIMAP_EXPORT FetchScope
     {
     public:
-      FetchScope();
-
-      /**
-       * Used to indicate what part of the message should be fetched.
-       */
-      enum Mode {
-        /**
-         * Fetch RFC-2822 or MIME message headers.
-         *
-         * To fetch MIME headers for a MIME part, populate the @p parts field.
-         *
-         * If the RFC-2822 headers are requested (so @p parts is empty), the
-         * returned information is:
-         * - To, From, Message-id, References In-Reply-To, Subject and Date headers
-         * - The message size (in octets)
-         * - The internal date of the message
-         * - The message flags
-         * - The message UID
-         */
-        Headers,
-        /**
-         * Fetch the message flags (the UID is also fetched)
-         */
-        Flags,
-        /**
-         * Fetch the MIME message body structure (the UID is also fetched)
-         */
-        Structure,
-        /**
-         * Fetch the message content (the UID is also fetched)
-         *
-         * To fetch only certain MIME parts (see Structure), populate the
-         * @p parts field.
-         */
-        Content,
-        /**
-         * Fetch the complete message.
-         */
-        Full,
-        /**
-         * Fetch the message MIME headers and the content of parts specified in the @p parts
-         * field.
-         *
-         * If @p parts is empty, this mode will return the full message, just like
-         * FetchScope::Content
-         *
-         * Use case:
-         * -# Start a FetchJob with the FetchScope::Structure mode to retrieve the structure
-         *    of the message.
-         * -# Parse the structure to identify the parts that are interesting (ie: probably
-         *    everything but attachments).
-         * -# Start another FetchJob with FetchScope::HeaderAndContent to fetch those parts.
-         * -# At the request of the user, you can repeat the step above to fetch the attachments.
-         *
-         * @since 4.7
-         */
-        HeaderAndContent,
+        FetchScope();
 
         /**
-         * Fetch message size (in octets), internal date of the message, flags, UID
-         * and all RFC822 headers.
+         * Used to indicate what part of the message should be fetched.
+         */
+        enum Mode {
+            /**
+             * Fetch RFC-2822 or MIME message headers.
+             *
+             * To fetch MIME headers for a MIME part, populate the @p parts field.
+             *
+             * If the RFC-2822 headers are requested (so @p parts is empty), the
+             * returned information is:
+             * - To, From, Message-id, References In-Reply-To, Subject and Date headers
+             * - The message size (in octets)
+             * - The internal date of the message
+             * - The message flags
+             * - The message UID
+             */
+            Headers,
+            /**
+             * Fetch the message flags (the UID is also fetched)
+             */
+            Flags,
+            /**
+             * Fetch the MIME message body structure (the UID is also fetched)
+             */
+            Structure,
+            /**
+             * Fetch the message content (the UID is also fetched)
+             *
+             * To fetch only certain MIME parts (see Structure), populate the
+             * @p parts field.
+             */
+            Content,
+            /**
+             * Fetch the complete message.
+             */
+            Full,
+            /**
+             * Fetch the message MIME headers and the content of parts specified in the @p parts
+             * field.
+             *
+             * If @p parts is empty, this mode will return the full message, just like
+             * FetchScope::Content
+             *
+             * Use case:
+             * -# Start a FetchJob with the FetchScope::Structure mode to retrieve the structure
+             *    of the message.
+             * -# Parse the structure to identify the parts that are interesting (ie: probably
+             *    everything but attachments).
+             * -# Start another FetchJob with FetchScope::HeaderAndContent to fetch those parts.
+             * -# At the request of the user, you can repeat the step above to fetch the attachments.
+             *
+             * @since 4.7
+             */
+            HeaderAndContent,
+
+            /**
+             * Fetch message size (in octets), internal date of the message, flags, UID
+             * and all RFC822 headers.
+             *
+             * The @p parts field is ignored when using this scope
+             *
+             * @since 4.12
+             */
+            FullHeaders
+        };
+
+        /**
+         * Specify which message parts to operate on.
          *
-         * The @p parts field is ignored when using this scope
+         * This refers to multipart-MIME message parts or MIME-IMB encapsulated
+         * message parts.
+         *
+         * Note that this is ignored unless @p mode is Headers or Content.
+         *
+         * If @p mode is Headers, this sets the parts to get the MIME headers
+         * for.  If this list is empty, the headers for the whole message
+         * (the RFC-2822 headers) are fetched.
+         *
+         * If @p mode is Content, this sets the parts to fetch.  Parts are
+         * fetched wholesale.  If this list is empty, the whole message body
+         * is fetched (all MIME parts together).
+         */
+        QList<QByteArray> parts;
+        /**
+         * Specify what message data should be fetched.
+         */
+        Mode mode;
+
+        /**
+         * Specify to fetch only items with mod-sequence higher then @p changedSince.
+         *
+         * The server must have CONDSTORE capability (RFC4551).
+         *
+         * Default value is 0 (ignored).
          *
          * @since 4.12
          */
-        FullHeaders
-      };
-
-      /**
-       * Specify which message parts to operate on.
-       *
-       * This refers to multipart-MIME message parts or MIME-IMB encapsulated
-       * message parts.
-       *
-       * Note that this is ignored unless @p mode is Headers or Content.
-       *
-       * If @p mode is Headers, this sets the parts to get the MIME headers
-       * for.  If this list is empty, the headers for the whole message
-       * (the RFC-2822 headers) are fetched.
-       *
-       * If @p mode is Content, this sets the parts to fetch.  Parts are
-       * fetched wholesale.  If this list is empty, the whole message body
-       * is fetched (all MIME parts together).
-       */
-      QList<QByteArray> parts;
-      /**
-       * Specify what message data should be fetched.
-       */
-      Mode mode;
-
-      /**
-       * Specify to fetch only items with mod-sequence higher then @p changedSince.
-       *
-       * The server must have CONDSTORE capability (RFC4551).
-       *
-       * Default value is 0 (ignored).
-       *
-       * @since 4.12
-       */
-      quint64 changedSince;
+        quint64 changedSince;
     };
 
-    explicit FetchJob( Session *session );
+    explicit FetchJob(Session *session);
     virtual ~FetchJob();
 
     /**
@@ -187,7 +188,7 @@ class KIMAP_EXPORT FetchJob : public Job
      *
      * @param set  the sequence numbers or UIDs of the messages to fetch data for
      */
-    void setSequenceSet( const ImapSet &set );
+    void setSequenceSet(const ImapSet &set);
     /**
      * The messages that will be fetched.
      */
@@ -218,7 +219,7 @@ class KIMAP_EXPORT FetchJob : public Job
      * @param scope  a FetchScope object describing what data
      *               should be fetched
      */
-    void setScope( const FetchScope &scope );
+    void setScope(const FetchScope &scope);
     /**
      * Specifies what data will be fetched.
      */
@@ -258,7 +259,7 @@ class KIMAP_EXPORT FetchJob : public Job
     /** @deprecated returns an empty map; use the signals instead */
     KIMAP_DEPRECATED QMap<qint64, qint64> uids() const;
 
-  Q_SIGNALS:
+Q_SIGNALS:
     /**
      * Provides header and message results.
      *
@@ -289,11 +290,11 @@ class KIMAP_EXPORT FetchJob : public Job
      *                 headers); populated if the scope is FetchScope::Full,
      *                 FetchScope::Headers or FetchScope::Structure
      */
-    void headersReceived( const QString &mailBox,
-                          const QMap<qint64, qint64> &uids,
-                          const QMap<qint64, qint64> &sizes,
-                          const QMap<qint64, KIMAP::MessageFlags> &flags,
-                          const QMap<qint64, KIMAP::MessagePtr> &messages );
+    void headersReceived(const QString &mailBox,
+                         const QMap<qint64, qint64> &uids,
+                         const QMap<qint64, qint64> &sizes,
+                         const QMap<qint64, KIMAP::MessageFlags> &flags,
+                         const QMap<qint64, KIMAP::MessagePtr> &messages);
 
     /**
      * An overloaded version of headersReceived(), which includes additional attribute
@@ -320,12 +321,12 @@ class KIMAP_EXPORT FetchJob : public Job
      * @overload
      * @since 4.14
      */
-    void headersReceived( const QString &mailBox,
-                          const QMap<qint64, qint64> &uids,
-                          const QMap<qint64, qint64> &sizes,
-                          const QMap<qint64, KIMAP::MessageAttribute > &attrs,
-                          const QMap<qint64, KIMAP::MessageFlags> &flags,
-                          const QMap<qint64, KIMAP::MessagePtr> &messages );
+    void headersReceived(const QString &mailBox,
+                         const QMap<qint64, qint64> &uids,
+                         const QMap<qint64, qint64> &sizes,
+                         const QMap<qint64, KIMAP::MessageAttribute > &attrs,
+                         const QMap<qint64, KIMAP::MessageFlags> &flags,
+                         const QMap<qint64, KIMAP::MessagePtr> &messages);
 
     /**
      * Provides header and message results.
@@ -345,10 +346,9 @@ class KIMAP_EXPORT FetchJob : public Job
      * @param uids     a map from message sequence numbers to message UIDs
      * @param messages a map from message sequence numbers to message contents
      */
-    void messagesReceived( const QString &mailBox,
-                           const QMap<qint64, qint64> &uids,
-                           const QMap<qint64, KIMAP::MessagePtr> &messages );
-
+    void messagesReceived(const QString &mailBox,
+                          const QMap<qint64, qint64> &uids,
+                          const QMap<qint64, KIMAP::MessagePtr> &messages);
 
     /**
      * An overloaded version of messagesReceived(), which includes additional attribute
@@ -365,10 +365,10 @@ class KIMAP_EXPORT FetchJob : public Job
      * @overload
      * @since 4.14
      */
-    void messagesReceived( const QString &mailBox,
-                           const QMap<qint64, qint64> &uids,
-                           const QMap<qint64, KIMAP::MessageAttribute > &attrs,
-                           const QMap<qint64, KIMAP::MessagePtr> &messages );
+    void messagesReceived(const QString &mailBox,
+                          const QMap<qint64, qint64> &uids,
+                          const QMap<qint64, KIMAP::MessageAttribute > &attrs,
+                          const QMap<qint64, KIMAP::MessagePtr> &messages);
     /**
      * Provides header and message results.
      *
@@ -386,35 +386,35 @@ class KIMAP_EXPORT FetchJob : public Job
      * @param uids     a map from message sequence numbers to message UIDs
      * @param parts    a map from message sequence numbers to message part collections
      */
-    void partsReceived( const QString &mailBox,
-                        const QMap<qint64, qint64> &uids,
-                        const QMap<qint64, KIMAP::MessageParts> &parts );
+    void partsReceived(const QString &mailBox,
+                       const QMap<qint64, qint64> &uids,
+                       const QMap<qint64, KIMAP::MessageParts> &parts);
 
-   /**
-     * An overloaded version of partsReceived(), which includes additional attribute
-     * specified in the FETCH response, but that don't belong to actual content of the
-     * message.
-     *
-     * @param mailBox  the name of the mailbox the fetch job was
-     *                 executed on
-     * @param uids     a map from message sequence numbers to message UIDs
-     * @param attrs    a map from message sequence numbers to pair of attribute
-     * @param parts    a map from message sequence numbers to message part collections
-     *
-     * @overload
-     * @since 4.14
-     */
-    void partsReceived( const QString &mailBox,
-                        const QMap<qint64, qint64> &uids,
-                        const QMap<qint64, KIMAP::MessageAttribute > &attrs,
-                        const QMap<qint64, KIMAP::MessageParts> &parts );
+    /**
+      * An overloaded version of partsReceived(), which includes additional attribute
+      * specified in the FETCH response, but that don't belong to actual content of the
+      * message.
+      *
+      * @param mailBox  the name of the mailbox the fetch job was
+      *                 executed on
+      * @param uids     a map from message sequence numbers to message UIDs
+      * @param attrs    a map from message sequence numbers to pair of attribute
+      * @param parts    a map from message sequence numbers to message part collections
+      *
+      * @overload
+      * @since 4.14
+      */
+    void partsReceived(const QString &mailBox,
+                       const QMap<qint64, qint64> &uids,
+                       const QMap<qint64, KIMAP::MessageAttribute > &attrs,
+                       const QMap<qint64, KIMAP::MessageParts> &parts);
 
-  protected:
+protected:
     virtual void doStart();
     virtual void handleResponse(const Message &response);
 
-  private:
-    Q_PRIVATE_SLOT( d_func(), void emitPendings() )
+private:
+    Q_PRIVATE_SLOT(d_func(), void emitPendings())
 };
 
 }

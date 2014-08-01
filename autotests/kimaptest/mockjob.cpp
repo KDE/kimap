@@ -32,64 +32,64 @@
 class MockJobPrivate : public KIMAP::JobPrivate
 {
 public:
-  MockJobPrivate( KIMAP::Session *session, const QString& name )
-    : KIMAP::JobPrivate( session, name ),
-      timeout( 10 )
-  { }
+    MockJobPrivate(KIMAP::Session *session, const QString &name)
+        : KIMAP::JobPrivate(session, name),
+          timeout(10)
+    { }
 
-  ~MockJobPrivate() { }
+    ~MockJobPrivate() { }
 
-  QByteArray command;
-  int timeout;
+    QByteArray command;
+    int timeout;
 };
 
 MockJob::MockJob(KIMAP::Session *session)
-  : KIMAP::Job( *new MockJobPrivate( session, i18n( "Mock" ) ) )
+    : KIMAP::Job(*new MockJobPrivate(session, i18n("Mock")))
 {
 }
 
 void MockJob::doStart()
 {
-  Q_D( MockJob );
-  if ( isNull() ) {
-    QTimer::singleShot(d->timeout, this, SLOT(done()));
-  } else {
-    d->sessionInternal()->setSocketTimeout( d->timeout );
-    d->tags << d->sessionInternal()->sendCommand( d->command );
-  }
+    Q_D(MockJob);
+    if (isNull()) {
+        QTimer::singleShot(d->timeout, this, SLOT(done()));
+    } else {
+        d->sessionInternal()->setSocketTimeout(d->timeout);
+        d->tags << d->sessionInternal()->sendCommand(d->command);
+    }
 }
 
 void MockJob::done()
 {
-  emitResult();
+    emitResult();
 }
 
 void MockJob::setCommand(const QByteArray &command)
 {
-  Q_D( MockJob );
-  d->command = command;
+    Q_D(MockJob);
+    d->command = command;
 }
 
 QByteArray MockJob::command() const
 {
-  Q_D( const MockJob );
-  return d->command;
+    Q_D(const MockJob);
+    return d->command;
 }
 
 void MockJob::setTimeout(int timeout)
 {
-  Q_D( MockJob );
-  d->timeout = timeout;
+    Q_D(MockJob);
+    d->timeout = timeout;
 }
 
 int MockJob::timeout() const
 {
-  Q_D( const MockJob );
-  return d->timeout;
+    Q_D(const MockJob);
+    return d->timeout;
 }
 
 bool MockJob::isNull() const
 {
-  Q_D( const MockJob );
-  return d->command.isEmpty();
+    Q_D(const MockJob);
+    return d->command.isEmpty();
 }

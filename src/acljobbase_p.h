@@ -27,27 +27,27 @@
 
 namespace KIMAP
 {
-  class AclJobBasePrivate : public JobPrivate
-  {
-    public:
-      AclJobBasePrivate( Session *session, const QString& name ) : JobPrivate( session, name ), rightList( Acl::None ), modifier( AclJobBase::Change )
-      {
-      }
-      ~AclJobBasePrivate() { }
+class AclJobBasePrivate : public JobPrivate
+{
+public:
+    AclJobBasePrivate(Session *session, const QString &name) : JobPrivate(session, name), rightList(Acl::None), modifier(AclJobBase::Change)
+    {
+    }
+    ~AclJobBasePrivate() { }
 
-      void setIdentifier( const QByteArray &identifier );
-      QByteArray identifier() const;
+    void setIdentifier(const QByteArray &identifier);
+    QByteArray identifier() const;
 
-      bool hasRightEnabled(Acl::Right right);
+    bool hasRightEnabled(Acl::Right right);
 
-      void setRights(const QByteArray& rights);
-      void setRights(AclJobBase::AclModifier modifier, Acl::Rights rights);
+    void setRights(const QByteArray &rights);
+    void setRights(AclJobBase::AclModifier modifier, Acl::Rights rights);
 
-      QString mailBox;
-      QByteArray id;
-      Acl::Rights rightList;
-      AclJobBase::AclModifier modifier;
-  };
+    QString mailBox;
+    QByteArray id;
+    Acl::Rights rightList;
+    AclJobBase::AclModifier modifier;
+};
 }
 
 #endif

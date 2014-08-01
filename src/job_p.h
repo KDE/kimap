@@ -23,24 +23,28 @@
 #include "session.h"
 #include <ktcpsocket.h>
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class SessionPrivate;
 
 class JobPrivate
 {
-  public:
-    JobPrivate( Session *session, const QString& name ) : m_session( session ), m_socketError( KTcpSocket::UnknownError )  {
-      m_name = name;
+public:
+    JobPrivate(Session *session, const QString &name) : m_session(session), m_socketError(KTcpSocket::UnknownError)
+    {
+        m_name = name;
     }
     virtual ~JobPrivate() { }
 
-    inline SessionPrivate *sessionInternal() {
-      return m_session->d;
+    inline SessionPrivate *sessionInternal()
+    {
+        return m_session->d;
     }
 
-    inline const SessionPrivate *sessionInternal() const {
-      return m_session->d;
+    inline const SessionPrivate *sessionInternal() const
+    {
+        return m_session->d;
     }
 
     QList<QByteArray> tags;

@@ -28,7 +28,8 @@
 
 class KSslErrorUiData;
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class SessionPrivate;
 class JobPrivate;
@@ -36,15 +37,15 @@ struct Message;
 
 class KIMAP_EXPORT Session : public QObject
 {
-  Q_OBJECT
-  Q_ENUMS( State )
+    Q_OBJECT
+    Q_ENUMS(State)
 
-  friend class JobPrivate;
+    friend class JobPrivate;
 
-  public:
+public:
     enum State { Disconnected = 0, NotAuthenticated, Authenticated, Selected };
 
-    Session( const QString &hostName, quint16 port, QObject *parent=0 );
+    Session(const QString &hostName, quint16 port, QObject *parent = 0);
     ~Session();
 
     QString hostName() const;
@@ -79,7 +80,7 @@ class KIMAP_EXPORT Session : public QObject
      * @param timeout The socket timeout in seconds, negative values disable the timeout.
      * @since 4.6
      */
-    void setTimeout( int timeout );
+    void setTimeout(int timeout);
 
     /**
      * Returns the session timeout.
@@ -97,8 +98,8 @@ class KIMAP_EXPORT Session : public QObject
 
     void close();
 
-  Q_SIGNALS:
-    void jobQueueSizeChanged( int queueSize );
+Q_SIGNALS:
+    void jobQueueSizeChanged(int queueSize);
 
     /**
       @deprecated
@@ -140,7 +141,7 @@ class KIMAP_EXPORT Session : public QObject
     */
     void stateChanged(KIMAP::Session::State newState, KIMAP::Session::State oldState);
 
-  private:
+private:
     friend class SessionPrivate;
     SessionPrivate *const d;
 };

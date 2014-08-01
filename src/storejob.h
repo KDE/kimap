@@ -25,7 +25,8 @@
 #include "job.h"
 #include "imapset.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 struct Message;
@@ -35,39 +36,39 @@ typedef QList<QByteArray> MessageFlags;
 
 class KIMAP_EXPORT StoreJob : public Job
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( StoreJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(StoreJob)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
+public:
     enum StoreMode {
-      SetFlags,
-      AppendFlags,
-      RemoveFlags
+        SetFlags,
+        AppendFlags,
+        RemoveFlags
     };
 
-    explicit StoreJob( Session *session );
+    explicit StoreJob(Session *session);
     virtual ~StoreJob();
 
-    void setSequenceSet( const ImapSet &set );
+    void setSequenceSet(const ImapSet &set);
     ImapSet sequenceSet() const;
 
-    void setUidBased( bool uidBased );
+    void setUidBased(bool uidBased);
     bool isUidBased() const;
 
-    void setFlags( const MessageFlags &flags );
+    void setFlags(const MessageFlags &flags);
     MessageFlags flags() const;
 
-    void setGMLabels( const MessageFlags &gmLabels );
+    void setGMLabels(const MessageFlags &gmLabels);
     MessageFlags gmLabels() const;
 
-    void setMode( StoreMode mode );
+    void setMode(StoreMode mode);
     StoreMode mode() const;
 
     QMap<int, MessageFlags> resultingFlags() const;
 
-  protected:
+protected:
     virtual void doStart();
     virtual void handleResponse(const Message &response);
 };

@@ -24,7 +24,8 @@
 
 #include "acljobbase.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 struct Message;
@@ -42,13 +43,13 @@ class SetAclJobPrivate;
  */
 class KIMAP_EXPORT SetAclJob : public AclJobBase
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( SetAclJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(SetAclJob)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
-    explicit SetAclJob( Session *session );
+public:
+    explicit SetAclJob(Session *session);
     virtual ~SetAclJob();
 
     /**
@@ -97,13 +98,13 @@ class KIMAP_EXPORT SetAclJob : public AclJobBase
      * user "fred" will not have the 'w' right.
      * @param identifier the identifier to set
      */
-    void setIdentifier( const QByteArray &identifier );
+    void setIdentifier(const QByteArray &identifier);
     /**
      * The identifier that rights will be associated with
      */
     QByteArray identifier();
 
-  protected:
+protected:
     virtual void doStart();
 
 };

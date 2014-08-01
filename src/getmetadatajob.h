@@ -24,7 +24,8 @@
 
 #include "metadatajobbase.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 struct Message;
@@ -60,25 +61,25 @@ class GetMetaDataJobPrivate;
  */
 class KIMAP_EXPORT GetMetaDataJob : public MetaDataJobBase
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( GetMetaDataJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(GetMetaDataJob)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
-    explicit GetMetaDataJob( Session *session );
+public:
+    explicit GetMetaDataJob(Session *session);
     virtual ~GetMetaDataJob();
 
     /**
      * Used to specify the depth of the metadata heirachy to walk.
      */
     enum Depth {
-      NoDepth = 0, /**< Only the requested entries */
-      OneLevel,    /**< The requested entries and all their direct children */
-      AllLevels    /**< The requested entries and all their descendants */
+        NoDepth = 0, /**< Only the requested entries */
+        OneLevel,    /**< The requested entries and all their direct children */
+        AllLevels    /**< The requested entries and all their descendants */
     };
 
-    Q_DECLARE_FLAGS( Depths, Depth )
+    Q_DECLARE_FLAGS(Depths, Depth)
 
     /**
      * Add an entry to the query list.
@@ -95,7 +96,7 @@ class KIMAP_EXPORT GetMetaDataJob : public MetaDataJobBase
      *
      * @deprecated use addRequestedEntry(QByteArray) instead
      */
-     KIMAP_DEPRECATED void addEntry( const QByteArray &entry, const QByteArray &attribute = QByteArray() );
+    KIMAP_DEPRECATED void addEntry(const QByteArray &entry, const QByteArray &attribute = QByteArray());
 
     /**
      * Add an entry to the query list.
@@ -107,7 +108,7 @@ class KIMAP_EXPORT GetMetaDataJob : public MetaDataJobBase
      *
      * @param entry the metadata entry name
      */
-     void addRequestedEntry( const QByteArray &entry );
+    void addRequestedEntry(const QByteArray &entry);
 
     /**
      * Limits the size of returned metadata entries.
@@ -126,7 +127,7 @@ class KIMAP_EXPORT GetMetaDataJob : public MetaDataJobBase
      *
      * @param size  the entry size limit, in octets, or -1 for no limit
      */
-    void setMaximumSize( qint64 size );
+    void setMaximumSize(qint64 size);
 
     /**
      * Sets whether to retrieve children or descendants of the requested entries.
@@ -148,7 +149,7 @@ class KIMAP_EXPORT GetMetaDataJob : public MetaDataJobBase
      *
      * @param depth  the depth of the metadata tree to return
      */
-    void setDepth( Depth depth );
+    void setDepth(Depth depth);
 
     /**
      * Get a single metadata entry.
@@ -173,8 +174,8 @@ class KIMAP_EXPORT GetMetaDataJob : public MetaDataJobBase
      */
     // XXX: what's with the mailBox argument in a class that has setMailBox()?
     //      KJobs are not intended to be run more than once
-    KIMAP_DEPRECATED QByteArray metaData( const QString &mailBox, const QByteArray &entry,
-                         const QByteArray &attribute = QByteArray() ) const;
+    KIMAP_DEPRECATED QByteArray metaData(const QString &mailBox, const QByteArray &entry,
+                                         const QByteArray &attribute = QByteArray()) const;
 
     /**
      * Get a single metadata entry.
@@ -195,7 +196,7 @@ class KIMAP_EXPORT GetMetaDataJob : public MetaDataJobBase
      * @param entry the entry to get
      * @return  the metadata entry value
      */
-    QByteArray metaData( const QByteArray &entry ) const;
+    QByteArray metaData(const QByteArray &entry) const;
 
     /**
      * Get all the metadata for a given mailbox.
@@ -220,7 +221,7 @@ class KIMAP_EXPORT GetMetaDataJob : public MetaDataJobBase
      */
     // XXX: what's with the mailBox argument in a class that has setMailBox()?
     //      KJobs are not intended to be run more than once
-    QMap<QByteArray, QMap<QByteArray, QByteArray> > allMetaData( const QString &mailBox ) const;
+    QMap<QByteArray, QMap<QByteArray, QByteArray> > allMetaData(const QString &mailBox) const;
 
     /**
      * Get all the metadata.
@@ -230,11 +231,11 @@ class KIMAP_EXPORT GetMetaDataJob : public MetaDataJobBase
      *
      * @return a map from metadata entry names to values
      */
-     QMap<QByteArray, QByteArray> allMetaData() const;
+    QMap<QByteArray, QByteArray> allMetaData() const;
 
-  protected:
+protected:
     virtual void doStart();
-    virtual void handleResponse( const Message &response );
+    virtual void handleResponse(const Message &response);
 
 };
 

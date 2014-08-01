@@ -24,7 +24,8 @@
 
 #include "job.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 struct Message;
@@ -33,13 +34,13 @@ class NamespaceJobPrivate;
 
 class KIMAP_EXPORT NamespaceJob : public Job
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( NamespaceJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(NamespaceJob)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
-    NamespaceJob( Session *session );
+public:
+    NamespaceJob(Session *session);
     virtual ~NamespaceJob();
 
     QList<MailBoxDescriptor> personalNamespaces() const;
@@ -48,9 +49,9 @@ class KIMAP_EXPORT NamespaceJob : public Job
 
     bool containsEmptyNamespace() const;
 
-  protected:
+protected:
     virtual void doStart();
-    virtual void handleResponse( const Message &response );
+    virtual void handleResponse(const Message &response);
 };
 
 }

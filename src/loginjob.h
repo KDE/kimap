@@ -25,7 +25,8 @@
 
 #include "job.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 struct Message;
@@ -33,12 +34,12 @@ class LoginJobPrivate;
 
 class KIMAP_EXPORT LoginJob : public Job
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( LoginJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(LoginJob)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
+public:
     enum EncryptionMode {
         Unencrypted = 0,
         TlsV1,
@@ -61,14 +62,14 @@ class KIMAP_EXPORT LoginJob : public Job
     };
 
     enum ErrorCode {
-      ERR_COULD_NOT_CONNECT = KJob::UserDefinedError + 23 // same as in kio
+        ERR_COULD_NOT_CONNECT = KJob::UserDefinedError + 23 // same as in kio
     };
 
-    explicit LoginJob( Session *session );
+    explicit LoginJob(Session *session);
     virtual ~LoginJob();
 
     QString userName() const;
-    void setUserName( const QString &userName );
+    void setUserName(const QString &userName);
 
     /**
      * Get the authorization identity.
@@ -87,10 +88,10 @@ class KIMAP_EXPORT LoginJob : public Job
      * This allows to login as a user using the admin credentials and the users name.
      * @since 4.10
      */
-    void setAuthorizationName( const QString &authorizationName );
+    void setAuthorizationName(const QString &authorizationName);
 
     QString password() const;
-    void setPassword( const QString &password );
+    void setPassword(const QString &password);
 
     /**
      * Returns the server greeting, in case of a successful login.
@@ -117,15 +118,15 @@ class KIMAP_EXPORT LoginJob : public Job
     */
     EncryptionMode encryptionMode();
 
-    void setAuthenticationMode( AuthenticationMode mode );
+    void setAuthenticationMode(AuthenticationMode mode);
 
-  protected:
+protected:
     virtual void doStart();
-    virtual void handleResponse( const Message &response );
+    virtual void handleResponse(const Message &response);
     virtual void connectionLost();
 
-  private:
-    Q_PRIVATE_SLOT( d_func(), void sslResponse(bool) )
+private:
+    Q_PRIVATE_SLOT(d_func(), void sslResponse(bool))
 };
 
 }

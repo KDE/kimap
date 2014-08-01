@@ -31,19 +31,26 @@
 
 class QIODevice;
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class ImapParserException : public std::exception
 {
-  public:
-    explicit ImapParserException( const char *what ) throw() : mWhat( what ) {}
-    explicit ImapParserException( const QByteArray &what ) throw() : mWhat( what ) {}
-    explicit ImapParserException( const QString &what ) throw() : mWhat( what.toUtf8() ) {}
-    ImapParserException( const ImapParserException &other ) throw() : std::exception( other ), mWhat( other.what() ) {}
+public:
+    explicit ImapParserException(const char *what) throw() : mWhat(what) {}
+    explicit ImapParserException(const QByteArray &what) throw() : mWhat(what) {}
+    explicit ImapParserException(const QString &what) throw() : mWhat(what.toUtf8()) {}
+    ImapParserException(const ImapParserException &other) throw() : std::exception(other), mWhat(other.what()) {}
     virtual ~ImapParserException() throw() {}
-    const char *what() const throw() { return mWhat.constData(); }
-    virtual const char *type() const throw() { return "ImapParserException"; }
-  private:
+    const char *what() const throw()
+    {
+        return mWhat.constData();
+    }
+    virtual const char *type() const throw()
+    {
+        return "ImapParserException";
+    }
+private:
     QByteArray mWhat;
 };
 
@@ -52,14 +59,14 @@ class ImapParserException : public std::exception
 */
 class KIMAP_EXPORT ImapStreamParser
 {
-  public:
+public:
     /**
      * Construct the parser.
      * @param socket the local socket to work with.
      * @param serverModeEnabled true if the parser has to assume we're writing a server (e.g. sends
      * continuation message automatically)
      */
-    explicit ImapStreamParser( QIODevice *socket, bool serverModeEnabled = false );
+    explicit ImapStreamParser(QIODevice *socket, bool serverModeEnabled = false);
 
     /**
      * Destructor.
@@ -91,7 +98,7 @@ class KIMAP_EXPORT ImapStreamParser
      * @param ok true if the data found was a number
      * @return the number
      */
-    qint64 readNumber( bool * ok = 0 );
+    qint64 readNumber(bool *ok = 0);
 
     /**
      * Check if the next data is a string or not. This call might block.
@@ -140,10 +147,10 @@ class KIMAP_EXPORT ImapStreamParser
     */
     bool hasList();
 
-     /**
-     * Check if the next data is a parenthesized list end. This call might block.
-     * @return true if a parenthesized list end.
-      */
+    /**
+    * Check if the next data is a parenthesized list end. This call might block.
+    * @return true if a parenthesized list end.
+     */
     bool atListEnd();
 
     /**
@@ -152,10 +159,10 @@ class KIMAP_EXPORT ImapStreamParser
      */
     bool hasResponseCode();
 
-     /**
-     * Check if the next data is a response code end. This call might block.
-     * @return true if a response code end.
-      */
+    /**
+    * Check if the next data is a response code end. This call might block.
+    * @return true if a response code end.
+     */
     bool atResponseCodeEnd();
 
     /**
@@ -178,9 +185,9 @@ class KIMAP_EXPORT ImapStreamParser
 
     int availableDataSize() const;
 
-    void setData( const QByteArray &data );
+    void setData(const QByteArray &data);
 
-  private:
+private:
     void stripLeadingSpaces();
     QByteArray parseQuotedString();
 
@@ -190,12 +197,12 @@ class KIMAP_EXPORT ImapStreamParser
      * @param wait the condition
      * @return true if more data is available
      */
-    bool waitForMoreData( bool wait);
+    bool waitForMoreData(bool wait);
 
     /**
      * Inform the client to send more literal data.
      */
-    void sendContinuationResponse( qint64 size );
+    void sendContinuationResponse(qint64 size);
 
     /**
      * Remove already read data from the internal buffer if necessary.

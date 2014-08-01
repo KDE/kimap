@@ -24,7 +24,8 @@
 
 #include "job.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 struct Message;
@@ -41,13 +42,13 @@ class QuotaJobBasePrivate;
 */
 class KIMAP_EXPORT QuotaJobBase : public Job
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( QuotaJobBase )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(QuotaJobBase)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
-    explicit QuotaJobBase( Session *session );
+public:
+    explicit QuotaJobBase(Session *session);
     virtual ~QuotaJobBase();
 
     /**
@@ -70,7 +71,7 @@ class KIMAP_EXPORT QuotaJobBase : public Job
      *          if the usage is unknown or there is no
      *          limit on the resource
      */
-    qint64 usage(const QByteArray& resource);
+    qint64 usage(const QByteArray &resource);
     /**
      * Get the current limit for a resource.
      *
@@ -87,10 +88,10 @@ class KIMAP_EXPORT QuotaJobBase : public Job
      *          if the limit is unknown or there is no limit
      *          on the resource
      */
-    qint64 limit(const QByteArray& resource);
+    qint64 limit(const QByteArray &resource);
 
-  protected:
-    QuotaJobBase( JobPrivate &dd );
+protected:
+    QuotaJobBase(JobPrivate &dd);
 
 };
 

@@ -24,7 +24,8 @@
 
 #include "acljobbase.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 struct Message;
@@ -47,13 +48,13 @@ class ListRightsJobPrivate;
  */
 class KIMAP_EXPORT ListRightsJob : public AclJobBase
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( ListRightsJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(ListRightsJob)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
-    explicit ListRightsJob( Session *session );
+public:
+    explicit ListRightsJob(Session *session);
     virtual ~ListRightsJob();
 
     /**
@@ -76,7 +77,7 @@ class KIMAP_EXPORT ListRightsJob : public AclJobBase
      *
      * @param identifier  the identifier to list the rights for
      */
-    void setIdentifier( const QByteArray &identifier );
+    void setIdentifier(const QByteArray &identifier);
     /**
      * The identifier that will be looked up
      */
@@ -110,7 +111,7 @@ class KIMAP_EXPORT ListRightsJob : public AclJobBase
      */
     QList<Acl::Rights> possibleRights();
 
-  protected:
+protected:
     virtual void doStart();
     virtual void handleResponse(const Message &response);
 

@@ -27,18 +27,18 @@
 
 namespace KIMAP
 {
-  class LogoutJobPrivate : public JobPrivate
-  {
-    public:
-      LogoutJobPrivate( Session *session, const QString& name ) : JobPrivate( session, name ) { }
-      ~LogoutJobPrivate() { }
-  };
+class LogoutJobPrivate : public JobPrivate
+{
+public:
+    LogoutJobPrivate(Session *session, const QString &name) : JobPrivate(session, name) { }
+    ~LogoutJobPrivate() { }
+};
 }
 
 using namespace KIMAP;
 
-LogoutJob::LogoutJob( Session *session )
-  : Job( *new LogoutJobPrivate( session, i18n( "Logout" ) ) )
+LogoutJob::LogoutJob(Session *session)
+    : Job(*new LogoutJobPrivate(session, i18n("Logout")))
 {
 }
 
@@ -48,11 +48,11 @@ LogoutJob::~LogoutJob()
 
 void LogoutJob::doStart()
 {
-  Q_D( LogoutJob );
-  d->tags << d->sessionInternal()->sendCommand( "LOGOUT" );
+    Q_D(LogoutJob);
+    d->tags << d->sessionInternal()->sendCommand("LOGOUT");
 }
 
 void LogoutJob::connectionLost()
 {
-  emitResult();
+    emitResult();
 }

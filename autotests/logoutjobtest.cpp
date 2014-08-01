@@ -30,52 +30,53 @@
 #include <QtTest>
 #include <QDebug>
 
-class LogoutJobTest: public QObject {
-  Q_OBJECT
+class LogoutJobTest: public QObject
+{
+    Q_OBJECT
 
 private Q_SLOTS:
 
-void testLogout()
-{
-    FakeServer fakeServer;
-    fakeServer.setScenario( QList<QByteArray>()
-        << FakeServer::preauth()
-        << "C: A000001 LOGOUT"
-        << "S: A000001 OK LOGOUT completed"
-    );
-    fakeServer.startAndWait();
+    void testLogout()
+    {
+        FakeServer fakeServer;
+        fakeServer.setScenario(QList<QByteArray>()
+                               << FakeServer::preauth()
+                               << "C: A000001 LOGOUT"
+                               << "S: A000001 OK LOGOUT completed"
+                              );
+        fakeServer.startAndWait();
 
-    KIMAP::Session *session = new KIMAP::Session( QLatin1String("127.0.0.1"), 5989 );
+        KIMAP::Session *session = new KIMAP::Session(QLatin1String("127.0.0.1"), 5989);
 
-    KIMAP::LogoutJob *logout = new KIMAP::LogoutJob( session );
-    QVERIFY( logout->exec() );
+        KIMAP::LogoutJob *logout = new KIMAP::LogoutJob(session);
+        QVERIFY(logout->exec());
 
-    fakeServer.quit();
-    delete session;
-}
+        fakeServer.quit();
+        delete session;
+    }
 
-void testLogoutUntagged()
-{
-    FakeServer fakeServer;
-    fakeServer.setScenario( QList<QByteArray>()
-        << FakeServer::preauth()
-        << "C: A000001 LOGOUT"
-        << "S: * some untagged response"
-        << "S: A000001 OK LOGOUT completed"
-    );
-    fakeServer.startAndWait();
+    void testLogoutUntagged()
+    {
+        FakeServer fakeServer;
+        fakeServer.setScenario(QList<QByteArray>()
+                               << FakeServer::preauth()
+                               << "C: A000001 LOGOUT"
+                               << "S: * some untagged response"
+                               << "S: A000001 OK LOGOUT completed"
+                              );
+        fakeServer.startAndWait();
 
-    KIMAP::Session *session = new KIMAP::Session( QLatin1String("127.0.0.1"), 5989 );
+        KIMAP::Session *session = new KIMAP::Session(QLatin1String("127.0.0.1"), 5989);
 
-    KIMAP::LogoutJob *logout = new KIMAP::LogoutJob( session );
-    QVERIFY( logout->exec() );
+        KIMAP::LogoutJob *logout = new KIMAP::LogoutJob(session);
+        QVERIFY(logout->exec());
 
-    fakeServer.quit();
-    delete session;
-}
+        fakeServer.quit();
+        delete session;
+    }
 
 };
 
-QTEST_GUILESS_MAIN( LogoutJobTest )
+QTEST_GUILESS_MAIN(LogoutJobTest)
 
 #include "logoutjobtest.moc"

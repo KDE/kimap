@@ -27,22 +27,22 @@
 
 namespace KIMAP
 {
-  class MetaDataJobBasePrivate : public JobPrivate
-  {
-    public:
-      MetaDataJobBasePrivate( Session *session, const QString& name ) : JobPrivate( session, name ), serverCapability( MetaDataJobBase::Metadata )
-      {}
+class MetaDataJobBasePrivate : public JobPrivate
+{
+public:
+    MetaDataJobBasePrivate(Session *session, const QString &name) : JobPrivate(session, name), serverCapability(MetaDataJobBase::Metadata)
+    {}
 
-      ~MetaDataJobBasePrivate() { }
+    ~MetaDataJobBasePrivate() { }
 
-      QByteArray addPrefix( const QByteArray &entry, const QByteArray &attribute ) const;
-      QByteArray removePrefix( const QByteArray & ) const;
+    QByteArray addPrefix(const QByteArray &entry, const QByteArray &attribute) const;
+    QByteArray removePrefix(const QByteArray &) const;
 
-      QByteArray getAttribute( const QByteArray &entry ) const;
+    QByteArray getAttribute(const QByteArray &entry) const;
 
-      MetaDataJobBase::ServerCapability serverCapability;
-      QString mailBox;
-  };
+    MetaDataJobBase::ServerCapability serverCapability;
+    QString mailBox;
+};
 }
 
 #endif

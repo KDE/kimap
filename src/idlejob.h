@@ -30,7 +30,8 @@
 
 #include <boost/shared_ptr.hpp>
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 struct Message;
@@ -62,11 +63,11 @@ class IdleJobPrivate;
  */
 class KIMAP_EXPORT IdleJob : public Job
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( IdleJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(IdleJob)
 
-  public:
-    explicit IdleJob( Session *session );
+public:
+    explicit IdleJob(Session *session);
     virtual ~IdleJob();
 
     /**
@@ -101,13 +102,13 @@ class KIMAP_EXPORT IdleJob : public Job
      */
     int lastRecentCount() const;
 
-  public Q_SLOTS:
+public Q_SLOTS:
     /**
      * Stops the idle job.
      */
     void stop();
 
-  Q_SIGNALS:
+Q_SIGNALS:
     /**
      * Signals that the server has notified that the total and
      * recent message counts have changed.
@@ -129,13 +130,13 @@ class KIMAP_EXPORT IdleJob : public Job
      */
     void mailBoxMessageFlagsChanged(KIMAP::IdleJob *job, qint64 uid);
 
-  protected:
+protected:
     virtual void doStart();
     virtual void handleResponse(const Message &response);
 
-  private:
-    Q_PRIVATE_SLOT( d_func(), void emitStats() )
-    Q_PRIVATE_SLOT( d_func(), void resetTimeout() )
+private:
+    Q_PRIVATE_SLOT(d_func(), void emitStats())
+    Q_PRIVATE_SLOT(d_func(), void resetTimeout())
 };
 
 }

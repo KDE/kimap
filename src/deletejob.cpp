@@ -28,20 +28,20 @@
 
 namespace KIMAP
 {
-  class DeleteJobPrivate : public JobPrivate
-  {
-    public:
-      DeleteJobPrivate( Session *session, const QString& name ) : JobPrivate( session, name ) { }
-      ~DeleteJobPrivate() { }
+class DeleteJobPrivate : public JobPrivate
+{
+public:
+    DeleteJobPrivate(Session *session, const QString &name) : JobPrivate(session, name) { }
+    ~DeleteJobPrivate() { }
 
-      QString mailBox;
-  };
+    QString mailBox;
+};
 }
 
 using namespace KIMAP;
 
-DeleteJob::DeleteJob( Session *session )
-  : Job( *new DeleteJobPrivate( session, i18n( "Delete" ) ) )
+DeleteJob::DeleteJob(Session *session)
+    : Job(*new DeleteJobPrivate(session, i18n("Delete")))
 {
 }
 
@@ -51,18 +51,18 @@ DeleteJob::~DeleteJob()
 
 void DeleteJob::doStart()
 {
-  Q_D( DeleteJob );
-  d->tags << d->sessionInternal()->sendCommand( "DELETE", '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + '\"' );
+    Q_D(DeleteJob);
+    d->tags << d->sessionInternal()->sendCommand("DELETE", '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8()) + '\"');
 }
 
-void DeleteJob::setMailBox( const QString &mailBox )
+void DeleteJob::setMailBox(const QString &mailBox)
 {
-  Q_D( DeleteJob );
-  d->mailBox = mailBox;
+    Q_D(DeleteJob);
+    d->mailBox = mailBox;
 }
 
 QString DeleteJob::mailBox() const
 {
-  Q_D( const DeleteJob );
-  return d->mailBox;
+    Q_D(const DeleteJob);
+    return d->mailBox;
 }

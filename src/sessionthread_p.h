@@ -27,39 +27,46 @@
 
 typedef KTcpSocket SessionSocket;
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class ImapStreamParser;
 struct Message;
 
 class SessionThread : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    explicit SessionThread( const QString &hostName, quint16 port );
+public:
+    explicit SessionThread(const QString &hostName, quint16 port);
     ~SessionThread();
 
-    inline QString hostName() { return m_hostName; }
-    inline quint16 port() { return m_port; }
+    inline QString hostName()
+    {
+        return m_hostName;
+    }
+    inline quint16 port()
+    {
+        return m_port;
+    }
 
-    void sendData( const QByteArray &payload );
+    void sendData(const QByteArray &payload);
 
-  public Q_SLOTS:
+public Q_SLOTS:
     void closeSocket();
     void startSsl(KTcpSocket::SslVersion version);
     void sslErrorHandlerResponse(bool result);
 
-  Q_SIGNALS:
+Q_SIGNALS:
     void socketConnected();
     void socketDisconnected();
     void socketActivity();
     void socketError(KTcpSocket::Error);
     void responseReceived(const KIMAP::Message &response);
     void encryptionNegotiationResult(bool, KTcpSocket::SslVersion);
-    void sslError(const KSslErrorUiData&);
+    void sslError(const KSslErrorUiData &);
 
-  private Q_SLOTS:
+private Q_SLOTS:
     void reconnect();
     void threadInit();
     void threadQuit();
@@ -72,7 +79,7 @@ class SessionThread : public QObject
     void doStartSsl(KTcpSocket::SslVersion);
     void doSslErrorHandlerResponse(bool result);
 
-  private:
+private:
     QString m_hostName;
     quint16 m_port;
 

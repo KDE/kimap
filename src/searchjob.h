@@ -27,7 +27,8 @@
 
 class QDate;
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class ImapSet;
 
@@ -42,135 +43,135 @@ class SearchJobPrivate;
  */
 class KIMAP_EXPORT Term
 {
-  public:
+public:
     enum Relation {
-      And,
-      Or
+        And,
+        Or
     };
 
     enum SearchKey {
-      All,
-      Bcc,
-      Body,
-      Cc,
-      From,
-      Subject,
-      Text,
-      To,
-      Keyword
+        All,
+        Bcc,
+        Body,
+        Cc,
+        From,
+        Subject,
+        Text,
+        To,
+        Keyword
     };
 
     enum BooleanSearchKey {
-      New,
-      Old,
-      Recent,
-      Seen,
-      Draft,
-      Deleted,
-      Flagged,
-      Answered
+        New,
+        Old,
+        Recent,
+        Seen,
+        Draft,
+        Deleted,
+        Flagged,
+        Answered
     };
 
     enum DateSearchKey {
-      Before,
-      On,
-      Since,
-      SentBefore,
-      SentOn,
-      SentSince
+        Before,
+        On,
+        Since,
+        SentBefore,
+        SentOn,
+        SentSince
     };
     enum NumberSearchKey {
-      Larger,
-      Smaller
+        Larger,
+        Smaller
     };
     enum SequenceSearchKey {
-      Uid,
-      SequenceNumber
+        Uid,
+        SequenceNumber
     };
 
     Term();
-    Term( Relation relation, const QVector<Term> &subterms );
-    Term( SearchKey key, const QString &value );
-    Term( BooleanSearchKey key );
-    Term( DateSearchKey key, const QDate &date );
-    Term( NumberSearchKey key, int value );
-    Term( SequenceSearchKey key, const KIMAP::ImapSet & );
-    Term( const QString &header, const QString &value );
+    Term(Relation relation, const QVector<Term> &subterms);
+    Term(SearchKey key, const QString &value);
+    Term(BooleanSearchKey key);
+    Term(DateSearchKey key, const QDate &date);
+    Term(NumberSearchKey key, int value);
+    Term(SequenceSearchKey key, const KIMAP::ImapSet &);
+    Term(const QString &header, const QString &value);
 
-    Term( const Term &other );
+    Term(const Term &other);
 
-    Term& operator=( const Term &other );
-    bool operator==( const Term &other ) const;
+    Term &operator=(const Term &other);
+    bool operator==(const Term &other) const;
 
     bool isNull() const;
 
-    Term &setFuzzy( bool fuzzy );
-    Term &setNegated( bool negated );
+    Term &setFuzzy(bool fuzzy);
+    Term &setNegated(bool negated);
 
     QByteArray serialize() const;
 
-  private:
+private:
     class Private;
     QSharedPointer<Private> d;
 };
 
 class KIMAP_EXPORT SearchJob : public Job
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( SearchJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(SearchJob)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
+public:
     enum SearchLogic {
-      And = 0,
-      Or,
-      Not
+        And = 0,
+        Or,
+        Not
     };
 
     enum SearchCriteria {
-       All = 0,
-       Answered,
-       BCC,
-       Before,
-       Body,
-       CC,
-       Deleted,
-       Draft,
-       Flagged,
-       From,
-       Header,
-       Keyword,
-       Larger,
-       New,
-       Old,
-       On,
-       Recent,
-       Seen,
-       SentBefore,
-       SentOn,
-       SentSince,
-       Since,
-       Smaller,
-       Subject,
-       Text,
-       To,
-       Uid,
-       Unanswered,
-       Undeleted,
-       Undraft,
-       Unflagged,
-       Unkeyword,
-       Unseen
+        All = 0,
+        Answered,
+        BCC,
+        Before,
+        Body,
+        CC,
+        Deleted,
+        Draft,
+        Flagged,
+        From,
+        Header,
+        Keyword,
+        Larger,
+        New,
+        Old,
+        On,
+        Recent,
+        Seen,
+        SentBefore,
+        SentOn,
+        SentSince,
+        Since,
+        Smaller,
+        Subject,
+        Text,
+        To,
+        Uid,
+        Unanswered,
+        Undeleted,
+        Undraft,
+        Unflagged,
+        Unkeyword,
+        Unseen
     };
 
-    explicit SearchJob( Session *session );
+    explicit SearchJob(Session *session);
     virtual ~SearchJob();
 
     void setUidBased(bool uidBased);
     bool isUidBased() const;
 
-    void setCharset( const QByteArray &charSet );
+    void setCharset(const QByteArray &charSet);
     QByteArray charset() const;
 
     /**
@@ -193,7 +194,7 @@ class KIMAP_EXPORT SearchJob : public Job
      * @param criteria a criteria from SearchCriterias
      * @deprecated since 4.13
      */
-    KIMAP_DEPRECATED void addSearchCriteria( SearchCriteria criteria );
+    KIMAP_DEPRECATED void addSearchCriteria(SearchCriteria criteria);
 
     /**
      * Add a search criteria that has one or more space separate string arguments.
@@ -203,7 +204,7 @@ class KIMAP_EXPORT SearchJob : public Job
      * @param argument the arguments
      * @deprecated since 4.13
      */
-    KIMAP_DEPRECATED void addSearchCriteria( SearchCriteria criteria, const QByteArray &argument );
+    KIMAP_DEPRECATED void addSearchCriteria(SearchCriteria criteria, const QByteArray &argument);
 
     /**
      * Add a search criteria that has an integer argument.
@@ -213,7 +214,7 @@ class KIMAP_EXPORT SearchJob : public Job
      * @param argument a number argument
      * @deprecated since 4.13
      */
-    KIMAP_DEPRECATED void addSearchCriteria( SearchCriteria criteria, int argument );
+    KIMAP_DEPRECATED void addSearchCriteria(SearchCriteria criteria, int argument);
 
     /**
      * Add a search criteria that has a date as argument.
@@ -223,7 +224,7 @@ class KIMAP_EXPORT SearchJob : public Job
      * @param argument a date
      * @deprecated since 4.13
      */
-    KIMAP_DEPRECATED void addSearchCriteria( SearchCriteria criteria, const QDate& argument );
+    KIMAP_DEPRECATED void addSearchCriteria(SearchCriteria criteria, const QDate &argument);
 
     /**
      * Add a custom criteria. No checks are done, the data is sent as it is
@@ -231,7 +232,7 @@ class KIMAP_EXPORT SearchJob : public Job
      * @param searchCriteria free form search criteria.
      * @deprecated since 4.13
      */
-    KIMAP_DEPRECATED void addSearchCriteria( const QByteArray &searchCriteria );
+    KIMAP_DEPRECATED void addSearchCriteria(const QByteArray &searchCriteria);
 
     /**
      * Set the logic combining the search criterias.
@@ -245,9 +246,9 @@ class KIMAP_EXPORT SearchJob : public Job
      * @param term The search term.
      * @since 4.13
      */
-    void setTerm( const Term & );
+    void setTerm(const Term &);
 
-  protected:
+protected:
     virtual void doStart();
     virtual void handleResponse(const Message &response);
 };

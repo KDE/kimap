@@ -24,7 +24,8 @@
 
 #include "job.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 struct Message;
@@ -46,33 +47,33 @@ class MetaDataJobBasePrivate;
 */
 class KIMAP_EXPORT MetaDataJobBase : public Job
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( MetaDataJobBase )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(MetaDataJobBase)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
-    explicit MetaDataJobBase( Session *session );
+public:
+    explicit MetaDataJobBase(Session *session);
     virtual ~MetaDataJobBase();
 
     /**
      * Represents the capability level of the server.
      */
     enum ServerCapability {
-      /**
-       * Used to indicate that the server supports the RFC 5464 version
-       * of the extension.
-       *
-       * This corresponds to the METADATA server capability.
-       */
-      Metadata = 0,
-      /**
-       * Used to indicate that the server supports the
-       * draft-daboo-imap-annotatemore-07 version of the extension.
-       *
-       * This corresponds to the ANNOTATEMORE server capability.
-       */
-      Annotatemore
+        /**
+         * Used to indicate that the server supports the RFC 5464 version
+         * of the extension.
+         *
+         * This corresponds to the METADATA server capability.
+         */
+        Metadata = 0,
+        /**
+         * Used to indicate that the server supports the
+         * draft-daboo-imap-annotatemore-07 version of the extension.
+         *
+         * This corresponds to the ANNOTATEMORE server capability.
+         */
+        Annotatemore
     };
 
     /**
@@ -83,7 +84,7 @@ class KIMAP_EXPORT MetaDataJobBase : public Job
      *
      * @param mailBox  the name of an existing mailbox, or an empty string
      */
-    void setMailBox( const QString &mailBox );
+    void setMailBox(const QString &mailBox);
     /**
      * The mailbox that will be acted upon.
      *
@@ -110,14 +111,14 @@ class KIMAP_EXPORT MetaDataJobBase : public Job
      *
      * @param capability  the version of the extension implemented by the server
      */
-    void setServerCapability( const ServerCapability &capability );
+    void setServerCapability(const ServerCapability &capability);
     /**
      * The version of the metadata extension that will be used.
      */
     ServerCapability serverCapability() const;
 
-  protected:
-    MetaDataJobBase( JobPrivate &dd );
+protected:
+    MetaDataJobBase(JobPrivate &dd);
 
 };
 

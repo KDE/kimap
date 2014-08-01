@@ -24,7 +24,8 @@
 
 #include "job.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 struct Message;
@@ -44,16 +45,16 @@ class ExpungeJobPrivate;
  */
 class KIMAP_EXPORT ExpungeJob : public Job
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( ExpungeJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(ExpungeJob)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
-    explicit ExpungeJob( Session *session );
+public:
+    explicit ExpungeJob(Session *session);
     virtual ~ExpungeJob();
 
-  protected:
+protected:
     virtual void doStart();
     virtual void handleResponse(const Message &response);
 };

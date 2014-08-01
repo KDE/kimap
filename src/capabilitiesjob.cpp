@@ -27,20 +27,20 @@
 
 namespace KIMAP
 {
-  class CapabilitiesJobPrivate : public JobPrivate
-  {
-    public:
-      CapabilitiesJobPrivate( Session *session,  const QString& name ) : JobPrivate( session, name ) { }
-      ~CapabilitiesJobPrivate() { }
+class CapabilitiesJobPrivate : public JobPrivate
+{
+public:
+    CapabilitiesJobPrivate(Session *session,  const QString &name) : JobPrivate(session, name) { }
+    ~CapabilitiesJobPrivate() { }
 
-      QStringList capabilities;
-  };
+    QStringList capabilities;
+};
 }
 
 using namespace KIMAP;
 
-CapabilitiesJob::CapabilitiesJob( Session *session )
-  : Job( *new CapabilitiesJobPrivate( session, i18n( "Capabilities" ) ) )
+CapabilitiesJob::CapabilitiesJob(Session *session)
+    : Job(*new CapabilitiesJobPrivate(session, i18n("Capabilities")))
 {
 }
 
@@ -50,27 +50,27 @@ CapabilitiesJob::~CapabilitiesJob()
 
 QStringList CapabilitiesJob::capabilities() const
 {
-  Q_D( const CapabilitiesJob );
-  return d->capabilities;
+    Q_D(const CapabilitiesJob);
+    return d->capabilities;
 }
 
 void CapabilitiesJob::doStart()
 {
-  Q_D( CapabilitiesJob );
-  d->tags << d->sessionInternal()->sendCommand( "CAPABILITY" );
+    Q_D(CapabilitiesJob);
+    d->tags << d->sessionInternal()->sendCommand("CAPABILITY");
 }
 
-void CapabilitiesJob::handleResponse( const Message &response )
+void CapabilitiesJob::handleResponse(const Message &response)
 {
 
-  Q_D( CapabilitiesJob );
-  if ( handleErrorReplies( response ) == NotHandled ) {
-    if ( response.content.size() >= 2 &&
-         response.content[1].toString() == "CAPABILITY" ) {
-      for ( int i = 2; i < response.content.size(); ++i ) {
-        d->capabilities << QLatin1String(response.content[i].toString().toUpper());
-      }
-      emit capabilitiesReceived( d->capabilities );
+    Q_D(CapabilitiesJob);
+    if (handleErrorReplies(response) == NotHandled) {
+        if (response.content.size() >= 2 &&
+                response.content[1].toString() == "CAPABILITY") {
+            for (int i = 2; i < response.content.size(); ++i) {
+                d->capabilities << QLatin1String(response.content[i].toString().toUpper());
+            }
+            emit capabilitiesReceived(d->capabilities);
+        }
     }
-  }
 }

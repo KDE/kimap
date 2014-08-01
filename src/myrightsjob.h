@@ -24,7 +24,8 @@
 
 #include "acljobbase.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 struct Message;
@@ -55,13 +56,13 @@ class MyRightsJobPrivate;
  */
 class KIMAP_EXPORT MyRightsJob : public AclJobBase
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( MyRightsJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(MyRightsJob)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
-    explicit MyRightsJob( Session *session );
+public:
+    explicit MyRightsJob(Session *session);
     virtual ~MyRightsJob();
 
     /**
@@ -82,7 +83,7 @@ class KIMAP_EXPORT MyRightsJob : public AclJobBase
      */
     Acl::Rights rights();
 
-  protected:
+protected:
     virtual void doStart();
     virtual void handleResponse(const Message &response);
 

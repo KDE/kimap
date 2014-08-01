@@ -22,7 +22,8 @@
 
 #include "quotajobbase.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 struct Message;
@@ -49,13 +50,13 @@ class SetQuotaJobPrivate;
  */
 class KIMAP_EXPORT SetQuotaJob : public QuotaJobBase
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( SetQuotaJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(SetQuotaJob)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
-    explicit SetQuotaJob( Session *session );
+public:
+    explicit SetQuotaJob(Session *session);
     virtual ~SetQuotaJob();
 
     /**
@@ -75,7 +76,7 @@ class KIMAP_EXPORT SetQuotaJob : public QuotaJobBase
      * @param resource  the resource name
      * @param limit     the maximum value the resource may take
      */
-    void setQuota( const QByteArray &resource, qint64 limit );
+    void setQuota(const QByteArray &resource, qint64 limit);
 
     /**
      * Set the quota root the resource limits should be set for.
@@ -87,15 +88,15 @@ class KIMAP_EXPORT SetQuotaJob : public QuotaJobBase
      * @param root the quota root to set, in bytes
      * @see GetQuotaRootJob
      */
-    void setRoot( const QByteArray &root );
+    void setRoot(const QByteArray &root);
     /**
      * The quota root that will be modified.
      */
     QByteArray root() const;
 
-  protected:
+protected:
     virtual void doStart();
-    virtual void handleResponse( const Message &response );
+    virtual void handleResponse(const Message &response);
 
 };
 

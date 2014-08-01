@@ -24,7 +24,8 @@
 
 #include "job.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 struct Message;
@@ -46,13 +47,13 @@ class CreateJobPrivate;
  */
 class KIMAP_EXPORT CreateJob : public Job
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( CreateJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(CreateJob)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
-    explicit CreateJob( Session *session );
+public:
+    explicit CreateJob(Session *session);
     virtual ~CreateJob();
 
     /**
@@ -61,13 +62,13 @@ class KIMAP_EXPORT CreateJob : public Job
      * @param mailBox  an (unquoted) identifier that does not correspond
      *                 to an existing mailbox name
      */
-    void setMailBox( const QString &mailBox );
+    void setMailBox(const QString &mailBox);
     /**
      * The name of the mailbox that will be created
      */
     QString mailBox() const;
 
-  protected:
+protected:
     virtual void doStart();
 };
 

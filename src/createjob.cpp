@@ -28,20 +28,20 @@
 
 namespace KIMAP
 {
-  class CreateJobPrivate : public JobPrivate
-  {
-    public:
-      CreateJobPrivate( Session *session, const QString& name ) : JobPrivate( session, name ) { }
-      ~CreateJobPrivate() { }
+class CreateJobPrivate : public JobPrivate
+{
+public:
+    CreateJobPrivate(Session *session, const QString &name) : JobPrivate(session, name) { }
+    ~CreateJobPrivate() { }
 
-      QString mailBox;
-  };
+    QString mailBox;
+};
 }
 
 using namespace KIMAP;
 
-CreateJob::CreateJob( Session *session )
-  : Job( *new CreateJobPrivate( session, i18n( "Create" ) ) )
+CreateJob::CreateJob(Session *session)
+    : Job(*new CreateJobPrivate(session, i18n("Create")))
 {
 }
 
@@ -51,18 +51,18 @@ CreateJob::~CreateJob()
 
 void CreateJob::doStart()
 {
-  Q_D( CreateJob );
-  d->tags << d->sessionInternal()->sendCommand( "CREATE", '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + '\"' );
+    Q_D(CreateJob);
+    d->tags << d->sessionInternal()->sendCommand("CREATE", '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8()) + '\"');
 }
 
-void CreateJob::setMailBox( const QString &mailBox )
+void CreateJob::setMailBox(const QString &mailBox)
 {
-  Q_D( CreateJob );
-  d->mailBox = mailBox;
+    Q_D(CreateJob);
+    d->mailBox = mailBox;
 }
 
 QString CreateJob::mailBox() const
 {
-  Q_D( const CreateJob );
-  return d->mailBox;
+    Q_D(const CreateJob);
+    return d->mailBox;
 }

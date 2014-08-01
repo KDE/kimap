@@ -24,68 +24,68 @@
 
 #include "job.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 struct Message;
 class ListJobPrivate;
 
-struct KIMAP_EXPORT MailBoxDescriptor
-{
-  QString name;
-  QChar separator;
+struct KIMAP_EXPORT MailBoxDescriptor {
+    QString name;
+    QChar separator;
 
-  inline bool operator==(const MailBoxDescriptor &other) const
-  {
-    return other.name == name && other.separator == separator;
-  }
+    inline bool operator==(const MailBoxDescriptor &other) const
+    {
+        return other.name == name && other.separator == separator;
+    }
 
-  inline bool operator<(const MailBoxDescriptor &other) const
-  {
-    return other.name < name || ( other.name == name && other.separator < separator );
-  }
+    inline bool operator<(const MailBoxDescriptor &other) const
+    {
+        return other.name < name || (other.name == name && other.separator < separator);
+    }
 };
 
 class KIMAP_EXPORT ListJob : public Job
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( ListJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(ListJob)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
+public:
     enum Option {
-      NoOption = 0x0,         /**< List only subscribed mailboxes. (Uses the LSUB IMAP command.) */
-      IncludeUnsubscribed,    /**< List subscribed and unsubscribed mailboxes. (Uses the LIST IMAP command.) */
-      IncludeFolderRoleFlags  /**< List subscribed and unsubscribed mailboxes with flags to identify standard mailboxes whose name may be localized.
+        NoOption = 0x0,         /**< List only subscribed mailboxes. (Uses the LSUB IMAP command.) */
+        IncludeUnsubscribed,    /**< List subscribed and unsubscribed mailboxes. (Uses the LIST IMAP command.) */
+        IncludeFolderRoleFlags  /**< List subscribed and unsubscribed mailboxes with flags to identify standard mailboxes whose name may be localized.
                                    The server must support the XLIST extension. */
     };
 
-    explicit ListJob( Session *session );
+    explicit ListJob(Session *session);
     virtual ~ListJob();
 
-    KIMAP_DEPRECATED void setIncludeUnsubscribed( bool include );
+    KIMAP_DEPRECATED void setIncludeUnsubscribed(bool include);
     KIMAP_DEPRECATED bool isIncludeUnsubscribed() const;
 
-    void setOption( Option option );
+    void setOption(Option option);
     Option option() const;
 
-    void setQueriedNamespaces( const QList<MailBoxDescriptor> &namespaces );
+    void setQueriedNamespaces(const QList<MailBoxDescriptor> &namespaces);
     QList<MailBoxDescriptor> queriedNamespaces() const;
 
     KIMAP_DEPRECATED QList<MailBoxDescriptor> mailBoxes() const;
     KIMAP_DEPRECATED QMap< MailBoxDescriptor, QList<QByteArray> > flags() const;
 
-  Q_SIGNALS:
-    void mailBoxesReceived( const QList<KIMAP::MailBoxDescriptor> &descriptors,
-                            const QList< QList<QByteArray> > &flags );
+Q_SIGNALS:
+    void mailBoxesReceived(const QList<KIMAP::MailBoxDescriptor> &descriptors,
+                           const QList< QList<QByteArray> > &flags);
 
-  protected:
+protected:
     virtual void doStart();
     virtual void handleResponse(const Message &response);
 
-  private:
-    Q_PRIVATE_SLOT( d_func(), void emitPendings() )
+private:
+    Q_PRIVATE_SLOT(d_func(), void emitPendings())
 
     /**
     * @brief Converts a mailbox descriptor's name to uppercase if it is the Inbox or an Inbox subfolder.
@@ -93,7 +93,7 @@ class KIMAP_EXPORT ListJob : public Job
     *
     * @param descriptor the descriptor to convert, conversion happens in place
     **/
-    void convertInboxName( KIMAP::MailBoxDescriptor &descriptor );
+    void convertInboxName(KIMAP::MailBoxDescriptor &descriptor);
 };
 
 }

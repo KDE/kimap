@@ -24,18 +24,18 @@
 
 class SslServer: public QTcpServer
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  SslServer(QSsl::SslProtocol);
-  virtual void incomingConnection(int handle);
+    SslServer(QSsl::SslProtocol);
+    virtual void incomingConnection(int handle);
 
 private slots:
-  void sslErrors(const QList<QSslError> &errors);
-  void error(QAbstractSocket::SocketError);
+    void sslErrors(const QList<QSslError> &errors);
+    void error(QAbstractSocket::SocketError);
 
 private:
-  QSsl::SslProtocol mProtocol;
-  QSslSocket mSocket;
+    QSsl::SslProtocol mProtocol;
+    QSslSocket mSocket;
 };
 
 #endif

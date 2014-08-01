@@ -32,7 +32,8 @@
 
 class KJob;
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Job;
 struct Message;
@@ -41,44 +42,44 @@ class SessionThread;
 
 class KIMAP_EXPORT SessionPrivate : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  friend class Session;
+    friend class Session;
 
-  public:
-    explicit SessionPrivate( Session *session );
+public:
+    explicit SessionPrivate(Session *session);
     virtual ~SessionPrivate();
 
     void addJob(Job *job);
-    QByteArray sendCommand( const QByteArray &command, const QByteArray &args = QByteArray() );
+    QByteArray sendCommand(const QByteArray &command, const QByteArray &args = QByteArray());
     void startSsl(const KTcpSocket::SslVersion &version);
-    void sendData( const QByteArray &data );
+    void sendData(const QByteArray &data);
 
     KTcpSocket::SslVersion negotiatedEncryption() const;
 
-    void setSocketTimeout( int ms );
+    void setSocketTimeout(int ms);
     int socketTimeout() const;
 
-  Q_SIGNALS:
+Q_SIGNALS:
     void encryptionNegotiationResult(bool);
 
-  private Q_SLOTS:
+private Q_SLOTS:
     void onEncryptionNegotiationResult(bool isEncrypted, KTcpSocket::SslVersion sslVersion);
     void onSocketTimeout();
 
     void doStartNext();
-    void jobDone( KJob* );
-    void jobDestroyed( QObject* );
-    void responseReceived( const KIMAP::Message& );
+    void jobDone(KJob *);
+    void jobDestroyed(QObject *);
+    void responseReceived(const KIMAP::Message &);
 
     void socketConnected();
     void socketDisconnected();
     void socketError(KTcpSocket::Error);
     void socketActivity();
 
-    void handleSslError( const KSslErrorUiData &errorData );
+    void handleSslError(const KSslErrorUiData &errorData);
 
-  private:
+private:
     void startNext();
     void clearJobQueue();
     void setState(Session::State state);
@@ -98,7 +99,7 @@ class KIMAP_EXPORT SessionPrivate : public QObject
 
     bool jobRunning;
     Job *currentJob;
-    QQueue<Job*> queue;
+    QQueue<Job *> queue;
 
     QByteArray authTag;
     QByteArray selectTag;

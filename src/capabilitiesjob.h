@@ -24,7 +24,8 @@
 
 #include "job.h"
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 struct Message;
@@ -44,13 +45,13 @@ class CapabilitiesJobPrivate;
  */
 class KIMAP_EXPORT CapabilitiesJob : public Job
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( CapabilitiesJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(CapabilitiesJob)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
-    CapabilitiesJob( Session *session );
+public:
+    CapabilitiesJob(Session *session);
     virtual ~CapabilitiesJob();
 
     /**
@@ -60,17 +61,17 @@ class KIMAP_EXPORT CapabilitiesJob : public Job
      */
     QStringList capabilities() const;
 
-  Q_SIGNALS:
+Q_SIGNALS:
     /**
      * Notifies listeners that the capabilities have been fetched.
      *
      * @param capabilities  The capabilities the server claims to support.
      */
-    void capabilitiesReceived( const QStringList &capabilities );
+    void capabilitiesReceived(const QStringList &capabilities);
 
-  protected:
+protected:
     virtual void doStart();
-    virtual void handleResponse( const Message &response );
+    virtual void handleResponse(const Message &response);
 };
 
 }

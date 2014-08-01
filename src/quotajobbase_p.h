@@ -28,17 +28,17 @@
 
 namespace KIMAP
 {
-  class QuotaJobBasePrivate : public JobPrivate
-  {
-    public:
-      QuotaJobBasePrivate( Session *session, const QString& name ) : JobPrivate( session, name )
-      {}
+class QuotaJobBasePrivate : public JobPrivate
+{
+public:
+    QuotaJobBasePrivate(Session *session, const QString &name) : JobPrivate(session, name)
+    {}
 
-      ~QuotaJobBasePrivate() { }
-      QMap<QByteArray, QPair<qint64, qint64> > readQuota( const Message::Part &content );
+    ~QuotaJobBasePrivate() { }
+    QMap<QByteArray, QPair<qint64, qint64> > readQuota(const Message::Part &content);
 
-      QMap<QByteArray, QPair<qint64, qint64> > quota;
-  };
+    QMap<QByteArray, QPair<qint64, qint64> > quota;
+};
 }
 
 #endif

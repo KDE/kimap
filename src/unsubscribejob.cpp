@@ -28,20 +28,20 @@
 
 namespace KIMAP
 {
-  class UnsubscribeJobPrivate : public JobPrivate
-  {
-    public:
-      UnsubscribeJobPrivate( Session *session, const QString& name ) : JobPrivate( session, name ) { }
-      ~UnsubscribeJobPrivate() { }
+class UnsubscribeJobPrivate : public JobPrivate
+{
+public:
+    UnsubscribeJobPrivate(Session *session, const QString &name) : JobPrivate(session, name) { }
+    ~UnsubscribeJobPrivate() { }
 
-      QString mailBox;
-  };
+    QString mailBox;
+};
 }
 
 using namespace KIMAP;
 
-UnsubscribeJob::UnsubscribeJob( Session *session )
-  : Job( *new UnsubscribeJobPrivate( session, i18n( "Unsubscribe" ) ) )
+UnsubscribeJob::UnsubscribeJob(Session *session)
+    : Job(*new UnsubscribeJobPrivate(session, i18n("Unsubscribe")))
 {
 }
 
@@ -51,18 +51,18 @@ UnsubscribeJob::~UnsubscribeJob()
 
 void UnsubscribeJob::doStart()
 {
-  Q_D( UnsubscribeJob );
-  d->tags << d->sessionInternal()->sendCommand( "UNSUBSCRIBE", '\"' + KIMAP::encodeImapFolderName( d->mailBox.toUtf8() ) + '\"' );
+    Q_D(UnsubscribeJob);
+    d->tags << d->sessionInternal()->sendCommand("UNSUBSCRIBE", '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8()) + '\"');
 }
 
-void UnsubscribeJob::setMailBox( const QString &mailBox )
+void UnsubscribeJob::setMailBox(const QString &mailBox)
 {
-  Q_D( UnsubscribeJob );
-  d->mailBox = mailBox;
+    Q_D(UnsubscribeJob);
+    d->mailBox = mailBox;
 }
 
 QString UnsubscribeJob::mailBox() const
 {
-  Q_D( const UnsubscribeJob );
-  return d->mailBox;
+    Q_D(const UnsubscribeJob);
+    return d->mailBox;
 }

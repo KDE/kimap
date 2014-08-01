@@ -33,10 +33,10 @@ class MockJobPrivate;
  */
 class MockJob : public KIMAP::Job
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( MockJob )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(MockJob)
 
-  public:
+public:
     MockJob(KIMAP::Session *session);
 
     /**
@@ -75,7 +75,7 @@ class MockJob : public KIMAP::Job
      */
     virtual void doStart();
 
-  private Q_SLOTS:
+private Q_SLOTS:
     void done();
 };
 

@@ -27,37 +27,37 @@
 using namespace KIMAP;
 
 SessionLogger::SessionLogger()
-  : m_id( 0 )
+    : m_id(0)
 {
-  static qint64 nextId = 0;
-  m_id = ++nextId;
+    static qint64 nextId = 0;
+    m_id = ++nextId;
 
-  m_file.setFileName( QLatin1String(qgetenv( "KIMAP_LOGFILE" ))
-                    + QLatin1Char('.') + QString::number( getpid() )
-                    + QLatin1Char('.') + QString::number( m_id ) );
-  if (!m_file.open( QFile::WriteOnly )) {
-     qDebug()<<" m_file can be open in write only";
-  }
+    m_file.setFileName(QLatin1String(qgetenv("KIMAP_LOGFILE"))
+                       + QLatin1Char('.') + QString::number(getpid())
+                       + QLatin1Char('.') + QString::number(m_id));
+    if (!m_file.open(QFile::WriteOnly)) {
+        qDebug() << " m_file can be open in write only";
+    }
 }
 
 SessionLogger::~SessionLogger()
 {
-  m_file.close();
+    m_file.close();
 }
 
-void SessionLogger::dataSent( const QByteArray &data )
+void SessionLogger::dataSent(const QByteArray &data)
 {
-  m_file.write( "C: "+data.trimmed()+'\n' );
-  m_file.flush();
+    m_file.write("C: " + data.trimmed() + '\n');
+    m_file.flush();
 }
 
-void SessionLogger::dataReceived( const QByteArray &data )
+void SessionLogger::dataReceived(const QByteArray &data)
 {
-  m_file.write( "S: "+data.trimmed()+'\n' );
-  m_file.flush();
+    m_file.write("S: " + data.trimmed() + '\n');
+    m_file.flush();
 }
 
 void SessionLogger::disconnectionOccured()
 {
-  m_file.write( "X\n" );
+    m_file.write("X\n");
 }

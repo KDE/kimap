@@ -25,7 +25,8 @@
 #include <KJob>
 #include <ktcpsocket.h>
 
-namespace KIMAP {
+namespace KIMAP
+{
 
 class Session;
 class SessionPrivate;
@@ -34,34 +35,34 @@ struct Message;
 
 class KIMAP_EXPORT Job : public KJob
 {
-  Q_OBJECT
-  Q_DECLARE_PRIVATE( Job )
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(Job)
 
-  friend class SessionPrivate;
+    friend class SessionPrivate;
 
-  public:
+public:
     virtual ~Job();
 
     Session *session() const;
 
     virtual void start();
 
-  private:
+private:
     virtual void doStart() = 0;
     virtual void handleResponse(const Message &response);
     virtual void connectionLost();
     void setSocketError(KTcpSocket::Error);
 
-  protected:
+protected:
     enum HandlerResponse {
-      Handled = 0,
-      NotHandled
+        Handled = 0,
+        NotHandled
     };
 
     HandlerResponse handleErrorReplies(const Message &response);
 
-    explicit Job( Session *session );
-    explicit Job( JobPrivate &dd );
+    explicit Job(Session *session);
+    explicit Job(JobPrivate &dd);
 
     JobPrivate *const d_ptr;
 };
