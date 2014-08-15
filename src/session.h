@@ -26,7 +26,6 @@
 
 #include "sessionuiproxy.h"
 
-class KSslErrorUiData;
 
 namespace KIMAP
 {
