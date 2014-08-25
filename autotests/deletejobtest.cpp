@@ -25,9 +25,7 @@
 #include "kimap/session.h"
 #include "kimap/deletejob.h"
 
-#include <QTcpSocket>
 #include <QtTest>
-#include <QDebug>
 
 class DeleteJobTest: public QObject
 {

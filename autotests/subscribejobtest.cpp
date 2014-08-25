@@ -25,9 +25,7 @@
 #include "kimap/session.h"
 #include "kimap/subscribejob.h"
 
-#include <QTcpSocket>
 #include <QtTest>
-#include <QDebug>
 
 class SubscribeJobTest: public QObject
 {

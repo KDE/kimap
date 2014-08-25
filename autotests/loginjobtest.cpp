@@ -25,9 +25,7 @@
 #include "kimap/session.h"
 #include "kimap/loginjob.h"
 
-#include <QTcpSocket>
 #include <QtTest>
-#include <QDebug>
 
 class TestUiProxy: public KIMAP::SessionUiProxy
 {

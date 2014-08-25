@@ -26,9 +26,7 @@
 #include "kimap/session.h"
 #include "kimap/selectjob.h"
 
-#include <QTcpSocket>
 #include <QtTest>
-#include <QDebug>
 
 class SelectJobTest: public QObject
 {

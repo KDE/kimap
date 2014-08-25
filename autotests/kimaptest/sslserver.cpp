@@ -17,7 +17,6 @@
 */
 #include "sslserver.h"
 
-#include <QFile>
 #include <QSslKey>
 
 #include <QDebug>

@@ -24,9 +24,7 @@
 #include "kimap/selectjob.h"
 #include "kimap/idlejob.h"
 
-#include <QTcpSocket>
 #include <QtTest>
-#include <QDebug>
 
 Q_DECLARE_METATYPE(QList<int>)
 Q_DECLARE_METATYPE(QList<qint64>)

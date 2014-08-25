@@ -25,7 +25,6 @@
 #include "kimap/session.h"
 #include "kimap/listjob.h"
 
-#include <QTcpSocket>
 #include <QtTest>
 #include <QDebug>
 

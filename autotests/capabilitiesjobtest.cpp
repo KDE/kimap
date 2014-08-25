@@ -25,9 +25,7 @@
 #include "kimap/session.h"
 #include "kimap/capabilitiesjob.h"
 
-#include <QTcpSocket>
 #include <QtTest>
-#include <QDebug>
 
 class CapabilitiesJobTest: public QObject
 {

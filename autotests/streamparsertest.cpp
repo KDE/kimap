@@ -21,9 +21,7 @@
 #include "imapstreamparser.h"
 #include <message_p.h>
 
-#include <QLocalSocket>
 #include <QtTest>
-#include <QDebug>
 
 using namespace KIMAP;
 

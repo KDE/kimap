@@ -22,7 +22,6 @@
 #include "kimap/session.h"
 #include "kimap/getmetadatajob.h"
 
-#include <QTcpSocket>
 #include <QtTest>
 #include <QDebug>
 

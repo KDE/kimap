@@ -23,9 +23,7 @@
 #include "kimap/session.h"
 #include "kimap/fetchjob.h"
 
-#include <QTcpSocket>
 #include <QtTest>
-#include <QDebug>
 
 Q_DECLARE_METATYPE(KIMAP::FetchJob::FetchScope)
 

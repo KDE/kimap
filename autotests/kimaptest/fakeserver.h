@@ -22,7 +22,6 @@
 #ifndef FAKESERVER_H
 #define FAKESERVER_H
 
-#include <QStringList>
 #include <QTcpSocket>
 #include <QTcpServer>
 #include <QThread>

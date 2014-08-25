@@ -25,9 +25,7 @@
 #include "kimap/session.h"
 #include "kimap/storejob.h"
 
-#include <QTcpSocket>
 #include <QtTest>
-#include <QDebug>
 
 class StoreJobTest: public QObject
 {
