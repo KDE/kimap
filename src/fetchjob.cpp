@@ -61,7 +61,7 @@ public:
                                   pendingUids, pendingAttributes,
                                   pendingParts);
         }
-        if (!pendingSizes.isEmpty() || !pendingFlags.isEmpty()) {
+        if (!pendingSizes.isEmpty() || !pendingFlags.isEmpty() || !pendingMessages.isEmpty()) {
             emit q->headersReceived(selectedMailBox,
                                     pendingUids, pendingSizes,
                                     pendingFlags, pendingMessages);
