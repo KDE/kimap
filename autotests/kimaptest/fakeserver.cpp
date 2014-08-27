@@ -231,6 +231,9 @@ void FakeServer::readClientPart(int scenarioNumber)
             scenario.first().startsWith("C: ")) {
         QByteArray received = "C: " + clientParser->readUntilCommandEnd().trimmed();
         QByteArray expected = scenario.takeFirst();
+        if (expected.contains("C: SKIP")) {
+            continue;
+        }
         compareReceived(received, expected);
         if (received.contains("STARTTLS")) {
             m_starttls = true;
