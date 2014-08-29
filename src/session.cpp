@@ -54,8 +54,8 @@ Session::Session(const QString &hostName, quint16 port, QObject *parent)
     d->jobRunning = false;
 
     d->thread = new SessionThread(hostName, port);
-    connect(d->thread, SIGNAL(encryptionNegotiationResult(bool, KTcpSocket::SslVersion)),
-            d, SLOT(onEncryptionNegotiationResult(bool, KTcpSocket::SslVersion)));
+    connect(d->thread, SIGNAL(encryptionNegotiationResult(bool,KTcpSocket::SslVersion)),
+            d, SLOT(onEncryptionNegotiationResult(bool,KTcpSocket::SslVersion)));
     connect(d->thread, SIGNAL(sslError(KSslErrorUiData)),
             d, SLOT(handleSslError(KSslErrorUiData)));
     connect(d->thread, SIGNAL(socketDisconnected()),
@@ -158,8 +158,8 @@ void SessionPrivate::addJob(Job *job)
     queue.append(job);
     emit q->jobQueueSizeChanged(q->jobQueueSize());
 
-    QObject::connect(job, SIGNAL(result(KJob *)), this, SLOT(jobDone(KJob *)));
-    QObject::connect(job, SIGNAL(destroyed(QObject *)), this, SLOT(jobDestroyed(QObject *)));
+    QObject::connect(job, SIGNAL(result(KJob*)), this, SLOT(jobDone(KJob*)));
+    QObject::connect(job, SIGNAL(destroyed(QObject*)), this, SLOT(jobDestroyed(QObject*)));
 
     if (state != Session::Disconnected) {
         startNext();

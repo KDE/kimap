@@ -80,7 +80,7 @@ IdleJob::IdleJob(Session *session)
     connect(&d->emitStatsTimer, SIGNAL(timeout()),
             this, SLOT(emitStats()));
 
-    connect(this, SIGNAL(result(KJob *)),
+    connect(this, SIGNAL(result(KJob*)),
             this, SLOT(resetTimeout()));
 }
 
