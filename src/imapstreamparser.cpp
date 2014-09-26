@@ -148,7 +148,7 @@ bool ImapStreamParser::atLiteralEnd() const
 
 QByteArray ImapStreamParser::readLiteralPart()
 {
-    static qint64 maxLiteralPartSize = 4096;
+    static const qint64 maxLiteralPartSize = 4096;
     int size = qMin(maxLiteralPartSize, m_literalSize);
 
     if (!waitForMoreData(m_data.length() < m_position + size)) {
