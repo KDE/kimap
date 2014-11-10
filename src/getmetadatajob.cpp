@@ -37,8 +37,8 @@ public:
 
     qint64 maxSize;
     QByteArray depth;
-    QList<QByteArray> entries;
-    QList<QByteArray> attributes;
+    QSet<QByteArray> entries;
+    QSet<QByteArray> attributes;
     QMap<QString, QMap<QByteArray, QMap<QByteArray, QByteArray> > > metadata;
     //    ^ mailbox        ^ entry          ^attribute  ^ value
 };
@@ -167,15 +167,15 @@ void GetMetaDataJob::addEntry(const QByteArray &entry, const QByteArray &attribu
     if (d->serverCapability == Annotatemore && attribute.isNull()) {
         qCWarning(KIMAP_LOG) << "In ANNOTATEMORE mode an attribute must be specified with addEntry!";
     }
-    d->entries.append(entry);
-    d->attributes.append(attribute);
+    d->entries.insert(entry);
+    d->attributes.insert(attribute);
 }
 
 void GetMetaDataJob::addRequestedEntry(const QByteArray &entry)
 {
     Q_D(GetMetaDataJob);
-    d->entries.append(d->removePrefix(entry));
-    d->attributes.append(d->getAttribute(entry));
+    d->entries.insert(d->removePrefix(entry));
+    d->attributes.insert(d->getAttribute(entry));
 }
 
 void GetMetaDataJob::setMaximumSize(qint64 size)

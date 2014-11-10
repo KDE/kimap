@@ -238,8 +238,8 @@ private Q_SLOTS:
             QList<QByteArray> scenario;
             scenario << FakeServer::preauth()
                      << "C: A000001 GETANNOTATION \"Folder1\" \"*\" \"value.shared\""
-                     << "S: * ANNOTATION Folder1 /comment ( value.shared \"Shared comment\" )"
-                     << "S: * ANNOTATION Folder1 /comment ( value.priv \"My own comment\" )"
+                     << "S: * ANNOTATION Folder1 /comment (value.shared \"Shared comment\")"
+                     << "S: * ANNOTATION Folder1 /comment (value.priv \"My own comment\")"
                      << "S: A000001 OK annotations retrieved";
 
             QMap<QByteArray, QByteArray> expected;
@@ -251,8 +251,8 @@ private Q_SLOTS:
             QList<QByteArray> scenario;
             scenario << FakeServer::preauth()
                      << "C: A000001 GETANNOTATION \"Folder1\" \"/comment\" \"value.shared\""
-                     << "S: * ANNOTATION Folder1 /comment ( value.shared \"Shared comment\" )"
-                     << "S: * ANNOTATION Folder1 /comment ( value.priv \"My own comment\" )"
+                     << "S: * ANNOTATION Folder1 /comment (value.shared \"Shared comment\")"
+                     << "S: * ANNOTATION Folder1 /comment (value.priv \"My own comment\")"
                      << "S: A000001 OK annotations retrieved";
 
             QMap<QByteArray, QByteArray> expected;
@@ -328,6 +328,43 @@ private Q_SLOTS:
         QVERIFY(fakeServer.isAllScenarioDone());
         fakeServer.quit();
     }
+
+    void testAnnotateMutiple()
+    {
+        //Do not double same parts of the request
+        FakeServer fakeServer;
+        QList<QByteArray> scenario;
+
+        scenario << FakeServer::preauth()
+            << "C: A000001 GETANNOTATION \"Folder1\" (\"/comment\" \"/motd\") \"value.shared\""
+            << "S: A000001 OK annotations retrieved"
+            << "C: A000002 GETANNOTATION \"Folder1\" \"/comment\" (\"value.shared\" \"value.priv\")"
+            << "S: A000002 OK annotations retrieved";
+        fakeServer.setScenario(scenario);
+        fakeServer.startAndWait();
+
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
+
+        //C: A000001 GETANNOTATION "Folder1" ("/comment" "/motd") "value.shared"
+        KIMAP::GetMetaDataJob *getMetadataJob = new KIMAP::GetMetaDataJob( &session);
+        getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Annotatemore);
+        getMetadataJob->setMailBox(QStringLiteral("Folder1"));
+        getMetadataJob->addRequestedEntry("/shared/comment");
+        getMetadataJob->addRequestedEntry("/shared/motd");
+        QVERIFY(getMetadataJob->exec());
+
+        //C: A000002 GETANNOTATION "Folder1" ("/comment") ("value.shared" "value.priv")
+        getMetadataJob = new KIMAP::GetMetaDataJob(&session);
+        getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Annotatemore);
+        getMetadataJob->setMailBox(QStringLiteral("Folder1"));
+        getMetadataJob->addRequestedEntry("/shared/comment");
+        getMetadataJob->addRequestedEntry("/private/comment");
+        QVERIFY(getMetadataJob->exec());
+
+        QVERIFY(fakeServer.isAllScenarioDone());
+        fakeServer.quit();
+    }
+
 
 };
 
