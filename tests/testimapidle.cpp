@@ -20,7 +20,6 @@
 
 #include <kcomponentdata.h>
 #include <k4aboutdata.h>
-#include <klocale.h>
 #include <klocalizedstring.h>
 #include <qdebug.h>
 #include <ktcpsocket.h> // declares KSslErrorUiData
