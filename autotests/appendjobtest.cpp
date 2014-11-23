@@ -45,14 +45,14 @@ private Q_SLOTS:
         {
             QList<QByteArray> scenario;
             scenario << FakeServer::preauth()
-                     << "C: A000001 APPEND \"INBOX\" (\\Seen)  {7}\r\ncontent"
+                     << "C: A000001 APPEND \"INBOX\" (\\Seen) {7}\r\ncontent"
                      << "S: A000001 OK APPEND completed. [ APPENDUID 492 2671 ]";
             QTest::newRow("good") << "INBOX" << scenario << flags << KDateTime() << QByteArray("content") << qint64(2671);
         }
         {
             QList<QByteArray> scenario;
             scenario << FakeServer::preauth()
-                     << "C: A000001 APPEND \"INBOX\" (\\Seen) \"26-Feb-2014 12:38:00 +0000\"  {7}\r\ncontent"
+                     << "C: A000001 APPEND \"INBOX\" (\\Seen) \"26-Feb-2014 12:38:00 +0000\" {7}\r\ncontent"
                      << "S: A000001 OK APPEND completed. [ APPENDUID 493 2672 ]";
             QTest::newRow("good, with internalDate set") << "INBOX" << scenario << flags << KDateTime::fromString(QLatin1String("2014-02-26T12:38:00Z")) << QByteArray("content") << qint64(2672);
         }
@@ -60,7 +60,7 @@ private Q_SLOTS:
         {
             QList<QByteArray> scenario;
             scenario << FakeServer::preauth()
-                     << "C: A000001 APPEND \"INBOX\" (\\Seen)  {7}\r\ncontent"
+                     << "C: A000001 APPEND \"INBOX\" (\\Seen) {7}\r\ncontent"
                      << "S: BYE"
                      << "X" ;
             QTest::newRow("bad") << "INBOX" << scenario << flags << KDateTime() << QByteArray("content") << qint64(0);
@@ -68,7 +68,7 @@ private Q_SLOTS:
         {
             QList<QByteArray> scenario;
             scenario << FakeServer::preauth()
-                     << "C: A000001 APPEND \"INBOX\" (\\Seen)  {7}\r\ncontent"
+                     << "C: A000001 APPEND \"INBOX\" (\\Seen) {7}\r\ncontent"
                      << "S: "
                      << "X" ;
             QTest::newRow("Don't crash on empty response") << "INBOX" << scenario << flags << KDateTime() << QByteArray("content") << qint64(0);

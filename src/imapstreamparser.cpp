@@ -547,7 +547,7 @@ QByteArray ImapStreamParser::readUntilCommandEnd()
         {
             m_position = i - 1;
             hasLiteral(); //init literal size
-            result.append(m_data.mid(i - 1, m_position - i + 1));
+            result.append( m_data.mid( i, m_position + 1 ) );
             while (!atLiteralEnd()) {
                 result.append(readLiteralPart());
             }

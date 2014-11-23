@@ -62,22 +62,39 @@ void SetMetaDataJob::doStart()
     d->entriesIt = d->entries.constBegin();
 
     QByteArray command = "SETMETADATA";
+    bool bSimpleData = true;
+
     if (d->serverCapability == Annotatemore) {
         command = "SETANNOTATION";
-        parameters += '\"' + d->entryName + "\" (";
-        d->m_name = i18n("SetAnnotation");
-        if (!d->entries.isEmpty()) {
-            for (; d->entriesIt != d->entries.constEnd(); ++d->entriesIt) {
-                parameters += '\"' + d->entriesIt.key() + "\" \"" + d->entriesIt.value() + "\" ";
-            }
-            parameters[parameters.length() - 1] = ')';
-        }
+        parameters += '\"' + d->entryName + "\" ";
     } else {
-        parameters += '(';
+        for (; d->entriesIt != d->entries.constEnd(); ++d->entriesIt) {
+            if (d->entriesIt.value().contains('\r') || d->entriesIt.value().contains('\n')) {
+                bSimpleData = false;
+                break;
+            }
+        }
+        d->entriesIt = d->entries.constBegin();
+    }
+
+    parameters += '(';
+    if (bSimpleData == true) {
+        for ( ; d->entriesIt != d->entries.constEnd(); ++d->entriesIt ) {
+            parameters += '\"' + d->entriesIt.key() + "\" ";
+            if (d->entriesIt.value().isEmpty()) {
+                parameters += "NIL";
+            } else {
+                parameters +=  "\"" + d->entriesIt.value() + "\"";
+            }
+            parameters += " ";
+
+        }
+        parameters[parameters.length() - 1] = ')';
+    } else {
         if (!d->entries.isEmpty()) {
-            parameters += '\"' + d->entriesIt.key() + '\"';
-            parameters += ' ';
-            parameters += " {" + QByteArray::number(d->entriesIt.value().size()) + '}';
+            parameters += '\"' + d->entriesIt.key() + "\"";
+            int size = d->entriesIt.value().size();
+            parameters += " {" + QByteArray::number( size==0 ? 3 : size ) + '}';
         }
     }
 
@@ -95,7 +112,7 @@ void SetMetaDataJob::handleResponse(const Message &response)
 
     //TODO: Test if a server can really return more then one untagged NO response. If not, no need to OR the error codes
     if (!response.content.isEmpty() &&
-            d->tags.contains(response.content.first().toString())) {
+        d->tags.contains(response.content.first().toString())) {
         if (response.content[1].toString() == "NO") {
             setError(UserDefinedError);
             setErrorText(i18n("%1 failed, server replied: %2", d->m_name, QLatin1String(response.toString().constData())));
@@ -123,12 +140,19 @@ void SetMetaDataJob::handleResponse(const Message &response)
         }
         emitResult();
     } else if (d->serverCapability == Metadata && response.content[0].toString() == "+") {
-        QByteArray content = d->entriesIt.value();
+        QByteArray content = "";
+        if (d->entriesIt.value().isEmpty()) {
+            content += "NIL";
+        } else {
+            content +=  d->entriesIt.value();
+        }
         ++d->entriesIt;
         if (d->entriesIt == d->entries.constEnd()) {
             content += ')';
         } else {
-            content += " {" + QByteArray::number(d->entriesIt.value().size()) + '}';
+            content += " \"" + d->entriesIt.key() + '\"';
+            int size = d->entriesIt.value().size();
+            content += " {" + QByteArray::number( size==0 ? 3 : size ) + '}';
         }
 //      qCDebug(KIMAP_LOG) << "SENT: " << content;
         d->sessionInternal()->sendData(content);
