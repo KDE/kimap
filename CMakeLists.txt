@@ -17,7 +17,7 @@ include(KDECMakeSettings)
 include(KDEFrameworkCompilerSettings)
 
 set(KF5_VERSION "5.4.0")
-set(KDEPIMLIBS_VERSION "4.75.0")
+set(KDEPIMLIBS_VERSION "4.76.0")
 
 ecm_setup_version(${KDEPIMLIBS_VERSION} VARIABLE_PREFIX KIMAP
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kimap_version.h"
