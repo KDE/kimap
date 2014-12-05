@@ -73,7 +73,7 @@ public:
      *
      * @reimp
      */
-    virtual void doStart();
+    virtual void doStart() Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void done();

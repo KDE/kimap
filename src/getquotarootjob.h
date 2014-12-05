@@ -115,8 +115,8 @@ public:
     QMap<QByteArray, qint64> allLimits(const QByteArray &root) const;
 
 protected:
-    virtual void doStart();
-    virtual void handleResponse(const Message &response);
+    virtual void doStart() Q_DECL_OVERRIDE;
+    virtual void handleResponse(const Message &response) Q_DECL_OVERRIDE;
 
 };
 

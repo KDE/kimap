@@ -66,7 +66,7 @@ public:
     QByteArray identifier();
 
 protected:
-    virtual void doStart();
+    virtual void doStart() Q_DECL_OVERRIDE;
 
 };
 

@@ -410,8 +410,8 @@ Q_SIGNALS:
                        const QMap<qint64, KIMAP::MessageParts> &parts);
 
 protected:
-    virtual void doStart();
-    virtual void handleResponse(const Message &response);
+    virtual void doStart() Q_DECL_OVERRIDE;
+    virtual void handleResponse(const Message &response) Q_DECL_OVERRIDE;
 
 private:
     Q_PRIVATE_SLOT(d_func(), void emitPendings())

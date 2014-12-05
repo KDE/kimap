@@ -81,8 +81,8 @@ Q_SIGNALS:
                            const QList< QList<QByteArray> > &flags);
 
 protected:
-    virtual void doStart();
-    virtual void handleResponse(const Message &response);
+    virtual void doStart() Q_DECL_OVERRIDE;
+    virtual void handleResponse(const Message &response) Q_DECL_OVERRIDE;
 
 private:
     Q_PRIVATE_SLOT(d_func(), void emitPendings())
