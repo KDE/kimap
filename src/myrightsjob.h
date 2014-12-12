@@ -84,8 +84,8 @@ public:
     Acl::Rights rights();
 
 protected:
-    virtual void doStart() Q_DECL_OVERRIDE;
-    virtual void handleResponse(const Message &response) Q_DECL_OVERRIDE;
+    void doStart() Q_DECL_OVERRIDE;
+    void handleResponse(const Message &response) Q_DECL_OVERRIDE;
 
 };
 

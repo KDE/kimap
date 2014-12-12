@@ -131,8 +131,8 @@ Q_SIGNALS:
     void mailBoxMessageFlagsChanged(KIMAP::IdleJob *job, qint64 uid);
 
 protected:
-    virtual void doStart() Q_DECL_OVERRIDE;
-    virtual void handleResponse(const Message &response) Q_DECL_OVERRIDE;
+    void doStart() Q_DECL_OVERRIDE;
+    void handleResponse(const Message &response) Q_DECL_OVERRIDE;
 
 private:
     Q_PRIVATE_SLOT(d_func(), void emitStats())
