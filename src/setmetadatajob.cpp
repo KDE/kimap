@@ -20,7 +20,7 @@
 #include "setmetadatajob.h"
 
 #include <KLocalizedString>
-#include <QDebug>
+#include "kimap_debug.h"
 
 #include "metadatajobbase_p.h"
 #include "message_p.h"
@@ -86,7 +86,7 @@ void SetMetaDataJob::doStart()
     }
 
     d->tags << d->sessionInternal()->sendCommand(command, parameters);
-//   qDebug() << "SENT: " << command << " " << parameters;
+//   qCDebug(KIMAP_LOG) << "SENT: " << command << " " << parameters;
 }
 
 void SetMetaDataJob::handleResponse(const Message &response)
@@ -130,7 +130,7 @@ void SetMetaDataJob::handleResponse(const Message &response)
         } else {
             content += " {" + QByteArray::number(d->entriesIt.value().size()) + '}';
         }
-//      qDebug() << "SENT: " << content;
+//      qCDebug(KIMAP_LOG) << "SENT: " << content;
         d->sessionInternal()->sendData(content);
     }
 }

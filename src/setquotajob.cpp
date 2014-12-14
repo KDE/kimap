@@ -20,7 +20,7 @@
 #include "setquotajob.h"
 
 #include <KLocalizedString>
-#include <QDebug>
+#include "kimap_debug.h"
 
 #include "quotajobbase_p.h"
 #include "message_p.h"
@@ -64,7 +64,7 @@ void SetQuotaJob::doStart()
         s[s.length() - 1] = ')';
     }
 
-    qDebug() << "SETQUOTA " << '\"' + d->root + "\" " + s;
+    qCDebug(KIMAP_LOG) << "SETQUOTA " << '\"' + d->root + "\" " + s;
     //XXX: [alexmerry, 2010-07-24]: should d->root be quoted properly?
     d->tags << d->sessionInternal()->sendCommand("SETQUOTA", '\"' + d->root + "\" " + s);
 }

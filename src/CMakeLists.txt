@@ -5,6 +5,7 @@ remove_definitions(-DQT_NO_CAST_FROM_BYTEARRAY)
 kde_enable_exceptions()
 
 set(kimap_SRCS
+   kimap_debug.cpp
    acl.cpp
    acljobbase.cpp
    appendjob.cpp

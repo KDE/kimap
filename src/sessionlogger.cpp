@@ -20,7 +20,7 @@
 
 #include "sessionlogger_p.h"
 
-#include <QDebug>
+#include "kimap_debug.h"
 
 #include <unistd.h>
 
@@ -36,7 +36,7 @@ SessionLogger::SessionLogger()
                        + QLatin1Char('.') + QString::number(getpid())
                        + QLatin1Char('.') + QString::number(m_id));
     if (!m_file.open(QFile::WriteOnly)) {
-        qDebug() << " m_file can be open in write only";
+        qCDebug(KIMAP_LOG) << " m_file can be open in write only";
     }
 }
 

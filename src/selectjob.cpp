@@ -20,7 +20,7 @@
 #include "selectjob.h"
 
 #include <KLocalizedString>
-#include <qdebug.h>
+#include "kimap_debug.h"
 
 #include "job_p.h"
 #include "message_p.h"
@@ -221,7 +221,7 @@ void SelectJob::handleResponse(const Message &response)
                 }
             }
         } else {
-            qDebug() << response.toString();
+            qCDebug(KIMAP_LOG) << response.toString();
         }
     } else {
         Q_ASSERT(error() || d->m_session->selectedMailBox() == d->mailBox);

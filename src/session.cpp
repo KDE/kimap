@@ -27,7 +27,7 @@
 #include <QtCore/QDebug>
 #include <QtCore/QTimer>
 
-#include <QDebug>
+#include "kimap_debug.h"
 
 #include "job.h"
 #include "loginjob.h"
@@ -230,7 +230,7 @@ void SessionPrivate::responseReceived(const Message &response)
             simplified.content.removeFirst(); // Strip the tag
             simplified.content.removeFirst(); // Strip the code
         }
-        qDebug() << "Received BYE: " << simplified.toString();
+        qCDebug(KIMAP_LOG) << "Received BYE: " << simplified.toString();
         return;
     }
 
@@ -298,7 +298,7 @@ void SessionPrivate::responseReceived(const Message &response)
         restartSocketTimer();
         currentJob->handleResponse(response);
     } else {
-        qWarning() << "A message was received from the server with no job to handle it:"
+        qCWarning(KIMAP_LOG) << "A message was received from the server with no job to handle it:"
                    << response.toString()
                    << '(' + response.toString().toHex() + ')';
     }
@@ -512,7 +512,7 @@ void SessionPrivate::restartSocketTimer()
 
 void SessionPrivate::onSocketTimeout()
 {
-    qDebug() << "Socket timeout!";
+    qCDebug(KIMAP_LOG) << "Socket timeout!";
     thread->closeSocket();
 }
 

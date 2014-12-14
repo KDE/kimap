@@ -22,7 +22,7 @@
 #include <QtCore/QDebug>
 #include <QtCore/QThread>
 
-#include <QDebug>
+#include "kimap_debug.h"
 
 #include "imapstreamparser.h"
 #include "message_p.h"
@@ -51,7 +51,7 @@ SessionThread::~SessionThread()
 {
     QMetaObject::invokeMethod(this, "threadQuit");
     if (!thread()->wait(10 * 1000)) {
-        qWarning() << "Session thread refuses to die, killing harder...";
+        qCWarning(KIMAP_LOG) << "Session thread refuses to die, killing harder...";
         thread()->terminate();
         // Make sure to wait until it's done, otherwise it can crash when the pthread callback is called
         thread()->wait();
@@ -126,7 +126,7 @@ void SessionThread::readMessage()
         emit responseReceived(message);
 
     } catch (KIMAP::ImapParserException e) {
-        qWarning() << "The stream parser raised an exception:" << e.what();
+        qCWarning(KIMAP_LOG) << "The stream parser raised an exception:" << e.what();
     }
 
     if (m_stream->availableDataSize() > 1) {
@@ -149,7 +149,7 @@ void SessionThread::doCloseSocket()
         return;
     }
     m_encryptedMode = false;
-    qDebug() << "close";
+    qCDebug(KIMAP_LOG) << "close";
     m_socket->close();
 }
 
@@ -163,10 +163,10 @@ void SessionThread::reconnect()
     if (m_socket->state() != SessionSocket::ConnectedState &&
             m_socket->state() != SessionSocket::ConnectingState) {
         if (m_encryptedMode) {
-            qDebug() << "connectToHostEncrypted" << m_hostName << m_port;
+            qCDebug(KIMAP_LOG) << "connectToHostEncrypted" << m_hostName << m_port;
             m_socket->connectToHostEncrypted(m_hostName, m_port);
         } else {
-            qDebug() << "connectToHost" << m_hostName << m_port;
+            qCDebug(KIMAP_LOG) << "connectToHost" << m_hostName << m_port;
             m_socket->connectToHost(m_hostName, m_port);
         }
     }
@@ -261,7 +261,7 @@ void SessionThread::sslConnected()
     if (m_socket->sslErrors().count() > 0 ||
             m_socket->encryptionMode() != KTcpSocket::SslClientMode ||
             cipher.isNull() || cipher.usedBits() == 0) {
-        qDebug() << "Initial SSL handshake failed. cipher.isNull() is" << cipher.isNull()
+        qCDebug(KIMAP_LOG) << "Initial SSL handshake failed. cipher.isNull() is" << cipher.isNull()
                  << ", cipher.usedBits() is" << cipher.usedBits()
                  << ", the socket says:" <<  m_socket->errorString()
                  << "and the list of SSL errors contains"
@@ -269,7 +269,7 @@ void SessionThread::sslConnected()
         KSslErrorUiData errorData(m_socket);
         emit sslError(errorData);
     } else {
-        qDebug() << "TLS negotiation done.";
+        qCDebug(KIMAP_LOG) << "TLS negotiation done.";
         m_encryptedMode = true;
         emit encryptionNegotiationResult(true, m_socket->negotiatedSslVersion());
     }

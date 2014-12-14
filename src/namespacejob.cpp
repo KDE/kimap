@@ -19,7 +19,7 @@
 
 #include "namespacejob.h"
 
-#include <QDebug>
+#include "kimap_debug.h"
 #include <KLocalizedString>
 
 #include "job_p.h"
@@ -56,8 +56,8 @@ public:
 
                 result << descriptor;
             } catch (KIMAP::ImapParserException e) {
-                qWarning() << "The stream parser raised an exception during namespace list parsing:" << e.what();
-                qWarning() << "namespacelist:" << namespaceList;
+                qCWarning(KIMAP_LOG) << "The stream parser raised an exception during namespace list parsing:" << e.what();
+                qCWarning(KIMAP_LOG) << "namespacelist:" << namespaceList;
             }
 
         }

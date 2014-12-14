@@ -20,7 +20,7 @@
 #include "getacljob.h"
 
 #include <KLocalizedString>
-#include <QDebug>
+#include "kimap_debug.h"
 
 #include "acljobbase_p.h"
 #include "message_p.h"
@@ -60,7 +60,7 @@ void GetAclJob::doStart()
 void GetAclJob::handleResponse(const Message &response)
 {
     Q_D(GetAclJob);
-//   qDebug() << response.toString();
+//   qCDebug(KIMAP_LOG) << response.toString();
 
     if (handleErrorReplies(response) == NotHandled) {
         if (response.content.size() >= 4 &&

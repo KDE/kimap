@@ -20,7 +20,7 @@
 #include "fetchjob.h"
 
 #include <QtCore/QTimer>
-#include <QDebug>
+#include "kimap_debug.h"
 #include <KLocalizedString>
 
 #include "job_p.h"
@@ -304,7 +304,7 @@ void FetchJob::handleResponse(const Message &response)
                 ++it;
 
                 if (it == content.constEnd()) {   // Uh oh, message was truncated?
-                    qWarning() << "FETCH reply got truncated, skipping.";
+                    qCWarning(KIMAP_LOG) << "FETCH reply got truncated, skipping.";
                     break;
                 }
 

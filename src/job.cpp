@@ -23,7 +23,7 @@
 #include "session_p.h"
 
 #include <KLocalizedString>
-#include <QDebug>
+#include "kimap_debug.h"
 
 using namespace KIMAP;
 
@@ -75,7 +75,7 @@ void Job::setSocketError(KTcpSocket::Error error)
 Job::HandlerResponse Job::handleErrorReplies(const Message &response)
 {
     Q_D(Job);
-//   qDebug() << response.toString();
+//   qCDebug(KIMAP_LOG) << response.toString();
 
     if (!response.content.isEmpty() &&
             d->tags.contains(response.content.first().toString())) {

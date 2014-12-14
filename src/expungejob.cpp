@@ -20,7 +20,7 @@
 #include "expungejob.h"
 
 #include <KLocalizedString>
-#include <QDebug>
+#include "kimap_debug.h"
 
 #include "job_p.h"
 #include "message_p.h"
@@ -76,7 +76,7 @@ void ExpungeJob::handleResponse(const Message &response)
                 return;
             }
         }
-        qDebug() << "Unhandled response: " << response.toString().constData();
+        qCDebug(KIMAP_LOG) << "Unhandled response: " << response.toString().constData();
 
     }
 }

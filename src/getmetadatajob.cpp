@@ -20,7 +20,7 @@
 #include "getmetadatajob.h"
 
 #include <KLocalizedString>
-#include <QDebug>
+#include "kimap_debug.h"
 
 #include "metadatajobbase_p.h"
 #include "message_p.h"
@@ -117,13 +117,13 @@ void GetMetaDataJob::doStart()
     }
 
     d->tags << d->sessionInternal()->sendCommand(command, parameters);
-//  qDebug() << "SENT: " << command << " " << parameters;
+//  qCDebug(KIMAP_LOG) << "SENT: " << command << " " << parameters;
 }
 
 void GetMetaDataJob::handleResponse(const Message &response)
 {
     Q_D(GetMetaDataJob);
-//  qDebug() << "GOT: " << response.toString();
+//  qCDebug(KIMAP_LOG) << "GOT: " << response.toString();
 
     //TODO: handle NO error messages having [METADATA MAXSIZE NNN], [METADATA TOOMANY], [METADATA NOPRIVATE] (see rfc5464)
     // or [ANNOTATEMORE TOOBIG], [ANNOTATEMORE TOOMANY] respectively
@@ -165,7 +165,7 @@ void GetMetaDataJob::addEntry(const QByteArray &entry, const QByteArray &attribu
 {
     Q_D(GetMetaDataJob);
     if (d->serverCapability == Annotatemore && attribute.isNull()) {
-        qWarning() << "In ANNOTATEMORE mode an attribute must be specified with addEntry!";
+        qCWarning(KIMAP_LOG) << "In ANNOTATEMORE mode an attribute must be specified with addEntry!";
     }
     d->entries.append(entry);
     d->attributes.append(attribute);
@@ -220,7 +220,7 @@ QByteArray GetMetaDataJob::metaData(const QString &mailBox, const QByteArray &en
 
 QByteArray GetMetaDataJob::metaData(const QByteArray &entry) const
 {
-    qDebug() << entry;
+    qCDebug(KIMAP_LOG) << entry;
     Q_D(const GetMetaDataJob);
     return d->metadata.value(d->mailBox).value(d->removePrefix(entry)).value(d->getAttribute(entry));
 }
