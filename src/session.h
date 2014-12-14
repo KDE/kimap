@@ -26,7 +26,6 @@
 
 #include "sessionuiproxy.h"
 
-
 namespace KIMAP
 {
 

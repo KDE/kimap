@@ -20,4 +20,3 @@
 #include "kimap_debug.h"
 Q_LOGGING_CATEGORY(KIMAP_LOG, "log_kimap")
 
-

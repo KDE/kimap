@@ -262,10 +262,10 @@ void SessionThread::sslConnected()
             m_socket->encryptionMode() != KTcpSocket::SslClientMode ||
             cipher.isNull() || cipher.usedBits() == 0) {
         qCDebug(KIMAP_LOG) << "Initial SSL handshake failed. cipher.isNull() is" << cipher.isNull()
-                 << ", cipher.usedBits() is" << cipher.usedBits()
-                 << ", the socket says:" <<  m_socket->errorString()
-                 << "and the list of SSL errors contains"
-                 << m_socket->sslErrors().count() << "items.";
+                           << ", cipher.usedBits() is" << cipher.usedBits()
+                           << ", the socket says:" <<  m_socket->errorString()
+                           << "and the list of SSL errors contains"
+                           << m_socket->sslErrors().count() << "items.";
         KSslErrorUiData errorData(m_socket);
         emit sslError(errorData);
     } else {

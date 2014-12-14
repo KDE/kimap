@@ -299,8 +299,8 @@ void SessionPrivate::responseReceived(const Message &response)
         currentJob->handleResponse(response);
     } else {
         qCWarning(KIMAP_LOG) << "A message was received from the server with no job to handle it:"
-                   << response.toString()
-                   << '(' + response.toString().toHex() + ')';
+                             << response.toString()
+                             << '(' + response.toString().toHex() + ')';
     }
 }
 
