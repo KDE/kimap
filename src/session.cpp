@@ -54,20 +54,13 @@ Session::Session(const QString &hostName, quint16 port, QObject *parent)
     d->jobRunning = false;
 
     d->thread = new SessionThread(hostName, port);
-    connect(d->thread, SIGNAL(encryptionNegotiationResult(bool,KTcpSocket::SslVersion)),
-            d, SLOT(onEncryptionNegotiationResult(bool,KTcpSocket::SslVersion)));
-    connect(d->thread, SIGNAL(sslError(KSslErrorUiData)),
-            d, SLOT(handleSslError(KSslErrorUiData)));
-    connect(d->thread, SIGNAL(socketDisconnected()),
-            d, SLOT(socketDisconnected()));
-    connect(d->thread, SIGNAL(responseReceived(KIMAP::Message)),
-            d, SLOT(responseReceived(KIMAP::Message)));
-    connect(d->thread, SIGNAL(socketConnected()),
-            d, SLOT(socketConnected()));
-    connect(d->thread, SIGNAL(socketActivity()),
-            d, SLOT(socketActivity()));
-    connect(d->thread, SIGNAL(socketError(KTcpSocket::Error)),
-            d, SLOT(socketError(KTcpSocket::Error)));
+    connect(d->thread, &SessionThread::encryptionNegotiationResult, d, &SessionPrivate::onEncryptionNegotiationResult);
+    connect(d->thread, &SessionThread::sslError, d, &SessionPrivate::handleSslError);
+    connect(d->thread, &SessionThread::socketDisconnected, d, &SessionPrivate::socketDisconnected);
+    connect(d->thread, &SessionThread::responseReceived, d, &SessionPrivate::responseReceived);
+    connect(d->thread, &SessionThread::socketConnected, d, &SessionPrivate::socketConnected);
+    connect(d->thread, &SessionThread::socketActivity, d, &SessionPrivate::socketActivity);
+    connect(d->thread, &SessionThread::socketError, d, &SessionPrivate::socketError);
 
     d->socketTimer.setSingleShot(true);
     connect(&d->socketTimer, SIGNAL(timeout()),
