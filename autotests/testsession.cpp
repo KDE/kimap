@@ -358,6 +358,6 @@ private:
     QList<KJob *> m_jobs;
 };
 
-QTEST_MAIN(SessionTest)
+QTEST_GUILESS_MAIN(SessionTest)
 
 #include "testsession.moc"
