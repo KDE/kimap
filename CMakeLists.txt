@@ -18,7 +18,7 @@ include(KDEFrameworkCompilerSettings)
 
 set(KF5_VERSION "5.5.0")
 set(KDEPIMLIBS_VERSION "4.79.0")
-
+set(MIMELIBS_VERSION "4.79.0")
 ecm_setup_version(${KDEPIMLIBS_VERSION} VARIABLE_PREFIX KIMAP
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kimap_version.h"
                         PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5ImapConfigVersion.cmake"
@@ -29,7 +29,7 @@ ecm_setup_version(${KDEPIMLIBS_VERSION} VARIABLE_PREFIX KIMAP
 find_package(KF5CoreAddons ${KF5_VERSION} CONFIG REQUIRED)
 find_package(KF5KDELibs4Support ${KF5_VERSION} CONFIG REQUIRED)
 
-find_package(KF5Mime ${KDEPIMLIBS_VERSION} CONFIG REQUIRED)
+find_package(KF5Mime ${MIMELIBS_VERSION} CONFIG REQUIRED)
 
 set(Boost_MINIMUM_VERSION "1.34.0")
 find_package(Boost ${Boost_MINIMUM_VERSION})
