@@ -17,4 +17,4 @@ install(TARGETS kimaptest ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES
   fakeserver.h
   mockjob.h
-  DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/kimaptest COMPONENT Devel)
+  DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/kimaptest COMPONENT Devel)

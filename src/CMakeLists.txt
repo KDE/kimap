@@ -54,7 +54,7 @@ generate_export_header(KF5Imap BASE_NAME kimap)
 
 add_library(KF5::Imap ALIAS KF5Imap)
 
-target_include_directories(KF5Imap INTERFACE "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KImap;${Boost_INCLUDE_DIR};${Sasl2_INCLUDE_DIR}>")
+target_include_directories(KF5Imap INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF5}/KImap;${Boost_INCLUDE_DIR};${Sasl2_INCLUDE_DIR}>")
 target_include_directories(KF5Imap PUBLIC "$<BUILD_INTERFACE:${KImap_SOURCE_DIR}/src;${KImap_BINARY_DIR}/src>")
 
 target_link_libraries(KF5Imap
@@ -124,16 +124,16 @@ install(FILES
     ${KImap_HEADERS}
     namespacejob.h rfccodecs.h # FIXME these two headers don't have camelcase headers in KDE4
     ${KImap_CamelCase_HEADERS}
-    DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KImap/kimap
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/KImap/kimap
     COMPONENT Devel
 )
 
 install(FILES
     ${KImap_CamelCase_HEADERS}
-    DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KImap/KImap
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/KImap/KImap
     COMPONENT Devel
 )
 
 
-ecm_generate_pri_file(BASE_NAME KImap LIB_NAME KF5Imap DEPS "Mime" FILENAME_VAR PRI_FILENAME INCLUDE_INSTALL_DIR ${KF5_INCLUDE_INSTALL_DIR}/KImap)
+ecm_generate_pri_file(BASE_NAME KImap LIB_NAME KF5Imap DEPS "Mime" FILENAME_VAR PRI_FILENAME INCLUDE_INSTALL_DIR ${KDE_INSTALL_INCLUDEDIR_KF5}/KImap)
 install(FILES ${PRI_FILENAME} DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
