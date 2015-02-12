@@ -123,7 +123,7 @@ public:
 protected:
     void doStart() Q_DECL_OVERRIDE;
     void handleResponse(const Message &response) Q_DECL_OVERRIDE;
-    virtual void connectionLost();
+    virtual void connectionLost() Q_DECL_OVERRIDE;
 
 private:
     Q_PRIVATE_SLOT(d_func(), void sslResponse(bool))

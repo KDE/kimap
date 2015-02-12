@@ -45,7 +45,7 @@ public:
 
     Session *session() const;
 
-    virtual void start();
+    virtual void start() Q_DECL_OVERRIDE;
 
 private:
     virtual void doStart() = 0;

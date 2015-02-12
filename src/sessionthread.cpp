@@ -36,7 +36,7 @@ static const int _kimap_sslErrorUiData = qRegisterMetaType<KSslErrorUiData>();
 
 SessionThread::SessionThread(const QString &hostName, quint16 port)
     : QObject(), m_hostName(hostName), m_port(port),
-      m_socket(0), m_stream(0), m_mutex(),
+      m_socket(Q_NULLPTR), m_stream(nullptr), m_mutex(),
       m_encryptedMode(false)
 {
     // Just like the Qt docs now recommend, for event-driven threads:
@@ -157,7 +157,7 @@ void SessionThread::doCloseSocket()
 void SessionThread::reconnect()
 {
     Q_ASSERT(QThread::currentThread() == thread());
-    if (m_socket == 0) { // threadQuit already called
+    if (m_socket == Q_NULLPTR) { // threadQuit already called
         return;
     }
     if (m_socket->state() != SessionSocket::ConnectedState &&
@@ -205,9 +205,9 @@ void SessionThread::threadQuit()
 {
     Q_ASSERT(QThread::currentThread() == thread());
     delete m_stream;
-    m_stream = 0;
+    m_stream = Q_NULLPTR;
     delete m_socket;
-    m_socket = 0;
+    m_socket = Q_NULLPTR;
     thread()->quit();
 }
 

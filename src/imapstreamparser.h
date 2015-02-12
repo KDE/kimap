@@ -42,7 +42,7 @@ public:
     explicit ImapParserException(const QString &what) throw() : mWhat(what.toUtf8()) {}
     ImapParserException(const ImapParserException &other) throw() : std::exception(other), mWhat(other.what()) {}
     virtual ~ImapParserException() throw() {}
-    const char *what() const throw()
+    const char *what() const throw() Q_DECL_OVERRIDE
     {
         return mWhat.constData();
     }
@@ -98,7 +98,7 @@ public:
      * @param ok true if the data found was a number
      * @return the number
      */
-    qint64 readNumber(bool *ok = 0);
+    qint64 readNumber(bool *ok = Q_NULLPTR);
 
     /**
      * Check if the next data is a string or not. This call might block.

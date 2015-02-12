@@ -295,7 +295,7 @@ QByteArray KIMAP::encodeImapFolderName(const QByteArray &inSrc)
 QTextCodec *KIMAP::codecForName(const QString &str)
 {
     if (str.isEmpty()) {
-        return 0;
+        return Q_NULLPTR;
     }
     return QTextCodec::codecForName(str.toLower().
                                     replace(QStringLiteral("windows"), QStringLiteral("cp")).toLatin1());
@@ -331,7 +331,7 @@ const QString KIMAP::decodeRFC2047String(const QString &str,
     // FIXME get rid of the conversion?
     QByteArray aStr = str.toLatin1();   // QString.length() means Unicode chars
     QByteArray result;
-    char *pos, *beg, *end, *mid = 0;
+    char *pos, *beg, *end, *mid = Q_NULLPTR;
     QByteArray cstr;
     char encoding = 0, ch;
     bool valid;

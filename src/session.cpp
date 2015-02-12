@@ -72,7 +72,7 @@ Session::Session(const QString &hostName, quint16 port, QObject *parent)
 Session::~Session()
 {
     delete d->thread;
-    d->thread = 0;
+    d->thread = Q_NULLPTR;
 }
 
 void Session::setUiProxy(SessionUiProxy::Ptr proxy)
@@ -133,8 +133,8 @@ SessionPrivate::SessionPrivate(Session *session)
     : QObject(session),
       q(session),
       state(Session::Disconnected),
-      logger(0),
-      currentJob(0),
+      logger(Q_NULLPTR),
+      currentJob(Q_NULLPTR),
       tagCount(0),
       sslVersion(KTcpSocket::UnknownSslVersion),
       socketTimerInterval(30000)   // By default timeouts on 30s
@@ -185,7 +185,7 @@ void SessionPrivate::jobDone(KJob *job)
     stopSocketTimer();
 
     jobRunning = false;
-    currentJob = 0;
+    currentJob = Q_NULLPTR;
     emit q->jobQueueSizeChanged(q->jobQueueSize());
     startNext();
 }
@@ -194,7 +194,7 @@ void SessionPrivate::jobDestroyed(QObject *job)
 {
     queue.removeAll(static_cast<KIMAP::Job *>(job));
     if (currentJob == job) {
-        currentJob = 0;
+        currentJob = Q_NULLPTR;
     }
 }
 
@@ -287,7 +287,7 @@ void SessionPrivate::responseReceived(const Message &response)
     }
 
     // If a job is running forward it the response
-    if (currentJob != 0) {
+    if (currentJob != Q_NULLPTR) {
         restartSocketTimer();
         currentJob->handleResponse(response);
     } else {

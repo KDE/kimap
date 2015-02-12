@@ -36,14 +36,14 @@ extern "C" {
 }
 
 static const sasl_callback_t callbacks[] = {
-    { SASL_CB_ECHOPROMPT, NULL, NULL },
-    { SASL_CB_NOECHOPROMPT, NULL, NULL },
-    { SASL_CB_GETREALM, NULL, NULL },
-    { SASL_CB_USER, NULL, NULL },
-    { SASL_CB_AUTHNAME, NULL, NULL },
-    { SASL_CB_PASS, NULL, NULL },
-    { SASL_CB_CANON_USER, NULL, NULL },
-    { SASL_CB_LIST_END, NULL, NULL }
+    { SASL_CB_ECHOPROMPT, Q_NULLPTR, nullptr },
+    { SASL_CB_NOECHOPROMPT, Q_NULLPTR, nullptr },
+    { SASL_CB_GETREALM, Q_NULLPTR, nullptr },
+    { SASL_CB_USER, Q_NULLPTR, nullptr },
+    { SASL_CB_AUTHNAME, Q_NULLPTR, nullptr },
+    { SASL_CB_PASS, Q_NULLPTR, nullptr },
+    { SASL_CB_CANON_USER, Q_NULLPTR, nullptr },
+    { SASL_CB_LIST_END, Q_NULLPTR, nullptr }
 };
 
 namespace KIMAP
@@ -60,8 +60,8 @@ public:
 
     LoginJobPrivate(LoginJob *job, Session *session, const QString &name) : JobPrivate(session, name), q(job), encryptionMode(LoginJob::Unencrypted), authState(Login), plainLoginDisabled(false)
     {
-        conn = 0;
-        client_interact = 0;
+        conn = Q_NULLPTR;
+        client_interact = Q_NULLPTR;
     }
     ~LoginJobPrivate() { }
     bool sasl_interact();
@@ -128,7 +128,7 @@ bool LoginJobPrivate::sasl_interact()
             interact->len = strlen((const char *) interact->result);
             break;
         default:
-            interact->result = 0;
+            interact->result = Q_NULLPTR;
             interact->len = 0;
             break;
         }
@@ -449,11 +449,11 @@ bool LoginJobPrivate::startAuthentication()
     }
 
     authState = LoginJobPrivate::Authenticate;
-    const char *out = 0;
+    const char *out = Q_NULLPTR;
     uint outlen = 0;
-    const char *mechusing = 0;
+    const char *mechusing = Q_NULLPTR;
 
-    int result = sasl_client_new("imap", m_session->hostName().toLatin1(), 0, 0, callbacks, 0, &conn);
+    int result = sasl_client_new("imap", m_session->hostName().toLatin1(), Q_NULLPTR, nullptr, callbacks, 0, &conn);
     if (result != SASL_OK) {
         qCDebug(KIMAP_LOG) << "sasl_client_new failed with:" << result;
         q->setError(LoginJob::UserDefinedError);
@@ -462,7 +462,7 @@ bool LoginJobPrivate::startAuthentication()
     }
 
     do {
-        result = sasl_client_start(conn, authMode.toLatin1(), &client_interact, capabilities.contains(QStringLiteral("SASL-IR")) ? &out : 0, &outlen, &mechusing);
+        result = sasl_client_start(conn, authMode.toLatin1(), &client_interact, capabilities.contains(QStringLiteral("SASL-IR")) ? &out : Q_NULLPTR, &outlen, &mechusing);
 
         if (result == SASL_INTERACT) {
             if (!sasl_interact()) {
@@ -497,10 +497,10 @@ bool LoginJobPrivate::answerChallenge(const QByteArray &data)
 {
     QByteArray challenge = data;
     int result = -1;
-    const char *out = 0;
+    const char *out = Q_NULLPTR;
     uint outlen = 0;
     do {
-        result = sasl_client_step(conn, challenge.isEmpty() ? 0 : challenge.data(),
+        result = sasl_client_step(conn, challenge.isEmpty() ? Q_NULLPTR : challenge.data(),
                                   challenge.size(),
                                   &client_interact,
                                   &out, &outlen);
