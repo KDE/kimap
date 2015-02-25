@@ -43,7 +43,7 @@ public:
 
 protected:
     void doStart() Q_DECL_OVERRIDE;
-    virtual void connectionLost() Q_DECL_OVERRIDE;
+    void connectionLost() Q_DECL_OVERRIDE;
 };
 
 }
