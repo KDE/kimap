@@ -55,6 +55,13 @@ GetMetaDataJob::~GetMetaDataJob()
 {
 }
 
+static QList<QByteArray> sort(const QSet<QByteArray> &set)
+{
+    QList<QByteArray> sortedEntries = set.toList();
+    qSort(sortedEntries);
+    return sortedEntries;
+}
+
 void GetMetaDataJob::doStart()
 {
     Q_D(GetMetaDataJob);
@@ -68,7 +75,7 @@ void GetMetaDataJob::doStart()
         if (d->entries.size() > 1) {
             parameters += '(';
         }
-        Q_FOREACH (const QByteArray &entry, d->entries) {
+        Q_FOREACH (const QByteArray &entry, sort(d->entries)) {
             parameters += '\"' + entry + "\" ";
         }
         if (d->entries.size() > 1) {
@@ -79,7 +86,7 @@ void GetMetaDataJob::doStart()
         if (d->attributes.size() > 1) {
             parameters += '(';
         }
-        Q_FOREACH (const QByteArray &attribute, d->attributes) {
+        Q_FOREACH (const QByteArray &attribute, sort(d->attributes)) {
             parameters += '\"' + attribute + "\" ";
         }
         if (d->attributes.size() > 1) {
@@ -107,7 +114,7 @@ void GetMetaDataJob::doStart()
 
         if (d->entries.size() >= 1) {
             parameters += '(';
-            Q_FOREACH (const QByteArray &entry, d->entries) {
+            Q_FOREACH (const QByteArray &entry, sort(d->entries)) {
                 parameters += entry + " ";
             }
             parameters[parameters.length() - 1 ] = ')';

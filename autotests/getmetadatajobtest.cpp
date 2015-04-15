@@ -302,7 +302,7 @@ private Q_SLOTS:
         scenario << FakeServer::preauth()
                  << "C: A000001 GETANNOTATION \"Folder1\""
                  << "S: A000001 OK annotations retrieved"
-                 << "C: A000002 GETANNOTATION \"Folder1\" (\"/comment\" \"/motd\") (\"value.shared\" \"value.priv\")"
+                 << "C: A000002 GETANNOTATION \"Folder1\" (\"/comment\" \"/motd\") (\"value.priv\" \"value.shared\")"
                  << "S: A000002 OK annotations retrieved";
         fakeServer.setScenario(scenario);
         fakeServer.startAndWait();
@@ -338,7 +338,7 @@ private Q_SLOTS:
         scenario << FakeServer::preauth()
             << "C: A000001 GETANNOTATION \"Folder1\" (\"/comment\" \"/motd\") \"value.shared\""
             << "S: A000001 OK annotations retrieved"
-            << "C: A000002 GETANNOTATION \"Folder1\" \"/comment\" (\"value.shared\" \"value.priv\")"
+            << "C: A000002 GETANNOTATION \"Folder1\" \"/comment\" (\"value.priv\" \"value.shared\")"
             << "S: A000002 OK annotations retrieved";
         fakeServer.setScenario(scenario);
         fakeServer.startAndWait();
