@@ -234,7 +234,13 @@ QMap<QByteArray, QMap<QByteArray, QByteArray> > GetMetaDataJob::allMetaData(cons
 QMap<QByteArray, QByteArray> GetMetaDataJob::allMetaData() const
 {
     Q_D(const GetMetaDataJob);
-    const QMap<QByteArray, QMap<QByteArray, QByteArray> > &entries = d->metadata[d->mailBox];
+    return allMetaDataForMailbox(d->mailBox);
+}
+
+QMap<QByteArray, QByteArray> GetMetaDataJob::allMetaDataForMailbox(const QString &mailbox) const
+{
+    Q_D(const GetMetaDataJob);
+    const QMap<QByteArray, QMap<QByteArray, QByteArray> > &entries = d->metadata[mailbox];
     QMap<QByteArray, QByteArray> map;
     foreach (const QByteArray &entry, entries.keys()) {
         const QMap<QByteArray, QByteArray> &values = entries[entry];
@@ -243,5 +249,15 @@ QMap<QByteArray, QByteArray> GetMetaDataJob::allMetaData() const
         }
     }
     return map;
+}
+
+QHash<QString, QMap<QByteArray, QByteArray> > GetMetaDataJob::allMetaDataForMailboxes() const
+{
+    Q_D(const GetMetaDataJob);
+    QHash<QString, QMap<QByteArray, QByteArray> > mailboxHash;
+    Q_FOREACH (const QString &mailbox, d->metadata.keys()) {
+        mailboxHash.insert(mailbox, allMetaDataForMailbox(mailbox));
+    }
+    return mailboxHash;
 }
 

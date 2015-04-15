@@ -224,14 +224,34 @@ public:
     QMap<QByteArray, QMap<QByteArray, QByteArray> > allMetaData(const QString &mailBox) const;
 
     /**
-     * Get all the metadata.
-     *
+     * Get all the metadata for the mailbox set with setMailBox().
+     * 
      * Note that the returned map uses METADATA style entries (with a /shared or /private prefix typically),
      * also in ANNOTATEMORE mode.
      *
      * @return a map from metadata entry names to values
      */
     QMap<QByteArray, QByteArray> allMetaData() const;
+
+    /**
+     * Get all the metadata for the mailbox.
+     *
+     * Note that the returned map uses METADATA style entries (with a /shared or /private prefix typically),
+     * also in ANNOTATEMORE mode.
+     *
+     * @return a map from metadata entry names to values
+     */
+     QMap<QByteArray, QByteArray> allMetaDataForMailbox(const QString &mailbox) const;
+
+    /**
+     * Get all the metadata for for all mailboxes.
+     *
+     * Note that the returned map uses METADATA style entries (with a /shared or /private prefix typically),
+     * also in ANNOTATEMORE mode.
+     *
+     * @return a map in the form (mailbox, (entry, value))
+     */
+     QHash<QString, QMap<QByteArray, QByteArray> > allMetaDataForMailboxes() const;
 
 protected:
     void doStart() Q_DECL_OVERRIDE;
