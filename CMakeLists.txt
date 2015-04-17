@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 2.8.12)
 
-project(KImap)
+project(KIMAP)
 
 # ECM setup
 find_package(ECM 5.9.0 CONFIG REQUIRED)
-set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${KImap_SOURCE_DIR}/cmake)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${KIMAP_SOURCE_DIR}/cmake)
 
 include(GenerateExportHeader)
 include(ECMGenerateHeaders)
@@ -21,7 +21,7 @@ set(KIMAP_LIB_VERSION "4.79.0")
 set(KMIME_LIBS_VERSION "4.79.0")
 ecm_setup_version(${KIMAP_LIB_VERSION} VARIABLE_PREFIX KIMAP
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kimap_version.h"
-                        PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5ImapConfigVersion.cmake"
+                        PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5IMAPConfigVersion.cmake"
                         SOVERSION 5
 )
 
@@ -47,13 +47,13 @@ set_package_properties(Sasl2 PROPERTIES
 )
 
 ########### CMake Config Files ###########
-set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5Imap")
+set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5IMAP")
 add_definitions(-DTRANSLATION_DOMAIN=\"libkimap5\")
 add_definitions("-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII")
 
 ecm_configure_package_config_file(
-  "${CMAKE_CURRENT_SOURCE_DIR}/KF5ImapConfig.cmake.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/KF5ImapConfig.cmake"
+  "${CMAKE_CURRENT_SOURCE_DIR}/KF5IMAPConfig.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/KF5IMAPConfig.cmake"
   INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
 )
 
@@ -65,13 +65,13 @@ add_subdirectory(cmake)
 
 ########### Install Files ###########
 install(FILES
-  "${CMAKE_CURRENT_BINARY_DIR}/KF5ImapConfig.cmake"
-  "${CMAKE_CURRENT_BINARY_DIR}/KF5ImapConfigVersion.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/KF5IMAPConfig.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/KF5IMAPConfigVersion.cmake"
   DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
   COMPONENT Devel
 )
 
-install(EXPORT KF5ImapTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE KF5ImapTargets.cmake NAMESPACE KF5::)
+install(EXPORT KF5IMAPTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE KF5IMAPTargets.cmake NAMESPACE KF5::)
 
 install(FILES
    ${CMAKE_CURRENT_BINARY_DIR}/kimap_version.h
