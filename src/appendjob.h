@@ -20,10 +20,10 @@
 #ifndef KIMAP_APPENDJOB_H
 #define KIMAP_APPENDJOB_H
 
-#include <kdatetime.h>
 #include "kimap_export.h"
 
 #include "job.h"
+#include <QDateTime>
 
 namespace KIMAP
 {
@@ -89,13 +89,14 @@ public:
      *
      * @since 4.13
      */
-    void setInternalDate(const KDateTime &internalDate);
+    void setInternalDate(const QDateTime &internalDate);
+
     /**
      * The internal date that will be set on the appended message.
      *
      * @since 4.13
      */
-    KDateTime internalDate() const;
+    QDateTime internalDate() const;
 
     /**
      * The content of the message.

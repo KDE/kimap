@@ -23,7 +23,7 @@
 #include "kimap/appendjob.h"
 
 #include <QtTest>
-#include <KDateTime>
+#include <QDateTime>
 
 class AppendJobTest: public QObject
 {
@@ -36,7 +36,7 @@ private Q_SLOTS:
         QTest::addColumn<QString>("mailbox");
         QTest::addColumn<QList<QByteArray> >("scenario");
         QTest::addColumn<QList<QByteArray> >("flags");
-        QTest::addColumn<KDateTime>("internaldate");
+        QTest::addColumn<QDateTime>("internaldate");
         QTest::addColumn<QByteArray>("content");
         QTest::addColumn<qint64>("uid");
 
@@ -47,14 +47,14 @@ private Q_SLOTS:
             scenario << FakeServer::preauth()
                      << "C: A000001 APPEND \"INBOX\" (\\Seen) {7}\r\ncontent"
                      << "S: A000001 OK APPEND completed. [ APPENDUID 492 2671 ]";
-            QTest::newRow("good") << "INBOX" << scenario << flags << KDateTime() << QByteArray("content") << qint64(2671);
+            QTest::newRow("good") << "INBOX" << scenario << flags << QDateTime() << QByteArray("content") << qint64(2671);
         }
         {
             QList<QByteArray> scenario;
             scenario << FakeServer::preauth()
                      << "C: A000001 APPEND \"INBOX\" (\\Seen) \"26-Feb-2014 12:38:00 +0000\" {7}\r\ncontent"
                      << "S: A000001 OK APPEND completed. [ APPENDUID 493 2672 ]";
-            QTest::newRow("good, with internalDate set") << "INBOX" << scenario << flags << KDateTime::fromString(QLatin1String("2014-02-26T12:38:00Z")) << QByteArray("content") << qint64(2672);
+            QTest::newRow("good, with internalDate set") << "INBOX" << scenario << flags << QDateTime::fromString(QLatin1String("2014-02-26T12:38:00Z"), Qt::ISODate) << QByteArray("content") << qint64(2672);
         }
 
         {
@@ -63,7 +63,7 @@ private Q_SLOTS:
                      << "C: A000001 APPEND \"INBOX\" (\\Seen) {7}\r\ncontent"
                      << "S: BYE"
                      << "X" ;
-            QTest::newRow("bad") << "INBOX" << scenario << flags << KDateTime() << QByteArray("content") << qint64(0);
+            QTest::newRow("bad") << "INBOX" << scenario << flags << QDateTime() << QByteArray("content") << qint64(0);
         }
         {
             QList<QByteArray> scenario;
@@ -71,7 +71,7 @@ private Q_SLOTS:
                      << "C: A000001 APPEND \"INBOX\" (\\Seen) {7}\r\ncontent"
                      << "S: "
                      << "X" ;
-            QTest::newRow("Don't crash on empty response") << "INBOX" << scenario << flags << KDateTime() << QByteArray("content") << qint64(0);
+            QTest::newRow("Don't crash on empty response") << "INBOX" << scenario << flags << QDateTime() << QByteArray("content") << qint64(0);
         }
     }
 
@@ -80,7 +80,7 @@ private Q_SLOTS:
         QFETCH(QString, mailbox);
         QFETCH(QList<QByteArray>, scenario);
         QFETCH(QList<QByteArray>, flags);
-        QFETCH(KDateTime, internaldate);
+        QFETCH(QDateTime, internaldate);
         QFETCH(QByteArray, content);
         QFETCH(qint64, uid);
 

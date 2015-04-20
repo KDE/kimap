@@ -36,7 +36,7 @@ public:
 
     QString mailBox;
     QList<QByteArray> flags;
-    KDateTime internalDate;
+    QDateTime internalDate;
     QByteArray content;
     qint64 uid;
 };
@@ -77,13 +77,13 @@ QList<QByteArray> AppendJob::flags() const
     return d->flags;
 }
 
-void AppendJob::setInternalDate(const KDateTime &internalDate)
+void AppendJob::setInternalDate(const QDateTime &internalDate)
 {
     Q_D(AppendJob);
     d->internalDate = internalDate;
 }
 
-KDateTime AppendJob::internalDate() const
+QDateTime AppendJob::internalDate() const
 {
     Q_D(const AppendJob);
     return d->internalDate;
@@ -123,7 +123,8 @@ void AppendJob::doStart()
     }
 
     if (!d->internalDate.isNull()) {
-        parameters += " \"" + d->internalDate.toString(QString::fromAscii("%d-%:b-%Y %H:%M:%S %z")).toLatin1() + '\"';
+        const QDateTime utcDateTime = d->internalDate.toUTC();
+        parameters += " \"" + utcDateTime.toString(QString::fromAscii("dd-MMM-yyyy hh:mm:ss")).toLatin1() + " +0000" + '\"';
     }
 
     parameters += " {" + QByteArray::number(d->content.size()) + '}';
