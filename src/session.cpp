@@ -71,6 +71,8 @@ Session::Session(const QString &hostName, quint16 port, QObject *parent)
 
 Session::~Session()
 {
+    //Make sure all jobs know we're done
+    d->socketDisconnected();
     delete d->thread;
     d->thread = Q_NULLPTR;
 }
