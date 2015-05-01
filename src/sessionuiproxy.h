@@ -37,7 +37,7 @@ class KIMAP_EXPORT SessionUiProxy
 public:
     typedef boost::shared_ptr<SessionUiProxy> Ptr;
 
-    virtual ~SessionUiProxy() {};
+    virtual ~SessionUiProxy();
     /**
      * Show an SSL error and ask the user whether it should be ignored or not.
      * The recommended KDE UI is the following:
