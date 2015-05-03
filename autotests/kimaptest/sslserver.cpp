@@ -68,7 +68,7 @@ SslServer::SslServer(QSsl::SslProtocol protocol)
 
 }
 
-void SslServer::incomingConnection(int handle)
+void SslServer::incomingConnection(qintptr handle)
 {
     QSslSocket *socket = new QSslSocket();
     socket->setSocketDescriptor(handle);
