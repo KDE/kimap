@@ -178,7 +178,9 @@ void ListJob::handleResponse(const Message &response)
     if (handleErrorReplies(response) == NotHandled) {
         if (response.content.size() >= 5 && response.content[1].toString() == d->command) {
             QList<QByteArray> flags = response.content[2].toList();
-            std::transform(flags.begin(), flags.end(), flags.begin(), boost::bind(&QByteArray::toLower, _1));
+            for (QList<QByteArray>::iterator it = flags.begin(), itEnd = flags.end(); it != itEnd; ++it) {
+                *it = it->toLower();
+            }
             QByteArray separator = response.content[3].toString();
             if (separator.isEmpty()) {
                 // Defaults to / for servers reporting an empty list
