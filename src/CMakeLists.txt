@@ -62,10 +62,10 @@ target_link_libraries(KF5IMAP
 PUBLIC
   KF5::Mime
 PRIVATE
-  #KF5::KIOCore
+  KF5::KIOCore
+  KF5::Codecs
   KF5::CoreAddons
   KF5::I18n
-  KF5::KDELibs4Support
   ${Sasl2_LIBRARIES}
 )
 
