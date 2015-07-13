@@ -59,8 +59,12 @@ ecm_configure_package_config_file(
 
 ########### Targets ###########
 add_subdirectory(src)
-add_subdirectory(autotests)
-add_subdirectory(tests)
+
+if(BUILD_TESTING)
+    add_subdirectory(autotests)
+    add_subdirectory(tests)
+endif()
+
 add_subdirectory(cmake)
 
 ########### Install Files ###########
