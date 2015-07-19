@@ -64,7 +64,7 @@ public:
      * Sets an ui proxy that displays the error messages and waits for user feedback.
      * @param proxy the ui proxy object
      */
-    void setUiProxy(SessionUiProxy::Ptr proxy);
+    void setUiProxy(const SessionUiProxy::Ptr &proxy);
 
     /**
      * Sets an ui proxy that displays the error messages and waits for user feedback.

@@ -77,7 +77,7 @@ Session::~Session()
     d->thread = Q_NULLPTR;
 }
 
-void Session::setUiProxy(SessionUiProxy::Ptr proxy)
+void Session::setUiProxy(const SessionUiProxy::Ptr &proxy)
 {
     d->uiProxy = proxy;
 }
