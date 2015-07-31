@@ -575,13 +575,3 @@ QList<qint64> SearchJob::results() const
     Q_D(const SearchJob);
     return d->results;
 }
-
-QList<int> SearchJob::foundItems()
-{
-    Q_D(const SearchJob);
-
-    QList<int> results;
-    qCopy(d->results.begin(), d->results.end(), results.begin());
-
-    return results;
-}

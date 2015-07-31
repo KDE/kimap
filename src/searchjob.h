@@ -177,13 +177,6 @@ public:
     /**
      * Get the search result, as a list of sequence numbers or UIDs, based on the isUidBased status
      * @return the found items
-     * @deprecated use results() instead
-     */
-    KIMAP_DEPRECATED QList<int> foundItems();
-
-    /**
-     * Get the search result, as a list of sequence numbers or UIDs, based on the isUidBased status
-     * @return the found items
      * @since 4.6
      */
     QList<qint64> results() const;
