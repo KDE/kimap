@@ -55,7 +55,7 @@ private Q_SLOTS:
         QTest::newRow("one interval and a value") << set << QByteArray("7:10,5");
 
         set = ImapSet(7, 10);
-        set.add(QList<ImapSet::Id>() << 5 << 3);
+        set.add(QVector<ImapSet::Id>() << 5 << 3);
         QTest::newRow("one interval and two values") << set << QByteArray("7:10,3,5");
     }
 

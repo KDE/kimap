@@ -201,7 +201,7 @@ ImapSet::ImapSet(Id begin, Id end) :
 ImapSet::ImapSet(Id value) :
     d(new Private)
 {
-    add(QList<Id>() << value);
+    add(QVector<Id>() << value);
 }
 
 ImapSet::ImapSet(const ImapSet &other) :
@@ -238,12 +238,12 @@ bool ImapSet::operator ==(const ImapSet &other) const
 
 void ImapSet::add(Id value)
 {
-    add(QList<Id>() << value);
+    add(QVector<Id>() << value);
 }
 
-void ImapSet::add(const QList<Id> &values)
+void ImapSet::add(const QVector<Id> &values)
 {
-    QList<Id> vals = values;
+    QVector<Id> vals = values;
     qSort(vals);
     for (int i = 0; i < vals.count(); ++i) {
         const int begin = vals[i];

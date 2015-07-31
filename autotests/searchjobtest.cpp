@@ -116,7 +116,7 @@ private Q_SLOTS:
         bool result = job->exec();
         QVERIFY(result);
         if (result) {
-            QList<qint64> foundItems = job->results();
+            QVector<qint64> foundItems = job->results();
             QCOMPARE(foundItems.size(), expectedResultsCount);
         }
 
@@ -186,7 +186,7 @@ private Q_SLOTS:
         bool result = job->exec();
         QVERIFY(result);
         if (result) {
-            QList<qint64> foundItems = job->results();
+            QVector<qint64> foundItems = job->results();
             QCOMPARE(foundItems.size(), expectedResultsCount);
         }
 

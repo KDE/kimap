@@ -179,7 +179,7 @@ public:
      * @return the found items
      * @since 4.6
      */
-    QList<qint64> results() const;
+    QVector<qint64> results() const;
 
     /**
      * Add a search criteria that doesn't have an argument. Passing a criteria that

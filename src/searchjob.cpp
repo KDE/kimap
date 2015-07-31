@@ -346,7 +346,7 @@ public:
     QMap<int, QByteArray> months;
     SearchJob::SearchLogic logic;
     QList<QByteArray> contents;
-    QList<qint64> results;
+    QVector<qint64> results;
     uint nextContent;
     bool uidBased;
     Term term;
@@ -570,7 +570,7 @@ bool SearchJob::isUidBased() const
     return d->uidBased;
 }
 
-QList<qint64> SearchJob::results() const
+QVector<qint64> SearchJob::results() const
 {
     Q_D(const SearchJob);
     return d->results;

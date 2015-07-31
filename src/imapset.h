@@ -195,7 +195,7 @@ public:
       No interval merging is performed.
       @param values List of positive integer numbers in arbitrary order
     */
-    void add(const QList<Id> &values);
+    void add(const QVector<Id> &values);
 
     /**
       Adds the given ImapInterval to this set.
