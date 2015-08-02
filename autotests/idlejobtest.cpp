@@ -68,7 +68,7 @@ private Q_SLOTS:
                  << "S: * 2 EXISTS"
                  << "S: A000002 OK done idling";
 
-        expectedMailBox = QLatin1String("INBOX/Foo");
+        expectedMailBox = QStringLiteral("INBOX/Foo");
 
         expectedMessageCounts.clear();
         expectedRecentCounts.clear();
@@ -88,7 +88,7 @@ private Q_SLOTS:
                  << "S: * 1 RECENT"
                  << "S: A000002 OK done idling";
 
-        expectedMailBox = QLatin1String("INBOX/Foo");
+        expectedMailBox = QStringLiteral("INBOX/Foo");
 
         expectedMessageCounts.clear();
         expectedRecentCounts.clear();
@@ -108,7 +108,7 @@ private Q_SLOTS:
                  << "S: * 2 EXISTS"
                  << "S: A000002 OK done idling";
 
-        expectedMailBox = QLatin1String("INBOX/Foo");
+        expectedMailBox = QStringLiteral("INBOX/Foo");
 
         expectedMessageCounts.clear();
         expectedRecentCounts.clear();
@@ -129,7 +129,7 @@ private Q_SLOTS:
                  << "S: * 1 RECENT"
                  << "S: A000002 OK done idling";
 
-        expectedMailBox = QLatin1String("INBOX/Foo");
+        expectedMailBox = QStringLiteral("INBOX/Foo");
 
         expectedMessageCounts.clear();
         expectedRecentCounts.clear();
@@ -150,7 +150,7 @@ private Q_SLOTS:
                  << "S: * 1 RECENT"
                  << "S: A000002 OK done idling";
 
-        expectedMailBox = QLatin1String("INBOX/Foo");
+        expectedMailBox = QStringLiteral("INBOX/Foo");
 
         expectedMessageCounts.clear();
         expectedRecentCounts.clear();
@@ -171,7 +171,7 @@ private Q_SLOTS:
                  << "S: * 2 FETCH (FLAGS (\\Seen))"
                  << "S: A000002 OK done idling";
 
-        expectedMailBox = QLatin1String("INBOX/Foo");
+        expectedMailBox = QStringLiteral("INBOX/Foo");
 
         expectedMessageCounts.clear();
         expectedRecentCounts.clear();
@@ -194,7 +194,7 @@ private Q_SLOTS:
         fakeServer.setScenario(scenario);
         fakeServer.startAndWait();
 
-        KIMAP::Session session(QLatin1String("127.0.0.1"), 5989);
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
         KIMAP::SelectJob *select = new KIMAP::SelectJob(&session);
         select->setMailBox(expectedMailBox);
@@ -271,11 +271,11 @@ private Q_SLOTS:
         fakeServer.setScenario(scenario);
         fakeServer.startAndWait();
 
-        KIMAP::Session session(QLatin1String("127.0.0.1"), 5989);
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
         const int originalTimeout = session.timeout();
 
         KIMAP::SelectJob *select = new KIMAP::SelectJob(&session);
-        select->setMailBox(QLatin1String("INBOX"));
+        select->setMailBox(QStringLiteral("INBOX"));
         QVERIFY(select->exec());
 
         KIMAP::IdleJob *idle = new KIMAP::IdleJob(&session);

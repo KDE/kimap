@@ -69,10 +69,10 @@ void RFCCodecsTest::testIMAPEncoding()
 
 void RFCCodecsTest::testQuotes()
 {
-    QString test(QLatin1String("tom\"allen"));
+    QString test(QStringLiteral("tom\"allen"));
     QCOMPARE(quoteIMAP(test), QString::fromLatin1("tom\\\"allen"));
-    test = QLatin1String("tom\'allen");
+    test = QStringLiteral("tom\'allen");
     QCOMPARE(quoteIMAP(test), QString::fromLatin1("tom\'allen"));
-    test =  QLatin1String("tom\\allen");
+    test =  QStringLiteral("tom\\allen");
     QCOMPARE(quoteIMAP(test), QString::fromLatin1("tom\\\\allen"));
 }

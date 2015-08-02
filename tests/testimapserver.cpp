@@ -106,25 +106,25 @@ void testMetaData(Session *session)
 {
     qDebug() << "TESTING: METADATA commands";
     CreateJob *create = new CreateJob(session);
-    create->setMailBox(QLatin1String("INBOX/TestFolder"));
+    create->setMailBox(QStringLiteral("INBOX/TestFolder"));
     create->exec();
 
     SetMetaDataJob *setmetadata = new SetMetaDataJob(session);
-    setmetadata->setMailBox(QLatin1String("INBOX/TestFolder"));
+    setmetadata->setMailBox(QStringLiteral("INBOX/TestFolder"));
     setmetadata->setServerCapability(SetMetaDataJob::Annotatemore);
     setmetadata->setEntry("/comment");
     setmetadata->addMetaData("value.priv", "My new comment");
     setmetadata->exec();
 
     setmetadata = new SetMetaDataJob(session);
-    setmetadata->setMailBox(QLatin1String("INBOX/TestFolder"));
+    setmetadata->setMailBox(QStringLiteral("INBOX/TestFolder"));
     setmetadata->setServerCapability(SetMetaDataJob::Annotatemore);
     setmetadata->setEntry("/check");
     setmetadata->addMetaData("value.priv", "true");
     setmetadata->exec();
 
     GetMetaDataJob *getmetadata = new GetMetaDataJob(session);
-    getmetadata->setMailBox(QLatin1String("INBOX/TestFolder"));
+    getmetadata->setMailBox(QStringLiteral("INBOX/TestFolder"));
     getmetadata->setServerCapability(SetMetaDataJob::Annotatemore);
     getmetadata->addEntry("/*", "value.priv");
     getmetadata->exec();
@@ -278,15 +278,15 @@ void testAppendAndStore(Session *session)
     Q_ASSERT(expectedFlags == resultingFlags);
 
     select = new SelectJob(session);
-    select->setMailBox(QLatin1String("INBOX"));
+    select->setMailBox(QStringLiteral("INBOX"));
     select->exec();
 
     //cleanup
     DeleteJob *deletejob = new DeleteJob(session);
-    deletejob->setMailBox(QLatin1String("INBOX/TestFolder"));
+    deletejob->setMailBox(QStringLiteral("INBOX/TestFolder"));
     deletejob->exec();
     deletejob = new DeleteJob(session);
-    deletejob->setMailBox(QLatin1String("INBOX/RenamedTestFolder"));
+    deletejob->setMailBox(QStringLiteral("INBOX/RenamedTestFolder"));
     deletejob->exec();
 }
 

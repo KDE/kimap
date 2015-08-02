@@ -90,11 +90,11 @@ int main(int argc, char **argv)
     qDebug() << capabilities->capabilities();
     qDebug();
 
-    Q_ASSERT(capabilities->capabilities().contains(QLatin1String("IDLE")));
+    Q_ASSERT(capabilities->capabilities().contains(QStringLiteral("IDLE")));
 
     qDebug() << "Selecting INBOX:";
     SelectJob *select = new SelectJob(&session);
-    select->setMailBox(QLatin1String("INBOX"));
+    select->setMailBox(QStringLiteral("INBOX"));
     select->exec();
     Q_ASSERT_X(select->error() == 0, "SelectJob", select->errorString().toLocal8Bit().constData());
     Q_ASSERT(session.state() == Session::Selected);

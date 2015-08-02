@@ -37,23 +37,23 @@ private Q_SLOTS:
         QList<KIMAP::MailBoxDescriptor> listresult;
 
         descriptor.separator = QLatin1Char('/');
-        descriptor.name = QLatin1String("INBOX");
+        descriptor.name = QStringLiteral("INBOX");
         listresult << descriptor;
         descriptor.separator = QLatin1Char('/');
         descriptor.name = QString::fromUtf8("INBOX/ä ö ü @ €");
         listresult << descriptor;
         descriptor.separator = QLatin1Char('/');
-        descriptor.name = QLatin1String("INBOX/lost+found");
+        descriptor.name = QStringLiteral("INBOX/lost+found");
         listresult << descriptor;
         descriptor.separator = QLatin1Char('/');
-        descriptor.name = QLatin1String("INBOX/lost+found/Calendar Public-20080128");
+        descriptor.name = QStringLiteral("INBOX/lost+found/Calendar Public-20080128");
         listresult << descriptor;
 
         FakeServer fakeServer;
-        fakeServer.addScenarioFromFile(QString(QLatin1String(TEST_DATA) + QLatin1String("/fakeserverscenario.log")));
+        fakeServer.addScenarioFromFile(QString(QStringLiteral(TEST_DATA) + QStringLiteral("/fakeserverscenario.log")));
         fakeServer.startAndWait();
 
-        KIMAP::Session session(QLatin1String("127.0.0.1"), 5989);
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
         KIMAP::ListJob *job = new KIMAP::ListJob(&session);
         job->setIncludeUnsubscribed(true);

@@ -55,16 +55,16 @@ private Q_SLOTS:
         QList<KIMAP::MailBoxDescriptor> listresult;
 
         descriptor.separator = QLatin1Char('/');
-        descriptor.name = QLatin1String("INBOX");
+        descriptor.name = QStringLiteral("INBOX");
         listresult << descriptor;
         descriptor.separator = QLatin1Char('/');
         descriptor.name = QString::fromUtf8("INBOX/ä ö ü @ €");
         listresult << descriptor;
         descriptor.separator = QLatin1Char('/');
-        descriptor.name = QLatin1String("INBOX/lost+found");
+        descriptor.name = QStringLiteral("INBOX/lost+found");
         listresult << descriptor;
         descriptor.separator = QLatin1Char('/');
-        descriptor.name = QLatin1String("INBOX/lost+found/Calendar Public-20080128");
+        descriptor.name = QStringLiteral("INBOX/lost+found/Calendar Public-20080128");
         listresult << descriptor;
 
         QTest::newRow("normal") << true << scenario << listresult;
@@ -80,16 +80,16 @@ private Q_SLOTS:
         listresult.clear();
 
         descriptor.separator = QLatin1Char('/');
-        descriptor.name = QLatin1String("INBOX");
+        descriptor.name = QStringLiteral("INBOX");
         listresult << descriptor;
         descriptor.separator = QLatin1Char('/');
         descriptor.name = QString::fromUtf8("INBOX/ä ö ü @ €");
         listresult << descriptor;
         descriptor.separator = QLatin1Char('/');
-        descriptor.name = QLatin1String("INBOX/lost+found");
+        descriptor.name = QStringLiteral("INBOX/lost+found");
         listresult << descriptor;
         descriptor.separator = QLatin1Char('/');
-        descriptor.name = QLatin1String("INBOX/lost+found/Calendar Public-20080128");
+        descriptor.name = QStringLiteral("INBOX/lost+found/Calendar Public-20080128");
         listresult << descriptor;
 
         QTest::newRow("lowercase Inbox") << true << scenario << listresult;
@@ -106,19 +106,19 @@ private Q_SLOTS:
         listresult.clear();
 
         descriptor.separator = QLatin1Char('/');
-        descriptor.name = QLatin1String("INBOX");
+        descriptor.name = QStringLiteral("INBOX");
         listresult << descriptor;
         descriptor.separator = QLatin1Char('/');
-        descriptor.name = QLatin1String("INBOX/Calendar/3196");
+        descriptor.name = QStringLiteral("INBOX/Calendar/3196");
         listresult << descriptor;
         descriptor.separator = QLatin1Char('/');
-        descriptor.name = QLatin1String("INBOX/Calendar/ff");
+        descriptor.name = QStringLiteral("INBOX/Calendar/ff");
         listresult << descriptor;
         descriptor.separator = QLatin1Char('/');
-        descriptor.name = QLatin1String("INBOX/Calendar/ff/hgh");
+        descriptor.name = QStringLiteral("INBOX/Calendar/ff/hgh");
         listresult << descriptor;
         descriptor.separator = QLatin1Char('/');
-        descriptor.name = QLatin1String("user/test2/Calendar");
+        descriptor.name = QStringLiteral("user/test2/Calendar");
         listresult << descriptor;
 
         QTest::newRow("subscribed") << false << scenario << listresult;
@@ -135,19 +135,19 @@ private Q_SLOTS:
         listresult.clear();
 
         descriptor.separator = QLatin1Char('/');
-        descriptor.name = QLatin1String("INBOX");
+        descriptor.name = QStringLiteral("INBOX");
         listresult << descriptor;
         descriptor.separator = QLatin1Char('/');
-        descriptor.name = QLatin1String("INBOX/Calendar/3196");
+        descriptor.name = QStringLiteral("INBOX/Calendar/3196");
         listresult << descriptor;
         descriptor.separator = QLatin1Char('/');
-        descriptor.name = QLatin1String("INBOX/Calendar/ff");
+        descriptor.name = QStringLiteral("INBOX/Calendar/ff");
         listresult << descriptor;
         descriptor.separator = QLatin1Char('/');
-        descriptor.name = QLatin1String("INBOX/Calendar/ff/hgh");
+        descriptor.name = QStringLiteral("INBOX/Calendar/ff/hgh");
         listresult << descriptor;
         descriptor.separator = QLatin1Char('/');
-        descriptor.name = QLatin1String("user/test2/Calendar");
+        descriptor.name = QStringLiteral("user/test2/Calendar");
         listresult << descriptor;
 
         QTest::newRow("subscribed, lowercase Inbox") << false << scenario << listresult;
@@ -159,7 +159,7 @@ private Q_SLOTS:
                  << "S: A000001 OK LIST completed";
         listresult.clear();
         descriptor.separator = QLatin1Char('/');
-        descriptor.name = QLatin1String("INBOX/lost+found/Calendar Public-20080128");
+        descriptor.name = QStringLiteral("INBOX/lost+found/Calendar Public-20080128");
         listresult << descriptor;
 
         QTest::newRow("unquoted-space") << true << scenario << listresult;
@@ -171,7 +171,7 @@ private Q_SLOTS:
                  << "S: A000001 OK LIST completed";
         listresult.clear();
         descriptor.separator = QLatin1Char('/');
-        descriptor.name = QLatin1String("INBOX");
+        descriptor.name = QStringLiteral("INBOX");
         listresult << descriptor;
 
         QTest::newRow("separator is empty list") << true << scenario << listresult;
@@ -200,7 +200,7 @@ private Q_SLOTS:
         fakeServer.setScenario(scenario);
         fakeServer.startAndWait();
 
-        KIMAP::Session session(QLatin1String("127.0.0.1"), 5989);
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
         KIMAP::ListJob *job = new KIMAP::ListJob(&session);
         job->setIncludeUnsubscribed(unsubscribed);

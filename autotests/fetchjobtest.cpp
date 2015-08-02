@@ -49,7 +49,7 @@ public Q_SLOTS:
                            const QMap<qint64, KIMAP::MessageFlags> &flags,
                            const QMap<qint64, KIMAP::MessagePtr> &messages)
     {
-        m_signals << QLatin1String("headersReceived");
+        m_signals << QStringLiteral("headersReceived");
         m_uids.unite(uids);
         m_sizes.unite(sizes);
         m_flags.unite(flags);
@@ -62,7 +62,7 @@ public Q_SLOTS:
                             const QMap<qint64, KIMAP::MessageAttribute> &attrs,
                             const QMap<qint64, KIMAP::MessagePtr> &messages)
     {
-        m_signals << QLatin1String("messagesReceived");
+        m_signals << QStringLiteral("messagesReceived");
         m_uids.unite(uids);
         m_messages.unite(messages);
         m_attrs.unite(attrs);
@@ -73,7 +73,7 @@ public Q_SLOTS:
                          const QMap<qint64, KIMAP::MessageAttribute> &attrs,
                          const QMap<qint64, KIMAP::MessageParts> &parts)
     {
-        m_signals << QLatin1String("partsReceived");
+        m_signals << QStringLiteral("partsReceived");
         m_attrs.unite(attrs);
         m_parts.unite(parts);
     }
@@ -175,7 +175,7 @@ private Q_SLOTS:
         fakeServer.setScenario(scenario);
         fakeServer.startAndWait();
 
-        KIMAP::Session session(QLatin1String("127.0.0.1"), 5989);
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
         KIMAP::FetchJob *job = new KIMAP::FetchJob(&session);
         job->setUidBased(uidBased);
@@ -233,7 +233,7 @@ private Q_SLOTS:
         fakeServer.setScenario(scenario);
         fakeServer.startAndWait();
 
-        KIMAP::Session session(QLatin1String("127.0.0.1"), 5989);
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
         KIMAP::FetchJob *job = new KIMAP::FetchJob(&session);
         job->setUidBased(false);
@@ -255,7 +255,7 @@ private Q_SLOTS:
         QCOMPARE(m_uids.count(), 2);
         QCOMPARE(m_messages[1]->attachments().count(), 0);
         QCOMPARE(m_messages[2]->attachments().count(), 3);
-        QCOMPARE(m_messages[2]->attachments().at(2)->contentDisposition()->filename(), QLatin1String("photo.jpg"));
+        QCOMPARE(m_messages[2]->attachments().at(2)->contentDisposition()->filename(), QStringLiteral("photo.jpg"));
 
         fakeServer.quit();
 
@@ -285,7 +285,7 @@ private Q_SLOTS:
         fakeServer.setScenario(scenario);
         fakeServer.startAndWait();
 
-        KIMAP::Session session(QLatin1String("127.0.0.1"), 5989);
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
         KIMAP::FetchJob *job = new KIMAP::FetchJob(&session);
         job->setUidBased(false);
@@ -337,7 +337,7 @@ private Q_SLOTS:
         QByteArray partId = m_parts[2].keys().first();
         QString text = m_parts[2].value(partId)->decodedText(true, true);
         QCOMPARE(partId, QByteArray("1.1.1"));
-        QCOMPARE(text, QLatin1String("Hi Jane, nice to meet you!")) ;
+        QCOMPARE(text, QStringLiteral("Hi Jane, nice to meet you!")) ;
 
         fakeServer.quit();
 
