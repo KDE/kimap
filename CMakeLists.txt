@@ -17,8 +17,8 @@ include(KDECMakeSettings)
 include(KDEFrameworkCompilerSettings)
 
 set(KF5_VERSION "5.12.0")
-set(KIMAP_LIB_VERSION "4.81.0")
-set(KMIME_LIBS_VERSION "4.79.0")
+set(KIMAP_LIB_VERSION "4.82.0")
+set(KMIME_LIBS_VERSION "4.83.0")
 ecm_setup_version(${KIMAP_LIB_VERSION} VARIABLE_PREFIX KIMAP
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kimap_version.h"
                         PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5IMAPConfigVersion.cmake"
@@ -30,14 +30,6 @@ find_package(KF5CoreAddons ${KF5_VERSION} CONFIG REQUIRED)
 find_package(KF5KDELibs4Support ${KF5_VERSION} CONFIG REQUIRED)
 
 find_package(KF5Mime ${KMIME_LIBS_VERSION} CONFIG REQUIRED)
-
-set(Boost_MINIMUM_VERSION "1.34.0")
-find_package(Boost ${Boost_MINIMUM_VERSION})
-set_package_properties(Boost PROPERTIES
-                             DESCRIPTION "Boost C++ Libraries"
-                             URL "http://www.boost.org"
-                             TYPE REQUIRED
-)
 
 find_package(Sasl2)
 set_package_properties(Sasl2 PROPERTIES

@@ -523,7 +523,7 @@ int main(int argc, char **argv)
     Q_ASSERT_X(fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit().constData());
     Q_ASSERT(session.state() == Session::Selected);
     MessagePtr message = fetch->messages()[1];
-    dumpContentHelper(message.get());
+    dumpContentHelper(message.data());
     qDebug();
 
     qDebug() << "Fetching first message second part headers:";

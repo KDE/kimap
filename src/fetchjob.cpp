@@ -332,7 +332,7 @@ void FetchJob::handleResponse(const Message &response)
                     d->pendingAttributes.insert(id, qMakePair<QByteArray, QVariant>("X-GM-MSGID", *it));
                 } else if (str == "BODYSTRUCTURE") {
                     int pos = 0;
-                    d->parseBodyStructure(*it, pos, message.get());
+                    d->parseBodyStructure(*it, pos, message.data());
                     message->assemble();
                     d->pendingMessages[id] = message;
                 } else if (str.startsWith("BODY[")) {     //krazy:exclude=strings

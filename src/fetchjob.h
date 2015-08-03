@@ -26,9 +26,7 @@
 #include "job.h"
 
 #include <kmime/kmime_content.h>
-#include "kmime/kmime_message.h"
-
-#include <boost/shared_ptr.hpp>
+#include <kmime/kmime_message.h>
 
 namespace KIMAP
 {
@@ -37,10 +35,10 @@ class Session;
 struct Message;
 class FetchJobPrivate;
 
-typedef boost::shared_ptr<KMime::Content> ContentPtr;
+typedef QSharedPointer<KMime::Content> ContentPtr;
 typedef QMap<QByteArray, ContentPtr> MessageParts;
 
-typedef boost::shared_ptr<KMime::Message> MessagePtr;
+typedef QSharedPointer<KMime::Message> MessagePtr;
 typedef QList<QByteArray> MessageFlags;
 
 typedef QPair<QByteArray, QVariant> MessageAttribute;

@@ -20,11 +20,11 @@
 #ifndef KIMAP_SESSIONUIPROXY_H
 #define KIMAP_SESSIONUIPROXY_H
 
-#include <boost/shared_ptr.hpp>
-
 #include "kimap_export.h"
 
 #include "job.h"
+
+#include <QSharedPointer>
 
 class KSslErrorUiData;
 
@@ -35,7 +35,7 @@ namespace KIMAP
 class KIMAP_EXPORT SessionUiProxy
 {
 public:
-    typedef boost::shared_ptr<SessionUiProxy> Ptr;
+    typedef QSharedPointer<SessionUiProxy> Ptr;
 
     virtual ~SessionUiProxy();
     /**

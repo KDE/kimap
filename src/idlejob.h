@@ -25,10 +25,8 @@
 #include "imapset.h"
 #include "job.h"
 
-#include "kmime/kmime_content.h"
-#include "kmime/kmime_message.h"
-
-#include <boost/shared_ptr.hpp>
+#include <kmime/kmime_content.h>
+#include <kmime/kmime_message.h>
 
 namespace KIMAP
 {

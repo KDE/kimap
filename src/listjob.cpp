@@ -19,7 +19,6 @@
 
 #include "listjob.h"
 
-#include <boost/bind.hpp>
 #include <QtCore/QTimer>
 #include <KLocalizedString>
 
