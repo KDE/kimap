@@ -214,7 +214,7 @@ void ListJob::convertInboxName(KIMAP::MailBoxDescriptor &descriptor)
     if (!pathParts.isEmpty() &&
             pathParts[0].compare(QLatin1String("INBOX"), Qt::CaseInsensitive) == 0) {
         pathParts.removeAt(0);
-        descriptor.name = QLatin1String("INBOX");
+        descriptor.name = QStringLiteral("INBOX");
         if (!pathParts.isEmpty()) {
             descriptor.name += descriptor.separator + pathParts.join(descriptor.separator);
         }
