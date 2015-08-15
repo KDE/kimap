@@ -50,7 +50,7 @@ private Q_SLOTS:
         listresult << descriptor;
 
         FakeServer fakeServer;
-        fakeServer.addScenarioFromFile(QString(QStringLiteral(TEST_DATA) + QStringLiteral("/fakeserverscenario.log")));
+        fakeServer.addScenarioFromFile(QStringLiteral(TEST_DATA) + QStringLiteral("/fakeserverscenario.log"));
         fakeServer.startAndWait();
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
