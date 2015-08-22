@@ -154,26 +154,11 @@ Term::Term(Term::BooleanSearchKey key)
     }
 }
 
-QMap<int, QByteArray> initializeMonths()
+static QByteArray monthName(int month)
 {
-    QMap<int, QByteArray> months;
-    //don't use QDate::shortMonthName(), it returns a localized month name
-    months[1] = "Jan";
-    months[2] = "Feb";
-    months[3] = "Mar";
-    months[4] = "Apr";
-    months[5] = "May";
-    months[6] = "Jun";
-    months[7] = "Jul";
-    months[8] = "Aug";
-    months[9] = "Sep";
-    months[10] = "Oct";
-    months[11] = "Nov";
-    months[12] = "Dec";
-    return months;
+    static const char* names[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    return (month >= 1 && month <= 12) ? QByteArray(names[month - 1]) : QByteArray();
 }
-
-static QMap<int, QByteArray> months = initializeMonths();
 
 Term::Term(Term::DateSearchKey key, const QDate &date)
     :  d(new Term::Private)
@@ -200,7 +185,7 @@ Term::Term(Term::DateSearchKey key, const QDate &date)
     }
     d->command += " \"";
     d->command += QByteArray::number(date.day()) + '-';
-    d->command += months[date.month()] + '-';
+    d->command += monthName(date.month()) + '-';
     d->command += QByteArray::number(date.year());
     d->command += '\"';
 }
