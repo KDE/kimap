@@ -5,7 +5,6 @@ remove_definitions(-DQT_NO_CAST_FROM_BYTEARRAY)
 kde_enable_exceptions()
 
 set(kimap_SRCS
-   kimap_debug.cpp
    acl.cpp
    acljobbase.cpp
    appendjob.cpp
@@ -48,6 +47,8 @@ set(kimap_SRCS
    subscribejob.cpp
    unsubscribejob.cpp
 )
+
+ecm_qt_declare_logging_category(kimap_SRCS HEADER kimap_debug.h IDENTIFIER KIMAP_LOG CATEGORY_NAME log_kimap)
 
 add_library(KF5IMAP ${kimap_SRCS})
 
