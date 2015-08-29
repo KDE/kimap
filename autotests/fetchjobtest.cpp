@@ -254,8 +254,10 @@ private Q_SLOTS:
         QVERIFY(m_signals.count() > 0);
         QCOMPARE(m_uids.count(), 2);
         QCOMPARE(m_messages[1]->attachments().count(), 0);
-        QCOMPARE(m_messages[2]->attachments().count(), 3);
-        QCOMPARE(m_messages[2]->attachments().at(2)->contentDisposition()->filename(), QStringLiteral("photo.jpg"));
+        QCOMPARE(m_messages[2]->attachments().count(), 1);
+        QCOMPARE(m_messages[2]->contents().size(), 2);
+        QCOMPARE(m_messages[2]->contents()[0]->contents().size(), 2);
+        QCOMPARE(m_messages[2]->attachments().at(0)->contentDisposition()->filename(), QStringLiteral("photo.jpg"));
 
         fakeServer.quit();
 
