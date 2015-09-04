@@ -24,7 +24,7 @@
 
 #include <QtTest>
 
-Q_DECLARE_METATYPE(QList<qint64>);
+Q_DECLARE_METATYPE(QList<qint64>)
 
 class QuotaRootJobTest: public QObject
 {
