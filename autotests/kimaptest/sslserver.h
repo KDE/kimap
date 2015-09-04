@@ -29,7 +29,7 @@ public:
     SslServer(QSsl::SslProtocol);
     virtual void incomingConnection(qintptr handle) Q_DECL_OVERRIDE;
 
-private slots:
+private Q_SLOTS:
     void sslErrors(const QList<QSslError> &errors);
     void error(QAbstractSocket::SocketError);
 

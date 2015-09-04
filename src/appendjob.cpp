@@ -124,7 +124,7 @@ void AppendJob::doStart()
 
     if (!d->internalDate.isNull()) {
         const QDateTime utcDateTime = d->internalDate.toUTC();
-        parameters += " \"" + utcDateTime.toString(QString::fromAscii("dd-MMM-yyyy hh:mm:ss")).toLatin1() + " +0000" + '\"';
+        parameters += " \"" + utcDateTime.toString(QStringLiteral("dd-MMM-yyyy hh:mm:ss")).toLatin1() + " +0000" + '\"';
     }
 
     parameters += " {" + QByteArray::number(d->content.size()) + '}';

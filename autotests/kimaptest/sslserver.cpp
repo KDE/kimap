@@ -77,7 +77,9 @@ void SslServer::incomingConnection(qintptr handle)
 
     QSslKey ssl_key(staticKey(), QSsl::Rsa);
     QSslCertificate ssl_cert(staticCert());
-    Q_ASSERT(ssl_cert.isValid());
+    Q_ASSERT(QDateTime::currentDateTime() >= ssl_cert.effectiveDate());
+    Q_ASSERT(QDateTime::currentDateTime() <= ssl_cert.expiryDate());
+    Q_ASSERT(!ssl_cert.isBlacklisted());
 
     socket->setPrivateKey(ssl_key);
     socket->setLocalCertificate(ssl_cert);
@@ -86,7 +88,7 @@ void SslServer::incomingConnection(qintptr handle)
     socket->ignoreSslErrors();
     connect(socket, SIGNAL(sslErrors(QList<QSslError>)), this, SLOT(sslErrors(QList<QSslError>)));
     connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
-    if (mProtocol != QSsl::TlsV1) {
+    if (mProtocol != QSsl::TlsV1_0) {
         socket->startServerEncryption();
     }
     addPendingConnection(socket);
