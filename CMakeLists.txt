@@ -28,7 +28,8 @@ ecm_setup_version(${KIMAP_LIB_VERSION} VARIABLE_PREFIX KIMAP
 
 ########### Find packages ###########
 find_package(KF5CoreAddons ${KF5_VERSION} CONFIG REQUIRED)
-find_package(KF5KDELibs4Support ${KF5_VERSION} CONFIG REQUIRED)
+find_package(KF5I18n ${KF5_VERSION} CONFIG REQUIRED)
+find_package(KF5KIO ${KF5_VERSION} CONFIG REQUIRED)
 
 find_package(KF5Mime ${KMIME_LIBS_VERSION} CONFIG REQUIRED)
 
