@@ -18,11 +18,7 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#include <kcomponentdata.h>
-#include <k4aboutdata.h>
-#include <klocalizedstring.h>
 #include <qdebug.h>
-#include <ktcpsocket.h> // declares KSslErrorUiData
 #include <QCoreApplication>
 #include <qsignalspy.h>
 
@@ -49,8 +45,7 @@ public:
 
 int main(int argc, char **argv)
 {
-    K4AboutData about("TestImapIdle", 0, ki18n("TestImapIdle"), "version");
-    KComponentData cData(&about);
+    QCoreApplication::setApplicationName(QStringLiteral("TestImapIdle"));
 
     if (argc < 4) {
         qCritical() << "Not enough parameters, expecting: <server> <user> <password>";

@@ -19,10 +19,7 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#include <kcomponentdata.h>
-#include <k4aboutdata.h>
 #include <qdebug.h>
-#include <klocalizedstring.h>
 #include <qtcpsocket.h>
 #include <QCoreApplication>
 #include <qsignalspy.h>
@@ -379,8 +376,7 @@ void testDelete(Session *session)
 
 int main(int argc, char **argv)
 {
-    K4AboutData about("TestImapServer", 0, ki18n("TestImapServer"), "version");
-    KComponentData cData(&about);
+    QCoreApplication::setApplicationName(QStringLiteral("TestImapServer"));
 
     if (argc < 4) {
         qCritical() << "Not enough parameters, expecting: <server> <user> <password>";
