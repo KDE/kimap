@@ -35,7 +35,7 @@ namespace KIMAP
 class Term::Private
 {
 public:
-    Private(): isFuzzy(false), isNegated(false), isNull(false) {};
+    Private(): isFuzzy(false), isNegated(false), isNull(false) {}
     QByteArray command;
     bool isFuzzy;
     bool isNegated;
