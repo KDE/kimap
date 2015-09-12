@@ -178,24 +178,24 @@ void SessionThread::threadInit()
     Q_ASSERT(QThread::currentThread() == thread());
     m_socket = new SessionSocket;
     m_stream = new ImapStreamParser(m_socket);
-    connect(m_socket, SIGNAL(readyRead()),
-            this, SLOT(readMessage()), Qt::QueuedConnection);
+    connect(m_socket, &QIODevice::readyRead,
+            this, &SessionThread::readMessage, Qt::QueuedConnection);
 
     // Delay the call to slotSocketDisconnected so that it finishes disconnecting before we call reconnect()
-    connect(m_socket, SIGNAL(disconnected()),
-            this, SLOT(slotSocketDisconnected()), Qt::QueuedConnection);
-    connect(m_socket, SIGNAL(connected()),
-            this, SIGNAL(socketConnected()));
+    connect(m_socket, &KTcpSocket::disconnected,
+            this, &SessionThread::slotSocketDisconnected, Qt::QueuedConnection);
+    connect(m_socket, &KTcpSocket::connected,
+            this, &SessionThread::socketConnected);
     connect(m_socket, SIGNAL(error(KTcpSocket::Error)),
             this, SLOT(slotSocketError(KTcpSocket::Error)));
-    connect(m_socket, SIGNAL(bytesWritten(qint64)),
-            this, SIGNAL(socketActivity()));
+    connect(m_socket, &QIODevice::bytesWritten,
+            this, &SessionThread::socketActivity);
     if (m_socket->metaObject()->indexOfSignal("encryptedBytesWritten(qint64)") > -1) {
-        connect(m_socket, SIGNAL(encryptedBytesWritten(qint64)),  // needs kdelibs > 4.8
-                this, SIGNAL(socketActivity()));
+        connect(m_socket, &KTcpSocket::encryptedBytesWritten,  // needs kdelibs > 4.8
+                this, &SessionThread::socketActivity);
     }
-    connect(m_socket, SIGNAL(readyRead()),
-            this, SIGNAL(socketActivity()));
+    connect(m_socket, &QIODevice::readyRead,
+            this, &SessionThread::socketActivity);
 
     QMetaObject::invokeMethod(this, "reconnect", Qt::QueuedConnection);
 }
@@ -227,7 +227,7 @@ void SessionThread::doStartSsl(KTcpSocket::SslVersion version)
 
     m_socket->setAdvertisedSslVersion(version);
     m_socket->ignoreSslErrors();
-    connect(m_socket, SIGNAL(encrypted()), this, SLOT(sslConnected()));
+    connect(m_socket, &KTcpSocket::encrypted, this, &SessionThread::sslConnected);
     m_socket->startClientEncryption();
 }
 

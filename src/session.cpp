@@ -63,8 +63,8 @@ Session::Session(const QString &hostName, quint16 port, QObject *parent)
     connect(d->thread, &SessionThread::socketError, d, &SessionPrivate::socketError);
 
     d->socketTimer.setSingleShot(true);
-    connect(&d->socketTimer, SIGNAL(timeout()),
-            d, SLOT(onSocketTimeout()));
+    connect(&d->socketTimer, &QTimer::timeout,
+            d, &SessionPrivate::onSocketTimeout);
 
     d->startSocketTimer();
 }
@@ -153,8 +153,8 @@ void SessionPrivate::addJob(Job *job)
     queue.append(job);
     emit q->jobQueueSizeChanged(q->jobQueueSize());
 
-    QObject::connect(job, SIGNAL(result(KJob*)), this, SLOT(jobDone(KJob*)));
-    QObject::connect(job, SIGNAL(destroyed(QObject*)), this, SLOT(jobDestroyed(QObject*)));
+    QObject::connect(job, &KJob::result, this, &SessionPrivate::jobDone);
+    QObject::connect(job, &QObject::destroyed, this, &SessionPrivate::jobDestroyed);
 
     if (state != Session::Disconnected) {
         startNext();
