@@ -331,6 +331,7 @@ private Q_SLOTS:
             mock->setTimeout(5000);
             mock->setCommand("DUMMY");
 
+            mock->setAutoDelete(false);
             mock->start();
             QTest::qWait(250);   // Should be plenty
 
@@ -339,6 +340,8 @@ private Q_SLOTS:
             QCOMPARE(spyFail.count(), 0);
             QCOMPARE(spyLost.count(), 1);
             QCOMPARE(spyState.count(), 2);   // Authenticated, Disconnected
+
+            delete mock;
         }
     }
 
