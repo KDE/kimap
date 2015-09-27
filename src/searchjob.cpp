@@ -412,14 +412,14 @@ void SearchJob::handleResponse(const Message &response)
     Q_D(SearchJob);
 
     if (handleErrorReplies(response) == NotHandled) {
-        if (response.content[0].toString() == "+") {
+        if (response.content.size() >= 1 && response.content[0].toString() == "+") {
             if (d->term.isNull()) {
                 d->sessionInternal()->sendData(d->contents[d->nextContent]);
             } else {
                 qCWarning(KIMAP_LOG) << "The term API only supports inline strings.";
             }
             d->nextContent++;
-        } else if (response.content[1].toString() == "SEARCH") {
+        } else if (response.content.size() >= 2 && response.content[1].toString() == "SEARCH") {
             for (int i = 2; i < response.content.size(); i++) {
                 d->results.append(response.content[i].toString().toInt());
             }
