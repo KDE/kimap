@@ -45,7 +45,7 @@ using namespace KIMAP;
 Session::Session(const QString &hostName, quint16 port, QObject *parent)
     : QObject(parent), d(new SessionPrivate(this))
 {
-    if (!qgetenv("KIMAP_LOGFILE").isEmpty()) {
+    if (!qEnvironmentVariableIsEmpty("KIMAP_LOGFILE")) {
         d->logger = new SessionLogger;
     }
 
