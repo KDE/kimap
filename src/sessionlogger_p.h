@@ -40,6 +40,7 @@ public:
     void disconnectionOccured();
 
 private:
+    Q_DISABLE_COPY(SessionLogger)
     qint64 m_id;
     QFile m_file;
 };
