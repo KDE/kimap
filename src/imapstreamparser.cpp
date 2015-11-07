@@ -36,10 +36,6 @@ ImapStreamParser::ImapStreamParser(QIODevice *socket, bool serverModeEnabled)
     m_literalSize = 0;
 }
 
-ImapStreamParser::~ImapStreamParser()
-{
-}
-
 QString ImapStreamParser::readUtf8String()
 {
     QByteArray tmp;

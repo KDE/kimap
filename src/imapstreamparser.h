@@ -69,11 +69,6 @@ public:
     explicit ImapStreamParser(QIODevice *socket, bool serverModeEnabled = false);
 
     /**
-     * Destructor.
-     */
-    ~ImapStreamParser();
-
-    /**
      * Get a string from the message. If the upcoming data is not a quoted string, unquoted string or a literal,
      * the behavior is undefined. Use @ref hasString to be sure a string comes. This call might block.
      * @return the next string from the message as an utf8 string
