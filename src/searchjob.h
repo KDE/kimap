@@ -90,6 +90,7 @@ public:
     };
 
     Term();
+    ~Term() = default; // silence clazy rule of three warning
     Term(Relation relation, const QVector<Term> &subterms);
     Term(SearchKey key, const QString &value);
     Term(BooleanSearchKey key);
