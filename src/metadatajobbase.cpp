@@ -89,7 +89,7 @@ QString MetaDataJobBase::mailBox() const
     return d->mailBox;
 }
 
-void MetaDataJobBase::setServerCapability(const ServerCapability &capability)
+void MetaDataJobBase::setServerCapability(ServerCapability capability)
 {
     Q_D(MetaDataJobBase);
     d->serverCapability = capability;

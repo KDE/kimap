@@ -111,7 +111,7 @@ public:
      *
      * @param capability  the version of the extension implemented by the server
      */
-    void setServerCapability(const ServerCapability &capability);
+    void setServerCapability(ServerCapability capability);
     /**
      * The version of the metadata extension that will be used.
      */
