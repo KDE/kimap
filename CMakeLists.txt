@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8.12)
 project(KIMAP)
 
 # ECM setup
-find_package(ECM 5.17.0 CONFIG REQUIRED)
+find_package(ECM 5.19.0 CONFIG REQUIRED)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${KIMAP_SOURCE_DIR}/cmake)
 
 include(GenerateExportHeader)
@@ -17,7 +17,7 @@ include(KDECMakeSettings)
 include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
 include(ECMQtDeclareLoggingCategory)
 
-set(KF5_VERSION "5.17.0")
+set(KF5_VERSION "5.19.0")
 set(KIMAP_LIB_VERSION "5.1.40")
 set(KMIME_LIBS_VERSION "5.1.40")
 ecm_setup_version(${KIMAP_LIB_VERSION} VARIABLE_PREFIX KIMAP
