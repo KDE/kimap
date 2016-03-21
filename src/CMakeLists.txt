@@ -20,6 +20,7 @@ set(kimap_SRCS
    getmetadatajob.cpp
    getquotajob.cpp
    getquotarootjob.cpp
+   idjob.cpp
    idlejob.cpp
    imapset.cpp
    imapstreamparser.cpp
@@ -93,6 +94,7 @@ ecm_generate_headers(KIMAP_CamelCase_HEADERS
   GetMetaDataJob
   GetQuotaJob
   GetQuotaRootJob
+  IdJob
   IdleJob
   ImapSet
   Job

@@ -36,6 +36,7 @@ KIMAP_UNIT_TESTS(
   listjobtest
   storejobtest
   imapsettest
+  idjobtest
   idlejobtest
   quotarootjobtest
   searchjobtest
