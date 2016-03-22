@@ -24,8 +24,6 @@
 #include "kimap/session.h"
 #include "kimap/statusjob.h"
 
-#include <QtTest>
-
 typedef QList<QPair<QByteArray, qint64>> StatusMap;
 Q_DECLARE_METATYPE(StatusMap)
 
@@ -87,7 +85,7 @@ private Q_SLOTS:
                  << "C: A000001 STATUS \"INBOX\" (UIDNEXT)"
                  << "S: A000001 NO bad command";
         dataItems = { "UIDNEXT" };
-        QTest::newRow("no") << scenario << dataItems << results;
+        QTest::newRow("bad") << scenario << dataItems << results;
     }
 
     void testStatus()
