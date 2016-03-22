@@ -26,6 +26,7 @@
 
 #include <QtCore/QDebug>
 #include <QtCore/QTimer>
+#include <QtCore/QPointer>
 
 #include "kimap_debug.h"
 
@@ -124,10 +125,11 @@ void KIMAP::Session::close()
 
 void SessionPrivate::handleSslError(const KSslErrorUiData &errorData)
 {
-    const bool ignoreSslError = uiProxy && uiProxy->ignoreSslError(errorData);
     //ignoreSslError is async, so the thread might already be gone when it returns
-    if (thread) {
-        thread->sslErrorHandlerResponse(ignoreSslError);
+    QPointer<SessionThread> _t = thread;
+    const bool ignoreSslError = uiProxy && uiProxy->ignoreSslError(errorData);
+    if (_t) {
+        _t->sslErrorHandlerResponse(ignoreSslError);
     }
 }
 

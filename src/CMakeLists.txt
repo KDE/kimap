@@ -44,6 +44,7 @@ set(kimap_SRCS
    setacljob.cpp
    setmetadatajob.cpp
    setquotajob.cpp
+   statusjob.cpp
    storejob.cpp
    subscribejob.cpp
    unsubscribejob.cpp
@@ -113,6 +114,7 @@ ecm_generate_headers(KIMAP_CamelCase_HEADERS
   SetAclJob
   SetMetaDataJob
   SetQuotaJob
+  StatusJob
   StoreJob
   SubscribeJob
   UnsubscribeJob

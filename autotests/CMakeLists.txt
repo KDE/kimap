@@ -44,4 +44,5 @@ KIMAP_UNIT_TESTS(
   streamparsertest
   setmetadatajobtest
   appendjobtest
+  statusjobtest
 )
