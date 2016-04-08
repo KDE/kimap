@@ -18,7 +18,7 @@ include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
 include(ECMQtDeclareLoggingCategory)
 
 set(KF5_VERSION "5.19.0")
-set(KIMAP_LIB_VERSION "5.1.90")
+set(KIMAP_LIB_VERSION "5.2.0")
 set(KMIME_LIBS_VERSION "5.1.90")
 ecm_setup_version(${KIMAP_LIB_VERSION} VARIABLE_PREFIX KIMAP
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kimap_version.h"
