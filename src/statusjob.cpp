@@ -119,7 +119,5 @@ void StatusJob::handleResponse(const Message &response)
                 qCDebug(KIMAP_LOG) << response.toString();
             }
         }
-    } else {
-        Q_ASSERT(error());
     }
 }
