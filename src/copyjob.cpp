@@ -33,7 +33,7 @@ namespace KIMAP
 class CopyJobPrivate : public JobPrivate
 {
 public:
-    CopyJobPrivate(Session *session, const QString &name) : JobPrivate(session, name) { }
+    CopyJobPrivate(Session *session, const QString &name) : JobPrivate(session, name), uidBased(false) { }
     ~CopyJobPrivate() { }
 
     QString mailBox;
