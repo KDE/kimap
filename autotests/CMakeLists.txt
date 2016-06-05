@@ -29,6 +29,7 @@ KIMAP_UNIT_TESTS(
   selectjobtest
   createjobtest
   deletejobtest
+  expungejobtest
   fetchjobtest
   renamejobtest
   subscribejobtest
