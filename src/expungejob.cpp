@@ -61,7 +61,7 @@ void ExpungeJob::handleResponse(const Message &response)
 //  Q_D(ExpungeJob);
 
     if (handleErrorReplies(response) == NotHandled) {
-        if (response.content.size() >= 2) {
+        if (response.content.size() >= 3) {
             QByteArray code = response.content[2].toString();
             if (code == "EXPUNGE") {
 #if 0
