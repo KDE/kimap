@@ -1,4 +1,4 @@
-# KIMAP
+# KIMAP #
 
 This library provides a job-based API for interacting with an IMAP4rev1 server.
 It manages connections, encryption and parameter quoting and encoding, but
