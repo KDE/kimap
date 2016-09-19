@@ -50,7 +50,7 @@ set(kimap_SRCS
    unsubscribejob.cpp
 )
 
-ecm_qt_declare_logging_category(kimap_SRCS HEADER kimap_debug.h IDENTIFIER KIMAP_LOG CATEGORY_NAME log_kimap)
+ecm_qt_declare_logging_category(kimap_SRCS HEADER kimap_debug.h IDENTIFIER KIMAP_LOG CATEGORY_NAME org.kde.pim.kimap)
 
 add_library(KF5IMAP ${kimap_SRCS})
 
