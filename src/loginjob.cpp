@@ -383,7 +383,7 @@ void LoginJob::handleResponse(const Message &response)
 
         switch (d->authState) {
         case LoginJobPrivate::StartTls:
-            d->sessionInternal()->startSsl(KTcpSocket::TlsV1);
+            d->sessionInternal()->startSsl(KTcpSocket::SecureProtocols);
             break;
 
         case LoginJobPrivate::Capability:
