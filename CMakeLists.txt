@@ -22,7 +22,7 @@ include(ECMQtDeclareLoggingCategory)
 set(PIM_VERSION "5.3.3")
 
 set(KIMAP_LIB_VERSION ${PIM_VERSION})
-set(KMIME_LIBS_VERSION "5.3.2")
+set(KMIME_LIBS_VERSION "5.3.3")
 ecm_setup_version(${KIMAP_LIB_VERSION} VARIABLE_PREFIX KIMAP
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kimap_version.h"
                         PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5IMAPConfigVersion.cmake"
