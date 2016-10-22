@@ -30,6 +30,7 @@ set(kimap_SRCS
    loginjob.cpp
    logoutjob.cpp
    metadatajobbase.cpp
+   movejob.cpp
    myrightsjob.cpp
    namespacejob.cpp
    quotajobbase.cpp
@@ -104,6 +105,7 @@ ecm_generate_headers(KIMAP_CamelCase_HEADERS
   LoginJob
   LogoutJob
   MetaDataJobBase
+  MoveJob
   MyRightsJob
   QuotaJobBase
   RenameJob

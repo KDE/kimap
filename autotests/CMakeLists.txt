@@ -46,4 +46,5 @@ KIMAP_UNIT_TESTS(
   setmetadatajobtest
   appendjobtest
   statusjobtest
+  movejobtest
 )
