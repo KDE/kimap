@@ -262,8 +262,11 @@ QHash<QString, QMap<QByteArray, QByteArray> > GetMetaDataJob::allMetaDataForMail
 {
     Q_D(const GetMetaDataJob);
     QHash<QString, QMap<QByteArray, QByteArray> > mailboxHash;
-    Q_FOREACH (const QString &mailbox, d->metadata.keys()) {
-        mailboxHash.insert(mailbox, allMetaDataForMailbox(mailbox));
+
+    QMapIterator<QString, QMap<QByteArray, QMap<QByteArray, QByteArray> > > i(d->metadata);
+    while (i.hasNext()) {
+        i.next();
+        mailboxHash.insert(i.key(), allMetaDataForMailbox(i.key()));
     }
     return mailboxHash;
 }

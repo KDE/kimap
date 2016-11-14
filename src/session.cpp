@@ -435,7 +435,7 @@ void SessionPrivate::clearJobQueue()
     emit q->jobQueueSizeChanged(0);
 }
 
-void SessionPrivate::startSsl(const KTcpSocket::SslVersion &version)
+void SessionPrivate::startSsl(KTcpSocket::SslVersion version)
 {
     thread->startSsl(version);
 }

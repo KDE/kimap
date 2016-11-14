@@ -52,7 +52,7 @@ public:
 
     void addJob(Job *job);
     QByteArray sendCommand(const QByteArray &command, const QByteArray &args = QByteArray());
-    void startSsl(const KTcpSocket::SslVersion &version);
+    void startSsl(KTcpSocket::SslVersion version);
     void sendData(const QByteArray &data);
 
     KTcpSocket::SslVersion negotiatedEncryption() const;

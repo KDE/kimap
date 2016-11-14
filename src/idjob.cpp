@@ -59,8 +59,11 @@ void IdJob::doStart()
     Q_D(IdJob);
     QByteArray command = "ID";
     command += " (";
-    foreach (const QByteArray &name, d->fields.keys()) {
-        command += "\"" + name + "\" \"" + d->fields.value(name) + "\" ";
+
+    QMapIterator<QByteArray, QByteArray> i(d->fields);
+    while (i.hasNext()) {
+        i.next();
+        command += "\"" + i.key() + "\" \"" + i.value() + "\" ";
     }
     command.chop(1);
     command += ")";
