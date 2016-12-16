@@ -47,7 +47,7 @@ QString ImapStreamParser::readUtf8String()
 QByteArray ImapStreamParser::readString()
 {
     QByteArray result;
-    if (!waitForMoreData(m_data.length() == 0)) {
+    if (!waitForMoreData(m_data.isEmpty())) {
         throw ImapParserException("Unable to read more data");
     }
     stripLeadingSpaces();

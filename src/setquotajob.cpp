@@ -55,7 +55,7 @@ void SetQuotaJob::doStart()
     Q_D(SetQuotaJob);
     QByteArray s;
     s += '(';
-    for (QMap<QByteArray, qint64>::ConstIterator it = d->setList.constBegin(); it != d->setList.constEnd(); ++it) {
+    for (QMap<QByteArray, qint64>::ConstIterator it = d->setList.constBegin(), end = d->setList.constEnd(); it != end; ++it) {
         s += it.key() + ' ' + QByteArray::number(it.value()) + ' ';
     }
     if (d->setList.isEmpty()) {

@@ -313,7 +313,6 @@ void FetchJob::handleResponse(const Message &response)
                 } else if (str == "RFC822.SIZE") {
                     d->pendingSizes[id] = it->toLongLong();
                 } else if (str == "INTERNALDATE") {
-                    //QT5 port to QDateTime
                     message->date()->setDateTime(QDateTime::fromString(QLatin1String(*it), Qt::RFC2822Date));
                 } else if (str == "FLAGS") {
                     if ((*it).startsWith('(') && (*it).endsWith(')')) {
