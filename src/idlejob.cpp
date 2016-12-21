@@ -118,7 +118,7 @@ void IdleJob::handleResponse(const Message &response)
     }
 
     if (handleErrorReplies(response) == NotHandled) {
-        if (response.content.size() > 0 && response.content[0].toString() == "+") {
+        if (!response.content.isEmpty() && response.content[0].toString() == "+") {
             // Got the continuation all is fine
             return;
 
