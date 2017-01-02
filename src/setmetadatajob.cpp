@@ -32,7 +32,7 @@ namespace KIMAP
 class SetMetaDataJobPrivate : public MetaDataJobBasePrivate
 {
 public:
-    SetMetaDataJobPrivate(Session *session, const QString &name) : MetaDataJobBasePrivate(session, name), metaDataErrors(Q_NULLPTR), maxAcceptedSize(-1) { }
+    SetMetaDataJobPrivate(Session *session, const QString &name) : MetaDataJobBasePrivate(session, name), metaDataErrors(nullptr), maxAcceptedSize(-1) { }
     ~SetMetaDataJobPrivate() { }
 
     QMap<QByteArray, QByteArray> entries;

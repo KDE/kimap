@@ -42,7 +42,7 @@ public:
         QList<MailBoxDescriptor> result;
 
         foreach (const QByteArray &namespaceItem, namespaceList) {
-            ImapStreamParser parser(Q_NULLPTR);
+            ImapStreamParser parser(nullptr);
             parser.setData(namespaceItem);
 
             try {

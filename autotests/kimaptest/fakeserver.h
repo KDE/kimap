@@ -125,7 +125,7 @@ public:
      */
     static QByteArray greeting();
 
-    FakeServer(QObject *parent = Q_NULLPTR);
+    FakeServer(QObject *parent = nullptr);
     ~FakeServer();
 
     /**

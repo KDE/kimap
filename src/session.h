@@ -43,7 +43,7 @@ class KIMAP_EXPORT Session : public QObject
 public:
     enum State { Disconnected = 0, NotAuthenticated, Authenticated, Selected };
 
-    Session(const QString &hostName, quint16 port, QObject *parent = Q_NULLPTR);
+    Session(const QString &hostName, quint16 port, QObject *parent = nullptr);
     ~Session();
 
     QString hostName() const;

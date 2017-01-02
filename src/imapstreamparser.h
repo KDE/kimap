@@ -93,7 +93,7 @@ public:
      * @param ok true if the data found was a number
      * @return the number
      */
-    qint64 readNumber(bool *ok = Q_NULLPTR);
+    qint64 readNumber(bool *ok = nullptr);
 
     /**
      * Check if the next data is a string or not. This call might block.

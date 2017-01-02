@@ -40,7 +40,7 @@ inline bool initSASL()
     }
 #endif
 
-    if (sasl_client_init(Q_NULLPTR) != SASL_OK) {
+    if (sasl_client_init(nullptr) != SASL_OK) {
         fprintf(stderr, "SASL library initialization failed!\n");
         return false;
     }
