@@ -36,13 +36,12 @@ struct Message;
 class KIMAP_EXPORT Session : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(State)
 
     friend class JobPrivate;
 
 public:
     enum State { Disconnected = 0, NotAuthenticated, Authenticated, Selected };
-
+    Q_ENUM(State)
     Session(const QString &hostName, quint16 port, QObject *parent = nullptr);
     ~Session();
 
