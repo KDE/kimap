@@ -125,7 +125,7 @@ public:
      */
     static QByteArray greeting();
 
-    FakeServer(QObject *parent = nullptr);
+    explicit FakeServer(QObject *parent = nullptr);
     ~FakeServer();
 
     /**
@@ -147,7 +147,7 @@ public:
      *
      * @reimp
      */
-    virtual void run();
+    virtual void run() Q_DECL_OVERRIDE;
 
     /**
      * Removes any previously-added scenarios, and adds a new one
