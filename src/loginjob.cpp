@@ -455,13 +455,15 @@ bool LoginJobPrivate::startAuthentication()
 
     int result = sasl_client_new("imap", m_session->hostName().toLatin1(), nullptr, nullptr, callbacks, 0, &conn);
     if (result != SASL_OK) {
-        qCDebug(KIMAP_LOG) << "sasl_client_new failed with:" << result;
+        const QString saslError = QString::fromUtf8(sasl_errdetail(conn));
+        qCWarning(KIMAP_LOG) << "sasl_client_new failed with:" << result << saslError;
         q->setError(LoginJob::UserDefinedError);
-        q->setErrorText(QString::fromUtf8(sasl_errdetail(conn)));
+        q->setErrorText(saslError);
         return false;
     }
 
     do {
+        qCDebug(KIMAP_LOG) << "Trying authmod" << authMode.toLatin1();
         result = sasl_client_start(conn, authMode.toLatin1(), &client_interact, capabilities.contains(QStringLiteral("SASL-IR")) ? &out : nullptr, &outlen, &mechusing);
 
         if (result == SASL_INTERACT) {
@@ -474,9 +476,10 @@ bool LoginJobPrivate::startAuthentication()
     } while (result == SASL_INTERACT);
 
     if (result != SASL_CONTINUE && result != SASL_OK) {
-        qCDebug(KIMAP_LOG) << "sasl_client_start failed with:" << result;
+        const QString saslError = QString::fromUtf8(sasl_errdetail(conn));
+        qCWarning(KIMAP_LOG) << "sasl_client_start failed with:" << result << saslError;
         q->setError(LoginJob::UserDefinedError);
-        q->setErrorText(QString::fromUtf8(sasl_errdetail(conn)));
+        q->setErrorText(saslError);
         sasl_dispose(&conn);
         return false;
     }
@@ -515,9 +518,10 @@ bool LoginJobPrivate::answerChallenge(const QByteArray &data)
     } while (result == SASL_INTERACT);
 
     if (result != SASL_CONTINUE && result != SASL_OK) {
-        qCDebug(KIMAP_LOG) << "sasl_client_step failed with:" << result;
+        const QString saslError = QString::fromUtf8(sasl_errdetail(conn));
+        qCWarning(KIMAP_LOG) << "sasl_client_step failed with:" << result << saslError;
         q->setError(LoginJob::UserDefinedError);   //TODO: check up the actual error
-        q->setErrorText(QString::fromUtf8(sasl_errdetail(conn)));
+        q->setErrorText(saslError);
         sasl_dispose(&conn);
         return false;
     }
