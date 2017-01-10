@@ -41,7 +41,7 @@ public:
     {
         QList<MailBoxDescriptor> result;
 
-        foreach (const QByteArray &namespaceItem, namespaceList) {
+        for (const QByteArray &namespaceItem : namespaceList) {
             ImapStreamParser parser(nullptr);
             parser.setData(namespaceItem);
 
@@ -103,11 +103,11 @@ QList<MailBoxDescriptor> NamespaceJob::sharedNamespaces() const
 bool NamespaceJob::containsEmptyNamespace() const
 {
     Q_D(const NamespaceJob);
-    QList<MailBoxDescriptor> completeList = d->personalNamespaces
+    const QList<MailBoxDescriptor> completeList = d->personalNamespaces
                                             + d->userNamespaces
                                             + d->sharedNamespaces;
 
-    foreach (const MailBoxDescriptor &descriptor, completeList) {
+    for (const MailBoxDescriptor &descriptor : completeList) {
         if (descriptor.name.isEmpty()) {
             return true;
         }

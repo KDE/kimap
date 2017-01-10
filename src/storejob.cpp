@@ -50,7 +50,7 @@ public:
         }
 
         parameters += " (";
-        foreach (const QByteArray &flag, flags) {
+        for (const QByteArray &flag : flags) {
             parameters += flag + ' ';
         }
         if (!flags.isEmpty()) {

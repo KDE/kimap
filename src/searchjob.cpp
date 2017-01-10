@@ -63,7 +63,7 @@ Term::Term(Term::Relation relation, const QVector<Term> &subterms)
                 d->command += subterms.at(1).serialize();
             }
         } else {
-            Q_FOREACH (const Term &t, subterms) {
+            for (const Term &t : subterms) {
                 d->command += t.serialize() + ' ';
             }
             if (!subterms.isEmpty()) {

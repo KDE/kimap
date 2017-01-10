@@ -64,7 +64,8 @@ struct Message {
         foreach (const Part &part, content) {
             if (part.type() == Part::List) {
                 result += '(';
-                foreach (const QByteArray &item, part.toList()) {
+                const QList<QByteArray> lstBa = part.toList();
+                for (const QByteArray &item : lstBa ) {
                     result += ' ';
                     result += item;
                 }
@@ -79,7 +80,8 @@ struct Message {
             foreach (const Part &part, responseCode) {
                 if (part.type() == Part::List) {
                     result += '(';
-                    foreach (const QByteArray &item, part.toList()) {
+                    const QList<QByteArray> lstBa = part.toList();
+                    for (const QByteArray &item : lstBa) {
                         result += ' ';
                         result += item;
                     }
