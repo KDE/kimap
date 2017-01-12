@@ -123,19 +123,20 @@ void IdleJob::handleResponse(const Message &response)
             return;
 
         } else if (response.content.size() > 2) {
-            if (response.content[2].toString() == "EXISTS") {
+            const QByteArray ba = response.content[2].toString();
+            if (ba == "EXISTS") {
                 if (d->messageCount >= 0) {
                     d->emitStats();
                 }
 
                 d->messageCount = response.content[1].toString().toInt();
-            } else if (response.content[2].toString() == "RECENT") {
+            } else if (ba == "RECENT") {
                 if (d->recentCount >= 0) {
                     d->emitStats();
                 }
 
                 d->recentCount = response.content[1].toString().toInt();
-            } else if (response.content[2].toString() == "FETCH") {
+            } else if (ba == "FETCH") {
                 const qint64 uid = response.content[1].toString().toLongLong();
                 Q_EMIT mailBoxMessageFlagsChanged(this, uid);
             }

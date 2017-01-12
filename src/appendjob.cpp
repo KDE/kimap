@@ -135,12 +135,12 @@ void AppendJob::doStart()
 void AppendJob::handleResponse(const Message &response)
 {
     Q_D(AppendJob);
-
+    const QList<Message::Part>::ConstIterator end(response.responseCode.end());
     for (QList<Message::Part>::ConstIterator it = response.responseCode.begin();
-            it != response.responseCode.end(); ++it) {
+            it != end; ++it) {
         if (it->toString() == "APPENDUID") {
             it = it + 2;
-            if (it != response.responseCode.end()) {
+            if (it != end) {
                 d->uid = it->toString().toLongLong();
             }
             break;

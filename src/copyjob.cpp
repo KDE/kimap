@@ -116,12 +116,12 @@ void CopyJob::doStart()
 void CopyJob::handleResponse(const Message &response)
 {
     Q_D(CopyJob);
-
+    const QList<Message::Part>::ConstIterator end(response.responseCode.end());
     for (QList<Message::Part>::ConstIterator it = response.responseCode.begin();
-            it != response.responseCode.end(); ++it) {
+            it != end; ++it) {
         if (it->toString() == "COPYUID") {
             it = it + 3;
-            if (it < response.responseCode.end()) {
+            if (it < end) {
                 d->resultingUids = ImapSet::fromImapSequenceSet(it->toString());
             }
             break;

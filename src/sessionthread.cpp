@@ -258,7 +258,7 @@ void SessionThread::sslConnected()
     }
     KSslCipher cipher = m_socket->sessionCipher();
 
-    if (m_socket->sslErrors().count() > 0 ||
+    if (!m_socket->sslErrors().isEmpty() ||
             m_socket->encryptionMode() != KTcpSocket::SslClientMode ||
             cipher.isNull() || cipher.usedBits() == 0) {
         qCDebug(KIMAP_LOG) << "Initial SSL handshake failed. cipher.isNull() is" << cipher.isNull()

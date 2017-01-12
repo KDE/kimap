@@ -62,7 +62,6 @@ void CapabilitiesJob::doStart()
 
 void CapabilitiesJob::handleResponse(const Message &response)
 {
-
     Q_D(CapabilitiesJob);
     if (handleErrorReplies(response) == NotHandled) {
         const int responseSize(response.content.size());

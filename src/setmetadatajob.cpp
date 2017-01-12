@@ -116,20 +116,21 @@ void SetMetaDataJob::handleResponse(const Message &response)
         if (response.content[1].toString() == "NO") {
             setError(UserDefinedError);
             setErrorText(i18n("%1 failed, server replied: %2", d->m_name, QLatin1String(response.toString().constData())));
-            if (response.content[2].toString() == "[ANNOTATEMORE TOOMANY]" ||
-                    response.content[2].toString() == "[METADATA TOOMANY]") {
+            const QByteArray responseBa = response.content[2].toString();
+            if (responseBa == "[ANNOTATEMORE TOOMANY]" ||
+                    responseBa == "[METADATA TOOMANY]") {
                 d->metaDataErrors |= TooMany;
-            } else if (response.content[2].toString() == "[ANNOTATEMORE TOOBIG]" ||
-                       response.content[2].toString().startsWith("[METADATA MAXSIZE")) {    //krazy:exclude=strings
+            } else if (responseBa == "[ANNOTATEMORE TOOBIG]" ||
+                       responseBa.startsWith("[METADATA MAXSIZE")) {    //krazy:exclude=strings
                 d->metaDataErrors |= TooBig;
                 d->maxAcceptedSize = -1;
-                if (response.content[2].toString().startsWith("[METADATA MAXSIZE")) {     //krazy:exclude=strings
-                    QByteArray max = response.content[2].toString();
+                if (responseBa.startsWith("[METADATA MAXSIZE")) {     //krazy:exclude=strings
+                    QByteArray max = responseBa;
                     max.replace("[METADATA MAXSIZE", "");   //krazy:exclude=doublequote_chars
                     max.replace("]", "");                   //krazy:exclude=doublequote_chars
                     d->maxAcceptedSize = max.toLongLong();
                 }
-            } else if (response.content[2].toString() == "[METADATA NOPRIVATE]") {
+            } else if (responseBa == "[METADATA NOPRIVATE]") {
                 d->metaDataErrors |= NoPrivate;
             }
         } else if (response.content.size() < 2) {
