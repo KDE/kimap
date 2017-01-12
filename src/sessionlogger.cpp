@@ -22,7 +22,7 @@
 
 #include "kimap_debug.h"
 
-#include <unistd.h>
+#include <unistd.h> // for getpid()
 
 using namespace KIMAP;
 
@@ -36,7 +36,7 @@ SessionLogger::SessionLogger()
                        + QLatin1Char('.') + QString::number(getpid())
                        + QLatin1Char('.') + QString::number(m_id));
     if (!m_file.open(QFile::WriteOnly)) {
-        qCDebug(KIMAP_LOG) << " m_file can be open in write only";
+        qCWarning(KIMAP_LOG) << "Could not open log file for writing:" << m_file.fileName();
     }
 }
 
