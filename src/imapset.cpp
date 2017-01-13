@@ -282,8 +282,9 @@ QByteArray ImapSet::toImapSequenceSet() const
     if (!rv.isEmpty()) {
         result = rv.first();
         QList<QByteArray>::ConstIterator it = rv.constBegin();
+        const QList<QByteArray>::ConstIterator end = rv.constEnd();
         ++it;
-        for (; it != rv.constEnd(); ++it) {
+        for (; it != end; ++it) {
             result += ',' + (*it);
         }
     }
