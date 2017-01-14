@@ -77,19 +77,18 @@ bool ImapStreamParser::hasString()
     stripLeadingSpaces();
     int pos = m_position;
     m_position = savedPos;
-    if (m_data.at(pos) == '{') {
+    const char dataChar = m_data.at(pos);
+    if (dataChar == '{') {
         return true; //literal string
-    }
-    if (m_data.at(pos) == '"') {
+    } else if (dataChar == '"') {
         return true; //quoted string
-    }
-    if (m_data.at(pos) != ' ' &&
-            m_data.at(pos) != '(' &&
-            m_data.at(pos) != ')' &&
-            m_data.at(pos) != '[' &&
-            m_data.at(pos) != ']' &&
-            m_data.at(pos) != '\n' &&
-            m_data.at(pos) != '\r') {
+    } else if (dataChar != ' ' &&
+            dataChar != '(' &&
+            dataChar != ')' &&
+            dataChar != '[' &&
+            dataChar != ']' &&
+            dataChar != '\n' &&
+            dataChar != '\r') {
         return true;  //unquoted string
     }
 

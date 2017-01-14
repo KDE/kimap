@@ -26,6 +26,7 @@
 #include "message_p.h"
 #include "rfccodecs.h"
 #include "session_p.h"
+#include "helper_p.h"
 
 namespace KIMAP
 {
@@ -145,7 +146,7 @@ void ListJob::doStart()
     if (d->namespaces.isEmpty()) {
         d->tags << d->sessionInternal()->sendCommand(d->command, "\"\" *");
     } else {
-        foreach (const MailBoxDescriptor &descriptor, d->namespaces) {
+        for (const MailBoxDescriptor &descriptor : qAsConst(d->namespaces)) {
             QString parameters = QStringLiteral("\"\" \"%1\"");
 
             if (descriptor.name.endsWith(descriptor.separator)) {

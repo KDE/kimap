@@ -25,6 +25,7 @@
 #include "message_p.h"
 #include "session_p.h"
 #include "rfccodecs.h"
+#include "helper_p.h"
 
 namespace KIMAP
 {
@@ -115,7 +116,7 @@ void AppendJob::doStart()
 
     if (!d->flags.isEmpty()) {
         parameters += " (";
-        foreach (const QByteArray &flag, d->flags) {
+        for (const QByteArray &flag : qAsConst(d->flags)) {
             parameters += flag + ' ';
         }
         parameters.chop(1);

@@ -43,8 +43,7 @@ QByteArray MetaDataJobBasePrivate::removePrefix(const QByteArray &entry) const
     if (serverCapability == MetaDataJobBase::Annotatemore) {
         if (entry.startsWith("/shared")) {
             return entry.mid(QByteArray("/shared").size());
-        }
-        if (entry.startsWith("/private")) {
+        } else if (entry.startsWith("/private")) {
             return entry.mid(QByteArray("/private").size());
         }
     }

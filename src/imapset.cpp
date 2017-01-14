@@ -18,7 +18,7 @@
 */
 
 #include "imapset.h"
-
+#include "helper_p.h"
 #include <QtCore/QSharedData>
 
 using namespace KIMAP;
@@ -227,7 +227,7 @@ bool ImapSet::operator ==(const ImapSet &other) const
         return false;
     }
 
-    foreach (const ImapInterval &interval, d->intervals) {
+    for (const ImapInterval &interval : qAsConst(d->intervals)) {
         if (!other.d->intervals.contains(interval)) {
             return false;
         }
@@ -273,7 +273,7 @@ QByteArray ImapSet::toImapSequenceSet() const
 {
     QList<QByteArray> rv;
     rv.reserve(d->intervals.count());
-    foreach (const ImapInterval &interval, d->intervals) {
+    for (const ImapInterval &interval : qAsConst(d->intervals)) {
         rv << interval.toImapSequence();
     }
 
@@ -296,9 +296,9 @@ ImapSet ImapSet::fromImapSequenceSet(const QByteArray &sequence)
 {
     ImapSet result;
 
-    QList<QByteArray> intervals = sequence.split(',');
+    const QList<QByteArray> intervals = sequence.split(',');
 
-    foreach (const QByteArray &interval, intervals) {
+    for (const QByteArray &interval : qAsConst(intervals)) {
         if (!interval.isEmpty()) {
             result.add(ImapInterval::fromImapSequence(interval));
         }

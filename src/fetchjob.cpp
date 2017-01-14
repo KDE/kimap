@@ -26,6 +26,7 @@
 #include "job_p.h"
 #include "message_p.h"
 #include "session_p.h"
+#include "helper_p.h"
 
 namespace KIMAP
 {
@@ -212,7 +213,7 @@ void FetchJob::doStart()
             parameters += "(RFC822.SIZE INTERNALDATE BODY.PEEK[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT DATE)] FLAGS UID";
         } else {
             parameters += '(';
-            foreach (const QByteArray &part, d->scope.parts) {
+            for (const QByteArray &part : qAsConst(d->scope.parts)) {
                 parameters += "BODY.PEEK[" + part + ".MIME] ";
             }
             parameters += "UID";
@@ -229,7 +230,7 @@ void FetchJob::doStart()
             parameters += "(BODY.PEEK[] UID";
         } else {
             parameters += '(';
-            foreach (const QByteArray &part, d->scope.parts) {
+            for (const QByteArray &part : qAsConst(d->scope.parts)) {
                 parameters += "BODY.PEEK[" + part + "] ";
             }
             parameters += "UID";
@@ -243,7 +244,7 @@ void FetchJob::doStart()
             parameters += "(BODY.PEEK[] FLAGS UID";
         } else {
             parameters += "(BODY.PEEK[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT DATE)]";
-            foreach (const QByteArray &part, d->scope.parts) {
+            for (const QByteArray &part : qAsConst(d->scope.parts)) {
                 parameters += " BODY.PEEK[" + part + ".MIME] BODY.PEEK[" + part + "]"; //krazy:exclude=doublequote_chars
             }
             parameters += " FLAGS UID";

@@ -28,6 +28,7 @@
 #include "message_p.h"
 #include "session_p.h"
 #include "rfccodecs.h"
+#include "helper_p.h"
 
 #include "common.h"
 
@@ -403,7 +404,7 @@ void LoginJob::handleResponse(const Message &response)
             } else {
                 bool authModeSupported = false;
                 //find the selected SASL authentication method
-                Q_FOREACH (const QString &capability, d->capabilities) {
+                for (const QString &capability : qAsConst(d->capabilities)) {
                     if (capability.startsWith(QLatin1String("AUTH="))) {
                         if (capability.mid(5) == d->authMode) {
                             authModeSupported = true;
@@ -613,7 +614,8 @@ void LoginJobPrivate::saveServerGreeting(const Message &response)
     for (int i = 2; i < response.content.size(); i++) {
         if (response.content.at(i).type() == Message::Part::List) {
             serverGreeting += QLatin1Char('(');
-            foreach (const QByteArray &item, response.content.at(i).toList()) {
+            const QList<QByteArray> itemLst = response.content.at(i).toList();
+            for (const QByteArray &item : itemLst) {
                 serverGreeting += QLatin1String(item) + QLatin1Char(' ');
             }
             serverGreeting.chop(1);
