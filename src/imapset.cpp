@@ -146,8 +146,7 @@ QByteArray ImapInterval::toImapSequence() const
     if (size() == 1) {
         return QByteArray::number(d->begin);
     }
-    QByteArray rv;
-    rv += QByteArray::number(d->begin) + ':';
+    QByteArray rv = QByteArray::number(d->begin) + ':';
     if (hasDefinedEnd()) {
         rv += QByteArray::number(d->end);
     } else {
