@@ -204,7 +204,7 @@ void SessionPrivate::jobDestroyed(QObject *job)
 
 void SessionPrivate::responseReceived(const Message &response)
 {
-    if (logger && (state == Session::Authenticated || state == Session::Selected)) {
+    if (logger && isConnected()) {
         logger->dataReceived(response.toString());
     }
 
@@ -339,7 +339,7 @@ void SessionPrivate::sendData(const QByteArray &data)
 {
     restartSocketTimer();
 
-    if (logger && (state == Session::Authenticated || state == Session::Selected)) {
+    if (logger && isConnected()) {
         logger->dataSent(data);
     }
 
@@ -371,13 +371,18 @@ void SessionPrivate::socketConnected()
     }
 }
 
+bool SessionPrivate::isConnected() const
+{
+    return state == Session::Authenticated || state == Session::Selected;
+}
+
 void SessionPrivate::socketDisconnected()
 {
     if (socketTimer.isActive()) {
         stopSocketTimer();
     }
 
-    if (logger && (state == Session::Authenticated || state == Session::Selected)) {
+    if (logger && isConnected()) {
         logger->disconnectionOccured();
     }
 

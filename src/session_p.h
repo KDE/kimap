@@ -87,6 +87,7 @@ private:
     void startSocketTimer();
     void stopSocketTimer();
     void restartSocketTimer();
+    bool isConnected() const;
 
     Session *const q;
 
