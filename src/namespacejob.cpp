@@ -55,7 +55,7 @@ public:
                 descriptor.separator = QLatin1Char(parts[1][0]);
 
                 result << descriptor;
-            } catch (KIMAP::ImapParserException e) {
+            } catch (const KIMAP::ImapParserException &e) {
                 qCWarning(KIMAP_LOG) << "The stream parser raised an exception during namespace list parsing:" << e.what();
                 qCWarning(KIMAP_LOG) << "namespacelist:" << namespaceList;
             }

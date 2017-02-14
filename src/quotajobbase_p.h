@@ -35,7 +35,7 @@ public:
     {}
 
     ~QuotaJobBasePrivate() { }
-    QMap<QByteArray, QPair<qint64, qint64> > readQuota(const Message::Part &content);
+    static QMap<QByteArray, QPair<qint64, qint64> > readQuota(const Message::Part &content);
 
     QMap<QByteArray, QPair<qint64, qint64> > quota;
 };

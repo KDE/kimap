@@ -36,7 +36,7 @@ QByteArray AclJobBasePrivate::identifier() const
     return id;
 }
 
-bool AclJobBasePrivate::hasRightEnabled(Acl::Right right)
+bool AclJobBasePrivate::hasRightEnabled(Acl::Right right) const
 {
     return rightList & right;
 }

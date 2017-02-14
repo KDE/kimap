@@ -125,7 +125,7 @@ void SessionThread::readMessage()
 
         emit responseReceived(message);
 
-    } catch (KIMAP::ImapParserException e) {
+    } catch (const KIMAP::ImapParserException &e) {
         qCWarning(KIMAP_LOG) << "The stream parser raised an exception:" << e.what();
     }
 

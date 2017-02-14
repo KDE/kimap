@@ -37,7 +37,7 @@ public:
     void setIdentifier(const QByteArray &identifier);
     QByteArray identifier() const;
 
-    bool hasRightEnabled(Acl::Right right);
+    bool hasRightEnabled(Acl::Right right) const;
 
     void setRights(const QByteArray &rights);
     void setRights(AclJobBase::AclModifier modifier, Acl::Rights rights);

@@ -571,7 +571,6 @@ const QString KIMAP::encodeRFC2231String(const QString &str)
     signed char *l = latin;
     char hexcode;
     int i;
-    bool quote;
     while (*l) {
         if (*l < 0) {
             break;
@@ -585,7 +584,7 @@ const QString KIMAP::encodeRFC2231String(const QString &str)
     QByteArray result;
     l = latin;
     while (*l) {
-        quote = *l < 0;
+        bool quote = *l < 0;
         for (i = 0; i < 16; ++i) {
             if (*l == especials[i]) {
                 quote = true;

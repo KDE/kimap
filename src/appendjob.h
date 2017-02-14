@@ -49,7 +49,7 @@ class KIMAP_EXPORT AppendJob : public Job
     friend class SessionPrivate;
 
 public:
-    AppendJob(Session *session);
+    explicit AppendJob(Session *session);
     virtual ~AppendJob();
 
     /**
