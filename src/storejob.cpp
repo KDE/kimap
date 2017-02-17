@@ -31,7 +31,7 @@ namespace KIMAP
 class StoreJobPrivate : public JobPrivate
 {
 public:
-    StoreJobPrivate(Session *session, const QString &name) : JobPrivate(session, name) { }
+    StoreJobPrivate(Session *session, const QString &name) : JobPrivate(session, name), uidBased(false) { }
     ~StoreJobPrivate() { }
 
     QByteArray addFlags(const QByteArray &param, const MessageFlags &flags)
