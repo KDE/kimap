@@ -1,5 +1,5 @@
 fancyname: KIMAP
-maintainer: cmollekopf
+maintainer: dvratil 
 description: A job-based API for interacting with IMAP servers
 tier: 3
 type: functional
@@ -11,7 +11,7 @@ release: false
 libraries:
  - qmake: KImap
    cmake: "KF5::Imap"
-cmakename: KF5Imap
+   cmakename: KF5Imap
 
 public_lib: true
 group: kdepim
