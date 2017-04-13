@@ -49,6 +49,7 @@ set_package_properties(Sasl2 PROPERTIES
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5IMAP")
 add_definitions(-DTRANSLATION_DOMAIN=\"libkimap5\")
 add_definitions("-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII")
+add_definitions( -DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT )
 
 configure_package_config_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/KF5IMAPConfig.cmake.in"
