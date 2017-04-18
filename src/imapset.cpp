@@ -18,7 +18,7 @@
 */
 
 #include "imapset.h"
-#include "helper_p.h"
+
 #include <QtCore/QSharedData>
 
 using namespace KIMAP;

@@ -25,7 +25,7 @@
 #include "message_p.h"
 #include "session_p.h"
 #include "rfccodecs.h"
-#include "helper_p.h"
+
 
 namespace KIMAP
 {
