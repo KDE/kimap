@@ -61,7 +61,7 @@ struct Message {
     {
         QByteArray result;
 
-        foreach (const Part &part, content) {
+        for (const Part &part : qAsConst(content)) {
             if (part.type() == Part::List) {
                 result += '(';
                 const QList<QByteArray> lstBa = part.toList();
@@ -77,7 +77,7 @@ struct Message {
 
         if (!responseCode.isEmpty()) {
             result += "[ ";
-            foreach (const Part &part, responseCode) {
+            for (const Part &part : qAsConst(responseCode)) {
                 if (part.type() == Part::List) {
                     result += '(';
                     const QList<QByteArray> lstBa = part.toList();
