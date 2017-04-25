@@ -105,7 +105,7 @@ private Q_SLOTS:
         KIMAP::SearchJob *job = new KIMAP::SearchJob(&session);
         job->setUidBased(uidbased);
         job->setSearchLogic(searchLogic);
-        Q_FOREACH (const SearchCriteriaValuePair &pair, searchCriteria) {
+        for (const SearchCriteriaValuePair &pair : qAsConst(searchCriteria)) {
             if (pair.second.isEmpty()) {
                 job->addSearchCriteria(pair.first);
             } else {
