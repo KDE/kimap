@@ -260,7 +260,7 @@ void testAppendAndStore(Session *session)
 
     qDebug() << "Add the \\Deleted flag...";
     expectedFlags << "\\Deleted";
-    qSort(expectedFlags);
+    std::sort(expectedFlags.begin(), expectedFlags.end());
     StoreJob *store = new StoreJob(session);
     store->setSequenceSet(ImapSet(1));
     store->setMode(StoreJob::AppendFlags);
@@ -269,7 +269,7 @@ void testAppendAndStore(Session *session)
     Q_ASSERT_X(store->error() == 0, "StoreJob", store->errorString().toLocal8Bit().constData());
 
     QList<QByteArray> resultingFlags = store->resultingFlags()[1];
-    qSort(resultingFlags);
+    std::sort(resultingFlags.begin(), resultingFlags.end());
     if (expectedFlags != resultingFlags) {
         qDebug() << resultingFlags;
     }
