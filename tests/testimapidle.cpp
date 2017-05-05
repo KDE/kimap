@@ -54,8 +54,9 @@ int main(int argc, char **argv)
     QString server = QString::fromLocal8Bit(argv[1]);
     int port = 143;
     if (server.count(QLatin1Char(':')) == 1) {
-        port = server.split(QLatin1Char(':')).last().toInt();
-        server = server.split(QLatin1Char(':')).first();
+        const QStringList lstSplit = server.split(QLatin1Char(':'));
+        port = lstSplit.last().toInt();
+        server = lstSplit.first();
     }
     QString user = QString::fromLocal8Bit(argv[2]);
     QString password = QString::fromLocal8Bit(argv[3]);
