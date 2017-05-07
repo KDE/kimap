@@ -114,18 +114,18 @@ bool LoginJobPrivate::sasl_interact()
         case SASL_CB_AUTHNAME:
             if (!authorizationName.isEmpty()) {
                 qCDebug(KIMAP_LOG) << "SASL_CB_[AUTHNAME]: '" << authorizationName << "'";
-                interact->result = strdup(authorizationName.toUtf8());
+                interact->result = strdup(authorizationName.toUtf8().constData());
                 interact->len = strlen((const char *) interact->result);
                 break;
             }
         case SASL_CB_USER:
             qCDebug(KIMAP_LOG) << "SASL_CB_[USER|AUTHNAME]: '" << userName << "'";
-            interact->result = strdup(userName.toUtf8());
+            interact->result = strdup(userName.toUtf8().constData());
             interact->len = strlen((const char *) interact->result);
             break;
         case SASL_CB_PASS:
             qCDebug(KIMAP_LOG) << "SASL_CB_PASS: [hidden]";
-            interact->result = strdup(password.toUtf8());
+            interact->result = strdup(password.toUtf8().constData());
             interact->len = strlen((const char *) interact->result);
             break;
         default:
@@ -454,7 +454,7 @@ bool LoginJobPrivate::startAuthentication()
     uint outlen = 0;
     const char *mechusing = nullptr;
 
-    int result = sasl_client_new("imap", m_session->hostName().toLatin1(), nullptr, nullptr, callbacks, 0, &conn);
+    int result = sasl_client_new("imap", m_session->hostName().toLatin1().constData(), nullptr, nullptr, callbacks, 0, &conn);
     if (result != SASL_OK) {
         const QString saslError = QString::fromUtf8(sasl_errdetail(conn));
         qCWarning(KIMAP_LOG) << "sasl_client_new failed with:" << result << saslError;
@@ -465,7 +465,7 @@ bool LoginJobPrivate::startAuthentication()
 
     do {
         qCDebug(KIMAP_LOG) << "Trying authmod" << authMode.toLatin1();
-        result = sasl_client_start(conn, authMode.toLatin1(), &client_interact, capabilities.contains(QStringLiteral("SASL-IR")) ? &out : nullptr, &outlen, &mechusing);
+        result = sasl_client_start(conn, authMode.toLatin1().constData(), &client_interact, capabilities.contains(QStringLiteral("SASL-IR")) ? &out : nullptr, &outlen, &mechusing);
 
         if (result == SASL_INTERACT) {
             if (!sasl_interact()) {
