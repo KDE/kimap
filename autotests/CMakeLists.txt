@@ -6,7 +6,6 @@ find_package(Qt5Test CONFIG REQUIRED)
 
 add_subdirectory(kimaptest)
 
-remove_definitions(-DQT_USE_QSTRINGBUILDER)
 macro(KIMAP_UNIT_TESTS)
   foreach(_testname ${ARGN})
     add_executable(${_testname} ${_testname}.cpp)
