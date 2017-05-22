@@ -22,7 +22,11 @@
 
 #include "kimap_debug.h"
 
+#ifdef WIN32
+#include <process.h>
+#else
 #include <unistd.h> // for getpid()
+#endif
 
 using namespace KIMAP;
 
@@ -33,8 +37,14 @@ SessionLogger::SessionLogger()
     m_id = ++nextId;
 
     m_file.setFileName(QLatin1String(qgetenv("KIMAP_LOGFILE"))
-                       + QLatin1Char('.') + QString::number(getpid())
-                       + QLatin1Char('.') + QString::number(m_id));
+                       + QLatin1Char('.')
+                   #ifdef WIN32
+                       + QString::number(_getpid())
+                   #else
+                       + QString::number(getpid())
+                   #endif
+                       + QLatin1Char('.')
+                       + QString::number(m_id));
     if (!m_file.open(QFile::WriteOnly)) {
         qCWarning(KIMAP_LOG) << "Could not open log file for writing:" << m_file.fileName();
     }
