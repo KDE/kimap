@@ -57,7 +57,7 @@ generate_export_header(KF5IMAP BASE_NAME kimap)
 
 add_library(KF5::IMAP ALIAS KF5IMAP)
 
-target_include_directories(KF5IMAP INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF5}/KIMAP;${Sasl2_INCLUDE_DIR}>")
+target_include_directories(KF5IMAP INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF5}/KIMAP;${Sasl2_INCLUDE_DIRS}>")
 target_include_directories(KF5IMAP PUBLIC "$<BUILD_INTERFACE:${KIMAP_SOURCE_DIR}/src;${KIMAP_BINARY_DIR}/src>")
 
 target_link_libraries(KF5IMAP
