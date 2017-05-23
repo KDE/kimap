@@ -2,6 +2,8 @@
 # Turn exceptions on
 kde_enable_exceptions()
 
+include_directories(${Sasl2_INCLUDE_DIRS})
+
 set(kimap_SRCS
    acl.cpp
    acljobbase.cpp
