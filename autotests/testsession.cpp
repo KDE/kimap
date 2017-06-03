@@ -23,7 +23,7 @@
 
 #include <QtCore/QEventLoop>
 #include <QtCore/QObject>
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include "session.h"
 #include "job.h"
