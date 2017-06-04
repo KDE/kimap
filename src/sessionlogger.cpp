@@ -21,7 +21,7 @@
 #include "sessionlogger_p.h"
 
 #include "kimap_debug.h"
-
+#include <QCoreApplication>
 #ifdef WIN32
 #include <process.h>
 #else
@@ -38,11 +38,7 @@ SessionLogger::SessionLogger()
 
     m_file.setFileName(QLatin1String(qgetenv("KIMAP_LOGFILE"))
                        + QLatin1Char('.')
-                   #ifdef WIN32
-                       + QString::number(_getpid())
-                   #else
-                       + QString::number(getpid())
-                   #endif
+                       + QString::number(QCoreApplication::applicationPid())
                        + QLatin1Char('.')
                        + QString::number(m_id));
     if (!m_file.open(QFile::WriteOnly)) {
