@@ -114,8 +114,8 @@ public:
     ImapSet resultingUids() const;
 
 protected:
-    void doStart() Q_DECL_OVERRIDE;
-    void handleResponse(const KIMAP::Message &response) Q_DECL_OVERRIDE;
+    void doStart() override;
+    void handleResponse(const KIMAP::Message &response) override;
 };
 
 }

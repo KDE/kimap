@@ -42,8 +42,8 @@ public:
     virtual ~LogoutJob();
 
 protected:
-    void doStart() Q_DECL_OVERRIDE;
-    void connectionLost() Q_DECL_OVERRIDE;
+    void doStart() override;
+    void connectionLost() override;
 };
 
 }

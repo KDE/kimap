@@ -86,8 +86,8 @@ public:
     bool condstoreEnabled() const;
 
 protected:
-    void doStart() Q_DECL_OVERRIDE;
-    void handleResponse(const Message &response) Q_DECL_OVERRIDE;
+    void doStart() override;
+    void handleResponse(const Message &response) override;
 };
 
 }

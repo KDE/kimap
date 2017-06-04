@@ -105,7 +105,7 @@ public:
     QByteArray identifier();
 
 protected:
-    void doStart() Q_DECL_OVERRIDE;
+    void doStart() override;
 
 };
 

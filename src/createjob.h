@@ -69,7 +69,7 @@ public:
     QString mailBox() const;
 
 protected:
-    void doStart() Q_DECL_OVERRIDE;
+    void doStart() override;
 };
 
 }

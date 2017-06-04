@@ -121,9 +121,9 @@ public:
     void setAuthenticationMode(AuthenticationMode mode);
 
 protected:
-    void doStart() Q_DECL_OVERRIDE;
-    void handleResponse(const Message &response) Q_DECL_OVERRIDE;
-    void connectionLost() Q_DECL_OVERRIDE;
+    void doStart() override;
+    void handleResponse(const Message &response) override;
+    void connectionLost() override;
 
 private:
     Q_PRIVATE_SLOT(d_func(), void sslResponse(bool))
