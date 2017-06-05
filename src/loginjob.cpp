@@ -425,6 +425,9 @@ void LoginJob::handleResponse(const Message &response)
         case LoginJobPrivate::Authenticate:
             sasl_dispose(&d->conn);   //SASL authentication done
         // Fall through
+#if QT_VERSION >= QT_VERSION_CHECK(5,8,0)
+        Q_FALLTHROUGH();
+#endif
         case LoginJobPrivate::Login:
             d->saveServerGreeting(response);
             emitResult(); //got an OK, command done
