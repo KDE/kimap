@@ -21,8 +21,8 @@
     Boston, MA 02110-1301, USA.
   */
 
-#include <QtCore/QEventLoop>
-#include <QtCore/QObject>
+#include <QEventLoop>
+#include <QObject>
 #include <QtTest>
 
 #include "session.h"

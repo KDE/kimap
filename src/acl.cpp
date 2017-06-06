@@ -19,8 +19,8 @@
 
 #include "acl.h"
 
-#include <QtCore/QByteArray>
-#include <QtCore/QMap>
+#include <QByteArray>
+#include <QMap>
 
 namespace KIMAP
 {

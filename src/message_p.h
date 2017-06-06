@@ -20,9 +20,9 @@
 #ifndef KIMAP_MESSAGE_P_H
 #define KIMAP_MESSAGE_P_H
 
-#include <QtCore/QByteArray>
-#include <QtCore/QList>
-#include <QtCore/QMetaType>
+#include <QByteArray>
+#include <QList>
+#include <QMetaType>
 
 namespace KIMAP
 {

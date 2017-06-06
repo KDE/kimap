@@ -27,7 +27,7 @@
 #include "session.h"
 #include "session_p.h"
 #include <KLocalizedString>
-#include <QtCore/QTimer>
+#include <QTimer>
 
 class MockJobPrivate : public KIMAP::JobPrivate
 {

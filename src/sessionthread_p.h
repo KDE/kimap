@@ -20,8 +20,8 @@
 #ifndef KIMAP_SESSIONTHREAD_P_H
 #define KIMAP_SESSIONTHREAD_P_H
 
-#include <QtCore/QMutex>
-#include <QtCore/QQueue>
+#include <QMutex>
+#include <QQueue>
 
 #include <ktcpsocket.h>
 

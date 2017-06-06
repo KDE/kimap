@@ -19,7 +19,7 @@
 
 #include "fetchjob.h"
 
-#include <QtCore/QTimer>
+#include <QTimer>
 #include "kimap_debug.h"
 #include <KLocalizedString>
 

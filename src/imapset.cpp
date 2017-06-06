@@ -19,7 +19,7 @@
 
 #include "imapset.h"
 
-#include <QtCore/QSharedData>
+#include <QSharedData>
 
 using namespace KIMAP;
 

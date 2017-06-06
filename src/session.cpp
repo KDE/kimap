@@ -24,9 +24,9 @@
 #include "session_p.h"
 #include "sessionuiproxy.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QTimer>
-#include <QtCore/QPointer>
+#include <QDebug>
+#include <QTimer>
+#include <QPointer>
 
 #include "kimap_debug.h"
 

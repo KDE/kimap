@@ -22,7 +22,7 @@
 
 #include "kimap_export.h"
 
-#include <QtCore/QObject>
+#include <QObject>
 
 #include "sessionuiproxy.h"
 

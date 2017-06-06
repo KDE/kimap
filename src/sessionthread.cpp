@@ -19,8 +19,8 @@
 
 #include "sessionthread_p.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QThread>
+#include <QDebug>
+#include <QThread>
 
 #include "kimap_debug.h"
 

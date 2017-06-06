@@ -25,10 +25,10 @@
 
 #include <ktcpsocket.h>
 
-#include <QtCore/QObject>
-#include <QtCore/QQueue>
-#include <QtCore/QString>
-#include <QtCore/QTimer>
+#include <QObject>
+#include <QQueue>
+#include <QString>
+#include <QTimer>
 
 class KJob;
 

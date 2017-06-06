@@ -25,9 +25,9 @@
 
 #include <exception>
 
-#include <QtCore/QByteArray>
-#include <QtCore/QList>
-#include <QtCore/QString>
+#include <QByteArray>
+#include <QList>
+#include <QString>
 
 class QIODevice;
 

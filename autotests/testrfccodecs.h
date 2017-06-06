@@ -22,7 +22,7 @@
 #ifndef RFCCODECSTEST_H
 #define RFCCODECSTEST_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class RFCCodecsTest : public QObject
 {

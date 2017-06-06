@@ -22,11 +22,11 @@
 
 #include "kimap_export.h"
 
-#include <QtCore/QByteArray>
-#include <QtCore/QDebug>
-#include <QtCore/QList>
-#include <QtCore/QMetaType>
-#include <QtCore/QSharedDataPointer>
+#include <QByteArray>
+#include <QDebug>
+#include <QList>
+#include <QMetaType>
+#include <QSharedDataPointer>
 
 namespace KIMAP
 {

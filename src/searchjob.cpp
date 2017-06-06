@@ -22,7 +22,7 @@
 #include <KLocalizedString>
 #include "kimap_debug.h"
 
-#include <QtCore/QDate>
+#include <QDate>
 
 #include "job_p.h"
 #include "message_p.h"
