@@ -22,11 +22,6 @@
 
 #include "kimap_debug.h"
 #include <QCoreApplication>
-#ifdef WIN32
-#include <process.h>
-#else
-#include <unistd.h> // for getpid()
-#endif
 
 using namespace KIMAP;
 
