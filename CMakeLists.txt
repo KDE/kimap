@@ -53,6 +53,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"libkimap5\")
 add_definitions("-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII")
 add_definitions(-DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT)
 #add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x060000)
+add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 
 configure_package_config_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/KF5IMAPConfig.cmake.in"
