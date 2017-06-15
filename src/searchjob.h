@@ -25,6 +25,8 @@
 
 #include "job.h"
 
+#include <QSharedDataPointer>
+
 class QDate;
 
 namespace KIMAP
@@ -90,7 +92,7 @@ public:
     };
 
     Term();
-    ~Term() = default; // silence clazy rule of three warning
+    ~Term();
     Term(Relation relation, const QVector<Term> &subterms);
     Term(SearchKey key, const QString &value);
     Term(BooleanSearchKey key);
@@ -113,7 +115,7 @@ public:
 
 private:
     class Private;
-    QSharedPointer<Private> d;
+    QSharedDataPointer<Private> d;
 };
 
 class KIMAP_EXPORT SearchJob : public Job

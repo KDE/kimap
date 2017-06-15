@@ -32,10 +32,27 @@
 namespace KIMAP
 {
 
-class Term::Private
+class Term::Private : public QSharedData
 {
 public:
-    Private(): isFuzzy(false), isNegated(false), isNull(false) {}
+    Private(): QSharedData(), isFuzzy(false), isNegated(false), isNull(false) {}
+    Private(const Private &other)
+        : QSharedData(other)
+        , command(other.command)
+        , isFuzzy(other.isFuzzy)
+        , isNegated(other.isNegated)
+        , isNull(other.isNull)
+    {}
+
+    Private &operator=(const Private &other)
+    {
+        command = other.command;
+        isFuzzy = other.isFuzzy;
+        isNegated = other.isNegated;
+        isNull = other.isNull;
+        return *this;
+    }
+
     QByteArray command;
     bool isFuzzy;
     bool isNegated;
@@ -221,6 +238,10 @@ Term::Term(const Term &other)
     :  d(new Term::Private)
 {
     *d = *other.d;
+}
+
+Term::~Term()
+{
 }
 
 Term &Term::operator=(const Term &other)
