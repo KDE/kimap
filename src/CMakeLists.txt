@@ -65,10 +65,10 @@ target_include_directories(KF5IMAP PUBLIC "$<BUILD_INTERFACE:${KIMAP_SOURCE_DIR}
 target_link_libraries(KF5IMAP
 PUBLIC
   KF5::Mime
+  KF5::CoreAddons
 PRIVATE
   KF5::KIOCore
   KF5::Codecs
-  KF5::CoreAddons
   KF5::I18n
   ${Sasl2_LIBRARIES}
 )
