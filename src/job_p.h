@@ -47,6 +47,11 @@ public:
         return m_session->d;
     }
 
+    void setSocketError(KTcpSocket::Error error)
+    {
+        m_socketError = error;
+    }
+
     QList<QByteArray> tags;
     Session *m_session;
     QString m_name;

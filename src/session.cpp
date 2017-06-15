@@ -31,6 +31,7 @@
 #include "kimap_debug.h"
 
 #include "job.h"
+#include "job_p.h"
 #include "loginjob.h"
 #include "message_p.h"
 #include "sessionlogger_p.h"
@@ -413,10 +414,10 @@ void SessionPrivate::socketError(KTcpSocket::Error error)
     }
 
     if (currentJob) {
-        currentJob->setSocketError(error);
+        currentJob->d_ptr->setSocketError(error);
     } else if (!queue.isEmpty()) {
         currentJob = queue.takeFirst();
-        currentJob->setSocketError(error);
+        currentJob->d_ptr->setSocketError(error);
     }
 
     if (isSocketConnected) {
