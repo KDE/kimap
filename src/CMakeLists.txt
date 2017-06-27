@@ -62,6 +62,10 @@ add_library(KF5::IMAP ALIAS KF5IMAP)
 target_include_directories(KF5IMAP INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF5}/KIMAP;${Sasl2_INCLUDE_DIRS}>")
 target_include_directories(KF5IMAP PUBLIC "$<BUILD_INTERFACE:${KIMAP_SOURCE_DIR}/src;${KIMAP_BINARY_DIR}/src>")
 
+if (WIN32)
+    set(extra_LIBS ws2_32)
+endif()
+
 target_link_libraries(KF5IMAP
 PUBLIC
   KF5::Mime
@@ -71,7 +75,9 @@ PRIVATE
   KF5::Codecs
   KF5::I18n
   ${Sasl2_LIBRARIES}
+  ${extra_LIBS}
 )
+
 
 set_target_properties(KF5IMAP PROPERTIES
     VERSION ${KIMAP_VERSION_STRING}
