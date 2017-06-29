@@ -51,9 +51,11 @@ public:
 
     void emitPendings()
     {
-        if (pendingUids.isEmpty()) {
+        if (pendingMsgs.isEmpty()) {
             return;
         }
+
+        Q_EMIT q->messagesAvailable(pendingMsgs);
 
         if (!pendingParts.isEmpty()) {
             emit q->partsReceived(selectedMailBox,
@@ -85,6 +87,7 @@ public:
         pendingSizes.clear();
         pendingFlags.clear();
         pendingAttributes.clear();
+        pendingMsgs.clear();
     }
 
     FetchJob *const q;
@@ -102,6 +105,7 @@ public:
     QMap<qint64, MessageAttribute> pendingAttributes;
     QMap<qint64, qint64> pendingSizes;
     QMap<qint64, qint64> pendingUids;
+    QMap<qint64, Message> pendingMsgs;
 };
 }
 
@@ -173,6 +177,12 @@ void FetchJob::setGmailExtensionsEnabled(bool enabled)
 {
     Q_D(FetchJob);
     d->gmailEnabled = enabled;
+}
+
+QString FetchJob::mailBox() const
+{
+    Q_D(const FetchJob);
+    return d->selectedMailBox;
 }
 
 void FetchJob::doStart()
@@ -270,6 +280,7 @@ void FetchJob::handleResponse(const Response &response)
             qint64 id = response.content[1].toString().toLongLong();
             QList<QByteArray> content = response.content[3].toList();
 
+            Message msg;
             MessagePtr message(new KMime::Message);
             bool shouldParseMessage = false;
             MessageParts parts;
@@ -284,10 +295,11 @@ void FetchJob::handleResponse(const Response &response)
                     break;
                 }
 
+
                 if (str == "UID") {
-                    d->pendingUids[id] = it->toLongLong();
+                    d->pendingUids[id] = msg.uid = it->toLongLong();
                 } else if (str == "RFC822.SIZE") {
-                    d->pendingSizes[id] = it->toLongLong();
+                    d->pendingSizes[id] = msg.size = it->toLongLong();
                 } else if (str == "INTERNALDATE") {
                     message->date()->setDateTime(QDateTime::fromString(QLatin1String(*it), Qt::RFC2822Date));
                 } else if (str == "FLAGS") {
@@ -295,21 +307,28 @@ void FetchJob::handleResponse(const Response &response)
                         QByteArray str = *it;
                         str.chop(1);
                         str.remove(0, 1);
-                        d->pendingFlags[id] = str.split(' ');
+                        const auto flags = str.split(' ');
+                        d->pendingFlags[id] = flags;
+                        msg.flags = flags;
                     } else {
                         d->pendingFlags[id] << *it;
+                        msg.flags << *it;
                     }
                 } else if (str == "X-GM-LABELS") {
                     d->pendingAttributes.insert(id, { "X-GM-LABELS", *it });
+                    msg.attributes.insert("X-GM-LABELS", *it);
                 } else if (str == "X-GM-THRID") {
                     d->pendingAttributes.insert(id, { "X-GM-THRID", *it });
+                    msg.attributes.insert("X-GM-THRID", *it);
                 } else if (str == "X-GM-MSGID") {
                     d->pendingAttributes.insert(id, { "X-GM-MSGID", *it });
+                    msg.attributes.insert("X-GM-MSGID", *it);
                 } else if (str == "BODYSTRUCTURE") {
                     int pos = 0;
                     d->parseBodyStructure(*it, pos, message.data());
                     message->assemble();
                     d->pendingMessages[id] = message;
+                    msg.message = message;
                 } else if (str.startsWith("BODY[")) {     //krazy:exclude=strings
                     if (!str.endsWith(']')) {     // BODY[ ... ] might have been split, skip until we find the ]
                         while (!(*it).endsWith(']')) {
@@ -328,6 +347,7 @@ void FetchJob::handleResponse(const Response &response)
                             parts[partId]->setHead(*it);
                             parts[partId]->parse();
                             d->pendingParts[id] = parts;
+                            msg.parts = parts;
                         } else {
                             message->setHead(*it);
                             shouldParseMessage = true;
@@ -338,6 +358,7 @@ void FetchJob::handleResponse(const Response &response)
                             shouldParseMessage = true;
 
                             d->pendingMessages[id] = message;
+                            msg.message = message;
                         } else {
                             QByteArray partId = str.mid(5, str.size() - 6);
                             if (!parts.contains(partId)) {
@@ -347,6 +368,7 @@ void FetchJob::handleResponse(const Response &response)
                             parts[partId]->parse();
 
                             d->pendingParts[id] = parts;
+                            msg.parts = parts;
                         }
                     }
                 }
@@ -363,7 +385,10 @@ void FetchJob::handleResponse(const Response &response)
                     d->scope.mode == FetchScope::HeaderAndContent ||
                     d->scope.mode == FetchScope::FullHeaders) {
                 d->pendingMessages[id] = message;
+                msg.message = message;
             }
+
+            d->pendingMsgs[id] = msg;
         }
     }
 }

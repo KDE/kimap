@@ -43,6 +43,17 @@ typedef QList<QByteArray> MessageFlags;
 
 typedef QPair<QByteArray, QVariant> MessageAttribute;
 
+struct Message
+{
+    qint64 uid;
+    qint64 size;
+    MessageFlags flags;
+    QMap<QByteArray, QVariant> attributes;
+    MessageParts parts;
+    MessagePtr message;
+};
+
+
 /**
  * Fetch message data from the server
  *
@@ -245,6 +256,16 @@ public:
      */
     bool setGmailExtensionsEnabled() const;
 
+    /**
+     * Returns the name of the mailbox the fetch job is executed on.
+     *
+     * Can only be accessed after the job is actually started, before that
+     * returns an empty string.
+     *
+     * @since 5.6
+     */
+    QString mailBox() const;
+
 Q_SIGNALS:
     /**
      * Provides header and message results.
@@ -275,7 +296,10 @@ Q_SIGNALS:
      * @param messages a map from message sequence numbers to message contents (including
      *                 headers); populated if the scope is FetchScope::Full,
      *                 FetchScope::Headers or FetchScope::Structure
+     *
+     * @deprecated Use messagesAvailable() instead.
      */
+    KIMAP_DEPRECATED
     void headersReceived(const QString &mailBox,
                          const QMap<qint64, qint64> &uids,
                          const QMap<qint64, qint64> &sizes,
@@ -306,7 +330,9 @@ Q_SIGNALS:
      *
      * @overload
      * @since 4.14
+     * @deprecated Use messagesAvailable() instead.
      */
+    KIMAP_DEPRECATED
     void headersReceived(const QString &mailBox,
                          const QMap<qint64, qint64> &uids,
                          const QMap<qint64, qint64> &sizes,
@@ -331,7 +357,10 @@ Q_SIGNALS:
      *                 executed on
      * @param uids     a map from message sequence numbers to message UIDs
      * @param messages a map from message sequence numbers to message contents
+     *
+     * @deprecated Use messagesAvailable() instead.
      */
+    KIMAP_DEPRECATED
     void messagesReceived(const QString &mailBox,
                           const QMap<qint64, qint64> &uids,
                           const QMap<qint64, KIMAP::MessagePtr> &messages);
@@ -350,7 +379,10 @@ Q_SIGNALS:
      *
      * @overload
      * @since 4.14
+     *
+     * @deprecated Use messagesAvailable() instead.
      */
+    KIMAP_DEPRECATED
     void messagesReceived(const QString &mailBox,
                           const QMap<qint64, qint64> &uids,
                           const QMap<qint64, KIMAP::MessageAttribute > &attrs,
@@ -371,7 +403,10 @@ Q_SIGNALS:
      *                 executed on
      * @param uids     a map from message sequence numbers to message UIDs
      * @param parts    a map from message sequence numbers to message part collections
+     *
+     * @deprecated Use messagesAvailable() instead.
      */
+    KIMAP_DEPRECATED
     void partsReceived(const QString &mailBox,
                        const QMap<qint64, qint64> &uids,
                        const QMap<qint64, KIMAP::MessageParts> &parts);
@@ -389,11 +424,27 @@ Q_SIGNALS:
       *
       * @overload
       * @since 4.14
+      *
+      * @deprecated Use messagesAvailable() instead.
       */
+    KIMAP_DEPRECATED
     void partsReceived(const QString &mailBox,
                        const QMap<qint64, qint64> &uids,
                        const QMap<qint64, KIMAP::MessageAttribute > &attrs,
                        const QMap<qint64, KIMAP::MessageParts> &parts);
+
+    /**
+     * Provides received messages.
+     *
+     * This signal is emitted when some data are received. The signal can be
+     * emitted multiple times as the messages are being received.
+     *
+     * @param messages A map from message sequence number to message. Not all
+     *                 fields may be populated, depending on the fetch scope.
+     *
+     * @since 5.6
+     */
+    void messagesAvailable(const QMap<qint64, KIMAP::Message> &messages);
 
 protected:
     void doStart() override;

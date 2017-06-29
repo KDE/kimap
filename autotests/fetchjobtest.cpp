@@ -40,6 +40,7 @@ private:
     QMap<qint64, KIMAP::MessagePtr> m_messages;
     QMap<qint64, KIMAP::MessageParts> m_parts;
     QMap<qint64, KIMAP::MessageAttribute> m_attrs;
+    QMap<qint64, KIMAP::Message> m_msgs;
 
 public Q_SLOTS:
     void onHeadersReceived(const QString &/*mailBox*/,
@@ -76,6 +77,12 @@ public Q_SLOTS:
         m_signals << QStringLiteral("partsReceived");
         m_attrs.unite(attrs);
         m_parts.unite(parts);
+    }
+
+    void onMessagesAvailable(const QMap<qint64, KIMAP::Message> &messages)
+    {
+        m_signals << QStringLiteral("messagesAvailable");
+        m_msgs.unite(messages);
     }
 
 private Q_SLOTS:
@@ -194,6 +201,8 @@ private Q_SLOTS:
                                              QMap<qint64, KIMAP::MessageAttribute>,
                                              QMap<qint64, KIMAP::MessageFlags>,
                                              QMap<qint64, KIMAP::MessagePtr>)));
+        connect(job, &KIMAP::FetchJob::messagesAvailable,
+                this, &FetchJobTest::onMessagesAvailable);
 
         bool result = job->exec();
         QEXPECT_FAIL("connection drop", "Expected failure on connection drop", Continue);
@@ -203,6 +212,7 @@ private Q_SLOTS:
         if (result) {
             QVERIFY(m_signals.count() > 0);
             QCOMPARE(m_uids.count(), expectedMessageCount);
+            QCOMPARE(m_msgs.count(), expectedMessageCount);
         }
 
         QVERIFY(fakeServer.isAllScenarioDone());
@@ -215,6 +225,7 @@ private Q_SLOTS:
         m_messages.clear();
         m_parts.clear();
         m_attrs.clear();
+        m_msgs.clear();
     }
 
     void testFetchStructure()
@@ -248,6 +259,8 @@ private Q_SLOTS:
                                               QMap<qint64, qint64>,
                                               QMap<qint64, KIMAP::MessageAttribute>,
                                               QMap<qint64, KIMAP::MessagePtr>)));
+        connect(job, &KIMAP::FetchJob::messagesAvailable,
+                this, &FetchJobTest::onMessagesAvailable);
 
         bool result = job->exec();
         QVERIFY(result);
@@ -258,6 +271,13 @@ private Q_SLOTS:
         QCOMPARE(m_messages[2]->contents().size(), 2);
         QCOMPARE(m_messages[2]->contents()[0]->contents().size(), 2);
         QCOMPARE(m_messages[2]->attachments().at(0)->contentDisposition()->filename(), QStringLiteral("photo.jpg"));
+        QCOMPARE(m_msgs.count(), 2);
+        QCOMPARE(m_msgs[1].message->attachments().count(), 0);
+        QCOMPARE(m_msgs[2].message->attachments().count(), 1);
+        QCOMPARE(m_msgs[2].message->contents().size(), 2);
+        QCOMPARE(m_msgs[2].message->contents()[0]->contents().size(), 2);
+        QCOMPARE(m_msgs[2].message->attachments().at(0)->contentDisposition()->filename(),
+                 QStringLiteral("photo.jpg"));
 
         fakeServer.quit();
 
@@ -268,6 +288,7 @@ private Q_SLOTS:
         m_messages.clear();
         m_parts.clear();
         m_attrs.clear();
+        m_msgs.clear();
     }
 
     void testFetchParts()
@@ -314,7 +335,8 @@ private Q_SLOTS:
                                            QMap<qint64, qint64>,
                                            QMap<qint64, KIMAP::MessageAttribute>,
                                            QMap<qint64, KIMAP::MessageParts>)));
-
+        connect(job, &KIMAP::FetchJob::messagesAvailable,
+                this, &FetchJobTest::onMessagesAvailable);
         bool result = job->exec();
 
         QVERIFY(result);
@@ -322,24 +344,33 @@ private Q_SLOTS:
         QCOMPARE(m_uids.count(), 1);
         QCOMPARE(m_parts.count(), 1);
         QCOMPARE(m_attrs.count(), 0);
+        QCOMPARE(m_msgs.count(), 1);
 
         // Check that we received the message header
         QCOMPARE(m_messages[2]->messageID()->identifier(), QByteArray("1234@example.com"));
+        QCOMPARE(m_msgs[2].message->messageID()->identifier(), QByteArray("1234@example.com"));
 
         // Check that we recieved the flags
         QMap<qint64, KIMAP::MessageFlags> expectedFlags;
         expectedFlags.insert(2, KIMAP::MessageFlags() << "\\Seen");
         QCOMPARE(m_flags, expectedFlags);
+        QCOMPARE(m_msgs[2].flags, expectedFlags[2]);
 
         // Check that we didn't received the full message body, since we only requested a specific part
         QCOMPARE(m_messages[2]->decodedText().length(), 0);
         QCOMPARE(m_messages[2]->attachments().count(), 0);
+        QCOMPARE(m_msgs[2].message->decodedText().length(), 0);
+        QCOMPARE(m_msgs[2].message->attachments().count(), 0);
 
         // Check that we received the part we requested
         QByteArray partId = m_parts[2].keys().first();
         QString text = m_parts[2].value(partId)->decodedText(true, true);
         QCOMPARE(partId, QByteArray("1.1.1"));
         QCOMPARE(text, QStringLiteral("Hi Jane, nice to meet you!")) ;
+
+        QCOMPARE(m_msgs[2].parts.keys().first(), QByteArray("1.1.1"));
+        QCOMPARE(m_msgs[2].parts.value(partId)->decodedText(true, true),
+                 QStringLiteral("Hi Jane, nice to meet you!"));
 
         fakeServer.quit();
 
@@ -350,6 +381,7 @@ private Q_SLOTS:
         m_messages.clear();
         m_parts.clear();
         m_attrs.clear();
+        m_msgs.clear();
     }
 
 };
