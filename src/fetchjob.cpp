@@ -175,31 +175,6 @@ void FetchJob::setGmailExtensionsEnabled(bool enabled)
     d->gmailEnabled = enabled;
 }
 
-QMap<qint64, MessagePtr> FetchJob::messages() const
-{
-    return QMap<qint64, MessagePtr>();
-}
-
-QMap<qint64, MessageParts> FetchJob::parts() const
-{
-    return QMap<qint64, MessageParts>();
-}
-
-QMap<qint64, MessageFlags> FetchJob::flags() const
-{
-    return QMap<qint64, MessageFlags>();
-}
-
-QMap<qint64, qint64> FetchJob::sizes() const
-{
-    return QMap<qint64, qint64>();
-}
-
-QMap<qint64, qint64> FetchJob::uids() const
-{
-    return QMap<qint64, qint64>();
-}
-
 void FetchJob::doStart()
 {
     Q_D(FetchJob);
