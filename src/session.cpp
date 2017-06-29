@@ -33,7 +33,7 @@
 #include "job.h"
 #include "job_p.h"
 #include "loginjob.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "sessionlogger_p.h"
 #include "sessionthread_p.h"
 #include "rfccodecs.h"
@@ -206,7 +206,7 @@ void SessionPrivate::jobDestroyed(QObject *job)
     }
 }
 
-void SessionPrivate::responseReceived(const Message &response)
+void SessionPrivate::responseReceived(const Response &response)
 {
     if (logger && isConnected()) {
         logger->dataReceived(response.toString());
@@ -226,7 +226,7 @@ void SessionPrivate::responseReceived(const Message &response)
     // BYE may arrive as part of a LOGOUT sequence or before the server closes the connection after an error.
     // In any case we should wait until the server closes the connection, so we don't have to do anything.
     if (code == "BYE") {
-        Message simplified = response;
+        Response simplified = response;
         if (simplified.content.size() >= 2) {
             simplified.content.removeFirst(); // Strip the tag
             simplified.content.removeFirst(); // Strip the code
@@ -243,7 +243,7 @@ void SessionPrivate::responseReceived(const Message &response)
         if (code == "OK") {
             setState(Session::NotAuthenticated);
 
-            Message simplified = response;
+            Response simplified = response;
             simplified.content.removeFirst(); // Strip the tag
             simplified.content.removeFirst(); // Strip the code
             greeting = simplified.toString().trimmed(); // Save the server greeting
@@ -252,7 +252,7 @@ void SessionPrivate::responseReceived(const Message &response)
         } else if (code == "PREAUTH") {
             setState(Session::Authenticated);
 
-            Message simplified = response;
+            Response simplified = response;
             simplified.content.removeFirst(); // Strip the tag
             simplified.content.removeFirst(); // Strip the code
             greeting = simplified.toString().trimmed(); // Save the server greeting

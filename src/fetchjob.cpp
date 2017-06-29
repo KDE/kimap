@@ -24,7 +24,7 @@
 #include <KLocalizedString>
 
 #include "job_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session_p.h"
 
 
@@ -249,7 +249,7 @@ void FetchJob::doStart()
     d->tags << d->sessionInternal()->sendCommand(command, parameters);
 }
 
-void FetchJob::handleResponse(const Message &response)
+void FetchJob::handleResponse(const Response &response)
 {
     Q_D(FetchJob);
 
@@ -265,7 +265,7 @@ void FetchJob::handleResponse(const Message &response)
     if (handleErrorReplies(response) == NotHandled) {
         if (response.content.size() == 4 &&
                 response.content[2].toString() == "FETCH" &&
-                response.content[3].type() == Message::Part::List) {
+                response.content[3].type() == Response::Part::List) {
 
             qint64 id = response.content[1].toString().toLongLong();
             QList<QByteArray> content = response.content[3].toList();
@@ -300,11 +300,11 @@ void FetchJob::handleResponse(const Message &response)
                         d->pendingFlags[id] << *it;
                     }
                 } else if (str == "X-GM-LABELS") {
-                    d->pendingAttributes.insert(id, qMakePair<QByteArray, QVariant>("X-GM-LABELS", *it));
+                    d->pendingAttributes.insert(id, { "X-GM-LABELS", *it });
                 } else if (str == "X-GM-THRID") {
-                    d->pendingAttributes.insert(id, qMakePair<QByteArray, QVariant>("X-GM-THRID", *it));
+                    d->pendingAttributes.insert(id, { "X-GM-THRID", *it });
                 } else if (str == "X-GM-MSGID") {
-                    d->pendingAttributes.insert(id, qMakePair<QByteArray, QVariant>("X-GM-MSGID", *it));
+                    d->pendingAttributes.insert(id, { "X-GM-MSGID", *it });
                 } else if (str == "BODYSTRUCTURE") {
                     int pos = 0;
                     d->parseBodyStructure(*it, pos, message.data());

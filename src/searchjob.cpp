@@ -25,7 +25,7 @@
 #include <QDate>
 
 #include "job_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session_p.h"
 #include "imapset.h"
 
@@ -430,7 +430,7 @@ void SearchJob::doStart()
     d->tags << d->sessionInternal()->sendCommand(command, searchKey);
 }
 
-void SearchJob::handleResponse(const Message &response)
+void SearchJob::handleResponse(const Response &response)
 {
     Q_D(SearchJob);
 

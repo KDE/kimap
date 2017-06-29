@@ -29,7 +29,7 @@ namespace KIMAP
 {
 
 class Session;
-struct Message;
+struct Response;
 class LoginJobPrivate;
 
 class KIMAP_EXPORT LoginJob : public Job
@@ -122,7 +122,7 @@ public:
 
 protected:
     void doStart() override;
-    void handleResponse(const Message &response) override;
+    void handleResponse(const Response &response) override;
     void connectionLost() override;
 
 private:

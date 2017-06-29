@@ -22,7 +22,7 @@
 #include <KLocalizedString>
 
 #include "job_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session_p.h"
 
 namespace KIMAP
@@ -60,7 +60,7 @@ void CapabilitiesJob::doStart()
     d->tags << d->sessionInternal()->sendCommand("CAPABILITY");
 }
 
-void CapabilitiesJob::handleResponse(const Message &response)
+void CapabilitiesJob::handleResponse(const Response &response)
 {
     Q_D(CapabilitiesJob);
     if (handleErrorReplies(response) == NotHandled) {

@@ -22,7 +22,7 @@
 #include <KLocalizedString>
 
 #include "job_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session_p.h"
 #include "rfccodecs.h"
 
@@ -113,12 +113,11 @@ void CopyJob::doStart()
     d->tags << d->sessionInternal()->sendCommand(command, parameters);
 }
 
-void CopyJob::handleResponse(const Message &response)
+void CopyJob::handleResponse(const Response &response)
 {
     Q_D(CopyJob);
-    const QList<Message::Part>::ConstIterator end(response.responseCode.end());
-    for (QList<Message::Part>::ConstIterator it = response.responseCode.begin();
-            it != end; ++it) {
+    for (auto it = response.responseCode.cbegin(), end = response.responseCode.cend();
+         it != end; ++it) {
         if (it->toString() == "COPYUID") {
             it = it + 3;
             if (it < end) {

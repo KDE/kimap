@@ -22,7 +22,7 @@
 #include <KLocalizedString>
 
 #include "job_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session_p.h"
 #include "rfccodecs.h"
 

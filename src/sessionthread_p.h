@@ -31,7 +31,7 @@ namespace KIMAP
 {
 
 class ImapStreamParser;
-struct Message;
+struct Response;
 
 class SessionThread : public QObject
 {
@@ -62,7 +62,7 @@ Q_SIGNALS:
     void socketDisconnected();
     void socketActivity();
     void socketError(KTcpSocket::Error);
-    void responseReceived(const KIMAP::Message &response);
+    void responseReceived(const KIMAP::Response &response);
     void encryptionNegotiationResult(bool, KTcpSocket::SslVersion);
     void sslError(const KSslErrorUiData &);
 

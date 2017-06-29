@@ -28,7 +28,7 @@ namespace KIMAP
 {
 
 class Session;
-struct Message;
+struct Response;
 struct MailBoxDescriptor;
 class NamespaceJobPrivate;
 
@@ -51,7 +51,7 @@ public:
 
 protected:
     void doStart() override;
-    void handleResponse(const Message &response) override;
+    void handleResponse(const Response &response) override;
 };
 
 }

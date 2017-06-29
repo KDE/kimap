@@ -22,7 +22,7 @@
 
 #include "metadatajobbase.h"
 #include "job_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session.h"
 
 namespace KIMAP

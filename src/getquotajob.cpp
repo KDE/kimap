@@ -22,7 +22,7 @@
 #include <KLocalizedString>
 
 #include "quotajobbase_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session_p.h"
 
 namespace KIMAP
@@ -55,7 +55,7 @@ void GetQuotaJob::doStart()
     d->tags << d->sessionInternal()->sendCommand("GETQUOTA", '\"' + d->root + '\"');
 }
 
-void GetQuotaJob::handleResponse(const Message &response)
+void GetQuotaJob::handleResponse(const Response &response)
 {
     Q_D(GetQuotaJob);
     if (handleErrorReplies(response) == NotHandled) {

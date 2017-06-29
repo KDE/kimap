@@ -120,7 +120,7 @@ public:
 
 protected:
     void doStart() override;
-    void handleResponse(const Message &response) override;
+    void handleResponse(const Response &response) override;
 };
 
 }

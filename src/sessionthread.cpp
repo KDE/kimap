@@ -25,7 +25,7 @@
 #include "kimap_debug.h"
 
 #include "imapstreamparser.h"
-#include "message_p.h"
+#include "response_p.h"
 
 using namespace KIMAP;
 
@@ -90,20 +90,20 @@ void SessionThread::readMessage()
         return;
     }
 
-    Message message;
-    QList<Message::Part> *payload = &message.content;
+    Response message;
+    QList<Response::Part> *payload = &message.content;
 
     try {
         while (!m_stream->atCommandEnd()) {
             if (m_stream->hasString()) {
                 QByteArray string = m_stream->readString();
                 if (string == "NIL") {
-                    *payload << Message::Part(QList<QByteArray>());
+                    *payload << Response::Part(QList<QByteArray>());
                 } else {
-                    *payload << Message::Part(string);
+                    *payload << Response::Part(string);
                 }
             } else if (m_stream->hasList()) {
-                *payload << Message::Part(m_stream->readParenthesizedList());
+                *payload << Response::Part(m_stream->readParenthesizedList());
             } else if (m_stream->hasResponseCode()) {
                 payload = &message.responseCode;
             } else if (m_stream->atResponseCodeEnd()) {
@@ -113,7 +113,7 @@ void SessionThread::readMessage()
                 while (!m_stream->atLiteralEnd()) {
                     literal += m_stream->readLiteralPart();
                 }
-                *payload << Message::Part(literal);
+                *payload << Response::Part(literal);
             } else {
                 // Oops! Something really bad happened, we won't be able to recover
                 // so close the socket immediately

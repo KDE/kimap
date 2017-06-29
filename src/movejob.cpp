@@ -20,7 +20,7 @@
 #include "movejob.h"
 
 #include "job_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session_p.h"
 #include "rfccodecs.h"
 
@@ -118,12 +118,12 @@ void MoveJob::doStart()
     d->tags << d->sessionInternal()->sendCommand(command, parameters);
 }
 
-void MoveJob::handleResponse(const Message &response)
+void MoveJob::handleResponse(const Response &response)
 {
     Q_D(MoveJob);
 
-    for (QList<Message::Part>::ConstIterator it = response.responseCode.begin(), end = response.responseCode.end();
-            it != end; ++it) {
+    for (auto it = response.responseCode.cbegin(), end = response.responseCode.cend();
+         it != end; ++it) {
         if (it->toString() == "COPYUID") {
             it = it + 3;
             if (it < end) {

@@ -23,7 +23,7 @@
 #include "kimap_debug.h"
 
 #include "quotajobbase_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session_p.h"
 
 namespace KIMAP
@@ -69,7 +69,7 @@ void SetQuotaJob::doStart()
     d->tags << d->sessionInternal()->sendCommand("SETQUOTA", '\"' + d->root + "\" " + s);
 }
 
-void SetQuotaJob::handleResponse(const Message &response)
+void SetQuotaJob::handleResponse(const Response &response)
 {
     Q_D(SetQuotaJob);
     if (handleErrorReplies(response) == NotHandled) {

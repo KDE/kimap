@@ -28,7 +28,7 @@ namespace KIMAP
 {
 
 class Session;
-struct Message;
+struct Response;
 class SetMetaDataJobPrivate;
 
 /**
@@ -207,7 +207,7 @@ public:
 
 protected:
     void doStart() override;
-    void handleResponse(const Message &response) override;
+    void handleResponse(const Response &response) override;
 
 };
 

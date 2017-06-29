@@ -36,7 +36,7 @@ namespace KIMAP
 {
 
 class Job;
-struct Message;
+struct Response;
 class SessionLogger;
 class SessionThread;
 
@@ -70,7 +70,7 @@ private Q_SLOTS:
     void doStartNext();
     void jobDone(KJob *);
     void jobDestroyed(QObject *);
-    void responseReceived(const KIMAP::Message &);
+    void responseReceived(const KIMAP::Response &);
 
     void socketConnected();
     void socketDisconnected();

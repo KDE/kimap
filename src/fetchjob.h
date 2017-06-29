@@ -32,7 +32,7 @@ namespace KIMAP
 {
 
 class Session;
-struct Message;
+struct Response;
 class FetchJobPrivate;
 
 typedef QSharedPointer<KMime::Content> ContentPtr;
@@ -397,7 +397,7 @@ Q_SIGNALS:
 
 protected:
     void doStart() override;
-    void handleResponse(const Message &response) override;
+    void handleResponse(const Response &response) override;
 
 private:
     Q_PRIVATE_SLOT(d_func(), void emitPendings())

@@ -22,7 +22,7 @@
 #include <KLocalizedString>
 
 #include "acljobbase_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session_p.h"
 #include "rfccodecs.h"
 
@@ -59,7 +59,7 @@ void ListRightsJob::doStart()
     d->tags << d->sessionInternal()->sendCommand("LISTRIGHTS", '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8()) + "\" \"" + d->id + "\"");
 }
 
-void ListRightsJob::handleResponse(const Message &response)
+void ListRightsJob::handleResponse(const Response &response)
 {
     Q_D(ListRightsJob);
 

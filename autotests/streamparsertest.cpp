@@ -19,7 +19,7 @@
 #include <qtest.h>
 
 #include "imapstreamparser.h"
-#include <message_p.h>
+#include <response_p.h>
 
 #include <QtTest>
 
@@ -33,7 +33,7 @@ class StreamParserTest: public QObject
     QByteArray part2;
     QByteArray part3;
     QByteArray part4;
-    QByteArray completeMessage;
+    QByteArray completeResponse;
     QList<QByteArray> expectedList;
 
 private Q_SLOTS:
@@ -45,7 +45,7 @@ private Q_SLOTS:
         part2 = "\nDate: Fri, 01 Nov 2013 12:31:13 +0000\n";
         part3 = "body\n";
         part4 = ")\n\r";
-        completeMessage = part1 + part2 + part3 + part4;
+        completeResponse = part1 + part2 + part3 + part4;
         expectedList.clear();
         expectedList << "FLAGS";
         expectedList << "(\\Recent \\Seen)";
@@ -68,7 +68,7 @@ private Q_SLOTS:
         QByteArray buffer;
         QBuffer socket(&buffer);
         socket.open(QBuffer::WriteOnly);
-        QVERIFY(socket.write(completeMessage) != -1);
+        QVERIFY(socket.write(completeResponse) != -1);
 
         QBuffer readSocket(&buffer);
         readSocket.open(QBuffer::ReadOnly);
@@ -76,17 +76,17 @@ private Q_SLOTS:
 
         QVERIFY(parser.availableDataSize() != 0);
 
-        Message message;
-        QList<Message::Part> *payload = &message.content;
+        Response message;
+        QList<Response::Part> *payload = &message.content;
         QVERIFY(!parser.atCommandEnd());
         QVERIFY(parser.hasString());
-        *payload << Message::Part(parser.readString());   //*
+        *payload << Response::Part(parser.readString());   //*
         QVERIFY(parser.hasString());
-        *payload << Message::Part(parser.readString());   //230
+        *payload << Response::Part(parser.readString());   //230
         QVERIFY(parser.hasString());
-        *payload << Message::Part(parser.readString());   //FETCH
+        *payload << Response::Part(parser.readString());   //FETCH
         QVERIFY(parser.hasList());
-        *payload << Message::Part(parser.readParenthesizedList());
+        *payload << Response::Part(parser.readParenthesizedList());
         QVERIFY(parser.atCommandEnd());
 
         QCOMPARE(message.content.last().toList(), expectedList);
@@ -109,23 +109,23 @@ private Q_SLOTS:
 
         QVERIFY(parser.availableDataSize() != 0);
 
-        Message message;
-        QList<Message::Part> *payload = &message.content;
+        Response message;
+        QList<Response::Part> *payload = &message.content;
         QVERIFY(!parser.atCommandEnd());
         //We wait with writing part2 until the first part is already loaded into the buffer
         QVERIFY(socket.write(part2) != -1);
         QVERIFY(parser.hasString());
-        *payload << Message::Part(parser.readString());   //*
+        *payload << Response::Part(parser.readString());   //*
         QVERIFY(parser.hasString());
-        *payload << Message::Part(parser.readString());   //230
+        *payload << Response::Part(parser.readString());   //230
         QVERIFY(parser.hasString());
-        *payload << Message::Part(parser.readString());   //FETCH
+        *payload << Response::Part(parser.readString());   //FETCH
 
         QVERIFY(socket.write(part3) != -1);
         QVERIFY(socket.write(part4) != -1);
 
         QVERIFY(parser.hasList());
-        *payload << Message::Part(parser.readParenthesizedList());
+        *payload << Response::Part(parser.readParenthesizedList());
         QVERIFY(parser.atCommandEnd());
     }
 
@@ -149,17 +149,17 @@ private Q_SLOTS:
 
         QVERIFY(parser.availableDataSize() != 0);
 
-        Message message;
-        QList<Message::Part> *payload = &message.content;
+        Response message;
+        QList<Response::Part> *payload = &message.content;
         QVERIFY(!parser.atCommandEnd());
         QVERIFY(parser.hasString());
-        *payload << Message::Part(parser.readString());   //*
+        *payload << Response::Part(parser.readString());   //*
         QVERIFY(parser.hasString());
-        *payload << Message::Part(parser.readString());   //33
+        *payload << Response::Part(parser.readString());   //33
         QVERIFY(parser.hasString());
-        *payload << Message::Part(parser.readString());   //FETCH
+        *payload << Response::Part(parser.readString());   //FETCH
         QVERIFY(parser.hasList());
-        *payload << Message::Part(parser.readParenthesizedList());
+        *payload << Response::Part(parser.readParenthesizedList());
         QVERIFY(parser.atCommandEnd());
     }
 

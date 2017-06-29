@@ -23,7 +23,7 @@
 #include "kimap_debug.h"
 
 #include "acljobbase_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session_p.h"
 #include "rfccodecs.h"
 
@@ -57,7 +57,7 @@ void GetAclJob::doStart()
     d->tags << d->sessionInternal()->sendCommand("GETACL", '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8()) + '\"');
 }
 
-void GetAclJob::handleResponse(const Message &response)
+void GetAclJob::handleResponse(const Response &response)
 {
     Q_D(GetAclJob);
 //   qCDebug(KIMAP_LOG) << response.toString();

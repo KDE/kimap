@@ -23,7 +23,7 @@
 #include "kimap_debug.h"
 
 #include "metadatajobbase_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session_p.h"
 #include "rfccodecs.h"
 
@@ -127,7 +127,7 @@ void GetMetaDataJob::doStart()
 //  qCDebug(KIMAP_LOG) << "SENT: " << command << " " << parameters;
 }
 
-void GetMetaDataJob::handleResponse(const Message &response)
+void GetMetaDataJob::handleResponse(const Response &response)
 {
     Q_D(GetMetaDataJob);
 //  qCDebug(KIMAP_LOG) << "GOT: " << response.toString();

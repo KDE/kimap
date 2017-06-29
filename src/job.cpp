@@ -19,7 +19,7 @@
 
 #include "job.h"
 #include "job_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session_p.h"
 
 #include <KLocalizedString>
@@ -54,7 +54,7 @@ void Job::start()
     d->sessionInternal()->addJob(this);
 }
 
-void Job::handleResponse(const Message &response)
+void Job::handleResponse(const Response &response)
 {
     handleErrorReplies(response);
 }
@@ -66,7 +66,7 @@ void Job::connectionLost()
     emitResult();
 }
 
-Job::HandlerResponse Job::handleErrorReplies(const Message &response)
+Job::HandlerResponse Job::handleErrorReplies(const Response &response)
 {
     Q_D(Job);
 //   qCDebug(KIMAP_LOG) << response.toString();

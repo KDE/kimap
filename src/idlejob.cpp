@@ -23,7 +23,7 @@
 #include <KLocalizedString>
 
 #include "job_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session_p.h"
 
 namespace KIMAP
@@ -103,7 +103,7 @@ void IdleJob::doStart()
     d->tags << d->sessionInternal()->sendCommand("IDLE");
 }
 
-void IdleJob::handleResponse(const Message &response)
+void IdleJob::handleResponse(const Response &response)
 {
     Q_D(IdleJob);
 

@@ -19,7 +19,7 @@
 
 #include "metadatajobbase.h"
 #include "metadatajobbase_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session_p.h"
 
 #include <KLocalizedString>

@@ -27,7 +27,7 @@
 namespace KIMAP
 {
 
-struct Message {
+struct Response {
     class Part
     {
     public:
@@ -102,7 +102,7 @@ struct Message {
 
 }
 
-Q_DECLARE_METATYPE(KIMAP::Message)
-static const int _kimap_messageTypeId = qRegisterMetaType<KIMAP::Message>();
+Q_DECLARE_METATYPE(KIMAP::Response)
+static const int _kimap_messageTypeId = qRegisterMetaType<KIMAP::Response>();
 
 #endif

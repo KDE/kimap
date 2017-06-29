@@ -22,7 +22,7 @@
 #include <KLocalizedString>
 
 #include "quotajobbase_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session_p.h"
 #include "rfccodecs.h"
 
@@ -57,7 +57,7 @@ void GetQuotaRootJob::doStart()
     d->tags << d->sessionInternal()->sendCommand("GETQUOTAROOT", '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8()) + '\"');
 }
 
-void GetQuotaRootJob::handleResponse(const Message &response)
+void GetQuotaRootJob::handleResponse(const Response &response)
 {
     Q_D(GetQuotaRootJob);
     if (handleErrorReplies(response) == NotHandled) {

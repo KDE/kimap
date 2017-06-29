@@ -21,7 +21,7 @@
 #define KIMAP_QUOTAJOBBASE_P_H
 
 #include "job_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session.h"
 
 #include <QMap>
@@ -35,7 +35,7 @@ public:
     {}
 
     ~QuotaJobBasePrivate() { }
-    static QMap<QByteArray, QPair<qint64, qint64> > readQuota(const Message::Part &content);
+    static QMap<QByteArray, QPair<qint64, qint64> > readQuota(const Response::Part &content);
 
     QMap<QByteArray, QPair<qint64, qint64> > quota;
 };

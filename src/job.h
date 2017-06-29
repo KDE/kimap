@@ -30,7 +30,7 @@ namespace KIMAP
 class Session;
 class SessionPrivate;
 class JobPrivate;
-struct Message;
+struct Response;
 
 class KIMAP_EXPORT Job : public KJob
 {
@@ -48,7 +48,7 @@ public:
 
 private:
     virtual void doStart() = 0;
-    virtual void handleResponse(const Message &response);
+    virtual void handleResponse(const Response &response);
     virtual void connectionLost();
 
 protected:
@@ -57,7 +57,7 @@ protected:
         NotHandled
     };
 
-    HandlerResponse handleErrorReplies(const Message &response);
+    HandlerResponse handleErrorReplies(const Response &response);
 
     explicit Job(Session *session);
     explicit Job(JobPrivate &dd);

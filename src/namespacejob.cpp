@@ -24,7 +24,7 @@
 
 #include "job_p.h"
 #include "listjob.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "rfccodecs.h"
 #include "session_p.h"
 #include "imapstreamparser.h"
@@ -122,7 +122,7 @@ void NamespaceJob::doStart()
     d->tags << d->sessionInternal()->sendCommand("NAMESPACE");
 }
 
-void NamespaceJob::handleResponse(const Message &response)
+void NamespaceJob::handleResponse(const Response &response)
 {
     Q_D(NamespaceJob);
     if (handleErrorReplies(response) == NotHandled) {

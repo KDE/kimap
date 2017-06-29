@@ -23,7 +23,7 @@
 #include "kimap_debug.h"
 
 #include "job_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session_p.h"
 #include "rfccodecs.h"
 
@@ -166,7 +166,7 @@ void SelectJob::doStart()
     d->tags << d->sessionInternal()->sendCommand(command, params);
 }
 
-void SelectJob::handleResponse(const Message &response)
+void SelectJob::handleResponse(const Response &response)
 {
     Q_D(SelectJob);
 

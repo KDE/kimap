@@ -28,7 +28,7 @@ namespace KIMAP
 {
 
 class Session;
-struct Message;
+struct Response;
 class MetaDataJobBasePrivate;
 
 /**

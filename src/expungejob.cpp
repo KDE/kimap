@@ -23,7 +23,7 @@
 #include "kimap_debug.h"
 
 #include "job_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session_p.h"
 
 namespace KIMAP
@@ -56,7 +56,7 @@ void ExpungeJob::doStart()
     d->tags << d->sessionInternal()->sendCommand("EXPUNGE");
 }
 
-void ExpungeJob::handleResponse(const Message &response)
+void ExpungeJob::handleResponse(const Response &response)
 {
 //  Q_D(ExpungeJob);
 

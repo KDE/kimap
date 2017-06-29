@@ -23,7 +23,7 @@
 #include <KLocalizedString>
 
 #include "job_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "rfccodecs.h"
 #include "session_p.h"
 
@@ -162,7 +162,7 @@ void ListJob::doStart()
     }
 }
 
-void ListJob::handleResponse(const Message &response)
+void ListJob::handleResponse(const Response &response)
 {
     Q_D(ListJob);
 

@@ -23,7 +23,7 @@
 #include <KLocalizedString>
 
 #include "job_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session_p.h"
 
 namespace KIMAP
@@ -185,14 +185,14 @@ void StoreJob::doStart()
     d->tags << d->sessionInternal()->sendCommand(command, parameters);
 }
 
-void StoreJob::handleResponse(const Message &response)
+void StoreJob::handleResponse(const Response &response)
 {
     Q_D(StoreJob);
 
     if (handleErrorReplies(response) == NotHandled) {
         if (response.content.size() == 4 &&
                 response.content[2].toString() == "FETCH" &&
-                response.content[3].type() == Message::Part::List) {
+                response.content[3].type() == Response::Part::List) {
 
             int id = response.content[1].toString().toInt();
             qint64 uid = 0;

@@ -23,7 +23,7 @@
 #include "kimap_debug.h"
 
 #include "metadatajobbase_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session_p.h"
 #include "rfccodecs.h"
 
@@ -105,7 +105,7 @@ void SetMetaDataJob::doStart()
 //   qCDebug(KIMAP_LOG) << "SENT: " << command << " " << parameters;
 }
 
-void SetMetaDataJob::handleResponse(const Message &response)
+void SetMetaDataJob::handleResponse(const Response &response)
 {
     Q_D(SetMetaDataJob);
 

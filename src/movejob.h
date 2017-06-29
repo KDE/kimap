@@ -115,7 +115,7 @@ public:
 
 protected:
     void doStart() override;
-    void handleResponse(const KIMAP::Message &response) override;
+    void handleResponse(const Response &response) override;
 };
 
 }

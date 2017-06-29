@@ -19,7 +19,7 @@
 
 #include "statusjob.h"
 #include "job_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session_p.h"
 #include "rfccodecs.h"
 #include "kimap_debug.h"
@@ -99,7 +99,7 @@ void StatusJob::doStart()
     d->tags << d->sessionInternal()->sendCommand("STATUS", params);
 }
 
-void StatusJob::handleResponse(const Message &response)
+void StatusJob::handleResponse(const Response &response)
 {
     Q_D(StatusJob);
 

@@ -22,7 +22,7 @@
 #include <KLocalizedString>
 
 #include "job_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session_p.h"
 #include "rfccodecs.h"
 
@@ -133,11 +133,11 @@ void AppendJob::doStart()
     d->tags << d->sessionInternal()->sendCommand("APPEND", parameters);
 }
 
-void AppendJob::handleResponse(const Message &response)
+void AppendJob::handleResponse(const Response &response)
 {
     Q_D(AppendJob);
-    const QList<Message::Part>::ConstIterator end(response.responseCode.end());
-    for (QList<Message::Part>::ConstIterator it = response.responseCode.begin();
+    const QList<Response::Part>::ConstIterator end(response.responseCode.end());
+    for (QList<Response::Part>::ConstIterator it = response.responseCode.begin();
             it != end; ++it) {
         if (it->toString() == "APPENDUID") {
             it = it + 2;

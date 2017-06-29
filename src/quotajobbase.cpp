@@ -19,14 +19,14 @@
 
 #include "quotajobbase.h"
 #include "quotajobbase_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session_p.h"
 
 #include <KLocalizedString>
 
 using namespace KIMAP;
 
-QMap<QByteArray, QPair<qint64, qint64> > QuotaJobBasePrivate::readQuota(const Message::Part &content)
+QMap<QByteArray, QPair<qint64, qint64> > QuotaJobBasePrivate::readQuota(const Response::Part &content)
 {
     QMap<QByteArray, QPair<qint64, qint64> > quotaMap;
     QList<QByteArray> quotas = content.toList();

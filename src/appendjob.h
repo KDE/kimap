@@ -29,7 +29,7 @@ namespace KIMAP
 {
 
 class Session;
-struct Message;
+struct Response;
 class AppendJobPrivate;
 
 /**
@@ -126,7 +126,7 @@ public:
 
 protected:
     void doStart() override;
-    void handleResponse(const Message &response) override;
+    void handleResponse(const Response &response) override;
 };
 
 }

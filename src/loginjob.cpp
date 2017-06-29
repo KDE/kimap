@@ -25,7 +25,7 @@
 #include <ktcpsocket.h>
 
 #include "job_p.h"
-#include "message_p.h"
+#include "response_p.h"
 #include "session_p.h"
 #include "rfccodecs.h"
 
@@ -70,7 +70,7 @@ public:
     bool startAuthentication();
     bool answerChallenge(const QByteArray &data);
     void sslResponse(bool response);
-    void saveServerGreeting(const Message &response);
+    void saveServerGreeting(const Response &response);
 
     LoginJob *q;
 
@@ -269,7 +269,7 @@ void LoginJob::doStart()
     }
 }
 
-void LoginJob::handleResponse(const Message &response)
+void LoginJob::handleResponse(const Response &response)
 {
     Q_D(LoginJob);
 
@@ -335,7 +335,7 @@ void LoginJob::handleResponse(const Message &response)
     case UNTAGGED:
         // The only untagged response interesting for us here is CAPABILITY
         if (response.content[1].toString() == "CAPABILITY") {
-            QList<Message::Part>::const_iterator p = response.content.begin() + 2;
+            QList<Response::Part>::const_iterator p = response.content.begin() + 2;
             while (p != response.content.end()) {
                 QString capability = QLatin1String(p->toString());
                 d->capabilities << capability;
@@ -609,13 +609,13 @@ void LoginJob::connectionLost()
 
 }
 
-void LoginJobPrivate::saveServerGreeting(const Message &response)
+void LoginJobPrivate::saveServerGreeting(const Response &response)
 {
     // Concatenate the parts of the server response into a string, while dropping the first two parts
     // (the response tag and the "OK" code), and being careful not to add useless extra whitespace.
 
     for (int i = 2; i < response.content.size(); i++) {
-        if (response.content.at(i).type() == Message::Part::List) {
+        if (response.content.at(i).type() == Response::Part::List) {
             serverGreeting += QLatin1Char('(');
             const QList<QByteArray> itemLst = response.content.at(i).toList();
             for (const QByteArray &item : itemLst) {
