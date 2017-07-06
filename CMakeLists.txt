@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-set(PIM_VERSION "5.5.61")
+set(PIM_VERSION "5.5.80")
 
 project(KIMAP VERSION ${PIM_VERSION})
 
