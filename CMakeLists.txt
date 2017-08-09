@@ -23,7 +23,7 @@ include(ECMCoverageOption)
 
 set(QT_REQUIRED_VERSION "5.7.0")
 
-find_package(Qt5 ${QT_REQUIRED_VERSION} CONFIG REQUIRED Test)
+
 
 set(KIMAP_LIB_VERSION ${PIM_VERSION})
 set(KMIME_LIBS_VERSION "5.6.40")
@@ -65,6 +65,7 @@ configure_package_config_file(
 add_subdirectory(src)
 
 if(BUILD_TESTING)
+    find_package(Qt5 ${QT_REQUIRED_VERSION} CONFIG REQUIRED Test)
     add_subdirectory(autotests)
     add_subdirectory(tests)
 endif()
