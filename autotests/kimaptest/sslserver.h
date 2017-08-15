@@ -27,7 +27,7 @@ class SslServer: public QTcpServer
     Q_OBJECT
 public:
     SslServer(QSsl::SslProtocol);
-    virtual void incomingConnection(qintptr handle) override;
+    void incomingConnection(qintptr handle) override;
 
 private Q_SLOTS:
     void sslErrors(const QList<QSslError> &errors);

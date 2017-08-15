@@ -147,7 +147,7 @@ public:
      *
      * @reimp
      */
-    virtual void run() override;
+    void run() override;
 
     /**
      * Removes any previously-added scenarios, and adds a new one
