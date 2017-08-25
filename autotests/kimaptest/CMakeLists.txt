@@ -8,9 +8,10 @@ set(kimaptest_SRCS
 
 add_library(kimaptest STATIC ${kimaptest_SRCS})
 generate_export_header(kimaptest)
+add_library(KF5::kimaptest ALIAS kimaptest)
 target_link_libraries(kimaptest KF5IMAP Qt5::Test Qt5::Network Qt5::Core KF5::CoreAddons KF5::KIOCore KF5::I18n)
 
-install(TARGETS kimaptest ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kimaptest EXPORT KF5IMAPTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
