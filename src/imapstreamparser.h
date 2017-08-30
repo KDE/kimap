@@ -204,11 +204,11 @@ private:
      */
     void trimBuffer();
 
-    QIODevice *m_socket;
-    bool m_isServerModeEnabled;
+    QIODevice *m_socket = nullptr;
+    bool m_isServerModeEnabled = false;
     QByteArray m_data;
-    int m_position;
-    qint64 m_literalSize;
+    int m_position = -1;
+    qint64 m_literalSize = -1;
 };
 
 }

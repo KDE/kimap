@@ -83,15 +83,15 @@ private:
     QString m_hostName;
     quint16 m_port;
 
-    SessionSocket *m_socket;
-    ImapStreamParser *m_stream;
+    SessionSocket *m_socket = nullptr;
+    ImapStreamParser *m_stream = nullptr;
 
     QQueue<QByteArray> m_dataQueue;
 
     // Protects m_dataQueue
     QMutex m_mutex;
 
-    bool m_encryptedMode;
+    bool m_encryptedMode = false;
 };
 
 }

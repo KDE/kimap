@@ -91,15 +91,15 @@ private:
 
     Session *const q;
 
-    bool isSocketConnected;
+    bool isSocketConnected = false;
     Session::State state;
 
-    SessionLogger *logger;
-    SessionThread *thread;
+    SessionLogger *logger = nullptr;
+    SessionThread *thread = nullptr;
     SessionUiProxy::Ptr uiProxy;
 
-    bool jobRunning;
-    Job *currentJob;
+    bool jobRunning = false;
+    Job *currentJob = nullptr;
     QQueue<Job *> queue;
 
     QByteArray authTag;
@@ -114,7 +114,7 @@ private:
 
     KTcpSocket::SslVersion sslVersion;
 
-    int socketTimerInterval;
+    int socketTimerInterval = 0;
     QTimer socketTimer;
 };
 
