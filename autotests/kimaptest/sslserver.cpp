@@ -83,7 +83,7 @@ void SslServer::incomingConnection(qintptr handle)
 
     socket->setPrivateKey(ssl_key);
     socket->setLocalCertificate(ssl_cert);
-    socket->setCaCertificates(QList<QSslCertificate>() << ssl_cert);
+    socket->addCaCertificates(QList<QSslCertificate>() << ssl_cert);
     socket->setPeerVerifyMode(QSslSocket::VerifyNone);
     socket->ignoreSslErrors();
     connect(socket, SIGNAL(sslErrors(QList<QSslError>)), this, SLOT(sslErrors(QList<QSslError>)));
