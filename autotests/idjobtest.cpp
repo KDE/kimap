@@ -20,7 +20,6 @@
 #include "kimap/session.h"
 #include "kimap/idjob.h"
 
-#include <QTcpSocket>
 #include <QtTest>
 
 typedef QMap<QByteArray, QByteArray> ArrayMap;

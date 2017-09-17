@@ -24,7 +24,6 @@
 #include "session_p.h"
 #include "sessionuiproxy.h"
 
-#include <QDebug>
 #include <QTimer>
 #include <QPointer>
 

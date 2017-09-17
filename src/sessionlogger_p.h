@@ -21,7 +21,6 @@
 #ifndef KIMAP_SESSIONLOGGER_P_H
 #define KIMAP_SESSIONLOGGER_P_H
 
-#include <QObject>
 #include <QFile>
 
 namespace KIMAP

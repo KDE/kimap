@@ -39,7 +39,6 @@
 #include <stdlib.h>
 
 #include <QTextCodec>
-#include <QBuffer>
 #include <QByteArray>
 #include <QLatin1Char>
 #include <kcodecs.h>
