@@ -7,7 +7,12 @@ project(KIMAP VERSION ${PIM_VERSION})
 set(KF5_VERSION "5.39.0")
 
 find_package(ECM ${KF5_VERSION} CONFIG REQUIRED)
-set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${KIMAP_SOURCE_DIR}/cmake)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
+
+# TODO: Remove the cmake directory when we'll require ECM >= 5.41.0
+if("${ECM_VERSION}" VERSION_LESS "5.41.0")
+  set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${KIMAP_SOURCE_DIR}/cmake)
+endif()
 
 include(GenerateExportHeader)
 include(ECMGenerateHeaders)
@@ -35,18 +40,13 @@ ecm_setup_version(PROJECT VARIABLE_PREFIX KIMAP
 )
 
 ########### Find packages ###########
+find_package(Sasl2)
+set_package_properties(Sasl2 PROPERTIES TYPE REQUIRED)
+
 find_package(KF5CoreAddons ${KF5_VERSION} CONFIG REQUIRED)
 find_package(KF5I18n ${KF5_VERSION} CONFIG REQUIRED)
 find_package(KF5KIO ${KF5_VERSION} CONFIG REQUIRED)
-
 find_package(KF5Mime ${KMIME_LIBS_VERSION} CONFIG REQUIRED)
-
-find_package(Sasl2)
-set_package_properties(Sasl2 PROPERTIES
-                             DESCRIPTION "The Cyrus-sasl library"
-                             URL "http://www.cyrussasl.org"
-                             TYPE REQUIRED
-)
 
 ########### CMake Config Files ###########
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5IMAP")
@@ -71,7 +71,10 @@ if(BUILD_TESTING)
     add_subdirectory(tests)
 endif()
 
-add_subdirectory(cmake)
+# TODO: Remove the cmake directory when we'll require ECM >= 5.41.0
+if("${ECM_VERSION}" VERSION_LESS "5.41.0")
+  add_subdirectory(cmake)
+endif()
 
 ########### Install Files ###########
 install(FILES

@@ -2,8 +2,6 @@
 # Turn exceptions on
 kde_enable_exceptions()
 
-include_directories(${Sasl2_INCLUDE_DIRS})
-
 set(kimap_SRCS
    acl.cpp
    acljobbase.cpp
@@ -59,7 +57,7 @@ generate_export_header(KF5IMAP BASE_NAME kimap)
 
 add_library(KF5::IMAP ALIAS KF5IMAP)
 
-target_include_directories(KF5IMAP INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF5}/KIMAP;${Sasl2_INCLUDE_DIRS}>")
+target_include_directories(KF5IMAP INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF5}/KIMAP>")
 target_include_directories(KF5IMAP PUBLIC "$<BUILD_INTERFACE:${KIMAP_SOURCE_DIR}/src;${KIMAP_BINARY_DIR}/src>")
 
 if (WIN32)
@@ -74,10 +72,9 @@ PRIVATE
   KF5::KIOCore
   KF5::Codecs
   KF5::I18n
-  ${Sasl2_LIBRARIES}
+  Sasl2::Sasl2
   ${extra_LIBS}
 )
-
 
 set_target_properties(KF5IMAP PROPERTIES
     VERSION ${KIMAP_VERSION_STRING}
