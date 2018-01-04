@@ -168,7 +168,11 @@ void SessionPrivate::addJob(Job *job)
 
 void SessionPrivate::startNext()
 {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    QMetaObject::invokeMethod(this, &SessionPrivate::doStartNext);
+#else
     QMetaObject::invokeMethod(this, "doStartNext");
+#endif
 }
 
 void SessionPrivate::doStartNext()
