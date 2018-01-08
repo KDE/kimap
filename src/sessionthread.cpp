@@ -238,7 +238,11 @@ void SessionThread::threadQuit()
 // Called in primary thread
 void SessionThread::startSsl(KTcpSocket::SslVersion version)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    QMetaObject::invokeMethod(this, [this, version]() { doStartSsl(version); });
+#else
     QMetaObject::invokeMethod(this, "doStartSsl", Q_ARG(KTcpSocket::SslVersion, version));
+#endif
 }
 
 // Called in secondary thread (via invokeMethod)
@@ -301,7 +305,12 @@ void SessionThread::sslConnected()
 
 void SessionThread::sslErrorHandlerResponse(bool response)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    QMetaObject::invokeMethod(this, [this, response]() { doSslErrorHandlerResponse(response); });
+#else
     QMetaObject::invokeMethod(this, "doSslErrorHandlerResponse", Q_ARG(bool, response));
+#endif
+
 }
 
 // Called in secondary thread (via invokeMethod)
