@@ -58,7 +58,11 @@ void FakeServer::startAndWait()
 {
     start();
     // this will block until the event queue starts
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    QMetaObject::invokeMethod(this, &FakeServer::started, Qt::BlockingQueuedConnection);
+#else
     QMetaObject::invokeMethod(this, "started", Qt::BlockingQueuedConnection);
+#endif
 }
 
 void FakeServer::dataAvailable()
