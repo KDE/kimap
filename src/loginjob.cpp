@@ -466,7 +466,7 @@ bool LoginJobPrivate::startAuthentication()
 
     do {
         qCDebug(KIMAP_LOG) << "Trying authmod" << authMode.toLatin1();
-        result = sasl_client_start(conn, authMode.toLatin1().constData(), &client_interact, capabilities.contains(QStringLiteral("SASL-IR")) ? &out : nullptr, &outlen, &mechusing);
+        result = sasl_client_start(conn, authMode.toLatin1().constData(), &client_interact, capabilities.contains(QLatin1String("SASL-IR")) ? &out : nullptr, &outlen, &mechusing);
 
         if (result == SASL_INTERACT) {
             if (!sasl_interact()) {

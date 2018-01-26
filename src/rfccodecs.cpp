@@ -322,7 +322,7 @@ const QString KIMAP::decodeRFC2047String(const QString &str,
         QString &language)
 {
     //do we have a rfc string
-    if (!str.contains(QStringLiteral("=?"))) {
+    if (!str.contains(QLatin1String("=?"))) {
         return str;
     }
 
