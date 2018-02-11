@@ -44,7 +44,7 @@ class KIMAP_EXPORT IdJob : public Job
 
 public:
     IdJob( Session *session);
-    virtual ~IdJob();
+    ~IdJob() override;
 
     void setField(const QByteArray &name, const QByteArray &field);
 

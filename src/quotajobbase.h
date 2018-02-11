@@ -49,7 +49,7 @@ class KIMAP_EXPORT QuotaJobBase : public Job
 
 public:
     explicit QuotaJobBase(Session *session);
-    virtual ~QuotaJobBase();
+    ~QuotaJobBase() override;
 
     /**
      * Get the current usage for a resource.

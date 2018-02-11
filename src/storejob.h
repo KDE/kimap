@@ -49,7 +49,7 @@ public:
     };
 
     explicit StoreJob(Session *session);
-    virtual ~StoreJob();
+    ~StoreJob() override;
 
     void setSequenceSet(const ImapSet &set);
     ImapSet sequenceSet() const;

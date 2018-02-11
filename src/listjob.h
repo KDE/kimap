@@ -62,7 +62,7 @@ public:
     };
 
     explicit ListJob(Session *session);
-    virtual ~ListJob();
+    ~ListJob() override;
 
     KIMAP_DEPRECATED void setIncludeUnsubscribed(bool include);
     KIMAP_DEPRECATED bool isIncludeUnsubscribed() const;

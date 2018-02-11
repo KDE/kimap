@@ -54,7 +54,7 @@ class KIMAP_EXPORT MetaDataJobBase : public Job
 
 public:
     explicit MetaDataJobBase(Session *session);
-    virtual ~MetaDataJobBase();
+    ~MetaDataJobBase() override;
 
     /**
      * Represents the capability level of the server.

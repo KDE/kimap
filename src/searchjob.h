@@ -169,7 +169,7 @@ public:
     };
 
     explicit SearchJob(Session *session);
-    virtual ~SearchJob();
+    ~SearchJob() override;
 
     void setUidBased(bool uidBased);
     bool isUidBased() const;

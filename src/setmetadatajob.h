@@ -75,7 +75,7 @@ class KIMAP_EXPORT SetMetaDataJob : public MetaDataJobBase
 
 public:
     explicit SetMetaDataJob(Session *session);
-    virtual ~SetMetaDataJob();
+    ~SetMetaDataJob() override;
 
     /**
      * Adds a metadata entry or attribute to the list of modifications to make

@@ -50,7 +50,7 @@ class KIMAP_EXPORT AclJobBase : public Job
 
 public:
     AclJobBase(Session *session);
-    virtual ~AclJobBase();
+    ~AclJobBase() override;
 
     /**
      * Used when subclassing to specify how the ACL will be modified.

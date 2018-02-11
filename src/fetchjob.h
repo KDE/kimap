@@ -187,7 +187,7 @@ public:
     };
 
     explicit FetchJob(Session *session);
-    virtual ~FetchJob();
+    ~FetchJob() override;
 
     /**
      * Set which messages to fetch data for.

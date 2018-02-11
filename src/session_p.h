@@ -48,7 +48,7 @@ class KIMAP_EXPORT SessionPrivate : public QObject
 
 public:
     explicit SessionPrivate(Session *session);
-    virtual ~SessionPrivate();
+    ~SessionPrivate() override;
 
     void addJob(Job *job);
     QByteArray sendCommand(const QByteArray &command, const QByteArray &args = QByteArray());

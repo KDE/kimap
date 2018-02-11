@@ -53,7 +53,7 @@ class KIMAP_EXPORT DeleteJob : public Job
 
 public:
     explicit DeleteJob(Session *session);
-    virtual ~DeleteJob();
+    ~DeleteJob() override;
 
     /**
      * Set the mailbox to delete.

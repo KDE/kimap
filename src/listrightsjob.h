@@ -55,7 +55,7 @@ class KIMAP_EXPORT ListRightsJob : public AclJobBase
 
 public:
     explicit ListRightsJob(Session *session);
-    virtual ~ListRightsJob();
+    ~ListRightsJob() override;
 
     /**
      * Sets the identifier that should be looked up

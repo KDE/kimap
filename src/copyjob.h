@@ -53,7 +53,7 @@ class KIMAP_EXPORT CopyJob : public Job
 
 public:
     explicit CopyJob(Session *session);
-    virtual ~CopyJob();
+    ~CopyJob() override;
 
     /**
      * Sets the destination mailbox.

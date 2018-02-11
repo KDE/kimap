@@ -54,7 +54,7 @@ class KIMAP_EXPORT DeleteAclJob : public AclJobBase
 
 public:
     explicit DeleteAclJob(Session *session);
-    virtual ~DeleteAclJob();
+    ~DeleteAclJob() override;
 
     /**
      * Sets the identifier to remove

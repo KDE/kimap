@@ -50,7 +50,7 @@ class KIMAP_EXPORT AppendJob : public Job
 
 public:
     explicit AppendJob(Session *session);
-    virtual ~AppendJob();
+    ~AppendJob() override;
 
     /**
      * Set the mailbox to append the message to.

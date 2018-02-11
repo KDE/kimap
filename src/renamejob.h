@@ -39,7 +39,7 @@ class KIMAP_EXPORT RenameJob : public Job
 
 public:
     explicit RenameJob(Session *session);
-    virtual ~RenameJob();
+    ~RenameJob() override;
 
     /**
      * Set the name of the mailbox that will be renamed.

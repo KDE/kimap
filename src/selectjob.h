@@ -40,7 +40,7 @@ class KIMAP_EXPORT SelectJob : public Job
 
 public:
     explicit SelectJob(Session *session);
-    virtual ~SelectJob();
+    ~SelectJob() override;
 
     void setMailBox(const QString &mailBox);
     QString mailBox() const;

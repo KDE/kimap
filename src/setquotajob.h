@@ -57,7 +57,7 @@ class KIMAP_EXPORT SetQuotaJob : public QuotaJobBase
 
 public:
     explicit SetQuotaJob(Session *session);
-    virtual ~SetQuotaJob();
+    ~SetQuotaJob() override;
 
     /**
      * Set a limit for a quota resource.

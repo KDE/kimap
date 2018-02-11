@@ -69,7 +69,7 @@ class KIMAP_EXPORT GetAclJob : public AclJobBase
 
 public:
     explicit GetAclJob(Session *session);
-    virtual ~GetAclJob();
+    ~GetAclJob() override;
 
     /**
      * The identifiers present in the ACL.

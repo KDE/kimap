@@ -57,7 +57,7 @@ class KIMAP_EXPORT GetQuotaRootJob : public QuotaJobBase
 
 public:
     explicit GetQuotaRootJob(Session *session);
-    virtual ~GetQuotaRootJob();
+    ~GetQuotaRootJob() override;
 
     /**
      * Set the mailbox to get the quota roots for.

@@ -63,7 +63,7 @@ class KIMAP_EXPORT MyRightsJob : public AclJobBase
 
 public:
     explicit MyRightsJob(Session *session);
-    virtual ~MyRightsJob();
+    ~MyRightsJob() override;
 
     /**
      * Check whether the current user has the a particular right

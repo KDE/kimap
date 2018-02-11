@@ -66,7 +66,7 @@ public:
     };
 
     explicit LoginJob(Session *session);
-    virtual ~LoginJob();
+    ~LoginJob() override;
 
     QString userName() const;
     void setUserName(const QString &userName);

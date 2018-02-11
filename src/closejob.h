@@ -59,7 +59,7 @@ class KIMAP_EXPORT CloseJob : public Job
 
 public:
     explicit CloseJob(Session *session);
-    virtual ~CloseJob();
+    ~CloseJob() override;
 
 protected:
     void doStart() override;

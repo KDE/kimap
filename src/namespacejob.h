@@ -41,7 +41,7 @@ class KIMAP_EXPORT NamespaceJob : public Job
 
 public:
     NamespaceJob(Session *session);
-    virtual ~NamespaceJob();
+    ~NamespaceJob() override;
 
     QList<MailBoxDescriptor> personalNamespaces() const;
     QList<MailBoxDescriptor> userNamespaces() const;

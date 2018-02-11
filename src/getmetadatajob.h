@@ -68,7 +68,7 @@ class KIMAP_EXPORT GetMetaDataJob : public MetaDataJobBase
 
 public:
     explicit GetMetaDataJob(Session *session);
-    virtual ~GetMetaDataJob();
+    ~GetMetaDataJob() override;
 
     /**
      * Used to specify the depth of the metadata heirachy to walk.

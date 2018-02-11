@@ -52,7 +52,7 @@ class KIMAP_EXPORT CapabilitiesJob : public Job
 
 public:
     CapabilitiesJob(Session *session);
-    virtual ~CapabilitiesJob();
+    ~CapabilitiesJob() override;
 
     /**
      * The capabilities the server claims to support.

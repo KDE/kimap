@@ -54,7 +54,7 @@ class KIMAP_EXPORT CreateJob : public Job
 
 public:
     explicit CreateJob(Session *session);
-    virtual ~CreateJob();
+    ~CreateJob() override;
 
     /**
      * Set the name of the new mailbox

@@ -52,7 +52,7 @@ class KIMAP_EXPORT ExpungeJob : public Job
 
 public:
     explicit ExpungeJob(Session *session);
-    virtual ~ExpungeJob();
+    ~ExpungeJob() override;
 
 protected:
     void doStart() override;

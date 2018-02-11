@@ -39,7 +39,7 @@ class KIMAP_EXPORT LogoutJob : public Job
 
 public:
     explicit LogoutJob(Session *session);
-    virtual ~LogoutJob();
+    ~LogoutJob() override;
 
 protected:
     void doStart() override;

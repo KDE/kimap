@@ -39,7 +39,7 @@ class KIMAP_EXPORT UnsubscribeJob : public Job
 
 public:
     explicit UnsubscribeJob(Session *session);
-    virtual ~UnsubscribeJob();
+    ~UnsubscribeJob() override;
 
     void setMailBox(const QString &mailBox);
     QString mailBox() const;

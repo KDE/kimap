@@ -40,7 +40,7 @@ class KIMAP_EXPORT Job : public KJob
     friend class SessionPrivate;
 
 public:
-    virtual ~Job();
+    ~Job() override;
 
     Session *session() const;
 

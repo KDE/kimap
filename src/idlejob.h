@@ -66,7 +66,7 @@ class KIMAP_EXPORT IdleJob : public Job
 
 public:
     explicit IdleJob(Session *session);
-    virtual ~IdleJob();
+    ~IdleJob() override;
 
     /**
      * The last mailbox status that was reported.

@@ -57,7 +57,7 @@ class KIMAP_EXPORT GetQuotaJob : public QuotaJobBase
 
 public:
     explicit GetQuotaJob(Session *session);
-    virtual ~GetQuotaJob();
+    ~GetQuotaJob() override;
 
     /**
      * Set the quota root to get the resource limits for.

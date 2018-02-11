@@ -50,7 +50,7 @@ class KIMAP_EXPORT SetAclJob : public AclJobBase
 
 public:
     explicit SetAclJob(Session *session);
-    virtual ~SetAclJob();
+    ~SetAclJob() override;
 
     /**
      * Sets the rights that will be changed for the identifier
