@@ -129,7 +129,6 @@ void ListJob::doStart()
     Q_D(ListJob);
 
     switch (d->option) {
-        break;
     case IncludeUnsubscribed:
         d->command = "LIST";
         break;

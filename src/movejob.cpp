@@ -43,8 +43,8 @@ public:
 
     QString mailBox;
     ImapSet set;
-    bool uidBased;
     ImapSet resultingUids;
+    bool uidBased;
 };
 }
 

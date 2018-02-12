@@ -94,7 +94,7 @@ QByteArray KIMAP::Acl::rightsToString(Rights rights)
 
     for (int right = Lookup; right <= Custom9; right <<= 1) {
         if (rights & right) {
-            result += globalRights->map.key((Right)right);
+            result += globalRights->map.key(static_cast<Right>(right));
         }
     }
 

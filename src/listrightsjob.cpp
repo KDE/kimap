@@ -34,8 +34,8 @@ public:
     ListRightsJobPrivate(Session *session, const QString &name) : AclJobBasePrivate(session, name), defaultRights(Acl::None) {}
     ~ListRightsJobPrivate() { }
 
-    Acl::Rights defaultRights;
     QList<Acl::Rights> possibleRights;
+    Acl::Rights defaultRights;
 
 };
 }

@@ -72,7 +72,7 @@ void IdJob::doStart()
 
 void IdJob::handleResponse(const Response &response)
 {
-    Q_D(IdJob);
+    //Q_D(IdJob);
     if (handleErrorReplies(response) == NotHandled) {
         // Ignore the response
     }
