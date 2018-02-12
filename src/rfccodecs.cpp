@@ -159,7 +159,7 @@ QString KIMAP::decodeImapFolderName(const QString &inSrc)
 
 QByteArray KIMAP::quoteIMAP(const QByteArray &src)
 {
-    uint len = src.length();
+    int len = src.length();
     QByteArray result;
     result.reserve(2 * len);
     for (unsigned int i = 0; i < len; i++) {
@@ -390,7 +390,7 @@ const QString KIMAP::decodeRFC2047String(const QString &str,
         if (valid) {
             ch = *pos;
             *pos = '\0';
-            cstr = QByteArray(mid).left((int)(mid - pos - 1));
+            cstr = QByteArray(mid).left(static_cast<int>(mid - pos - 1));
             if (encoding == 'Q') {
                 // decode quoted printable text
                 for (i = cstr.length() - 1; i >= 0; --i) {
@@ -636,7 +636,7 @@ const QString KIMAP::decodeRFC2231String(const QString &str)
 
     char ch, ch2;
     p = 0;
-    while (p < (int) st.length()) {
+    while (p < st.length()) {
         if (st.at(p) == 37) {
             ch = st.at(p + 1).toLatin1() - 48;
             if (ch > 16) {

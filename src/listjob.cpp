@@ -136,7 +136,6 @@ void ListJob::doStart()
         d->command = "XLIST";
         break;
     case NoOption:
-    default:
         d->command = "LSUB";
     }
 
