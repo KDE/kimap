@@ -63,7 +63,7 @@ private Q_SLOTS:
                  << "S: A000001 OK CAPABILITY completed";
 
         capabilities << QStringLiteral("IMAP4REV1") << QStringLiteral("STARTTLS") <<  QStringLiteral("AUTH=PLAIN");
-        QTest::newRow("extra-untagged") << scenario << capabilities;;
+        QTest::newRow("extra-untagged") << scenario << capabilities;
     }
 
     void testCapabilities()

@@ -69,7 +69,7 @@ private Q_SLOTS:
 
         QTest::newRow("normal") << true << scenario << listresult;
 
-        scenario.clear();;
+        scenario.clear();
         scenario << FakeServer::preauth()
                  << "C: A000001 LIST \"\" *"
                  << "S: * LIST ( \\HasChildren ) / Inbox"
