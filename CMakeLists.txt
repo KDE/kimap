@@ -22,7 +22,6 @@ include(ECMQtDeclareLoggingCategory)
 include(ECMCoverageOption)
 
 set(QT_REQUIRED_VERSION "5.8.0")
-find_package(Qt5 ${QT_REQUIRED_VERSION} CONFIG REQUIRED Network)
 
 set(KIMAP_LIB_VERSION ${PIM_VERSION})
 set(KMIME_LIBS_VERSION "5.7.80")
