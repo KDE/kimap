@@ -63,11 +63,6 @@ if(BUILD_TESTING)
     add_subdirectory(tests)
 endif()
 
-# TODO: Remove the cmake directory when we'll require ECM >= 5.41.0
-if("${ECM_VERSION}" VERSION_LESS "5.41.0")
-  add_subdirectory(cmake)
-endif()
-
 ########### Install Files ###########
 install(FILES
   "${CMAKE_CURRENT_BINARY_DIR}/KF5IMAPConfig.cmake"
