@@ -70,11 +70,16 @@ void FakeServer::dataAvailable()
     QMutexLocker locker(&m_mutex);
 
     QTcpSocket *socket = qobject_cast<QTcpSocket *>(sender());
-    Q_ASSERT(socket != 0);
+    QVERIFY(socket != 0);
 
     int scenarioNumber = m_clientSockets.indexOf(socket);
 
-    QVERIFY(!m_scenarios[scenarioNumber].isEmpty());
+    if (m_scenarios[scenarioNumber].isEmpty()) {
+        KIMAP::ImapStreamParser *clientParser = m_clientParsers[scenarioNumber];
+        QByteArray received = "C: " + clientParser->readUntilCommandEnd().trimmed();
+        qWarning() << "Scenario" << scenarioNumber << "finished, but we got command" << received;
+        QVERIFY(false);
+    }
 
     readClientPart(scenarioNumber);
     writeServerPart(scenarioNumber);
@@ -245,7 +250,7 @@ void FakeServer::readClientPart(int scenarioNumber)
     }
 
     if (!scenario.isEmpty()) {
-        QVERIFY(scenario.first().startsWith("S: "));
+        QVERIFY(scenario.first().startsWith("S: ") || scenario.first().startsWith("X"));
     }
 
     m_scenarios[scenarioNumber] = scenario;
