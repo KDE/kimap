@@ -393,7 +393,7 @@ void SessionPrivate::socketDisconnected()
         logger->disconnectionOccured();
     }
 
-    if (state != Session::Disconnected) {
+    if (isSocketConnected) {
         setState(Session::Disconnected);
         emit q->connectionLost();
     } else {
@@ -427,7 +427,6 @@ void SessionPrivate::socketError(KTcpSocket::Error error)
         thread->closeSocket();
     } else {
         emit q->connectionFailed();
-        emit q->connectionLost();    // KDE5: Remove this. We shouldn't emit connectionLost() if we weren't connected in the first place
         clearJobQueue();
     }
 }

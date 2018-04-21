@@ -99,18 +99,11 @@ Q_SIGNALS:
     void jobQueueSizeChanged(int queueSize);
 
     /**
-      @deprecated
-      Emitted when we loose a previously established connection
+      Emitted when we lose a previously established connection
 
       Likely reasons: server closed the connection, loss of internet connectivity, etc...
-
-      For historical reasons, this signal is also emitted in the event of a failed connection, but
-      you should not rely on this behavior.
-
-      New implementations should use connectionFailed() to detect a failure to connect to the host,
-      and stateChanged() to detect a loss of connectivity.
     */
-    KIMAP_DEPRECATED void connectionLost();
+    void connectionLost();
 
     /**
       Emitted when the Session couldn't connect to the host.
@@ -128,8 +121,7 @@ Q_SIGNALS:
     /**
       Emitted when the session's state changes.
 
-      You can use this signal to detect a connection loss (ie: stateChanged is emitted with newState
-      == KIMAP::Session::Disconnected)
+      Not very useful after all... :-)
 
       If you want to receive the stateChanged arguments in your slot, you must register the State
       enum with @c Q_DECLARE_METATYPE(KIMAP::Session::State) and @c qRegisterMetaType<KIMAP::Session::State>();
