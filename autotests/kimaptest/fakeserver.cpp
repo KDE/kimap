@@ -245,7 +245,7 @@ void FakeServer::readClientPart(int scenarioNumber)
     }
 
     if (!scenario.isEmpty()) {
-        QVERIFY(scenario.first().startsWith("S: "));
+        QVERIFY(scenario.first().startsWith("S: ") || scenario.first().startsWith("X"));
     }
 
     m_scenarios[scenarioNumber] = scenario;
