@@ -204,57 +204,26 @@ void LoginJob::doStart()
     // Trigger encryption negotiation only if needed
     EncryptionMode encryptionMode = d->encryptionMode;
 
-    switch (d->sessionInternal()->negotiatedEncryption()) {
-    case KTcpSocket::UnknownSslVersion:
-        break; // Do nothing the encryption mode still needs to be negotiated
-
-    // For the other cases, pretend we're going unencrypted as that's the
-    // encryption mode already set on the session
-    // (so for instance we won't issue another STARTTLS for nothing if that's
-    // not needed)
-    case KTcpSocket::SslV2:
-        if (encryptionMode == SslV2) {
-            encryptionMode = Unencrypted;
-        }
-        break;
-    case KTcpSocket::SslV3:
-        if (encryptionMode == SslV3) {
-            encryptionMode = Unencrypted;
-        }
-        break;
-    case KTcpSocket::TlsV1:
-        if (encryptionMode == TlsV1) {
-            encryptionMode = Unencrypted;
-        }
-        break;
-    case KTcpSocket::AnySslVersion:
-        if (encryptionMode == AnySslVersion) {
-            encryptionMode = Unencrypted;
-        }
-        break;
+    const auto negotiatedEncryption = d->sessionInternal()->negotiatedEncryption();
+    if (negotiatedEncryption != KTcpSocket::UnknownSslVersion) {
+        // If the socket is already encrypted, pretend we did not want any
+        // encryption
+        encryptionMode = Unencrypted;
     }
 
-    if (encryptionMode == SslV2 ||
-            encryptionMode == SslV3 ||
-            encryptionMode == SslV3_1 ||
-            encryptionMode == AnySslVersion) {
-        KTcpSocket::SslVersion version = KTcpSocket::SslV2;
-        if (encryptionMode == SslV3) {
-            version = KTcpSocket::SslV3;
+    if (encryptionMode == SSLorTLS) {
+        d->sessionInternal()->startSsl(KTcpSocket::SecureProtocols);
+    } else if (encryptionMode == STARTTLS) {
+        if (d->capabilities.contains(QLatin1String("STARTTLS"))) {
+            d->authState = LoginJobPrivate::StartTls;
+            d->tags << d->sessionInternal()->sendCommand("STARTTLS");
+        } else {
+            qCWarning(KIMAP_LOG) << "STARTTLS not supported by server!";
+            setError(UserDefinedError);
+            emitResult();
+            return;
         }
-        if (encryptionMode == SslV3_1) {
-            version = KTcpSocket::SslV3_1;
-        }
-        if (encryptionMode == AnySslVersion) {
-            version = KTcpSocket::AnySslVersion;
-        }
-        d->sessionInternal()->startSsl(version);
-
-    } else if (encryptionMode == TlsV1) {
-        d->authState = LoginJobPrivate::StartTls;
-        d->tags << d->sessionInternal()->sendCommand("STARTTLS");
-
-    } else  if (encryptionMode == Unencrypted) {
+    } else {
         if (d->authMode.isEmpty()) {
             d->authState = LoginJobPrivate::Login;
             qCDebug(KIMAP_LOG) << "sending LOGIN";
@@ -553,6 +522,11 @@ void LoginJobPrivate::sslResponse(bool response)
 void LoginJob::setEncryptionMode(EncryptionMode mode)
 {
     Q_D(LoginJob);
+    if (mode == SslV2 || mode == SslV3 || mode == SslV3_1 || mode == AnySslVersion) {
+        mode = SSLorTLS;
+    } else if (mode == TlsV1) {
+        mode = STARTTLS;
+    }
     d->encryptionMode = mode;
 }
 
