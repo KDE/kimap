@@ -118,6 +118,7 @@ bool LoginJobPrivate::sasl_interact()
                 interact->len = strlen((const char *) interact->result);
                 break;
             }
+            Q_FALLTHROUGH();
         case SASL_CB_USER:
             qCDebug(KIMAP_LOG) << "SASL_CB_[USER|AUTHNAME]: '" << userName << "'";
             interact->result = strdup(userName.toUtf8().constData());
