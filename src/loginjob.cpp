@@ -523,11 +523,6 @@ void LoginJobPrivate::sslResponse(bool response)
 void LoginJob::setEncryptionMode(EncryptionMode mode)
 {
     Q_D(LoginJob);
-    if (mode == SslV2 || mode == SslV3 || mode == SslV3_1 || mode == AnySslVersion) {
-        mode = SSLorTLS;
-    } else if (mode == TlsV1) {
-        mode = STARTTLS;
-    }
     d->encryptionMode = mode;
 }
 
