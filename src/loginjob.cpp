@@ -220,7 +220,7 @@ void LoginJob::doStart()
         } else {
             qCWarning(KIMAP_LOG) << "STARTTLS not supported by server!";
             setError(UserDefinedError);
-            setErrorText(i18n("STARTTLS is not support by the server, try SSL/TLS instead."));
+            setErrorText(i18n("STARTTLS is not supported by the server, try using SSL/TLS instead."));
             emitResult();
             return;
         }
