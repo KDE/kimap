@@ -214,7 +214,8 @@ void LoginJob::doStart()
     if (encryptionMode == SSLorTLS) {
         d->sessionInternal()->startSsl(KTcpSocket::SecureProtocols);
     } else if (encryptionMode == STARTTLS) {
-        if (d->capabilities.contains(QLatin1String("STARTTLS"))) {
+        // Can't check d->capabilities here, because that's only populated after login
+        if (d->sessionInternal()->canStartTls()) {
             d->authState = LoginJobPrivate::StartTls;
             d->tags << d->sessionInternal()->sendCommand("STARTTLS");
         } else {
