@@ -60,6 +60,10 @@ public:
     void setSocketTimeout(int ms);
     int socketTimeout() const;
 
+    bool canStartTls() const {
+        return q->state() == Session::NotAuthenticated && supportsStartTls;
+    }
+
 Q_SIGNALS:
     void encryptionNegotiationResult(bool);
 
@@ -116,6 +120,8 @@ private:
 
     int socketTimerInterval = 0;
     QTimer socketTimer;
+
+    bool supportsStartTls = false;
 };
 
 }
