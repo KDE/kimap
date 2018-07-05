@@ -247,11 +247,6 @@ void SessionPrivate::responseReceived(const Response &response)
             setState(Session::NotAuthenticated);
 
             Response simplified = response;
-            supportsStartTls = std::any_of(response.responseCode.cbegin(), response.responseCode.cend(),
-                                           [](const Response::Part &part) {
-                                                return part.type() == Response::Part::String
-                                                        && part.toString() == "STARTTLS";
-                                           });
             simplified.content.removeFirst(); // Strip the tag
             simplified.content.removeFirst(); // Strip the code
             greeting = simplified.toString().trimmed(); // Save the server greeting

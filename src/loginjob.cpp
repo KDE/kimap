@@ -28,6 +28,7 @@
 #include "response_p.h"
 #include "session_p.h"
 #include "rfccodecs.h"
+#include "capabilitiesjob.h"
 
 
 #include "common.h"
@@ -53,7 +54,8 @@ class LoginJobPrivate : public JobPrivate
 {
 public:
     enum AuthState {
-        StartTls = 0,
+        PreStartTlsCapability = 0,
+        StartTls,
         Capability,
         Login,
         Authenticate
@@ -214,17 +216,9 @@ void LoginJob::doStart()
     if (encryptionMode == SSLorTLS) {
         d->sessionInternal()->startSsl(KTcpSocket::SecureProtocols);
     } else if (encryptionMode == STARTTLS) {
-        // Can't check d->capabilities here, because that's only populated after login
-        if (d->sessionInternal()->canStartTls()) {
-            d->authState = LoginJobPrivate::StartTls;
-            d->tags << d->sessionInternal()->sendCommand("STARTTLS");
-        } else {
-            qCWarning(KIMAP_LOG) << "STARTTLS not supported by server!";
-            setError(UserDefinedError);
-            setErrorText(i18n("STARTTLS is not supported by the server, try using SSL/TLS instead."));
-            emitResult();
-            return;
-        }
+        // Check if STARTTLS is supported
+        d->authState = LoginJobPrivate::PreStartTlsCapability;
+        d->tags << d->sessionInternal()->sendCommand("CAPABILITY");
     } else {
         if (d->authMode.isEmpty()) {
             d->authState = LoginJobPrivate::Login;
@@ -307,6 +301,7 @@ void LoginJob::handleResponse(const Response &response)
     case UNTAGGED:
         // The only untagged response interesting for us here is CAPABILITY
         if (response.content[1].toString() == "CAPABILITY") {
+            d->capabilities.clear();
             QList<Response::Part>::const_iterator p = response.content.begin() + 2;
             while (p != response.content.end()) {
                 QString capability = QLatin1String(p->toString());
@@ -355,6 +350,18 @@ void LoginJob::handleResponse(const Response &response)
     case OK:
 
         switch (d->authState) {
+        case LoginJobPrivate::PreStartTlsCapability:
+            if (d->capabilities.contains(QLatin1String("STARTTLS"))) {
+                d->authState = LoginJobPrivate::StartTls;
+                d->tags << d->sessionInternal()->sendCommand("STARTTLS");
+            } else {
+                qCWarning(KIMAP_LOG) << "STARTTLS not supported by server!";
+                setError(UserDefinedError);
+                setErrorText(i18n("STARTTLS is not supported by the server, try using SSL/TLS instead."));
+                emitResult();
+            }
+            break;
+
         case LoginJobPrivate::StartTls:
             d->sessionInternal()->startSsl(KTcpSocket::SecureProtocols);
             break;

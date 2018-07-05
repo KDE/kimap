@@ -61,9 +61,10 @@ IiVUnppVeiLFa7ItwHOovgqvWVbePd5xl6+yBGxUXznjWA==\n\
 -----END RSA PRIVATE KEY-----");
 }
 
-SslServer::SslServer(QSsl::SslProtocol protocol)
+SslServer::SslServer(QSsl::SslProtocol protocol, bool waitForStartTls)
     : QTcpServer(),
-      mProtocol(protocol)
+      mProtocol(protocol),
+      mWaitForStartTls(waitForStartTls)
 {
 
 }
@@ -88,9 +89,10 @@ void SslServer::incomingConnection(qintptr handle)
     socket->ignoreSslErrors();
     connect(socket, SIGNAL(sslErrors(QList<QSslError>)), this, SLOT(sslErrors(QList<QSslError>)));
     connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
-    if (mProtocol != QSsl::TlsV1_0) {
+    if (!mWaitForStartTls) {
         socket->startServerEncryption();
     }
+
     addPendingConnection(socket);
 }
 

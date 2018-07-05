@@ -134,6 +134,11 @@ public:
     void setEncrypted(QSsl::SslProtocol protocol);
 
     /**
+     * Won't start encryption until client sends STARTTLS
+     */
+    void setWaitForStartTls(bool wait);
+
+    /**
      * Starts the server and waits for it to be ready
      *
      * You should use this instead of start() to avoid race conditions.
@@ -229,6 +234,7 @@ private:
     QList<KIMAP::ImapStreamParser *> m_clientParsers;
     bool m_encrypted;
     bool m_starttls;
+    bool m_waitForStartTls = false;
     QSsl::SslProtocol m_sslProtocol;
 };
 

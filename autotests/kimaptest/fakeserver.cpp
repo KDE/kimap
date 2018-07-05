@@ -109,10 +109,16 @@ void FakeServer::setEncrypted(QSsl::SslProtocol protocol)
     m_sslProtocol = protocol;
 }
 
+void FakeServer::setWaitForStartTls(bool wait)
+{
+    m_waitForStartTls = wait;
+}
+
+
 void FakeServer::run()
 {
     if (m_encrypted) {
-        m_tcpServer = new SslServer(m_sslProtocol);
+        m_tcpServer = new SslServer(m_sslProtocol, m_waitForStartTls);
     } else {
         m_tcpServer = new QTcpServer();
     }
