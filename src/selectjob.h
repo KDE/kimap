@@ -43,20 +43,20 @@ public:
     ~SelectJob() override;
 
     void setMailBox(const QString &mailBox);
-    QString mailBox() const;
+    Q_REQUIRED_RESULT QString mailBox() const;
 
     void setOpenReadOnly(bool readOnly);
-    bool isOpenReadOnly() const;
+    Q_REQUIRED_RESULT bool isOpenReadOnly() const;
 
-    QList<QByteArray> flags() const;
-    QList<QByteArray> permanentFlags() const;
+    Q_REQUIRED_RESULT QList<QByteArray> flags() const;
+    Q_REQUIRED_RESULT QList<QByteArray> permanentFlags() const;
 
-    int messageCount() const;
-    int recentCount() const;
-    int firstUnseenIndex() const;
+    Q_REQUIRED_RESULT int messageCount() const;
+    Q_REQUIRED_RESULT int recentCount() const;
+    Q_REQUIRED_RESULT int firstUnseenIndex() const;
 
-    qint64 uidValidity() const;
-    qint64 nextUid() const;
+    Q_REQUIRED_RESULT qint64 uidValidity() const;
+    Q_REQUIRED_RESULT qint64 nextUid() const;
 
     /**
      * @return Highest mod-sequence value of all messages in the mailbox or 0
@@ -65,7 +65,7 @@ public:
      *
      * @since 4.12
      */
-    quint64 highestModSequence() const;
+    Q_REQUIRED_RESULT quint64 highestModSequence() const;
 
     /**
      * Whether to append CONDSTORE parameter to the SELECT command.
@@ -83,7 +83,7 @@ public:
      *
      * @since 4.12
      */
-    bool condstoreEnabled() const;
+    Q_REQUIRED_RESULT bool condstoreEnabled() const;
 
 protected:
     void doStart() override;

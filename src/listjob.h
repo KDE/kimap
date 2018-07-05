@@ -68,10 +68,10 @@ public:
     KIMAP_DEPRECATED bool isIncludeUnsubscribed() const;
 
     void setOption(Option option);
-    Option option() const;
+    Q_REQUIRED_RESULT Option option() const;
 
     void setQueriedNamespaces(const QList<MailBoxDescriptor> &namespaces);
-    QList<MailBoxDescriptor> queriedNamespaces() const;
+    Q_REQUIRED_RESULT QList<MailBoxDescriptor> queriedNamespaces() const;
 
     KIMAP_DEPRECATED QList<MailBoxDescriptor> mailBoxes() const;
     KIMAP_DEPRECATED QMap< MailBoxDescriptor, QList<QByteArray> > flags() const;

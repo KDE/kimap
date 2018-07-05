@@ -39,15 +39,15 @@ class KIMAP_EXPORT StatusJob : public Job
 
 public:
     explicit StatusJob(Session *session);
-    ~StatusJob();
+    ~StatusJob() override;
 
     void setMailBox(const QString &mailBox);
-    QString mailBox() const;
+    Q_REQUIRED_RESULT QString mailBox() const;
 
     void setDataItems(const QList<QByteArray> &dataItems);
-    QList<QByteArray> dataItems() const;
+    Q_REQUIRED_RESULT QList<QByteArray> dataItems() const;
 
-    QList<QPair<QByteArray, qint64>> status() const;
+    Q_REQUIRED_RESULT QList<QPair<QByteArray, qint64>> status() const;
 
 protected:
     void doStart() override;

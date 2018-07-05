@@ -92,7 +92,7 @@ public:
     /**
      * The quota root that will be modified.
      */
-    QByteArray root() const;
+    Q_REQUIRED_RESULT QByteArray root() const;
 
 protected:
     void doStart() override;

@@ -69,7 +69,7 @@ public:
     /**
      * The destination mailbox
      */
-    QString mailBox() const;
+    Q_REQUIRED_RESULT QString mailBox() const;
 
     /**
      * Sets the messages to be copied
@@ -91,7 +91,7 @@ public:
      *
      * @return  the sequence numbers or UIDs of the messages to be copied
      */
-    ImapSet sequenceSet() const;
+    Q_REQUIRED_RESULT ImapSet sequenceSet() const;
 
     /**
      * Set how the sequence set should be interpreted.
@@ -108,7 +108,7 @@ public:
      *          interpreted as UIDs, if @c false it should be interpreted
      *          as sequence numbers
      */
-    bool isUidBased() const;
+    Q_REQUIRED_RESULT bool isUidBased() const;
 
     /**
      * The UIDs of the new copies of the messages
@@ -116,7 +116,7 @@ public:
      * This will be an empty set if no messages have been copied yet
      * or if the server does not support the UIDPLUS extension.
      */
-    ImapSet resultingUids() const;
+    Q_REQUIRED_RESULT ImapSet resultingUids() const;
 
 protected:
     void doStart() override;

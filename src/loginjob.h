@@ -68,14 +68,14 @@ public:
     explicit LoginJob(Session *session);
     ~LoginJob() override;
 
-    QString userName() const;
+    Q_REQUIRED_RESULT QString userName() const;
     void setUserName(const QString &userName);
 
     /**
      * Get the authorization identity.
      * @since 4.10
      */
-    QString authorizationName() const;
+    Q_REQUIRED_RESULT QString authorizationName() const;
 
     /**
      * Set the authorization identity.
@@ -90,7 +90,7 @@ public:
      */
     void setAuthorizationName(const QString &authorizationName);
 
-    QString password() const;
+    Q_REQUIRED_RESULT QString password() const;
     void setPassword(const QString &password);
 
     /**
@@ -102,7 +102,7 @@ public:
      * implementation-dependent.
      * @since 4.7
      */
-    QString serverGreeting() const;
+    Q_REQUIRED_RESULT QString serverGreeting() const;
 
     /**
      * Set the encryption mode for the connection. In case an encryption mode is set, the caller
@@ -116,7 +116,7 @@ public:
       Get the encryption mode.
       @return the currently active encryption mode
     */
-    EncryptionMode encryptionMode();
+    Q_REQUIRED_RESULT EncryptionMode encryptionMode();
 
     void setAuthenticationMode(AuthenticationMode mode);
 

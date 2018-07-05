@@ -74,14 +74,14 @@ public:
      *
      * @param right       the right to check for
      */
-    bool hasRightEnabled(Acl::Right right);
+    Q_REQUIRED_RESULT bool hasRightEnabled(Acl::Right right);
     /**
      * Get the rights for the current user on the mailbox.
      *
      * The result of this method is undefined if the job has
      * not yet completed.
      */
-    Acl::Rights rights();
+    Q_REQUIRED_RESULT Acl::Rights rights();
 
 protected:
     void doStart() override;

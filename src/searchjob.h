@@ -106,12 +106,12 @@ public:
     Term &operator=(const Term &other);
     bool operator==(const Term &other) const;
 
-    bool isNull() const;
+    Q_REQUIRED_RESULT bool isNull() const;
 
     Term &setFuzzy(bool fuzzy);
     Term &setNegated(bool negated);
 
-    QByteArray serialize() const;
+    Q_REQUIRED_RESULT QByteArray serialize() const;
 
 private:
     class Private;

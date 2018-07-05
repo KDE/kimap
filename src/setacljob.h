@@ -102,7 +102,7 @@ public:
     /**
      * The identifier that rights will be associated with
      */
-    QByteArray identifier();
+    Q_REQUIRED_RESULT QByteArray identifier();
 
 protected:
     void doStart() override;

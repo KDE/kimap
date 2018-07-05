@@ -42,7 +42,7 @@ public:
     ~UnsubscribeJob() override;
 
     void setMailBox(const QString &mailBox);
-    QString mailBox() const;
+    Q_REQUIRED_RESULT QString mailBox() const;
 
 protected:
     void doStart() override;

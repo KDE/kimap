@@ -63,7 +63,7 @@ public:
     /**
      * The identifier that will be removed
      */
-    QByteArray identifier();
+    Q_REQUIRED_RESULT QByteArray identifier();
 
 protected:
     void doStart() override;

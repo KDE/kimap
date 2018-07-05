@@ -66,7 +66,7 @@ public:
     /**
      * The name of the mailbox that will be created
      */
-    QString mailBox() const;
+    Q_REQUIRED_RESULT QString mailBox() const;
 
 protected:
     void doStart() override;

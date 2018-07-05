@@ -67,7 +67,7 @@ public:
     /**
      * The destination mailbox
      */
-    QString mailBox() const;
+    Q_REQUIRED_RESULT QString mailBox() const;
 
     /**
      * Sets the messages to be moved,
@@ -86,7 +86,7 @@ public:
      *
      * @return  the sequence numbers or UIDs of the messages to be moved
      */
-    ImapSet sequenceSet() const;
+    Q_REQUIRED_RESULT ImapSet sequenceSet() const;
 
     /**
      * Set how the sequence set should be interpreted.
@@ -111,7 +111,7 @@ public:
      * This will be an empty set if no messages have been moved yet
      * or if the server does not support the UIDPLUS extension.
      */
-    ImapSet resultingUids() const;
+    Q_REQUIRED_RESULT ImapSet resultingUids() const;
 
 protected:
     void doStart() override;

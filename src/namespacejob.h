@@ -43,9 +43,9 @@ public:
     NamespaceJob(Session *session);
     ~NamespaceJob() override;
 
-    QList<MailBoxDescriptor> personalNamespaces() const;
-    QList<MailBoxDescriptor> userNamespaces() const;
-    QList<MailBoxDescriptor> sharedNamespaces() const;
+    Q_REQUIRED_RESULT QList<MailBoxDescriptor> personalNamespaces() const;
+    Q_REQUIRED_RESULT QList<MailBoxDescriptor> userNamespaces() const;
+    Q_REQUIRED_RESULT QList<MailBoxDescriptor> sharedNamespaces() const;
 
     bool containsEmptyNamespace() const;
 

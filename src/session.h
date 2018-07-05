@@ -45,9 +45,9 @@ public:
     Session(const QString &hostName, quint16 port, QObject *parent = nullptr);
     ~Session();
 
-    QString hostName() const;
-    quint16 port() const;
-    State state() const;
+    Q_REQUIRED_RESULT QString hostName() const;
+    Q_REQUIRED_RESULT quint16 port() const;
+    Q_REQUIRED_RESULT State state() const;
 
     /**
      * Returns the name that has been set with LoginJob::setUserName()
@@ -55,9 +55,9 @@ public:
      * @note If the Session was pre-authenticated, userName() will return an empty string
      * @since 4.7
      */
-    QString userName() const;
+    Q_REQUIRED_RESULT QString userName() const;
 
-    QByteArray serverGreeting() const;
+    Q_REQUIRED_RESULT QByteArray serverGreeting() const;
 
     /**
      * Sets an ui proxy that displays the error messages and waits for user feedback.
@@ -83,15 +83,15 @@ public:
      * Returns the session timeout.
      * @since 4.12
      */
-    int timeout() const;
+    Q_REQUIRED_RESULT int timeout() const;
 
     /**
      * Returns the currently selected mailbox.
      * @since 4.5
      */
-    QString selectedMailBox() const;
+    Q_REQUIRED_RESULT QString selectedMailBox() const;
 
-    int jobQueueSize() const;
+    Q_REQUIRED_RESULT int jobQueueSize() const;
 
     void close();
 

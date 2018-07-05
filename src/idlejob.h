@@ -73,7 +73,7 @@ public:
      *
      * This is just the session's selected mailbox.
      */
-    QString lastMailBox() const;
+    Q_REQUIRED_RESULT QString lastMailBox() const;
     /**
      * The last message count that was reported.
      *
@@ -85,7 +85,7 @@ public:
      *          or -1 if it has not reported a message count
      *          since the job started.
      */
-    int lastMessageCount() const;
+    Q_REQUIRED_RESULT int lastMessageCount() const;
     /**
      * The last recent message count that was reported.
      *
@@ -98,7 +98,7 @@ public:
      *          or -1 if it has not reported a recent message count
      *          since the job started.
      */
-    int lastRecentCount() const;
+    Q_REQUIRED_RESULT int lastRecentCount() const;
 
 public Q_SLOTS:
     /**

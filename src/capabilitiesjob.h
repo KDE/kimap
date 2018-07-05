@@ -59,7 +59,7 @@ public:
      *
      * This will return an empty list until the job has completed.
      */
-    QStringList capabilities() const;
+    Q_REQUIRED_RESULT QStringList capabilities() const;
 
 Q_SIGNALS:
     /**

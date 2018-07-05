@@ -64,7 +64,7 @@ public:
     /**
      * The mailbox that the message will be appended to.
      */
-    QString mailBox() const;
+    Q_REQUIRED_RESULT QString mailBox() const;
 
     /**
      * Set the flags that should be applied to the appended message.
@@ -75,7 +75,7 @@ public:
     /**
      * The flags that will be set on the appended message.
      */
-    QList<QByteArray> flags() const;
+    Q_REQUIRED_RESULT QList<QByteArray> flags() const;
 
     /**
      * Set the internal date that should be applied to the appended message.
@@ -96,7 +96,7 @@ public:
      *
      * @since 4.13
      */
-    QDateTime internalDate() const;
+    Q_REQUIRED_RESULT QDateTime internalDate() const;
 
     /**
      * The content of the message.
@@ -111,7 +111,7 @@ public:
     /**
      * The content that the message will have.
      */
-    QByteArray content() const;
+    Q_REQUIRED_RESULT QByteArray content() const;
 
     /**
      * The UID of the new message.
@@ -122,7 +122,7 @@ public:
      * executed, and it will only be known at all if the server
      * supports the UIDPLUS extension (RFC 4315).
      */
-    qint64 uid() const;
+    Q_REQUIRED_RESULT qint64 uid() const;
 
 protected:
     void doStart() override;

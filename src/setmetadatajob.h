@@ -193,7 +193,7 @@ public:
      *
      * @return  a set of error codes
      */
-    MetaDataErrors metaDataErrors() const;
+    Q_REQUIRED_RESULT MetaDataErrors metaDataErrors() const;
     /**
      * The maximum accepted metadata size.
      *
@@ -203,7 +203,7 @@ public:
      *
      * @return  the maximum value size in octets, or -1 if the limit is unknown
      */
-    qint64 maxAcceptedSize();
+    Q_REQUIRED_RESULT qint64 maxAcceptedSize();
 
 protected:
     void doStart() override;
