@@ -23,7 +23,7 @@ KIMAP_UNIT_TESTS(
   fakeservertest
   testrfccodecs
   testsession
-  # loginjobtest FIXME: test hangs forever
+  loginjobtest
   logoutjobtest
   capabilitiesjobtest
   selectjobtest
