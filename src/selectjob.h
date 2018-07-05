@@ -46,6 +46,11 @@ public:
     Q_REQUIRED_RESULT QString mailBox() const;
 
     void setOpenReadOnly(bool readOnly);
+    /**
+     * @return Returns whether the mailbox is opened in read-only mode. Note
+     * that this can return true even if setOpenReadOnly() was set to false,
+     * as the mailbox may be read-only on the server.
+     */
     Q_REQUIRED_RESULT bool isOpenReadOnly() const;
 
     Q_REQUIRED_RESULT QList<QByteArray> flags() const;
