@@ -170,6 +170,15 @@ void SelectJob::handleResponse(const Response &response)
 {
     Q_D(SelectJob);
 
+    // Check for [READ-ONLY] response in final tagged OK
+    // This must be checked before handleErrorReplies(), because that calls emitResult()
+    // right away
+    if (!response.content.isEmpty() && d->tags.contains(response.content.first().toString())) {
+        if (response.responseCode.size() >= 1 && response.responseCode[0].toString() == "READ-ONLY") {
+            d->readOnly = true;
+        }
+    }
+
     if (handleErrorReplies(response) == NotHandled) {
         if (response.content.size() >= 2) {
             QByteArray code = response.content[1].toString();
@@ -180,7 +189,6 @@ void SelectJob::handleResponse(const Response &response)
                 }
 
                 code = response.responseCode[0].toString();
-
                 if (code == "PERMANENTFLAGS") {
                     d->permanentFlags = response.responseCode[1].toList();
                 } else if (code == "HIGHESTMODSEQ") {

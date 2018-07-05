@@ -46,6 +46,7 @@ private Q_SLOTS:
         QTest::addColumn<qint64>("nextUid");
         QTest::addColumn<quint64>("highestmodseq");
         QTest::addColumn<bool>("condstoreEnabled");
+        QTest::addColumn<bool>("readonly");
 
         QList<QByteArray> scenario;
         QList<QByteArray> flags;
@@ -64,7 +65,7 @@ private Q_SLOTS:
 
         flags << "\\Answered" << "\\Flagged" << "\\Deleted" << "\\Seen" << "\\Draft";
         permanentflags << "\\Deleted" << "\\Seen" << "\\*";
-        QTest::newRow("good") << scenario << flags << permanentflags << 172 << 1 << 12 << (qint64)3857529045 << (qint64)4392 << (quint64)123456789 << true;
+        QTest::newRow("good") << scenario << flags << permanentflags << 172 << 1 << 12 << (qint64)3857529045 << (qint64)4392 << (quint64)123456789 << true << false;
 
         scenario.clear();
         flags.clear();
@@ -72,7 +73,7 @@ private Q_SLOTS:
         scenario << FakeServer::preauth()
                  << "C: A000001 SELECT \"INBOX\""
                  << "S: A000001 BAD command unknown or arguments invalid";
-        QTest::newRow("bad") << scenario << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << (qint64)0 << (quint64)0 << false;
+        QTest::newRow("bad") << scenario << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << (qint64)0 << (quint64)0 << false << false;
 
         scenario.clear();
         flags.clear();
@@ -80,7 +81,7 @@ private Q_SLOTS:
         scenario << FakeServer::preauth()
                  << "C: A000001 SELECT \"INBOX\""
                  << "S: A000001 NO select failure";
-        QTest::newRow("no") << scenario << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << (qint64)0 << (quint64)0 << false;
+        QTest::newRow("no") << scenario << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << (qint64)0 << (quint64)0 << false << false;
     }
 
     void testSingleSelect()
@@ -146,6 +147,64 @@ private Q_SLOTS:
         QVERIFY(job->exec());
     }
 
+    void testReadOnlySelect_data()
+    {
+        QTest::addColumn<QList<QByteArray>>("scenario");
+        QTest::addColumn<bool>("examine");
+        QTest::addColumn<bool>("isReadOnly");
+
+        {
+            QList<QByteArray> scenario;
+            scenario << FakeServer::preauth()
+                     << "C: A000001 SELECT \"INBOX\""
+                     << "S: A000001 OK [READ-WRITE] SELECT ok";
+            QTest::newRow("SELECT rw") << scenario << false << false;
+        }
+
+        {
+            QList<QByteArray> scenario;
+            scenario << FakeServer::preauth()
+                     << "C: A000001 SELECT \"INBOX\""
+                     << "S: A000001 OK SELECT ok";
+            QTest::newRow("SELECT rw (without code)") << scenario << false << false;
+        }
+
+        {
+            QList<QByteArray> scenario;
+            scenario << FakeServer::preauth()
+                     << "C: A000001 SELECT \"INBOX\""
+                     << "S: A000001 OK [READ-ONLY] SELECT ok";
+            QTest::newRow("SELECT ro") << scenario << false << true;
+        }
+
+        {
+            QList<QByteArray> scenario;
+            scenario << FakeServer::preauth()
+                     << "C: A000001 EXAMINE \"INBOX\""
+                     << "S: A000001 OK [READ-ONLY] EXAMINE ok";
+            QTest::newRow("EXAMINE ro") << scenario << true << true;
+        }
+    }
+
+    void testReadOnlySelect()
+    {
+        QFETCH(QList<QByteArray>, scenario);
+        QFETCH(bool, examine);
+        QFETCH(bool, isReadOnly);
+
+        FakeServer fakeServer;
+        fakeServer.setScenario(scenario);
+        fakeServer.startAndWait();
+
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
+
+        KIMAP::SelectJob select(&session);
+        select.setOpenReadOnly(examine);
+        select.setMailBox(QStringLiteral("INBOX"));
+        QVERIFY(select.exec());
+
+        QCOMPARE(select.isOpenReadOnly(), isReadOnly);
+    }
 };
 
 QTEST_GUILESS_MAIN(SelectJobTest)
