@@ -19,8 +19,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef RFCCODECSTEST_H
-#define RFCCODECSTEST_H
+#ifndef TESTRFCCODECS_H
+#define TESTRFCCODECS_H
 
 #include <QObject>
 

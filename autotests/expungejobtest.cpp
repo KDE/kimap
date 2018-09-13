@@ -59,7 +59,7 @@ private Q_SLOTS:
         scenario.clear();
         scenario << FakeServer::preauth()
                  << "C: A000001 EXPUNGE"
-                 << "S: A000001 NO access deined";
+                 << "S: A000001 NO access denied";
         QTest::newRow("no") << scenario;
     }
 

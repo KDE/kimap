@@ -350,7 +350,7 @@ private Q_SLOTS:
         QCOMPARE(m_messages[2]->messageID()->identifier(), QByteArray("1234@example.com"));
         QCOMPARE(m_msgs[2].message->messageID()->identifier(), QByteArray("1234@example.com"));
 
-        // Check that we recieved the flags
+        // Check that we received the flags
         QMap<qint64, KIMAP::MessageFlags> expectedFlags;
         expectedFlags.insert(2, KIMAP::MessageFlags() << "\\Seen");
         QCOMPARE(m_flags, expectedFlags);

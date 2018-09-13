@@ -17,8 +17,8 @@
     02110-1301, USA.
 */
 
-#ifndef KIMAP_MOVE_H_
-#define KIMAP_MOVE_H_
+#ifndef KIMAP_MOVEJOB_H_
+#define KIMAP_MOVEJOB_H_
 
 #include "kimap_export.h"
 

@@ -27,7 +27,6 @@
 #include <QDebug>
 #include <QTcpServer>
 
-#include <QDebug>
 #include <QFile>
 #include <qtest.h>
 

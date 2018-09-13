@@ -71,7 +71,7 @@ public:
     ~GetMetaDataJob() override;
 
     /**
-     * Used to specify the depth of the metadata heirachy to walk.
+     * Used to specify the depth of the metadata hierarchy to walk.
      */
     enum Depth {
         NoDepth = 0, /**< Only the requested entries */
@@ -132,7 +132,7 @@ public:
     /**
      * Sets whether to retrieve children or descendants of the requested entries.
      *
-     * Metadata entry names are heirachical, much like UNIX path names.
+     * Metadata entry names are hierarchical, much like UNIX path names.
      * It therefore makes sense to ask for an entry and all its children
      * (OneLevel) or an entry and all its descendants (AllLevels).
      *

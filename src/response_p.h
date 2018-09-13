@@ -17,8 +17,8 @@
     02110-1301, USA.
 */
 
-#ifndef KIMAP_MESSAGE_P_H
-#define KIMAP_MESSAGE_P_H
+#ifndef KIMAP_RESPONSE_P_H
+#define KIMAP_RESPONSE_P_H
 
 #include <QByteArray>
 #include <QList>
