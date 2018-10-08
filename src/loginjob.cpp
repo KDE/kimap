@@ -561,7 +561,7 @@ void LoginJob::setAuthenticationMode(AuthenticationMode mode)
     case XOAuth2: d->authMode = QStringLiteral("XOAUTH2");
         break;
     default:
-        d->authMode = QStringLiteral("");
+        d->authMode = QString();
     }
 }
 
