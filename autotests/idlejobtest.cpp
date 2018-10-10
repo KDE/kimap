@@ -35,7 +35,7 @@ class IdleJobTest: public QObject
     Q_OBJECT
 
 public:
-    explicit IdleJobTest(QObject *parent = 0)
+    explicit IdleJobTest(QObject *parent = nullptr)
         : QObject(parent)
     {
         qRegisterMetaType<KIMAP::IdleJob *>();
