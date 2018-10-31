@@ -43,7 +43,7 @@ find_package(KF5Mime ${KMIME_LIBS_VERSION} CONFIG REQUIRED)
 ########### CMake Config Files ###########
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5IMAP")
 add_definitions(-DTRANSLATION_DOMAIN=\"libkimap5\")
-add_definitions(-DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT)
+
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x060000)
 
 configure_package_config_file(
