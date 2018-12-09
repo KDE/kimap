@@ -111,8 +111,10 @@ ecm_generate_headers(KIMAP_CamelCase_HEADERS
   MetaDataJobBase
   MoveJob
   MyRightsJob
+  NamespaceJob
   QuotaJobBase
   RenameJob
+  RFCCodecs
   SearchJob
   SelectJob
   Session
@@ -134,7 +136,6 @@ install(TARGETS KF5IMAP EXPORT KF5IMAPTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS
 install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/kimap_export.h
     ${KIMAP_HEADERS}
-    namespacejob.h rfccodecs.h # FIXME these two headers don't have camelcase headers in KDE4
     ${KIMAP_CamelCase_HEADERS}
     DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/KIMAP/kimap
     COMPONENT Devel
