@@ -44,21 +44,12 @@ SessionThread::SessionThread(const QString &hostName, quint16 port)
     QThread *thread = new QThread();
     moveToThread(thread);
     thread->start();
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     QMetaObject::invokeMethod(this, &SessionThread::threadInit);
-#else
-    QMetaObject::invokeMethod(this, "threadInit");
-#endif
-
 }
 
 SessionThread::~SessionThread()
 {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     QMetaObject::invokeMethod(this, &SessionThread::threadQuit);
-#else
-    QMetaObject::invokeMethod(this, "threadQuit");
-#endif
     if (!thread()->wait(10 * 1000)) {
         qCWarning(KIMAP_LOG) << "Session thread refuses to die, killing harder...";
         thread()->terminate();
@@ -74,11 +65,7 @@ void SessionThread::sendData(const QByteArray &payload)
     QMutexLocker locker(&m_mutex);
 
     m_dataQueue.enqueue(payload);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     QMetaObject::invokeMethod(this, &SessionThread::writeDataQueue);
-#else
-    QMetaObject::invokeMethod(this, "writeDataQueue");
-#endif
 }
 
 // Called in secondary thread
@@ -143,11 +130,7 @@ void SessionThread::readMessage()
     }
 
     if (m_stream->availableDataSize() > 1) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         QMetaObject::invokeMethod(this, &SessionThread::readMessage, Qt::QueuedConnection);
-#else
-        QMetaObject::invokeMethod(this, "readMessage", Qt::QueuedConnection);
-#endif
     }
 
 }
@@ -155,11 +138,7 @@ void SessionThread::readMessage()
 // Called in main thread
 void SessionThread::closeSocket()
 {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     QMetaObject::invokeMethod(this, &SessionThread::doCloseSocket, Qt::QueuedConnection);
-#else
-    QMetaObject::invokeMethod(this, "doCloseSocket", Qt::QueuedConnection);
-#endif
 }
 
 // Called in secondary thread
@@ -217,11 +196,7 @@ void SessionThread::threadInit()
     }
     connect(m_socket, &QIODevice::readyRead,
             this, &SessionThread::socketActivity);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     QMetaObject::invokeMethod(this, &SessionThread::reconnect, Qt::QueuedConnection);
-#else
-    QMetaObject::invokeMethod(this, "reconnect", Qt::QueuedConnection);
-#endif
 }
 
 // Called in secondary thread
@@ -238,11 +213,7 @@ void SessionThread::threadQuit()
 // Called in primary thread
 void SessionThread::startSsl(KTcpSocket::SslVersion version)
 {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     QMetaObject::invokeMethod(this, [this, version]() { doStartSsl(version); });
-#else
-    QMetaObject::invokeMethod(this, "doStartSsl", Q_ARG(KTcpSocket::SslVersion, version));
-#endif
 }
 
 // Called in secondary thread (via invokeMethod)
@@ -305,12 +276,7 @@ void SessionThread::sslConnected()
 
 void SessionThread::sslErrorHandlerResponse(bool response)
 {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     QMetaObject::invokeMethod(this, [this, response]() { doSslErrorHandlerResponse(response); });
-#else
-    QMetaObject::invokeMethod(this, "doSslErrorHandlerResponse", Q_ARG(bool, response));
-#endif
-
 }
 
 // Called in secondary thread (via invokeMethod)
