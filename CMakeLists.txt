@@ -44,7 +44,12 @@ find_package(KF5Mime ${KMIME_LIBS_VERSION} CONFIG REQUIRED)
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5IMAP")
 add_definitions(-DTRANSLATION_DOMAIN=\"libkimap5\")
 
-add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x060000)
+# workaround for https://bugreports.qt.io/browse/QTBUG-74665 (bug in qt5.13 reevaluate it)
+if (${Qt5Widgets_VERSION} STRGREATER "5.13")
+   MESSAGE(STATUS "Qt version: ${Qt5Widgets_VERSION} DISABLE compile without deprecated methods. bug QTBUG-74665")
+else()
+   add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x060000)
+endif()
 
 configure_package_config_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/KF5IMAPConfig.cmake.in"
