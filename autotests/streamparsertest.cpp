@@ -16,7 +16,7 @@
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include <qtest.h>
+#include <QTest>
 
 #include "imapstreamparser.h"
 #include <response_p.h>

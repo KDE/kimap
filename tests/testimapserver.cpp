@@ -19,10 +19,10 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#include <qdebug.h>
-#include <qtcpsocket.h>
+#include <QDebug>
+#include <QTcpSocket>
 #include <QCoreApplication>
-#include <qsignalspy.h>
+#include <QSignalSpy>
 
 #include "acl.h"
 #include "session.h"

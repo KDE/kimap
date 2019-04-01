@@ -18,9 +18,9 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#include <qdebug.h>
+#include <QDebug>
 #include <QCoreApplication>
-#include <qsignalspy.h>
+#include <QSignalSpy>
 
 #include "session.h"
 #include "capabilitiesjob.h"

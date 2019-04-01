@@ -17,7 +17,7 @@
  *
  */
 
-#include <qtest.h>
+#include <QTest>
 
 #include "kimaptest/fakeserver.h"
 #include "kimap/loginjob.h"

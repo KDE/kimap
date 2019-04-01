@@ -28,7 +28,7 @@
 #include <QTcpServer>
 
 #include <QFile>
-#include <qtest.h>
+#include <QTest>
 
 #include "imapstreamparser.h"
 
