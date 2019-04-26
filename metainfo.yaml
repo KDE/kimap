@@ -11,7 +11,7 @@ release: false
 libraries:
  - qmake: KImap
    cmake: "KF5::Imap"
-   cmakename: KF5Imap
+cmakename: KF5Imap
 
 public_lib: true
 group: kdepim
