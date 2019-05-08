@@ -39,7 +39,7 @@ class SetAclJobPrivate;
  *
  * This job requires that the server supports the ACL
  * capability, defined in
- * <a href="http://www.apps.ietf.org/rfc/rfc4314.html">RFC 4314</a>.
+ * <a href="https://tools.ietf.org/html/rfc4314">RFC 4314</a>.
  */
 class KIMAP_EXPORT SetAclJob : public AclJobBase
 {

@@ -57,7 +57,7 @@ class IdleJobPrivate;
  *
  * This job requires that the server supports the IDLE
  * capability, defined in
- * <a href="http://www.apps.ietf.org/rfc/rfc2177.html">RFC 2177</a>.
+ * <a href="https://tools.ietf.org/html/rfc2177">RFC 2177</a>.
  */
 class KIMAP_EXPORT IdleJob : public Job
 {

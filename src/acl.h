@@ -77,7 +77,7 @@ enum Right {
     Expunge       = 0x001000,
     /** Write shared annotations
      *
-     * See <a href="http://www.apps.ietf.org/rfc/rfc5257.html" title="IMAP ANNOTATE extension">RFC
+     * See <a href="https://tools.ietf.org/html/rfc5257" title="IMAP ANNOTATE extension">RFC
      * 5257</a>.  Only supported by servers that implement the ANNOTATE extension.
      */
     WriteShared   = 0x002000,

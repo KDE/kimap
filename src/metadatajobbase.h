@@ -36,10 +36,10 @@ class MetaDataJobBasePrivate;
  *
  * Provides support for the IMAP METADATA extension; both the
  * final RFC version
- * (<a href="http://tools.ietf.org/html/rfc5464">RFC 5464</a>)
+ * (<a href="https://tools.ietf.org/html/rfc5464">RFC 5464</a>)
  * and the older, incompatible draft version (known as ANNOTATEMORE)
  * (<a
- * href="http://tools.ietf.org/html/draft-daboo-imap-annotatemore-07"
+ * href="https://tools.ietf.org/html/draft-daboo-imap-annotatemore-07"
  * >draft-daboo-imap-annotatemore-07</a>).
  *
  * This class cannot be used directly, you must subclass it and reimplement

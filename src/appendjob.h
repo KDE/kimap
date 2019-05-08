@@ -81,7 +81,7 @@ public:
      * Set the internal date that should be applied to the appended message.
      *
      * This is the date/time the IMAP server should set internally for the appended message.
-     * See http://tools.ietf.org/html/rfc3501#section-6.3.11
+     * See https://tools.ietf.org/html/rfc3501#section-6.3.11
      *
      * If this is not set, the server will use the current date/time.
      *

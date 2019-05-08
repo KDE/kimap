@@ -46,7 +46,7 @@ class GetQuotaRootJobPrivate;
  *
  * This job requires that the server supports the QUOTA
  * capability, defined in
- * <a href="http://www.apps.ietf.org/rfc/rfc2087.html">RFC 2087</a>.
+ * <a href="https://tools.ietf.org/html/rfc2087">RFC 2087</a>.
  */
 class KIMAP_EXPORT GetQuotaRootJob : public QuotaJobBase
 {

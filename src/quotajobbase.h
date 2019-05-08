@@ -35,7 +35,7 @@ class QuotaJobBasePrivate;
  * Base class for jobs that operate on mailbox quotas
  *
  * Provides support for the IMAP QUOTA extension, as defined by
- * <a href="http://www.apps.ietf.org/rfc/rfc2087.html" title="IMAP QUOTA extension">RFC 2087</a>.
+ * <a href="https://tools.ietf.org/html/rfc2087" title="IMAP QUOTA extension">RFC 2087</a>.
  *
  * This class cannot be used directly, you must subclass it and reimplement
  * at least the doStart() method.
