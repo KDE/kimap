@@ -98,6 +98,11 @@ quint16 Session::port() const
     return d->thread->port();
 }
 
+void Session::setUseNetworkProxy(bool useProxy)
+{
+    d->thread->setUseNetworkProxy(useProxy);
+}
+
 Session::State Session::state() const
 {
     return d->state;

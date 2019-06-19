@@ -50,6 +50,8 @@ public:
         return m_port;
     }
 
+    void setUseNetworkProxy(bool useProxy);
+
     void sendData(const QByteArray &payload);
 
 public Q_SLOTS:
@@ -78,6 +80,7 @@ private Q_SLOTS:
     void slotSocketDisconnected();
     void doStartSsl(KTcpSocket::SslVersion);
     void doSslErrorHandlerResponse(bool result);
+    void setUseProxyInternal(bool useProxy);
 
 private:
     QString m_hostName;
@@ -92,6 +95,7 @@ private:
     QMutex m_mutex;
 
     bool m_encryptedMode = false;
+    bool m_useProxy = false;
 };
 
 }

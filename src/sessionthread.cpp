@@ -21,6 +21,7 @@
 
 #include <QDebug>
 #include <QThread>
+#include <QNetworkProxy>
 
 #include "kimap_debug.h"
 
@@ -37,7 +38,8 @@ static const int _kimap_sslErrorUiData = qRegisterMetaType<KSslErrorUiData>();
 SessionThread::SessionThread(const QString &hostName, quint16 port)
     : QObject(), m_hostName(hostName), m_port(port),
       m_socket(nullptr), m_stream(nullptr), m_mutex(),
-      m_encryptedMode(false)
+      m_encryptedMode(false),
+      m_useProxy(false)
 {
     // Just like the Qt docs now recommend, for event-driven threads:
     // don't derive from QThread, create one directly and move the object to it.
@@ -57,6 +59,12 @@ SessionThread::~SessionThread()
         thread()->wait();
     }
     delete thread();
+}
+
+// Called in primary thread, passes setting to secondary thread
+void SessionThread::setUseNetworkProxy(bool useProxy)
+{
+    QMetaObject::invokeMethod(this, [this, useProxy]() { setUseProxyInternal(useProxy); }, Qt::QueuedConnection);
 }
 
 // Called in primary thread
@@ -162,6 +170,17 @@ void SessionThread::reconnect()
     }
     if (m_socket->state() != SessionSocket::ConnectedState &&
             m_socket->state() != SessionSocket::ConnectingState) {
+
+        QNetworkProxy proxy;
+        if (!m_useProxy) {
+            qCDebug(KIMAP_LOG) << "Connecting to IMAP server with no proxy";
+            proxy.setType(QNetworkProxy::NoProxy);
+        } else {
+            qCDebug(KIMAP_LOG) << "Connecting to IMAP server using default system proxy";
+            proxy.setType(QNetworkProxy::DefaultProxy);
+        }
+        m_socket->setProxy(proxy);
+
         if (m_encryptedMode) {
             qCDebug(KIMAP_LOG) << "connectToHostEncrypted" << m_hostName << m_port;
             m_socket->connectToHostEncrypted(m_hostName, m_port);
@@ -208,6 +227,18 @@ void SessionThread::threadQuit()
     delete m_socket;
     m_socket = nullptr;
     thread()->quit();
+}
+
+// Called in secondary thread
+void SessionThread::setUseProxyInternal(bool useProxy)
+{
+    m_useProxy = useProxy;
+    if (m_socket != nullptr) {
+        if (m_socket->state() != SessionSocket::UnconnectedState) {
+            m_socket->disconnectFromHost();
+            QMetaObject::invokeMethod(this, &SessionThread::reconnect, Qt::QueuedConnection);
+        }
+    }
 }
 
 // Called in primary thread
