@@ -121,7 +121,7 @@ ImapInterval::Id ImapInterval::end() const
     if (hasDefinedEnd()) {
         return d->end;
     }
-    return 0xFFFFFFFF; // should be INT_MAX, but where is that defined again?
+    return std::numeric_limits<qint64>::max();
 }
 
 void ImapInterval::setBegin(Id value)
@@ -245,7 +245,7 @@ void ImapSet::add(const QVector<Id> &values)
     QVector<Id> vals = values;
     std::sort(vals.begin(), vals.end());
     for (int i = 0; i < vals.count(); ++i) {
-        const int begin = vals[i];
+        const Id begin = vals[i];
         Q_ASSERT(begin >= 0);
         if (i == vals.count() - 1) {
             d->intervals << ImapInterval(begin, begin);
