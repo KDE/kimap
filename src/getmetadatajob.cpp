@@ -92,7 +92,7 @@ void GetMetaDataJob::doStart()
         if (d->attributes.size() > 1) {
             parameters[parameters.length() - 1 ] = ')';
         } else {
-            parameters.truncate(parameters.length() - 1);
+            parameters.chop(1);
         }
 
     } else {
@@ -119,7 +119,7 @@ void GetMetaDataJob::doStart()
             }
             parameters[parameters.length() - 1 ] = ')';
         } else {
-            parameters.truncate(parameters.length() - 1);
+            parameters.chop(1);
         }
     }
 
