@@ -45,7 +45,10 @@ find_package(KF5Mime ${KMIME_LIBS_VERSION} CONFIG REQUIRED)
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5IMAP")
 add_definitions(-DTRANSLATION_DOMAIN=\"libkimap5\")
 
-add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x060000)
+if (EXISTS "${CMAKE_SOURCE_DIR}/.git")
+   add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x060000)
+endif()
+
 
 configure_package_config_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/KF5IMAPConfig.cmake.in"
