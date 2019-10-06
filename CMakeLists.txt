@@ -3,6 +3,8 @@ set(PIM_VERSION "5.12.40")
 
 project(KIMAP VERSION ${PIM_VERSION})
 
+set(CMAKE_CXX_STANDARD 14)
+
 # ECM setup
 set(KF5_MIN_VERSION "5.62.0")
 

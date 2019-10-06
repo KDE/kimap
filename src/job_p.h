@@ -21,7 +21,7 @@
 #define KIMAP_JOB_P_H
 
 #include "session.h"
-#include <ktcpsocket.h>
+#include <QAbstractSocket>
 
 namespace KIMAP
 {
@@ -31,7 +31,7 @@ class SessionPrivate;
 class JobPrivate
 {
 public:
-    JobPrivate(Session *session, const QString &name) : m_session(session), m_socketError(KTcpSocket::UnknownError)
+    JobPrivate(Session *session, const QString &name) : m_session(session)
     {
         m_name = name;
     }
@@ -47,7 +47,7 @@ public:
         return m_session->d;
     }
 
-    void setSocketError(KTcpSocket::Error error)
+    void setSocketError(QAbstractSocket::SocketError error)
     {
         m_socketError = error;
     }
@@ -55,7 +55,7 @@ public:
     QList<QByteArray> tags;
     Session *m_session = nullptr;
     QString m_name;
-    KTcpSocket::Error m_socketError;
+    QAbstractSocket::SocketError m_socketError = QAbstractSocket::UnknownSocketError;
 };
 
 }

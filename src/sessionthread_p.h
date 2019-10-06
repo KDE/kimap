@@ -23,9 +23,11 @@
 #include <QMutex>
 #include <QQueue>
 
-#include <ktcpsocket.h>
+#include <QSslSocket>
 
-typedef KTcpSocket SessionSocket;
+#include <memory>
+
+class KSslErrorUiData;
 
 namespace KIMAP
 {
@@ -56,16 +58,16 @@ public:
 
 public Q_SLOTS:
     void closeSocket();
-    void startSsl(KTcpSocket::SslVersion version);
+    void startSsl(QSsl::SslProtocol protocol);
     void sslErrorHandlerResponse(bool result);
 
 Q_SIGNALS:
     void socketConnected();
     void socketDisconnected();
     void socketActivity();
-    void socketError(KTcpSocket::Error);
+    void socketError(QAbstractSocket::SocketError);
     void responseReceived(const KIMAP::Response &response);
-    void encryptionNegotiationResult(bool, KTcpSocket::SslVersion);
+    void encryptionNegotiationResult(bool, QSsl::SslProtocol);
     void sslError(const KSslErrorUiData &);
 
 private Q_SLOTS:
@@ -76,9 +78,9 @@ private Q_SLOTS:
     void writeDataQueue();
     void sslConnected();
     void doCloseSocket();
-    void slotSocketError(KTcpSocket::Error);
+    void slotSocketError(QAbstractSocket::SocketError);
     void slotSocketDisconnected();
-    void doStartSsl(KTcpSocket::SslVersion);
+    void doStartSsl(QSsl::SslProtocol);
     void doSslErrorHandlerResponse(bool result);
     void setUseProxyInternal(bool useProxy);
 
@@ -86,8 +88,8 @@ private:
     QString m_hostName;
     quint16 m_port;
 
-    SessionSocket *m_socket = nullptr;
-    ImapStreamParser *m_stream = nullptr;
+    std::unique_ptr<QSslSocket> m_socket;
+    std::unique_ptr<ImapStreamParser> m_stream;
 
     QQueue<QByteArray> m_dataQueue;
 

@@ -37,9 +37,9 @@
 #include "sessionthread_p.h"
 #include "rfccodecs.h"
 
-Q_DECLARE_METATYPE(KTcpSocket::SslVersion)
+Q_DECLARE_METATYPE(QSsl::SslProtocol)
 Q_DECLARE_METATYPE(QSslSocket::SslMode)
-static const int _kimap_sslVersionId = qRegisterMetaType<KTcpSocket::SslVersion>();
+static const int _kimap_sslVersionId = qRegisterMetaType<QSsl::SslProtocol>();
 
 using namespace KIMAP;
 
@@ -148,7 +148,7 @@ SessionPrivate::SessionPrivate(Session *session)
       jobRunning(false),
       currentJob(nullptr),
       tagCount(0),
-      sslVersion(KTcpSocket::UnknownSslVersion),
+      sslVersion(QSsl::UnknownProtocol),
       socketTimerInterval(30000)   // By default timeouts on 30s
 {
 }
@@ -407,7 +407,7 @@ void SessionPrivate::socketActivity()
     restartSocketTimer();
 }
 
-void SessionPrivate::socketError(KTcpSocket::Error error)
+void SessionPrivate::socketError(QAbstractSocket::SocketError error)
 {
     if (socketTimer.isActive()) {
         stopSocketTimer();
@@ -443,9 +443,9 @@ void SessionPrivate::clearJobQueue()
     emit q->jobQueueSizeChanged(0);
 }
 
-void SessionPrivate::startSsl(KTcpSocket::SslVersion version)
+void SessionPrivate::startSsl(QSsl::SslProtocol protocol)
 {
-    thread->startSsl(version);
+    thread->startSsl(protocol);
 }
 
 QString Session::selectedMailBox() const
@@ -453,17 +453,17 @@ QString Session::selectedMailBox() const
     return QString::fromUtf8(d->currentMailBox);
 }
 
-void SessionPrivate::onEncryptionNegotiationResult(bool isEncrypted, KTcpSocket::SslVersion version)
+void SessionPrivate::onEncryptionNegotiationResult(bool isEncrypted, QSsl::SslProtocol protocol)
 {
     if (isEncrypted) {
-        sslVersion = version;
+        sslVersion = protocol;
     } else {
-        sslVersion = KTcpSocket::UnknownSslVersion;
+        sslVersion = QSsl::UnknownProtocol;
     }
     emit encryptionNegotiationResult(isEncrypted);
 }
 
-KTcpSocket::SslVersion SessionPrivate::negotiatedEncryption() const
+QSsl::SslProtocol SessionPrivate::negotiatedEncryption() const
 {
     return sslVersion;
 }

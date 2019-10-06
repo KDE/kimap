@@ -23,12 +23,11 @@
 #include "session.h"
 #include "sessionuiproxy.h"
 
-#include <ktcpsocket.h>
-
 #include <QObject>
 #include <QQueue>
 #include <QString>
 #include <QTimer>
+#include <QSslSocket>
 
 class KJob;
 
@@ -52,10 +51,10 @@ public:
 
     void addJob(Job *job);
     QByteArray sendCommand(const QByteArray &command, const QByteArray &args = QByteArray());
-    void startSsl(KTcpSocket::SslVersion version);
+    void startSsl(QSsl::SslProtocol protocol);
     void sendData(const QByteArray &data);
 
-    KTcpSocket::SslVersion negotiatedEncryption() const;
+    QSsl::SslProtocol negotiatedEncryption() const;
 
     void setSocketTimeout(int ms);
     int socketTimeout() const;
@@ -64,7 +63,7 @@ Q_SIGNALS:
     void encryptionNegotiationResult(bool);
 
 private Q_SLOTS:
-    void onEncryptionNegotiationResult(bool isEncrypted, KTcpSocket::SslVersion sslVersion);
+    void onEncryptionNegotiationResult(bool isEncrypted, QSsl::SslProtocol sslVersion);
     void onSocketTimeout();
 
     void doStartNext();
@@ -74,7 +73,7 @@ private Q_SLOTS:
 
     void socketConnected();
     void socketDisconnected();
-    void socketError(KTcpSocket::Error);
+    void socketError(QAbstractSocket::SocketError error);
     void socketActivity();
 
     void handleSslError(const KSslErrorUiData &errorData);
@@ -112,7 +111,7 @@ private:
     QByteArray upcomingMailBox;
     quint16 tagCount;
 
-    KTcpSocket::SslVersion sslVersion;
+    QSsl::SslProtocol sslVersion;
 
     int socketTimerInterval = 0;
     QTimer socketTimer;

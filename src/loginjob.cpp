@@ -21,8 +21,9 @@
 #include "loginjob.h"
 
 #include <KLocalizedString>
+#include <QSslSocket>
+
 #include "kimap_debug.h"
-#include <ktcpsocket.h>
 
 #include "job_p.h"
 #include "response_p.h"
@@ -207,14 +208,14 @@ void LoginJob::doStart()
     EncryptionMode encryptionMode = d->encryptionMode;
 
     const auto negotiatedEncryption = d->sessionInternal()->negotiatedEncryption();
-    if (negotiatedEncryption != KTcpSocket::UnknownSslVersion) {
+    if (negotiatedEncryption != QSsl::UnknownProtocol) {
         // If the socket is already encrypted, pretend we did not want any
         // encryption
         encryptionMode = Unencrypted;
     }
 
     if (encryptionMode == SSLorTLS) {
-        d->sessionInternal()->startSsl(KTcpSocket::SecureProtocols);
+        d->sessionInternal()->startSsl(QSsl::SecureProtocols);
     } else if (encryptionMode == STARTTLS) {
         // Check if STARTTLS is supported
         d->authState = LoginJobPrivate::PreStartTlsCapability;
@@ -363,7 +364,7 @@ void LoginJob::handleResponse(const Response &response)
             break;
 
         case LoginJobPrivate::StartTls:
-            d->sessionInternal()->startSsl(KTcpSocket::SecureProtocols);
+            d->sessionInternal()->startSsl(QSsl::SecureProtocols);
             break;
 
         case LoginJobPrivate::Capability:
@@ -573,7 +574,7 @@ void LoginJob::connectionLost()
     //the TLS handshake failed and the socket was reconnected in normal mode
     if (d->authState != LoginJobPrivate::StartTls) {
         qCWarning(KIMAP_LOG) << "Connection to server lost " << d->m_socketError;
-        if (d->m_socketError == KTcpSocket::SslHandshakeFailedError) {
+        if (d->m_socketError == QAbstractSocket::SslHandshakeFailedError) {
             setError(KJob::UserDefinedError);
             setErrorText(i18n("SSL handshake failed."));
             emitResult();
