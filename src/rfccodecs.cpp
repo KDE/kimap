@@ -162,7 +162,7 @@ QByteArray KIMAP::quoteIMAP(const QByteArray &src)
     int len = src.length();
     QByteArray result;
     result.reserve(2 * len);
-    for (unsigned int i = 0; i < len; i++) {
+    for (int i = 0; i < len; i++) {
         if (src[i] == '"' || src[i] == '\\') {
             result += '\\';
         }
