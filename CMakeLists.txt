@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.5)
-set(PIM_VERSION "5.12.80")
+set(PIM_VERSION "5.13.40")
 
 project(KIMAP VERSION ${PIM_VERSION})
 
 set(CMAKE_CXX_STANDARD 14)
 
 # ECM setup
-set(KF5_MIN_VERSION "5.63.0")
+set(KF5_MIN_VERSION "5.64.0")
 
 find_package(ECM ${KF5_MIN_VERSION} CONFIG REQUIRED)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
@@ -24,7 +24,7 @@ include(FeatureSummary)
 include(ECMQtDeclareLoggingCategory)
 
 
-set(QT_REQUIRED_VERSION "5.11.0")
+set(QT_REQUIRED_VERSION "5.12.0")
 
 set(KIMAP_LIB_VERSION ${PIM_VERSION})
 set(KMIME_LIBS_VERSION "5.12.40")
