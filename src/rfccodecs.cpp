@@ -41,7 +41,7 @@
 #include <QTextCodec>
 #include <QByteArray>
 #include <QLatin1Char>
-#include <kcodecs.h>
+#include <KCodecs>
 
 using namespace KIMAP;
 
