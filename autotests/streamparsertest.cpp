@@ -20,8 +20,8 @@
 
 #include "imapstreamparser.h"
 #include <response_p.h>
-
-#include <QtTest>
+#include <QBuffer>
+#include <QTest>
 
 using namespace KIMAP;
 

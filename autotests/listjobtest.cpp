@@ -25,7 +25,8 @@
 #include "kimap/session.h"
 #include "kimap/listjob.h"
 
-#include <QtTest>
+#include <QTest>
+#include <QSignalSpy>
 #include <QDebug>
 
 Q_DECLARE_METATYPE(QList<KIMAP::MailBoxDescriptor>)

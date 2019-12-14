@@ -25,7 +25,7 @@
 #include "kimap/session.h"
 #include "kimap/deletejob.h"
 
-#include <QtTest>
+#include <QTest>
 
 class DeleteJobTest: public QObject
 {

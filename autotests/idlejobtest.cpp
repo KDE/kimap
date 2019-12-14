@@ -24,7 +24,8 @@
 #include "kimap/selectjob.h"
 #include "kimap/idlejob.h"
 
-#include <QtTest>
+#include <QTest>
+#include <QSignalSpy>
 
 Q_DECLARE_METATYPE(QList<int>)
 Q_DECLARE_METATYPE(QList<qint64>)

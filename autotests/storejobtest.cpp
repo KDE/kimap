@@ -25,7 +25,7 @@
 #include "kimap/session.h"
 #include "kimap/storejob.h"
 
-#include <QtTest>
+#include <QTest>
 
 class StoreJobTest: public QObject
 {

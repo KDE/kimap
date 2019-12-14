@@ -22,7 +22,7 @@
 #include "kimap/session.h"
 #include "kimap/appendjob.h"
 
-#include <QtTest>
+#include <QTest>
 #include <QDateTime>
 
 class AppendJobTest: public QObject

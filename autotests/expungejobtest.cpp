@@ -22,7 +22,7 @@
 #include "kimap/session.h"
 #include "kimap/expungejob.h"
 
-#include <QtTest>
+#include <QTest>
 
 class ExpungeJobTest: public QObject
 {

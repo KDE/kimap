@@ -23,7 +23,7 @@
 #include "kimap/imapset.h"
 #include "../src/movejob.h"
 
-#include <QtTest>
+#include <QTest>
 
 class MoveJobTest: public QObject
 {

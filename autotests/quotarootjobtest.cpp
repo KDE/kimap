@@ -22,7 +22,7 @@
 #include "kimap/session.h"
 #include "kimap/getquotarootjob.h"
 
-#include <QtTest>
+#include <QTest>
 
 Q_DECLARE_METATYPE(QList<qint64>)
 

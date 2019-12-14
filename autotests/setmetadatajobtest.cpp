@@ -22,7 +22,7 @@
 #include "kimap/session.h"
 #include "kimap/setmetadatajob.h"
 
-#include <QtTest>
+#include <QTest>
 
 typedef QMap<QByteArray, QByteArray> MAP;
 Q_DECLARE_METATYPE(MAP)

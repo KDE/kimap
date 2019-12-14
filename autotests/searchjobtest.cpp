@@ -24,7 +24,7 @@
 #include "kimap/session.h"
 #include "kimap/searchjob.h"
 
-#include <QtTest>
+#include <QTest>
 
 typedef QPair< KIMAP::SearchJob::SearchCriteria, QByteArray > SearchCriteriaValuePair;
 

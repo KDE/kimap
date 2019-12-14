@@ -20,7 +20,7 @@
 #include "kimap/session.h"
 #include "kimap/idjob.h"
 
-#include <QtTest>
+#include <QTest>
 
 typedef QMap<QByteArray, QByteArray> ArrayMap;
 Q_DECLARE_METATYPE(ArrayMap)

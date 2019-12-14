@@ -23,7 +23,7 @@
 #include "kimap/session.h"
 #include "kimap/listjob.h"
 
-#include <QtTest>
+#include <QTest>
 
 class FakeServerTest: public QObject
 {

@@ -25,7 +25,7 @@
 #include "kimap/session.h"
 #include "kimap/capabilitiesjob.h"
 
-#include <QtTest>
+#include <QTest>
 
 class CapabilitiesJobTest: public QObject
 {

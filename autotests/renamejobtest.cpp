@@ -25,7 +25,7 @@
 #include "kimap/session.h"
 #include "kimap/renamejob.h"
 
-#include <QtTest>
+#include <QTest>
 
 class RenameJobTest: public QObject
 {

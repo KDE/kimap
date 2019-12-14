@@ -25,7 +25,7 @@
 #include "kimap/session.h"
 #include "kimap/unsubscribejob.h"
 
-#include <QtTest>
+#include <QTest>
 
 class UnsubscribeJobTest: public QObject
 {

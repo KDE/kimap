@@ -26,7 +26,7 @@
 #include "kimap/logoutjob.h"
 #include "kimap/loginjob.h"
 
-#include <QtTest>
+#include <QTest>
 
 class LogoutJobTest: public QObject
 {

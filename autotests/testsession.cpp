@@ -23,7 +23,8 @@
 
 #include <QEventLoop>
 #include <QObject>
-#include <QtTest>
+#include <QTest>
+#include <QSignalSpy>
 
 #include "session.h"
 #include "job.h"
