@@ -57,7 +57,7 @@ GetMetaDataJob::~GetMetaDataJob()
 
 static QList<QByteArray> sort(const QSet<QByteArray> &set)
 {
-    QList<QByteArray> sortedEntries = set.toList();
+    QList<QByteArray> sortedEntries = set.values();
     std::sort(sortedEntries.begin(), sortedEntries.end());
     return sortedEntries;
 }
