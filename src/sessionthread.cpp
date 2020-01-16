@@ -285,14 +285,23 @@ void SessionThread::sslConnected()
         return;
     }
     QSslCipher cipher = m_socket->sessionCipher();
-
-    if (!m_socket->sslErrors().isEmpty() || !m_socket->isEncrypted()
+#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
+    if (!m_socket->sslErrors().isEmpty()
+#else
+    if (!m_socket->sslHandshakeErrors().isEmpty()
+#endif
+            || !m_socket->isEncrypted()
         || cipher.isNull() || cipher.usedBits() == 0) {
         qCDebug(KIMAP_LOG) << "Initial SSL handshake failed. cipher.isNull() is" << cipher.isNull()
                            << ", cipher.usedBits() is" << cipher.usedBits()
                            << ", the socket says:" <<  m_socket->errorString()
                            << "and the list of SSL errors contains"
-                           << m_socket->sslErrors().count() << "items.";
+                      #if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
+                           << m_socket->sslErrors().count()
+                      #else
+                           << m_socket->sslHandshakeErrors().count()
+                      #endif
+                           << "items.";
         KSslErrorUiData errorData(m_socket.get());
         emit sslError(errorData);
     } else {
