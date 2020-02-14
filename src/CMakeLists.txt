@@ -49,7 +49,14 @@ set(kimap_SRCS
    unsubscribejob.cpp
 )
 
-ecm_qt_declare_logging_category(kimap_SRCS HEADER kimap_debug.h IDENTIFIER KIMAP_LOG CATEGORY_NAME org.kde.pim.kimap)
+if (ECM_VERSION VERSION_LESS "5.68.0")
+    ecm_qt_declare_logging_category(kimap_SRCS HEADER kimap_debug.h IDENTIFIER KIMAP_LOG CATEGORY_NAME org.kde.pim.kimap)
+else()
+    ecm_qt_declare_logging_category(kimap_SRCS HEADER kimap_debug.h IDENTIFIER KIMAP_LOG CATEGORY_NAME org.kde.pim.kimap
+        OLD_CATEGORY_NAMES log_kimap
+        DESCRIPTION "kimap (pim lib)" EXPORT KIMAP)
+endif()
+
 
 add_library(KF5IMAP ${kimap_SRCS})
 
@@ -147,6 +154,8 @@ install(FILES
     COMPONENT Devel
 )
 
-
+if (NOT ECM_VERSION VERSION_LESS "5.68.0")
+   ecm_qt_install_logging_categories(EXPORT KIMAP FILE kimap.categories DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
+endif()
 ecm_generate_pri_file(BASE_NAME KIMAP LIB_NAME KF5IMAP DEPS "Mime" FILENAME_VAR PRI_FILENAME INCLUDE_INSTALL_DIR ${KDE_INSTALL_INCLUDEDIR_KF5}/KIMAP)
 install(FILES ${PRI_FILENAME} DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
