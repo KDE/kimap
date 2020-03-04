@@ -208,8 +208,13 @@ void SessionThread::threadInit()
             this, &SessionThread::slotSocketDisconnected, Qt::QueuedConnection);
     connect(m_socket.get(), &QSslSocket::connected,
             this, &SessionThread::socketConnected);
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
     connect(m_socket.get(), QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error),
+#else
+    connect(m_socket.get(), QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::errorOccurred),
+#endif
             this, &SessionThread::slotSocketError);
+
     connect(m_socket.get(), &QIODevice::bytesWritten,
             this, &SessionThread::socketActivity);
     connect(m_socket.get(), &QSslSocket::encryptedBytesWritten,
