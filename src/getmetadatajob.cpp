@@ -57,7 +57,11 @@ GetMetaDataJob::~GetMetaDataJob()
 
 static QList<QByteArray> sort(const QSet<QByteArray> &set)
 {
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
     QList<QByteArray> sortedEntries = set.toList();
+#else
+    QList<QByteArray> sortedEntries(set.cbegin(), set.cend());
+#endif
     std::sort(sortedEntries.begin(), sortedEntries.end());
     return sortedEntries;
 }
