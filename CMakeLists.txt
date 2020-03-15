@@ -27,7 +27,7 @@ include(ECMQtDeclareLoggingCategory)
 set(QT_REQUIRED_VERSION "5.12.0")
 
 set(KIMAP_LIB_VERSION ${PIM_VERSION})
-set(KMIME_LIBS_VERSION "5.13.40")
+set(KMIME_LIBS_VERSION "5.13.80")
 ecm_setup_version(PROJECT VARIABLE_PREFIX KIMAP
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kimap_version.h"
                         PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5IMAPConfigVersion.cmake"
@@ -49,7 +49,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"libkimap5\")
 
 if (EXISTS "${CMAKE_SOURCE_DIR}/.git")
    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050e00)
-   add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x058000)
+   add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x054400)
 endif()
 
 
