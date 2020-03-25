@@ -59,7 +59,7 @@ public Q_SLOTS:
     }
 
     void onMessagesReceived(const QString &/*mailbox*/,
-                            const QMap<qint64, qint64> uids,
+                            const QMap<qint64, qint64> &uids,
                             const QMap<qint64, KIMAP::MessageAttribute> &attrs,
                             const QMap<qint64, KIMAP::MessagePtr> &messages)
     {

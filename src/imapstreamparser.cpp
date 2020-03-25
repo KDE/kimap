@@ -29,11 +29,11 @@
 using namespace KIMAP;
 
 ImapStreamParser::ImapStreamParser(QIODevice *socket, bool serverModeEnabled)
+    : m_position(0)
+    , m_literalSize(0)
 {
     m_socket = socket;
     m_isServerModeEnabled = serverModeEnabled;
-    m_position = 0;
-    m_literalSize = 0;
 }
 
 QString ImapStreamParser::readUtf8String()
