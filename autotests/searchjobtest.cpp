@@ -137,7 +137,7 @@ private Q_SLOTS:
                      << "S: * SEARCH 10 12"
                      << "S: A000001 OK search done";
 
-            QTest::newRow("uidbased header search") << scenario << true << 2 << KIMAP::Term(QLatin1String("Message-Id"), QLatin1String("<12345678@mail.box>"));
+            QTest::newRow("uidbased header search") << scenario << true << 2 << KIMAP::Term(QStringLiteral("Message-Id"), QStringLiteral("<12345678@mail.box>"));
         }
         {
             QList<QByteArray> scenario;
@@ -146,7 +146,7 @@ private Q_SLOTS:
                      << "S: * SEARCH"
                      << "S: A000001 OK search done";
 
-            QTest::newRow("OR search with no results") << scenario << false << 0 << KIMAP::Term(KIMAP::Term::Or, QVector<KIMAP::Term>() << KIMAP::Term(KIMAP::Term::New) << KIMAP::Term(QLatin1String("Message-Id"), QLatin1String("<12345678@mail.box>")));
+            QTest::newRow("OR search with no results") << scenario << false << 0 << KIMAP::Term(KIMAP::Term::Or, QVector<KIMAP::Term>() << KIMAP::Term(KIMAP::Term::New) << KIMAP::Term(QStringLiteral("Message-Id"), QStringLiteral("<12345678@mail.box>")));
         }
         {
             QList<QByteArray> scenario;
@@ -154,7 +154,7 @@ private Q_SLOTS:
                      << "C: A000001 SEARCH TO \"<testuser@kde.testserver>\""
                      << "S: * SEARCH 1"
                      << "S: A000001 OK search done";
-            QTest::newRow("literal data search") << scenario << false << 1 << KIMAP::Term(KIMAP::Term::To, QLatin1String("<testuser@kde.testserver>"));
+            QTest::newRow("literal data search") << scenario << false << 1 << KIMAP::Term(KIMAP::Term::To, QStringLiteral("<testuser@kde.testserver>"));
         }
         {
             QList<QByteArray> scenario;
@@ -177,7 +177,7 @@ private Q_SLOTS:
         fakeServer.setScenario(scenario);
         fakeServer.startAndWait();
 
-        KIMAP::Session session(QLatin1String("127.0.0.1"), 5989);
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
         KIMAP::SearchJob *job = new KIMAP::SearchJob(&session);
         job->setUidBased(uidbased);

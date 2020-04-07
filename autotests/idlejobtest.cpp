@@ -203,8 +203,8 @@ private Q_SLOTS:
 
         KIMAP::IdleJob *idle = new KIMAP::IdleJob(&session);
 
-        QSignalSpy statsSpy(idle, SIGNAL(mailBoxStats(KIMAP::IdleJob*,QString,int,int)));
-        QSignalSpy flagsSpy(idle, SIGNAL(mailBoxMessageFlagsChanged(KIMAP::IdleJob*,qint64)));
+        QSignalSpy statsSpy(idle, &KIMAP::IdleJob::mailBoxStats);
+        QSignalSpy flagsSpy(idle, &KIMAP::IdleJob::mailBoxMessageFlagsChanged);
 
         bool result = idle->exec();
 

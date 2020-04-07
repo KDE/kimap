@@ -148,11 +148,11 @@ void testAcl(Session *session, const QString &user)
 {
     qDebug() << "TESTING: ACL commands";
     CreateJob *create = new CreateJob(session);
-    create->setMailBox(QLatin1String("INBOX/TestFolder"));
+    create->setMailBox(QStringLiteral("INBOX/TestFolder"));
     create->exec();
 
     ListRightsJob *listRights = new ListRightsJob(session);
-    listRights->setMailBox(QLatin1String("INBOX/TestFolder"));
+    listRights->setMailBox(QStringLiteral("INBOX/TestFolder"));
     listRights->setIdentifier(user.toLatin1());
     listRights->exec();
     qDebug() << "Default rights on INBOX/TestFolder: " << Acl::rightsToString(listRights->defaultRights());
@@ -164,7 +164,7 @@ void testAcl(Session *session, const QString &user)
     qDebug() << "Possible rights on INBOX/TestFolder: " << strList;
 
     MyRightsJob *myRights = new MyRightsJob(session);
-    myRights->setMailBox(QLatin1String("INBOX/TestFolder"));
+    myRights->setMailBox(QStringLiteral("INBOX/TestFolder"));
     myRights->exec();
 
     Acl::Rights mine = myRights->rights();
@@ -173,7 +173,7 @@ void testAcl(Session *session, const QString &user)
     Q_ASSERT_X(myRights->hasRightEnabled(Acl::Read), "Reading INBOX is NOT possible", "");
 
     GetAclJob *getAcl = new GetAclJob(session);
-    getAcl->setMailBox(QLatin1String("INBOX/TestFolder"));
+    getAcl->setMailBox(QStringLiteral("INBOX/TestFolder"));
     getAcl->exec();
     qDebug() << "Anyone rights on INBOX/TestFolder: " << getAcl->rights("anyone");
     Acl::Rights users = getAcl->rights(user.toLatin1());
@@ -183,13 +183,13 @@ void testAcl(Session *session, const QString &user)
     qDebug() << "Removing Delete right ";
     mine = Acl::Delete;
     SetAclJob *setAcl = new SetAclJob(session);
-    setAcl->setMailBox(QLatin1String("INBOX/TestFolder"));
+    setAcl->setMailBox(QStringLiteral("INBOX/TestFolder"));
     setAcl->setIdentifier(user.toLatin1());
     setAcl->setRights(AclJobBase::Remove, mine);
     setAcl->exec();
 
     getAcl = new GetAclJob(session);
-    getAcl->setMailBox(QLatin1String("INBOX/TestFolder"));
+    getAcl->setMailBox(QStringLiteral("INBOX/TestFolder"));
     getAcl->exec();
     users = getAcl->rights(user.toLatin1());
     qDebug() << user << " rights on INBOX/TestFolder: " << Acl::rightsToString(users);
@@ -197,20 +197,20 @@ void testAcl(Session *session, const QString &user)
     qDebug() << "Adding back Delete right ";
     mine = Acl::Delete;
     setAcl = new SetAclJob(session);
-    setAcl->setMailBox(QLatin1String("INBOX/TestFolder"));
+    setAcl->setMailBox(QStringLiteral("INBOX/TestFolder"));
     setAcl->setIdentifier(user.toLatin1());
     setAcl->setRights(AclJobBase::Add, mine);
     setAcl->exec();
 
     getAcl = new GetAclJob(session);
-    getAcl->setMailBox(QLatin1String("INBOX/TestFolder"));
+    getAcl->setMailBox(QStringLiteral("INBOX/TestFolder"));
     getAcl->exec();
     users = getAcl->rights(user.toLatin1());
     qDebug() << user << " rights on INBOX/TestFolder: " << Acl::rightsToString(users);
 
     //cleanup
     DeleteJob *deletejob = new DeleteJob(session);
-    deletejob->setMailBox(QLatin1String("INBOX/TestFolder"));
+    deletejob->setMailBox(QStringLiteral("INBOX/TestFolder"));
     deletejob->exec();
 }
 
@@ -219,7 +219,7 @@ void testAppendAndStore(Session *session)
     qDebug() << "TESTING: APPEND and STORE";
     //setup
     CreateJob *create = new CreateJob(session);
-    create->setMailBox(QLatin1String("INBOX/TestFolder"));
+    create->setMailBox(QStringLiteral("INBOX/TestFolder"));
     create->exec();
 
     QByteArray testMailContent =
@@ -242,7 +242,7 @@ void testAppendAndStore(Session *session)
 
     qDebug() << "Read the message back and compare...";
     SelectJob *select = new SelectJob(session);
-    select->setMailBox(QLatin1String("INBOX/TestFolder"));
+    select->setMailBox(QStringLiteral("INBOX/TestFolder"));
     select->exec();
 
     FetchJob *fetch = new FetchJob(session);
@@ -314,30 +314,30 @@ void testRename(Session *session)
     qDebug() << "TESTING: RENAME";
     //setup
     CreateJob *create = new CreateJob(session);
-    create->setMailBox(QLatin1String("INBOX/TestFolder"));
+    create->setMailBox(QStringLiteral("INBOX/TestFolder"));
     create->exec();
 
     qDebug() << "Listing mailboxes with name TestFolder:";
-    listFolders(session, true, QLatin1String("TestFolder"));
+    listFolders(session, true, QStringLiteral("TestFolder"));
 
     //actual tests
     qDebug() << "Renaming to RenamedTestFolder";
     RenameJob *rename = new RenameJob(session);
-    rename->setSourceMailBox(QLatin1String("INBOX/TestFolder"));
-    rename->setDestinationMailBox(QLatin1String("INBOX/RenamedTestFolder"));
+    rename->setSourceMailBox(QStringLiteral("INBOX/TestFolder"));
+    rename->setDestinationMailBox(QStringLiteral("INBOX/RenamedTestFolder"));
     rename->exec();
 
     qDebug() << "Listing mailboxes with name TestFolder:";
-    listFolders(session, true, QLatin1String("TestFolder"));
+    listFolders(session, true, QStringLiteral("TestFolder"));
     qDebug() << "Listing mailboxes with name RenamedTestFolder:";
-    listFolders(session, true, QLatin1String("RenamedTestFolder"));
+    listFolders(session, true, QStringLiteral("RenamedTestFolder"));
 
     //cleanup
     DeleteJob *deletejob = new DeleteJob(session);
-    deletejob->setMailBox(QLatin1String("INBOX/TestFolder"));
+    deletejob->setMailBox(QStringLiteral("INBOX/TestFolder"));
     deletejob->exec();
     deletejob = new DeleteJob(session);
-    deletejob->setMailBox(QLatin1String("INBOX/RenamedTestFolder"));
+    deletejob->setMailBox(QStringLiteral("INBOX/RenamedTestFolder"));
     deletejob->exec();
 }
 
@@ -346,32 +346,32 @@ void testSubscribe(Session *session)
     qDebug() << "TESTING: SUBSCRIBE/UNSUBSCRIBE";
     //setup
     CreateJob *create = new CreateJob(session);
-    create->setMailBox(QLatin1String("INBOX/TestFolder"));
+    create->setMailBox(QStringLiteral("INBOX/TestFolder"));
     create->exec();
 
     qDebug() << "Listing  subscribed mailboxes with name TestFolder:";
-    listFolders(session, false, QLatin1String("TestFolder"));
+    listFolders(session, false, QStringLiteral("TestFolder"));
 
     //actual tests
     qDebug() << "Subscribing to INBOX/TestFolder";
     SubscribeJob *subscribe = new SubscribeJob(session);
-    subscribe->setMailBox(QLatin1String("INBOX/TestFolder"));
+    subscribe->setMailBox(QStringLiteral("INBOX/TestFolder"));
     subscribe->exec();
 
     qDebug() << "Listing  subscribed mailboxes with name TestFolder:";
-    listFolders(session, false, QLatin1String("TestFolder"));
+    listFolders(session, false, QStringLiteral("TestFolder"));
 
     qDebug() << "Unsubscribing from INBOX/TestFolder";
     UnsubscribeJob *unsubscribe = new UnsubscribeJob(session);
-    unsubscribe->setMailBox(QLatin1String("INBOX/TestFolder"));
+    unsubscribe->setMailBox(QStringLiteral("INBOX/TestFolder"));
     unsubscribe->exec();
 
     qDebug() << "Listing  subscribed mailboxes with name TestFolder:";
-    listFolders(session, false, QLatin1String("TestFolder"));
+    listFolders(session, false, QStringLiteral("TestFolder"));
 
     //cleanup
     DeleteJob *deletejob = new DeleteJob(session);
-    deletejob->setMailBox(QLatin1String("INBOX/TestFolder"));
+    deletejob->setMailBox(QStringLiteral("INBOX/TestFolder"));
     deletejob->exec();
 }
 
@@ -380,19 +380,19 @@ void testDelete(Session *session)
     qDebug() << "TESTING: DELETE";
     qDebug() << "Creating INBOX/TestFolder:";
     CreateJob *create = new CreateJob(session);
-    create->setMailBox(QLatin1String("INBOX/TestFolder"));
+    create->setMailBox(QStringLiteral("INBOX/TestFolder"));
     create->exec();
 
     qDebug() << "Listing  with name TestFolder  before DELETE:";
-    listFolders(session, true, QLatin1String("TestFolder"));
+    listFolders(session, true, QStringLiteral("TestFolder"));
 
     qDebug() << "Deleting INBOX/TestFolder";
     DeleteJob *deletejob = new DeleteJob(session);
-    deletejob->setMailBox(QLatin1String("INBOX/TestFolder"));
+    deletejob->setMailBox(QStringLiteral("INBOX/TestFolder"));
     deletejob->exec();
 
     qDebug() << "Listing with name TestFolder after DELETE:";
-    listFolders(session, true, QLatin1String("TestFolder"));
+    listFolders(session, true, QStringLiteral("TestFolder"));
 }
 
 int main(int argc, char **argv)
