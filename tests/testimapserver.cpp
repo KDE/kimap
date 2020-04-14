@@ -235,7 +235,7 @@ void testAppendAndStore(Session *session)
 
     qDebug() << "Append a message in INBOX/TestFolder...";
     AppendJob *append = new AppendJob(session);
-    append->setMailBox(QLatin1String("INBOX/TestFolder"));
+    append->setMailBox(QStringLiteral("INBOX/TestFolder"));
     append->setContent(testMailContent);
     append->exec();
     Q_ASSERT_X(append->error() == 0, "AppendJob", append->errorString().toLocal8Bit().constData());
@@ -483,7 +483,7 @@ int main(int argc, char **argv)
 
     qDebug() << "Selecting INBOX:";
     SelectJob *select = new SelectJob(&session);
-    select->setMailBox(QLatin1String("INBOX"));
+    select->setMailBox(QStringLiteral("INBOX"));
     select->exec();
     Q_ASSERT_X(select->error() == 0, "SelectJob", select->errorString().toLocal8Bit().constData());
     Q_ASSERT(session.state() == Session::Selected);
