@@ -134,7 +134,7 @@ void SessionThread::readMessage()
             }
         }
 
-        emit responseReceived(message);
+        Q_EMIT responseReceived(message);
 
     } catch (const KIMAP::ImapParserException &e) {
         qCWarning(KIMAP_LOG) << "The stream parser raised an exception:" << e.what();
@@ -269,7 +269,7 @@ void SessionThread::doStartSsl(QSsl::SslProtocol protocol)
 void SessionThread::slotSocketDisconnected()
 {
     Q_ASSERT(QThread::currentThread() == thread());
-    emit socketDisconnected();
+    Q_EMIT socketDisconnected();
 }
 
 // Called in secondary thread
@@ -279,7 +279,7 @@ void SessionThread::slotSocketError(QAbstractSocket::SocketError error)
     if (!m_socket) {
         return;
     }
-    emit socketError(error);
+    Q_EMIT socketError(error);
 }
 
 // Called in secondary thread
@@ -308,11 +308,11 @@ void SessionThread::sslConnected()
                       #endif
                            << "items.";
         KSslErrorUiData errorData(m_socket.get());
-        emit sslError(errorData);
+        Q_EMIT sslError(errorData);
     } else {
         qCDebug(KIMAP_LOG) << "TLS negotiation done, the negotiated protocol is" << cipher.protocolString();
         m_encryptedMode = true;
-        emit encryptionNegotiationResult(true, m_socket->sessionProtocol());
+        Q_EMIT encryptionNegotiationResult(true, m_socket->sessionProtocol());
     }
 }
 
@@ -330,14 +330,14 @@ void SessionThread::doSslErrorHandlerResponse(bool response)
     }
     if (response) {
         m_encryptedMode = true;
-        emit encryptionNegotiationResult(true, m_socket->sessionProtocol());
+        Q_EMIT encryptionNegotiationResult(true, m_socket->sessionProtocol());
     } else {
         m_encryptedMode = false;
         //reconnect in unencrypted mode, so new commands can be issued
         m_socket->disconnectFromHost();
         m_socket->waitForDisconnected();
         m_socket->connectToHost(m_hostName, m_port);
-        emit encryptionNegotiationResult(false, QSsl::UnknownProtocol);
+        Q_EMIT encryptionNegotiationResult(false, QSsl::UnknownProtocol);
     }
 }
 

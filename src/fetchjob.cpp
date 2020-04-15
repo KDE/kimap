@@ -58,25 +58,25 @@ public:
         Q_EMIT q->messagesAvailable(pendingMsgs);
 
         if (!pendingParts.isEmpty()) {
-            emit q->partsReceived(selectedMailBox,
+            Q_EMIT q->partsReceived(selectedMailBox,
                                   pendingUids, pendingParts);
-            emit q->partsReceived(selectedMailBox,
+            Q_EMIT q->partsReceived(selectedMailBox,
                                   pendingUids, pendingAttributes,
                                   pendingParts);
         }
         if (!pendingSizes.isEmpty() || !pendingFlags.isEmpty() || !pendingMessages.isEmpty()) {
-            emit q->headersReceived(selectedMailBox,
+            Q_EMIT q->headersReceived(selectedMailBox,
                                     pendingUids, pendingSizes,
                                     pendingFlags, pendingMessages);
-            emit q->headersReceived(selectedMailBox,
+            Q_EMIT q->headersReceived(selectedMailBox,
                                     pendingUids, pendingSizes,
                                     pendingAttributes, pendingFlags,
                                     pendingMessages);
         }
         if (!pendingMessages.isEmpty()) {
-            emit q->messagesReceived(selectedMailBox,
+            Q_EMIT q->messagesReceived(selectedMailBox,
                                      pendingUids, pendingMessages);
-            emit q->messagesReceived(selectedMailBox,
+            Q_EMIT q->messagesReceived(selectedMailBox,
                                      pendingUids, pendingAttributes,
                                      pendingMessages);
         }

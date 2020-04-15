@@ -70,7 +70,7 @@ void CapabilitiesJob::handleResponse(const Response &response)
             for (int i = 2; i < responseSize; ++i) {
                 d->capabilities << QLatin1String(response.content[i].toString().toUpper());
             }
-            emit capabilitiesReceived(d->capabilities);
+            Q_EMIT capabilitiesReceived(d->capabilities);
         }
     }
 }

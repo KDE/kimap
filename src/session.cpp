@@ -161,7 +161,7 @@ SessionPrivate::~SessionPrivate()
 void SessionPrivate::addJob(Job *job)
 {
     queue.append(job);
-    emit q->jobQueueSizeChanged(q->jobQueueSize());
+    Q_EMIT q->jobQueueSizeChanged(q->jobQueueSize());
 
     QObject::connect(job, &KJob::result, this, &SessionPrivate::jobDone);
     QObject::connect(job, &QObject::destroyed, this, &SessionPrivate::jobDestroyed);
@@ -198,7 +198,7 @@ void SessionPrivate::jobDone(KJob *job)
 
     jobRunning = false;
     currentJob = nullptr;
-    emit q->jobQueueSizeChanged(q->jobQueueSize());
+    Q_EMIT q->jobQueueSizeChanged(q->jobQueueSize());
     startNext();
 }
 
@@ -313,7 +313,7 @@ void SessionPrivate::setState(Session::State s)
     if (s != state) {
         Session::State oldState = state;
         state = s;
-        emit q->stateChanged(state, oldState);
+        Q_EMIT q->stateChanged(state, oldState);
     }
 }
 
@@ -392,9 +392,9 @@ void SessionPrivate::socketDisconnected()
 
     if (isSocketConnected) {
         setState(Session::Disconnected);
-        emit q->connectionLost();
+        Q_EMIT q->connectionLost();
     } else {
-        emit q->connectionFailed();
+        Q_EMIT q->connectionFailed();
     }
 
     isSocketConnected = false;
@@ -423,7 +423,7 @@ void SessionPrivate::socketError(QAbstractSocket::SocketError error)
     if (isSocketConnected) {
         thread->closeSocket();
     } else {
-        emit q->connectionFailed();
+        Q_EMIT q->connectionFailed();
         clearJobQueue();
     }
 }
@@ -440,7 +440,7 @@ void SessionPrivate::clearJobQueue()
     QQueue<Job *> queueCopy = queue; // copy because jobDestroyed calls removeAll
     qDeleteAll(queueCopy);
     queue.clear();
-    emit q->jobQueueSizeChanged(0);
+    Q_EMIT q->jobQueueSizeChanged(0);
 }
 
 void SessionPrivate::startSsl(QSsl::SslProtocol protocol)
@@ -460,7 +460,7 @@ void SessionPrivate::onEncryptionNegotiationResult(bool isEncrypted, QSsl::SslPr
     } else {
         sslVersion = QSsl::UnknownProtocol;
     }
-    emit encryptionNegotiationResult(isEncrypted);
+    Q_EMIT encryptionNegotiationResult(isEncrypted);
 }
 
 QSsl::SslProtocol SessionPrivate::negotiatedEncryption() const

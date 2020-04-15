@@ -42,7 +42,7 @@ public:
             return;
         }
 
-        emit q->mailBoxesReceived(pendingDescriptors, pendingFlags);
+        Q_EMIT q->mailBoxesReceived(pendingDescriptors, pendingFlags);
 
         pendingDescriptors.clear();
         pendingFlags.clear();

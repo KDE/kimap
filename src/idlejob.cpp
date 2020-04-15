@@ -42,7 +42,7 @@ public:
     {
         emitStatsTimer.stop();
 
-        emit q->mailBoxStats(q, m_session->selectedMailBox(),
+        Q_EMIT q->mailBoxStats(q, m_session->selectedMailBox(),
                              messageCount, recentCount);
 
         lastMessageCount = messageCount;
@@ -107,7 +107,7 @@ void IdleJob::handleResponse(const Response &response)
 {
     Q_D(IdleJob);
 
-    // We can predict it'll be handled by handleErrorReplies() so emit
+    // We can predict it'll be handled by handleErrorReplies() so Q_EMIT
     // pending signals now (if needed) so that result() will really be
     // the last emitted signal.
     if (!response.content.isEmpty() &&
