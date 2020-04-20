@@ -133,7 +133,7 @@ FetchJob::~FetchJob()
 void FetchJob::setSequenceSet(const ImapSet &set)
 {
     Q_D(FetchJob);
-    Q_ASSERT(!set.toImapSequenceSet().trimmed().isEmpty());
+    Q_ASSERT(!set.isEmpty());
     d->set = set;
 }
 
@@ -189,6 +189,7 @@ void FetchJob::doStart()
 {
     Q_D(FetchJob);
 
+    d->set.optimize();
     QByteArray parameters = d->set.toImapSequenceSet() + ' ';
     Q_ASSERT(!parameters.trimmed().isEmpty());
 

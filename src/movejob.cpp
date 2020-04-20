@@ -107,6 +107,7 @@ void MoveJob::doStart()
 {
     Q_D(MoveJob);
 
+    d->set.optimize();
     QByteArray parameters = d->set.toImapSequenceSet() + ' ';
     parameters += '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8()) + '\"';
 

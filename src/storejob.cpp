@@ -163,6 +163,7 @@ void StoreJob::doStart()
         return;
     }
 
+    d->set.optimize();
     QByteArray parameters = d->set.toImapSequenceSet() + ' ';
 
     if (!d->flags.isEmpty()) {

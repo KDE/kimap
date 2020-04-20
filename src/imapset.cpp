@@ -316,6 +316,38 @@ bool ImapSet::isEmpty() const
     return d->intervals.isEmpty();
 }
 
+void ImapSet::optimize()
+{
+    // There's nothing to optimize if we have fewer than 2 intervals
+    if (d->intervals.size() < 2) {
+        return;
+    }
+
+    // Sort the intervals in ascending order by their beginning value
+    std::sort(d->intervals.begin(), d->intervals.end(),
+              [](const ImapInterval &lhs, const ImapInterval &rhs) {
+                   return lhs.begin() < rhs.begin();
+              });
+
+    auto it = d->intervals.begin();
+    while (it != d->intervals.end() && it != std::prev(d->intervals.end())) {
+        auto next = std::next(it);
+        // +1 so that we also merge neighbouring intervals, e.g. 1:2,3:4 -> 1:4
+        if (it->hasDefinedEnd() && it->end() + 1 >= next->begin()) {
+            next->setBegin(it->begin());
+            if (next->hasDefinedEnd() && it->end() > next->end()) {
+                next->setEnd(it->end());
+            }
+            it = d->intervals.erase(it);
+        } else if (!it->hasDefinedEnd()) {
+            // We can eat up all the remaining intervals
+            it = d->intervals.erase(next, d->intervals.end());
+        } else {
+            ++it;
+        }
+    }
+}
+
 QDebug &operator<<(QDebug &d, const ImapInterval &interval)
 {
     d << interval.toImapSequence();

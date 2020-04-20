@@ -224,6 +224,15 @@ public:
     */
     bool isEmpty() const;
 
+    /**
+     * Optimizes the ImapSet by sorting and merging overlapping intervals.
+     *
+     * Normally you shouldn't need to call this method. KIMAP will make sure
+     * to opimize the ImapSet before serializing it to string and sending it
+     * to the IMAP server.
+     */
+    void optimize();
+
 private:
     class Private;
     QSharedDataPointer<Private> d;
