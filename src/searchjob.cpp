@@ -69,25 +69,24 @@ Term::Term(Term::Relation relation, const QVector<Term> &subterms)
     :  d(new Term::Private)
 {
     if (subterms.size() >= 2) {
-        d->command += "(";
         if (relation == KIMAP::Term::Or) {
-            d->command += "OR ";
-            d->command += subterms.at(0).serialize() + ' ';
-            if (subterms.size() >= 3) {
-                Term t(relation, subterms.mid(1));
-                d->command += t.serialize();
-            } else if (subterms.size() == 2) {
-                d->command += subterms.at(1).serialize();
+            for (int i = 0; i < subterms.size() - 1; ++i) {
+                d->command += "(OR " + subterms[i].serialize() + " ";
+            }
+            d->command += subterms.back().serialize();
+            for (int i = 0; i < subterms.size() - 1; ++i) {
+                d->command += ")";
             }
         } else {
+            d->command += "(";
             for (const Term &t : subterms) {
                 d->command += t.serialize() + ' ';
             }
             if (!subterms.isEmpty()) {
                 d->command.chop(1);
             }
+            d->command += ")";
         }
-        d->command += ")";
     } else if (subterms.size() == 1) {
         d->command += subterms.first().serialize();
     } else {

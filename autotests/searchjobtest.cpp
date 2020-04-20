@@ -164,6 +164,19 @@ private Q_SLOTS:
                      << "S: A000001 OK search done";
             QTest::newRow("uidbased NOT NEW search") << scenario << true << 6 << KIMAP::Term(KIMAP::Term::New).setNegated(true);
         }
+
+        {
+            QList<QByteArray> scenario;
+            scenario << FakeServer::preauth()
+                     << "C: A000001 UID SEARCH OR HEADER Message-Id \"<1234567@mail.box>\" (OR HEADER Message-Id \"<7654321@mail.box>\" (OR HEADER Message-Id \"<abcdefg@mail.box>\" HEADER Message-Id \"<gfedcba@mail.box>\"))"
+                     << "S: * SEARCH 1 2 3 4"
+                     << "S: A000001 OK search done";
+            KIMAP::Term term{KIMAP::Term::Or, {KIMAP::Term{QStringLiteral("Message-Id"), QStringLiteral("<1234567@mail.box>")},
+                                               KIMAP::Term{QStringLiteral("Message-Id"), QStringLiteral("<7654321@mail.box>")},
+                                               KIMAP::Term{QStringLiteral("Message-Id"), QStringLiteral("<abcdefg@mail.box>")},
+                                               KIMAP::Term{QStringLiteral("Message-Id"), QStringLiteral("<gfedcba@mail.box>")}}};
+            QTest::newRow("OR with multiple subterms") << scenario << true << 4 << term;
+        }
     }
 
     void testSearchTerm()
