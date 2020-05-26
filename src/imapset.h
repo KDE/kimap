@@ -134,7 +134,7 @@ private:
 };
 
 /**
-  Represents a set of natural numbers (1->\f$\infty\f$) in a as compact as possible form.
+  Represents a set of natural numbers (1->∞) in a as compact as possible form.
   Used to address Akonadi items via the IMAP protocol or in the database.
   This class is implicitly shared.
 */
