@@ -1,7 +1,7 @@
 /*
    This file is part of the kimap library.
-   Copyright (C) 2007 Tom Albers <tomalbers@kde.nl>
-   Copyright (c) 2007 Allen Winter <winter@kde.org>
+   SPDX-FileCopyrightText: 2007 Tom Albers <tomalbers@kde.nl>
+   SPDX-FileCopyrightText: 2007 Allen Winter <winter@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

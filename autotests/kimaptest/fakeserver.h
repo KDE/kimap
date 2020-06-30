@@ -1,8 +1,8 @@
 /*
-   Copyright (C) 2008 Omat Holding B.V. <info@omat.nl>
+   SPDX-FileCopyrightText: 2008 Omat Holding B.V. <info@omat.nl>
 
-   Copyright (C) 2010 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
-   Author: Kevin Ottens <kevin@kdab.com>
+   SPDX-FileCopyrightText: 2010 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+   SPDX-FileContributor: Kevin Ottens <kevin@kdab.com>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public

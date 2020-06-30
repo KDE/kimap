@@ -1,7 +1,7 @@
 /**********************************************************************
  *
  *   rfccodecs.cpp - handler for various rfc/mime encodings
- *   Copyright (C) 2000 s.carstens@gmx.de
+ *   SPDX-FileCopyrightText: 2000 s .carstens@gmx.de
  *
  *   This library is free software; you can redistribute it and/or
  *   modify it under the terms of the GNU Library General Public

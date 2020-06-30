@@ -1,6 +1,6 @@
 /*
-    Copyright (c) 2010 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
-    Author: Kevin Ottens <kevin@kdab.com>
+    SPDX-FileCopyrightText: 2010 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+    SPDX-FileContributor: Kevin Ottens <kevin@kdab.com>
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Library General Public License as published by
