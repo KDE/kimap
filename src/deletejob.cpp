@@ -42,6 +42,33 @@ void DeleteJob::doStart()
     d->tags << d->sessionInternal()->sendCommand("DELETE", '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8()) + '\"');
 }
 
+void DeleteJob::handleResponse(const Response &response)
+{
+    Q_D(DeleteJob);
+
+    if (!response.content.isEmpty() &&
+        d->tags.contains(response.content.first().toString())) {
+        if (response.content.size() >= 2 &&
+            response.content[1].toString() == "NO") {
+            for (auto it = response.responseCode.cbegin(), end = response.responseCode.cend();
+                 it != end; ++it) {
+                // NONEXISTENT can be considered a success during DELETE
+                // cf. https://tools.ietf.org/html/rfc5530#section-3
+                if (it->toString() == "NONEXISTENT") {
+                    // Code copied from handleErrorReplies:
+                    d->tags.removeAll(response.content.first().toString());
+                    if (d->tags.isEmpty()) {   // Only emit result when the last command returned
+                        emitResult();
+                    }
+                    return;
+                }
+            }
+        }
+    }
+
+    handleErrorReplies(response);
+}
+
 void DeleteJob::setMailBox(const QString &mailBox)
 {
     Q_D(DeleteJob);
