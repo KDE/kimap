@@ -46,6 +46,18 @@ private Q_SLOTS:
 
         scenario.clear();
         scenario << FakeServer::preauth()
+                 << "C: A000001 DELETE \"foo-IGNOREDCODE\""
+                 << "S: A000001 NO Name \"foo-IGNOREDCODE\" does not exist [IGNOREDCODE]";
+        QTest::newRow("ignoredcode") << "foo-IGNOREDCODE" << scenario;
+
+        scenario.clear();
+        scenario << FakeServer::preauth()
+                 << "C: A000001 DELETE \"foo-NONEXISTENT\""
+                 << "S: A000001 NO Name \"foo-NONEXISTENT\" does not exist [NONEXISTENT]";
+        QTest::newRow("nonexistent") << "foo-NONEXISTENT" << scenario;
+
+        scenario.clear();
+        scenario << FakeServer::preauth()
                  << "C: A000001 DELETE \"foo/bar\""
                  << "S: A000001 OK DELETE completed";
         QTest::newRow("hierarchical") << "foo/bar" << scenario;
@@ -67,6 +79,7 @@ private Q_SLOTS:
         bool result = job->exec();
         QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
         QEXPECT_FAIL("no" , "Expected failure on NO response", Continue);
+        QEXPECT_FAIL("ignoredcode" , "Expected failure on NO response with ignored response code", Continue);
         QVERIFY(result);
         if (result) {
             QCOMPARE(job->mailBox(), mailbox);

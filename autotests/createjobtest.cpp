@@ -43,6 +43,18 @@ private Q_SLOTS:
                  << "C: A000001 CREATE \"INBOX-FAIL-NO\""
                  << "S: A000001 NO create failure";
         QTest::newRow("no") << "INBOX-FAIL-NO" << scenario;
+
+        scenario.clear();
+        scenario << FakeServer::preauth()
+                 << "C: A000001 CREATE \"INBOX-FAIL-IGNOREDCODE\""
+                 << "S: A000001 NO create failure [IGNOREDCODE]";
+        QTest::newRow("ignoredcode") << "INBOX-FAIL-IGNOREDCODE" << scenario;
+
+        scenario.clear();
+        scenario << FakeServer::preauth()
+                 << "C: A000001 CREATE \"INBOX-ALREADYEXISTS\""
+                 << "S: A000001 NO create failure [ALREADYEXISTS]";
+        QTest::newRow("alreadyexists") << "INBOX-ALREADYEXISTS" << scenario;
     }
 
     void testCreate()
@@ -60,6 +72,7 @@ private Q_SLOTS:
         bool result = job->exec();
         QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
         QEXPECT_FAIL("no" , "Expected failure on NO response", Continue);
+        QEXPECT_FAIL("ignoredcode" , "Expected failure on NO response with ignored response code", Continue);
         QVERIFY(result);
         if (result) {
             QCOMPARE(job->mailBox(), mailbox);
