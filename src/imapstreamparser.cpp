@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2006 - 2007 Volker Krause <vkrause@kde.org>
+    SPDX-FileCopyrightText: 2006-2007 Volker Krause <vkrause@kde.org>
     SPDX-FileCopyrightText: 2009 Andras Mantia <amantia@kde.org>
 
     SPDX-FileCopyrightText: 2010 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
