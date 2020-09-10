@@ -23,8 +23,6 @@ public:
     FetchJobPrivate(FetchJob *job, Session *session, const QString &name)
         : JobPrivate(session, name)
         , q(job)
-        , uidBased(false)
-        , gmailEnabled(false)
     { }
 
     ~FetchJobPrivate()
@@ -80,10 +78,10 @@ public:
     FetchJob *const q;
 
     ImapSet set;
-    bool uidBased;
+    bool uidBased = false;
     FetchJob::FetchScope scope;
     QString selectedMailBox;
-    bool gmailEnabled;
+    bool gmailEnabled = false;
 
     QTimer emitPendingsTimer;
     QMap<qint64, MessagePtr> pendingMessages;

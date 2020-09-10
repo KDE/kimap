@@ -19,10 +19,7 @@ class IdleJobPrivate : public JobPrivate
 {
 public:
     IdleJobPrivate(IdleJob *job, Session *session, const QString &name)
-        : JobPrivate(session, name), q(job),
-          messageCount(-1), recentCount(-1),
-          lastMessageCount(-1), lastRecentCount(-1),
-          originalSocketTimeout(-1) { }
+        : JobPrivate(session, name), q(job) { }
     ~IdleJobPrivate() { }
 
     void emitStats()
@@ -48,13 +45,13 @@ public:
 
     QTimer emitStatsTimer;
 
-    int messageCount;
-    int recentCount;
+    int messageCount = -1;
+    int recentCount = -1;
 
-    int lastMessageCount;
-    int lastRecentCount;
+    int lastMessageCount = -1;
+    int lastRecentCount = -1;
 
-    int originalSocketTimeout;
+    int originalSocketTimeout = -1;
 };
 }
 

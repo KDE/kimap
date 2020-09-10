@@ -20,12 +20,12 @@ namespace KIMAP
 class CopyJobPrivate : public JobPrivate
 {
 public:
-    CopyJobPrivate(Session *session, const QString &name) : JobPrivate(session, name), uidBased(false) { }
+    CopyJobPrivate(Session *session, const QString &name) : JobPrivate(session, name) { }
     ~CopyJobPrivate() { }
 
     QString mailBox;
     ImapSet set;
-    bool uidBased;
+    bool uidBased = false;
     ImapSet resultingUids;
 };
 }

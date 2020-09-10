@@ -13,7 +13,6 @@
 using namespace KIMAP;
 
 SessionLogger::SessionLogger()
-    : m_id(0)
 {
     static qint64 nextId = 0;
     m_id = ++nextId;

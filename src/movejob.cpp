@@ -22,7 +22,6 @@ class MoveJobPrivate : public JobPrivate
 public:
     MoveJobPrivate(Session *session, const QString &name) 
         : JobPrivate(session, name)
-        , uidBased(false)
     {}
 
     ~MoveJobPrivate()
@@ -31,7 +30,7 @@ public:
     QString mailBox;
     ImapSet set;
     ImapSet resultingUids;
-    bool uidBased;
+    bool uidBased = false;
 };
 }
 

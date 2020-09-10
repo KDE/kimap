@@ -19,10 +19,10 @@ namespace KIMAP
 class GetMetaDataJobPrivate : public MetaDataJobBasePrivate
 {
 public:
-    GetMetaDataJobPrivate(Session *session, const QString &name) : MetaDataJobBasePrivate(session, name), maxSize(-1), depth("0") { }
+    GetMetaDataJobPrivate(Session *session, const QString &name) : MetaDataJobBasePrivate(session, name), depth("0") { }
     ~GetMetaDataJobPrivate() { }
 
-    qint64 maxSize;
+    qint64 maxSize = -1;
     QByteArray depth;
     QSet<QByteArray> entries;
     QSet<QByteArray> attributes;

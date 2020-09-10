@@ -20,23 +20,21 @@ class SelectJobPrivate : public JobPrivate
 {
 public:
     SelectJobPrivate(Session *session, const QString &name)
-        : JobPrivate(session, name), readOnly(false), messageCount(-1), recentCount(-1),
-          firstUnseenIndex(-1), uidValidity(-1), nextUid(-1), highestmodseq(0),
-          condstoreEnabled(false) { }
+        : JobPrivate(session, name) { }
     ~SelectJobPrivate() { }
 
     QString mailBox;
-    bool readOnly;
+    bool readOnly = false;
 
     QList<QByteArray> flags;
     QList<QByteArray> permanentFlags;
-    int messageCount;
-    int recentCount;
-    int firstUnseenIndex;
-    qint64 uidValidity;
-    qint64 nextUid;
-    quint64 highestmodseq;
-    bool condstoreEnabled;
+    int messageCount = -1;
+    int recentCount = -1;
+    int firstUnseenIndex = -1;
+    qint64 uidValidity = -1;
+    qint64 nextUid = -1;
+    quint64 highestmodseq = 0;
+    bool condstoreEnabled = false;
 };
 }
 

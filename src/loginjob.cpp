@@ -62,7 +62,7 @@ public:
     void sslResponse(bool response);
     void saveServerGreeting(const Response &response);
 
-    LoginJob *q;
+    LoginJob *const q;
 
     QString userName;
     QString authorizationName;

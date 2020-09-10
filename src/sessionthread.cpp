@@ -27,9 +27,7 @@ static const int _kimap_sslErrorUiData = qRegisterMetaType<KSslErrorUiData>();
 }
 
 SessionThread::SessionThread(const QString &hostName, quint16 port)
-    : QObject(), m_hostName(hostName), m_port(port),
-      m_encryptedMode(false),
-      m_useProxy(false)
+    : QObject(), m_hostName(hostName), m_port(port)
 {
     // Just like the Qt docs now recommend, for event-driven threads:
     // don't derive from QThread, create one directly and move the object to it.

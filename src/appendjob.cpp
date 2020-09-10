@@ -19,14 +19,14 @@ namespace KIMAP
 class AppendJobPrivate : public JobPrivate
 {
 public:
-    AppendJobPrivate(Session *session, const QString &name) : JobPrivate(session, name), uid(0) { }
+    AppendJobPrivate(Session *session, const QString &name) : JobPrivate(session, name) { }
     ~AppendJobPrivate() { }
 
     QString mailBox;
     QList<QByteArray> flags;
     QDateTime internalDate;
     QByteArray content;
-    qint64 uid;
+    qint64 uid = 0;
 };
 }
 

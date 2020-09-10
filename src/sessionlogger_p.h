@@ -27,7 +27,7 @@ public:
 
 private:
     Q_DISABLE_COPY(SessionLogger)
-    qint64 m_id;
+    qint64 m_id = 0;
     QFile m_file;
 };
 
