@@ -9,6 +9,7 @@
 #include "kimaptest/fakeserver.h"
 #include "kimap/session.h"
 #include "kimap/expungejob.h"
+#include "imapset.h"
 
 #include <QTest>
 
@@ -20,7 +21,9 @@ private Q_SLOTS:
 
     void testDelete_data()
     {
-        QTest::addColumn<QList<QByteArray> >("scenario");
+        QTest::addColumn<QList<QByteArray>>("scenario");
+        QTest::addColumn<KIMAP::ImapSet>("vanishedSet");
+        QTest::addColumn<quint64>("highestModSeq");
 
         QList<QByteArray> scenario;
         scenario << FakeServer::preauth()
@@ -29,31 +32,43 @@ private Q_SLOTS:
                  << "S: * 2 EXPUNGE"
                  << "S: * 3 EXPUNGE"
                  << "S: A000001 OK EXPUNGE completed";
-        QTest::newRow("good") << scenario;
+        QTest::newRow("good") << scenario << KIMAP::ImapSet{} << 0ULL;
 
         scenario.clear();
         scenario << FakeServer::preauth()
                  << "C: A000001 EXPUNGE"
                  << "S: * 1" // missing EXPUNGE word
                  << "S: A000001 OK EXPUNGE completed";
-        QTest::newRow("non-standard response") << scenario;
+        QTest::newRow("non-standard response") << scenario << KIMAP::ImapSet{} << 0ULL;
 
         scenario.clear();
         scenario << FakeServer::preauth()
                  << "C: A000001 EXPUNGE"
                  << "S: A000001 BAD command unknown or arguments invalid";
-        QTest::newRow("bad") << scenario;
+        QTest::newRow("bad") << scenario << KIMAP::ImapSet{} << 0ULL;
 
         scenario.clear();
         scenario << FakeServer::preauth()
                  << "C: A000001 EXPUNGE"
                  << "S: A000001 NO access denied";
-        QTest::newRow("no") << scenario;
+        QTest::newRow("no") << scenario << KIMAP::ImapSet{} << 0ULL;
+
+        scenario.clear();
+        scenario << FakeServer::preauth()
+                 << "C: A000001 EXPUNGE"
+                 << "S: * VANISHED 405,407,410:420"
+                 << "S: A000001 OK [HIGHESTMODSEQ 123456789] Expunged.";
+        KIMAP::ImapSet vanishedSet;
+        vanishedSet.add({405, 407});
+        vanishedSet.add(KIMAP::ImapInterval{410, 420});
+        QTest::newRow("qresync") << scenario << vanishedSet << 123456789ULL;
     }
 
     void testDelete()
     {
         QFETCH(QList<QByteArray>, scenario);
+        QFETCH(KIMAP::ImapSet, vanishedSet);
+        QFETCH(quint64, highestModSeq);
 
         FakeServer fakeServer;
         fakeServer.setScenario(scenario);
@@ -66,6 +81,10 @@ private Q_SLOTS:
         QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
         QEXPECT_FAIL("no" , "Expected failure on NO response", Continue);
         QVERIFY(result);
+        if (result) {
+            QCOMPARE(job->vanishedMessages(), vanishedSet);
+            QCOMPARE(job->newHighestModSeq(), highestModSeq);
+        }
 
         fakeServer.quit();
     }
