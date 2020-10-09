@@ -21,7 +21,7 @@
 using Messages = QMap<qint64, KIMAP::Message>;
 
 Q_DECLARE_METATYPE(KIMAP::Message)
-Q_DECLARE_METATYPE(Messages);
+Q_DECLARE_METATYPE(Messages)
 
 class SelectJobTest: public QObject
 {
