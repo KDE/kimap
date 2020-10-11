@@ -185,10 +185,7 @@ private Q_SLOTS:
             if (!modified.isEmpty()) {
                 Messages collectedModified;
                 for (const auto &modifiedSpyCatch : modifiedSpy) {
-                    const auto msgs = modifiedSpyCatch.at(0).value<Messages>();
-                    for (auto it = msgs.begin(); it != msgs.end(); ++it) {
-                        collectedModified.insert(it.key(), it.value());
-                    }
+                    collectedModified.insert(modifiedSpyCatch.at(0).value<Messages>());
                 }
 
                 QCOMPARE(collectedModified, modified);
