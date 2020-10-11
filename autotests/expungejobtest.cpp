@@ -59,7 +59,7 @@ private Q_SLOTS:
                  << "S: * VANISHED 405,407,410:420"
                  << "S: A000001 OK [HIGHESTMODSEQ 123456789] Expunged.";
         KIMAP::ImapSet vanishedSet;
-        vanishedSet.add(KIMAP::ImapInterval{405, 407});
+        vanishedSet.add({405, 407});
         vanishedSet.add(KIMAP::ImapInterval{410, 420});
         QTest::newRow("qresync") << scenario << vanishedSet << 123456789ULL;
     }

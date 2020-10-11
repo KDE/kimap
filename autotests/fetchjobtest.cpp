@@ -179,7 +179,7 @@ private Q_SLOTS:
         scope.qresync = true;
         KIMAP::ImapSet vanished;
         vanished.add(KIMAP::ImapInterval{300, 310});
-        vanished.add(KIMAP::ImapInterval{405, 411});
+        vanished.add({405, 411});
         QTest::newRow("qresync") << true << KIMAP::ImapSet(300, 500) << 3 << scenario << scope << vanished;
     }
 
