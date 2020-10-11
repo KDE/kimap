@@ -12,7 +12,6 @@ set(kimap_SRCS
    createjob.cpp
    deleteacljob.cpp
    deletejob.cpp
-   enablejob.cpp
    expungejob.cpp
    fetchjob.cpp
    getacljob.cpp
@@ -98,7 +97,6 @@ ecm_generate_headers(KIMAP_CamelCase_HEADERS
   CreateJob
   DeleteAclJob
   DeleteJob
-  EnableJob
   ExpungeJob
   FetchJob
   GetAclJob
