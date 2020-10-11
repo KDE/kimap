@@ -27,10 +27,7 @@ class EnableJobPrivate;
  * new capabilities to enable will be specified by the user. The user is
  * responsible for making sure the capabilities are supported by the server.
  *
- * The example usecase for this job is to enable support for the QRESYNC
- * extension (RFC5162) on the server.
- *
- * @since 5.16
+ * @since 5.15
  */
 class KIMAP_EXPORT EnableJob : public Job
 {

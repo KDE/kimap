@@ -16,7 +16,6 @@ namespace KIMAP
 
 class Session;
 struct Response;
-class ImapSet;
 class ExpungeJobPrivate;
 
 /**
@@ -40,29 +39,7 @@ class KIMAP_EXPORT ExpungeJob : public Job
 
 public:
     explicit ExpungeJob(Session *session);
-    ~ExpungeJob() override = default;
-
-    /**
-     * Returns UIDs of messages that have been expunged.
-     *
-     * This feature is only available when QRESYNC capability (RFC5162) is
-     * supported by the server and have been enabled on the current session.
-     *
-     * @see KIMAP::EnableJob
-     * @since 5.16
-     */
-    KIMAP::ImapSet vanishedMessages() const;
-
-    /**
-     * Returns new highest modification sequence number.
-     *
-     * This feature is only available when QRESYNC capability (RFC5162) is
-     * supported by the server and have been enabled on the current session.
-     *
-     * @see KIMAP::EnableJob
-     * @since 5.16
-     */
-    quint64 newHighestModSeq() const;
+    ~ExpungeJob() override;
 
 protected:
     void doStart() override;

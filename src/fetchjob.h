@@ -15,8 +15,6 @@
 #include <kmime/kmime_content.h>
 #include <kmime/kmime_message.h>
 
-#include <tuple>
-
 namespace KIMAP
 {
 
@@ -34,14 +32,8 @@ typedef QPair<QByteArray, QVariant> MessageAttribute;
 
 struct Message
 {
-    inline bool operator==(const Message &other) const
-    {
-        return std::tie(uid, size, flags, attributes, parts, message)
-                == std::tie(other.uid, other.size, other.flags, other.attributes, other.parts, other.message);
-    }
-
-    qint64 uid = -1;
-    qint64 size = 0;
+    qint64 uid;
+    qint64 size;
     MessageFlags flags;
     QMap<QByteArray, QVariant> attributes;
     MessageParts parts;
@@ -78,6 +70,8 @@ public:
     class KIMAP_EXPORT FetchScope
     {
     public:
+        FetchScope();
+
         /**
          * Used to indicate what part of the message should be fetched.
          */
@@ -165,7 +159,7 @@ public:
         /**
          * Specify what message data should be fetched.
          */
-        Mode mode = Content;
+        Mode mode;
 
         /**
          * Specify to fetch only items with mod-sequence higher then @p changedSince.
@@ -176,27 +170,11 @@ public:
          *
          * @since 4.12
          */
-        quint64 changedSince = 0;
-
-        /**
-         * Specify whether QRESYNC is supported and should be used.
-         *
-         * When enabled, the @p changedSince parameter must be specified as
-         * well. The server will then also return list of messages that have
-         * been deleted from the mailbox since the specified modification sequence.
-         *
-         * The server must have QRESYNC capability (RFC5162) and it must have
-         * explicitly been enabled via ENABLE command (see @EnableJob).
-         *
-         * QRESYNC can only be used in UID FETCH (@see setUidBased())
-         *
-         * @since 5.16
-         */
-        bool qresync = false;
+        quint64 changedSince;
     };
 
     explicit FetchJob(Session *session);
-    ~FetchJob() override = default;
+    ~FetchJob() override;
 
     /**
      * Set which messages to fetch data for.
@@ -454,21 +432,6 @@ Q_SIGNALS:
      * @since 5.6
      */
     void messagesAvailable(const QMap<qint64, KIMAP::Message> &messages);
-
-    /**
-     * Provides vanished messages.
-     *
-     * This signal is emitted when QRESYNC capability (RFC5162) is available and has
-     * bee enabled on the server, and @p FetchScope::qresync has been set to @p true.
-     * It contains a list of messages that have vanished from the mailbox since the
-     * last modification sequence specified in @p FetchScope::changedSince.
-     *
-     * @param uids UIDs of messages that have been removed from the mailbox since
-     *             the specified modification sequence.
-     *
-     * @since 5.16
-     */
-    void messagesVanished(const KIMAP::ImapSet &uids);
 
 protected:
     void doStart() override;

@@ -31,9 +31,7 @@ class CloseJobPrivate;
  * messages were expunged, so this is quicker than doing
  * an expunge and then implicitly closing the mailbox
  * (by selecting or examining another mailbox or logging
- * out). If the QRESYNC extension (RFC5162) is available on the
- * server and has been enabled, the job will provide a new
- * modification sequence after expunging the deleted messages.
+ * out).
  *
  * No messages are removed if the mailbox is open in a read-only
  * state, or if the server supports ACLs and the user does not
@@ -48,21 +46,10 @@ class KIMAP_EXPORT CloseJob : public Job
 
 public:
     explicit CloseJob(Session *session);
-    ~CloseJob() override = default;
+    ~CloseJob() override;
 
-    /**
-     * Returns new modification sequence number after expunging messages.
-     *
-     * This value is only valid when server supports the QRESYNC extension
-     * (RFC5162) and it has been explicitly enabled on this session.
-     *
-     * @see KIMAP::EnableJob
-     * @since 5.16
-     */
-    quint64 newHighestModSeq() const;
 protected:
     void doStart() override;
-    void handleResponse(const Response &response) override;
 };
 
 }
