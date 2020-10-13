@@ -12,12 +12,19 @@
 #include "kimap/fetchjob.h"
 
 #include <QTest>
+#include <QSignalSpy>
 
 Q_DECLARE_METATYPE(KIMAP::FetchJob::FetchScope)
 
 class FetchJobTest: public QObject
 {
     Q_OBJECT
+
+public:
+    FetchJobTest()
+    {
+        qRegisterMetaType<KIMAP::ImapSet>();
+    }
 
 private:
     QStringList m_signals;
@@ -80,10 +87,11 @@ private Q_SLOTS:
         qRegisterMetaType<KIMAP::FetchJob::FetchScope>();
 
         QTest::addColumn<bool>("uidBased");
-        QTest::addColumn< KIMAP::ImapSet >("set");
+        QTest::addColumn<KIMAP::ImapSet>("set");
         QTest::addColumn<int>("expectedMessageCount");
-        QTest::addColumn< QList<QByteArray> >("scenario");
+        QTest::addColumn<QList<QByteArray>>("scenario");
         QTest::addColumn<KIMAP::FetchJob::FetchScope>("scope");
+        QTest::addColumn<KIMAP::ImapSet>("expectedVanished");
 
         KIMAP::FetchJob::FetchScope scope;
         scope.mode = KIMAP::FetchJob::FetchScope::Flags;
@@ -99,7 +107,7 @@ private Q_SLOTS:
                  << "S: A000001 OK fetch done";
 
         QTest::newRow("messages have empty flags (with changedsince)") << false << KIMAP::ImapSet(1, 4) << 4
-                << scenario << scope;
+                << scenario << scope << KIMAP::ImapSet{};
 
         scenario.clear();
         scope.changedSince = 0;
@@ -112,7 +120,7 @@ private Q_SLOTS:
                  << "S: A000001 OK fetch done";
 
         QTest::newRow("messages have empty flags") << false << KIMAP::ImapSet(1, 4) << 4
-                << scenario << scope;
+                << scenario << scope << KIMAP::ImapSet{};
 
         scenario.clear();
         // kill the connection part-way through a list, with carriage returns at end
@@ -124,7 +132,7 @@ private Q_SLOTS:
                  << "S: From: John Smith <jonathanr.smith@foobarbaz.com>\r\nTo: \"amagicemailaddress@foobarbazbarfoo.com\"\r\n\t<amagicemailaddress@foobarbazbarfoo.com>\r\nDate: Mon, 11 Oct 2010 03:34:48 +0100\r\nSubject: unsubscribe\r\nMessage-ID: <ASDFFDSASDFFDS@foobarbaz.com>\r\n\r\n"
                  << "X";
         scope.mode = KIMAP::FetchJob::FetchScope::Headers;
-        QTest::newRow("connection drop") << false << KIMAP::ImapSet(11, 11) << 1 << scenario << scope;
+        QTest::newRow("connection drop") << false << KIMAP::ImapSet(11, 11) << 1 << scenario << scope << KIMAP::ImapSet{};
 
         scenario.clear();
         // Important bit here if "([127.0.0.1])" which used to crash the stream parser
@@ -134,7 +142,7 @@ private Q_SLOTS:
                  << "S: ([127.0.0.1])\r\nDate: Mon, 11 Oct 2010 03:34:48 +0100\r\nSubject: unsubscribe\r\nMessage-ID: <ASDFFDSASDFFDS@foobarbaz.com>\r\n\r\n"
                  << "X";
         scope.mode = KIMAP::FetchJob::FetchScope::Headers;
-        QTest::newRow("buffer overwrite") << false << KIMAP::ImapSet(11, 11) << 1 << scenario << scope;
+        QTest::newRow("buffer overwrite") << false << KIMAP::ImapSet(11, 11) << 1 << scenario << scope << KIMAP::ImapSet{};
 
         scenario.clear();
         // We're assuming a buffer overwrite here which made us miss the opening parenthesis
@@ -144,7 +152,7 @@ private Q_SLOTS:
                  << "S: * 11 FETCH {10}doh!\r\n\r\n\r\n)\r\n"
                  << "X";
         scope.mode = KIMAP::FetchJob::FetchScope::Headers;
-        QTest::newRow("buffer overwrite 2") << false << KIMAP::ImapSet(11, 11) << 1 << scenario << scope;
+        QTest::newRow("buffer overwrite 2") << false << KIMAP::ImapSet(11, 11) << 1 << scenario << scope << KIMAP::ImapSet{};
 
         scenario.clear();
         scenario << FakeServer::preauth()
@@ -155,7 +163,24 @@ private Q_SLOTS:
         scope.mode = KIMAP::FetchJob::FetchScope::FullHeaders;
         scope.changedSince = 123456789;
         QTest::newRow("fetch full headers") << false << KIMAP::ImapSet(11, 11) << 1
-                                            << scenario << scope;
+                                            << scenario << scope << KIMAP::ImapSet{};
+
+
+        scenario.clear();
+        scenario << FakeServer::preauth()
+                 << "C: A000001 UID FETCH 300:500 (FLAGS UID) (CHANGEDSINCE 12345 VANISHED)"
+                 << "S: * VANISHED (EARLIER) 300:310,405,411"
+                 << "S: * 1 FETCH (UID 404 MODSEQ (65402) FLAGS (\\Seen))"
+                 << "S: * 2 FETCH (UID 406 MODSEQ (75403) FLAGS (\\Deleted))"
+                 << "S: * 4 FETCH (UID 408 MODSEQ (29738) FLAGS ($Nojunk $AutoJunk $MDNSent))"
+                 << "S: A000001 OK Fetch completed";
+        scope.mode = KIMAP::FetchJob::FetchScope::Flags;
+        scope.changedSince = 12345;
+        scope.qresync = true;
+        KIMAP::ImapSet vanished;
+        vanished.add(KIMAP::ImapInterval{300, 310});
+        vanished.add(KIMAP::ImapInterval{405, 411});
+        QTest::newRow("qresync") << true << KIMAP::ImapSet(300, 500) << 3 << scenario << scope << vanished;
     }
 
     void testFetch()
@@ -165,6 +190,7 @@ private Q_SLOTS:
         QFETCH(int, expectedMessageCount);
         QFETCH(QList<QByteArray>, scenario);
         QFETCH(KIMAP::FetchJob::FetchScope, scope);
+        QFETCH(KIMAP::ImapSet, expectedVanished);
 
         FakeServer fakeServer;
         fakeServer.setScenario(scenario);
@@ -192,6 +218,9 @@ private Q_SLOTS:
         connect(job, &KIMAP::FetchJob::messagesAvailable,
                 this, &FetchJobTest::onMessagesAvailable);
 
+        QSignalSpy vanishedSpy(job, &KIMAP::FetchJob::messagesVanished);
+        QVERIFY(vanishedSpy.isValid());
+
         bool result = job->exec();
         QEXPECT_FAIL("connection drop", "Expected failure on connection drop", Continue);
         QEXPECT_FAIL("buffer overwrite", "Expected failure on confused list", Continue);
@@ -201,6 +230,10 @@ private Q_SLOTS:
             QVERIFY(m_signals.count() > 0);
             QCOMPARE(m_uids.count(), expectedMessageCount);
             QCOMPARE(m_msgs.count(), expectedMessageCount);
+            if (scope.qresync) {
+                QCOMPARE(vanishedSpy.size(), 1);
+                QCOMPARE(vanishedSpy.at(0).at(0).value<KIMAP::ImapSet>(), expectedVanished);
+            }
         }
 
         QVERIFY(fakeServer.isAllScenarioDone());

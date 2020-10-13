@@ -96,23 +96,12 @@ public:
 
 using namespace KIMAP;
 
-FetchJob::FetchScope::FetchScope():
-    mode(FetchScope::Content),
-    changedSince(0)
-{
-
-}
-
 FetchJob::FetchJob(Session *session)
     : Job(*new FetchJobPrivate(this, session, i18n("Fetch")))
 {
     Q_D(FetchJob);
     connect(&d->emitPendingsTimer, SIGNAL(timeout()),
             this, SLOT(emitPendings()));
-}
-
-FetchJob::~FetchJob()
-{
 }
 
 void FetchJob::setSequenceSet(const ImapSet &set)
@@ -232,7 +221,11 @@ void FetchJob::doStart()
     parameters += ")";
 
     if (d->scope.changedSince > 0) {
-        parameters += " (CHANGEDSINCE " + QByteArray::number(d->scope.changedSince) + ")";
+        parameters += " (CHANGEDSINCE " + QByteArray::number(d->scope.changedSince);
+        if (d->scope.qresync) {
+            parameters += " VANISHED";
+        }
+        parameters += ")";
     }
 
     QByteArray command = "FETCH";
@@ -260,11 +253,15 @@ void FetchJob::handleResponse(const Response &response)
 
     if (handleErrorReplies(response) == NotHandled) {
         if (response.content.size() == 4 &&
+                response.content[1].toString() == "VANISHED") {
+            const auto vanishedSet = ImapSet::fromImapSequenceSet(response.content[3].toString());
+            Q_EMIT messagesVanished(vanishedSet);
+        } else if (response.content.size() == 4 &&
                 response.content[2].toString() == "FETCH" &&
                 response.content[3].type() == Response::Part::List) {
 
-            qint64 id = response.content[1].toString().toLongLong();
-            QList<QByteArray> content = response.content[3].toList();
+            const qint64 id = response.content[1].toString().toLongLong();
+            const QList<QByteArray> content = response.content[3].toList();
 
             Message msg;
             MessagePtr message(new KMime::Message);

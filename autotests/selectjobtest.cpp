@@ -15,10 +15,25 @@
 #include "kimap/selectjob.h"
 
 #include <QTest>
+#include <QSignalSpy>
+
+
+using Messages = QMap<qint64, KIMAP::Message>;
+
+Q_DECLARE_METATYPE(KIMAP::Message)
+Q_DECLARE_METATYPE(Messages)
 
 class SelectJobTest: public QObject
 {
     Q_OBJECT
+
+public:
+    explicit SelectJobTest()
+    {
+        qRegisterMetaType<KIMAP::ImapSet>();
+        qRegisterMetaType<KIMAP::Message>();
+        qRegisterMetaType<QMap<qint64, KIMAP::Message>>("QMap<qint64,KIMAP::Message>");
+    }
 
 private Q_SLOTS:
 
@@ -35,6 +50,11 @@ private Q_SLOTS:
         QTest::addColumn<quint64>("highestmodseq");
         QTest::addColumn<bool>("condstoreEnabled");
         QTest::addColumn<bool>("readonly");
+        QTest::addColumn<qint64>("lastUidvalidity");
+        QTest::addColumn<quint64>("lastModseq");
+        QTest::addColumn<KIMAP::ImapSet>("vanished");
+        QTest::addColumn<Messages>("modified");
+
 
         QList<QByteArray> scenario;
         QList<QByteArray> flags;
@@ -53,7 +73,8 @@ private Q_SLOTS:
 
         flags << "\\Answered" << "\\Flagged" << "\\Deleted" << "\\Seen" << "\\Draft";
         permanentflags << "\\Deleted" << "\\Seen" << "\\*";
-        QTest::newRow("good") << scenario << flags << permanentflags << 172 << 1 << 12 << (qint64)3857529045 << (qint64)4392 << (quint64)123456789 << true << false;
+        QTest::newRow("good") << scenario << flags << permanentflags << 172 << 1 << 12 << 3857529045LL << 4392LL << 123456789ULL << true << false
+                              << -1LL << 0ULL << KIMAP::ImapSet{} << Messages{};
 
         scenario.clear();
         flags.clear();
@@ -61,7 +82,8 @@ private Q_SLOTS:
         scenario << FakeServer::preauth()
                  << "C: A000001 SELECT \"INBOX\""
                  << "S: A000001 BAD command unknown or arguments invalid";
-        QTest::newRow("bad") << scenario << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << (qint64)0 << (quint64)0 << false << false;
+        QTest::newRow("bad") << scenario << flags << permanentflags << 0 << 0 << 0 << 0LL << 0LL << 0ULL << false << false
+                             << -1LL << 0ULL << KIMAP::ImapSet{} << Messages{};
 
         scenario.clear();
         flags.clear();
@@ -69,7 +91,40 @@ private Q_SLOTS:
         scenario << FakeServer::preauth()
                  << "C: A000001 SELECT \"INBOX\""
                  << "S: A000001 NO select failure";
-        QTest::newRow("no") << scenario << flags << permanentflags << 0 << 0 << 0 << (qint64)0 << (qint64)0 << (quint64)0 << false << false;
+        QTest::newRow("no") << scenario << flags << permanentflags << 0 << 0 << 0 << 0LL << 0LL << 0ULL << false << false
+                            << -1LL << 0ULL << KIMAP::ImapSet{} << Messages{};
+
+        scenario.clear();
+        scenario << FakeServer::preauth()
+                 << "C: A000001 SELECT \"INBOX\" (QRESYNC (67890007 90060115194045000))"
+                 << "S: * 314 EXISTS"
+                 << "S: * 15 RECENT"
+                 << "S: * OK [UIDVALIDITY 67890007] UIDVALIDITY"
+                 << "S: * OK [UIDNEXT 567] Predicted next UID"
+                 << "S: * OK [HIGHESTMODSEQ 90060115205545359]"
+                 << "S: * OK [UNSEEN 7] There are some unseen messages in the mailbox"
+                 << "S: * FLAGS (\\Answered \\Flagged \\Draft \\Deleted \\Seen)"
+                 << "S: * OK [PERMANENTFLAGS (\\Answered \\Flagged \\Draft \\Deleted \\Seen \\*)] Permanent flags"
+                 << "S: * VANISHED (EARLIER) 41,43:116,118,120:211,214:540"
+                 << "S: * 49 FETCH (UID 117 FLAGS (\\Seen \\Answered) MODSEQ (90060115194045001))"
+                 << "S: * 50 FETCH (UID 119 FLAGS (\\Draft $MDNSent) MODSEQ (90060115194045308))"
+                 << "S: * 100 FETCH (UID 541 FLAGS (\\Seen $Forwarded) MODSEQ (90060115194045001))"
+                 << "S: A000001 OK [READ-WRITE] mailbox selected";
+        permanentflags = {"\\Answered", "\\Flagged", "\\Draft", "\\Deleted", "\\Seen", "\\*"};
+        flags = {"\\Answered", "\\Flagged", "\\Draft", "\\Deleted", "\\Seen"};
+        KIMAP::ImapSet vanished;
+        vanished.add(41);
+        vanished.add(KIMAP::ImapInterval{43, 116});
+        vanished.add(118);
+        vanished.add(KIMAP::ImapInterval{120, 211});
+        vanished.add(KIMAP::ImapInterval{214, 540});
+        Messages modified = {
+            {49, KIMAP::Message{117, 0, {"\\Seen", "\\Answered"}, {{"MODSEQ", QVariant{90060115194045001ULL}}}, {}, {}}},
+            {50, KIMAP::Message{119, 0, {"\\Draft", "$MDNSent"}, {{"MODSEQ", QVariant{90060115194045308ULL}}}, {}, {}}},
+            {100, KIMAP::Message{541, 0, {"\\Seen", "$Forwarded"}, {{"MODSEQ", QVariant{90060115194045001ULL}}}, {}, {}}}
+        };
+        QTest::newRow("QResync") << scenario << flags << permanentflags << 314 << 15 << 7 << 67890007LL << 567LL << 90060115205545359ULL << false << false
+                                 << 67890007LL << 90060115194045000ULL << vanished << modified;
     }
 
     void testSingleSelect()
@@ -84,6 +139,10 @@ private Q_SLOTS:
         QFETCH(qint64, nextUid);
         QFETCH(quint64, highestmodseq);
         QFETCH(bool, condstoreEnabled);
+        QFETCH(qint64, lastUidvalidity);
+        QFETCH(quint64, lastModseq);
+        QFETCH(KIMAP::ImapSet, vanished);
+        QFETCH(Messages, modified);
 
         FakeServer fakeServer;
         fakeServer.setScenario(scenario);
@@ -94,6 +153,16 @@ private Q_SLOTS:
         auto *job = new KIMAP::SelectJob(&session);
         job->setCondstoreEnabled(condstoreEnabled);
         job->setMailBox(QStringLiteral("INBOX"));
+        if (lastUidvalidity > -1 && lastModseq > 0) {
+            job->setQResync(lastUidvalidity, lastModseq);
+        }
+
+        QSignalSpy vanishedSpy(job, &KIMAP::SelectJob::vanished);
+        QVERIFY(vanishedSpy.isValid());
+
+        QSignalSpy modifiedSpy(job, &KIMAP::SelectJob::modified);
+        QVERIFY(modifiedSpy.isValid());
+
         bool result = job->exec();
         QEXPECT_FAIL("bad" , "Expected failure on BAD scenario", Continue);
         QEXPECT_FAIL("no" , "Expected failure on NO scenario", Continue);
@@ -107,6 +176,23 @@ private Q_SLOTS:
             QCOMPARE(job->uidValidity(), uidValidity);
             QCOMPARE(job->nextUid(), nextUid);
             QCOMPARE(job->highestModSequence(), highestmodseq);
+
+            if (!vanished.isEmpty()) {
+                QCOMPARE(vanishedSpy.size(), 1);
+                QCOMPARE(vanishedSpy.at(0).at(0).value<KIMAP::ImapSet>(), vanished);
+            }
+
+            if (!modified.isEmpty()) {
+                Messages collectedModified;
+                for (const auto &modifiedSpyCatch : modifiedSpy) {
+                    const auto msgs = modifiedSpyCatch.at(0).value<Messages>();
+                    for (auto it = msgs.begin(); it != msgs.end(); ++it) {
+                        collectedModified.insert(it.key(), it.value());
+                    }
+                }
+
+                QCOMPARE(collectedModified, modified);
+            }
         }
 
         fakeServer.quit();

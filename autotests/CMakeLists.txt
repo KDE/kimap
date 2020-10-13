@@ -26,9 +26,11 @@ KIMAP_UNIT_TESTS(
   loginjobtest
   logoutjobtest
   capabilitiesjobtest
+  closejobtest
   selectjobtest
   createjobtest
   deletejobtest
+  enablejobtest
   expungejobtest
   fetchjobtest
   renamejobtest

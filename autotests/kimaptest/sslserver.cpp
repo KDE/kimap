@@ -9,22 +9,36 @@
 #include <QSslConfiguration>
 #include <QDebug>
 
+
+// Generated on 2020-10-07 using command:
+// openssl req -nodes -new -x509 -keyout key.pem -out cert.pem -days 36500
+//
+// The cert should be valid until 2120.
+
 static QByteArray staticCert()
 {
     //a dummy certificate
     return QByteArray(
-               "-----BEGIN CERTIFICATE-----\n\
-MIIB+zCCAWQCCQDBBi7xZ2944DANBgkqhkiG9w0BAQUFADBCMQswCQYDVQQGEwJY\n\
-WDEVMBMGA1UEBwwMRGVmYXVsdCBDaXR5MRwwGgYDVQQKDBNEZWZhdWx0IENvbXBh\n\
-bnkgTHRkMB4XDTEzMTIwNTA5MDcxNVoXDTQxMDQyMjA5MDcxNVowQjELMAkGA1UE\n\
-BhMCWFgxFTATBgNVBAcMDERlZmF1bHQgQ2l0eTEcMBoGA1UECgwTRGVmYXVsdCBD\n\
-b21wYW55IEx0ZDCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAyuZdeqTgzX2E\n\
-Q+tOj8/QzT8jHOUvwleqv56hAOEbZ5pLhYPesaSqV0lADiYHKjCRVIrhJQXePf7y\n\
-MrJ3zE6hbHEMoIj+ku6ttNQkfJif30wmbXxLXO+RqraYgJW730kcbi2Jyq7ciEC1\n\
-SVeiIaaiV2yUFBc/ARDFBc7733Y053UCAwEAATANBgkqhkiG9w0BAQUFAAOBgQAE\n\
-BmB+mGtQzdmOAPbRYegA2ybuUARnW467qMOQpj5dV2LN+bizCbqrsz2twFKWS7oK\n\
-EiC1bd6EGHnF6inFksUwODqeb+rjQ85pFBWskG51LWvX2/hoS+0x2V37vUYMxnDH\n\
-rOEQiDe3oerErB0x9FMWk7VivEqO5HGEdxy7fGl3vg==\n\
+            "-----BEGIN CERTIFICATE-----\n\
+MIIDZzCCAk+gAwIBAgIUQoBjjbd//7DD9zWfru/epnVT2vAwDQYJKoZIhvcNAQEL\n\
+BQAwQjELMAkGA1UEBhMCWFgxFTATBgNVBAcMDERlZmF1bHQgQ2l0eTEcMBoGA1UE\n\
+CgwTRGVmYXVsdCBDb21wYW55IEx0ZDAgFw0yMDEwMDcxMzMxMTJaGA8yMTIwMDkx\n\
+MzEzMzExMlowQjELMAkGA1UEBhMCWFgxFTATBgNVBAcMDERlZmF1bHQgQ2l0eTEc\n\
+MBoGA1UECgwTRGVmYXVsdCBDb21wYW55IEx0ZDCCASIwDQYJKoZIhvcNAQEBBQAD\n\
+ggEPADCCAQoCggEBAMIu0Osija2bIINdCjuP0T+tdlQOI8l52J+z/dI45MxecEn5\n\
+LAsYWhqanpgZSM5tFf4xqWaX/1/TVDB5JiLx3voWOODTtNKzFVFCzfKHuH6cBboE\n\
+E4TZ+H6hTq+YyMKUDN7XqRtBIf1FBf0lMhalWdtEDtlXcsuoaGXkr671JwR34+EU\n\
+6YH/8kbBQQBoL640/gxtgevGmpqfqLW0/hogF5pOhMOfwVlYo28IqaPScUGEpopf\n\
+zqL+z6NwdEsNLygwq21kU0hhRnx2UgdPcZNX3dc7sUkZjxn53t6XPeVvgGXCte1o\n\
+Ad6L0rMunlda+Tj02FXn7jo6G7ELj05Bg8JNB8sCAwEAAaNTMFEwHQYDVR0OBBYE\n\
+FLi6xsBAkbc06veA7t+8slAUCVebMB8GA1UdIwQYMBaAFLi6xsBAkbc06veA7t+8\n\
+slAUCVebMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAFpcIzOl\n\
+iqMK/kre/xJyE+S1UoS85rmegZDkNdEXUS6zCozL+eO2NxHxumxfD3qrdwLvXfn0\n\
+y30xUlNecB30/egXrel9z7Xop70sVCfgfb/vfMmQ5KSUZC8968rgHPl5qPmjZk6X\n\
+z0M9hktTRpIk43DPuz5k1qD+LsmrKzI7twGu00EenwVZa4eLN36Ju4ZRg3I0h2zH\n\
+vAnuAku0F0JU9GXdbjOW/248k+jhMP1noDaLqwVkkjgzaJwHxFNiKxnG3f7anneK\n\
+HxybczmNl3a6IsZN0CSUSwLfvr1Wezk2Mb7dwzhPbycP5icB/KXWgApkRZ3MKfLN\n\
+aBvBMCfr7GXmLQk=\n\
 -----END CERTIFICATE-----");
 }
 
@@ -32,21 +46,34 @@ static QByteArray staticKey()
 {
     //a dummy key without password
     return QByteArray(
-               "-----BEGIN RSA PRIVATE KEY-----\n\
-MIICXgIBAAKBgQDK5l16pODNfYRD606Pz9DNPyMc5S/CV6q/nqEA4RtnmkuFg96x\n\
-pKpXSUAOJgcqMJFUiuElBd49/vIysnfMTqFscQygiP6S7q201CR8mJ/fTCZtfEtc\n\
-75GqtpiAlbvfSRxuLYnKrtyIQLVJV6IhpqJXbJQUFz8BEMUFzvvfdjTndQIDAQAB\n\
-AoGBAIdNfXLGtl5x4BzGspn2NEBaZRjkwKdxfJzRtH34nyTEYK5FVODTdQBGCaAl\n\
-vctlndRp1F+y/RQMighCuN6WZM/SdkzxkGGJVzDDuMw0Cwc48aqtMA3A3x/3bQkK\n\
-kk2A5sLBc1TuC4DYSP5zkoXDbvBsHHN+tGAaC348Df6of1J1AkEA7ye3W9JUN4uK\n\
-2cPrnh7EKwQ2pFypeE/UNQ+LXR9h8XK90mxwiShU9sRFlNIA+pPcZ2aBxoY9m3rJ\n\
-4GHitl4ajwJBANkw6xM9IdgjMD8OQonpZTHSrKki/MaSSe9eBJ+WiCkTKL+Y9aTm\n\
-28sU7I+j3V38kYf5zyWXkyWmmNaQ4VaU77sCQQDMx7BM0qPEUBtb7lQxt9x3jQsQ\n\
-4DtIxupJaP8HhRjDu2Fo7evKthtSlauTC+NErRl7/J1BFa9pE9IK7SZIy/lnAkB6\n\
-ssga9k5IbJi1BrlQcCpbG0mvw7RJ+hsKv3KdNc12Zvx+QUuE/WbuM8Pw4gINNsKA\n\
-rv/3nMnkW1m83dxvrXRBAkEAmy3nO9HXdcKtSseseLJ6h9RB/R0XE1EvG8CKvveS\n\
-IiVUnppVeiLFa7ItwHOovgqvWVbePd5xl6+yBGxUXznjWA==\n\
------END RSA PRIVATE KEY-----");
+            "-----BEGIN PRIVATE KEY-----\n\
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDCLtDrIo2tmyCD\n\
+XQo7j9E/rXZUDiPJedifs/3SOOTMXnBJ+SwLGFoamp6YGUjObRX+Malml/9f01Qw\n\
+eSYi8d76Fjjg07TSsxVRQs3yh7h+nAW6BBOE2fh+oU6vmMjClAze16kbQSH9RQX9\n\
+JTIWpVnbRA7ZV3LLqGhl5K+u9ScEd+PhFOmB//JGwUEAaC+uNP4MbYHrxpqan6i1\n\
+tP4aIBeaToTDn8FZWKNvCKmj0nFBhKaKX86i/s+jcHRLDS8oMKttZFNIYUZ8dlIH\n\
+T3GTV93XO7FJGY8Z+d7elz3lb4BlwrXtaAHei9KzLp5XWvk49NhV5+46OhuxC49O\n\
+QYPCTQfLAgMBAAECggEAFdV/xkCfX5rmv/6RLPtR0vAlMvRYD8p0khiB/MZK67Pe\n\
+umKbEjBNyVoDZSTKq/NWGrvoyVFj9JlliQHGSP2bTdF72cPUPDDIv9dcIt4h35KZ\n\
+jj3xF+oOZ+apW1M5l69f9xqWuCrNsJW3Q6yQAj3baa0wYj3T+ZRZEMPzASAtn/HM\n\
+8r/ToZ9jzObVeNAKoHy30bn5a5NwUcpdOfj84l/qJalXEMtR05FTOa+UEjbqpxjM\n\
++HR9RhlLyxXoFkBjtBowEWZcJSik7t5Vpk4brhUZTVxR1bC5zAXxtnDg2SmR9bKO\n\
+4wttLEtTTrXeTkxpYMTZWt7FplUmP92RdcW8PCbe2QKBgQDl+QYUhaQdmRC1ylny\n\
+2XP0lvPBHQr7jIHYcsGgit7XKMu6wSq/NGuLNT7WL1A9UDWBCdsdqXBFjR3rwhzh\n\
+krbymy1H6PGPYYMQg0DeoAG7I1YTYhrp25bO0WTXVyYrhbZiQkFontUFYIbqu+Rf\n\
+glVnhEXXN6wXBjY1F0qM4KjydQKBgQDYKNspAaxX/GxnydtlxXTXWSKD/kMlbAeu\n\
++AI9PRn6LckT7pKEE4Qd/gHnrlnxlqgLTJDcGgTeNutHmaHToQNSWiNltr7igzsU\n\
+nABUwlNpl2NwUqttCvsGcyxhabDIjO6Iw+jbnLsWwyMzwf/5YaP8wwmznWYDGn6Y\n\
+UXbyXn5JPwKBgQCzHM/qfefDkaqdG/wQk+KnFkbFGnyqTNX4ofBCvMYwp7p9OuOz\n\
+Rf2Yz6CgKvuAtY7mcKmzIXuq/+zU6TubSKyqqceLoVc6iAUPgFquycpvWWc584fo\n\
+qjl73USAH4VAEoVpZBcTh9l7taF/A1YsORORa0kGBXtH93OSyBAtRvDu3QKBgHZm\n\
+2rU5f2eqks6/GPhEEl4rKubWDX2gEQ1cOA3HPEV3ct8CHStPbVzoV67KJ+ZXObEG\n\
+vYpyjhwSRQoxMx0y4xjm2uDKGwEEFQaS9PN4hiweio9qGRBfpWTBDZxGQll4KOit\n\
+Nw2kai5rsQqWx1mYjDTVuKi0HL6ycomIhfj4nYANAoGATXXc8Ekg+w7hfzLS3BTV\n\
+SovH/d6/fC5B7nD5+wB7s0dD8NqqOUKvRm/HPRzMWejSOMXWQzpWSAGTheaFArTw\n\
+2k6FDQ7S1lEt6jbVBtS189LtaZBnEWZQfyjKl8h6lJyVU2kBfaYoEOO31T8n20sG\n\
+NdkmACeCyNMs5V3yq1vAeN4=\n\
+-----END PRIVATE KEY-----");
 }
 
 SslServer::SslServer(QSsl::SslProtocol protocol, bool waitForStartTls)
