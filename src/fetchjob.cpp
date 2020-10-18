@@ -96,6 +96,12 @@ public:
 
 using namespace KIMAP;
 
+FetchJob::FetchScope::FetchScope()
+    : mode(FetchScope::Content)
+    , changedSince(0)
+    , qresync(false)
+{}
+
 FetchJob::FetchJob(Session *session)
     : Job(*new FetchJobPrivate(this, session, i18n("Fetch")))
 {

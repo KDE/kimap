@@ -78,6 +78,8 @@ public:
     class KIMAP_EXPORT FetchScope
     {
     public:
+        FetchScope();
+
         /**
          * Used to indicate what part of the message should be fetched.
          */
