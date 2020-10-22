@@ -9,7 +9,6 @@
 
 #include "session.h"
 #include "session_p.h"
-#include "sessionuiproxy.h"
 
 #include <QTimer>
 #include <QPointer>

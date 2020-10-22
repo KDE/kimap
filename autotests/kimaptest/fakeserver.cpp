@@ -13,7 +13,6 @@
 
 // Qt
 #include <QDebug>
-#include <QTcpServer>
 
 #include <QFile>
 #include <QTest>
