@@ -185,11 +185,11 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        KIMAP::SelectJob *select = new KIMAP::SelectJob(&session);
+        auto *select = new KIMAP::SelectJob(&session);
         select->setMailBox(expectedMailBox);
         QVERIFY(select->exec());
 
-        KIMAP::IdleJob *idle = new KIMAP::IdleJob(&session);
+        auto *idle = new KIMAP::IdleJob(&session);
 
         QSignalSpy statsSpy(idle, &KIMAP::IdleJob::mailBoxStats);
         QSignalSpy flagsSpy(idle, &KIMAP::IdleJob::mailBoxMessageFlagsChanged);
@@ -263,11 +263,11 @@ private Q_SLOTS:
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
         const int originalTimeout = session.timeout();
 
-        KIMAP::SelectJob *select = new KIMAP::SelectJob(&session);
+        auto *select = new KIMAP::SelectJob(&session);
         select->setMailBox(QStringLiteral("INBOX"));
         QVERIFY(select->exec());
 
-        KIMAP::IdleJob *idle = new KIMAP::IdleJob(&session);
+        auto *idle = new KIMAP::IdleJob(&session);
         idle->exec();
 
         QCOMPARE(session.timeout(), originalTimeout);

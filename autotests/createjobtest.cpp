@@ -67,7 +67,7 @@ private Q_SLOTS:
         fakeServer.startAndWait();
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        KIMAP::CreateJob *job = new KIMAP::CreateJob(&session);
+        auto *job = new KIMAP::CreateJob(&session);
         job->setMailBox(mailbox);
         bool result = job->exec();
         QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);

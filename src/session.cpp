@@ -346,7 +346,7 @@ void SessionPrivate::socketConnected()
 
     bool willUseSsl = false;
     if (!queue.isEmpty()) {
-        KIMAP::LoginJob *login = qobject_cast<KIMAP::LoginJob *>(queue.first());
+        auto *login = qobject_cast<KIMAP::LoginJob *>(queue.first());
         if (login) {
             willUseSsl = (login->encryptionMode() == KIMAP::LoginJob::SSLorTLS);
 

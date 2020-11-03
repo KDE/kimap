@@ -82,7 +82,7 @@ void dumpContentHelper(KMime::Content *part, const QString &partId = QString())
 
 void listFolders(Session *session, bool includeUnsubscribed = false, const QString &nameFilter = QLatin1String(""))
 {
-    ListJob *list = new ListJob(session);
+    auto *list = new ListJob(session);
     list->setIncludeUnsubscribed(includeUnsubscribed);
     list->exec();
     Q_ASSERT_X(list->error() == 0, "ListJob", list->errorString().toLocal8Bit().constData());
@@ -99,11 +99,11 @@ void listFolders(Session *session, bool includeUnsubscribed = false, const QStri
 void testMetaData(Session *session)
 {
     qDebug() << "TESTING: METADATA commands";
-    CreateJob *create = new CreateJob(session);
+    auto *create = new CreateJob(session);
     create->setMailBox(QStringLiteral("INBOX/TestFolder"));
     create->exec();
 
-    SetMetaDataJob *setmetadata = new SetMetaDataJob(session);
+    auto *setmetadata = new SetMetaDataJob(session);
     setmetadata->setMailBox(QStringLiteral("INBOX/TestFolder"));
     setmetadata->setServerCapability(SetMetaDataJob::Annotatemore);
     setmetadata->setEntry("/comment");
@@ -117,7 +117,7 @@ void testMetaData(Session *session)
     setmetadata->addMetaData("value.priv", "true");
     setmetadata->exec();
 
-    GetMetaDataJob *getmetadata = new GetMetaDataJob(session);
+    auto *getmetadata = new GetMetaDataJob(session);
     getmetadata->setMailBox(QStringLiteral("INBOX/TestFolder"));
     getmetadata->setServerCapability(SetMetaDataJob::Annotatemore);
     getmetadata->addEntry("/*", "value.priv");
@@ -126,7 +126,7 @@ void testMetaData(Session *session)
     Q_ASSERT_X(getmetadata->metaData(QLatin1String("INBOX/TestFolder"), "/comment", "value.priv") == "My new comment", "",  "/check metadata should be My new comment");
 
     //cleanup
-    DeleteJob *deletejob = new DeleteJob(session);
+    auto *deletejob = new DeleteJob(session);
     deletejob->setMailBox(QLatin1String("INBOX/TestFolder"));
     deletejob->exec();
 }
@@ -134,11 +134,11 @@ void testMetaData(Session *session)
 void testAcl(Session *session, const QString &user)
 {
     qDebug() << "TESTING: ACL commands";
-    CreateJob *create = new CreateJob(session);
+    auto *create = new CreateJob(session);
     create->setMailBox(QStringLiteral("INBOX/TestFolder"));
     create->exec();
 
-    ListRightsJob *listRights = new ListRightsJob(session);
+    auto *listRights = new ListRightsJob(session);
     listRights->setMailBox(QStringLiteral("INBOX/TestFolder"));
     listRights->setIdentifier(user.toLatin1());
     listRights->exec();
@@ -150,7 +150,7 @@ void testAcl(Session *session, const QString &user)
     }
     qDebug() << "Possible rights on INBOX/TestFolder: " << strList;
 
-    MyRightsJob *myRights = new MyRightsJob(session);
+    auto *myRights = new MyRightsJob(session);
     myRights->setMailBox(QStringLiteral("INBOX/TestFolder"));
     myRights->exec();
 
@@ -159,7 +159,7 @@ void testAcl(Session *session, const QString &user)
     qDebug() << "Reading INBOX/TestFolder is possible: " << myRights->hasRightEnabled(Acl::Read);
     Q_ASSERT_X(myRights->hasRightEnabled(Acl::Read), "Reading INBOX is NOT possible", "");
 
-    GetAclJob *getAcl = new GetAclJob(session);
+    auto *getAcl = new GetAclJob(session);
     getAcl->setMailBox(QStringLiteral("INBOX/TestFolder"));
     getAcl->exec();
     qDebug() << "Anyone rights on INBOX/TestFolder: " << getAcl->rights("anyone");
@@ -169,7 +169,7 @@ void testAcl(Session *session, const QString &user)
 
     qDebug() << "Removing Delete right ";
     mine = Acl::Delete;
-    SetAclJob *setAcl = new SetAclJob(session);
+    auto *setAcl = new SetAclJob(session);
     setAcl->setMailBox(QStringLiteral("INBOX/TestFolder"));
     setAcl->setIdentifier(user.toLatin1());
     setAcl->setRights(AclJobBase::Remove, mine);
@@ -196,7 +196,7 @@ void testAcl(Session *session, const QString &user)
     qDebug() << user << " rights on INBOX/TestFolder: " << Acl::rightsToString(users);
 
     //cleanup
-    DeleteJob *deletejob = new DeleteJob(session);
+    auto *deletejob = new DeleteJob(session);
     deletejob->setMailBox(QStringLiteral("INBOX/TestFolder"));
     deletejob->exec();
 }
@@ -205,7 +205,7 @@ void testAppendAndStore(Session *session)
 {
     qDebug() << "TESTING: APPEND and STORE";
     //setup
-    CreateJob *create = new CreateJob(session);
+    auto *create = new CreateJob(session);
     create->setMailBox(QStringLiteral("INBOX/TestFolder"));
     create->exec();
 
@@ -221,18 +221,18 @@ void testAppendAndStore(Session *session)
         "Hello Joe, do you think we can meet at 3:30 tomorrow?\r\n";
 
     qDebug() << "Append a message in INBOX/TestFolder...";
-    AppendJob *append = new AppendJob(session);
+    auto *append = new AppendJob(session);
     append->setMailBox(QStringLiteral("INBOX/TestFolder"));
     append->setContent(testMailContent);
     append->exec();
     Q_ASSERT_X(append->error() == 0, "AppendJob", append->errorString().toLocal8Bit().constData());
 
     qDebug() << "Read the message back and compare...";
-    SelectJob *select = new SelectJob(session);
+    auto *select = new SelectJob(session);
     select->setMailBox(QStringLiteral("INBOX/TestFolder"));
     select->exec();
 
-    FetchJob *fetch = new FetchJob(session);
+    auto *fetch = new FetchJob(session);
     FetchJob::FetchScope scope;
     fetch->setSequenceSet(ImapSet(1));
     scope.parts.clear();
@@ -269,7 +269,7 @@ void testAppendAndStore(Session *session)
     qDebug() << "Add the \\Deleted flag...";
     expectedFlags << "\\Deleted";
     std::sort(expectedFlags.begin(), expectedFlags.end());
-    StoreJob *store = new StoreJob(session);
+    auto *store = new StoreJob(session);
     store->setSequenceSet(ImapSet(1));
     store->setMode(StoreJob::AppendFlags);
     store->setFlags(QList<QByteArray>() << "\\Deleted");
@@ -288,7 +288,7 @@ void testAppendAndStore(Session *session)
     select->exec();
 
     //cleanup
-    DeleteJob *deletejob = new DeleteJob(session);
+    auto *deletejob = new DeleteJob(session);
     deletejob->setMailBox(QStringLiteral("INBOX/TestFolder"));
     deletejob->exec();
     deletejob = new DeleteJob(session);
@@ -300,7 +300,7 @@ void testRename(Session *session)
 {
     qDebug() << "TESTING: RENAME";
     //setup
-    CreateJob *create = new CreateJob(session);
+    auto *create = new CreateJob(session);
     create->setMailBox(QStringLiteral("INBOX/TestFolder"));
     create->exec();
 
@@ -309,7 +309,7 @@ void testRename(Session *session)
 
     //actual tests
     qDebug() << "Renaming to RenamedTestFolder";
-    RenameJob *rename = new RenameJob(session);
+    auto *rename = new RenameJob(session);
     rename->setSourceMailBox(QStringLiteral("INBOX/TestFolder"));
     rename->setDestinationMailBox(QStringLiteral("INBOX/RenamedTestFolder"));
     rename->exec();
@@ -320,7 +320,7 @@ void testRename(Session *session)
     listFolders(session, true, QStringLiteral("RenamedTestFolder"));
 
     //cleanup
-    DeleteJob *deletejob = new DeleteJob(session);
+    auto *deletejob = new DeleteJob(session);
     deletejob->setMailBox(QStringLiteral("INBOX/TestFolder"));
     deletejob->exec();
     deletejob = new DeleteJob(session);
@@ -332,7 +332,7 @@ void testSubscribe(Session *session)
 {
     qDebug() << "TESTING: SUBSCRIBE/UNSUBSCRIBE";
     //setup
-    CreateJob *create = new CreateJob(session);
+    auto *create = new CreateJob(session);
     create->setMailBox(QStringLiteral("INBOX/TestFolder"));
     create->exec();
 
@@ -341,7 +341,7 @@ void testSubscribe(Session *session)
 
     //actual tests
     qDebug() << "Subscribing to INBOX/TestFolder";
-    SubscribeJob *subscribe = new SubscribeJob(session);
+    auto *subscribe = new SubscribeJob(session);
     subscribe->setMailBox(QStringLiteral("INBOX/TestFolder"));
     subscribe->exec();
 
@@ -349,7 +349,7 @@ void testSubscribe(Session *session)
     listFolders(session, false, QStringLiteral("TestFolder"));
 
     qDebug() << "Unsubscribing from INBOX/TestFolder";
-    UnsubscribeJob *unsubscribe = new UnsubscribeJob(session);
+    auto *unsubscribe = new UnsubscribeJob(session);
     unsubscribe->setMailBox(QStringLiteral("INBOX/TestFolder"));
     unsubscribe->exec();
 
@@ -357,7 +357,7 @@ void testSubscribe(Session *session)
     listFolders(session, false, QStringLiteral("TestFolder"));
 
     //cleanup
-    DeleteJob *deletejob = new DeleteJob(session);
+    auto *deletejob = new DeleteJob(session);
     deletejob->setMailBox(QStringLiteral("INBOX/TestFolder"));
     deletejob->exec();
 }
@@ -366,7 +366,7 @@ void testDelete(Session *session)
 {
     qDebug() << "TESTING: DELETE";
     qDebug() << "Creating INBOX/TestFolder:";
-    CreateJob *create = new CreateJob(session);
+    auto *create = new CreateJob(session);
     create->setMailBox(QStringLiteral("INBOX/TestFolder"));
     create->exec();
 
@@ -374,7 +374,7 @@ void testDelete(Session *session)
     listFolders(session, true, QStringLiteral("TestFolder"));
 
     qDebug() << "Deleting INBOX/TestFolder";
-    DeleteJob *deletejob = new DeleteJob(session);
+    auto *deletejob = new DeleteJob(session);
     deletejob->setMailBox(QStringLiteral("INBOX/TestFolder"));
     deletejob->exec();
 
@@ -409,7 +409,7 @@ int main(int argc, char **argv)
     session.setUiProxy(proxy);
 
     qDebug() << "Logging in...";
-    LoginJob *login = new LoginJob(&session);
+    auto *login = new LoginJob(&session);
     //login->setEncryptionMode( LoginJob::TlsV1 );
     //login->setAuthenticationMode( LoginJob::Plain );
     login->setUserName(user);
@@ -433,7 +433,7 @@ int main(int argc, char **argv)
     qDebug() << "Server greeting:" << session.serverGreeting();
 
     qDebug() << "Asking for capabilities:";
-    CapabilitiesJob *capabilities = new CapabilitiesJob(&session);
+    auto *capabilities = new CapabilitiesJob(&session);
     capabilities->exec();
     Q_ASSERT_X(capabilities->error() == 0, "CapabilitiesJob", capabilities->errorString().toLocal8Bit().constData());
     Q_ASSERT(session.state() == Session::Authenticated);
@@ -441,7 +441,7 @@ int main(int argc, char **argv)
     qDebug();
 
     qDebug() << "Asking for namespaces:";
-    NamespaceJob *namespaces = new NamespaceJob(&session);
+    auto *namespaces = new NamespaceJob(&session);
     namespaces->exec();
     Q_ASSERT_X(namespaces->error() == 0, "CapabilitiesJob", namespaces->errorString().toLocal8Bit().constData());
     Q_ASSERT(session.state() == Session::Authenticated);
@@ -469,7 +469,7 @@ int main(int argc, char **argv)
     Q_ASSERT(session.state() == Session::Authenticated);
 
     qDebug() << "Selecting INBOX:";
-    SelectJob *select = new SelectJob(&session);
+    auto *select = new SelectJob(&session);
     select->setMailBox(QStringLiteral("INBOX"));
     select->exec();
     Q_ASSERT_X(select->error() == 0, "SelectJob", select->errorString().toLocal8Bit().constData());
@@ -484,7 +484,7 @@ int main(int argc, char **argv)
     qDebug();
 
     qDebug() << "Fetching first 3 messages headers:";
-    FetchJob *fetch = new FetchJob(&session);
+    auto *fetch = new FetchJob(&session);
     FetchJob::FetchScope scope;
     fetch->setSequenceSet(ImapSet(1, 3));
     scope.parts.clear();
@@ -621,17 +621,17 @@ int main(int argc, char **argv)
     testMetaData(&session);
 
     qDebug() << "Expunge INBOX:";
-    ExpungeJob *expunge = new ExpungeJob(&session);
+    auto *expunge = new ExpungeJob(&session);
     expunge->exec();
 
     qDebug() << "Closing INBOX:";
-    CloseJob *close = new CloseJob(&session);
+    auto *close = new CloseJob(&session);
     close->exec();
     Q_ASSERT(session.state() == Session::Authenticated);
     qDebug();
 
     qDebug() << "Logging out...";
-    LogoutJob *logout = new LogoutJob(&session);
+    auto *logout = new LogoutJob(&session);
     logout->exec();
     Q_ASSERT_X(logout->error() == 0, "LogoutJob", logout->errorString().toLocal8Bit().constData());
     Q_ASSERT(session.state() == Session::Disconnected);

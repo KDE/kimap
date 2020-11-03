@@ -77,7 +77,7 @@ private Q_SLOTS:
         fakeServer.startAndWait();
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        KIMAP::AppendJob *job = new KIMAP::AppendJob(&session);
+        auto *job = new KIMAP::AppendJob(&session);
         job->setContent(content);
         job->setFlags(flags);
         job->setInternalDate(internaldate);

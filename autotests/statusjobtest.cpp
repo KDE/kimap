@@ -86,7 +86,7 @@ private Q_SLOTS:
         fakeServer.startAndWait();
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
-        KIMAP::StatusJob *job = new KIMAP::StatusJob(&session);
+        auto *job = new KIMAP::StatusJob(&session);
         job->setMailBox(QStringLiteral("INBOX"));
         job->setDataItems(dataItems);
         bool result = job->exec();

@@ -551,7 +551,7 @@ const QString KIMAP::encodeRFC2231String(const QString &str)
         return str;
     }
 
-    signed char *latin = (signed char *)calloc(1, str.length() + 1);
+    auto *latin = (signed char *)calloc(1, str.length() + 1);
     char *latin_us = (char *)latin;
     strcpy(latin_us, str.toLatin1().constData());
     signed char *l = latin;

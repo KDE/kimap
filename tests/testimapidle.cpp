@@ -53,11 +53,11 @@ int main(int argc, char **argv)
 
     QCoreApplication app(argc, argv);
     Session session(server, port);
-    UiProxy *proxy = new UiProxy();
+    auto *proxy = new UiProxy();
     session.setUiProxy(UiProxy::Ptr(proxy));
 
     qDebug() << "Logging in...";
-    LoginJob *login = new LoginJob(&session);
+    auto *login = new LoginJob(&session);
     login->setUserName(user);
     login->setPassword(password);
     login->exec();
@@ -66,7 +66,7 @@ int main(int argc, char **argv)
     qDebug();
 
     qDebug() << "Asking for capabilities:";
-    CapabilitiesJob *capabilities = new CapabilitiesJob(&session);
+    auto *capabilities = new CapabilitiesJob(&session);
     capabilities->exec();
     Q_ASSERT_X(capabilities->error() == 0, "CapabilitiesJob", capabilities->errorString().toLocal8Bit().constData());
     Q_ASSERT(session.state() == Session::Authenticated);
@@ -76,7 +76,7 @@ int main(int argc, char **argv)
     Q_ASSERT(capabilities->capabilities().contains(QLatin1String("IDLE")));
 
     qDebug() << "Selecting INBOX:";
-    SelectJob *select = new SelectJob(&session);
+    auto *select = new SelectJob(&session);
     select->setMailBox(QStringLiteral("INBOX"));
     select->exec();
     Q_ASSERT_X(select->error() == 0, "SelectJob", select->errorString().toLocal8Bit().constData());
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
     qDebug();
 
     qDebug() << "Start idling...";
-    IdleJob *idle = new IdleJob(&session);
+    auto *idle = new IdleJob(&session);
     QObject::connect(idle, SIGNAL(mailBoxStats(KIMAP::IdleJob*,QString,int,int)),
                      idle, SLOT(stop()));
     idle->exec();
@@ -100,13 +100,13 @@ int main(int argc, char **argv)
              << "recent count:" << idle->lastRecentCount();
 
     qDebug() << "Closing INBOX:";
-    CloseJob *close = new CloseJob(&session);
+    auto *close = new CloseJob(&session);
     close->exec();
     Q_ASSERT(session.state() == Session::Authenticated);
     qDebug();
 
     qDebug() << "Logging out...";
-    LogoutJob *logout = new LogoutJob(&session);
+    auto *logout = new LogoutJob(&session);
     logout->exec();
     Q_ASSERT_X(logout->error() == 0, "LogoutJob", logout->errorString().toLocal8Bit().constData());
     Q_ASSERT(session.state() == Session::Disconnected);

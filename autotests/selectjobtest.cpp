@@ -47,8 +47,8 @@ private Q_SLOTS:
                  << "S: * OK [UIDVALIDITY 3857529045] UIDs valid"
                  << "S: * OK [UIDNEXT 4392] Predicted next UID"
                  << "S: * OK [HIGHESTMODSEQ 123456789]"
-                 << "S: * FLAGS (\\Answered \\Flagged \\Deleted \\Seen \\Draft)"
-                 << "S: * OK [PERMANENTFLAGS (\\Deleted \\Seen \\*)] Limited"
+                 << R"(S: * FLAGS (\Answered \Flagged \Deleted \Seen \Draft))"
+                 << R"(S: * OK [PERMANENTFLAGS (\Deleted \Seen \*)] Limited)"
                  << "S: A000001 OK [READ-WRITE] SELECT completed";
 
         flags << "\\Answered" << "\\Flagged" << "\\Deleted" << "\\Seen" << "\\Draft";
@@ -91,7 +91,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        KIMAP::SelectJob *job = new KIMAP::SelectJob(&session);
+        auto *job = new KIMAP::SelectJob(&session);
         job->setCondstoreEnabled(condstoreEnabled);
         job->setMailBox(QStringLiteral("INBOX"));
         bool result = job->exec();
@@ -126,7 +126,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        KIMAP::SelectJob *job = new KIMAP::SelectJob(&session);
+        auto *job = new KIMAP::SelectJob(&session);
         job->setMailBox(QStringLiteral("INBOX"));
         QVERIFY(job->exec());
 

@@ -172,7 +172,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        KIMAP::FetchJob *job = new KIMAP::FetchJob(&session);
+        auto *job = new KIMAP::FetchJob(&session);
         job->setUidBased(uidBased);
         job->setSequenceSet(set);
         job->setScope(scope);
@@ -221,8 +221,8 @@ private Q_SLOTS:
         QList<QByteArray> scenario;
         scenario << FakeServer::preauth()
                  << "C: A000001 FETCH 1:2 (BODYSTRUCTURE UID)"
-                 << "S: * 1 FETCH (UID 10 BODYSTRUCTURE (\"TEXT\" \"PLAIN\" (\"CHARSET\" \"ISO-8859-1\") NIL NIL \"7BIT\" 5 1 NIL NIL NIL))"
-                 << "S: * 2 FETCH (UID 20 BODYSTRUCTURE ((((\"TEXT\" \"PLAIN\" (\"CHARSET\" \"ISO-8859-1\") NIL NIL \"7BIT\" 72 4 NIL NIL NIL)(\"TEXT\" \"HTML\" (\"CHARSET\" \"ISO-8859-1\") NIL NIL \"QUOTED-PRINTABLE\" 281 5 NIL NIL NIL) \"ALTERNATIVE\" (\"BOUNDARY\" \"0001\") NIL NIL)(\"IMAGE\" \"GIF\" (\"NAME\" \"B56.gif\") \"<B56@goomoji.gmail>\" NIL \"BASE64\" 528 NIL NIL NIL) \"RELATED\" (\"BOUNDARY\" \"0002\") NIL NIL)(\"IMAGE\" \"JPEG\" (\"NAME\" \"photo.jpg\") NIL NIL \"BASE64\" 53338 NIL (\"ATTACHMENT\" (\"FILENAME\" \"photo.jpg\")) NIL) \"MIXED\" (\"BOUNDARY\" \"0003\") NIL NIL))"
+                 << R"(S: * 1 FETCH (UID 10 BODYSTRUCTURE ("TEXT" "PLAIN" ("CHARSET" "ISO-8859-1") NIL NIL "7BIT" 5 1 NIL NIL NIL)))"
+                 << R"(S: * 2 FETCH (UID 20 BODYSTRUCTURE (((("TEXT" "PLAIN" ("CHARSET" "ISO-8859-1") NIL NIL "7BIT" 72 4 NIL NIL NIL)("TEXT" "HTML" ("CHARSET" "ISO-8859-1") NIL NIL "QUOTED-PRINTABLE" 281 5 NIL NIL NIL) "ALTERNATIVE" ("BOUNDARY" "0001") NIL NIL)("IMAGE" "GIF" ("NAME" "B56.gif") "<B56@goomoji.gmail>" NIL "BASE64" 528 NIL NIL NIL) "RELATED" ("BOUNDARY" "0002") NIL NIL)("IMAGE" "JPEG" ("NAME" "photo.jpg") NIL NIL "BASE64" 53338 NIL ("ATTACHMENT" ("FILENAME" "photo.jpg")) NIL) "MIXED" ("BOUNDARY" "0003") NIL NIL)))"
                  << "S: A000001 OK fetch done";
 
         KIMAP::FetchJob::FetchScope scope;
@@ -234,7 +234,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        KIMAP::FetchJob *job = new KIMAP::FetchJob(&session);
+        auto *job = new KIMAP::FetchJob(&session);
         job->setUidBased(false);
         job->setSequenceSet(KIMAP::ImapSet(1, 2));
         job->setScope(scope);
@@ -298,7 +298,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        KIMAP::FetchJob *job = new KIMAP::FetchJob(&session);
+        auto *job = new KIMAP::FetchJob(&session);
         job->setUidBased(false);
         job->setSequenceSet(KIMAP::ImapSet(2, 2));
         job->setScope(scope);

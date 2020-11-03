@@ -38,7 +38,7 @@ private Q_SLOTS:
                  << "S: * LIST ( \\HasChildren ) / INBOX"
                  << "S: * LIST ( \\HasNoChildren ) / INBOX/&AOQ- &APY- &APw- @ &IKw-"
                  << "S: * LIST ( \\HasChildren ) / INBOX/lost+found"
-                 << "S: * LIST ( \\HasNoChildren ) / \"INBOX/lost+found/Calendar Public-20080128\""
+                 << R"(S: * LIST ( \HasNoChildren ) / "INBOX/lost+found/Calendar Public-20080128")"
                  << "S: A000001 OK LIST completed";
         KIMAP::MailBoxDescriptor descriptor;
         QList<KIMAP::MailBoxDescriptor> listresult;
@@ -64,7 +64,7 @@ private Q_SLOTS:
                  << "S: * LIST ( \\HasChildren ) / Inbox"
                  << "S: * LIST ( \\HasNoChildren ) / Inbox/&AOQ- &APY- &APw- @ &IKw-"
                  << "S: * LIST ( \\HasChildren ) / Inbox/lost+found"
-                 << "S: * LIST ( \\HasNoChildren ) / \"Inbox/lost+found/Calendar Public-20080128\""
+                 << R"(S: * LIST ( \HasNoChildren ) / "Inbox/lost+found/Calendar Public-20080128")"
                  << "S: A000001 OK LIST completed";
         listresult.clear();
 
@@ -191,7 +191,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        KIMAP::ListJob *job = new KIMAP::ListJob(&session);
+        auto *job = new KIMAP::ListJob(&session);
         job->setIncludeUnsubscribed(unsubscribed);
 
         QSignalSpy spy(job,

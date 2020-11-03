@@ -29,19 +29,19 @@ private Q_SLOTS:
 
         QList<QByteArray> scenario;
         scenario << FakeServer::preauth()
-                 << "C: A000001 RENAME \"INBOX\" \"oldmail\""
+                 << R"(C: A000001 RENAME "INBOX" "oldmail")"
                  << "S: A000001 OK RENAME completed";
         QTest::newRow("good") << "INBOX" << "oldmail" << scenario;
 
         scenario.clear();
         scenario << FakeServer::preauth()
-                 << "C: A000001 RENAME \"INBOX-FAIL-BAD\" \"oldmail-bad\""
+                 << R"(C: A000001 RENAME "INBOX-FAIL-BAD" "oldmail-bad")"
                  << "S: A000001 BAD command unknown or arguments invalid";
         QTest::newRow("bad") << "INBOX-FAIL-BAD"  << "oldmail-bad" << scenario;
 
         scenario.clear();
         scenario << FakeServer::preauth()
-                 << "C: A000001 RENAME \"INBOX-FAIL-NO\" \"oldmail-no\""
+                 << R"(C: A000001 RENAME "INBOX-FAIL-NO" "oldmail-no")"
                  << "S: A000001 NO rename failure";
         QTest::newRow("no") << "INBOX-FAIL-NO" << "oldmail-no" << scenario;
     }
@@ -58,7 +58,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        KIMAP::RenameJob *job = new KIMAP::RenameJob(&session);
+        auto *job = new KIMAP::RenameJob(&session);
         job->setSourceMailBox(mailbox);
         job->setDestinationMailBox(newname);
         bool result = job->exec();

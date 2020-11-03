@@ -61,7 +61,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        KIMAP::ExpungeJob *job = new KIMAP::ExpungeJob(&session);
+        auto *job = new KIMAP::ExpungeJob(&session);
         bool result = job->exec();
         QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
         QEXPECT_FAIL("no" , "Expected failure on NO response", Continue);

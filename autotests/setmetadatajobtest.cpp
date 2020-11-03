@@ -30,7 +30,7 @@ private Q_SLOTS:
         {
             QList<QByteArray> scenario;
             scenario << FakeServer::preauth()
-                     << "C: A000001 SETMETADATA \"Folder1\" (\"/public/comment\" \"comment2\" \"/shared/comment\" \"Shared comment\")"
+                     << R"(C: A000001 SETMETADATA "Folder1" ("/public/comment" "comment2" "/shared/comment" "Shared comment"))"
                      << "S: A000001 OK SETMETADATA complete";
             QMap<QByteArray, QByteArray> annotations;
             annotations.insert("/public/comment", "comment2");
@@ -50,7 +50,7 @@ private Q_SLOTS:
         {
             QList<QByteArray> scenario;
             scenario << FakeServer::preauth()
-                    << "C: A000001 SETMETADATA \"Folder1\" (\"/shared/comment\" NIL)"
+                    << R"(C: A000001 SETMETADATA "Folder1" ("/shared/comment" NIL))"
                     << "S: A000001 OK SETMETADATA complete";
             QMap<QByteArray, QByteArray> annotations;
             annotations.insert("/shared/comment","");
@@ -90,7 +90,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        KIMAP::SetMetaDataJob *setMetadataJob = new KIMAP::SetMetaDataJob(&session);
+        auto *setMetadataJob = new KIMAP::SetMetaDataJob(&session);
         setMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Metadata);
         setMetadataJob->setMailBox(mailbox);
         foreach (const QByteArray &entry, annotations.keys()) {
@@ -112,7 +112,7 @@ private Q_SLOTS:
         {
             QList<QByteArray> scenario;
             scenario << FakeServer::preauth()
-                     << "C: A000001 SETANNOTATION \"Folder1\" \"/comment\" (\"value.shared\" \"Shared comment\")"
+                     << R"(C: A000001 SETANNOTATION "Folder1" "/comment" ("value.shared" "Shared comment"))"
                      << "S: A000001 OK annotations changed";
 
             QMap<QByteArray, QByteArray> annotations;
@@ -135,7 +135,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        KIMAP::SetMetaDataJob *setMetadataJob = new KIMAP::SetMetaDataJob(&session);
+        auto *setMetadataJob = new KIMAP::SetMetaDataJob(&session);
         setMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Annotatemore);
         setMetadataJob->setMailBox(mailbox);
         foreach (const QByteArray &entry, annotations.keys()) {

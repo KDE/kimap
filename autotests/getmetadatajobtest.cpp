@@ -33,8 +33,8 @@ private Q_SLOTS:
             QList<QByteArray> scenario;
             scenario << FakeServer::preauth()
                      << "C: A000001 GETMETADATA (DEPTH infinity) \"Folder1\" (/shared)"
-                     << "S: * METADATA \"Folder1\" (/shared/comment \"Shared comment\")"
-                     << "S: * METADATA \"Folder1\" (/private/comment \"My own comment\")"
+                     << R"(S: * METADATA "Folder1" (/shared/comment "Shared comment"))"
+                     << R"(S: * METADATA "Folder1" (/private/comment "My own comment"))"
                      << "S: A000001 OK GETMETADATA complete";
             QMap<QByteArray, QByteArray> expected;
             expected.insert("/shared/comment", "Shared comment");
@@ -45,7 +45,7 @@ private Q_SLOTS:
             QList<QByteArray> scenario;
             scenario << FakeServer::preauth()
                      << "C: A000001 GETMETADATA (DEPTH infinity) \"Folder1\" (/shared)"
-                     << "S: * METADATA \"Folder1\" (/shared/comment \"Shared comment\" /private/comment \"My own comment\")"
+                     << R"(S: * METADATA "Folder1" (/shared/comment "Shared comment" /private/comment "My own comment"))"
                      << "S: A000001 OK GETMETADATA complete";
             QMap<QByteArray, QByteArray> expected;
             expected.insert("/shared/comment", "Shared comment");
@@ -56,7 +56,7 @@ private Q_SLOTS:
             QList<QByteArray> scenario;
             scenario << FakeServer::preauth()
                      << "C: A000001 GETMETADATA (DEPTH infinity) \"Folder1\" (/shared)"
-                     << "S: * METADATA \"Folder1\" (/shared/comment \"NIL\" /private/comment \"NIL\")"
+                     << R"(S: * METADATA "Folder1" (/shared/comment "NIL" /private/comment "NIL"))"
                      << "S: A000001 OK GETMETADATA complete";
             QMap<QByteArray, QByteArray> expected;
             expected.insert("/shared/comment", "");
@@ -77,7 +77,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QLatin1String("127.0.0.1"), 5989);
 
-        KIMAP::GetMetaDataJob *getMetadataJob = new KIMAP::GetMetaDataJob(&session);
+        auto *getMetadataJob = new KIMAP::GetMetaDataJob(&session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Metadata);
         getMetadataJob->setMailBox(mailbox);
         getMetadataJob->setDepth(KIMAP::GetMetaDataJob::AllLevels);
@@ -129,7 +129,7 @@ private Q_SLOTS:
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
         //C: A000001 GETMETADATA "Folder1" (/shared)
-        KIMAP::GetMetaDataJob *getMetadataJob = new KIMAP::GetMetaDataJob(&session);
+        auto *getMetadataJob = new KIMAP::GetMetaDataJob(&session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Metadata);
         getMetadataJob->setMailBox(QStringLiteral("Folder1"));
         getMetadataJob->addRequestedEntry("/shared");
@@ -225,7 +225,7 @@ private Q_SLOTS:
         {
             QList<QByteArray> scenario;
             scenario << FakeServer::preauth()
-                     << "C: A000001 GETANNOTATION \"Folder1\" \"*\" \"value.shared\""
+                     << R"(C: A000001 GETANNOTATION "Folder1" "*" "value.shared")"
                      << "S: * ANNOTATION Folder1 /comment (value.shared \"Shared comment\")"
                      << "S: * ANNOTATION Folder1 /comment (value.priv \"My own comment\")"
                      << "S: A000001 OK annotations retrieved";
@@ -238,7 +238,7 @@ private Q_SLOTS:
         {
             QList<QByteArray> scenario;
             scenario << FakeServer::preauth()
-                     << "C: A000001 GETANNOTATION \"Folder1\" \"/comment\" \"value.shared\""
+                     << R"(C: A000001 GETANNOTATION "Folder1" "/comment" "value.shared")"
                      << "S: * ANNOTATION Folder1 /comment (value.shared \"Shared comment\")"
                      << "S: * ANNOTATION Folder1 /comment (value.priv \"My own comment\")"
                      << "S: A000001 OK annotations retrieved";
@@ -263,7 +263,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        KIMAP::GetMetaDataJob *getMetadataJob = new KIMAP::GetMetaDataJob(&session);
+        auto *getMetadataJob = new KIMAP::GetMetaDataJob(&session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Annotatemore);
         getMetadataJob->setMailBox(mailbox);
         getMetadataJob->addRequestedEntry(entry);
@@ -290,7 +290,7 @@ private Q_SLOTS:
         scenario << FakeServer::preauth()
                  << "C: A000001 GETANNOTATION \"Folder1\""
                  << "S: A000001 OK annotations retrieved"
-                 << "C: A000002 GETANNOTATION \"Folder1\" (\"/comment\" \"/motd\") (\"value.priv\" \"value.shared\")"
+                 << R"(C: A000002 GETANNOTATION "Folder1" ("/comment" "/motd") ("value.priv" "value.shared"))"
                  << "S: A000002 OK annotations retrieved";
         fakeServer.setScenario(scenario);
         fakeServer.startAndWait();
@@ -298,7 +298,7 @@ private Q_SLOTS:
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
         //C: A000001 GETANNOTATION "Folder1"
-        KIMAP::GetMetaDataJob *getMetadataJob = new KIMAP::GetMetaDataJob(&session);
+        auto *getMetadataJob = new KIMAP::GetMetaDataJob(&session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Annotatemore);
         getMetadataJob->setMailBox(QStringLiteral("Folder1"));
         QVERIFY(getMetadataJob->exec());
@@ -324,9 +324,9 @@ private Q_SLOTS:
         QList<QByteArray> scenario;
 
         scenario << FakeServer::preauth()
-            << "C: A000001 GETANNOTATION \"Folder1\" (\"/comment\" \"/motd\") \"value.shared\""
+            << R"(C: A000001 GETANNOTATION "Folder1" ("/comment" "/motd") "value.shared")"
             << "S: A000001 OK annotations retrieved"
-            << "C: A000002 GETANNOTATION \"Folder1\" \"/comment\" (\"value.priv\" \"value.shared\")"
+            << R"(C: A000002 GETANNOTATION "Folder1" "/comment" ("value.priv" "value.shared"))"
             << "S: A000002 OK annotations retrieved";
         fakeServer.setScenario(scenario);
         fakeServer.startAndWait();
@@ -334,7 +334,7 @@ private Q_SLOTS:
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
         //C: A000001 GETANNOTATION "Folder1" ("/comment" "/motd") "value.shared"
-        KIMAP::GetMetaDataJob *getMetadataJob = new KIMAP::GetMetaDataJob( &session);
+        auto *getMetadataJob = new KIMAP::GetMetaDataJob( &session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Annotatemore);
         getMetadataJob->setMailBox(QStringLiteral("Folder1"));
         getMetadataJob->addRequestedEntry("/shared/comment");

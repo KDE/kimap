@@ -23,7 +23,7 @@ void testId_data() {
     QTest::addColumn<ArrayMap>("values");
     QList<QByteArray> scenario;
     scenario << "S: * PREAUTH"
-             << "C: A000001 ID (\"name\" \"clientid\")"
+             << R"(C: A000001 ID ("name" "clientid"))"
              << "S: * ID NIL"
              << "S: A000001 OK ID completed";
   
@@ -42,7 +42,7 @@ void testId()
     fakeServer.startAndWait();
     KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-    KIMAP::IdJob *job = new KIMAP::IdJob(&session);
+    auto *job = new KIMAP::IdJob(&session);
     foreach (const QByteArray &key, values.keys()) {
         job->setField(key, values.value(key));
     }

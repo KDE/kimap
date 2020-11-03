@@ -90,7 +90,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        KIMAP::SearchJob *job = new KIMAP::SearchJob(&session);
+        auto *job = new KIMAP::SearchJob(&session);
         job->setUidBased(uidbased);
         job->setSearchLogic(searchLogic);
         for (const SearchCriteriaValuePair &pair : qAsConst(searchCriteria)) {
@@ -156,7 +156,7 @@ private Q_SLOTS:
         {
             QList<QByteArray> scenario;
             scenario << FakeServer::preauth()
-                     << "C: A000001 UID SEARCH OR HEADER Message-Id \"<1234567@mail.box>\" (OR HEADER Message-Id \"<7654321@mail.box>\" (OR HEADER Message-Id \"<abcdefg@mail.box>\" HEADER Message-Id \"<gfedcba@mail.box>\"))"
+                     << R"(C: A000001 UID SEARCH OR HEADER Message-Id "<1234567@mail.box>" (OR HEADER Message-Id "<7654321@mail.box>" (OR HEADER Message-Id "<abcdefg@mail.box>" HEADER Message-Id "<gfedcba@mail.box>")))"
                      << "S: * SEARCH 1 2 3 4"
                      << "S: A000001 OK search done";
             KIMAP::Term term{KIMAP::Term::Or, {KIMAP::Term{QStringLiteral("Message-Id"), QStringLiteral("<1234567@mail.box>")},
@@ -180,7 +180,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        KIMAP::SearchJob *job = new KIMAP::SearchJob(&session);
+        auto *job = new KIMAP::SearchJob(&session);
         job->setUidBased(uidbased);
         job->setTerm(searchTerm);
 
