@@ -7,9 +7,7 @@
   */
 
 #include <QDebug>
-#include <QTcpSocket>
 #include <QCoreApplication>
-#include <QSignalSpy>
 
 #include "acl.h"
 #include "session.h"

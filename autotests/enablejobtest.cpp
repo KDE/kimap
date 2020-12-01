@@ -11,8 +11,6 @@
 #include "kimap/enablejob.h"
 
 #include <QTest>
-#include <QSignalSpy>
-#include <QDebug>
 
 Q_DECLARE_METATYPE(QList<QList<QByteArray>>)
 

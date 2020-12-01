@@ -8,7 +8,6 @@
 #include "loginjob.h"
 
 #include <KLocalizedString>
-#include <QSslSocket>
 
 #include "kimap_debug.h"
 

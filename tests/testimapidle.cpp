@@ -7,7 +7,6 @@
 
 #include <QDebug>
 #include <QCoreApplication>
-#include <QSignalSpy>
 
 #include "session.h"
 #include "capabilitiesjob.h"
