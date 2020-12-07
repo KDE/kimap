@@ -28,7 +28,7 @@ public:
     explicit ImapParserException(const QByteArray &what) throw() : mWhat(what) {}
     explicit ImapParserException(const QString &what) throw() : mWhat(what.toUtf8()) {}
     ImapParserException(const ImapParserException &other) throw() : std::exception(other), mWhat(other.what()) {}
-    virtual ~ImapParserException() throw() {}
+    ~ImapParserException() throw() override {}
     const char *what() const throw() override
     {
         return mWhat.constData();

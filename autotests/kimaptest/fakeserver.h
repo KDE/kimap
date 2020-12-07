@@ -114,7 +114,7 @@ public:
     static QByteArray greeting();
 
     explicit FakeServer(QObject *parent = nullptr);
-    ~FakeServer();
+    ~FakeServer() override;
 
     /**
      * Sets the encryption mode used by the server socket.
