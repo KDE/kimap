@@ -56,7 +56,7 @@ ecm_qt_declare_logging_category(kimap_SRCS HEADER kimap_debug.h IDENTIFIER KIMAP
 
 
 add_library(KF5IMAP ${kimap_SRCS})
-if (COMPILE_WITH_CMAKE_SUPPORT)
+if (COMPILE_WITH_UNITY_CMAKE_SUPPORT)
     set_target_properties(KF5IMAP PROPERTIES UNITY_BUILD ON)
 endif()
 
