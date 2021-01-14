@@ -52,7 +52,7 @@ class UiProxy: public SessionUiProxy
 public:
     bool ignoreSslError(const KSslErrorUiData &errorData) override
     {
-        Q_UNUSED(errorData);
+        Q_UNUSED(errorData)
         return true;
     }
 };
