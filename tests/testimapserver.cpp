@@ -447,17 +447,20 @@ int main(int argc, char **argv)
     qDebug() << "Contains empty namespace:" << namespaces->containsEmptyNamespace();
 
     qDebug() << "Personal:";
-    foreach (MailBoxDescriptor ns, namespaces->personalNamespaces()) {
+    const auto personalNamespaces = namespaces->personalNamespaces();
+    for (MailBoxDescriptor ns : personalNamespaces) {
         qDebug() << ns.separator << ns.name;
     }
 
     qDebug() << "User:    ";
-    foreach (MailBoxDescriptor ns, namespaces->userNamespaces()) {
+    const auto userNamespaces = namespaces->userNamespaces();
+    for (MailBoxDescriptor ns : userNamespaces) {
         qDebug() << ns.separator << ns.name;
     }
 
     qDebug() << "Shared:  ";
-    foreach (MailBoxDescriptor ns, namespaces->sharedNamespaces()) {
+    const auto sharedNamespaces = namespaces->sharedNamespaces();
+    for (MailBoxDescriptor ns : sharedNamespaces) {
         qDebug() << ns.separator << ns.name;
     }
     qDebug();
@@ -502,7 +505,8 @@ int main(int argc, char **argv)
     fetch->exec();
     Q_ASSERT_X(fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit().constData());
     Q_ASSERT(session.state() == Session::Selected);
-    foreach (qint64 id, messages.keys()) {
+    const auto messagesKey = messages.keys();
+    for (qint64 id : messagesKey) {
         qDebug() << "* Message" << id << "(" << sizes[id] << "bytes )";
         qDebug() << "  From      :" << messages[id]->from()->asUnicodeString();
         qDebug() << "  To        :" << messages[id]->to()->asUnicodeString();
@@ -529,7 +533,8 @@ int main(int argc, char **argv)
     fetch->exec();
     Q_ASSERT_X(fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit().constData());
     Q_ASSERT(session.state() == Session::Selected);
-    foreach (qint64 id, flags.keys()) {
+    const auto flagsKey = flags.keys();
+    for (qint64 id : flagsKey) {
         qDebug() << "* Message" << id << "flags:" << flags[id];
     }
     qDebug();
@@ -570,10 +575,12 @@ int main(int argc, char **argv)
     fetch->exec();
     Q_ASSERT_X(fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit().constData());
     Q_ASSERT(session.state() == Session::Selected);
-    foreach (qint64 id, allParts.keys()) {
+    const auto allkeys = allParts.keys();
+    for (qint64 id : allkeys) {
         qDebug() << "* Message" << id << "parts headers";
         MessageParts parts = allParts[id];
-        foreach (const QByteArray &partId, parts.keys()) {
+        const auto parsKeys = parts.keys();
+        for (const QByteArray &partId : parsKeys) {
             qDebug() << "  ** Part" << partId;
             qDebug() << "     Name       :" << parts[partId]->contentType()->name();
             qDebug() << "     Mimetype   :" << parts[partId]->contentType()->mimeType();
@@ -597,9 +604,11 @@ int main(int argc, char **argv)
     fetch->exec();
     Q_ASSERT_X(fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit().constData());
     Q_ASSERT(session.state() == Session::Selected);
-    foreach (int id, allParts.keys()) {
+    const auto allpartskeys = allParts.keys();
+    for (int id : allpartskeys) {
         MessageParts parts = allParts[id];
-        foreach (const QByteArray &partId, parts.keys()) {
+        const auto partsKeys = parts.keys();
+        for (const QByteArray &partId : partsKeys) {
             qDebug() << "* Message" << id << "part" << partId << "content:";
             qDebug() << parts[partId]->body();
         }

@@ -93,7 +93,8 @@ private Q_SLOTS:
         auto *setMetadataJob = new KIMAP::SetMetaDataJob(&session);
         setMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Metadata);
         setMetadataJob->setMailBox(mailbox);
-        foreach (const QByteArray &entry, annotations.keys()) {
+        const auto keys = annotations.keys();
+        for (const QByteArray &entry : keys) {
             setMetadataJob->addMetaData(entry, annotations[entry]);
         }
 
@@ -138,7 +139,8 @@ private Q_SLOTS:
         auto *setMetadataJob = new KIMAP::SetMetaDataJob(&session);
         setMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Annotatemore);
         setMetadataJob->setMailBox(mailbox);
-        foreach (const QByteArray &entry, annotations.keys()) {
+        const auto keys = annotations.keys();
+        for (const QByteArray &entry : keys) {
             if (legacyMode) {
                 setMetadataJob->setEntry(entry);
                 setMetadataJob->addMetaData("value.shared", annotations[entry]);

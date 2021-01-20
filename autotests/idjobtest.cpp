@@ -43,7 +43,8 @@ void testId()
     KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
     auto *job = new KIMAP::IdJob(&session);
-    foreach (const QByteArray &key, values.keys()) {
+    const auto keys = values.keys();
+    for (const QByteArray &key : keys) {
         job->setField(key, values.value(key));
     }
     bool result = job->exec();

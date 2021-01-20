@@ -62,7 +62,8 @@ void GetMetaDataJob::doStart()
         if (d->entries.size() > 1) {
             parameters += '(';
         }
-        Q_FOREACH (const QByteArray &entry, sort(d->entries)) {
+        const auto sortedEntries = sort(d->entries);
+        for (const QByteArray &entry : sortedEntries) {
             parameters += '\"' + entry + "\" ";
         }
         if (d->entries.size() > 1) {
@@ -73,7 +74,8 @@ void GetMetaDataJob::doStart()
         if (d->attributes.size() > 1) {
             parameters += '(';
         }
-        Q_FOREACH (const QByteArray &attribute, sort(d->attributes)) {
+        const auto sortedAttributes = sort(d->attributes);
+        for (const QByteArray &attribute : sortedAttributes) {
             parameters += '\"' + attribute + "\" ";
         }
         if (d->attributes.size() > 1) {
@@ -101,7 +103,8 @@ void GetMetaDataJob::doStart()
 
         if (d->entries.size() >= 1) {
             parameters += '(';
-            Q_FOREACH (const QByteArray &entry, sort(d->entries)) {
+            const auto sortedEntries = sort(d->entries);
+            for (const QByteArray &entry : sortedEntries) {
                 parameters += entry + " ";
             }
             parameters[parameters.length() - 1 ] = ')';
@@ -236,9 +239,11 @@ QMap<QByteArray, QByteArray> GetMetaDataJob::allMetaDataForMailbox(const QString
     Q_D(const GetMetaDataJob);
     const QMap<QByteArray, QMap<QByteArray, QByteArray> > &entries = d->metadata[mailbox];
     QMap<QByteArray, QByteArray> map;
-    foreach (const QByteArray &entry, entries.keys()) {
+    const auto entriesKeys = entries.keys();
+    for (const QByteArray &entry : entriesKeys) {
         const QMap<QByteArray, QByteArray> &values = entries[entry];
-        foreach (const QByteArray &attribute, values.keys()) {
+        const auto valuesKeys = values.keys();
+        for (const QByteArray &attribute : valuesKeys) {
             map.insert(d->addPrefix(entry, attribute), values[attribute]);
         }
     }

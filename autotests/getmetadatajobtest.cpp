@@ -88,7 +88,8 @@ private Q_SLOTS:
         QCOMPARE(getMetadataJob->allMetaData(mailbox).size(), expectedAnnotations.size());
         const QMap <QByteArray, QByteArray> &allMetaData = getMetadataJob->allMetaData();
         QCOMPARE(allMetaData.size(), expectedAnnotations.size());
-        foreach (const QByteArray &entry, expectedAnnotations.keys()) {
+        const auto keys = expectedAnnotations.keys();
+        for (const QByteArray &entry : keys ) {
             QCOMPARE(getMetadataJob->metaData(mailbox, entry), expectedAnnotations.value(entry));
             QCOMPARE(getMetadataJob->metaData(entry), expectedAnnotations.value(entry));
             QCOMPARE(allMetaData.value(entry), expectedAnnotations.value(entry));
@@ -274,7 +275,8 @@ private Q_SLOTS:
         qDebug() << getMetadataJob->allMetaData();
         const QMap <QByteArray, QByteArray> &allMetaData = getMetadataJob->allMetaData();
         QCOMPARE(allMetaData.size(), expectedAnnotations.size());
-        foreach (const QByteArray &e, expectedAnnotations.keys()) {
+        const auto keys = expectedAnnotations.keys();
+        for (const QByteArray &e : keys) {
             QCOMPARE(getMetadataJob->metaData(e), expectedAnnotations.value(e));
             QCOMPARE(allMetaData.value(e), expectedAnnotations.value(e));
         }
