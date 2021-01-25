@@ -198,7 +198,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        auto *job = new KIMAP::FetchJob(&session);
+        auto job = new KIMAP::FetchJob(&session);
         job->setUidBased(uidBased);
         job->setSequenceSet(set);
         job->setScope(scope);
@@ -267,7 +267,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        auto *job = new KIMAP::FetchJob(&session);
+        auto job = new KIMAP::FetchJob(&session);
         job->setUidBased(false);
         job->setSequenceSet(KIMAP::ImapSet(1, 2));
         job->setScope(scope);
@@ -331,7 +331,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        auto *job = new KIMAP::FetchJob(&session);
+        auto job = new KIMAP::FetchJob(&session);
         job->setUidBased(false);
         job->setSequenceSet(KIMAP::ImapSet(2, 2));
         job->setScope(scope);

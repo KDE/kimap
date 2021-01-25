@@ -14,7 +14,7 @@
 
 #include <QTest>
 
-typedef QPair< KIMAP::SearchJob::SearchCriteria, QByteArray > SearchCriteriaValuePair;
+using SearchCriteriaValuePair = QPair<KIMAP::SearchJob::SearchCriteria, QByteArray>;
 
 Q_DECLARE_METATYPE(QList<SearchCriteriaValuePair>)
 Q_DECLARE_METATYPE(KIMAP::SearchJob::SearchLogic)
@@ -90,7 +90,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        auto *job = new KIMAP::SearchJob(&session);
+        auto job = new KIMAP::SearchJob(&session);
         job->setUidBased(uidbased);
         job->setSearchLogic(searchLogic);
         for (const SearchCriteriaValuePair &pair : qAsConst(searchCriteria)) {
@@ -180,7 +180,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        auto *job = new KIMAP::SearchJob(&session);
+        auto job = new KIMAP::SearchJob(&session);
         job->setUidBased(uidbased);
         job->setTerm(searchTerm);
 

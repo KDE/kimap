@@ -86,7 +86,7 @@ SslServer::SslServer(QSsl::SslProtocol protocol, bool waitForStartTls)
 
 void SslServer::incomingConnection(qintptr handle)
 {
-    auto *socket = new QSslSocket();
+    auto socket = new QSslSocket();
     socket->setSocketDescriptor(handle);
 
     socket->setProtocol(mProtocol);
@@ -120,7 +120,7 @@ void SslServer::sslErrors(const QList<QSslError> &errors)
     for (const QSslError &error : errors) {
         qWarning() << "Received ssl error: " << error.errorString();
     }
-    auto *socket = qobject_cast<QSslSocket *>(QObject::sender());
+    auto socket = qobject_cast<QSslSocket *>(QObject::sender());
     if (socket) {
         socket->disconnectFromHost();
     }
@@ -128,7 +128,7 @@ void SslServer::sslErrors(const QList<QSslError> &errors)
 
 void SslServer::error(QAbstractSocket::SocketError error)
 {
-    auto *socket = qobject_cast<QSslSocket *>(QObject::sender());
+    auto socket = qobject_cast<QSslSocket *>(QObject::sender());
     if (socket) {
         qWarning() << socket->errorString();
     }

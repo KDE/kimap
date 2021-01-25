@@ -12,7 +12,7 @@
 
 #include <QTest>
 
-typedef QMap<QByteArray, QByteArray> MAP;
+using MAP = QMap<QByteArray, QByteArray>;
 Q_DECLARE_METATYPE(MAP)
 
 class SetMetadataJobTest: public QObject
@@ -90,7 +90,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        auto *setMetadataJob = new KIMAP::SetMetaDataJob(&session);
+        auto setMetadataJob = new KIMAP::SetMetaDataJob(&session);
         setMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Metadata);
         setMetadataJob->setMailBox(mailbox);
         const auto keys = annotations.keys();
@@ -136,7 +136,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        auto *setMetadataJob = new KIMAP::SetMetaDataJob(&session);
+        auto setMetadataJob = new KIMAP::SetMetaDataJob(&session);
         setMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Annotatemore);
         setMetadataJob->setMailBox(mailbox);
         const auto keys = annotations.keys();

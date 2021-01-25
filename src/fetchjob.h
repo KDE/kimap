@@ -24,13 +24,13 @@ class Session;
 struct Response;
 class FetchJobPrivate;
 
-typedef QSharedPointer<KMime::Content> ContentPtr;
-typedef QMap<QByteArray, ContentPtr> MessageParts;
+using ContentPtr = QSharedPointer<KMime::Content>;
+using MessageParts = QMap<QByteArray, ContentPtr>;
 
-typedef QSharedPointer<KMime::Message> MessagePtr;
-typedef QList<QByteArray> MessageFlags;
+using MessagePtr = QSharedPointer<KMime::Message>;
+using MessageFlags = QList<QByteArray>;
 
-typedef QPair<QByteArray, QVariant> MessageAttribute;
+using MessageAttribute = QPair<QByteArray, QVariant>;
 
 struct Message
 {

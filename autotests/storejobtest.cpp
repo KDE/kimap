@@ -64,7 +64,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        auto *job = new KIMAP::StoreJob(&session);
+        auto job = new KIMAP::StoreJob(&session);
         job->setUidBased(uidBased);
         job->setSequenceSet(KIMAP::ImapSet(uidBased ? uid : id));
         job->setFlags(flags);

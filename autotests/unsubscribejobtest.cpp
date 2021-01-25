@@ -56,7 +56,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        auto *job = new KIMAP::UnsubscribeJob(&session);
+        auto job = new KIMAP::UnsubscribeJob(&session);
         job->setMailBox(mailbox);
         bool result = job->exec();
         QEXPECT_FAIL("bad" , "Expected failure on BAD scenario", Continue);

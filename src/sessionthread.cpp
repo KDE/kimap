@@ -31,7 +31,7 @@ SessionThread::SessionThread(const QString &hostName, quint16 port)
 {
     // Just like the Qt docs now recommend, for event-driven threads:
     // don't derive from QThread, create one directly and move the object to it.
-    auto *thread = new QThread();
+    auto thread = new QThread();
     moveToThread(thread);
     thread->start();
     QMetaObject::invokeMethod(this, &SessionThread::threadInit);

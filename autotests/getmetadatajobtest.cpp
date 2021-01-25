@@ -13,7 +13,7 @@
 #include <QTest>
 #include <QDebug>
 
-typedef QMap<QByteArray, QByteArray> MAP;
+using MAP = QMap<QByteArray, QByteArray>;
 Q_DECLARE_METATYPE(MAP)
 
 class GetMetadataJobTest: public QObject
@@ -77,7 +77,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QLatin1String("127.0.0.1"), 5989);
 
-        auto *getMetadataJob = new KIMAP::GetMetaDataJob(&session);
+        auto getMetadataJob = new KIMAP::GetMetaDataJob(&session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Metadata);
         getMetadataJob->setMailBox(mailbox);
         getMetadataJob->setDepth(KIMAP::GetMetaDataJob::AllLevels);
@@ -130,7 +130,7 @@ private Q_SLOTS:
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
         //C: A000001 GETMETADATA "Folder1" (/shared)
-        auto *getMetadataJob = new KIMAP::GetMetaDataJob(&session);
+        auto getMetadataJob = new KIMAP::GetMetaDataJob(&session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Metadata);
         getMetadataJob->setMailBox(QStringLiteral("Folder1"));
         getMetadataJob->addRequestedEntry("/shared");
@@ -264,7 +264,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        auto *getMetadataJob = new KIMAP::GetMetaDataJob(&session);
+        auto getMetadataJob = new KIMAP::GetMetaDataJob(&session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Annotatemore);
         getMetadataJob->setMailBox(mailbox);
         getMetadataJob->addRequestedEntry(entry);
@@ -300,7 +300,7 @@ private Q_SLOTS:
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
         //C: A000001 GETANNOTATION "Folder1"
-        auto *getMetadataJob = new KIMAP::GetMetaDataJob(&session);
+        auto getMetadataJob = new KIMAP::GetMetaDataJob(&session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Annotatemore);
         getMetadataJob->setMailBox(QStringLiteral("Folder1"));
         QVERIFY(getMetadataJob->exec());
@@ -336,7 +336,7 @@ private Q_SLOTS:
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
         //C: A000001 GETANNOTATION "Folder1" ("/comment" "/motd") "value.shared"
-        auto *getMetadataJob = new KIMAP::GetMetaDataJob( &session);
+        auto getMetadataJob = new KIMAP::GetMetaDataJob( &session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Annotatemore);
         getMetadataJob->setMailBox(QStringLiteral("Folder1"));
         getMetadataJob->addRequestedEntry("/shared/comment");

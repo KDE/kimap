@@ -10,7 +10,7 @@
 
 #include <QTest>
 
-typedef QMap<QByteArray, QByteArray> ArrayMap;
+using ArrayMap = QMap<QByteArray, QByteArray>;
 Q_DECLARE_METATYPE(ArrayMap)
 
 class IdJobTest: public QObject {
@@ -42,7 +42,7 @@ void testId()
     fakeServer.startAndWait();
     KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-    auto *job = new KIMAP::IdJob(&session);
+    auto job = new KIMAP::IdJob(&session);
     const auto keys = values.keys();
     for (const QByteArray &key : keys) {
         job->setField(key, values.value(key));

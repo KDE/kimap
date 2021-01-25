@@ -103,8 +103,8 @@ private Q_SLOTS:
                  << "S: * OK [UIDNEXT 567] Predicted next UID"
                  << "S: * OK [HIGHESTMODSEQ 90060115205545359]"
                  << "S: * OK [UNSEEN 7] There are some unseen messages in the mailbox"
-                 << "S: * FLAGS (\\Answered \\Flagged \\Draft \\Deleted \\Seen)"
-                 << "S: * OK [PERMANENTFLAGS (\\Answered \\Flagged \\Draft \\Deleted \\Seen \\*)] Permanent flags"
+                 << R"(S: * FLAGS (\Answered \Flagged \Draft \Deleted \Seen))"
+                 << R"(S: * OK [PERMANENTFLAGS (\Answered \Flagged \Draft \Deleted \Seen \*)] Permanent flags)"
                  << "S: * VANISHED (EARLIER) 41,43:116,118,120:211,214:540"
                  << "S: * 49 FETCH (UID 117 FLAGS (\\Seen \\Answered) MODSEQ (90060115194045001))"
                  << "S: * 50 FETCH (UID 119 FLAGS (\\Draft $MDNSent) MODSEQ (90060115194045308))"
@@ -150,7 +150,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        auto *job = new KIMAP::SelectJob(&session);
+        auto job = new KIMAP::SelectJob(&session);
         job->setCondstoreEnabled(condstoreEnabled);
         job->setMailBox(QStringLiteral("INBOX"));
         if (lastUidvalidity > -1 && lastModseq > 0) {
@@ -212,7 +212,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        auto *job = new KIMAP::SelectJob(&session);
+        auto job = new KIMAP::SelectJob(&session);
         job->setMailBox(QStringLiteral("INBOX"));
         QVERIFY(job->exec());
 

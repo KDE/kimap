@@ -11,7 +11,7 @@
 #include "kimap/session.h"
 #include "kimap/statusjob.h"
 
-typedef QList<QPair<QByteArray, qint64>> StatusMap;
+using StatusMap = QList<QPair<QByteArray, qint64>>;
 Q_DECLARE_METATYPE(StatusMap)
 
 class StatusJobTest: public QObject
@@ -86,7 +86,7 @@ private Q_SLOTS:
         fakeServer.startAndWait();
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
-        auto *job = new KIMAP::StatusJob(&session);
+        auto job = new KIMAP::StatusJob(&session);
         job->setMailBox(QStringLiteral("INBOX"));
         job->setDataItems(dataItems);
         bool result = job->exec();

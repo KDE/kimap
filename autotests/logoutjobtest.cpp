@@ -32,9 +32,9 @@ private Q_SLOTS:
                               );
         fakeServer.startAndWait();
 
-        KIMAP::Session *session = new KIMAP::Session(QStringLiteral("127.0.0.1"), 5989);
+        auto session = new KIMAP::Session(QStringLiteral("127.0.0.1"), 5989);
 
-        auto *logout = new KIMAP::LogoutJob(session);
+        auto logout = new KIMAP::LogoutJob(session);
         QVERIFY(logout->exec());
 
         fakeServer.quit();
@@ -52,9 +52,9 @@ private Q_SLOTS:
                               );
         fakeServer.startAndWait();
 
-        KIMAP::Session *session = new KIMAP::Session(QStringLiteral("127.0.0.1"), 5989);
+        auto session = new KIMAP::Session(QStringLiteral("127.0.0.1"), 5989);
 
-        auto *logout = new KIMAP::LogoutJob(session);
+        auto logout = new KIMAP::LogoutJob(session);
         QVERIFY(logout->exec());
 
         fakeServer.quit();

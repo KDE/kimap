@@ -135,13 +135,13 @@ private Q_SLOTS:
         fakeServer.startAndWait();
 
         KIMAP::Session s(QStringLiteral("127.0.0.1"), 5989);
-        auto *j1 = new MockJob(&s);
+        auto j1 = new MockJob(&s);
         connect(j1, SIGNAL(result(KJob*)), this, SLOT(jobDone(KJob*)));
-        auto *j2 = new MockJob(&s);
+        auto j2 = new MockJob(&s);
         connect(j2, SIGNAL(result(KJob*)), this, SLOT(jobDone(KJob*)));
-        auto *j3 = new MockJob(&s);
+        auto j3 = new MockJob(&s);
         connect(j3, SIGNAL(result(KJob*)), this, SLOT(jobDone(KJob*)));
-        auto *j4 = new MockJob(&s);
+        auto j4 = new MockJob(&s);
         connect(j4, SIGNAL(result(KJob*)), this, SLOT(jobDone(KJob*)));
 
         j4->start();
@@ -173,10 +173,10 @@ private Q_SLOTS:
 
         QCOMPARE(s.jobQueueSize(), 0);
 
-        auto *j1 = new MockJob(&s);
-        auto *j2 = new MockJob(&s);
-        auto *j3 = new MockJob(&s);
-        auto *j4 = new MockJob(&s);
+        auto j1 = new MockJob(&s);
+        auto j2 = new MockJob(&s);
+        auto j3 = new MockJob(&s);
+        auto j4 = new MockJob(&s);
         connect(j4, SIGNAL(result(KJob*)), &m_eventLoop, SLOT(quit()));
 
         QCOMPARE(s.jobQueueSize(), 0);
@@ -241,7 +241,7 @@ private Q_SLOTS:
         QSignalSpy spyLost(&s, SIGNAL(connectionLost()));
         QSignalSpy spyState(&s, SIGNAL(stateChanged(KIMAP::Session::State,KIMAP::Session::State)));
 
-        auto *mock = new MockJob(&s);
+        auto mock = new MockJob(&s);
         mock->setCommand("DUMMY");
 
         mock->exec();
@@ -263,15 +263,15 @@ private Q_SLOTS:
         KIMAP::Session s(QStringLiteral("127.0.0.1"), 5989);
         s.setTimeout(1);
 
-        auto *j1 = new MockJob(&s);
+        auto j1 = new MockJob(&s);
         QSignalSpy spyResult1(j1, SIGNAL(result(KJob*)));
         QSignalSpy spyDestroyed1(j1, SIGNAL(destroyed()));
 
-        auto *j2 = new MockJob(&s);
+        auto j2 = new MockJob(&s);
         QSignalSpy spyResult2(j2, SIGNAL(result(KJob*)));
         QSignalSpy spyDestroyed2(j2, SIGNAL(destroyed()));
 
-        auto *j3 = new MockJob(&s);
+        auto j3 = new MockJob(&s);
         QSignalSpy spyResult3(j3, SIGNAL(result(KJob*)));
         QSignalSpy spyDestroyed3(j3, SIGNAL(destroyed()));
 
@@ -314,7 +314,7 @@ private Q_SLOTS:
             QSignalSpy spyLost(&s, SIGNAL(connectionLost()));
             QSignalSpy spyState(&s, SIGNAL(stateChanged(KIMAP::Session::State,KIMAP::Session::State)));
 
-            auto *mock = new MockJob(&s);
+            auto mock = new MockJob(&s);
             mock->setTimeout(5000);
             mock->setCommand("DUMMY");
 

@@ -19,7 +19,7 @@ class Session;
 struct Response;
 class StoreJobPrivate;
 
-typedef QList<QByteArray> MessageFlags;
+using MessageFlags = QList<QByteArray>;
 
 class KIMAP_EXPORT StoreJob : public Job
 {
