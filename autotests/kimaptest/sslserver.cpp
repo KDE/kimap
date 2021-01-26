@@ -5,10 +5,9 @@
 */
 #include "sslserver.h"
 
-#include <QSslKey>
-#include <QSslConfiguration>
 #include <QDebug>
-
+#include <QSslConfiguration>
+#include <QSslKey>
 
 // Generated on 2020-10-07 using command:
 // openssl req -nodes -new -x509 -keyout key.pem -out cert.pem -days 36500
@@ -17,9 +16,9 @@
 
 static QByteArray staticCert()
 {
-    //a dummy certificate
+    // a dummy certificate
     return QByteArray(
-            "-----BEGIN CERTIFICATE-----\n\
+        "-----BEGIN CERTIFICATE-----\n\
 MIIDZzCCAk+gAwIBAgIUQoBjjbd//7DD9zWfru/epnVT2vAwDQYJKoZIhvcNAQEL\n\
 BQAwQjELMAkGA1UEBhMCWFgxFTATBgNVBAcMDERlZmF1bHQgQ2l0eTEcMBoGA1UE\n\
 CgwTRGVmYXVsdCBDb21wYW55IEx0ZDAgFw0yMDEwMDcxMzMxMTJaGA8yMTIwMDkx\n\
@@ -44,9 +43,9 @@ aBvBMCfr7GXmLQk=\n\
 
 static QByteArray staticKey()
 {
-    //a dummy key without password
+    // a dummy key without password
     return QByteArray(
-            "-----BEGIN PRIVATE KEY-----\n\
+        "-----BEGIN PRIVATE KEY-----\n\
 MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDCLtDrIo2tmyCD\n\
 XQo7j9E/rXZUDiPJedifs/3SOOTMXnBJ+SwLGFoamp6YGUjObRX+Malml/9f01Qw\n\
 eSYi8d76Fjjg07TSsxVRQs3yh7h+nAW6BBOE2fh+oU6vmMjClAze16kbQSH9RQX9\n\
@@ -77,11 +76,10 @@ NdkmACeCyNMs5V3yq1vAeN4=\n\
 }
 
 SslServer::SslServer(QSsl::SslProtocol protocol, bool waitForStartTls)
-    : QTcpServer(),
-      mProtocol(protocol),
-      mWaitForStartTls(waitForStartTls)
+    : QTcpServer()
+    , mProtocol(protocol)
+    , mWaitForStartTls(waitForStartTls)
 {
-
 }
 
 void SslServer::incomingConnection(qintptr handle)

@@ -6,17 +6,17 @@
 
 #include <QTest>
 
-#include "kimaptest/fakeserver.h"
-#include "kimap/session.h"
 #include "kimap/getmetadatajob.h"
+#include "kimap/session.h"
+#include "kimaptest/fakeserver.h"
 
-#include <QTest>
 #include <QDebug>
+#include <QTest>
 
 using MAP = QMap<QByteArray, QByteArray>;
 Q_DECLARE_METATYPE(MAP)
 
-class GetMetadataJobTest: public QObject
+class GetMetadataJobTest : public QObject
 {
     Q_OBJECT
 
@@ -24,15 +24,14 @@ private Q_SLOTS:
 
     void metadata_data()
     {
-        QTest::addColumn<QList<QByteArray> >("scenario");
+        QTest::addColumn<QList<QByteArray>>("scenario");
         QTest::addColumn<QString>("mailbox");
-        QTest::addColumn<QMap<QByteArray, QByteArray> >("expectedAnnotations");
+        QTest::addColumn<QMap<QByteArray, QByteArray>>("expectedAnnotations");
 
         {
-            //FIXME requesting /shared and getting /private back doesn't make sense => fix scenario
+            // FIXME requesting /shared and getting /private back doesn't make sense => fix scenario
             QList<QByteArray> scenario;
-            scenario << FakeServer::preauth()
-                     << "C: A000001 GETMETADATA (DEPTH infinity) \"Folder1\" (/shared)"
+            scenario << FakeServer::preauth() << "C: A000001 GETMETADATA (DEPTH infinity) \"Folder1\" (/shared)"
                      << R"(S: * METADATA "Folder1" (/shared/comment "Shared comment"))"
                      << R"(S: * METADATA "Folder1" (/private/comment "My own comment"))"
                      << "S: A000001 OK GETMETADATA complete";
@@ -43,8 +42,7 @@ private Q_SLOTS:
         }
         {
             QList<QByteArray> scenario;
-            scenario << FakeServer::preauth()
-                     << "C: A000001 GETMETADATA (DEPTH infinity) \"Folder1\" (/shared)"
+            scenario << FakeServer::preauth() << "C: A000001 GETMETADATA (DEPTH infinity) \"Folder1\" (/shared)"
                      << R"(S: * METADATA "Folder1" (/shared/comment "Shared comment" /private/comment "My own comment"))"
                      << "S: A000001 OK GETMETADATA complete";
             QMap<QByteArray, QByteArray> expected;
@@ -54,8 +52,7 @@ private Q_SLOTS:
         }
         {
             QList<QByteArray> scenario;
-            scenario << FakeServer::preauth()
-                     << "C: A000001 GETMETADATA (DEPTH infinity) \"Folder1\" (/shared)"
+            scenario << FakeServer::preauth() << "C: A000001 GETMETADATA (DEPTH infinity) \"Folder1\" (/shared)"
                      << R"(S: * METADATA "Folder1" (/shared/comment "NIL" /private/comment "NIL"))"
                      << "S: A000001 OK GETMETADATA complete";
             QMap<QByteArray, QByteArray> expected;
@@ -86,10 +83,10 @@ private Q_SLOTS:
         QVERIFY(getMetadataJob->exec());
 
         QCOMPARE(getMetadataJob->allMetaData(mailbox).size(), expectedAnnotations.size());
-        const QMap <QByteArray, QByteArray> &allMetaData = getMetadataJob->allMetaData();
+        const QMap<QByteArray, QByteArray> &allMetaData = getMetadataJob->allMetaData();
         QCOMPARE(allMetaData.size(), expectedAnnotations.size());
         const auto keys = expectedAnnotations.keys();
-        for (const QByteArray &entry : keys ) {
+        for (const QByteArray &entry : keys) {
             QCOMPARE(getMetadataJob->metaData(mailbox, entry), expectedAnnotations.value(entry));
             QCOMPARE(getMetadataJob->metaData(entry), expectedAnnotations.value(entry));
             QCOMPARE(allMetaData.value(entry), expectedAnnotations.value(entry));
@@ -103,8 +100,7 @@ private Q_SLOTS:
         FakeServer fakeServer;
         QList<QByteArray> scenario;
 
-        scenario << FakeServer::preauth()
-                 << "C: A000001 GETMETADATA \"Folder1\" (/shared)"
+        scenario << FakeServer::preauth() << "C: A000001 GETMETADATA \"Folder1\" (/shared)"
                  << "S: A000001 OK GETMETADATA complete"
                  << "C: A000002 GETMETADATA (DEPTH 1) \"Folder1\" (/shared)"
                  << "S: A000002 OK GETMETADATA complete"
@@ -129,7 +125,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        //C: A000001 GETMETADATA "Folder1" (/shared)
+        // C: A000001 GETMETADATA "Folder1" (/shared)
         auto getMetadataJob = new KIMAP::GetMetaDataJob(&session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Metadata);
         getMetadataJob->setMailBox(QStringLiteral("Folder1"));
@@ -139,7 +135,7 @@ private Q_SLOTS:
 
         QCOMPARE(getMetadataJob->allMetaData(QLatin1String("Folder1")).size(), 0);
 
-        //C: A000002 GETMETADATA "Folder1" (DEPTH 1) (/shared)
+        // C: A000002 GETMETADATA "Folder1" (DEPTH 1) (/shared)
         getMetadataJob = new KIMAP::GetMetaDataJob(&session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Metadata);
         getMetadataJob->setMailBox(QStringLiteral("Folder1"));
@@ -147,7 +143,7 @@ private Q_SLOTS:
         getMetadataJob->setDepth(KIMAP::GetMetaDataJob::OneLevel);
         QVERIFY(getMetadataJob->exec());
 
-        //C: A000003 GETMETADATA "Folder1" (MAXSIZE 1234) (/shared)
+        // C: A000003 GETMETADATA "Folder1" (MAXSIZE 1234) (/shared)
         getMetadataJob = new KIMAP::GetMetaDataJob(&session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Metadata);
         getMetadataJob->setMailBox(QStringLiteral("Folder1"));
@@ -156,7 +152,7 @@ private Q_SLOTS:
         getMetadataJob->setMaximumSize(1234);
         QVERIFY(getMetadataJob->exec());
 
-        //C: A000004 GETMETADATA "Folder1" (DEPTH 1) (MAXSIZE 1234) (/shared)
+        // C: A000004 GETMETADATA "Folder1" (DEPTH 1) (MAXSIZE 1234) (/shared)
         getMetadataJob = new KIMAP::GetMetaDataJob(&session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Metadata);
         getMetadataJob->setMailBox(QStringLiteral("Folder1"));
@@ -165,7 +161,7 @@ private Q_SLOTS:
         getMetadataJob->setMaximumSize(1234);
         QVERIFY(getMetadataJob->exec());
 
-        //C: A000005 GETMETADATA "Folder1" (DEPTH 1) (MAXSIZE 1234) (/shared /shared2)
+        // C: A000005 GETMETADATA "Folder1" (DEPTH 1) (MAXSIZE 1234) (/shared /shared2)
         getMetadataJob = new KIMAP::GetMetaDataJob(&session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Metadata);
         getMetadataJob->setMailBox(QStringLiteral("Folder1"));
@@ -175,7 +171,7 @@ private Q_SLOTS:
         getMetadataJob->setMaximumSize(1234);
         QVERIFY(getMetadataJob->exec());
 
-        //C: A000006 GETMETADATA "Folder1" (DEPTH 1) (MAXSIZE 1234)
+        // C: A000006 GETMETADATA "Folder1" (DEPTH 1) (MAXSIZE 1234)
         getMetadataJob = new KIMAP::GetMetaDataJob(&session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Metadata);
         getMetadataJob->setMailBox(QStringLiteral("Folder1"));
@@ -183,14 +179,14 @@ private Q_SLOTS:
         getMetadataJob->setMaximumSize(1234);
         QVERIFY(getMetadataJob->exec());
 
-        //C: A000007 GETMETADATA "Folder1" (DEPTH 1)
+        // C: A000007 GETMETADATA "Folder1" (DEPTH 1)
         getMetadataJob = new KIMAP::GetMetaDataJob(&session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Metadata);
         getMetadataJob->setMailBox(QStringLiteral("Folder1"));
         getMetadataJob->setDepth(KIMAP::GetMetaDataJob::OneLevel);
         QVERIFY(getMetadataJob->exec());
 
-        //C: A000008 GETMETADATA "Folder1" (MAXSIZE 1234)
+        // C: A000008 GETMETADATA "Folder1" (MAXSIZE 1234)
         getMetadataJob = new KIMAP::GetMetaDataJob(&session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Metadata);
         getMetadataJob->setMailBox(QStringLiteral("Folder1"));
@@ -198,14 +194,14 @@ private Q_SLOTS:
         getMetadataJob->setMaximumSize(1234);
         QVERIFY(getMetadataJob->exec());
 
-        //C: A000009 GETMETADATA "Folder1"
+        // C: A000009 GETMETADATA "Folder1"
         getMetadataJob = new KIMAP::GetMetaDataJob(&session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Metadata);
         getMetadataJob->setMailBox(QStringLiteral("Folder1"));
         getMetadataJob->setDepth(KIMAP::GetMetaDataJob::NoDepth);
         QVERIFY(getMetadataJob->exec());
 
-        //C: A000010 GETMETADATA ""
+        // C: A000010 GETMETADATA ""
         getMetadataJob = new KIMAP::GetMetaDataJob(&session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Metadata);
         getMetadataJob->setMailBox(QLatin1String(""));
@@ -218,15 +214,14 @@ private Q_SLOTS:
 
     void annotatemore_data()
     {
-        QTest::addColumn<QList<QByteArray> >("scenario");
+        QTest::addColumn<QList<QByteArray>>("scenario");
         QTest::addColumn<QString>("mailbox");
-        QTest::addColumn<QMap<QByteArray, QByteArray> >("expectedAnnotations");
+        QTest::addColumn<QMap<QByteArray, QByteArray>>("expectedAnnotations");
         QTest::addColumn<QByteArray>("entry");
 
         {
             QList<QByteArray> scenario;
-            scenario << FakeServer::preauth()
-                     << R"(C: A000001 GETANNOTATION "Folder1" "*" "value.shared")"
+            scenario << FakeServer::preauth() << R"(C: A000001 GETANNOTATION "Folder1" "*" "value.shared")"
                      << "S: * ANNOTATION Folder1 /comment (value.shared \"Shared comment\")"
                      << "S: * ANNOTATION Folder1 /comment (value.priv \"My own comment\")"
                      << "S: A000001 OK annotations retrieved";
@@ -238,8 +233,7 @@ private Q_SLOTS:
         }
         {
             QList<QByteArray> scenario;
-            scenario << FakeServer::preauth()
-                     << R"(C: A000001 GETANNOTATION "Folder1" "/comment" "value.shared")"
+            scenario << FakeServer::preauth() << R"(C: A000001 GETANNOTATION "Folder1" "/comment" "value.shared")"
                      << "S: * ANNOTATION Folder1 /comment (value.shared \"Shared comment\")"
                      << "S: * ANNOTATION Folder1 /comment (value.priv \"My own comment\")"
                      << "S: A000001 OK annotations retrieved";
@@ -271,9 +265,9 @@ private Q_SLOTS:
 
         QVERIFY(getMetadataJob->exec());
 
-//   qDebug() << getMetadataJob->allMetaData(mailbox);
+        //   qDebug() << getMetadataJob->allMetaData(mailbox);
         qDebug() << getMetadataJob->allMetaData();
-        const QMap <QByteArray, QByteArray> &allMetaData = getMetadataJob->allMetaData();
+        const QMap<QByteArray, QByteArray> &allMetaData = getMetadataJob->allMetaData();
         QCOMPARE(allMetaData.size(), expectedAnnotations.size());
         const auto keys = expectedAnnotations.keys();
         for (const QByteArray &e : keys) {
@@ -289,8 +283,7 @@ private Q_SLOTS:
         FakeServer fakeServer;
         QList<QByteArray> scenario;
 
-        scenario << FakeServer::preauth()
-                 << "C: A000001 GETANNOTATION \"Folder1\""
+        scenario << FakeServer::preauth() << "C: A000001 GETANNOTATION \"Folder1\""
                  << "S: A000001 OK annotations retrieved"
                  << R"(C: A000002 GETANNOTATION "Folder1" ("/comment" "/motd") ("value.priv" "value.shared"))"
                  << "S: A000002 OK annotations retrieved";
@@ -299,7 +292,7 @@ private Q_SLOTS:
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        //C: A000001 GETANNOTATION "Folder1"
+        // C: A000001 GETANNOTATION "Folder1"
         auto getMetadataJob = new KIMAP::GetMetaDataJob(&session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Annotatemore);
         getMetadataJob->setMailBox(QStringLiteral("Folder1"));
@@ -307,7 +300,7 @@ private Q_SLOTS:
 
         QCOMPARE(getMetadataJob->allMetaData(QLatin1String("Folder1")).size(), 0);
 
-        //C: A000002 GETANNOTATION "Folder1" ("/comment" "/motd") ("value.shared" "value.priv")
+        // C: A000002 GETANNOTATION "Folder1" ("/comment" "/motd") ("value.shared" "value.priv")
         getMetadataJob = new KIMAP::GetMetaDataJob(&session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Annotatemore);
         getMetadataJob->setMailBox(QStringLiteral("Folder1"));
@@ -321,29 +314,28 @@ private Q_SLOTS:
 
     void testAnnotateMutiple()
     {
-        //Do not double same parts of the request
+        // Do not double same parts of the request
         FakeServer fakeServer;
         QList<QByteArray> scenario;
 
-        scenario << FakeServer::preauth()
-            << R"(C: A000001 GETANNOTATION "Folder1" ("/comment" "/motd") "value.shared")"
-            << "S: A000001 OK annotations retrieved"
-            << R"(C: A000002 GETANNOTATION "Folder1" "/comment" ("value.priv" "value.shared"))"
-            << "S: A000002 OK annotations retrieved";
+        scenario << FakeServer::preauth() << R"(C: A000001 GETANNOTATION "Folder1" ("/comment" "/motd") "value.shared")"
+                 << "S: A000001 OK annotations retrieved"
+                 << R"(C: A000002 GETANNOTATION "Folder1" "/comment" ("value.priv" "value.shared"))"
+                 << "S: A000002 OK annotations retrieved";
         fakeServer.setScenario(scenario);
         fakeServer.startAndWait();
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
 
-        //C: A000001 GETANNOTATION "Folder1" ("/comment" "/motd") "value.shared"
-        auto getMetadataJob = new KIMAP::GetMetaDataJob( &session);
+        // C: A000001 GETANNOTATION "Folder1" ("/comment" "/motd") "value.shared"
+        auto getMetadataJob = new KIMAP::GetMetaDataJob(&session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Annotatemore);
         getMetadataJob->setMailBox(QStringLiteral("Folder1"));
         getMetadataJob->addRequestedEntry("/shared/comment");
         getMetadataJob->addRequestedEntry("/shared/motd");
         QVERIFY(getMetadataJob->exec());
 
-        //C: A000002 GETANNOTATION "Folder1" ("/comment") ("value.shared" "value.priv")
+        // C: A000002 GETANNOTATION "Folder1" ("/comment") ("value.shared" "value.priv")
         getMetadataJob = new KIMAP::GetMetaDataJob(&session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Annotatemore);
         getMetadataJob->setMailBox(QStringLiteral("Folder1"));
@@ -354,8 +346,6 @@ private Q_SLOTS:
         QVERIFY(fakeServer.isAllScenarioDone());
         fakeServer.quit();
     }
-
-
 };
 
 QTEST_GUILESS_MAIN(GetMetadataJobTest)

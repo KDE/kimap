@@ -10,17 +10,21 @@
 
 #include "job_p.h"
 #include "response_p.h"
-#include "session_p.h"
 #include "rfccodecs.h"
-
+#include "session_p.h"
 
 namespace KIMAP
 {
 class AppendJobPrivate : public JobPrivate
 {
 public:
-    AppendJobPrivate(Session *session, const QString &name) : JobPrivate(session, name) { }
-    ~AppendJobPrivate() { }
+    AppendJobPrivate(Session *session, const QString &name)
+        : JobPrivate(session, name)
+    {
+    }
+    ~AppendJobPrivate()
+    {
+    }
 
     QString mailBox;
     QList<QByteArray> flags;
@@ -124,8 +128,7 @@ void AppendJob::handleResponse(const Response &response)
 {
     Q_D(AppendJob);
     const QList<Response::Part>::ConstIterator end(response.responseCode.end());
-    for (QList<Response::Part>::ConstIterator it = response.responseCode.begin();
-            it != end; ++it) {
+    for (QList<Response::Part>::ConstIterator it = response.responseCode.begin(); it != end; ++it) {
         if (it->toString() == "APPENDUID") {
             it = it + 2;
             if (it != end) {

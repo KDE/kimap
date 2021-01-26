@@ -6,21 +6,28 @@
 
 #include "setmetadatajob.h"
 
-#include <KLocalizedString>
 #include "kimap_debug.h"
+#include <KLocalizedString>
 
 #include "metadatajobbase_p.h"
 #include "response_p.h"
-#include "session_p.h"
 #include "rfccodecs.h"
+#include "session_p.h"
 
 namespace KIMAP
 {
 class SetMetaDataJobPrivate : public MetaDataJobBasePrivate
 {
 public:
-    SetMetaDataJobPrivate(Session *session, const QString &name) : MetaDataJobBasePrivate(session, name), metaDataErrors({}), maxAcceptedSize(-1) { }
-    ~SetMetaDataJobPrivate() { }
+    SetMetaDataJobPrivate(Session *session, const QString &name)
+        : MetaDataJobBasePrivate(session, name)
+        , metaDataErrors({})
+        , maxAcceptedSize(-1)
+    {
+    }
+    ~SetMetaDataJobPrivate()
+    {
+    }
 
     QMap<QByteArray, QByteArray> entries;
     QMap<QByteArray, QByteArray>::ConstIterator entriesIt;
@@ -65,22 +72,21 @@ void SetMetaDataJob::doStart()
 
     parameters += '(';
     if (bSimpleData == true) {
-        for ( ; d->entriesIt != d->entries.constEnd(); ++d->entriesIt ) {
+        for (; d->entriesIt != d->entries.constEnd(); ++d->entriesIt) {
             parameters += '\"' + d->entriesIt.key() + "\" ";
             if (d->entriesIt.value().isEmpty()) {
                 parameters += "NIL";
             } else {
-                parameters +=  "\"" + d->entriesIt.value() + "\"";
+                parameters += "\"" + d->entriesIt.value() + "\"";
             }
             parameters += " ";
-
         }
         parameters[parameters.length() - 1] = ')';
     } else {
         if (!d->entries.isEmpty()) {
             parameters += '\"' + d->entriesIt.key() + "\"";
             int size = d->entriesIt.value().size();
-            parameters += " {" + QByteArray::number( size==0 ? 3 : size ) + '}';
+            parameters += " {" + QByteArray::number(size == 0 ? 3 : size) + '}';
         }
     }
 
@@ -89,31 +95,28 @@ void SetMetaDataJob::doStart()
     }
 
     d->tags << d->sessionInternal()->sendCommand(command, parameters);
-//   qCDebug(KIMAP_LOG) << "SENT: " << command << " " << parameters;
+    //   qCDebug(KIMAP_LOG) << "SENT: " << command << " " << parameters;
 }
 
 void SetMetaDataJob::handleResponse(const Response &response)
 {
     Q_D(SetMetaDataJob);
 
-    //TODO: Test if a server can really return more then one untagged NO response. If not, no need to OR the error codes
-    if (!response.content.isEmpty() &&
-        d->tags.contains(response.content.first().toString())) {
+    // TODO: Test if a server can really return more then one untagged NO response. If not, no need to OR the error codes
+    if (!response.content.isEmpty() && d->tags.contains(response.content.first().toString())) {
         if (response.content[1].toString() == "NO") {
             setError(UserDefinedError);
             setErrorText(i18n("%1 failed, server replied: %2", d->m_name, QLatin1String(response.toString().constData())));
             const QByteArray responseBa = response.content[2].toString();
-            if (responseBa == "[ANNOTATEMORE TOOMANY]" ||
-                    responseBa == "[METADATA TOOMANY]") {
+            if (responseBa == "[ANNOTATEMORE TOOMANY]" || responseBa == "[METADATA TOOMANY]") {
                 d->metaDataErrors |= TooMany;
-            } else if (responseBa == "[ANNOTATEMORE TOOBIG]" ||
-                       responseBa.startsWith("[METADATA MAXSIZE")) {    //krazy:exclude=strings
+            } else if (responseBa == "[ANNOTATEMORE TOOBIG]" || responseBa.startsWith("[METADATA MAXSIZE")) { // krazy:exclude=strings
                 d->metaDataErrors |= TooBig;
                 d->maxAcceptedSize = -1;
-                if (responseBa.startsWith("[METADATA MAXSIZE")) {     //krazy:exclude=strings
+                if (responseBa.startsWith("[METADATA MAXSIZE")) { // krazy:exclude=strings
                     QByteArray max = responseBa;
-                    max.replace("[METADATA MAXSIZE", "");   //krazy:exclude=doublequote_chars
-                    max.replace("]", "");                   //krazy:exclude=doublequote_chars
+                    max.replace("[METADATA MAXSIZE", ""); // krazy:exclude=doublequote_chars
+                    max.replace("]", ""); // krazy:exclude=doublequote_chars
                     d->maxAcceptedSize = max.toLongLong();
                 }
             } else if (responseBa == "[METADATA NOPRIVATE]") {
@@ -131,7 +134,7 @@ void SetMetaDataJob::handleResponse(const Response &response)
         if (d->entriesIt.value().isEmpty()) {
             content += "NIL";
         } else {
-            content +=  d->entriesIt.value();
+            content += d->entriesIt.value();
         }
         ++d->entriesIt;
         if (d->entriesIt == d->entries.constEnd()) {
@@ -139,9 +142,9 @@ void SetMetaDataJob::handleResponse(const Response &response)
         } else {
             content += " \"" + d->entriesIt.key() + '\"';
             int size = d->entriesIt.value().size();
-            content += " {" + QByteArray::number( size==0 ? 3 : size ) + '}';
+            content += " {" + QByteArray::number(size == 0 ? 3 : size) + '}';
         }
-//      qCDebug(KIMAP_LOG) << "SENT: " << content;
+        //      qCDebug(KIMAP_LOG) << "SENT: " << content;
         d->sessionInternal()->sendData(content);
     }
 }

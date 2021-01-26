@@ -10,20 +10,25 @@
 
 #include "quotajobbase_p.h"
 #include "response_p.h"
-#include "session_p.h"
 #include "rfccodecs.h"
+#include "session_p.h"
 
 namespace KIMAP
 {
 class GetQuotaRootJobPrivate : public QuotaJobBasePrivate
 {
 public:
-    GetQuotaRootJobPrivate(Session *session, const QString &name) : QuotaJobBasePrivate(session, name) { }
-    ~GetQuotaRootJobPrivate() { }
+    GetQuotaRootJobPrivate(Session *session, const QString &name)
+        : QuotaJobBasePrivate(session, name)
+    {
+    }
+    ~GetQuotaRootJobPrivate()
+    {
+    }
 
     QString mailBox;
     QList<QByteArray> rootList;
-    QMap< QByteArray, QMap<QByteArray, QPair<qint64, qint64> > > quotas;
+    QMap<QByteArray, QMap<QByteArray, QPair<qint64, qint64>>> quotas;
 };
 }
 
@@ -51,8 +56,8 @@ void GetQuotaRootJob::handleResponse(const Response &response)
         if (response.content.size() >= 3) {
             if (response.content[1].toString() == "QUOTAROOT") {
                 d->rootList.clear();
-                //some impls don't give the root a name which for us seems as if
-                //there were no message part
+                // some impls don't give the root a name which for us seems as if
+                // there were no message part
                 if (response.content.size() == 3) {
                     d->rootList.append("");
                 } else {
@@ -64,19 +69,19 @@ void GetQuotaRootJob::handleResponse(const Response &response)
                 }
             } else if (response.content[1].toString() == "QUOTA") {
                 QByteArray rootName;
-                int  quotaContentIndex = 3;
-                //some impls don't give the root a name in the response
+                int quotaContentIndex = 3;
+                // some impls don't give the root a name in the response
                 if (response.content.size() == 3) {
                     quotaContentIndex = 2;
                 } else {
                     rootName = response.content[2].toString();
                 }
 
-                const QMap<QByteArray, QPair<qint64, qint64> > &quota = d->readQuota(response.content[quotaContentIndex]);
+                const QMap<QByteArray, QPair<qint64, qint64>> &quota = d->readQuota(response.content[quotaContentIndex]);
                 if (d->quotas.contains(rootName)) {
-                    d->quotas[ rootName ].unite(quota);
+                    d->quotas[rootName].unite(quota);
                 } else {
-                    d->quotas[ rootName ] = quota;
+                    d->quotas[rootName] = quota;
                 }
             }
         }
@@ -131,9 +136,9 @@ QMap<QByteArray, qint64> GetQuotaRootJob::allUsages(const QByteArray &root) cons
     QMap<QByteArray, qint64> result;
 
     if (d->quotas.contains(root)) {
-        const QMap< QByteArray, QPair<qint64, qint64> > quota = d->quotas[root];
-        QMap<QByteArray, QPair<qint64, qint64> >::const_iterator it = quota.cbegin();
-        const QMap<QByteArray, QPair<qint64, qint64> >::const_iterator itEnd = quota.cend();
+        const QMap<QByteArray, QPair<qint64, qint64>> quota = d->quotas[root];
+        QMap<QByteArray, QPair<qint64, qint64>>::const_iterator it = quota.cbegin();
+        const QMap<QByteArray, QPair<qint64, qint64>>::const_iterator itEnd = quota.cend();
         for (; it != itEnd; ++it) {
             result[it.key()] = it.value().first;
         }
@@ -148,9 +153,9 @@ QMap<QByteArray, qint64> GetQuotaRootJob::allLimits(const QByteArray &root) cons
     QMap<QByteArray, qint64> result;
 
     if (d->quotas.contains(root)) {
-        const QMap< QByteArray, QPair<qint64, qint64> > quota = d->quotas[root];
-        QMap<QByteArray, QPair<qint64, qint64> >::const_iterator it = quota.cbegin();
-        const QMap<QByteArray, QPair<qint64, qint64> >::const_iterator itEnd = quota.cend();
+        const QMap<QByteArray, QPair<qint64, qint64>> quota = d->quotas[root];
+        QMap<QByteArray, QPair<qint64, qint64>>::const_iterator it = quota.cbegin();
+        const QMap<QByteArray, QPair<qint64, qint64>>::const_iterator itEnd = quota.cend();
         for (; it != itEnd; ++it) {
             result[it.key()] = it.value().second;
         }

@@ -6,14 +6,14 @@
 
 #include <QTest>
 
-#include "kimaptest/fakeserver.h"
-#include "kimap/session.h"
-#include "kimap/expungejob.h"
 #include "imapset.h"
+#include "kimap/expungejob.h"
+#include "kimap/session.h"
+#include "kimaptest/fakeserver.h"
 
 #include <QTest>
 
-class ExpungeJobTest: public QObject
+class ExpungeJobTest : public QObject
 {
     Q_OBJECT
 
@@ -26,8 +26,7 @@ private Q_SLOTS:
         QTest::addColumn<quint64>("highestModSeq");
 
         QList<QByteArray> scenario;
-        scenario << FakeServer::preauth()
-                 << "C: A000001 EXPUNGE"
+        scenario << FakeServer::preauth() << "C: A000001 EXPUNGE"
                  << "S: * 1 EXPUNGE"
                  << "S: * 2 EXPUNGE"
                  << "S: * 3 EXPUNGE"
@@ -35,27 +34,23 @@ private Q_SLOTS:
         QTest::newRow("good") << scenario << KIMAP::ImapSet{} << 0ULL;
 
         scenario.clear();
-        scenario << FakeServer::preauth()
-                 << "C: A000001 EXPUNGE"
+        scenario << FakeServer::preauth() << "C: A000001 EXPUNGE"
                  << "S: * 1" // missing EXPUNGE word
                  << "S: A000001 OK EXPUNGE completed";
         QTest::newRow("non-standard response") << scenario << KIMAP::ImapSet{} << 0ULL;
 
         scenario.clear();
-        scenario << FakeServer::preauth()
-                 << "C: A000001 EXPUNGE"
+        scenario << FakeServer::preauth() << "C: A000001 EXPUNGE"
                  << "S: A000001 BAD command unknown or arguments invalid";
         QTest::newRow("bad") << scenario << KIMAP::ImapSet{} << 0ULL;
 
         scenario.clear();
-        scenario << FakeServer::preauth()
-                 << "C: A000001 EXPUNGE"
+        scenario << FakeServer::preauth() << "C: A000001 EXPUNGE"
                  << "S: A000001 NO access denied";
         QTest::newRow("no") << scenario << KIMAP::ImapSet{} << 0ULL;
 
         scenario.clear();
-        scenario << FakeServer::preauth()
-                 << "C: A000001 EXPUNGE"
+        scenario << FakeServer::preauth() << "C: A000001 EXPUNGE"
                  << "S: * VANISHED 405,407,410:420"
                  << "S: A000001 OK [HIGHESTMODSEQ 123456789] Expunged.";
         KIMAP::ImapSet vanishedSet;
@@ -78,8 +73,8 @@ private Q_SLOTS:
 
         auto job = new KIMAP::ExpungeJob(&session);
         bool result = job->exec();
-        QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
-        QEXPECT_FAIL("no" , "Expected failure on NO response", Continue);
+        QEXPECT_FAIL("bad", "Expected failure on BAD response", Continue);
+        QEXPECT_FAIL("no", "Expected failure on NO response", Continue);
         QVERIFY(result);
         if (result) {
             QCOMPARE(job->vanishedMessages(), vanishedSet);
@@ -88,7 +83,6 @@ private Q_SLOTS:
 
         fakeServer.quit();
     }
-
 };
 
 QTEST_GUILESS_MAIN(ExpungeJobTest)

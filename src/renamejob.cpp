@@ -10,16 +10,21 @@
 
 #include "job_p.h"
 #include "response_p.h"
-#include "session_p.h"
 #include "rfccodecs.h"
+#include "session_p.h"
 
 namespace KIMAP
 {
 class RenameJobPrivate : public JobPrivate
 {
 public:
-    RenameJobPrivate(Session *session, const QString &name) : JobPrivate(session, name) { }
-    ~RenameJobPrivate() { }
+    RenameJobPrivate(Session *session, const QString &name)
+        : JobPrivate(session, name)
+    {
+    }
+    ~RenameJobPrivate()
+    {
+    }
 
     QString sourceMailBox;
     QString destinationMailBox;
@@ -40,8 +45,9 @@ RenameJob::~RenameJob()
 void RenameJob::doStart()
 {
     Q_D(RenameJob);
-    d->tags << d->sessionInternal()->sendCommand("RENAME", '\"' + KIMAP::encodeImapFolderName(d->sourceMailBox.toUtf8()) +
-            "\" \"" + KIMAP::encodeImapFolderName(d->destinationMailBox.toUtf8()) + '\"');
+    d->tags << d->sessionInternal()->sendCommand("RENAME",
+                                                 '\"' + KIMAP::encodeImapFolderName(d->sourceMailBox.toUtf8()) + "\" \""
+                                                     + KIMAP::encodeImapFolderName(d->destinationMailBox.toUtf8()) + '\"');
 }
 
 void RenameJob::setSourceMailBox(const QString &mailBox)

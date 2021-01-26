@@ -17,7 +17,6 @@
 
 namespace KIMAP
 {
-
 /**
   Represents a single interval in an ImapSet.
   This class is implicitly shared.

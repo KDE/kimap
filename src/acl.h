@@ -13,35 +13,33 @@
 
 namespace KIMAP
 {
-
 /**
  * Operations for dealing with mailbox permissions.
  */
 namespace Acl
 {
-
 /**
  * Possible rights that can be held on a mailbox
  */
 enum Right {
-    None          = 0x000000,
+    None = 0x000000,
     /** Mailbox is visible to LIST/LSUB commands, SUBSCRIBE mailbox */
-    Lookup        = 0x000001,
+    Lookup = 0x000001,
     /** SELECT the mailbox, perform STATUS */
-    Read          = 0x000002,
+    Read = 0x000002,
     /** Set or clear the \Seen flag on messages in the mailbox, and keep it across sessions */
-    KeepSeen      = 0x000004,
+    KeepSeen = 0x000004,
     /** Set or clear flags other than \Seen and \Deleted on messages in the mailbox */
-    Write         = 0x000008,
+    Write = 0x000008,
     /** Perform APPEND and COPY with the mailbox as the target */
-    Insert        = 0x000010,
+    Insert = 0x000010,
     /** Send mail to the submission address for the mailbox
      *
      * Note: this is not enforced by IMAP4, but is purely advisory.
      */
-    Post          = 0x000020,
+    Post = 0x000020,
     /** Obsolete as of RFC 4314, replaced by CreateMailbox and DeleteMailbox */
-    Create        = 0x000040,
+    Create = 0x000040,
     /** Create new child mailboxes, or move a mailbox with this mailbox as the new parent
      *
      * Note that what constitutes a "child" mailbox is implementation-defined, but
@@ -53,31 +51,31 @@ enum Right {
     /** Set or clear the \Deleted flag on messages in the mailbox */
     DeleteMessage = 0x000200,
     /** Obsolete as of RFC 4314, replaced by DeleteMessage and Expunge*/
-    Delete        = 0x000400,
+    Delete = 0x000400,
     /** View and modify the access control list for the mailbox */
-    Admin         = 0x000800,
+    Admin = 0x000800,
     /** Expunge the messages in this mailbox
      *
      * Note that if this right is not held on a mailbox, closing the mailbox
      * (see CloseJob) will succeed, but will not expunge the messages.
      */
-    Expunge       = 0x001000,
+    Expunge = 0x001000,
     /** Write shared annotations
      *
      * See <a href="https://tools.ietf.org/html/rfc5257" title="IMAP ANNOTATE extension">RFC
      * 5257</a>.  Only supported by servers that implement the ANNOTATE extension.
      */
-    WriteShared   = 0x002000,
-    Custom0       = 0x004000, /**< Server-specific right 0 */
-    Custom1       = 0x008000, /**< Server-specific right 1 */
-    Custom2       = 0x010000, /**< Server-specific right 2 */
-    Custom3       = 0x020000, /**< Server-specific right 3 */
-    Custom4       = 0x040000, /**< Server-specific right 4 */
-    Custom5       = 0x080000, /**< Server-specific right 5 */
-    Custom6       = 0x100000, /**< Server-specific right 6 */
-    Custom7       = 0x200000, /**< Server-specific right 7 */
-    Custom8       = 0x400000, /**< Server-specific right 8 */
-    Custom9       = 0x800000  /**< Server-specific right 9 */
+    WriteShared = 0x002000,
+    Custom0 = 0x004000, /**< Server-specific right 0 */
+    Custom1 = 0x008000, /**< Server-specific right 1 */
+    Custom2 = 0x010000, /**< Server-specific right 2 */
+    Custom3 = 0x020000, /**< Server-specific right 3 */
+    Custom4 = 0x040000, /**< Server-specific right 4 */
+    Custom5 = 0x080000, /**< Server-specific right 5 */
+    Custom6 = 0x100000, /**< Server-specific right 6 */
+    Custom7 = 0x200000, /**< Server-specific right 7 */
+    Custom8 = 0x400000, /**< Server-specific right 8 */
+    Custom9 = 0x800000 /**< Server-specific right 9 */
 };
 
 Q_DECLARE_FLAGS(Rights, Right)

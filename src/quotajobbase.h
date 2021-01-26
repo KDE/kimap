@@ -13,7 +13,6 @@
 
 namespace KIMAP
 {
-
 class Session;
 struct Response;
 class QuotaJobBasePrivate;
@@ -26,7 +25,7 @@ class QuotaJobBasePrivate;
  *
  * This class cannot be used directly, you must subclass it and reimplement
  * at least the doStart() method.
-*/
+ */
 class KIMAP_EXPORT QuotaJobBase : public Job
 {
     Q_OBJECT
@@ -79,7 +78,6 @@ public:
 
 protected:
     QuotaJobBase(JobPrivate &dd);
-
 };
 
 }

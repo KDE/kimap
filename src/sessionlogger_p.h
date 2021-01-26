@@ -12,7 +12,6 @@
 
 namespace KIMAP
 {
-
 class SessionLoggerPrivate;
 
 class SessionLogger

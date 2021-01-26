@@ -11,7 +11,6 @@
 
 namespace KIMAP
 {
-
 class Session;
 struct Message;
 class GetQuotaRootJobPrivate;
@@ -104,7 +103,6 @@ public:
 protected:
     void doStart() override;
     void handleResponse(const Response &response) override;
-
 };
 
 }

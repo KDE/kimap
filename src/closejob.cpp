@@ -17,7 +17,10 @@ namespace KIMAP
 class CloseJobPrivate : public JobPrivate
 {
 public:
-    CloseJobPrivate(Session *session, const QString &name) : JobPrivate(session, name) { }
+    CloseJobPrivate(Session *session, const QString &name)
+        : JobPrivate(session, name)
+    {
+    }
 
     quint64 highestModSeq = 0;
 };

@@ -10,16 +10,21 @@
 
 #include "job_p.h"
 #include "response_p.h"
-#include "session_p.h"
 #include "rfccodecs.h"
+#include "session_p.h"
 
 namespace KIMAP
 {
 class DeleteJobPrivate : public JobPrivate
 {
 public:
-    DeleteJobPrivate(Session *session, const QString &name) : JobPrivate(session, name) { }
-    ~DeleteJobPrivate() { }
+    DeleteJobPrivate(Session *session, const QString &name)
+        : JobPrivate(session, name)
+    {
+    }
+    ~DeleteJobPrivate()
+    {
+    }
 
     QString mailBox;
 };
@@ -46,18 +51,15 @@ void DeleteJob::handleResponse(const Response &response)
 {
     Q_D(DeleteJob);
 
-    if (!response.content.isEmpty() &&
-        d->tags.contains(response.content.first().toString())) {
-        if (response.content.size() >= 2 &&
-            response.content[1].toString() == "NO") {
-            for (auto it = response.responseCode.cbegin(), end = response.responseCode.cend();
-                 it != end; ++it) {
+    if (!response.content.isEmpty() && d->tags.contains(response.content.first().toString())) {
+        if (response.content.size() >= 2 && response.content[1].toString() == "NO") {
+            for (auto it = response.responseCode.cbegin(), end = response.responseCode.cend(); it != end; ++it) {
                 // NONEXISTENT can be considered a success during DELETE
                 // cf. https://tools.ietf.org/html/rfc5530#section-3
                 if (it->toString() == "NONEXISTENT") {
                     // Code copied from handleErrorReplies:
                     d->tags.removeAll(response.content.first().toString());
-                    if (d->tags.isEmpty()) {   // Only emit result when the last command returned
+                    if (d->tags.isEmpty()) { // Only emit result when the last command returned
                         emitResult();
                     }
                     return;

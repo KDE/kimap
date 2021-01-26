@@ -17,8 +17,13 @@ namespace KIMAP
 class CapabilitiesJobPrivate : public JobPrivate
 {
 public:
-    CapabilitiesJobPrivate(Session *session,  const QString &name) : JobPrivate(session, name) { }
-    ~CapabilitiesJobPrivate() { }
+    CapabilitiesJobPrivate(Session *session, const QString &name)
+        : JobPrivate(session, name)
+    {
+    }
+    ~CapabilitiesJobPrivate()
+    {
+    }
 
     QStringList capabilities;
 };
@@ -52,8 +57,7 @@ void CapabilitiesJob::handleResponse(const Response &response)
     Q_D(CapabilitiesJob);
     if (handleErrorReplies(response) == NotHandled) {
         const int responseSize(response.content.size());
-        if (responseSize >= 2 &&
-                response.content[1].toString() == "CAPABILITY") {
+        if (responseSize >= 2 && response.content[1].toString() == "CAPABILITY") {
             for (int i = 2; i < responseSize; ++i) {
                 d->capabilities << QLatin1String(response.content[i].toString().toUpper());
             }

@@ -6,8 +6,8 @@
 
 #include "idlejob.h"
 
-#include <QTimer>
 #include <KLocalizedString>
+#include <QTimer>
 
 #include "job_p.h"
 #include "response_p.h"
@@ -19,15 +19,19 @@ class IdleJobPrivate : public JobPrivate
 {
 public:
     IdleJobPrivate(IdleJob *job, Session *session, const QString &name)
-        : JobPrivate(session, name), q(job) { }
-    ~IdleJobPrivate() { }
+        : JobPrivate(session, name)
+        , q(job)
+    {
+    }
+    ~IdleJobPrivate()
+    {
+    }
 
     void emitStats()
     {
         emitStatsTimer.stop();
 
-        Q_EMIT q->mailBoxStats(q, m_session->selectedMailBox(),
-                             messageCount, recentCount);
+        Q_EMIT q->mailBoxStats(q, m_session->selectedMailBox(), messageCount, recentCount);
 
         lastMessageCount = messageCount;
         lastRecentCount = recentCount;
@@ -61,11 +65,9 @@ IdleJob::IdleJob(Session *session)
     : Job(*new IdleJobPrivate(this, session, i18nc("name of the idle job", "Idle")))
 {
     Q_D(IdleJob);
-    connect(&d->emitStatsTimer, SIGNAL(timeout()),
-            this, SLOT(emitStats()));
+    connect(&d->emitStatsTimer, SIGNAL(timeout()), this, SLOT(emitStats()));
 
-    connect(this, SIGNAL(result(KJob*)),
-            this, SLOT(resetTimeout()));
+    connect(this, SIGNAL(result(KJob *)), this, SLOT(resetTimeout()));
 }
 
 IdleJob::~IdleJob()
@@ -94,10 +96,8 @@ void IdleJob::handleResponse(const Response &response)
     // We can predict it'll be handled by handleErrorReplies() so Q_EMIT
     // pending signals now (if needed) so that result() will really be
     // the last emitted signal.
-    if (!response.content.isEmpty() &&
-            d->tags.size() == 1 &&
-            d->tags.contains(response.content.first().toString()) &&
-            (d->messageCount >= 0 || d->recentCount >= 0)) {
+    if (!response.content.isEmpty() && d->tags.size() == 1 && d->tags.contains(response.content.first().toString())
+        && (d->messageCount >= 0 || d->recentCount >= 0)) {
         d->emitStats();
     }
 

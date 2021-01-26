@@ -10,16 +10,21 @@
 
 #include "job_p.h"
 #include "response_p.h"
-#include "session_p.h"
 #include "rfccodecs.h"
+#include "session_p.h"
 
 namespace KIMAP
 {
 class SubscribeJobPrivate : public JobPrivate
 {
 public:
-    SubscribeJobPrivate(Session *session, const QString &name) : JobPrivate(session, name) { }
-    ~SubscribeJobPrivate() { }
+    SubscribeJobPrivate(Session *session, const QString &name)
+        : JobPrivate(session, name)
+    {
+    }
+    ~SubscribeJobPrivate()
+    {
+    }
 
     QString mailBox;
 };

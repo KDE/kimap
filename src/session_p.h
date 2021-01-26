@@ -12,15 +12,14 @@
 
 #include <QObject>
 #include <QQueue>
+#include <QSslSocket>
 #include <QString>
 #include <QTimer>
-#include <QSslSocket>
 
 class KJob;
 
 namespace KIMAP
 {
-
 class Job;
 struct Response;
 class SessionLogger;

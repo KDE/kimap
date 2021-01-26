@@ -13,7 +13,6 @@
 
 namespace KIMAP
 {
-
 class Session;
 struct Response;
 class GetMetaDataJobPrivate;
@@ -62,8 +61,8 @@ public:
      */
     enum Depth {
         NoDepth = 0, /**< Only the requested entries */
-        OneLevel,    /**< The requested entries and all their direct children */
-        AllLevels    /**< The requested entries and all their descendants */
+        OneLevel, /**< The requested entries and all their direct children */
+        AllLevels /**< The requested entries and all their descendants */
     };
 
     Q_DECLARE_FLAGS(Depths, Depth)
@@ -161,8 +160,7 @@ public:
      */
     // XXX: what's with the mailBox argument in a class that has setMailBox()?
     //      KJobs are not intended to be run more than once
-    KIMAP_DEPRECATED QByteArray metaData(const QString &mailBox, const QByteArray &entry,
-                                         const QByteArray &attribute = QByteArray()) const;
+    KIMAP_DEPRECATED QByteArray metaData(const QString &mailBox, const QByteArray &entry, const QByteArray &attribute = QByteArray()) const;
 
     /**
      * Get a single metadata entry.
@@ -208,11 +206,11 @@ public:
      */
     // XXX: what's with the mailBox argument in a class that has setMailBox()?
     //      KJobs are not intended to be run more than once
-    QMap<QByteArray, QMap<QByteArray, QByteArray> > allMetaData(const QString &mailBox) const;
+    QMap<QByteArray, QMap<QByteArray, QByteArray>> allMetaData(const QString &mailBox) const;
 
     /**
      * Get all the metadata for the mailbox set with setMailBox().
-     * 
+     *
      * Note that the returned map uses METADATA style entries (with a /shared or /private prefix typically),
      * also in ANNOTATEMORE mode.
      *
@@ -228,7 +226,7 @@ public:
      *
      * @return a map from metadata entry names to values
      */
-     QMap<QByteArray, QByteArray> allMetaDataForMailbox(const QString &mailbox) const;
+    QMap<QByteArray, QByteArray> allMetaDataForMailbox(const QString &mailbox) const;
 
     /**
      * Get all the metadata for for all mailboxes.
@@ -238,12 +236,11 @@ public:
      *
      * @return a map in the form (mailbox, (entry, value))
      */
-     QHash<QString, QMap<QByteArray, QByteArray> > allMetaDataForMailboxes() const;
+    QHash<QString, QMap<QByteArray, QByteArray>> allMetaDataForMailboxes() const;
 
 protected:
     void doStart() override;
     void handleResponse(const Response &response) override;
-
 };
 
 }

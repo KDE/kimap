@@ -9,13 +9,13 @@
 
 #include <QTest>
 
-#include "kimaptest/fakeserver.h"
-#include "kimap/session.h"
 #include "kimap/createjob.h"
+#include "kimap/session.h"
+#include "kimaptest/fakeserver.h"
 
 #include <QTest>
 
-class CreateJobTest: public QObject
+class CreateJobTest : public QObject
 {
     Q_OBJECT
 
@@ -24,35 +24,30 @@ private Q_SLOTS:
     void testCreate_data()
     {
         QTest::addColumn<QString>("mailbox");
-        QTest::addColumn<QList<QByteArray> >("scenario");
+        QTest::addColumn<QList<QByteArray>>("scenario");
 
         QList<QByteArray> scenario;
-        scenario << FakeServer::preauth()
-                 << "C: A000001 CREATE \"INBOX\""
+        scenario << FakeServer::preauth() << "C: A000001 CREATE \"INBOX\""
                  << "S: A000001 OK CREATE completed";
         QTest::newRow("good") << "INBOX" << scenario;
 
         scenario.clear();
-        scenario << FakeServer::preauth()
-                 << "C: A000001 CREATE \"INBOX-FAIL-BAD\""
+        scenario << FakeServer::preauth() << "C: A000001 CREATE \"INBOX-FAIL-BAD\""
                  << "S: A000001 BAD command unknown or arguments invalid";
         QTest::newRow("bad") << "INBOX-FAIL-BAD" << scenario;
 
         scenario.clear();
-        scenario << FakeServer::preauth()
-                 << "C: A000001 CREATE \"INBOX-FAIL-NO\""
+        scenario << FakeServer::preauth() << "C: A000001 CREATE \"INBOX-FAIL-NO\""
                  << "S: A000001 NO create failure";
         QTest::newRow("no") << "INBOX-FAIL-NO" << scenario;
 
         scenario.clear();
-        scenario << FakeServer::preauth()
-                 << "C: A000001 CREATE \"INBOX-FAIL-IGNOREDCODE\""
+        scenario << FakeServer::preauth() << "C: A000001 CREATE \"INBOX-FAIL-IGNOREDCODE\""
                  << "S: A000001 NO create failure [IGNOREDCODE]";
         QTest::newRow("ignoredcode") << "INBOX-FAIL-IGNOREDCODE" << scenario;
 
         scenario.clear();
-        scenario << FakeServer::preauth()
-                 << "C: A000001 CREATE \"INBOX-ALREADYEXISTS\""
+        scenario << FakeServer::preauth() << "C: A000001 CREATE \"INBOX-ALREADYEXISTS\""
                  << "S: A000001 NO create failure [ALREADYEXISTS]";
         QTest::newRow("alreadyexists") << "INBOX-ALREADYEXISTS" << scenario;
     }
@@ -70,9 +65,9 @@ private Q_SLOTS:
         auto job = new KIMAP::CreateJob(&session);
         job->setMailBox(mailbox);
         bool result = job->exec();
-        QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
-        QEXPECT_FAIL("no" , "Expected failure on NO response", Continue);
-        QEXPECT_FAIL("ignoredcode" , "Expected failure on NO response with ignored response code", Continue);
+        QEXPECT_FAIL("bad", "Expected failure on BAD response", Continue);
+        QEXPECT_FAIL("no", "Expected failure on NO response", Continue);
+        QEXPECT_FAIL("ignoredcode", "Expected failure on NO response with ignored response code", Continue);
         QVERIFY(result);
         if (result) {
             QCOMPARE(job->mailBox(), mailbox);
@@ -80,7 +75,6 @@ private Q_SLOTS:
 
         fakeServer.quit();
     }
-
 };
 
 QTEST_GUILESS_MAIN(CreateJobTest)

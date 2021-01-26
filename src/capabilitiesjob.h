@@ -13,7 +13,6 @@
 
 namespace KIMAP
 {
-
 class Session;
 struct Response;
 class CapabilitiesJobPrivate;

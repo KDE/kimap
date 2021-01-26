@@ -13,7 +13,6 @@
 
 namespace KIMAP
 {
-
 class Session;
 class UnsubscribeJobPrivate;
 

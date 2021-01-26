@@ -9,12 +9,11 @@
 
 #include "kimap_export.h"
 
-#include "job.h"
 #include "imapset.h"
+#include "job.h"
 
 namespace KIMAP
 {
-
 class Session;
 struct Response;
 class StoreJobPrivate;
@@ -29,11 +28,7 @@ class KIMAP_EXPORT StoreJob : public Job
     friend class SessionPrivate;
 
 public:
-    enum StoreMode {
-        SetFlags,
-        AppendFlags,
-        RemoveFlags
-    };
+    enum StoreMode { SetFlags, AppendFlags, RemoveFlags };
 
     explicit StoreJob(Session *session);
     ~StoreJob() override;

@@ -9,12 +9,11 @@
 
 #include "kimap_export.h"
 
-#include "job.h"
 #include "fetchjob.h"
+#include "job.h"
 
 namespace KIMAP
 {
-
 class Session;
 struct Response;
 class SelectJobPrivate;

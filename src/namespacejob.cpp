@@ -9,20 +9,25 @@
 #include "kimap_debug.h"
 #include <KLocalizedString>
 
+#include "imapstreamparser.h"
 #include "job_p.h"
 #include "listjob.h"
 #include "response_p.h"
 #include "rfccodecs.h"
 #include "session_p.h"
-#include "imapstreamparser.h"
 
 namespace KIMAP
 {
 class NamespaceJobPrivate : public JobPrivate
 {
 public:
-    NamespaceJobPrivate(Session *session,  const QString &name) : JobPrivate(session, name) { }
-    ~NamespaceJobPrivate() { }
+    NamespaceJobPrivate(Session *session, const QString &name)
+        : JobPrivate(session, name)
+    {
+    }
+    ~NamespaceJobPrivate()
+    {
+    }
 
     QList<MailBoxDescriptor> processNamespaceList(const QList<QByteArray> &namespaceList)
     {
@@ -46,7 +51,6 @@ public:
                 qCWarning(KIMAP_LOG) << "The stream parser raised an exception during namespace list parsing:" << e.what();
                 qCWarning(KIMAP_LOG) << "namespacelist:" << namespaceList;
             }
-
         }
 
         return result;
@@ -90,9 +94,7 @@ QList<MailBoxDescriptor> NamespaceJob::sharedNamespaces() const
 bool NamespaceJob::containsEmptyNamespace() const
 {
     Q_D(const NamespaceJob);
-    const QList<MailBoxDescriptor> completeList = d->personalNamespaces
-                                            + d->userNamespaces
-                                            + d->sharedNamespaces;
+    const QList<MailBoxDescriptor> completeList = d->personalNamespaces + d->userNamespaces + d->sharedNamespaces;
 
     for (const MailBoxDescriptor &descriptor : completeList) {
         if (descriptor.name.isEmpty()) {
@@ -113,8 +115,7 @@ void NamespaceJob::handleResponse(const Response &response)
 {
     Q_D(NamespaceJob);
     if (handleErrorReplies(response) == NotHandled) {
-        if (response.content.size() >= 5 &&
-                response.content[1].toString() == "NAMESPACE") {
+        if (response.content.size() >= 5 && response.content[1].toString() == "NAMESPACE") {
             // Personal namespaces
             d->personalNamespaces = d->processNamespaceList(response.content[2].toList());
 

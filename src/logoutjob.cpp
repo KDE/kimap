@@ -17,8 +17,13 @@ namespace KIMAP
 class LogoutJobPrivate : public JobPrivate
 {
 public:
-    LogoutJobPrivate(Session *session, const QString &name) : JobPrivate(session, name) { }
-    ~LogoutJobPrivate() { }
+    LogoutJobPrivate(Session *session, const QString &name)
+        : JobPrivate(session, name)
+    {
+    }
+    ~LogoutJobPrivate()
+    {
+    }
 };
 }
 

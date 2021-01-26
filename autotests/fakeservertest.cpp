@@ -7,13 +7,13 @@
 
 #include <QTest>
 
-#include "kimaptest/fakeserver.h"
-#include "kimap/session.h"
 #include "kimap/listjob.h"
+#include "kimap/session.h"
+#include "kimaptest/fakeserver.h"
 
 #include <QTest>
 
-class FakeServerTest: public QObject
+class FakeServerTest : public QObject
 {
     Q_OBJECT
 
@@ -49,7 +49,6 @@ private Q_SLOTS:
 
         fakeServer.quit();
     }
-
 };
 
 QTEST_GUILESS_MAIN(FakeServerTest)

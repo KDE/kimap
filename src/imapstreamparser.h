@@ -20,15 +20,29 @@ class QIODevice;
 
 namespace KIMAP
 {
-
 class ImapParserException : public std::exception
 {
 public:
-    explicit ImapParserException(const char *what) throw() : mWhat(what) {}
-    explicit ImapParserException(const QByteArray &what) throw() : mWhat(what) {}
-    explicit ImapParserException(const QString &what) throw() : mWhat(what.toUtf8()) {}
-    ImapParserException(const ImapParserException &other) throw() : std::exception(other), mWhat(other.what()) {}
-    ~ImapParserException() throw() override {}
+    explicit ImapParserException(const char *what) throw()
+        : mWhat(what)
+    {
+    }
+    explicit ImapParserException(const QByteArray &what) throw()
+        : mWhat(what)
+    {
+    }
+    explicit ImapParserException(const QString &what) throw()
+        : mWhat(what.toUtf8())
+    {
+    }
+    ImapParserException(const ImapParserException &other) throw()
+        : std::exception(other)
+        , mWhat(other.what())
+    {
+    }
+    ~ImapParserException() throw() override
+    {
+    }
     const char *what() const throw() override
     {
         return mWhat.constData();
@@ -37,6 +51,7 @@ public:
     {
         return "ImapParserException";
     }
+
 private:
     QByteArray mWhat;
 };
@@ -126,12 +141,12 @@ public:
     /**
      * Check if the next data is a parenthesized list. This call might block.
      * @return true if a parenthesized list comes.
-    */
+     */
     bool hasList();
 
     /**
-    * Check if the next data is a parenthesized list end. This call might block.
-    * @return true if a parenthesized list end.
+     * Check if the next data is a parenthesized list end. This call might block.
+     * @return true if a parenthesized list end.
      */
     bool atListEnd();
 
@@ -142,8 +157,8 @@ public:
     bool hasResponseCode();
 
     /**
-    * Check if the next data is a response code end. This call might block.
-    * @return true if a response code end.
+     * Check if the next data is a response code end. This call might block.
+     * @return true if a response code end.
      */
     bool atResponseCodeEnd();
 

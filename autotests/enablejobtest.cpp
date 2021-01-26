@@ -6,15 +6,15 @@
 
 #include <QTest>
 
-#include "kimaptest/fakeserver.h"
-#include "kimap/session.h"
 #include "kimap/enablejob.h"
+#include "kimap/session.h"
+#include "kimaptest/fakeserver.h"
 
 #include <QTest>
 
 Q_DECLARE_METATYPE(QList<QList<QByteArray>>)
 
-class EnableJobTest: public QObject
+class EnableJobTest : public QObject
 {
     Q_OBJECT
 
@@ -27,8 +27,7 @@ private Q_SLOTS:
         QTest::addColumn<QStringList>("supportedCaps");
 
         QList<QByteArray> scenario;
-        scenario << FakeServer::preauth()
-                 << "C: A000001 ENABLE CONDSTORE X-GOOD-IDEA"
+        scenario << FakeServer::preauth() << "C: A000001 ENABLE CONDSTORE X-GOOD-IDEA"
                  << "S: * ENABLED X-GOOD-IDEA"
                  << "S: A000001 OK Enabled";
         QStringList reqCapabilities = {QStringLiteral("CONDSTORE"), QStringLiteral("X-GOOD-IDEA")};
@@ -36,8 +35,7 @@ private Q_SLOTS:
         QTest::newRow("one feature") << scenario << reqCapabilities << supportedCaps;
 
         scenario.clear();
-        scenario << FakeServer::preauth()
-                 << "C: A000001 ENABLE FEATURE1 FEATURE2"
+        scenario << FakeServer::preauth() << "C: A000001 ENABLE FEATURE1 FEATURE2"
                  << "S: * ENABLED FEATURE1 FEATURE2"
                  << "S: A000001 OK Enabled";
         reqCapabilities = QStringList{QStringLiteral("FEATURE1"), QStringLiteral("FEATURE2")};
@@ -65,7 +63,6 @@ private Q_SLOTS:
 
         fakeServer.quit();
     }
-
 };
 
 QTEST_GUILESS_MAIN(EnableJobTest)

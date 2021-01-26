@@ -1,53 +1,52 @@
 /**
-  * This file is part of the KDE project
-  * SPDX-FileCopyrightText: 2009 Kevin Ottens <ervin@kde.org>
-  * SPDX-FileCopyrightText: 2009 Andras Mantia <amantia@kde.org>
-  *
-  * SPDX-License-Identifier: LGPL-2.0-or-later
-  */
+ * This file is part of the KDE project
+ * SPDX-FileCopyrightText: 2009 Kevin Ottens <ervin@kde.org>
+ * SPDX-FileCopyrightText: 2009 Andras Mantia <amantia@kde.org>
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 
-#include <QDebug>
 #include <QCoreApplication>
+#include <QDebug>
 
 #include "acl.h"
-#include "session.h"
 #include "appendjob.h"
 #include "capabilitiesjob.h"
+#include "closejob.h"
+#include "createjob.h"
+#include "deleteacljob.h"
+#include "deletejob.h"
+#include "expungejob.h"
 #include "fetchjob.h"
+#include "getacljob.h"
+#include "getmetadatajob.h"
 #include "listjob.h"
+#include "listrightsjob.h"
 #include "loginjob.h"
 #include "logoutjob.h"
-#include "selectjob.h"
-#include "closejob.h"
-#include "expungejob.h"
-#include "createjob.h"
-#include "deletejob.h"
+#include "myrightsjob.h"
 #include "namespacejob.h"
-#include "subscribejob.h"
-#include "unsubscribejob.h"
 #include "renamejob.h"
-#include "storejob.h"
+#include "selectjob.h"
+#include "session.h"
 #include "sessionuiproxy.h"
 #include "setacljob.h"
-#include "getacljob.h"
-#include "deleteacljob.h"
-#include "myrightsjob.h"
-#include "listrightsjob.h"
 #include "setmetadatajob.h"
-#include "getmetadatajob.h"
+#include "storejob.h"
+#include "subscribejob.h"
+#include "unsubscribejob.h"
 
 using namespace KIMAP;
 
-using PartsReceivedSignal = void(FetchJob::*)(const QString &, const QMap<qint64,qint64> &,
-                                              const QMap<qint64, MessageParts> &);
+using PartsReceivedSignal = void (FetchJob::*)(const QString &, const QMap<qint64, qint64> &, const QMap<qint64, MessageParts> &);
 
-using HeadersReceivedSignal = void(FetchJob::*)(const QString &,
-                                                const QMap<qint64, qint64> &,
-                                                const QMap<qint64, qint64> &,
-                                                const QMap<qint64, MessageFlags> &,
-                                                const QMap<qint64, MessagePtr> &);
+using HeadersReceivedSignal = void (FetchJob::*)(const QString &,
+                                                 const QMap<qint64, qint64> &,
+                                                 const QMap<qint64, qint64> &,
+                                                 const QMap<qint64, MessageFlags> &,
+                                                 const QMap<qint64, MessagePtr> &);
 
-class UiProxy: public SessionUiProxy
+class UiProxy : public SessionUiProxy
 {
 public:
     bool ignoreSslError(const KSslErrorUiData &errorData) override
@@ -91,7 +90,6 @@ void listFolders(Session *session, bool includeUnsubscribed = false, const QStri
             qDebug() << descriptor.separator << descriptor.name;
         }
     }
-
 }
 
 void testMetaData(Session *session)
@@ -120,10 +118,12 @@ void testMetaData(Session *session)
     getmetadata->setServerCapability(SetMetaDataJob::Annotatemore);
     getmetadata->addEntry("/*", "value.priv");
     getmetadata->exec();
-    Q_ASSERT_X(getmetadata->metaData(QLatin1String("INBOX/TestFolder"), "/check", "value.priv") == "true", "",  "/check metadata should be true");
-    Q_ASSERT_X(getmetadata->metaData(QLatin1String("INBOX/TestFolder"), "/comment", "value.priv") == "My new comment", "",  "/check metadata should be My new comment");
+    Q_ASSERT_X(getmetadata->metaData(QLatin1String("INBOX/TestFolder"), "/check", "value.priv") == "true", "", "/check metadata should be true");
+    Q_ASSERT_X(getmetadata->metaData(QLatin1String("INBOX/TestFolder"), "/comment", "value.priv") == "My new comment",
+               "",
+               "/check metadata should be My new comment");
 
-    //cleanup
+    // cleanup
     auto deletejob = new DeleteJob(session);
     deletejob->setMailBox(QLatin1String("INBOX/TestFolder"));
     deletejob->exec();
@@ -193,7 +193,7 @@ void testAcl(Session *session, const QString &user)
     users = getAcl->rights(user.toLatin1());
     qDebug() << user << " rights on INBOX/TestFolder: " << Acl::rightsToString(users);
 
-    //cleanup
+    // cleanup
     auto deletejob = new DeleteJob(session);
     deletejob->setMailBox(QStringLiteral("INBOX/TestFolder"));
     deletejob->exec();
@@ -202,7 +202,7 @@ void testAcl(Session *session, const QString &user)
 void testAppendAndStore(Session *session)
 {
     qDebug() << "TESTING: APPEND and STORE";
-    //setup
+    // setup
     auto create = new CreateJob(session);
     create->setMailBox(QStringLiteral("INBOX/TestFolder"));
     create->exec();
@@ -237,17 +237,22 @@ void testAppendAndStore(Session *session)
     scope.mode = FetchJob::FetchScope::Content;
     fetch->setScope(scope);
     MessagePtr message;
-    QObject::connect(fetch, static_cast<HeadersReceivedSignal>(&FetchJob::headersReceived),
-                     fetch, [&](const QString &, const QMap<qint64, qint64> &,
-                                const QMap<qint64, qint64> &, const QMap<qint64, MessageFlags> &,
-                                const QMap<qint64, MessagePtr> &msgs) {
-                        message = msgs[1];
-                    });
+    QObject::connect(fetch,
+                     static_cast<HeadersReceivedSignal>(&FetchJob::headersReceived),
+                     fetch,
+                     [&](const QString &,
+                         const QMap<qint64, qint64> &,
+                         const QMap<qint64, qint64> &,
+                         const QMap<qint64, MessageFlags> &,
+                         const QMap<qint64, MessagePtr> &msgs) {
+                         message = msgs[1];
+                     });
     fetch->exec();
     Q_ASSERT_X(fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit().constData());
     testMailContent.replace("\r\n", "\n");
     Q_ASSERT_X(testMailContent == message->head() + "\n" + message->body(),
-               "Message differs from reference", QByteArray(message->head() + "\n" + message->body()).constData());
+               "Message differs from reference",
+               QByteArray(message->head() + "\n" + message->body()).constData());
 
     fetch = new FetchJob(session);
     fetch->setSequenceSet(ImapSet(1));
@@ -255,12 +260,16 @@ void testAppendAndStore(Session *session)
     scope.mode = FetchJob::FetchScope::Flags;
     fetch->setScope(scope);
     MessageFlags expectedFlags;
-    QObject::connect(fetch, static_cast<HeadersReceivedSignal>(&FetchJob::headersReceived),
-                     fetch, [&](const QString &, const QMap<qint64, qint64> &,
-                                const QMap<qint64, qint64> &, const QMap<qint64, MessageFlags> &flags,
-                                const QMap<qint64, MessagePtr> &) {
-                        expectedFlags = flags[1];
-                    });
+    QObject::connect(fetch,
+                     static_cast<HeadersReceivedSignal>(&FetchJob::headersReceived),
+                     fetch,
+                     [&](const QString &,
+                         const QMap<qint64, qint64> &,
+                         const QMap<qint64, qint64> &,
+                         const QMap<qint64, MessageFlags> &flags,
+                         const QMap<qint64, MessagePtr> &) {
+                         expectedFlags = flags[1];
+                     });
     fetch->exec();
     qDebug() << "Read the message flags:" << expectedFlags;
 
@@ -285,7 +294,7 @@ void testAppendAndStore(Session *session)
     select->setMailBox(QStringLiteral("INBOX"));
     select->exec();
 
-    //cleanup
+    // cleanup
     auto deletejob = new DeleteJob(session);
     deletejob->setMailBox(QStringLiteral("INBOX/TestFolder"));
     deletejob->exec();
@@ -297,7 +306,7 @@ void testAppendAndStore(Session *session)
 void testRename(Session *session)
 {
     qDebug() << "TESTING: RENAME";
-    //setup
+    // setup
     auto create = new CreateJob(session);
     create->setMailBox(QStringLiteral("INBOX/TestFolder"));
     create->exec();
@@ -305,7 +314,7 @@ void testRename(Session *session)
     qDebug() << "Listing mailboxes with name TestFolder:";
     listFolders(session, true, QStringLiteral("TestFolder"));
 
-    //actual tests
+    // actual tests
     qDebug() << "Renaming to RenamedTestFolder";
     auto rename = new RenameJob(session);
     rename->setSourceMailBox(QStringLiteral("INBOX/TestFolder"));
@@ -317,7 +326,7 @@ void testRename(Session *session)
     qDebug() << "Listing mailboxes with name RenamedTestFolder:";
     listFolders(session, true, QStringLiteral("RenamedTestFolder"));
 
-    //cleanup
+    // cleanup
     auto deletejob = new DeleteJob(session);
     deletejob->setMailBox(QStringLiteral("INBOX/TestFolder"));
     deletejob->exec();
@@ -329,7 +338,7 @@ void testRename(Session *session)
 void testSubscribe(Session *session)
 {
     qDebug() << "TESTING: SUBSCRIBE/UNSUBSCRIBE";
-    //setup
+    // setup
     auto create = new CreateJob(session);
     create->setMailBox(QStringLiteral("INBOX/TestFolder"));
     create->exec();
@@ -337,7 +346,7 @@ void testSubscribe(Session *session)
     qDebug() << "Listing  subscribed mailboxes with name TestFolder:";
     listFolders(session, false, QStringLiteral("TestFolder"));
 
-    //actual tests
+    // actual tests
     qDebug() << "Subscribing to INBOX/TestFolder";
     auto subscribe = new SubscribeJob(session);
     subscribe->setMailBox(QStringLiteral("INBOX/TestFolder"));
@@ -354,7 +363,7 @@ void testSubscribe(Session *session)
     qDebug() << "Listing  subscribed mailboxes with name TestFolder:";
     listFolders(session, false, QStringLiteral("TestFolder"));
 
-    //cleanup
+    // cleanup
     auto deletejob = new DeleteJob(session);
     deletejob->setMailBox(QStringLiteral("INBOX/TestFolder"));
     deletejob->exec();
@@ -408,8 +417,8 @@ int main(int argc, char **argv)
 
     qDebug() << "Logging in...";
     auto login = new LoginJob(&session);
-    //login->setEncryptionMode( LoginJob::TlsV1 );
-    //login->setAuthenticationMode( LoginJob::Plain );
+    // login->setEncryptionMode( LoginJob::TlsV1 );
+    // login->setAuthenticationMode( LoginJob::Plain );
     login->setUserName(user);
     login->setPassword(password);
     login->exec();
@@ -494,11 +503,14 @@ int main(int argc, char **argv)
     QMap<qint64, qint64> sizes;
     QMap<qint64, MessagePtr> messages;
 
-    QObject::connect(fetch, static_cast<HeadersReceivedSignal>(&FetchJob::headersReceived),
-                     fetch, [&](const QString &, const QMap<qint64,qint64> &,
-                                const QMap<qint64, qint64> &sizes_,
-                                const QMap<qint64, MessageFlags> &,
-                                const QMap<qint64, MessagePtr> &msgs_) {
+    QObject::connect(fetch,
+                     static_cast<HeadersReceivedSignal>(&FetchJob::headersReceived),
+                     fetch,
+                     [&](const QString &,
+                         const QMap<qint64, qint64> &,
+                         const QMap<qint64, qint64> &sizes_,
+                         const QMap<qint64, MessageFlags> &,
+                         const QMap<qint64, MessagePtr> &msgs_) {
                          sizes = sizes_;
                          messages = msgs_;
                      });
@@ -523,11 +535,14 @@ int main(int argc, char **argv)
     scope.mode = FetchJob::FetchScope::Flags;
     fetch->setScope(scope);
     QMap<qint64, MessageFlags> flags;
-    QObject::connect(fetch, static_cast<HeadersReceivedSignal>(&FetchJob::headersReceived),
-                     fetch, [&](const QString &, const QMap<qint64,qint64> &,
-                                const QMap<qint64, qint64> &,
-                                const QMap<qint64, MessageFlags> &flags_,
-                                const QMap<qint64, MessagePtr> &) {
+    QObject::connect(fetch,
+                     static_cast<HeadersReceivedSignal>(&FetchJob::headersReceived),
+                     fetch,
+                     [&](const QString &,
+                         const QMap<qint64, qint64> &,
+                         const QMap<qint64, qint64> &,
+                         const QMap<qint64, MessageFlags> &flags_,
+                         const QMap<qint64, MessagePtr> &) {
                          flags = flags_;
                      });
     fetch->exec();
@@ -545,11 +560,14 @@ int main(int argc, char **argv)
     scope.parts.clear();
     scope.mode = FetchJob::FetchScope::Structure;
     fetch->setScope(scope);
-    QObject::connect(fetch, static_cast<HeadersReceivedSignal>(&FetchJob::headersReceived),
-                     fetch, [&](const QString &, const QMap<qint64,qint64> &,
-                                const QMap<qint64, qint64> &,
-                                const QMap<qint64, MessageFlags> &,
-                                const QMap<qint64, MessagePtr> &msgs_) {
+    QObject::connect(fetch,
+                     static_cast<HeadersReceivedSignal>(&FetchJob::headersReceived),
+                     fetch,
+                     [&](const QString &,
+                         const QMap<qint64, qint64> &,
+                         const QMap<qint64, qint64> &,
+                         const QMap<qint64, MessageFlags> &,
+                         const QMap<qint64, MessagePtr> &msgs_) {
                          messages = msgs_;
                      });
     fetch->exec();
@@ -567,9 +585,10 @@ int main(int argc, char **argv)
     scope.mode = FetchJob::FetchScope::Headers;
     fetch->setScope(scope);
     QMap<qint64, MessageParts> allParts;
-    QObject::connect(fetch, static_cast<PartsReceivedSignal>(&FetchJob::partsReceived),
-                     fetch, [&](const QString &, const QMap<qint64, qint64> &,
-                                const QMap<qint64, MessageParts> &parts_) {
+    QObject::connect(fetch,
+                     static_cast<PartsReceivedSignal>(&FetchJob::partsReceived),
+                     fetch,
+                     [&](const QString &, const QMap<qint64, qint64> &, const QMap<qint64, MessageParts> &parts_) {
                          allParts = parts_;
                      });
     fetch->exec();
@@ -596,9 +615,10 @@ int main(int argc, char **argv)
     scope.parts << "2";
     scope.mode = FetchJob::FetchScope::Content;
     fetch->setScope(scope);
-    QObject::connect(fetch, static_cast<PartsReceivedSignal>(&FetchJob::partsReceived),
-                     fetch, [&](const QString &, const QMap<qint64, qint64> &,
-                                const QMap<qint64, MessageParts> &parts_) {
+    QObject::connect(fetch,
+                     static_cast<PartsReceivedSignal>(&FetchJob::partsReceived),
+                     fetch,
+                     [&](const QString &, const QMap<qint64, qint64> &, const QMap<qint64, MessageParts> &parts_) {
                          allParts = parts_;
                      });
     fetch->exec();

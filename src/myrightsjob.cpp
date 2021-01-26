@@ -10,16 +10,22 @@
 
 #include "acljobbase_p.h"
 #include "response_p.h"
-#include "session_p.h"
 #include "rfccodecs.h"
+#include "session_p.h"
 
 namespace KIMAP
 {
 class MyRightsJobPrivate : public AclJobBasePrivate
 {
 public:
-    MyRightsJobPrivate(Session *session, const QString &name) : AclJobBasePrivate(session, name), myRights(Acl::None) {}
-    ~MyRightsJobPrivate() { }
+    MyRightsJobPrivate(Session *session, const QString &name)
+        : AclJobBasePrivate(session, name)
+        , myRights(Acl::None)
+    {
+    }
+    ~MyRightsJobPrivate()
+    {
+    }
 
     Acl::Rights myRights;
 };
@@ -48,8 +54,7 @@ void MyRightsJob::handleResponse(const Response &response)
     Q_D(MyRightsJob);
 
     if (handleErrorReplies(response) == NotHandled) {
-        if (response.content.size() == 4 &&
-                response.content[1].toString() == "MYRIGHTS") {
+        if (response.content.size() == 4 && response.content[1].toString() == "MYRIGHTS") {
             d->myRights = Acl::rightsFromString(response.content[3].toString());
         }
     }

@@ -10,8 +10,8 @@
 #include "session.h"
 #include "session_p.h"
 
-#include <QTimer>
 #include <QPointer>
+#include <QTimer>
 
 #include "kimap_debug.h"
 
@@ -19,9 +19,9 @@
 #include "job_p.h"
 #include "loginjob.h"
 #include "response_p.h"
+#include "rfccodecs.h"
 #include "sessionlogger_p.h"
 #include "sessionthread_p.h"
-#include "rfccodecs.h"
 
 Q_DECLARE_METATYPE(QSsl::SslProtocol)
 Q_DECLARE_METATYPE(QSslSocket::SslMode)
@@ -30,7 +30,8 @@ static const int _kimap_sslVersionId = qRegisterMetaType<QSsl::SslProtocol>();
 using namespace KIMAP;
 
 Session::Session(const QString &hostName, quint16 port, QObject *parent)
-    : QObject(parent), d(new SessionPrivate(this))
+    : QObject(parent)
+    , d(new SessionPrivate(this))
 {
     if (!qEnvironmentVariableIsEmpty("KIMAP_LOGFILE")) {
         d->logger = new SessionLogger;
@@ -50,15 +51,14 @@ Session::Session(const QString &hostName, quint16 port, QObject *parent)
     connect(d->thread, &SessionThread::socketError, d, &SessionPrivate::socketError);
 
     d->socketTimer.setSingleShot(true);
-    connect(&d->socketTimer, &QTimer::timeout,
-            d, &SessionPrivate::onSocketTimeout);
+    connect(&d->socketTimer, &QTimer::timeout, d, &SessionPrivate::onSocketTimeout);
 
     d->startSocketTimer();
 }
 
 Session::~Session()
 {
-    //Make sure all jobs know we're done
+    // Make sure all jobs know we're done
     d->socketDisconnected();
     delete d->thread;
     d->thread = nullptr;
@@ -116,7 +116,7 @@ void KIMAP::Session::close()
 
 void SessionPrivate::handleSslError(const KSslErrorUiData &errorData)
 {
-    //ignoreSslError is async, so the thread might already be gone when it returns
+    // ignoreSslError is async, so the thread might already be gone when it returns
     QPointer<SessionThread> _t = thread;
     const bool ignoreSslError = uiProxy && uiProxy->ignoreSslError(errorData);
     if (_t) {
@@ -125,17 +125,17 @@ void SessionPrivate::handleSslError(const KSslErrorUiData &errorData)
 }
 
 SessionPrivate::SessionPrivate(Session *session)
-    : QObject(session),
-      q(session),
-      isSocketConnected(false),
-      state(Session::Disconnected),
-      logger(nullptr),
-      thread(nullptr),
-      jobRunning(false),
-      currentJob(nullptr),
-      tagCount(0),
-      sslVersion(QSsl::UnknownProtocol),
-      socketTimerInterval(30000)   // By default timeouts on 30s
+    : QObject(session)
+    , q(session)
+    , isSocketConnected(false)
+    , state(Session::Disconnected)
+    , logger(nullptr)
+    , thread(nullptr)
+    , jobRunning(false)
+    , currentJob(nullptr)
+    , tagCount(0)
+    , sslVersion(QSsl::UnknownProtocol)
+    , socketTimerInterval(30000) // By default timeouts on 30s
 {
 }
 
@@ -263,8 +263,7 @@ void SessionPrivate::responseReceived(const Response &response)
         }
         break;
     case Session::Selected:
-        if ((code == "OK" && tag == closeTag) ||
-                (code != "OK" && tag == selectTag)) {
+        if ((code == "OK" && tag == closeTag) || (code != "OK" && tag == selectTag)) {
             setState(Session::Authenticated);
             currentMailBox = QByteArray();
         } else if (code == "OK" && tag == selectTag) {
@@ -288,8 +287,7 @@ void SessionPrivate::responseReceived(const Response &response)
         restartSocketTimer();
         currentJob->handleResponse(response);
     } else {
-        qCWarning(KIMAP_LOG) << "A message was received from the server with no job to handle it:"
-                             << response.toString()
+        qCWarning(KIMAP_LOG) << "A message was received from the server with no job to handle it:" << response.toString()
                              << '(' + response.toString().toHex() + ')';
     }
 }

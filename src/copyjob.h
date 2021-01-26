@@ -9,12 +9,11 @@
 
 #include "kimap_export.h"
 
-#include "job.h"
 #include "imapset.h"
+#include "job.h"
 
 namespace KIMAP
 {
-
 class Session;
 struct Message;
 class CopyJobPrivate;

@@ -6,21 +6,26 @@
 
 #include "getacljob.h"
 
-#include <KLocalizedString>
 #include "kimap_debug.h"
+#include <KLocalizedString>
 
 #include "acljobbase_p.h"
 #include "response_p.h"
-#include "session_p.h"
 #include "rfccodecs.h"
+#include "session_p.h"
 
 namespace KIMAP
 {
 class GetAclJobPrivate : public AclJobBasePrivate
 {
 public:
-    GetAclJobPrivate(Session *session, const QString &name) : AclJobBasePrivate(session, name) {}
-    ~GetAclJobPrivate() { }
+    GetAclJobPrivate(Session *session, const QString &name)
+        : AclJobBasePrivate(session, name)
+    {
+    }
+    ~GetAclJobPrivate()
+    {
+    }
 
     QMap<QByteArray, Acl::Rights> userRights;
 };
@@ -47,11 +52,10 @@ void GetAclJob::doStart()
 void GetAclJob::handleResponse(const Response &response)
 {
     Q_D(GetAclJob);
-//   qCDebug(KIMAP_LOG) << response.toString();
+    //   qCDebug(KIMAP_LOG) << response.toString();
 
     if (handleErrorReplies(response) == NotHandled) {
-        if (response.content.size() >= 4 &&
-                response.content[1].toString() == "ACL") {
+        if (response.content.size() >= 4 && response.content[1].toString() == "ACL") {
             int i = 3;
             while (i < response.content.size() - 1) {
                 QByteArray id = response.content[i].toString();

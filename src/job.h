@@ -13,7 +13,6 @@
 
 namespace KIMAP
 {
-
 class Session;
 class SessionPrivate;
 class JobPrivate;
@@ -39,10 +38,7 @@ private:
     virtual void connectionLost();
 
 protected:
-    enum HandlerResponse {
-        Handled = 0,
-        NotHandled
-    };
+    enum HandlerResponse { Handled = 0, NotHandled };
 
     HandlerResponse handleErrorReplies(const Response &response);
 

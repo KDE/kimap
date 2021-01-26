@@ -14,14 +14,19 @@
 
 namespace KIMAP
 {
-    class IdJobPrivate : public JobPrivate
+class IdJobPrivate : public JobPrivate
+{
+public:
+    IdJobPrivate(Session *session, const QString &name)
+        : JobPrivate(session, name)
     {
-    public:
-        IdJobPrivate(Session *session,  const QString& name) : JobPrivate(session, name) { }
-        ~IdJobPrivate() { }
-  
-        QMap<QByteArray, QByteArray> fields;
-    };
+    }
+    ~IdJobPrivate()
+    {
+    }
+
+    QMap<QByteArray, QByteArray> fields;
+};
 }
 
 using namespace KIMAP;
@@ -59,7 +64,7 @@ void IdJob::doStart()
 
 void IdJob::handleResponse(const Response &response)
 {
-    //Q_D(IdJob);
+    // Q_D(IdJob);
     if (handleErrorReplies(response) == NotHandled) {
         // Ignore the response
     }

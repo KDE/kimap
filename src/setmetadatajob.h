@@ -13,7 +13,6 @@
 
 namespace KIMAP
 {
-
 class Session;
 struct Response;
 class SetMetaDataJobPrivate;
@@ -166,9 +165,9 @@ public:
      * Possible error codes that may be returned by the server.
      */
     enum MetaDataError {
-        NoError = 0,  /**< Used to indicate that no errors have been received */
-        TooMany = 1,  /**< Cannot add a new metadata item, because the limit has already been reached */
-        TooBig = 2,   /**< A metadata value was too big (see maxAcceptedSize()) */
+        NoError = 0, /**< Used to indicate that no errors have been received */
+        TooMany = 1, /**< Cannot add a new metadata item, because the limit has already been reached */
+        TooBig = 2, /**< A metadata value was too big (see maxAcceptedSize()) */
         NoPrivate = 4 /**< The server does not support private metadata entries */
     };
 
@@ -195,7 +194,6 @@ public:
 protected:
     void doStart() override;
     void handleResponse(const Response &response) override;
-
 };
 
 }

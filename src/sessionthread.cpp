@@ -8,11 +8,11 @@
 
 #include <KSslErrorUiData>
 
+#include "kimap_debug.h"
 #include <QDebug>
-#include <QThread>
 #include <QNetworkProxy>
 #include <QSslCipher>
-#include "kimap_debug.h"
+#include <QThread>
 
 #include "imapstreamparser.h"
 #include "response_p.h"
@@ -21,13 +21,16 @@ using namespace KIMAP;
 
 Q_DECLARE_METATYPE(KSslErrorUiData)
 
-namespace {
+namespace
+{
 static const int _kimap_abstractSocketError = qRegisterMetaType<QAbstractSocket::SocketError>();
 static const int _kimap_sslErrorUiData = qRegisterMetaType<KSslErrorUiData>();
 }
 
 SessionThread::SessionThread(const QString &hostName, quint16 port)
-    : QObject(), m_hostName(hostName), m_port(port)
+    : QObject()
+    , m_hostName(hostName)
+    , m_port(port)
 {
     // Just like the Qt docs now recommend, for event-driven threads:
     // don't derive from QThread, create one directly and move the object to it.
@@ -52,7 +55,12 @@ SessionThread::~SessionThread()
 // Called in primary thread, passes setting to secondary thread
 void SessionThread::setUseNetworkProxy(bool useProxy)
 {
-    QMetaObject::invokeMethod(this, [this, useProxy]() { setUseProxyInternal(useProxy); }, Qt::QueuedConnection);
+    QMetaObject::invokeMethod(
+        this,
+        [this, useProxy]() {
+            setUseProxyInternal(useProxy);
+        },
+        Qt::QueuedConnection);
 }
 
 // Called in primary thread
@@ -128,7 +136,6 @@ void SessionThread::readMessage()
     if (m_stream->availableDataSize() > 1) {
         QMetaObject::invokeMethod(this, &SessionThread::readMessage, Qt::QueuedConnection);
     }
-
 }
 
 // Called in main thread
@@ -156,9 +163,7 @@ void SessionThread::reconnect()
     if (m_socket == nullptr) { // threadQuit already called
         return;
     }
-    if (m_socket->state() != QSslSocket::ConnectedState &&
-            m_socket->state() != QSslSocket::ConnectingState) {
-
+    if (m_socket->state() != QSslSocket::ConnectedState && m_socket->state() != QSslSocket::ConnectingState) {
         QNetworkProxy proxy;
         if (!m_useProxy) {
             qCDebug(KIMAP_LOG) << "Connecting to IMAP server with no proxy";
@@ -185,27 +190,24 @@ void SessionThread::threadInit()
     Q_ASSERT(QThread::currentThread() == thread());
     m_socket = std::make_unique<QSslSocket>();
     m_stream = std::make_unique<ImapStreamParser>(m_socket.get());
-    connect(m_socket.get(), &QIODevice::readyRead,
-            this, &SessionThread::readMessage, Qt::QueuedConnection);
+    connect(m_socket.get(), &QIODevice::readyRead, this, &SessionThread::readMessage, Qt::QueuedConnection);
 
     // Delay the call to slotSocketDisconnected so that it finishes disconnecting before we call reconnect()
-    connect(m_socket.get(), &QSslSocket::disconnected,
-            this, &SessionThread::slotSocketDisconnected, Qt::QueuedConnection);
-    connect(m_socket.get(), &QSslSocket::connected,
-            this, &SessionThread::socketConnected);
+    connect(m_socket.get(), &QSslSocket::disconnected, this, &SessionThread::slotSocketDisconnected, Qt::QueuedConnection);
+    connect(m_socket.get(), &QSslSocket::connected, this, &SessionThread::socketConnected);
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-    connect(m_socket.get(), QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error),
+    connect(m_socket.get(),
+            QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error),
 #else
-    connect(m_socket.get(), QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::errorOccurred),
+    connect(m_socket.get(),
+            QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::errorOccurred),
 #endif
-            this, &SessionThread::slotSocketError);
+            this,
+            &SessionThread::slotSocketError);
 
-    connect(m_socket.get(), &QIODevice::bytesWritten,
-            this, &SessionThread::socketActivity);
-    connect(m_socket.get(), &QSslSocket::encryptedBytesWritten,
-            this, &SessionThread::socketActivity);
-    connect(m_socket.get(), &QIODevice::readyRead,
-            this, &SessionThread::socketActivity);
+    connect(m_socket.get(), &QIODevice::bytesWritten, this, &SessionThread::socketActivity);
+    connect(m_socket.get(), &QSslSocket::encryptedBytesWritten, this, &SessionThread::socketActivity);
+    connect(m_socket.get(), &QIODevice::readyRead, this, &SessionThread::socketActivity);
     QMetaObject::invokeMethod(this, &SessionThread::reconnect, Qt::QueuedConnection);
 }
 
@@ -233,7 +235,9 @@ void SessionThread::setUseProxyInternal(bool useProxy)
 // Called in primary thread
 void SessionThread::startSsl(QSsl::SslProtocol protocol)
 {
-    QMetaObject::invokeMethod(this, [this, protocol]() { doStartSsl(protocol); });
+    QMetaObject::invokeMethod(this, [this, protocol]() {
+        doStartSsl(protocol);
+    });
 }
 
 // Called in secondary thread (via invokeMethod)
@@ -280,17 +284,14 @@ void SessionThread::sslConnected()
 #else
     if (!m_socket->sslHandshakeErrors().isEmpty()
 #endif
-            || !m_socket->isEncrypted()
-        || cipher.isNull() || cipher.usedBits() == 0) {
-        qCDebug(KIMAP_LOG) << "Initial SSL handshake failed. cipher.isNull() is" << cipher.isNull()
-                           << ", cipher.usedBits() is" << cipher.usedBits()
-                           << ", the socket says:" <<  m_socket->errorString()
-                           << "and the list of SSL errors contains"
-                      #if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
+        || !m_socket->isEncrypted() || cipher.isNull() || cipher.usedBits() == 0) {
+        qCDebug(KIMAP_LOG) << "Initial SSL handshake failed. cipher.isNull() is" << cipher.isNull() << ", cipher.usedBits() is" << cipher.usedBits()
+                           << ", the socket says:" << m_socket->errorString() << "and the list of SSL errors contains"
+#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
                            << m_socket->sslErrors().count()
-                      #else
+#else
                            << m_socket->sslHandshakeErrors().count()
-                      #endif
+#endif
                            << "items.";
         KSslErrorUiData errorData(m_socket.get());
         Q_EMIT sslError(errorData);
@@ -303,7 +304,9 @@ void SessionThread::sslConnected()
 
 void SessionThread::sslErrorHandlerResponse(bool response)
 {
-    QMetaObject::invokeMethod(this, [this, response]() { doSslErrorHandlerResponse(response); });
+    QMetaObject::invokeMethod(this, [this, response]() {
+        doSslErrorHandlerResponse(response);
+    });
 }
 
 // Called in secondary thread (via invokeMethod)
@@ -318,7 +321,7 @@ void SessionThread::doSslErrorHandlerResponse(bool response)
         Q_EMIT encryptionNegotiationResult(true, m_socket->sessionProtocol());
     } else {
         m_encryptedMode = false;
-        //reconnect in unencrypted mode, so new commands can be issued
+        // reconnect in unencrypted mode, so new commands can be issued
         m_socket->disconnectFromHost();
         m_socket->waitForDisconnected();
         m_socket->connectToHost(m_hostName, m_port);

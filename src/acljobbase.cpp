@@ -60,7 +60,6 @@ AclJobBase::AclJobBase(Session *session)
 AclJobBase::AclJobBase(JobPrivate &dd)
     : Job(dd)
 {
-
 }
 
 AclJobBase::~AclJobBase()

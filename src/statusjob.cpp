@@ -6,16 +6,15 @@
 
 #include "statusjob.h"
 #include "job_p.h"
-#include "response_p.h"
-#include "session_p.h"
-#include "rfccodecs.h"
 #include "kimap_debug.h"
+#include "response_p.h"
+#include "rfccodecs.h"
+#include "session_p.h"
 
 #include <KLocalizedString>
 
 namespace KIMAP
 {
-
 class StatusJobPrivate : public JobPrivate
 {
 public:
@@ -80,8 +79,7 @@ void StatusJob::doStart()
 {
     Q_D(StatusJob);
 
-    const QByteArray params = '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8()) + "\" ("
-                            + d->dataItems.join(' ') + ')';
+    const QByteArray params = '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8()) + "\" (" + d->dataItems.join(' ') + ')';
 
     d->tags << d->sessionInternal()->sendCommand("STATUS", params);
 }
@@ -94,7 +92,6 @@ void StatusJob::handleResponse(const Response &response)
         if (response.content.size() >= 3) {
             const QByteArray code = response.content[1].toString();
             if (code == "STATUS") {
-
                 const QList<QByteArray> resp = response.content[3].toList();
                 for (int i = 0; i < resp.size(); i += 2) {
                     d->status << (qMakePair(resp[i], resp[i + 1].toLongLong()));

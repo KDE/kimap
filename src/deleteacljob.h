@@ -13,7 +13,6 @@
 
 namespace KIMAP
 {
-
 class Session;
 struct Response;
 class DeleteAclJobPrivate;
@@ -54,7 +53,6 @@ public:
 
 protected:
     void doStart() override;
-
 };
 
 }

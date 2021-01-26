@@ -10,11 +10,11 @@
 #ifndef FAKESERVER_H
 #define FAKESERVER_H
 
-#include <QTcpSocket>
-#include <QTcpServer>
-#include <QThread>
 #include <QMutex>
 #include <QSsl>
+#include <QTcpServer>
+#include <QTcpSocket>
+#include <QThread>
 
 namespace KIMAP
 {
@@ -215,7 +215,7 @@ private:
     void writeServerPart(int scenarioNumber);
     void readClientPart(int scenarioNumber);
 
-    QList< QList<QByteArray> > m_scenarios;
+    QList<QList<QByteArray>> m_scenarios;
     QTcpServer *m_tcpServer;
     mutable QMutex m_mutex;
     QList<QTcpSocket *> m_clientSockets;

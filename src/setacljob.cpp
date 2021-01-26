@@ -10,16 +10,21 @@
 
 #include "acljobbase_p.h"
 #include "response_p.h"
-#include "session_p.h"
 #include "rfccodecs.h"
+#include "session_p.h"
 
 namespace KIMAP
 {
 class SetAclJobPrivate : public AclJobBasePrivate
 {
 public:
-    SetAclJobPrivate(Session *session, const QString &name) : AclJobBasePrivate(session, name) {}
-    ~SetAclJobPrivate() { }
+    SetAclJobPrivate(Session *session, const QString &name)
+        : AclJobBasePrivate(session, name)
+    {
+    }
+    ~SetAclJobPrivate()
+    {
+    }
 };
 }
 

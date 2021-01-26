@@ -6,15 +6,15 @@
 
 #include <QTest>
 
-#include "kimaptest/fakeserver.h"
-#include "kimap/session.h"
 #include "kimap/getquotarootjob.h"
+#include "kimap/session.h"
+#include "kimaptest/fakeserver.h"
 
 #include <QTest>
 
 Q_DECLARE_METATYPE(QList<qint64>)
 
-class QuotaRootJobTest: public QObject
+class QuotaRootJobTest : public QObject
 {
     Q_OBJECT
 
@@ -23,11 +23,11 @@ private Q_SLOTS:
     void testGetQuotaRoot_data()
     {
         QTest::addColumn<QString>("mailbox");
-        QTest::addColumn<QList<QByteArray> >("roots");
-        QTest::addColumn<QList<QByteArray> >("resources");
-        QTest::addColumn<QList<qint64> >("usages");
-        QTest::addColumn<QList<qint64> >("limits");
-        QTest::addColumn<QList<QByteArray> >("scenario");
+        QTest::addColumn<QList<QByteArray>>("roots");
+        QTest::addColumn<QList<QByteArray>>("resources");
+        QTest::addColumn<QList<qint64>>("usages");
+        QTest::addColumn<QList<qint64>>("limits");
+        QTest::addColumn<QList<QByteArray>>("scenario");
 
         QList<QByteArray> roots;
         QList<QByteArray> resources;
@@ -38,8 +38,7 @@ private Q_SLOTS:
         resources << "STORAGE";
         limits << 512;
         usages << 10;
-        scenario << FakeServer::preauth()
-                 << "C: A000001 GETQUOTAROOT \"INBOX\""
+        scenario << FakeServer::preauth() << "C: A000001 GETQUOTAROOT \"INBOX\""
                  << "S: * QUOTAROOT INBOX \"\" "
                  << "S: * QUOTA \"\" (STORAGE 10 512)"
                  << "S: A000001 OK GETQUOTA completed";
@@ -51,11 +50,11 @@ private Q_SLOTS:
         limits.clear();
         scenario.clear();
         roots << "";
-        resources << "STORAGE" << "MESSAGE";
+        resources << "STORAGE"
+                  << "MESSAGE";
         usages << 10 << 8221;
         limits << 512 << 20000;
-        scenario << FakeServer::preauth()
-                 << "C: A000001 GETQUOTAROOT \"INBOX\""
+        scenario << FakeServer::preauth() << "C: A000001 GETQUOTAROOT \"INBOX\""
                  << "S: * QUOTAROOT INBOX \"\" "
                  << "S: * QUOTA \"\" (STORAGE 10 512)"
                  << "S: * QUOTA \"\" ( MESSAGE 8221 20000 ) "
@@ -67,12 +66,13 @@ private Q_SLOTS:
         usages.clear();
         limits.clear();
         scenario.clear();
-        roots << "root1" << "root2";
-        resources << "STORAGE" << "MESSAGE";
+        roots << "root1"
+              << "root2";
+        resources << "STORAGE"
+                  << "MESSAGE";
         usages << 10 << 8221 << 30 << 100;
         limits << 512 << 20000 << 5124 << 120000;
-        scenario << FakeServer::preauth()
-                 << "C: A000001 GETQUOTAROOT \"INBOX\""
+        scenario << FakeServer::preauth() << "C: A000001 GETQUOTAROOT \"INBOX\""
                  << "S: * QUOTAROOT INBOX \"root1\" root2 "
                  << "S: * QUOTA \"root1\" (STORAGE 10 512)"
                  << "S: * QUOTA \"root1\" ( MESSAGE 8221 20000 ) "
@@ -87,11 +87,11 @@ private Q_SLOTS:
         limits.clear();
         scenario.clear();
         roots << "";
-        resources << "STORAGE" << "MESSAGE";
+        resources << "STORAGE"
+                  << "MESSAGE";
         usages << 10 << 8221;
         limits << 512 << 20000;
-        scenario << FakeServer::preauth()
-                 << "C: A000001 GETQUOTAROOT \"INBOX\""
+        scenario << FakeServer::preauth() << "C: A000001 GETQUOTAROOT \"INBOX\""
                  << "S: * QUOTAROOT INBOX"
                  << "S: * QUOTA (STORAGE 10 512)"
                  << "S: * QUOTA ( MESSAGE 8221 20000 ) "
@@ -107,8 +107,7 @@ private Q_SLOTS:
         resources << "STORAGE";
         limits << 512;
         usages << 10;
-        scenario << FakeServer::preauth()
-                 << "C: A000001 GETQUOTAROOT \"INBOX\""
+        scenario << FakeServer::preauth() << "C: A000001 GETQUOTAROOT \"INBOX\""
                  << "S: * QUOTAROOT INBOX \"\" "
                  << "S: * QUOTA (STORAGE 10 512)"
                  << "S: A000001 OK GETQUOTA completed";
@@ -123,8 +122,7 @@ private Q_SLOTS:
         resources << "STORAGE";
         limits << 512;
         usages << 10;
-        scenario << FakeServer::preauth()
-                 << "C: A000001 GETQUOTAROOT \"INBOX\""
+        scenario << FakeServer::preauth() << "C: A000001 GETQUOTAROOT \"INBOX\""
                  << "S: * QUOTAROOT INBOX \"root1\" "
                  << "S: * QUOTA \"root2\" (STORAGE 10 512)"
                  << "S: A000001 OK GETQUOTA completed";
@@ -149,10 +147,10 @@ private Q_SLOTS:
         auto job = new KIMAP::GetQuotaRootJob(&session);
         job->setMailBox(mailbox);
         bool result = job->exec();
-        QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
-        QEXPECT_FAIL("no" , "Expected failure on NO response", Continue);
+        QEXPECT_FAIL("bad", "Expected failure on BAD response", Continue);
+        QEXPECT_FAIL("no", "Expected failure on NO response", Continue);
         QVERIFY(result);
-        QEXPECT_FAIL("rootname missmatch" , "Expected failure on rootname missmatch in QUOTAROOT and QUOTA response", Abort);
+        QEXPECT_FAIL("rootname missmatch", "Expected failure on rootname missmatch in QUOTAROOT and QUOTA response", Abort);
         QCOMPARE(job->roots(), roots);
         for (int rootIdx = 0; rootIdx < roots.size(); rootIdx++) {
             const QByteArray &root = roots[rootIdx];
@@ -166,7 +164,6 @@ private Q_SLOTS:
 
         fakeServer.quit();
     }
-
 };
 
 QTEST_GUILESS_MAIN(QuotaRootJobTest)

@@ -1,25 +1,25 @@
 /**
-  * This file is part of the KDE project
-  * SPDX-FileCopyrightText: 2009 Kevin Ottens <ervin@kde.org>
-  *
-  * SPDX-License-Identifier: LGPL-2.0-or-later
-  */
+ * This file is part of the KDE project
+ * SPDX-FileCopyrightText: 2009 Kevin Ottens <ervin@kde.org>
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 
-#include <QDebug>
 #include <QCoreApplication>
+#include <QDebug>
 
-#include "session.h"
 #include "capabilitiesjob.h"
+#include "closejob.h"
 #include "idlejob.h"
 #include "loginjob.h"
 #include "logoutjob.h"
 #include "selectjob.h"
-#include "closejob.h"
+#include "session.h"
 #include "sessionuiproxy.h"
 
 using namespace KIMAP;
 
-class UiProxy: public SessionUiProxy
+class UiProxy : public SessionUiProxy
 {
 public:
     bool ignoreSslError(const KSslErrorUiData &errorData) override
@@ -91,12 +91,9 @@ int main(int argc, char **argv)
 
     qDebug() << "Start idling...";
     auto idle = new IdleJob(&session);
-    QObject::connect(idle, SIGNAL(mailBoxStats(KIMAP::IdleJob*,QString,int,int)),
-                     idle, SLOT(stop()));
+    QObject::connect(idle, SIGNAL(mailBoxStats(KIMAP::IdleJob *, QString, int, int)), idle, SLOT(stop()));
     idle->exec();
-    qDebug() << "Idling done for" << idle->lastMailBox()
-             << "message count:" << idle->lastMessageCount()
-             << "recent count:" << idle->lastRecentCount();
+    qDebug() << "Idling done for" << idle->lastMailBox() << "message count:" << idle->lastMessageCount() << "recent count:" << idle->lastRecentCount();
 
     qDebug() << "Closing INBOX:";
     auto close = new CloseJob(&session);

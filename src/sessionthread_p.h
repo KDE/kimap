@@ -18,7 +18,6 @@ class KSslErrorUiData;
 
 namespace KIMAP
 {
-
 class ImapStreamParser;
 struct Response;
 

@@ -6,30 +6,36 @@
 
 #include "searchjob.h"
 
-#include <KLocalizedString>
 #include "kimap_debug.h"
+#include <KLocalizedString>
 
 #include <QDate>
 
+#include "imapset.h"
 #include "job_p.h"
 #include "response_p.h"
 #include "session_p.h"
-#include "imapset.h"
 
 namespace KIMAP
 {
-
 class Term::Private : public QSharedData
 {
 public:
-    Private(): QSharedData(), isFuzzy(false), isNegated(false), isNull(false) {}
+    Private()
+        : QSharedData()
+        , isFuzzy(false)
+        , isNegated(false)
+        , isNull(false)
+    {
+    }
     Private(const Private &other)
         : QSharedData(other)
         , command(other.command)
         , isFuzzy(other.isFuzzy)
         , isNegated(other.isNegated)
         , isNull(other.isNull)
-    {}
+    {
+    }
 
     Private &operator=(const Private &other)
     {
@@ -47,13 +53,13 @@ public:
 };
 
 Term::Term()
-    :  d(new Term::Private)
+    : d(new Term::Private)
 {
     d->isNull = true;
 }
 
 Term::Term(Term::Relation relation, const QVector<Term> &subterms)
-    :  d(new Term::Private)
+    : d(new Term::Private)
 {
     if (subterms.size() >= 2) {
         if (relation == KIMAP::Term::Or) {
@@ -82,7 +88,7 @@ Term::Term(Term::Relation relation, const QVector<Term> &subterms)
 }
 
 Term::Term(Term::SearchKey key, const QString &value)
-    :  d(new Term::Private)
+    : d(new Term::Private)
 {
     switch (key) {
     case All:
@@ -119,7 +125,7 @@ Term::Term(Term::SearchKey key, const QString &value)
 }
 
 Term::Term(const QString &header, const QString &value)
-    :  d(new Term::Private)
+    : d(new Term::Private)
 {
     d->command += "HEADER";
     d->command += ' ' + QByteArray(header.toUtf8().constData());
@@ -127,7 +133,7 @@ Term::Term(const QString &header, const QString &value)
 }
 
 Term::Term(Term::BooleanSearchKey key)
-    :  d(new Term::Private)
+    : d(new Term::Private)
 {
     switch (key) {
     case Answered:
@@ -159,12 +165,12 @@ Term::Term(Term::BooleanSearchKey key)
 
 static QByteArray monthName(int month)
 {
-    static const char* names[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    static const char *names[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     return (month >= 1 && month <= 12) ? QByteArray(names[month - 1]) : QByteArray();
 }
 
 Term::Term(Term::DateSearchKey key, const QDate &date)
-    :  d(new Term::Private)
+    : d(new Term::Private)
 {
     switch (key) {
     case Before:
@@ -194,7 +200,7 @@ Term::Term(Term::DateSearchKey key, const QDate &date)
 }
 
 Term::Term(Term::NumberSearchKey key, int value)
-    :  d(new Term::Private)
+    : d(new Term::Private)
 {
     switch (key) {
     case Larger:
@@ -208,7 +214,7 @@ Term::Term(Term::NumberSearchKey key, int value)
 }
 
 Term::Term(Term::SequenceSearchKey key, const ImapSet &set)
-    :  d(new Term::Private)
+    : d(new Term::Private)
 {
     switch (key) {
     case Uid:
@@ -223,7 +229,7 @@ Term::Term(Term::SequenceSearchKey key, const ImapSet &set)
 }
 
 Term::Term(const Term &other)
-    :  d(new Term::Private)
+    : d(new Term::Private)
 {
     *d = *other.d;
 }
@@ -240,9 +246,7 @@ Term &Term::operator=(const Term &other)
 
 bool Term::operator==(const Term &other) const
 {
-    return d->command == other.d->command &&
-           d->isNegated == other.d->isNegated &&
-           d->isFuzzy == other.d->isFuzzy;
+    return d->command == other.d->command && d->isNegated == other.d->isNegated && d->isFuzzy == other.d->isFuzzy;
 }
 
 QByteArray Term::serialize() const
@@ -274,14 +278,16 @@ bool Term::isNull() const
     return d->isNull;
 }
 
-//TODO: when custom error codes are introduced, handle the NO [TRYCREATE] response
+// TODO: when custom error codes are introduced, handle the NO [TRYCREATE] response
 
 class SearchJobPrivate : public JobPrivate
 {
 public:
-    SearchJobPrivate(Session *session, const QString &name) : JobPrivate(session, name), logic(SearchJob::And)
+    SearchJobPrivate(Session *session, const QString &name)
+        : JobPrivate(session, name)
+        , logic(SearchJob::And)
     {
-        criteriaMap[SearchJob::All]  = "ALL";
+        criteriaMap[SearchJob::All] = "ALL";
         criteriaMap[SearchJob::Answered] = "ANSWERED";
         criteriaMap[SearchJob::BCC] = "BCC";
         criteriaMap[SearchJob::Before] = "BEFORE";
@@ -315,7 +321,7 @@ public:
         criteriaMap[SearchJob::Unkeyword] = "UNKEYWORD";
         criteriaMap[SearchJob::Unseen] = "UNSEEN";
 
-        //don't use QDate::shortMonthName(), it returns a localized month name
+        // don't use QDate::shortMonthName(), it returns a localized month name
         months[1] = "Jan";
         months[2] = "Feb";
         months[3] = "Mar";
@@ -332,11 +338,13 @@ public:
         nextContent = 0;
         uidBased = false;
     }
-    ~SearchJobPrivate() { }
+    ~SearchJobPrivate()
+    {
+    }
 
     QByteArray charset;
     QList<QByteArray> criterias;
-    QMap<SearchJob::SearchCriteria, QByteArray > criteriaMap;
+    QMap<SearchJob::SearchCriteria, QByteArray> criteriaMap;
     QMap<int, QByteArray> months;
     SearchJob::SearchLogic logic;
     QList<QByteArray> contents;
@@ -382,7 +390,6 @@ void SearchJob::doStart()
             searchKey += term;
         }
     } else {
-
         if (d->logic == SearchJob::Not) {
             searchKey += "NOT ";
         } else if (d->logic == SearchJob::Or && d->criterias.size() > 1) {
@@ -478,7 +485,7 @@ void SearchJob::addSearchCriteria(SearchCriteria criteria)
         d->criterias.append(d->criteriaMap[criteria]);
         break;
     default:
-        //TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
+        // TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
         qCDebug(KIMAP_LOG) << "Criteria " << d->criteriaMap[criteria] << " needs an argument, but none was specified.";
         break;
     }
@@ -493,7 +500,7 @@ void SearchJob::addSearchCriteria(SearchCriteria criteria, int argument)
         d->criterias.append(d->criteriaMap[criteria] + ' ' + QByteArray::number(argument));
         break;
     default:
-        //TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
+        // TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
         qCDebug(KIMAP_LOG) << "Criteria " << d->criteriaMap[criteria] << " doesn't accept an integer as an argument.";
         break;
     }
@@ -520,7 +527,7 @@ void SearchJob::addSearchCriteria(SearchCriteria criteria, const QByteArray &arg
         d->criterias.append(d->criteriaMap[criteria] + ' ' + argument);
         break;
     default:
-        //TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
+        // TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
         qCDebug(KIMAP_LOG) << "Criteria " << d->criteriaMap[criteria] << " doesn't accept any argument.";
         break;
     }
@@ -542,7 +549,7 @@ void SearchJob::addSearchCriteria(SearchCriteria criteria, const QDate &argument
         break;
     }
     default:
-        //TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
+        // TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
         qCDebug(KIMAP_LOG) << "Criteria " << d->criteriaMap[criteria] << " doesn't accept a date as argument.";
         break;
     }

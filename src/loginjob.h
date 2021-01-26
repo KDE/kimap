@@ -14,7 +14,6 @@
 
 namespace KIMAP
 {
-
 class Session;
 struct Response;
 class LoginJobPrivate;
@@ -31,22 +30,12 @@ public:
         Unencrypted = 0,
         SSLorTLS, /*!< Use SSL/TLS encryption, KIMAP will automatically negoatiate
                        the best supported encryption protocol. */
-        STARTTLS  /*!< Use STARTTLS to upgrade an initially plaintext connection to
-                       encrypted connection. KIMAP will automatically negoatiate
-                       the best supported encryption protocol. */
+        STARTTLS /*!< Use STARTTLS to upgrade an initially plaintext connection to
+                      encrypted connection. KIMAP will automatically negoatiate
+                      the best supported encryption protocol. */
     };
 
-    enum AuthenticationMode {
-        ClearText = 0,
-        Login,
-        Plain,
-        CramMD5,
-        DigestMD5,
-        NTLM,
-        GSSAPI,
-        Anonymous,
-        XOAuth2
-    };
+    enum AuthenticationMode { ClearText = 0, Login, Plain, CramMD5, DigestMD5, NTLM, GSSAPI, Anonymous, XOAuth2 };
 
     enum ErrorCode {
         ERR_COULD_NOT_CONNECT = KJob::UserDefinedError + 23 // same as in kio
@@ -71,8 +60,8 @@ public:
      *
      * Note that this feature only works with the "PLAIN" AuthenticationMode.
      *
-     * The @param authorizationName will be used together with the password() to get authenticated as userName() by the authorization of the provided credentials.
-     * This allows to login as a user using the admin credentials and the users name.
+     * The @param authorizationName will be used together with the password() to get authenticated as userName() by the authorization of the provided
+     * credentials. This allows to login as a user using the admin credentials and the users name.
      * @since 4.10
      */
     void setAuthorizationName(const QString &authorizationName);

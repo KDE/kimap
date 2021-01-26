@@ -28,7 +28,6 @@ class QTextCodec;
 
 namespace KIMAP
 {
-
 /**
   Converts an Unicode IMAP mailbox to a QByteArray which can be used in
   IMAP communication.
@@ -82,16 +81,13 @@ KIMAP_EXPORT QTextCodec *codecForName(const QString &name);
   @param charset is the character set to use when decoding.
   @param language is the language found in the charset.
 */
-Q_REQUIRED_RESULT KIMAP_EXPORT const QString decodeRFC2047String(const QString &str,
-        QString &charset,
-        QString &language);
+Q_REQUIRED_RESULT KIMAP_EXPORT const QString decodeRFC2047String(const QString &str, QString &charset, QString &language);
 /**
   Decodes a RFC2047 string @p str.
   @param str is the QString to decode.
   @param charset is the character set to use when decoding.
 */
-Q_REQUIRED_RESULT KIMAP_EXPORT const QString decodeRFC2047String(const QString &str,
-        QString &charset);
+Q_REQUIRED_RESULT KIMAP_EXPORT const QString decodeRFC2047String(const QString &str, QString &charset);
 
 /**
   Decodes a RFC2047 string @p str.

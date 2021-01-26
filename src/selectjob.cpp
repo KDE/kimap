@@ -8,11 +8,11 @@
 
 #include "kimap_debug.h"
 
+#include "imapset.h"
 #include "job_p.h"
 #include "response_p.h"
-#include "session_p.h"
 #include "rfccodecs.h"
-#include "imapset.h"
+#include "session_p.h"
 
 #include <KLocalizedString>
 
@@ -25,9 +25,12 @@ class SelectJobPrivate : public JobPrivate
 {
 public:
     SelectJobPrivate(SelectJob *q, Session *session, const QString &name)
-        : JobPrivate(session, name), q(q)
+        : JobPrivate(session, name)
+        , q(q)
     {
-        QObject::connect(&emitPendingsTimer, &QTimer::timeout, [this]() { emitPendings(); });
+        QObject::connect(&emitPendingsTimer, &QTimer::timeout, [this]() {
+            emitPendings();
+        });
     }
 
     void emitPendings()
@@ -60,7 +63,7 @@ public:
 
     bool condstoreEnabled = false;
 
-    SelectJob * const q;
+    SelectJob *const q;
 };
 }
 
@@ -184,8 +187,7 @@ void SelectJob::doStart()
         if (d->lastUidvalidity == -1 && d->lastModseq == 0) {
             params += " (CONDSTORE)";
         } else {
-            params += " (QRESYNC (" + QByteArray::number(d->lastUidvalidity) + " "
-                                    + QByteArray::number(d->lastModseq);
+            params += " (QRESYNC (" + QByteArray::number(d->lastUidvalidity) + " " + QByteArray::number(d->lastModseq);
             if (!d->knownUids.isEmpty()) {
                 params += " " + d->knownUids.toImapSequenceSet();
             }
@@ -212,9 +214,7 @@ void SelectJob::handleResponse(const Response &response)
 
     // We can predict it'll be handled by handleErrorReplies() so stop
     // the timer now so that result() will really be the last emitted signal.
-    if (!response.content.isEmpty() &&
-            d->tags.size() == 1 &&
-            d->tags.contains(response.content.first().toString())) {
+    if (!response.content.isEmpty() && d->tags.size() == 1 && d->tags.contains(response.content.first().toString())) {
         d->emitPendingsTimer.stop();
         d->emitPendings();
     }
@@ -272,7 +272,7 @@ void SelectJob::handleResponse(const Response &response)
                         const auto name = *it;
                         ++it;
 
-                        if (it == content.constEnd()) {   // Uh oh, message was truncated?
+                        if (it == content.constEnd()) { // Uh oh, message was truncated?
                             qCWarning(KIMAP_LOG) << "SELECT reply got truncated, skipping.";
                             break;
                         }

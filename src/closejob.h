@@ -13,7 +13,6 @@
 
 namespace KIMAP
 {
-
 class Session;
 struct Response;
 class CloseJobPrivate;
@@ -60,6 +59,7 @@ public:
      * @since 5.16
      */
     quint64 newHighestModSeq() const;
+
 protected:
     void doStart() override;
     void handleResponse(const Response &response) override;

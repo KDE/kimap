@@ -19,7 +19,6 @@
 
 namespace KIMAP
 {
-
 class Session;
 struct Response;
 class FetchJobPrivate;
@@ -32,12 +31,11 @@ using MessageFlags = QList<QByteArray>;
 
 using MessageAttribute = QPair<QByteArray, QVariant>;
 
-struct Message
-{
+struct Message {
     inline bool operator==(const Message &other) const
     {
         return std::tie(uid, size, flags, attributes, parts, message)
-                == std::tie(other.uid, other.size, other.flags, other.attributes, other.parts, other.message);
+            == std::tie(other.uid, other.size, other.flags, other.attributes, other.parts, other.message);
     }
 
     qint64 uid = -1;
@@ -47,7 +45,6 @@ struct Message
     MessageParts parts;
     MessagePtr message;
 };
-
 
 /**
  * Fetch message data from the server
@@ -347,7 +344,7 @@ Q_SIGNALS:
     void headersReceived(const QString &mailBox,
                          const QMap<qint64, qint64> &uids,
                          const QMap<qint64, qint64> &sizes,
-                         const QMap<qint64, KIMAP::MessageAttribute > &attrs,
+                         const QMap<qint64, KIMAP::MessageAttribute> &attrs,
                          const QMap<qint64, KIMAP::MessageFlags> &flags,
                          const QMap<qint64, KIMAP::MessagePtr> &messages);
 
@@ -372,9 +369,7 @@ Q_SIGNALS:
      * @deprecated Use messagesAvailable() instead.
      */
     KIMAP_DEPRECATED
-    void messagesReceived(const QString &mailBox,
-                          const QMap<qint64, qint64> &uids,
-                          const QMap<qint64, KIMAP::MessagePtr> &messages);
+    void messagesReceived(const QString &mailBox, const QMap<qint64, qint64> &uids, const QMap<qint64, KIMAP::MessagePtr> &messages);
 
     /**
      * An overloaded version of messagesReceived(), which includes additional attribute
@@ -396,7 +391,7 @@ Q_SIGNALS:
     KIMAP_DEPRECATED
     void messagesReceived(const QString &mailBox,
                           const QMap<qint64, qint64> &uids,
-                          const QMap<qint64, KIMAP::MessageAttribute > &attrs,
+                          const QMap<qint64, KIMAP::MessageAttribute> &attrs,
                           const QMap<qint64, KIMAP::MessagePtr> &messages);
     /**
      * Provides header and message results.
@@ -418,30 +413,28 @@ Q_SIGNALS:
      * @deprecated Use messagesAvailable() instead.
      */
     KIMAP_DEPRECATED
-    void partsReceived(const QString &mailBox,
-                       const QMap<qint64, qint64> &uids,
-                       const QMap<qint64, KIMAP::MessageParts> &parts);
+    void partsReceived(const QString &mailBox, const QMap<qint64, qint64> &uids, const QMap<qint64, KIMAP::MessageParts> &parts);
 
     /**
-      * An overloaded version of partsReceived(), which includes additional attribute
-      * specified in the FETCH response, but that don't belong to actual content of the
-      * message.
-      *
-      * @param mailBox  the name of the mailbox the fetch job was
-      *                 executed on
-      * @param uids     a map from message sequence numbers to message UIDs
-      * @param attrs    a map from message sequence numbers to pair of attribute
-      * @param parts    a map from message sequence numbers to message part collections
-      *
-      * @overload
-      * @since 4.14
-      *
-      * @deprecated Use messagesAvailable() instead.
-      */
+     * An overloaded version of partsReceived(), which includes additional attribute
+     * specified in the FETCH response, but that don't belong to actual content of the
+     * message.
+     *
+     * @param mailBox  the name of the mailbox the fetch job was
+     *                 executed on
+     * @param uids     a map from message sequence numbers to message UIDs
+     * @param attrs    a map from message sequence numbers to pair of attribute
+     * @param parts    a map from message sequence numbers to message part collections
+     *
+     * @overload
+     * @since 4.14
+     *
+     * @deprecated Use messagesAvailable() instead.
+     */
     KIMAP_DEPRECATED
     void partsReceived(const QString &mailBox,
                        const QMap<qint64, qint64> &uids,
-                       const QMap<qint64, KIMAP::MessageAttribute > &attrs,
+                       const QMap<qint64, KIMAP::MessageAttribute> &attrs,
                        const QMap<qint64, KIMAP::MessageParts> &parts);
 
     /**

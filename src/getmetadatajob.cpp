@@ -6,27 +6,33 @@
 
 #include "getmetadatajob.h"
 
-#include <KLocalizedString>
 #include "kimap_debug.h"
+#include <KLocalizedString>
 
 #include "metadatajobbase_p.h"
 #include "response_p.h"
-#include "session_p.h"
 #include "rfccodecs.h"
+#include "session_p.h"
 
 namespace KIMAP
 {
 class GetMetaDataJobPrivate : public MetaDataJobBasePrivate
 {
 public:
-    GetMetaDataJobPrivate(Session *session, const QString &name) : MetaDataJobBasePrivate(session, name), depth("0") { }
-    ~GetMetaDataJobPrivate() { }
+    GetMetaDataJobPrivate(Session *session, const QString &name)
+        : MetaDataJobBasePrivate(session, name)
+        , depth("0")
+    {
+    }
+    ~GetMetaDataJobPrivate()
+    {
+    }
 
     qint64 maxSize = -1;
     QByteArray depth;
     QSet<QByteArray> entries;
     QSet<QByteArray> attributes;
-    QMap<QString, QMap<QByteArray, QMap<QByteArray, QByteArray> > > metadata;
+    QMap<QString, QMap<QByteArray, QMap<QByteArray, QByteArray>>> metadata;
     //    ^ mailbox        ^ entry          ^attribute  ^ value
 };
 }
@@ -67,7 +73,7 @@ void GetMetaDataJob::doStart()
             parameters += '\"' + entry + "\" ";
         }
         if (d->entries.size() > 1) {
-            parameters[parameters.length() - 1 ] = ')';
+            parameters[parameters.length() - 1] = ')';
             parameters += ' ';
         }
 
@@ -79,13 +85,12 @@ void GetMetaDataJob::doStart()
             parameters += '\"' + attribute + "\" ";
         }
         if (d->attributes.size() > 1) {
-            parameters[parameters.length() - 1 ] = ')';
+            parameters[parameters.length() - 1] = ')';
         } else {
             parameters.chop(1);
         }
 
     } else {
-
         QByteArray options;
         if (d->depth != "0") {
             options = "DEPTH " + d->depth;
@@ -107,22 +112,22 @@ void GetMetaDataJob::doStart()
             for (const QByteArray &entry : sortedEntries) {
                 parameters += entry + " ";
             }
-            parameters[parameters.length() - 1 ] = ')';
+            parameters[parameters.length() - 1] = ')';
         } else {
             parameters.chop(1);
         }
     }
 
     d->tags << d->sessionInternal()->sendCommand(command, parameters);
-//  qCDebug(KIMAP_LOG) << "SENT: " << command << " " << parameters;
+    //  qCDebug(KIMAP_LOG) << "SENT: " << command << " " << parameters;
 }
 
 void GetMetaDataJob::handleResponse(const Response &response)
 {
     Q_D(GetMetaDataJob);
-//  qCDebug(KIMAP_LOG) << "GOT: " << response.toString();
+    //  qCDebug(KIMAP_LOG) << "GOT: " << response.toString();
 
-    //TODO: handle NO error messages having [METADATA MAXSIZE NNN], [METADATA TOOMANY], [METADATA NOPRIVATE] (see rfc5464)
+    // TODO: handle NO error messages having [METADATA MAXSIZE NNN], [METADATA TOOMANY], [METADATA NOPRIVATE] (see rfc5464)
     // or [ANNOTATEMORE TOOBIG], [ANNOTATEMORE TOOMANY] respectively
     if (handleErrorReplies(response) == NotHandled) {
         if (response.content.size() >= 4) {
@@ -148,7 +153,7 @@ void GetMetaDataJob::handleResponse(const Response &response)
                 while (i < entries.size() - 1) {
                     const QByteArray &value = entries[i + 1];
                     QByteArray &targetValue = d->metadata[mailBox][entries[i]][""];
-                    if (value != "NIL") {   //This just indicates no value
+                    if (value != "NIL") { // This just indicates no value
                         targetValue = value;
                     }
                     i += 2;
@@ -187,13 +192,13 @@ void GetMetaDataJob::setDepth(Depth depth)
 
     switch (depth) {
     case OneLevel:
-        d->depth = "1"; //krazy:exclude=doublequote_chars
+        d->depth = "1"; // krazy:exclude=doublequote_chars
         break;
     case AllLevels:
         d->depth = "infinity";
         break;
     default:
-        d->depth = "0"; //krazy:exclude=doublequote_chars
+        d->depth = "0"; // krazy:exclude=doublequote_chars
     }
 }
 
@@ -222,7 +227,7 @@ QByteArray GetMetaDataJob::metaData(const QByteArray &entry) const
     return d->metadata.value(d->mailBox).value(d->removePrefix(entry)).value(d->getAttribute(entry));
 }
 
-QMap<QByteArray, QMap<QByteArray, QByteArray> > GetMetaDataJob::allMetaData(const QString &mailBox) const
+QMap<QByteArray, QMap<QByteArray, QByteArray>> GetMetaDataJob::allMetaData(const QString &mailBox) const
 {
     Q_D(const GetMetaDataJob);
     return d->metadata[mailBox];
@@ -237,7 +242,7 @@ QMap<QByteArray, QByteArray> GetMetaDataJob::allMetaData() const
 QMap<QByteArray, QByteArray> GetMetaDataJob::allMetaDataForMailbox(const QString &mailbox) const
 {
     Q_D(const GetMetaDataJob);
-    const QMap<QByteArray, QMap<QByteArray, QByteArray> > &entries = d->metadata[mailbox];
+    const QMap<QByteArray, QMap<QByteArray, QByteArray>> &entries = d->metadata[mailbox];
     QMap<QByteArray, QByteArray> map;
     const auto entriesKeys = entries.keys();
     for (const QByteArray &entry : entriesKeys) {
@@ -250,16 +255,15 @@ QMap<QByteArray, QByteArray> GetMetaDataJob::allMetaDataForMailbox(const QString
     return map;
 }
 
-QHash<QString, QMap<QByteArray, QByteArray> > GetMetaDataJob::allMetaDataForMailboxes() const
+QHash<QString, QMap<QByteArray, QByteArray>> GetMetaDataJob::allMetaDataForMailboxes() const
 {
     Q_D(const GetMetaDataJob);
-    QHash<QString, QMap<QByteArray, QByteArray> > mailboxHash;
+    QHash<QString, QMap<QByteArray, QByteArray>> mailboxHash;
 
-    QMapIterator<QString, QMap<QByteArray, QMap<QByteArray, QByteArray> > > i(d->metadata);
+    QMapIterator<QString, QMap<QByteArray, QMap<QByteArray, QByteArray>>> i(d->metadata);
     while (i.hasNext()) {
         i.next();
         mailboxHash.insert(i.key(), allMetaDataForMailbox(i.key()));
     }
     return mailboxHash;
 }
-

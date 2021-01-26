@@ -6,14 +6,14 @@
 
 #include <QTest>
 
-#include "kimaptest/fakeserver.h"
-#include "kimap/session.h"
 #include "kimap/appendjob.h"
+#include "kimap/session.h"
+#include "kimaptest/fakeserver.h"
 
-#include <QTest>
 #include <QDateTime>
+#include <QTest>
 
-class AppendJobTest: public QObject
+class AppendJobTest : public QObject
 {
     Q_OBJECT
 
@@ -22,8 +22,8 @@ private Q_SLOTS:
     void testAppend_data()
     {
         QTest::addColumn<QString>("mailbox");
-        QTest::addColumn<QList<QByteArray> >("scenario");
-        QTest::addColumn<QList<QByteArray> >("flags");
+        QTest::addColumn<QList<QByteArray>>("scenario");
+        QTest::addColumn<QList<QByteArray>>("flags");
         QTest::addColumn<QDateTime>("internaldate");
         QTest::addColumn<QByteArray>("content");
         QTest::addColumn<qint64>("uid");
@@ -32,33 +32,31 @@ private Q_SLOTS:
         flags << QByteArray("\\Seen");
         {
             QList<QByteArray> scenario;
-            scenario << FakeServer::preauth()
-                     << "C: A000001 APPEND \"INBOX\" (\\Seen) {7}\r\ncontent"
+            scenario << FakeServer::preauth() << "C: A000001 APPEND \"INBOX\" (\\Seen) {7}\r\ncontent"
                      << "S: A000001 OK APPEND completed. [ APPENDUID 492 2671 ]";
             QTest::newRow("good") << "INBOX" << scenario << flags << QDateTime() << QByteArray("content") << qint64(2671);
         }
         {
             QList<QByteArray> scenario;
-            scenario << FakeServer::preauth()
-                     << "C: A000001 APPEND \"INBOX\" (\\Seen) \"26-Feb-2014 12:38:00 +0000\" {7}\r\ncontent"
+            scenario << FakeServer::preauth() << "C: A000001 APPEND \"INBOX\" (\\Seen) \"26-Feb-2014 12:38:00 +0000\" {7}\r\ncontent"
                      << "S: A000001 OK APPEND completed. [ APPENDUID 493 2672 ]";
-            QTest::newRow("good, with internalDate set") << "INBOX" << scenario << flags << QDateTime::fromString(QStringLiteral("2014-02-26T12:38:00Z"), Qt::ISODate) << QByteArray("content") << qint64(2672);
+            QTest::newRow("good, with internalDate set")
+                << "INBOX" << scenario << flags << QDateTime::fromString(QStringLiteral("2014-02-26T12:38:00Z"), Qt::ISODate) << QByteArray("content")
+                << qint64(2672);
         }
 
         {
             QList<QByteArray> scenario;
-            scenario << FakeServer::preauth()
-                     << "C: A000001 APPEND \"INBOX\" (\\Seen) {7}\r\ncontent"
+            scenario << FakeServer::preauth() << "C: A000001 APPEND \"INBOX\" (\\Seen) {7}\r\ncontent"
                      << "S: BYE"
-                     << "X" ;
+                     << "X";
             QTest::newRow("bad") << "INBOX" << scenario << flags << QDateTime() << QByteArray("content") << qint64(0);
         }
         {
             QList<QByteArray> scenario;
-            scenario << FakeServer::preauth()
-                     << "C: A000001 APPEND \"INBOX\" (\\Seen) {7}\r\ncontent"
+            scenario << FakeServer::preauth() << "C: A000001 APPEND \"INBOX\" (\\Seen) {7}\r\ncontent"
                      << "S: "
-                     << "X" ;
+                     << "X";
             QTest::newRow("Don't crash on empty response") << "INBOX" << scenario << flags << QDateTime() << QByteArray("content") << qint64(0);
         }
     }
@@ -83,14 +81,13 @@ private Q_SLOTS:
         job->setInternalDate(internaldate);
         job->setMailBox(mailbox);
         const bool result = job->exec();
-        QEXPECT_FAIL("bad" , "Expected failure on connection abort", Continue);
-        QEXPECT_FAIL("Don't crash on empty response" , "Expected failure on connection abort", Continue);
+        QEXPECT_FAIL("bad", "Expected failure on connection abort", Continue);
+        QEXPECT_FAIL("Don't crash on empty response", "Expected failure on connection abort", Continue);
         QVERIFY(result);
         QCOMPARE(job->uid(), uid);
 
         fakeServer.quit();
     }
-
 };
 
 QTEST_GUILESS_MAIN(AppendJobTest)

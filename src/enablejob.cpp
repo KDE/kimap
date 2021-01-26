@@ -9,9 +9,9 @@
 #include <KLocalizedString>
 
 #include "job_p.h"
+#include "kimap_debug.h"
 #include "response_p.h"
 #include "session_p.h"
-#include "kimap_debug.h"
 
 namespace KIMAP
 {

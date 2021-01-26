@@ -9,13 +9,13 @@
 
 #include <QTest>
 
-#include "kimaptest/fakeserver.h"
 #include "kimap/session.h"
 #include "kimap/storejob.h"
+#include "kimaptest/fakeserver.h"
 
 #include <QTest>
 
-class StoreJobTest: public QObject
+class StoreJobTest : public QObject
 {
     Q_OBJECT
 
@@ -26,27 +26,27 @@ private Q_SLOTS:
         QTest::addColumn<bool>("uidBased");
         QTest::addColumn<qint64>("id");
         QTest::addColumn<qint64>("uid");
-        QTest::addColumn< QList<QByteArray> >("flags");
-        QTest::addColumn< QList<QByteArray> >("scenario");
+        QTest::addColumn<QList<QByteArray>>("flags");
+        QTest::addColumn<QList<QByteArray>>("scenario");
 
         QList<QByteArray> scenario;
-        scenario << FakeServer::preauth()
-                 << "C: A000001 STORE 3 FLAGS (\\Seen \\Foo)"
+        scenario << FakeServer::preauth() << "C: A000001 STORE 3 FLAGS (\\Seen \\Foo)"
                  << "S: * 3 FETCH (FLAGS (\\Seen \\Foo) UID 1096)"
                  << "S: A000001 OK STORE completed";
 
         QTest::newRow("not uid based") << false << qint64(3) << qint64(1096)
-                                       << (QList<QByteArray>() << "\\Seen" << "\\Foo")
+                                       << (QList<QByteArray>() << "\\Seen"
+                                                               << "\\Foo")
                                        << scenario;
 
         scenario.clear();
-        scenario << FakeServer::preauth()
-                 << "C: A000001 UID STORE 1096 FLAGS (\\Seen \\Foo)"
+        scenario << FakeServer::preauth() << "C: A000001 UID STORE 1096 FLAGS (\\Seen \\Foo)"
                  << "S: * 3 FETCH (FLAGS (\\Seen \\Foo) UID 1096)"
                  << "S: A000001 OK STORE completed";
 
         QTest::newRow("uid based") << true << qint64(3) << qint64(1096)
-                                   << (QList<QByteArray>() << "\\Seen" << "\\Foo")
+                                   << (QList<QByteArray>() << "\\Seen"
+                                                           << "\\Foo")
                                    << scenario;
     }
 
@@ -79,7 +79,6 @@ private Q_SLOTS:
 
         fakeServer.quit();
     }
-
 };
 
 QTEST_GUILESS_MAIN(StoreJobTest)

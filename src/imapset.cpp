@@ -13,14 +13,15 @@ using namespace KIMAP;
 class ImapInterval::Private : public QSharedData
 {
 public:
-    Private() :
-        QSharedData(),
-        begin(0),
-        end(0)
-    {}
+    Private()
+        : QSharedData()
+        , begin(0)
+        , end(0)
+    {
+    }
 
-    Private(const Private &other) :
-        QSharedData(other)
+    Private(const Private &other)
+        : QSharedData(other)
     {
         begin = other.begin;
         end = other.end;
@@ -33,9 +34,12 @@ public:
 class ImapSet::Private : public QSharedData
 {
 public:
-    Private() : QSharedData() {}
-    Private(const Private &other) :
-        QSharedData(other)
+    Private()
+        : QSharedData()
+    {
+    }
+    Private(const Private &other)
+        : QSharedData(other)
     {
         intervals = other.intervals;
     }
@@ -43,28 +47,28 @@ public:
     ImapInterval::List intervals;
 };
 
-ImapInterval::ImapInterval() :
-    d(new Private)
+ImapInterval::ImapInterval()
+    : d(new Private)
 {
 }
 
-ImapInterval::ImapInterval(const ImapInterval &other) :
-    d(other.d)
+ImapInterval::ImapInterval(const ImapInterval &other)
+    : d(other.d)
 {
 }
 
-ImapInterval::ImapInterval(Id begin, Id end) :
-    d(new Private)
+ImapInterval::ImapInterval(Id begin, Id end)
+    : d(new Private)
 {
     d->begin = begin;
     d->end = end;
 }
 
-ImapInterval::~ ImapInterval()
+ImapInterval::~ImapInterval()
 {
 }
 
-ImapInterval &ImapInterval::operator =(const ImapInterval &other)
+ImapInterval &ImapInterval::operator=(const ImapInterval &other)
 {
     if (this != &other) {
         d = other.d;
@@ -72,7 +76,7 @@ ImapInterval &ImapInterval::operator =(const ImapInterval &other)
     return *this;
 }
 
-bool ImapInterval::operator ==(const ImapInterval &other) const
+bool ImapInterval::operator==(const ImapInterval &other) const
 {
     return (d->begin == other.d->begin && d->end == other.d->end);
 }
@@ -173,25 +177,25 @@ ImapInterval ImapInterval::fromImapSequence(const QByteArray &sequence)
     return ImapInterval(begin, end);
 }
 
-ImapSet::ImapSet() :
-    d(new Private)
+ImapSet::ImapSet()
+    : d(new Private)
 {
 }
 
-ImapSet::ImapSet(Id begin, Id end) :
-    d(new Private)
+ImapSet::ImapSet(Id begin, Id end)
+    : d(new Private)
 {
     add(ImapInterval(begin, end));
 }
 
-ImapSet::ImapSet(Id value) :
-    d(new Private)
+ImapSet::ImapSet(Id value)
+    : d(new Private)
 {
     add(QVector<Id>() << value);
 }
 
-ImapSet::ImapSet(const ImapSet &other) :
-    d(other.d)
+ImapSet::ImapSet(const ImapSet &other)
+    : d(other.d)
 {
 }
 
@@ -199,7 +203,7 @@ ImapSet::~ImapSet()
 {
 }
 
-ImapSet &ImapSet::operator =(const ImapSet &other)
+ImapSet &ImapSet::operator=(const ImapSet &other)
 {
     if (this != &other) {
         d = other.d;
@@ -207,7 +211,7 @@ ImapSet &ImapSet::operator =(const ImapSet &other)
     return *this;
 }
 
-bool ImapSet::operator ==(const ImapSet &other) const
+bool ImapSet::operator==(const ImapSet &other) const
 {
     if (d->intervals.size() != other.d->intervals.size()) {
         return false;
@@ -311,10 +315,9 @@ void ImapSet::optimize()
     }
 
     // Sort the intervals in ascending order by their beginning value
-    std::sort(d->intervals.begin(), d->intervals.end(),
-              [](const ImapInterval &lhs, const ImapInterval &rhs) {
-                   return lhs.begin() < rhs.begin();
-              });
+    std::sort(d->intervals.begin(), d->intervals.end(), [](const ImapInterval &lhs, const ImapInterval &rhs) {
+        return lhs.begin() < rhs.begin();
+    });
 
     auto it = d->intervals.begin();
     while (it != d->intervals.end() && it != std::prev(d->intervals.end())) {

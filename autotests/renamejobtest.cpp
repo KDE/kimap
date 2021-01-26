@@ -9,13 +9,13 @@
 
 #include <QTest>
 
-#include "kimaptest/fakeserver.h"
-#include "kimap/session.h"
 #include "kimap/renamejob.h"
+#include "kimap/session.h"
+#include "kimaptest/fakeserver.h"
 
 #include <QTest>
 
-class RenameJobTest: public QObject
+class RenameJobTest : public QObject
 {
     Q_OBJECT
 
@@ -25,25 +25,25 @@ private Q_SLOTS:
     {
         QTest::addColumn<QString>("mailbox");
         QTest::addColumn<QString>("newname");
-        QTest::addColumn<QList<QByteArray> >("scenario");
+        QTest::addColumn<QList<QByteArray>>("scenario");
 
         QList<QByteArray> scenario;
-        scenario << FakeServer::preauth()
-                 << R"(C: A000001 RENAME "INBOX" "oldmail")"
+        scenario << FakeServer::preauth() << R"(C: A000001 RENAME "INBOX" "oldmail")"
                  << "S: A000001 OK RENAME completed";
-        QTest::newRow("good") << "INBOX" << "oldmail" << scenario;
+        QTest::newRow("good") << "INBOX"
+                              << "oldmail" << scenario;
 
         scenario.clear();
-        scenario << FakeServer::preauth()
-                 << R"(C: A000001 RENAME "INBOX-FAIL-BAD" "oldmail-bad")"
+        scenario << FakeServer::preauth() << R"(C: A000001 RENAME "INBOX-FAIL-BAD" "oldmail-bad")"
                  << "S: A000001 BAD command unknown or arguments invalid";
-        QTest::newRow("bad") << "INBOX-FAIL-BAD"  << "oldmail-bad" << scenario;
+        QTest::newRow("bad") << "INBOX-FAIL-BAD"
+                             << "oldmail-bad" << scenario;
 
         scenario.clear();
-        scenario << FakeServer::preauth()
-                 << R"(C: A000001 RENAME "INBOX-FAIL-NO" "oldmail-no")"
+        scenario << FakeServer::preauth() << R"(C: A000001 RENAME "INBOX-FAIL-NO" "oldmail-no")"
                  << "S: A000001 NO rename failure";
-        QTest::newRow("no") << "INBOX-FAIL-NO" << "oldmail-no" << scenario;
+        QTest::newRow("no") << "INBOX-FAIL-NO"
+                            << "oldmail-no" << scenario;
     }
 
     void testRename()
@@ -62,15 +62,14 @@ private Q_SLOTS:
         job->setSourceMailBox(mailbox);
         job->setDestinationMailBox(newname);
         bool result = job->exec();
-        QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
-        QEXPECT_FAIL("no" , "Expected failure on NO response", Continue);
+        QEXPECT_FAIL("bad", "Expected failure on BAD response", Continue);
+        QEXPECT_FAIL("no", "Expected failure on NO response", Continue);
         QVERIFY(result);
         QCOMPARE(job->sourceMailBox(), mailbox);
         QCOMPARE(job->destinationMailBox(), newname);
 
         fakeServer.quit();
     }
-
 };
 
 QTEST_GUILESS_MAIN(RenameJobTest)

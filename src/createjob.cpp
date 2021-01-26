@@ -18,8 +18,13 @@ namespace KIMAP
 class CreateJobPrivate : public JobPrivate
 {
 public:
-    CreateJobPrivate(Session *session, const QString &name) : JobPrivate(session, name) { }
-    ~CreateJobPrivate() { }
+    CreateJobPrivate(Session *session, const QString &name)
+        : JobPrivate(session, name)
+    {
+    }
+    ~CreateJobPrivate()
+    {
+    }
 
     QString mailBox;
 };
@@ -46,18 +51,15 @@ void CreateJob::handleResponse(const Response &response)
 {
     Q_D(CreateJob);
 
-    if (!response.content.isEmpty() &&
-        d->tags.contains(response.content.first().toString())) {
-        if (response.content.size() >= 2 &&
-            response.content[1].toString() == "NO") {
-            for (auto it = response.responseCode.cbegin(), end = response.responseCode.cend();
-                 it != end; ++it) {
+    if (!response.content.isEmpty() && d->tags.contains(response.content.first().toString())) {
+        if (response.content.size() >= 2 && response.content[1].toString() == "NO") {
+            for (auto it = response.responseCode.cbegin(), end = response.responseCode.cend(); it != end; ++it) {
                 // ALREADYEXISTS can be considered a success during CREATE
                 // cf. https://tools.ietf.org/html/rfc5530#section-3
                 if (it->toString() == "ALREADYEXISTS") {
                     // Code copied from handleErrorReplies:
                     d->tags.removeAll(response.content.first().toString());
-                    if (d->tags.isEmpty()) {   // Only emit result when the last command returned
+                    if (d->tags.isEmpty()) { // Only emit result when the last command returned
                         emitResult();
                     }
                     return;

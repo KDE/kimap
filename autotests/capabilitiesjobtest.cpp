@@ -9,13 +9,13 @@
 
 #include <QTest>
 
-#include "kimaptest/fakeserver.h"
-#include "kimap/session.h"
 #include "kimap/capabilitiesjob.h"
+#include "kimap/session.h"
+#include "kimaptest/fakeserver.h"
 
 #include <QTest>
 
-class CapabilitiesJobTest: public QObject
+class CapabilitiesJobTest : public QObject
 {
     Q_OBJECT
 
@@ -23,7 +23,7 @@ private Q_SLOTS:
 
     void testCapabilities_data()
     {
-        QTest::addColumn<QList<QByteArray> >("scenario");
+        QTest::addColumn<QList<QByteArray>>("scenario");
         QTest::addColumn<QStringList>("capabilities");
         QList<QByteArray> scenario;
         scenario << "S: * PREAUTH"
@@ -32,7 +32,7 @@ private Q_SLOTS:
                  << "S: A000001 OK CAPABILITY completed";
 
         QStringList capabilities;
-        capabilities << QStringLiteral("IMAP4REV1") << QStringLiteral("STARTTLS") <<  QStringLiteral("AUTH=GSSAPI");
+        capabilities << QStringLiteral("IMAP4REV1") << QStringLiteral("STARTTLS") << QStringLiteral("AUTH=GSSAPI");
         QTest::newRow("good") << scenario << capabilities;
 
         scenario.clear();
@@ -50,7 +50,7 @@ private Q_SLOTS:
                  << "S: * some response"
                  << "S: A000001 OK CAPABILITY completed";
 
-        capabilities << QStringLiteral("IMAP4REV1") << QStringLiteral("STARTTLS") <<  QStringLiteral("AUTH=PLAIN");
+        capabilities << QStringLiteral("IMAP4REV1") << QStringLiteral("STARTTLS") << QStringLiteral("AUTH=PLAIN");
         QTest::newRow("extra-untagged") << scenario << capabilities;
     }
 
@@ -66,14 +66,13 @@ private Q_SLOTS:
 
         auto job = new KIMAP::CapabilitiesJob(&session);
         bool result = job->exec();
-        QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
+        QEXPECT_FAIL("bad", "Expected failure on BAD response", Continue);
         QVERIFY(result);
         if (result) {
             QCOMPARE(job->capabilities(), capabilities);
         }
         fakeServer.quit();
     }
-
 };
 
 QTEST_GUILESS_MAIN(CapabilitiesJobTest)

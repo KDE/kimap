@@ -6,13 +6,13 @@
 
 #include <QTest>
 
-#include "kimaptest/fakeserver.h"
-#include "kimap/session.h"
 #include "kimap/closejob.h"
+#include "kimap/session.h"
+#include "kimaptest/fakeserver.h"
 
 #include <QTest>
 
-class CloseJobTest: public QObject
+class CloseJobTest : public QObject
 {
     Q_OBJECT
 
@@ -24,20 +24,17 @@ private Q_SLOTS:
         QTest::addColumn<quint64>("highestModSeq");
 
         QList<QByteArray> scenario;
-        scenario << FakeServer::preauth()
-                 << "C: A000001 CLOSE"
+        scenario << FakeServer::preauth() << "C: A000001 CLOSE"
                  << "S: A000001 OK Closed";
         QTest::newRow("good") << scenario << 0ULL;
 
         scenario.clear();
-        scenario << FakeServer::preauth()
-                 << "C: A000001 CLOSE"
+        scenario << FakeServer::preauth() << "C: A000001 CLOSE"
                  << "S: A000001 BAD No mailbox selected";
         QTest::newRow("bad") << scenario << 0ULL;
 
         scenario.clear();
-        scenario << FakeServer::preauth()
-                 << "C: A000001 CLOSE"
+        scenario << FakeServer::preauth() << "C: A000001 CLOSE"
                  << "S: A000001 OK [HIGHESTMODSEQ 123456789] Closed.";
         QTest::newRow("qresync") << scenario << 123456789ULL;
     }
@@ -55,7 +52,7 @@ private Q_SLOTS:
 
         auto job = new KIMAP::CloseJob(&session);
         bool result = job->exec();
-        QEXPECT_FAIL("bad" , "Expected failure on BAD response", Continue);
+        QEXPECT_FAIL("bad", "Expected failure on BAD response", Continue);
         QVERIFY(result);
         if (result) {
             QCOMPARE(job->newHighestModSeq(), highestModSeq);
@@ -63,7 +60,6 @@ private Q_SLOTS:
 
         fakeServer.quit();
     }
-
 };
 
 QTEST_GUILESS_MAIN(CloseJobTest)

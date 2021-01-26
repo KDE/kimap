@@ -14,7 +14,6 @@
 
 namespace KIMAP
 {
-
 class Session;
 struct Response;
 class AclJobBasePrivate;
@@ -27,7 +26,7 @@ class AclJobBasePrivate;
  *
  * This class cannot be used directly, you must subclass it and reimplement
  * at least the doStart() method.
-*/
+ */
 class KIMAP_EXPORT AclJobBase : public Job
 {
     Q_OBJECT
@@ -42,11 +41,7 @@ public:
     /**
      * Used when subclassing to specify how the ACL will be modified.
      */
-    enum AclModifier {
-        Add = 0,
-        Remove,
-        Change
-    };
+    enum AclModifier { Add = 0, Remove, Change };
 
     /**
      * Set the mailbox to act on
@@ -61,7 +56,6 @@ public:
 
 protected:
     explicit AclJobBase(JobPrivate &dd);
-
 };
 
 }

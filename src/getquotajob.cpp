@@ -17,8 +17,13 @@ namespace KIMAP
 class GetQuotaJobPrivate : public QuotaJobBasePrivate
 {
 public:
-    GetQuotaJobPrivate(Session *session, const QString &name) : QuotaJobBasePrivate(session, name) { }
-    ~GetQuotaJobPrivate() { }
+    GetQuotaJobPrivate(Session *session, const QString &name)
+        : QuotaJobBasePrivate(session, name)
+    {
+    }
+    ~GetQuotaJobPrivate()
+    {
+    }
 
     QByteArray root;
 };
@@ -38,7 +43,7 @@ GetQuotaJob::~GetQuotaJob()
 void GetQuotaJob::doStart()
 {
     Q_D(GetQuotaJob);
-    //XXX: [alexmerry, 2010-07-24]: should d->root be quoted properly?
+    // XXX: [alexmerry, 2010-07-24]: should d->root be quoted properly?
     d->tags << d->sessionInternal()->sendCommand("GETQUOTA", '\"' + d->root + '\"');
 }
 
@@ -46,8 +51,7 @@ void GetQuotaJob::handleResponse(const Response &response)
 {
     Q_D(GetQuotaJob);
     if (handleErrorReplies(response) == NotHandled) {
-        if (response.content.size() >= 4 &&
-                response.content[1].toString() == "QUOTA") {
+        if (response.content.size() >= 4 && response.content[1].toString() == "QUOTA") {
             d->quota = d->readQuota(response.content[3]);
         }
     }

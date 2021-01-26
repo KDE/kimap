@@ -7,8 +7,8 @@
 #ifndef KIMAP_METADATAJOBBASE_P_H
 #define KIMAP_METADATAJOBBASE_P_H
 
-#include "metadatajobbase.h"
 #include "job_p.h"
+#include "metadatajobbase.h"
 #include "response_p.h"
 #include "session.h"
 
@@ -17,10 +17,15 @@ namespace KIMAP
 class MetaDataJobBasePrivate : public JobPrivate
 {
 public:
-    MetaDataJobBasePrivate(Session *session, const QString &name) : JobPrivate(session, name), serverCapability(MetaDataJobBase::Metadata)
-    {}
+    MetaDataJobBasePrivate(Session *session, const QString &name)
+        : JobPrivate(session, name)
+        , serverCapability(MetaDataJobBase::Metadata)
+    {
+    }
 
-    ~MetaDataJobBasePrivate() { }
+    ~MetaDataJobBasePrivate()
+    {
+    }
 
     QByteArray addPrefix(const QByteArray &entry, const QByteArray &attribute) const;
     QByteArray removePrefix(const QByteArray &) const;

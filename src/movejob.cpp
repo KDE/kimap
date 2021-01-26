@@ -8,24 +8,26 @@
 
 #include "job_p.h"
 #include "response_p.h"
-#include "session_p.h"
 #include "rfccodecs.h"
+#include "session_p.h"
 
 #include <KLocalizedString>
 
-//TODO: when custom error codes are introduced, handle the NO [TRYCREATE] response
+// TODO: when custom error codes are introduced, handle the NO [TRYCREATE] response
 
 namespace KIMAP
 {
 class MoveJobPrivate : public JobPrivate
 {
 public:
-    MoveJobPrivate(Session *session, const QString &name) 
+    MoveJobPrivate(Session *session, const QString &name)
         : JobPrivate(session, name)
-    {}
+    {
+    }
 
     ~MoveJobPrivate()
-    {}
+    {
+    }
 
     QString mailBox;
     ImapSet set;
@@ -109,8 +111,7 @@ void MoveJob::handleResponse(const Response &response)
 {
     Q_D(MoveJob);
 
-    for (auto it = response.responseCode.cbegin(), end = response.responseCode.cend();
-         it != end; ++it) {
+    for (auto it = response.responseCode.cbegin(), end = response.responseCode.cend(); it != end; ++it) {
         if (it->toString() == "COPYUID") {
             it = it + 3;
             if (it < end) {

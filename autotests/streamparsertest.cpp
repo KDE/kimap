@@ -7,13 +7,13 @@
 #include <QTest>
 
 #include "imapstreamparser.h"
-#include <response_p.h>
 #include <QBuffer>
 #include <QTest>
+#include <response_p.h>
 
 using namespace KIMAP;
 
-class StreamParserTest: public QObject
+class StreamParserTest : public QObject
 {
     Q_OBJECT
 
@@ -28,7 +28,6 @@ private Q_SLOTS:
 
     void init()
     {
-
         part1 = "* 230 FETCH (FLAGS (\\Recent \\Seen) UID 230 INTERNALDATE \" 1-Nov-2013 13:31:17 +0100\" RFC822.SIZE 37 BODY[] {37}\r";
         part2 = "\nDate: Fri, 01 Nov 2013 12:31:13 +0000\n";
         part3 = "body\n";
@@ -49,8 +48,8 @@ private Q_SLOTS:
     }
 
     /**
-    * Test parsing of the example command if the complete command is in the buffer
-    */
+     * Test parsing of the example command if the complete command is in the buffer
+     */
     void testParse()
     {
         QByteArray buffer;
@@ -68,11 +67,11 @@ private Q_SLOTS:
         QList<Response::Part> *payload = &message.content;
         QVERIFY(!parser.atCommandEnd());
         QVERIFY(parser.hasString());
-        *payload << Response::Part(parser.readString());   //*
+        *payload << Response::Part(parser.readString()); //*
         QVERIFY(parser.hasString());
-        *payload << Response::Part(parser.readString());   //230
+        *payload << Response::Part(parser.readString()); // 230
         QVERIFY(parser.hasString());
-        *payload << Response::Part(parser.readString());   //FETCH
+        *payload << Response::Part(parser.readString()); // FETCH
         QVERIFY(parser.hasList());
         *payload << Response::Part(parser.readParenthesizedList());
         QVERIFY(parser.atCommandEnd());
@@ -83,8 +82,8 @@ private Q_SLOTS:
     void testLeadingNewline()
     {
         /**
-        * Test a the special case when the CRLF after the string octet count, is separated and not initially loaded into the buffer.
-        */
+         * Test a the special case when the CRLF after the string octet count, is separated and not initially loaded into the buffer.
+         */
         QByteArray buffer;
         QBuffer socket(&buffer);
         socket.open(QBuffer::WriteOnly);
@@ -100,14 +99,14 @@ private Q_SLOTS:
         Response message;
         QList<Response::Part> *payload = &message.content;
         QVERIFY(!parser.atCommandEnd());
-        //We wait with writing part2 until the first part is already loaded into the buffer
+        // We wait with writing part2 until the first part is already loaded into the buffer
         QVERIFY(socket.write(part2) != -1);
         QVERIFY(parser.hasString());
-        *payload << Response::Part(parser.readString());   //*
+        *payload << Response::Part(parser.readString()); //*
         QVERIFY(parser.hasString());
-        *payload << Response::Part(parser.readString());   //230
+        *payload << Response::Part(parser.readString()); // 230
         QVERIFY(parser.hasString());
-        *payload << Response::Part(parser.readString());   //FETCH
+        *payload << Response::Part(parser.readString()); // FETCH
 
         QVERIFY(socket.write(part3) != -1);
         QVERIFY(socket.write(part4) != -1);
@@ -120,7 +119,9 @@ private Q_SLOTS:
     void testNewLineInString()
     {
         QByteArray command2;
-        command2 = "* 33 FETCH (FLAGS (\\Recent \\Seen) UID 33 INTERNALDATE \" 1-Nov-2013 18:43:34 +0100\" RFC822.SIZE 1203 BODY[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT DATE)] {54}\r\n";
+        command2 =
+            "* 33 FETCH (FLAGS (\\Recent \\Seen) UID 33 INTERNALDATE \" 1-Nov-2013 18:43:34 +0100\" RFC822.SIZE 1203 BODY[HEADER.FIELDS (TO FROM MESSAGE-ID "
+            "REFERENCES IN-REPLY-TO SUBJECT DATE)] {54}\r\n";
         command2 += "Date: Fri, 01 Nov 2013 17:43:29 +0000\n";
         command2 += "Subject: uid32\n";
         command2 += "\n";
@@ -141,16 +142,15 @@ private Q_SLOTS:
         QList<Response::Part> *payload = &message.content;
         QVERIFY(!parser.atCommandEnd());
         QVERIFY(parser.hasString());
-        *payload << Response::Part(parser.readString());   //*
+        *payload << Response::Part(parser.readString()); //*
         QVERIFY(parser.hasString());
-        *payload << Response::Part(parser.readString());   //33
+        *payload << Response::Part(parser.readString()); // 33
         QVERIFY(parser.hasString());
-        *payload << Response::Part(parser.readString());   //FETCH
+        *payload << Response::Part(parser.readString()); // FETCH
         QVERIFY(parser.hasList());
         *payload << Response::Part(parser.readParenthesizedList());
         QVERIFY(parser.atCommandEnd());
     }
-
 };
 
 QTEST_GUILESS_MAIN(StreamParserTest)

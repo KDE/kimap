@@ -7,10 +7,10 @@
 #ifndef SSLSERVER_H
 #define SSLSERVER_H
 
-#include <QTcpServer>
 #include <QSslSocket>
+#include <QTcpServer>
 
-class SslServer: public QTcpServer
+class SslServer : public QTcpServer
 {
     Q_OBJECT
 public:

@@ -13,7 +13,6 @@
 
 namespace KIMAP
 {
-
 class Session;
 struct Response;
 class MyRightsJobPrivate;
@@ -73,7 +72,6 @@ public:
 protected:
     void doStart() override;
     void handleResponse(const Response &response) override;
-
 };
 
 }

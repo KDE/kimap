@@ -6,16 +6,16 @@
 
 #include <QTest>
 
-#include "kimaptest/fakeserver.h"
 #include "kimap/session.h"
 #include "kimap/setmetadatajob.h"
+#include "kimaptest/fakeserver.h"
 
 #include <QTest>
 
 using MAP = QMap<QByteArray, QByteArray>;
 Q_DECLARE_METATYPE(MAP)
 
-class SetMetadataJobTest: public QObject
+class SetMetadataJobTest : public QObject
 {
     Q_OBJECT
 
@@ -23,14 +23,13 @@ private Q_SLOTS:
 
     void metadata_data()
     {
-        QTest::addColumn<QList<QByteArray> >("scenario");
+        QTest::addColumn<QList<QByteArray>>("scenario");
         QTest::addColumn<QString>("mailbox");
-        QTest::addColumn<QMap<QByteArray, QByteArray> >("annotations");
+        QTest::addColumn<QMap<QByteArray, QByteArray>>("annotations");
 
         {
             QList<QByteArray> scenario;
-            scenario << FakeServer::preauth()
-                     << R"(C: A000001 SETMETADATA "Folder1" ("/public/comment" "comment2" "/shared/comment" "Shared comment"))"
+            scenario << FakeServer::preauth() << R"(C: A000001 SETMETADATA "Folder1" ("/public/comment" "comment2" "/shared/comment" "Shared comment"))"
                      << "S: A000001 OK SETMETADATA complete";
             QMap<QByteArray, QByteArray> annotations;
             annotations.insert("/public/comment", "comment2");
@@ -40,41 +39,38 @@ private Q_SLOTS:
         {
             QList<QByteArray> scenario;
             scenario << FakeServer::preauth()
-                    << "C: A000001 SETMETADATA \"Folder1\" (\"/public/comment\" {8}\r\ncomment2 \"/shared/comment\" {14}\r\nShared\ncomment)"
-                    << "S: A000001 OK SETMETADATA complete";
+                     << "C: A000001 SETMETADATA \"Folder1\" (\"/public/comment\" {8}\r\ncomment2 \"/shared/comment\" {14}\r\nShared\ncomment)"
+                     << "S: A000001 OK SETMETADATA complete";
             QMap<QByteArray, QByteArray> annotations;
             annotations.insert("/shared/comment", "Shared\ncomment");
             annotations.insert("/public/comment", "comment2");
-            QTest::newRow( "newline" ) << scenario << "Folder1" << annotations;
+            QTest::newRow("newline") << scenario << "Folder1" << annotations;
         }
         {
             QList<QByteArray> scenario;
-            scenario << FakeServer::preauth()
-                    << R"(C: A000001 SETMETADATA "Folder1" ("/shared/comment" NIL))"
-                    << "S: A000001 OK SETMETADATA complete";
+            scenario << FakeServer::preauth() << R"(C: A000001 SETMETADATA "Folder1" ("/shared/comment" NIL))"
+                     << "S: A000001 OK SETMETADATA complete";
             QMap<QByteArray, QByteArray> annotations;
-            annotations.insert("/shared/comment","");
-            QTest::newRow( "newline" ) << scenario << "Folder1" << annotations;
+            annotations.insert("/shared/comment", "");
+            QTest::newRow("newline") << scenario << "Folder1" << annotations;
         }
         {
             QList<QByteArray> scenario;
-            scenario << FakeServer::preauth()
-                    << "C: A000001 SETMETADATA \"Folder1\" (\"/public/comment\" {12}\r\ncomment\ntest \"/shared/comment\" {3}\r\nNIL)"
-                    << "S: A000001 OK SETMETADATA complete";
+            scenario << FakeServer::preauth() << "C: A000001 SETMETADATA \"Folder1\" (\"/public/comment\" {12}\r\ncomment\ntest \"/shared/comment\" {3}\r\nNIL)"
+                     << "S: A000001 OK SETMETADATA complete";
             QMap<QByteArray, QByteArray> annotations;
-            annotations.insert("/shared/comment","");
+            annotations.insert("/shared/comment", "");
             annotations.insert("/public/comment", "comment\ntest");
-            QTest::newRow( "newline2" ) << scenario << "Folder1" << annotations;
+            QTest::newRow("newline2") << scenario << "Folder1" << annotations;
         }
         {
             QList<QByteArray> scenario;
-            scenario << FakeServer::preauth()
-                    << "C: A000001 SETMETADATA \"Folder1\" (\"/public/comment\" {3}\r\nNIL \"/shared/comment\" {12}\r\ncomment\ntest)"
-                    << "S: A000001 OK SETMETADATA complete";
+            scenario << FakeServer::preauth() << "C: A000001 SETMETADATA \"Folder1\" (\"/public/comment\" {3}\r\nNIL \"/shared/comment\" {12}\r\ncomment\ntest)"
+                     << "S: A000001 OK SETMETADATA complete";
             QMap<QByteArray, QByteArray> annotations;
             annotations.insert("/shared/comment", "comment\ntest");
-            annotations.insert("/public/comment","");
-            QTest::newRow( "newline2" ) << scenario << "Folder1" << annotations;
+            annotations.insert("/public/comment", "");
+            QTest::newRow("newline2") << scenario << "Folder1" << annotations;
         }
     }
 
@@ -105,15 +101,14 @@ private Q_SLOTS:
 
     void annotatemore_data()
     {
-        QTest::addColumn<QList<QByteArray> >("scenario");
+        QTest::addColumn<QList<QByteArray>>("scenario");
         QTest::addColumn<QString>("mailbox");
-        QTest::addColumn<QMap<QByteArray, QByteArray> >("annotations");
+        QTest::addColumn<QMap<QByteArray, QByteArray>>("annotations");
         QTest::addColumn<bool>("legacyMode");
 
         {
             QList<QByteArray> scenario;
-            scenario << FakeServer::preauth()
-                     << R"(C: A000001 SETANNOTATION "Folder1" "/comment" ("value.shared" "Shared comment"))"
+            scenario << FakeServer::preauth() << R"(C: A000001 SETANNOTATION "Folder1" "/comment" ("value.shared" "Shared comment"))"
                      << "S: A000001 OK annotations changed";
 
             QMap<QByteArray, QByteArray> annotations;
@@ -153,7 +148,6 @@ private Q_SLOTS:
 
         fakeServer.quit();
     }
-
 };
 
 QTEST_GUILESS_MAIN(SetMetadataJobTest)

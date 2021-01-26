@@ -13,9 +13,9 @@
 
 using namespace KIMAP;
 
-QMap<QByteArray, QPair<qint64, qint64> > QuotaJobBasePrivate::readQuota(const Response::Part &content)
+QMap<QByteArray, QPair<qint64, qint64>> QuotaJobBasePrivate::readQuota(const Response::Part &content)
 {
-    QMap<QByteArray, QPair<qint64, qint64> > quotaMap;
+    QMap<QByteArray, QPair<qint64, qint64>> quotaMap;
     QList<QByteArray> quotas = content.toList();
 
     int i = 0;

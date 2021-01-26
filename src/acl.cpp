@@ -13,7 +13,6 @@ namespace KIMAP
 {
 namespace Acl
 {
-
 class RightsMap
 {
 public:
@@ -25,8 +24,8 @@ public:
         map['w'] = Write;
         map['i'] = Insert;
         map['p'] = Post;
-        map['c'] = Create; //TODO: obsolete, keep it?
-        map['d'] = Delete; //TODO: obsolete, keep it?
+        map['c'] = Create; // TODO: obsolete, keep it?
+        map['d'] = Delete; // TODO: obsolete, keep it?
         map['k'] = CreateMailbox;
         map['x'] = DeleteMailbox;
         map['t'] = DeleteMessage;
@@ -62,7 +61,7 @@ KIMAP::Acl::Rights KIMAP::Acl::rightsFromString(const QByteArray &string)
     }
 
     int pos = 0;
-    if (string[0] == '+' || string[0] == '-') {   // Skip modifier if any
+    if (string[0] == '+' || string[0] == '-') { // Skip modifier if any
         pos++;
     }
 

@@ -8,8 +8,8 @@
 
 #include "kimap/imapset.h"
 
-#include <QTest>
 #include <QDebug>
+#include <QTest>
 
 using namespace KIMAP;
 
@@ -57,9 +57,8 @@ private Q_SLOTS:
         QFETCH(ImapSet, imapSet);
         QFETCH(QByteArray, byteArray);
 
-        QCOMPARE(QString::fromUtf8(imapSet.toImapSequenceSet()),
-                 QString::fromUtf8(byteArray));
-        //qDebug() << "Expects" << imapSet << "got" << ImapSet::fromImapSequenceSet( byteArray );
+        QCOMPARE(QString::fromUtf8(imapSet.toImapSequenceSet()), QString::fromUtf8(byteArray));
+        // qDebug() << "Expects" << imapSet << "got" << ImapSet::fromImapSequenceSet( byteArray );
         QCOMPARE(ImapSet::fromImapSequenceSet(byteArray), imapSet);
     }
 
@@ -74,26 +73,30 @@ private Q_SLOTS:
             for (int i = 1; i <= 10; ++i) {
                 imapSet.add(i);
             }
-            QTest::newRow("Neighbouring numbers") << imapSet << "1,2,3,4,5,6,7,8,9,10"_ba << "1:10"_ba;
+            QTest::newRow("Neighbouring numbers") << imapSet << "1,2,3,4,5,6,7,8,9,10"_ba
+                                                  << "1:10"_ba;
         }
         {
             ImapSet imapSet;
             imapSet.add(ImapInterval{1, 3});
             imapSet.add(ImapInterval{5, 7});
-            QTest::newRow("Neighbouring intervals with a gap") << imapSet << "1:3,5:7"_ba << "1:3,5:7"_ba;
+            QTest::newRow("Neighbouring intervals with a gap") << imapSet << "1:3,5:7"_ba
+                                                               << "1:3,5:7"_ba;
         }
         {
             ImapSet imapSet;
-            for (int i : { 5, 8, 3, 1, 9, 2, 7, 4, 6 }) {
+            for (int i : {5, 8, 3, 1, 9, 2, 7, 4, 6}) {
                 imapSet.add(i);
             }
-            QTest::newRow("Random order") << imapSet << "5,8,3,1,9,2,7,4,6"_ba << "1:9"_ba;
+            QTest::newRow("Random order") << imapSet << "5,8,3,1,9,2,7,4,6"_ba
+                                          << "1:9"_ba;
         }
         {
             ImapSet imapSet;
             imapSet.add(ImapInterval{1, 3});
             imapSet.add(ImapInterval{2, 4});
-            QTest::newRow("Overlapping") << imapSet << "1:3,2:4"_ba << "1:4"_ba;
+            QTest::newRow("Overlapping") << imapSet << "1:3,2:4"_ba
+                                         << "1:4"_ba;
         }
         {
             ImapSet imapSet;
@@ -102,7 +105,8 @@ private Q_SLOTS:
             imapSet.add(4);
             imapSet.add(ImapInterval{7, 8});
             imapSet.add(ImapInterval{8, 9});
-            QTest::newRow("Multiple overlapping with a gap") << imapSet << "2:4,1:3,4,7:8,8:9"_ba << "1:4,7:9"_ba;
+            QTest::newRow("Multiple overlapping with a gap") << imapSet << "2:4,1:3,4,7:8,8:9"_ba
+                                                             << "1:4,7:9"_ba;
         }
         {
             ImapSet imapSet;
@@ -110,27 +114,31 @@ private Q_SLOTS:
             imapSet.add(8);
             imapSet.add(10);
             imapSet.add(ImapInterval{0, 20});
-            QTest::newRow("Overlapping multiple intervals") << imapSet << "5,8,10,0:20"_ba << "0:20"_ba;
+            QTest::newRow("Overlapping multiple intervals") << imapSet << "5,8,10,0:20"_ba
+                                                            << "0:20"_ba;
         }
         {
             ImapSet imapSet;
             imapSet.add(1);
             imapSet.add(ImapInterval{3, 5});
             imapSet.add(ImapInterval{4, 0});
-            QTest::newRow("Open end overlap") << imapSet << "1,3:5,4:*"_ba << "1,3:*"_ba;
+            QTest::newRow("Open end overlap") << imapSet << "1,3:5,4:*"_ba
+                                              << "1,3:*"_ba;
         }
         {
             ImapSet imapSet;
             imapSet.add(ImapInterval{1, 4});
             imapSet.add(3);
-            QTest::newRow("Value within interval") << imapSet << "1:4,3"_ba << "1:4"_ba;
+            QTest::newRow("Value within interval") << imapSet << "1:4,3"_ba
+                                                   << "1:4"_ba;
         }
         {
             ImapSet imapSet;
             imapSet.add(ImapInterval{1, 0});
             imapSet.add(ImapInterval{3, 0});
             imapSet.add(5);
-            QTest::newRow("Multiple open end intervals") << imapSet << "1:*,3:*,5"_ba << "1:*"_ba;
+            QTest::newRow("Multiple open end intervals") << imapSet << "1:*,3:*,5"_ba
+                                                         << "1:*"_ba;
         }
         {
             ImapSet imapSet;

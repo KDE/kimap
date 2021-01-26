@@ -13,7 +13,6 @@
 
 namespace KIMAP
 {
-
 struct Response {
     class Part
     {
@@ -21,9 +20,15 @@ struct Response {
         enum Type { String = 0, List };
 
         explicit Part(const QByteArray &string)
-            : m_type(String), m_string(string) { }
+            : m_type(String)
+            , m_string(string)
+        {
+        }
         explicit Part(const QList<QByteArray> &list)
-            : m_type(List), m_list(list) { }
+            : m_type(List)
+            , m_list(list)
+        {
+        }
 
         inline Type type() const
         {
@@ -52,7 +57,7 @@ struct Response {
             if (part.type() == Part::List) {
                 result += '(';
                 const QList<QByteArray> lstBa = part.toList();
-                for (const QByteArray &item : lstBa ) {
+                for (const QByteArray &item : lstBa) {
                     result += ' ';
                     result += item;
                 }

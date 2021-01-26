@@ -9,21 +9,20 @@
 
 #include <QTest>
 
-#include "kimaptest/fakeserver.h"
 #include "kimap/loginjob.h"
-#include "kimap/session.h"
 #include "kimap/selectjob.h"
+#include "kimap/session.h"
+#include "kimaptest/fakeserver.h"
 
-#include <QTest>
 #include <QSignalSpy>
-
+#include <QTest>
 
 using Messages = QMap<qint64, KIMAP::Message>;
 
 Q_DECLARE_METATYPE(KIMAP::Message)
 Q_DECLARE_METATYPE(Messages)
 
-class SelectJobTest: public QObject
+class SelectJobTest : public QObject
 {
     Q_OBJECT
 
@@ -39,9 +38,9 @@ private Q_SLOTS:
 
     void testSingleSelect_data()
     {
-        QTest::addColumn<QList<QByteArray> >("scenario");
-        QTest::addColumn<QList<QByteArray> >("flags");
-        QTest::addColumn<QList<QByteArray> >("permanentflags");
+        QTest::addColumn<QList<QByteArray>>("scenario");
+        QTest::addColumn<QList<QByteArray>>("flags");
+        QTest::addColumn<QList<QByteArray>>("permanentflags");
         QTest::addColumn<int>("messagecount");
         QTest::addColumn<int>("recentcount");
         QTest::addColumn<int>("firstUnseenIndex");
@@ -55,12 +54,10 @@ private Q_SLOTS:
         QTest::addColumn<KIMAP::ImapSet>("vanished");
         QTest::addColumn<Messages>("modified");
 
-
         QList<QByteArray> scenario;
         QList<QByteArray> flags;
         QList<QByteArray> permanentflags;
-        scenario << FakeServer::preauth()
-                 << "C: A000001 SELECT \"INBOX\" (CONDSTORE)"
+        scenario << FakeServer::preauth() << "C: A000001 SELECT \"INBOX\" (CONDSTORE)"
                  << "S: * 172 EXISTS"
                  << "S: * 1 RECENT"
                  << "S: * OK [UNSEEN 12] Message 12 is first unseen"
@@ -71,32 +68,35 @@ private Q_SLOTS:
                  << R"(S: * OK [PERMANENTFLAGS (\Deleted \Seen \*)] Limited)"
                  << "S: A000001 OK [READ-WRITE] SELECT completed";
 
-        flags << "\\Answered" << "\\Flagged" << "\\Deleted" << "\\Seen" << "\\Draft";
-        permanentflags << "\\Deleted" << "\\Seen" << "\\*";
-        QTest::newRow("good") << scenario << flags << permanentflags << 172 << 1 << 12 << 3857529045LL << 4392LL << 123456789ULL << true << false
-                              << -1LL << 0ULL << KIMAP::ImapSet{} << Messages{};
+        flags << "\\Answered"
+              << "\\Flagged"
+              << "\\Deleted"
+              << "\\Seen"
+              << "\\Draft";
+        permanentflags << "\\Deleted"
+                       << "\\Seen"
+                       << "\\*";
+        QTest::newRow("good") << scenario << flags << permanentflags << 172 << 1 << 12 << 3857529045LL << 4392LL << 123456789ULL << true << false << -1LL
+                              << 0ULL << KIMAP::ImapSet{} << Messages{};
 
         scenario.clear();
         flags.clear();
         permanentflags.clear();
-        scenario << FakeServer::preauth()
-                 << "C: A000001 SELECT \"INBOX\""
+        scenario << FakeServer::preauth() << "C: A000001 SELECT \"INBOX\""
                  << "S: A000001 BAD command unknown or arguments invalid";
-        QTest::newRow("bad") << scenario << flags << permanentflags << 0 << 0 << 0 << 0LL << 0LL << 0ULL << false << false
-                             << -1LL << 0ULL << KIMAP::ImapSet{} << Messages{};
+        QTest::newRow("bad") << scenario << flags << permanentflags << 0 << 0 << 0 << 0LL << 0LL << 0ULL << false << false << -1LL << 0ULL << KIMAP::ImapSet{}
+                             << Messages{};
 
         scenario.clear();
         flags.clear();
         permanentflags.clear();
-        scenario << FakeServer::preauth()
-                 << "C: A000001 SELECT \"INBOX\""
+        scenario << FakeServer::preauth() << "C: A000001 SELECT \"INBOX\""
                  << "S: A000001 NO select failure";
-        QTest::newRow("no") << scenario << flags << permanentflags << 0 << 0 << 0 << 0LL << 0LL << 0ULL << false << false
-                            << -1LL << 0ULL << KIMAP::ImapSet{} << Messages{};
+        QTest::newRow("no") << scenario << flags << permanentflags << 0 << 0 << 0 << 0LL << 0LL << 0ULL << false << false << -1LL << 0ULL << KIMAP::ImapSet{}
+                            << Messages{};
 
         scenario.clear();
-        scenario << FakeServer::preauth()
-                 << "C: A000001 SELECT \"INBOX\" (QRESYNC (67890007 90060115194045000))"
+        scenario << FakeServer::preauth() << "C: A000001 SELECT \"INBOX\" (QRESYNC (67890007 90060115194045000))"
                  << "S: * 314 EXISTS"
                  << "S: * 15 RECENT"
                  << "S: * OK [UIDVALIDITY 67890007] UIDVALIDITY"
@@ -118,11 +118,9 @@ private Q_SLOTS:
         vanished.add(118);
         vanished.add(KIMAP::ImapInterval{120, 211});
         vanished.add(KIMAP::ImapInterval{214, 540});
-        Messages modified = {
-            {49, KIMAP::Message{117, 0, {"\\Seen", "\\Answered"}, {{"MODSEQ", QVariant{90060115194045001ULL}}}, {}, {}}},
-            {50, KIMAP::Message{119, 0, {"\\Draft", "$MDNSent"}, {{"MODSEQ", QVariant{90060115194045308ULL}}}, {}, {}}},
-            {100, KIMAP::Message{541, 0, {"\\Seen", "$Forwarded"}, {{"MODSEQ", QVariant{90060115194045001ULL}}}, {}, {}}}
-        };
+        Messages modified = {{49, KIMAP::Message{117, 0, {"\\Seen", "\\Answered"}, {{"MODSEQ", QVariant{90060115194045001ULL}}}, {}, {}}},
+                             {50, KIMAP::Message{119, 0, {"\\Draft", "$MDNSent"}, {{"MODSEQ", QVariant{90060115194045308ULL}}}, {}, {}}},
+                             {100, KIMAP::Message{541, 0, {"\\Seen", "$Forwarded"}, {{"MODSEQ", QVariant{90060115194045001ULL}}}, {}, {}}}};
         QTest::newRow("QResync") << scenario << flags << permanentflags << 314 << 15 << 7 << 67890007LL << 567LL << 90060115205545359ULL << false << false
                                  << 67890007LL << 90060115194045000ULL << vanished << modified;
     }
@@ -164,8 +162,8 @@ private Q_SLOTS:
         QVERIFY(modifiedSpy.isValid());
 
         bool result = job->exec();
-        QEXPECT_FAIL("bad" , "Expected failure on BAD scenario", Continue);
-        QEXPECT_FAIL("no" , "Expected failure on NO scenario", Continue);
+        QEXPECT_FAIL("bad", "Expected failure on BAD scenario", Continue);
+        QEXPECT_FAIL("no", "Expected failure on NO scenario", Continue);
         QVERIFY(result);
         if (result) {
             QCOMPARE(job->flags(), flags);
@@ -201,13 +199,10 @@ private Q_SLOTS:
     void testSeveralSelect()
     {
         FakeServer fakeServer;
-        fakeServer.setScenario(QList<QByteArray>()
-                               << FakeServer::preauth()
-                               << "C: A000001 SELECT \"INBOX\""
-                               << "S: A000001 OK [READ-WRITE] SELECT completed"
-                               << "C: A000002 SELECT \"INBOX/Foo\""
-                               << "S: A000002 OK [READ-WRITE] SELECT completed"
-                              );
+        fakeServer.setScenario(QList<QByteArray>() << FakeServer::preauth() << "C: A000001 SELECT \"INBOX\""
+                                                   << "S: A000001 OK [READ-WRITE] SELECT completed"
+                                                   << "C: A000002 SELECT \"INBOX/Foo\""
+                                                   << "S: A000002 OK [READ-WRITE] SELECT completed");
         fakeServer.startAndWait();
 
         KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
@@ -229,32 +224,28 @@ private Q_SLOTS:
 
         {
             QList<QByteArray> scenario;
-            scenario << FakeServer::preauth()
-                     << "C: A000001 SELECT \"INBOX\""
+            scenario << FakeServer::preauth() << "C: A000001 SELECT \"INBOX\""
                      << "S: A000001 OK [READ-WRITE] SELECT ok";
             QTest::newRow("SELECT rw") << scenario << false << false;
         }
 
         {
             QList<QByteArray> scenario;
-            scenario << FakeServer::preauth()
-                     << "C: A000001 SELECT \"INBOX\""
+            scenario << FakeServer::preauth() << "C: A000001 SELECT \"INBOX\""
                      << "S: A000001 OK SELECT ok";
             QTest::newRow("SELECT rw (without code)") << scenario << false << false;
         }
 
         {
             QList<QByteArray> scenario;
-            scenario << FakeServer::preauth()
-                     << "C: A000001 SELECT \"INBOX\""
+            scenario << FakeServer::preauth() << "C: A000001 SELECT \"INBOX\""
                      << "S: A000001 OK [READ-ONLY] SELECT ok";
             QTest::newRow("SELECT ro") << scenario << false << true;
         }
 
         {
             QList<QByteArray> scenario;
-            scenario << FakeServer::preauth()
-                     << "C: A000001 EXAMINE \"INBOX\""
+            scenario << FakeServer::preauth() << "C: A000001 EXAMINE \"INBOX\""
                      << "S: A000001 OK [READ-ONLY] EXAMINE ok";
             QTest::newRow("EXAMINE ro") << scenario << true << true;
         }

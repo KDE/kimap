@@ -29,7 +29,10 @@ QByteArray FakeServer::greeting()
     return "S: * OK localhost Test Library server ready";
 }
 
-FakeServer::FakeServer(QObject *parent) : QThread(parent), m_encrypted(false), m_starttls(false)
+FakeServer::FakeServer(QObject *parent)
+    : QThread(parent)
+    , m_encrypted(false)
+    , m_starttls(false)
 {
     moveToThread(this);
 }
@@ -95,7 +98,6 @@ void FakeServer::setWaitForStartTls(bool wait)
 {
     m_waitForStartTls = wait;
 }
-
 
 void FakeServer::run()
 {
@@ -187,8 +189,7 @@ void FakeServer::writeServerPart(int scenarioNumber)
     QList<QByteArray> scenario = m_scenarios[scenarioNumber];
     QTcpSocket *clientSocket = m_clientSockets[scenarioNumber];
 
-    while (!scenario.isEmpty() &&
-            (scenario.first().startsWith("S: ") || scenario.first().startsWith("W: "))) {
+    while (!scenario.isEmpty() && (scenario.first().startsWith("S: ") || scenario.first().startsWith("W: "))) {
         QByteArray rule = scenario.takeFirst();
 
         if (rule.startsWith("S: ")) {
@@ -200,8 +201,7 @@ void FakeServer::writeServerPart(int scenarioNumber)
         }
     }
 
-    if (!scenario.isEmpty() &&
-            scenario.first().startsWith("X")) {
+    if (!scenario.isEmpty() && scenario.first().startsWith("X")) {
         scenario.takeFirst();
         clientSocket->close();
     }
@@ -224,8 +224,7 @@ void FakeServer::readClientPart(int scenarioNumber)
     QList<QByteArray> scenario = m_scenarios[scenarioNumber];
     KIMAP::ImapStreamParser *clientParser = m_clientParsers[scenarioNumber];
 
-    while (!scenario.isEmpty() &&
-            scenario.first().startsWith("C: ")) {
+    while (!scenario.isEmpty() && scenario.first().startsWith("C: ")) {
         QByteArray received = "C: " + clientParser->readUntilCommandEnd().trimmed();
         QByteArray expected = scenario.takeFirst();
         if (expected.contains("C: SKIP")) {

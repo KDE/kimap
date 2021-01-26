@@ -10,13 +10,13 @@
 
 #include <QEventLoop>
 #include <QObject>
-#include <QTest>
 #include <QSignalSpy>
+#include <QTest>
 
-#include "session.h"
 #include "job.h"
 #include "kimaptest/fakeserver.h"
 #include "kimaptest/mockjob.h"
+#include "session.h"
 
 Q_DECLARE_METATYPE(KIMAP::Session::State)
 Q_DECLARE_METATYPE(KJob *)
@@ -35,16 +35,14 @@ private Q_SLOTS:
     void shouldStartDisconnected()
     {
         FakeServer fakeServer;
-        fakeServer.setScenario(QList<QByteArray>()
-                               << FakeServer::greeting()
-                              );
+        fakeServer.setScenario(QList<QByteArray>() << FakeServer::greeting());
         fakeServer.startAndWait();
         KIMAP::Session s(QStringLiteral("127.0.0.1"), 5989);
-        QSignalSpy spy(&s, SIGNAL(stateChanged(KIMAP::Session::State,KIMAP::Session::State)));
+        QSignalSpy spy(&s, SIGNAL(stateChanged(KIMAP::Session::State, KIMAP::Session::State)));
         QCOMPARE((int)s.state(), (int)KIMAP::Session::Disconnected);
         QTest::qWait(600);
         QCOMPARE((int)s.state(), (int)KIMAP::Session::NotAuthenticated);
-        QCOMPARE(spy.count(), 1);   // NotAuthenticated
+        QCOMPARE(spy.count(), 1); // NotAuthenticated
         QList<QVariant> arguments = spy.takeFirst();
         QCOMPARE((int)qvariant_cast<KIMAP::Session::State>(arguments.at(0)), (int)KIMAP::Session::NotAuthenticated);
         QCOMPARE((int)qvariant_cast<KIMAP::Session::State>(arguments.at(1)), (int)KIMAP::Session::Disconnected);
@@ -53,11 +51,11 @@ private Q_SLOTS:
     void shouldFailForInvalidHosts()
     {
         KIMAP::Session s(QStringLiteral("0.0.0.0"), 1234);
-        s.setTimeout(1);   // 1 second timout
+        s.setTimeout(1); // 1 second timout
 
         QSignalSpy spyFail(&s, SIGNAL(connectionFailed()));
         QSignalSpy spyLost(&s, SIGNAL(connectionLost()));
-        QSignalSpy spyState(&s, SIGNAL(stateChanged(KIMAP::Session::State,KIMAP::Session::State)));
+        QSignalSpy spyState(&s, SIGNAL(stateChanged(KIMAP::Session::State, KIMAP::Session::State)));
 
         QCOMPARE((int)s.state(), (int)KIMAP::Session::Disconnected);
 
@@ -87,7 +85,7 @@ private Q_SLOTS:
         s.setTimeout(2);
         QSignalSpy spyFail(&s, SIGNAL(connectionFailed()));
         QSignalSpy spyLost(&s, SIGNAL(connectionLost()));
-        QSignalSpy spyState(&s, SIGNAL(stateChanged(KIMAP::Session::State,KIMAP::Session::State)));
+        QSignalSpy spyState(&s, SIGNAL(stateChanged(KIMAP::Session::State, KIMAP::Session::State)));
         QCOMPARE((int)s.state(), (int)KIMAP::Session::Disconnected);
 
         // Wait 1.8 second. Since the timeout is set to 2 seconds, the socket should be still
@@ -110,17 +108,15 @@ private Q_SLOTS:
     void shouldSupportPreauth()
     {
         FakeServer fakeServer;
-        fakeServer.setScenario(QList<QByteArray>()
-                               << FakeServer::preauth()
-                              );
+        fakeServer.setScenario(QList<QByteArray>() << FakeServer::preauth());
         fakeServer.startAndWait();
 
         KIMAP::Session s(QStringLiteral("127.0.0.1"), 5989);
-        QSignalSpy spy(&s, SIGNAL(stateChanged(KIMAP::Session::State,KIMAP::Session::State)));
+        QSignalSpy spy(&s, SIGNAL(stateChanged(KIMAP::Session::State, KIMAP::Session::State)));
         QCOMPARE((int)s.state(), (int)KIMAP::Session::Disconnected);
         QTest::qWait(500);
         QCOMPARE((int)s.state(), (int)KIMAP::Session::Authenticated);
-        QCOMPARE(spy.count(), 1);   // Authenticated
+        QCOMPARE(spy.count(), 1); // Authenticated
         QList<QVariant> arguments = spy.takeFirst();
         QCOMPARE((int)qvariant_cast<KIMAP::Session::State>(arguments.at(0)), (int)KIMAP::Session::Authenticated);
         QCOMPARE((int)qvariant_cast<KIMAP::Session::State>(arguments.at(1)), (int)KIMAP::Session::Disconnected);
@@ -129,20 +125,18 @@ private Q_SLOTS:
     void shouldRespectStartOrder()
     {
         FakeServer fakeServer;
-        fakeServer.setScenario(QList<QByteArray>()
-                               << FakeServer::greeting()
-                              );
+        fakeServer.setScenario(QList<QByteArray>() << FakeServer::greeting());
         fakeServer.startAndWait();
 
         KIMAP::Session s(QStringLiteral("127.0.0.1"), 5989);
         auto j1 = new MockJob(&s);
-        connect(j1, SIGNAL(result(KJob*)), this, SLOT(jobDone(KJob*)));
+        connect(j1, SIGNAL(result(KJob *)), this, SLOT(jobDone(KJob *)));
         auto j2 = new MockJob(&s);
-        connect(j2, SIGNAL(result(KJob*)), this, SLOT(jobDone(KJob*)));
+        connect(j2, SIGNAL(result(KJob *)), this, SLOT(jobDone(KJob *)));
         auto j3 = new MockJob(&s);
-        connect(j3, SIGNAL(result(KJob*)), this, SLOT(jobDone(KJob*)));
+        connect(j3, SIGNAL(result(KJob *)), this, SLOT(jobDone(KJob *)));
         auto j4 = new MockJob(&s);
-        connect(j4, SIGNAL(result(KJob*)), this, SLOT(jobDone(KJob*)));
+        connect(j4, SIGNAL(result(KJob *)), this, SLOT(jobDone(KJob *)));
 
         j4->start();
         j2->start();
@@ -162,9 +156,7 @@ private Q_SLOTS:
     void shouldManageQueueSize()
     {
         FakeServer fakeServer;
-        fakeServer.setScenario(QList<QByteArray>()
-                               << FakeServer::greeting()
-                              );
+        fakeServer.setScenario(QList<QByteArray>() << FakeServer::greeting());
         fakeServer.startAndWait();
 
         KIMAP::Session s(QStringLiteral("127.0.0.1"), 5989);
@@ -177,7 +169,7 @@ private Q_SLOTS:
         auto j2 = new MockJob(&s);
         auto j3 = new MockJob(&s);
         auto j4 = new MockJob(&s);
-        connect(j4, SIGNAL(result(KJob*)), &m_eventLoop, SLOT(quit()));
+        connect(j4, SIGNAL(result(KJob *)), &m_eventLoop, SLOT(quit()));
 
         QCOMPARE(s.jobQueueSize(), 0);
 
@@ -215,31 +207,29 @@ private Q_SLOTS:
     void shouldTimeoutOnNoReply()
     {
         FakeServer fakeServer;
-        fakeServer.setScenario(QList<QByteArray>()
-                               << FakeServer::preauth()
-                               << "C: A000001 DUMMY"
-                               << "S: * DUMMY"
-                               << "S: * DUMMY"
-                               << "S: * DUMMY"
-                               << "S: * DUMMY"
-                               << "S: * DUMMY"
-                               << "S: * DUMMY"
-                               << "S: * DUMMY"
-                               << "S: * DUMMY"
-                               << "S: * DUMMY"
-                               << "S: * DUMMY"
-                               << "S: * DUMMY"
-                               << "S: * DUMMY"
-                               << "S: * DUMMY"
+        fakeServer.setScenario(QList<QByteArray>() << FakeServer::preauth() << "C: A000001 DUMMY"
+                                                   << "S: * DUMMY"
+                                                   << "S: * DUMMY"
+                                                   << "S: * DUMMY"
+                                                   << "S: * DUMMY"
+                                                   << "S: * DUMMY"
+                                                   << "S: * DUMMY"
+                                                   << "S: * DUMMY"
+                                                   << "S: * DUMMY"
+                                                   << "S: * DUMMY"
+                                                   << "S: * DUMMY"
+                                                   << "S: * DUMMY"
+                                                   << "S: * DUMMY"
+                                                   << "S: * DUMMY"
                                // We never get a OK or anything, so the job can't normally complete
-                              );
+        );
         fakeServer.startAndWait();
 
         KIMAP::Session s(QStringLiteral("127.0.0.1"), 5989);
 
         QSignalSpy spyFail(&s, SIGNAL(connectionFailed()));
         QSignalSpy spyLost(&s, SIGNAL(connectionLost()));
-        QSignalSpy spyState(&s, SIGNAL(stateChanged(KIMAP::Session::State,KIMAP::Session::State)));
+        QSignalSpy spyState(&s, SIGNAL(stateChanged(KIMAP::Session::State, KIMAP::Session::State)));
 
         auto mock = new MockJob(&s);
         mock->setCommand("DUMMY");
@@ -249,7 +239,7 @@ private Q_SLOTS:
         QVERIFY(mock->error() != 0);
         QCOMPARE(spyFail.count(), 0);
         QCOMPARE(spyLost.count(), 1);
-        QCOMPARE(spyState.count(), 2);   // Authenticated, Disconnected
+        QCOMPARE(spyState.count(), 2); // Authenticated, Disconnected
     }
 
     void shouldFailFirstJobOnConnectionFailed()
@@ -264,15 +254,15 @@ private Q_SLOTS:
         s.setTimeout(1);
 
         auto j1 = new MockJob(&s);
-        QSignalSpy spyResult1(j1, SIGNAL(result(KJob*)));
+        QSignalSpy spyResult1(j1, SIGNAL(result(KJob *)));
         QSignalSpy spyDestroyed1(j1, SIGNAL(destroyed()));
 
         auto j2 = new MockJob(&s);
-        QSignalSpy spyResult2(j2, SIGNAL(result(KJob*)));
+        QSignalSpy spyResult2(j2, SIGNAL(result(KJob *)));
         QSignalSpy spyDestroyed2(j2, SIGNAL(destroyed()));
 
         auto j3 = new MockJob(&s);
-        QSignalSpy spyResult3(j3, SIGNAL(result(KJob*)));
+        QSignalSpy spyResult3(j3, SIGNAL(result(KJob *)));
         QSignalSpy spyDestroyed3(j3, SIGNAL(destroyed()));
 
         j1->start();
@@ -300,19 +290,16 @@ private Q_SLOTS:
     {
         for (int count = 0; count < 10; count++) {
             FakeServer fakeServer;
-            fakeServer.setScenario(QList<QByteArray>()
-                                   << FakeServer::preauth()
-                                   << "C: A000001 DUMMY"
-                                   << "S: * DUMMY %"
-                                   << "S: DUMMY)"
-                                  );
+            fakeServer.setScenario(QList<QByteArray>() << FakeServer::preauth() << "C: A000001 DUMMY"
+                                                       << "S: * DUMMY %"
+                                                       << "S: DUMMY)");
             fakeServer.startAndWait();
 
             KIMAP::Session s(QStringLiteral("127.0.0.1"), 5989);
 
             QSignalSpy spyFail(&s, SIGNAL(connectionFailed()));
             QSignalSpy spyLost(&s, SIGNAL(connectionLost()));
-            QSignalSpy spyState(&s, SIGNAL(stateChanged(KIMAP::Session::State,KIMAP::Session::State)));
+            QSignalSpy spyState(&s, SIGNAL(stateChanged(KIMAP::Session::State, KIMAP::Session::State)));
 
             auto mock = new MockJob(&s);
             mock->setTimeout(5000);
@@ -320,13 +307,13 @@ private Q_SLOTS:
 
             mock->setAutoDelete(false);
             mock->start();
-            QTest::qWait(250);   // Should be plenty
+            QTest::qWait(250); // Should be plenty
 
             // We expect to get an error here due to the inconsistency
             QVERIFY(mock->error() != 0);
             QCOMPARE(spyFail.count(), 0);
             QCOMPARE(spyLost.count(), 1);
-            QCOMPARE(spyState.count(), 2);   // Authenticated, Disconnected
+            QCOMPARE(spyState.count(), 2); // Authenticated, Disconnected
 
             delete mock;
         }

@@ -6,20 +6,23 @@
 
 #include "expungejob.h"
 
-#include <KLocalizedString>
 #include "kimap_debug.h"
+#include <KLocalizedString>
 
+#include "imapset.h"
 #include "job_p.h"
 #include "response_p.h"
 #include "session_p.h"
-#include "imapset.h"
 
 namespace KIMAP
 {
 class ExpungeJobPrivate : public JobPrivate
 {
 public:
-    ExpungeJobPrivate(Session *session, const QString &name) : JobPrivate(session, name) { }
+    ExpungeJobPrivate(Session *session, const QString &name)
+        : JobPrivate(session, name)
+    {
+    }
 #if 0
     QList< int > items;
 #endif

@@ -18,8 +18,14 @@ namespace KIMAP
 class StoreJobPrivate : public JobPrivate
 {
 public:
-    StoreJobPrivate(Session *session, const QString &name) : JobPrivate(session, name), uidBased(false) { }
-    ~StoreJobPrivate() { }
+    StoreJobPrivate(Session *session, const QString &name)
+        : JobPrivate(session, name)
+        , uidBased(false)
+    {
+    }
+    ~StoreJobPrivate()
+    {
+    }
 
     QByteArray addFlags(const QByteArray &param, const MessageFlags &flags)
     {
@@ -178,10 +184,7 @@ void StoreJob::handleResponse(const Response &response)
     Q_D(StoreJob);
 
     if (handleErrorReplies(response) == NotHandled) {
-        if (response.content.size() == 4 &&
-                response.content[2].toString() == "FETCH" &&
-                response.content[3].type() == Response::Part::List) {
-
+        if (response.content.size() == 4 && response.content[2].toString() == "FETCH" && response.content[3].type() == Response::Part::List) {
             int id = response.content[1].toString().toInt();
             qint64 uid = 0;
             bool uidFound = false;
@@ -189,8 +192,7 @@ void StoreJob::handleResponse(const Response &response)
 
             QList<QByteArray> content = response.content[3].toList();
 
-            for (QList<QByteArray>::ConstIterator it = content.constBegin();
-                    it != content.constEnd(); ++it) {
+            for (QList<QByteArray>::ConstIterator it = content.constBegin(); it != content.constEnd(); ++it) {
                 QByteArray str = *it;
                 ++it;
 

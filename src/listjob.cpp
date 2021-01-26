@@ -6,22 +6,28 @@
 
 #include "listjob.h"
 
-#include <QTimer>
 #include <KLocalizedString>
+#include <QTimer>
 
 #include "job_p.h"
 #include "response_p.h"
 #include "rfccodecs.h"
 #include "session_p.h"
 
-
 namespace KIMAP
 {
 class ListJobPrivate : public JobPrivate
 {
 public:
-    ListJobPrivate(ListJob *job, Session *session, const QString &name) : JobPrivate(session, name), q(job), option(ListJob::NoOption) { }
-    ~ListJobPrivate() { }
+    ListJobPrivate(ListJob *job, Session *session, const QString &name)
+        : JobPrivate(session, name)
+        , q(job)
+        , option(ListJob::NoOption)
+    {
+    }
+    ~ListJobPrivate()
+    {
+    }
 
     void emitPendings()
     {
@@ -43,7 +49,7 @@ public:
 
     QTimer emitPendingsTimer;
     QList<MailBoxDescriptor> pendingDescriptors;
-    QList< QList<QByteArray> > pendingFlags;
+    QList<QList<QByteArray>> pendingFlags;
 };
 }
 
@@ -53,8 +59,7 @@ ListJob::ListJob(Session *session)
     : Job(*new ListJobPrivate(this, session, i18n("List")))
 {
     Q_D(ListJob);
-    connect(&d->emitPendingsTimer, SIGNAL(timeout()),
-            this, SLOT(emitPendings()));
+    connect(&d->emitPendingsTimer, SIGNAL(timeout()), this, SLOT(emitPendings()));
 }
 
 ListJob::~ListJob()
@@ -106,9 +111,9 @@ QList<MailBoxDescriptor> ListJob::mailBoxes() const
     return QList<MailBoxDescriptor>();
 }
 
-QMap< MailBoxDescriptor, QList<QByteArray> > ListJob::flags() const
+QMap<MailBoxDescriptor, QList<QByteArray>> ListJob::flags() const
 {
-    return QMap< MailBoxDescriptor, QList<QByteArray> >();
+    return QMap<MailBoxDescriptor, QList<QByteArray>>();
 }
 
 void ListJob::doStart()
@@ -137,12 +142,10 @@ void ListJob::doStart()
             if (descriptor.name.endsWith(descriptor.separator)) {
                 QString name = encodeImapFolderName(descriptor.name);
                 name.chop(1);
-                d->tags << d->sessionInternal()->sendCommand(d->command,
-                        parameters.arg(name).toUtf8());
+                d->tags << d->sessionInternal()->sendCommand(d->command, parameters.arg(name).toUtf8());
             }
 
-            d->tags << d->sessionInternal()->sendCommand(d->command,
-                    parameters.arg(descriptor.name + QLatin1Char('*')).toUtf8());
+            d->tags << d->sessionInternal()->sendCommand(d->command, parameters.arg(descriptor.name + QLatin1Char('*')).toUtf8());
         }
     }
 }
@@ -153,9 +156,7 @@ void ListJob::handleResponse(const Response &response)
 
     // We can predict it'll be handled by handleErrorReplies() so stop
     // the timer now so that result() will really be the last emitted signal.
-    if (!response.content.isEmpty() &&
-            d->tags.size() == 1 &&
-            d->tags.contains(response.content.first().toString())) {
+    if (!response.content.isEmpty() && d->tags.size() == 1 && d->tags.contains(response.content.first().toString())) {
         d->emitPendingsTimer.stop();
         d->emitPendings();
     }
@@ -171,7 +172,7 @@ void ListJob::handleResponse(const Response &response)
                 // Defaults to / for servers reporting an empty list
                 // it's supposedly not a problem as servers doing that
                 // only do it for mailboxes with no child.
-                separator = "/"; //krazy:exclude=doublequote_chars since a QByteArray
+                separator = "/"; // krazy:exclude=doublequote_chars since a QByteArray
             }
             Q_ASSERT(separator.size() == 1);
             QByteArray fullName;
@@ -195,10 +196,9 @@ void ListJob::handleResponse(const Response &response)
 
 void ListJob::convertInboxName(KIMAP::MailBoxDescriptor &descriptor)
 {
-    //Inbox must be case sensitive, according to the RFC, so make it always uppercase
+    // Inbox must be case sensitive, according to the RFC, so make it always uppercase
     QStringList pathParts = descriptor.name.split(descriptor.separator);
-    if (!pathParts.isEmpty() &&
-            pathParts[0].compare(QLatin1String("INBOX"), Qt::CaseInsensitive) == 0) {
+    if (!pathParts.isEmpty() && pathParts[0].compare(QLatin1String("INBOX"), Qt::CaseInsensitive) == 0) {
         pathParts.removeAt(0);
         descriptor.name = QStringLiteral("INBOX");
         if (!pathParts.isEmpty()) {

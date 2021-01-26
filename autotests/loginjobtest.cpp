@@ -9,13 +9,13 @@
 
 #include <QTest>
 
-#include "kimaptest/fakeserver.h"
-#include "kimap/session.h"
 #include "kimap/loginjob.h"
+#include "kimap/session.h"
+#include "kimaptest/fakeserver.h"
 
 #include <QTest>
 
-class TestUiProxy: public KIMAP::SessionUiProxy
+class TestUiProxy : public KIMAP::SessionUiProxy
 {
     bool ignoreSslError(const KSslErrorUiData &) override
     {
@@ -23,7 +23,7 @@ class TestUiProxy: public KIMAP::SessionUiProxy
     }
 };
 
-class LoginJobTest: public QObject
+class LoginJobTest : public QObject
 {
     Q_OBJECT
 
@@ -33,25 +33,22 @@ private Q_SLOTS:
     {
         QTest::addColumn<QString>("user");
         QTest::addColumn<QString>("password");
-        QTest::addColumn< QList<QByteArray> >("scenario");
+        QTest::addColumn<QList<QByteArray>>("scenario");
 
         QList<QByteArray> scenario;
-        scenario << FakeServer::greeting()
-                 << "C: A000001 LOGIN \"user\" \"password\""
+        scenario << FakeServer::greeting() << "C: A000001 LOGIN \"user\" \"password\""
                  << "S: A000001 OK User logged in";
 
         QTest::newRow("success") << QStringLiteral("user") << QStringLiteral("password") << scenario;
 
         scenario.clear();
-        scenario << FakeServer::greeting()
-                 << "C: A000001 LOGIN \"user_bad\" \"password\""
+        scenario << FakeServer::greeting() << "C: A000001 LOGIN \"user_bad\" \"password\""
                  << "S: A000001 NO Login failed: authentication failure";
 
         QTest::newRow("wrong login") << "user_bad" << QStringLiteral("password") << scenario;
 
         scenario.clear();
-        scenario << FakeServer::greeting()
-                 << "C: A000001 LOGIN \"user\" \"aa\\\"bb\\\\cc[dd ee\""
+        scenario << FakeServer::greeting() << "C: A000001 LOGIN \"user\" \"aa\\\"bb\\\\cc[dd ee\""
                  << "S: A000001 OK User logged in";
 
         QTest::newRow("special chars") << QStringLiteral("user") << "aa\"bb\\cc[dd ee" << scenario;
@@ -92,11 +89,10 @@ private Q_SLOTS:
         QTest::addColumn<QString>("user");
         QTest::addColumn<QString>("proxy");
         QTest::addColumn<QString>("password");
-        QTest::addColumn< QList<QByteArray> >("scenario");
+        QTest::addColumn<QList<QByteArray>>("scenario");
 
         QList<QByteArray> scenario;
-        scenario << FakeServer::greeting()
-                 << "C: A000001 AUTHENTICATE PLAIN"
+        scenario << FakeServer::greeting() << "C: A000001 AUTHENTICATE PLAIN"
                  << "S: A000001 OK (success)"
                  << "C: A000001 LOGIN \"proxy\" \"user\" \"password\""
                  << "S: A000001 OK User logged in";
@@ -133,32 +129,28 @@ private Q_SLOTS:
     void shouldSaveServerGreeting_data()
     {
         QTest::addColumn<QString>("greeting");
-        QTest::addColumn< QList<QByteArray> >("scenario");
+        QTest::addColumn<QList<QByteArray>>("scenario");
 
         QList<QByteArray> scenario;
-        scenario << FakeServer::greeting()
-                 << "C: A000001 LOGIN \"user\" \"password\""
+        scenario << FakeServer::greeting() << "C: A000001 LOGIN \"user\" \"password\""
                  << "S: A000001 OK Welcome John Smith";
 
         QTest::newRow("greeting") << "Welcome John Smith" << scenario;
 
         scenario.clear();
-        scenario << FakeServer::greeting()
-                 << "C: A000001 LOGIN \"user\" \"password\""
+        scenario << FakeServer::greeting() << "C: A000001 LOGIN \"user\" \"password\""
                  << "S: A000001 OK Welcome John Smith (last login: Feb 21, 2010)";
 
         QTest::newRow("greeting with parenthesis") << "Welcome John Smith (last login: Feb 21, 2010)" << scenario;
 
         scenario.clear();
-        scenario << FakeServer::greeting()
-                 << "C: A000001 LOGIN \"user\" \"password\""
+        scenario << FakeServer::greeting() << "C: A000001 LOGIN \"user\" \"password\""
                  << "S: A000001 OK";
 
         QTest::newRow("no greeting") << "" << scenario;
 
         scenario.clear();
-        scenario << FakeServer::greeting()
-                 << "C: A000001 LOGIN \"user\" \"password\""
+        scenario << FakeServer::greeting() << "C: A000001 LOGIN \"user\" \"password\""
                  << "S: A000001 NO Login failed: authentication failure";
 
         QTest::newRow("login failed") << "" << scenario;
@@ -188,31 +180,28 @@ private Q_SLOTS:
 
     void shouldUseSsl_data()
     {
-        QTest::addColumn< QList<QByteArray> >("scenario");
-        QTest::addColumn< int >("serverEncryption");
+        QTest::addColumn<QList<QByteArray>>("scenario");
+        QTest::addColumn<int>("serverEncryption");
 
         {
             QList<QByteArray> scenario;
-            scenario << FakeServer::greeting()
-                     << "C: A000001 CAPABILITY"
+            scenario << FakeServer::greeting() << "C: A000001 CAPABILITY"
                      << "S: A000001 OK"
                      << "C: A000002 LOGIN \"user\" \"password\""
                      << "S: A000002 OK";
 
-
             // SSLv2 support was removed from openssl 1.1
-            //QTest::newRow("sslv2") << scenario << static_cast<int>(QSsl::SslV2);
+            // QTest::newRow("sslv2") << scenario << static_cast<int>(QSsl::SslV2);
 
             // FIXME: SSLv3-only server is failing, likely openssl configuration problem
-            //QTest::newRow("sslv3") << scenario << static_cast<int>(QSsl::SslV3);
+            // QTest::newRow("sslv3") << scenario << static_cast<int>(QSsl::SslV3);
 
-            //AnySslVersion doesn't mean the server can force a specific version (e.g. openssl always starts with a tls12 hello)
+            // AnySslVersion doesn't mean the server can force a specific version (e.g. openssl always starts with a tls12 hello)
             QTest::newRow("any protocol with anyssl version") << scenario << static_cast<int>(QSsl::AnyProtocol);
 
             QTest::newRow("tlsv10") << scenario << static_cast<int>(QSsl::TlsV1_0);
             QTest::newRow("tlsv11") << scenario << static_cast<int>(QSsl::TlsV1_1);
             QTest::newRow("tlsv12") << scenario << static_cast<int>(QSsl::TlsV1_2);
-
         }
     }
 
@@ -248,8 +237,7 @@ private Q_SLOTS:
 
         {
             QList<QByteArray> scenario;
-            scenario << FakeServer::greeting()
-                     << "C: A000001 CAPABILITY"
+            scenario << FakeServer::greeting() << "C: A000001 CAPABILITY"
                      << "S: * CAPABILITY IMAP4rev1 STARTTLS"
                      << "S: A000001 OK CAPABILITY completed"
                      << "C: A000002 STARTTLS"
@@ -264,8 +252,7 @@ private Q_SLOTS:
 
         {
             QList<QByteArray> scenario;
-            scenario << FakeServer::greeting()
-                     << "C: A000001 CAPABILITY"
+            scenario << FakeServer::greeting() << "C: A000001 CAPABILITY"
                      << "S: * CAPABILITY IMAP4rev1"
                      << "S: A000001 OK CAPABILITY completed";
 

@@ -7,19 +7,19 @@
 
 #include <QTest>
 
-#include "kimaptest/fakeserver.h"
-#include "kimap/session.h"
-#include "kimap/selectjob.h"
 #include "kimap/idlejob.h"
+#include "kimap/selectjob.h"
+#include "kimap/session.h"
+#include "kimaptest/fakeserver.h"
 
-#include <QTest>
 #include <QSignalSpy>
+#include <QTest>
 
 Q_DECLARE_METATYPE(QList<int>)
 Q_DECLARE_METATYPE(QList<qint64>)
 Q_DECLARE_METATYPE(KIMAP::IdleJob *)
 
-class IdleJobTest: public QObject
+class IdleJobTest : public QObject
 {
     Q_OBJECT
 
@@ -33,11 +33,11 @@ public:
 private Q_SLOTS:
     void shouldReactToIdle_data()
     {
-        QTest::addColumn<QList<QByteArray> >("scenario");
+        QTest::addColumn<QList<QByteArray>>("scenario");
         QTest::addColumn<QString>("expectedMailBox");
-        QTest::addColumn< QList<int> >("expectedMessageCounts");
-        QTest::addColumn< QList<int> >("expectedRecentCounts");
-        QTest::addColumn< QList<qint64> >("expectedFlagsNotifications");
+        QTest::addColumn<QList<int>>("expectedMessageCounts");
+        QTest::addColumn<QList<int>>("expectedRecentCounts");
+        QTest::addColumn<QList<qint64>>("expectedFlagsNotifications");
 
         QList<QByteArray> scenario;
         QString expectedMailBox;
@@ -46,8 +46,7 @@ private Q_SLOTS:
         QList<qint64> expectedFlagsNotifications;
 
         scenario.clear();
-        scenario << FakeServer::preauth()
-                 << "C: A000001 SELECT \"INBOX/Foo\""
+        scenario << FakeServer::preauth() << "C: A000001 SELECT \"INBOX/Foo\""
                  << "S: A000001 OK SELECT done"
                  << "C: A000002 IDLE"
                  << "S: + OK"
@@ -68,8 +67,7 @@ private Q_SLOTS:
         QTest::newRow("normal") << scenario << expectedMailBox << expectedMessageCounts << expectedRecentCounts << expectedFlagsNotifications;
 
         scenario.clear();
-        scenario << FakeServer::preauth()
-                 << "C: A000001 SELECT \"INBOX/Foo\""
+        scenario << FakeServer::preauth() << "C: A000001 SELECT \"INBOX/Foo\""
                  << "S: A000001 OK SELECT done"
                  << "C: A000002 IDLE"
                  << "S: + OK"
@@ -88,8 +86,7 @@ private Q_SLOTS:
         QTest::newRow("only RECENT") << scenario << expectedMailBox << expectedMessageCounts << expectedRecentCounts << expectedFlagsNotifications;
 
         scenario.clear();
-        scenario << FakeServer::preauth()
-                 << "C: A000001 SELECT \"INBOX/Foo\""
+        scenario << FakeServer::preauth() << "C: A000001 SELECT \"INBOX/Foo\""
                  << "S: A000001 OK SELECT done"
                  << "C: A000002 IDLE"
                  << "S: + OK"
@@ -108,8 +105,7 @@ private Q_SLOTS:
         QTest::newRow("only EXISTS") << scenario << expectedMailBox << expectedMessageCounts << expectedRecentCounts << expectedFlagsNotifications;
 
         scenario.clear();
-        scenario << FakeServer::preauth()
-                 << "C: A000001 SELECT \"INBOX/Foo\""
+        scenario << FakeServer::preauth() << "C: A000001 SELECT \"INBOX/Foo\""
                  << "S: A000001 OK SELECT done"
                  << "C: A000002 IDLE"
                  << "S: + OK"
@@ -126,11 +122,11 @@ private Q_SLOTS:
         expectedMessageCounts << 2;
         expectedRecentCounts << 1;
 
-        QTest::newRow("under 200ms, same notification") << scenario << expectedMailBox << expectedMessageCounts << expectedRecentCounts << expectedFlagsNotifications;
+        QTest::newRow("under 200ms, same notification")
+            << scenario << expectedMailBox << expectedMessageCounts << expectedRecentCounts << expectedFlagsNotifications;
 
         scenario.clear();
-        scenario << FakeServer::preauth()
-                 << "C: A000001 SELECT \"INBOX/Foo\""
+        scenario << FakeServer::preauth() << "C: A000001 SELECT \"INBOX/Foo\""
                  << "S: A000001 OK SELECT done"
                  << "C: A000002 IDLE"
                  << "S: + OK"
@@ -147,11 +143,11 @@ private Q_SLOTS:
         expectedMessageCounts << 2 << -1;
         expectedRecentCounts << -1 << 1;
 
-        QTest::newRow("above 200ms, two notifications") << scenario << expectedMailBox << expectedMessageCounts << expectedRecentCounts << expectedFlagsNotifications;
+        QTest::newRow("above 200ms, two notifications")
+            << scenario << expectedMailBox << expectedMessageCounts << expectedRecentCounts << expectedFlagsNotifications;
 
         scenario.clear();
-        scenario << FakeServer::preauth()
-                 << "C: A000001 SELECT \"INBOX/Foo\""
+        scenario << FakeServer::preauth() << "C: A000001 SELECT \"INBOX/Foo\""
                  << "S: A000001 OK SELECT done"
                  << "C: A000002 IDLE"
                  << "S: + OK"
@@ -166,7 +162,8 @@ private Q_SLOTS:
         expectedRecentCounts.clear();
         expectedFlagsNotifications << 1 << 2;
 
-        QTest::newRow("2 flags change notifications") << scenario << expectedMailBox << expectedMessageCounts << expectedRecentCounts << expectedFlagsNotifications;
+        QTest::newRow("2 flags change notifications") << scenario << expectedMailBox << expectedMessageCounts << expectedRecentCounts
+                                                      << expectedFlagsNotifications;
     }
 
     void shouldReactToIdle()
@@ -200,7 +197,7 @@ private Q_SLOTS:
             QCOMPARE(statsSpy.count(), expectedMessageCounts.size());
             QCOMPARE(flagsSpy.count(), expectedFlagsNotifications.size());
 
-            for (int i = 0 ; i < statsSpy.count(); i++) {
+            for (int i = 0; i < statsSpy.count(); i++) {
                 const KIMAP::IdleJob *job = statsSpy.at(i).at(0).value<KIMAP::IdleJob *>();
                 const QString mailBox = statsSpy.at(i).at(1).toString();
                 const int messageCount = statsSpy.at(i).at(2).toInt();
@@ -226,11 +223,10 @@ private Q_SLOTS:
 
     void shouldResetTimeout_data()
     {
-        QTest::addColumn<QList<QByteArray> >("scenario");
+        QTest::addColumn<QList<QByteArray>>("scenario");
         {
             QList<QByteArray> scenario;
-            scenario << FakeServer::preauth()
-                     << "C: A000001 SELECT \"INBOX\""
+            scenario << FakeServer::preauth() << "C: A000001 SELECT \"INBOX\""
                      << "S: A000001 OK SELECT done"
                      << "C: A000002 IDLE"
                      << "S: + OK"
@@ -241,8 +237,7 @@ private Q_SLOTS:
 
         {
             QList<QByteArray> scenario;
-            scenario << FakeServer::preauth()
-                     << "C: A000001 SELECT \"INBOX\""
+            scenario << FakeServer::preauth() << "C: A000001 SELECT \"INBOX\""
                      << "S: A000001 OK SELECT done"
                      << "C: A000002 IDLE"
                      << "S: + OK"
@@ -274,7 +269,6 @@ private Q_SLOTS:
 
         fakeServer.quit();
     }
-
 };
 
 QTEST_GUILESS_MAIN(IdleJobTest)

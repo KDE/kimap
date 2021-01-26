@@ -15,7 +15,6 @@
 
 namespace KIMAP
 {
-
 class SessionPrivate;
 class JobPrivate;
 struct Response;
@@ -78,16 +77,16 @@ public:
      */
     Q_REQUIRED_RESULT QString selectedMailBox() const;
 
-   /**
-    * Sets whether the IMAP network connection should use the system proxy settings.
-    *
-    * @param useProxy @c true if the proxy is to be used
-    * The default is to not use the proxy.
-    * @since 5.11.41
-    *
-    * @note If the session is currently connected to the IMAP server, calling this
-    * function will disconnect and reconnect to it with the changed proxy setting.
-    */
+    /**
+     * Sets whether the IMAP network connection should use the system proxy settings.
+     *
+     * @param useProxy @c true if the proxy is to be used
+     * The default is to not use the proxy.
+     * @since 5.11.41
+     *
+     * @note If the session is currently connected to the IMAP server, calling this
+     * function will disconnect and reconnect to it with the changed proxy setting.
+     */
     void setUseNetworkProxy(bool useProxy);
 
     Q_REQUIRED_RESULT int jobQueueSize() const;
