@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KIMAP_SETMETADATAJOB_H
-#define KIMAP_SETMETADATAJOB_H
+#pragma once
 
 #include "kimap_export.h"
 
@@ -200,4 +199,3 @@ protected:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KIMAP::SetMetaDataJob::MetaDataErrors)
 
-#endif

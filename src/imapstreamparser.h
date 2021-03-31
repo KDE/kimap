@@ -5,8 +5,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KIMAP_IMAPSTREAMPARSER_P_H
-#define KIMAP_IMAPSTREAMPARSER_P_H
+#pragma once
 
 #include "kimap_export.h"
 
@@ -215,4 +214,3 @@ private:
 
 }
 
-#endif

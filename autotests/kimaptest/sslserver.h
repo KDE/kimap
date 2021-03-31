@@ -4,8 +4,7 @@
    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef SSLSERVER_H
-#define SSLSERVER_H
+#pragma once
 
 #include <QSslSocket>
 #include <QTcpServer>
@@ -27,4 +26,3 @@ private:
     bool mWaitForStartTls = false;
 };
 
-#endif

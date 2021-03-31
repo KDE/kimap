@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KIMAP_RESPONSE_P_H
-#define KIMAP_RESPONSE_P_H
+#pragma once
 
 #include <QByteArray>
 #include <QList>
@@ -97,4 +96,3 @@ struct Response {
 Q_DECLARE_METATYPE(KIMAP::Response)
 static const int _kimap_messageTypeId = qRegisterMetaType<KIMAP::Response>();
 
-#endif

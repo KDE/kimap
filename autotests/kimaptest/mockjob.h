@@ -8,8 +8,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
   */
 
-#ifndef MOCKJOB_H
-#define MOCKJOB_H
+#pragma once
 
 #include <kimap/job.h>
 
@@ -66,4 +65,3 @@ private Q_SLOTS:
     void done();
 };
 
-#endif

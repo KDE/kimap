@@ -17,8 +17,7 @@
  * @author Sven Carstens
  */
 
-#ifndef KIMAP_RFCCODECS_H
-#define KIMAP_RFCCODECS_H
+#pragma once
 
 #include <QString>
 
@@ -120,4 +119,3 @@ Q_REQUIRED_RESULT KIMAP_EXPORT const QString encodeRFC2231String(const QString &
 Q_REQUIRED_RESULT KIMAP_EXPORT const QString decodeRFC2231String(const QString &str);
 }
 
-#endif

@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KIMAP_ACL_H
-#define KIMAP_ACL_H
+#pragma once
 
 #include "kimap_export.h"
 
@@ -115,4 +114,3 @@ KIMAP_EXPORT Rights rightsFromString(const QByteArray &string);
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KIMAP::Acl::Rights)
 
-#endif

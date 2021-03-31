@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KIMAP_SETQUOTAJOB_H
-#define KIMAP_SETQUOTAJOB_H
+#pragma once
 
 #include "quotajobbase.h"
 
@@ -87,4 +86,3 @@ protected:
 
 }
 
-#endif

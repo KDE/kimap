@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KIMAP_SESSIONUIPROXY_H
-#define KIMAP_SESSIONUIPROXY_H
+#pragma once
 
 #include "kimap_export.h"
 
@@ -52,4 +51,3 @@ public:
 
 }
 
-#endif

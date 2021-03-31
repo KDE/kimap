@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KIMAP_IMAPSET_H
-#define KIMAP_IMAPSET_H
+#pragma once
 
 #include "kimap_export.h"
 
@@ -233,4 +232,3 @@ Q_DECLARE_METATYPE(KIMAP::ImapInterval)
 Q_DECLARE_METATYPE(KIMAP::ImapInterval::List)
 Q_DECLARE_METATYPE(KIMAP::ImapSet)
 
-#endif

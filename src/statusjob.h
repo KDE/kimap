@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KIMAP_STATUSJOB_H
-#define KIMAP_STATUSJOB_H
+#pragma once
 
 #include "kimap_export.h"
 
@@ -43,4 +42,3 @@ protected:
 
 }
 
-#endif // KIMAP_STATUSJOB_H

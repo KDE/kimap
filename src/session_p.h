@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KIMAP_SESSION_P_H
-#define KIMAP_SESSION_P_H
+#pragma once
 
 #include "session.h"
 #include "sessionuiproxy.h"
@@ -105,4 +104,3 @@ private:
 
 }
 
-#endif

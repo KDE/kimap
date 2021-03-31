@@ -4,8 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KIMAP_METADATAJOBBASE_P_H
-#define KIMAP_METADATAJOBBASE_P_H
+#pragma once
 
 #include "job_p.h"
 #include "metadatajobbase.h"
@@ -37,4 +36,3 @@ public:
 };
 }
 
-#endif

@@ -7,8 +7,7 @@
    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef FAKESERVER_H
-#define FAKESERVER_H
+#pragma once
 
 #include <QMutex>
 #include <QSsl>
@@ -226,4 +225,3 @@ private:
     QSsl::SslProtocol m_sslProtocol;
 };
 
-#endif
