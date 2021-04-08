@@ -97,11 +97,7 @@ void SslServer::incomingConnection(qintptr handle)
 
     socket->setPrivateKey(ssl_key);
     socket->setLocalCertificate(ssl_cert);
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-    socket->addCaCertificates(QList<QSslCertificate>() << ssl_cert);
-#else
     socket->sslConfiguration().addCaCertificates(QList<QSslCertificate>() << ssl_cert);
-#endif
     socket->setPeerVerifyMode(QSslSocket::VerifyNone);
     socket->ignoreSslErrors();
     connect(socket, SIGNAL(sslErrors(QList<QSslError>)), this, SLOT(sslErrors(QList<QSslError>)));

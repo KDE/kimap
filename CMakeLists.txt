@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 set(PIM_VERSION "5.17.40")
 
 project(KIMAP VERSION ${PIM_VERSION})
@@ -26,7 +26,7 @@ include(KDEGitCommitHooks)
 include(ECMQtDeclareLoggingCategory)
 
 
-set(QT_REQUIRED_VERSION "5.14.0")
+set(QT_REQUIRED_VERSION "5.15.0")
 
 set(KIMAP_LIB_VERSION ${PIM_VERSION})
 set(KMIME_LIBS_VERSION "5.17.40")
@@ -50,7 +50,7 @@ set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5IMAP")
 add_definitions(-DTRANSLATION_DOMAIN=\"libkimap5\")
 
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050e00)
-add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x055100)
+add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x055200)
 add_definitions(-DQT_NO_EMIT)
 
 
@@ -60,15 +60,11 @@ configure_package_config_file(
   INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
 )
 
-option(USE_UNITY_CMAKE_SUPPORT "Use UNITY cmake support (speedup compile time)" FALSE)
+option(USE_UNITY_CMAKE_SUPPORT "Use UNITY cmake support (speedup compile time)" OFF)
 
-set(COMPILE_WITH_UNITY_CMAKE_SUPPORT false)
+set(COMPILE_WITH_UNITY_CMAKE_SUPPORT OFF)
 if (USE_UNITY_CMAKE_SUPPORT)
-    if(${CMAKE_VERSION} VERSION_LESS "3.16.0")
-        message(STATUS "CMAKE version is less than 3.16.0 . We can't use cmake unify build support")
-    else()
-        set(COMPILE_WITH_UNITY_CMAKE_SUPPORT true)
-    endif()
+    set(COMPILE_WITH_UNITY_CMAKE_SUPPORT ON)
 endif()
 
 ########### Targets ###########

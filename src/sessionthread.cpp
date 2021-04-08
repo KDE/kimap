@@ -195,13 +195,8 @@ void SessionThread::threadInit()
     // Delay the call to slotSocketDisconnected so that it finishes disconnecting before we call reconnect()
     connect(m_socket.get(), &QSslSocket::disconnected, this, &SessionThread::slotSocketDisconnected, Qt::QueuedConnection);
     connect(m_socket.get(), &QSslSocket::connected, this, &SessionThread::socketConnected);
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-    connect(m_socket.get(),
-            QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error),
-#else
     connect(m_socket.get(),
             QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::errorOccurred),
-#endif
             this,
             &SessionThread::slotSocketError);
 
@@ -279,19 +274,11 @@ void SessionThread::sslConnected()
         return;
     }
     QSslCipher cipher = m_socket->sessionCipher();
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
-    if (!m_socket->sslErrors().isEmpty()
-#else
     if (!m_socket->sslHandshakeErrors().isEmpty()
-#endif
         || !m_socket->isEncrypted() || cipher.isNull() || cipher.usedBits() == 0) {
         qCDebug(KIMAP_LOG) << "Initial SSL handshake failed. cipher.isNull() is" << cipher.isNull() << ", cipher.usedBits() is" << cipher.usedBits()
                            << ", the socket says:" << m_socket->errorString() << "and the list of SSL errors contains"
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
-                           << m_socket->sslErrors().count()
-#else
                            << m_socket->sslHandshakeErrors().count()
-#endif
                            << "items.";
         KSslErrorUiData errorData(m_socket.get());
         Q_EMIT sslError(errorData);
