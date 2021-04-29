@@ -15,6 +15,8 @@
 #include <QDebug>
 
 #include <QFile>
+#include <QTcpServer>
+#include <QTcpSocket>
 #include <QTest>
 
 #include "imapstreamparser.h"

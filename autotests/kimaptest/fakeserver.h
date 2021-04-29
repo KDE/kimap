@@ -11,10 +11,9 @@
 
 #include <QMutex>
 #include <QSsl>
-#include <QTcpServer>
-#include <QTcpSocket>
 #include <QThread>
-
+class QTcpSocket;
+class QTcpServer;
 namespace KIMAP
 {
 class ImapStreamParser;
