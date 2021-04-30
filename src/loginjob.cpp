@@ -360,7 +360,7 @@ void LoginJob::handleResponse(const Response &response)
                 // find the selected SASL authentication method
                 for (const QString &capability : qAsConst(d->capabilities)) {
                     if (capability.startsWith(QLatin1String("AUTH="))) {
-                        if (capability.midRef(5) == d->authMode) {
+                        if (QStringView(capability).mid(5) == d->authMode) {
                             authModeSupported = true;
                             break;
                         }
