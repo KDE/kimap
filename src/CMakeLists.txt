@@ -1,8 +1,9 @@
 
 # Turn exceptions on
 kde_enable_exceptions()
-
-set(kimap_SRCS
+add_library(KF5IMAP)
+add_library(KF5::IMAP ALIAS KF5IMAP)
+target_sources(KF5IMAP PRIVATE
    acl.cpp
    acljobbase.cpp
    appendjob.cpp
@@ -50,19 +51,17 @@ set(kimap_SRCS
    unsubscribejob.cpp
 )
 
-ecm_qt_declare_logging_category(kimap_SRCS HEADER kimap_debug.h IDENTIFIER KIMAP_LOG CATEGORY_NAME org.kde.pim.kimap
+ecm_qt_declare_logging_category(KF5IMAP HEADER kimap_debug.h IDENTIFIER KIMAP_LOG CATEGORY_NAME org.kde.pim.kimap
         OLD_CATEGORY_NAMES log_kimap
         DESCRIPTION "kimap (pim lib)" EXPORT KIMAP)
 
-
-add_library(KF5IMAP ${kimap_SRCS})
 if (COMPILE_WITH_UNITY_CMAKE_SUPPORT)
     set_target_properties(KF5IMAP PROPERTIES UNITY_BUILD ON)
 endif()
 
 generate_export_header(KF5IMAP BASE_NAME kimap)
 
-add_library(KF5::IMAP ALIAS KF5IMAP)
+
 
 target_include_directories(KF5IMAP INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF5}/KIMAP>")
 target_include_directories(KF5IMAP PUBLIC "$<BUILD_INTERFACE:${KIMAP_SOURCE_DIR}/src;${KIMAP_BINARY_DIR}/src>")
