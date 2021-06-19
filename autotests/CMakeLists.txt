@@ -2,8 +2,6 @@ kde_enable_exceptions()
 
 include(ECMMarkAsTest)
 
-find_package(Qt5Test CONFIG REQUIRED)
-
 add_subdirectory(kimaptest)
 
 macro(KIMAP_UNIT_TESTS)
