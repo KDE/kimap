@@ -1,4 +1,5 @@
-
+# SPDX-FileCopyrightText: none
+# SPDX-License-Identifier: BSD-3-Clause
 # Turn exceptions on
 kde_enable_exceptions()
 add_library(KF5IMAP)
