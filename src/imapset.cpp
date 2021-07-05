@@ -217,7 +217,7 @@ bool ImapSet::operator==(const ImapSet &other) const
         return false;
     }
 
-    for (const ImapInterval &interval : qAsConst(d->intervals)) {
+    for (const ImapInterval &interval : std::as_const(d->intervals)) {
         if (!other.d->intervals.contains(interval)) {
             return false;
         }
@@ -263,7 +263,7 @@ QByteArray ImapSet::toImapSequenceSet() const
 {
     QList<QByteArray> rv;
     rv.reserve(d->intervals.count());
-    for (const ImapInterval &interval : qAsConst(d->intervals)) {
+    for (const ImapInterval &interval : std::as_const(d->intervals)) {
         rv << interval.toImapSequence();
     }
 
@@ -288,7 +288,7 @@ ImapSet ImapSet::fromImapSequenceSet(const QByteArray &sequence)
 
     const QList<QByteArray> intervals = sequence.split(',');
 
-    for (const QByteArray &interval : qAsConst(intervals)) {
+    for (const QByteArray &interval : std::as_const(intervals)) {
         if (!interval.isEmpty()) {
             result.add(ImapInterval::fromImapSequence(interval));
         }

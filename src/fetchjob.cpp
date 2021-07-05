@@ -169,7 +169,7 @@ void FetchJob::doStart()
             parameters += "(RFC822.SIZE INTERNALDATE BODY.PEEK[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT DATE)] FLAGS UID";
         } else {
             parameters += '(';
-            for (const QByteArray &part : qAsConst(d->scope.parts)) {
+            for (const QByteArray &part : std::as_const(d->scope.parts)) {
                 parameters += "BODY.PEEK[" + part + ".MIME] ";
             }
             parameters += "UID";
@@ -186,7 +186,7 @@ void FetchJob::doStart()
             parameters += "(BODY.PEEK[] UID";
         } else {
             parameters += '(';
-            for (const QByteArray &part : qAsConst(d->scope.parts)) {
+            for (const QByteArray &part : std::as_const(d->scope.parts)) {
                 parameters += "BODY.PEEK[" + part + "] ";
             }
             parameters += "UID";
@@ -200,7 +200,7 @@ void FetchJob::doStart()
             parameters += "(BODY.PEEK[] FLAGS UID";
         } else {
             parameters += "(BODY.PEEK[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT DATE)]";
-            for (const QByteArray &part : qAsConst(d->scope.parts)) {
+            for (const QByteArray &part : std::as_const(d->scope.parts)) {
                 parameters += " BODY.PEEK[" + part + ".MIME] BODY.PEEK[" + part + "]"; // krazy:exclude=doublequote_chars
             }
             parameters += " FLAGS UID";

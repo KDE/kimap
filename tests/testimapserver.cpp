@@ -143,7 +143,7 @@ void testAcl(Session *session, const QString &user)
     qDebug() << "Default rights on INBOX/TestFolder: " << Acl::rightsToString(listRights->defaultRights());
     const QList<Acl::Rights> possible = listRights->possibleRights();
     QStringList strList;
-    for (Acl::Rights r : qAsConst(possible)) {
+    for (Acl::Rights r : std::as_const(possible)) {
         strList << QString::fromLatin1(Acl::rightsToString(r));
     }
     qDebug() << "Possible rights on INBOX/TestFolder: " << strList;

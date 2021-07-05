@@ -136,7 +136,7 @@ void ListJob::doStart()
     if (d->namespaces.isEmpty()) {
         d->tags << d->sessionInternal()->sendCommand(d->command, "\"\" *");
     } else {
-        for (const MailBoxDescriptor &descriptor : qAsConst(d->namespaces)) {
+        for (const MailBoxDescriptor &descriptor : std::as_const(d->namespaces)) {
             QString parameters = QStringLiteral("\"\" \"%1\"");
 
             if (descriptor.name.endsWith(descriptor.separator)) {

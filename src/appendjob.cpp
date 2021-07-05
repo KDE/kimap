@@ -107,7 +107,7 @@ void AppendJob::doStart()
 
     if (!d->flags.isEmpty()) {
         parameters += " (";
-        for (const QByteArray &flag : qAsConst(d->flags)) {
+        for (const QByteArray &flag : std::as_const(d->flags)) {
             parameters += flag + ' ';
         }
         parameters.chop(1);

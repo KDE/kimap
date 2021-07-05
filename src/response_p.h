@@ -52,7 +52,7 @@ struct Response {
     {
         QByteArray result;
 
-        for (const Part &part : qAsConst(content)) {
+        for (const Part &part : std::as_const(content)) {
             if (part.type() == Part::List) {
                 result += '(';
                 const QList<QByteArray> lstBa = part.toList();
@@ -68,7 +68,7 @@ struct Response {
 
         if (!responseCode.isEmpty()) {
             result += "[ ";
-            for (const Part &part : qAsConst(responseCode)) {
+            for (const Part &part : std::as_const(responseCode)) {
                 if (part.type() == Part::List) {
                     result += '(';
                     const QList<QByteArray> lstBa = part.toList();
