@@ -126,7 +126,7 @@ private Q_SLOTS:
                  << "S: * QUOTAROOT INBOX \"root1\" "
                  << "S: * QUOTA \"root2\" (STORAGE 10 512)"
                  << "S: A000001 OK GETQUOTA completed";
-        QTest::newRow("rootname missmatch") << "INBOX" << roots << resources << usages << limits << scenario;
+        QTest::newRow("rootname mismatch") << "INBOX" << roots << resources << usages << limits << scenario;
     }
 
     void testGetQuotaRoot()
@@ -150,7 +150,7 @@ private Q_SLOTS:
         QEXPECT_FAIL("bad", "Expected failure on BAD response", Continue);
         QEXPECT_FAIL("no", "Expected failure on NO response", Continue);
         QVERIFY(result);
-        QEXPECT_FAIL("rootname missmatch", "Expected failure on rootname missmatch in QUOTAROOT and QUOTA response", Abort);
+        QEXPECT_FAIL("rootname mismatch", "Expected failure on rootname mismatch in QUOTAROOT and QUOTA response", Abort);
         QCOMPARE(job->roots(), roots);
         for (int rootIdx = 0; rootIdx < roots.size(); rootIdx++) {
             const QByteArray &root = roots[rootIdx];

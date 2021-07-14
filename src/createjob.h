@@ -27,7 +27,7 @@ class CreateJobPrivate;
  * If the server supports ACLs, the user must have the
  * Acl::CreateMailbox permission on the parent
  * mailbox.  Note that what is meant by "parent mailbox"
- * depends on the server: . and / are typical hierachy
+ * depends on the server: . and / are typical hierarchy
  * delimiters.
  */
 class KIMAP_EXPORT CreateJob : public Job

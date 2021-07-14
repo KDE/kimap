@@ -177,7 +177,7 @@ public:
     KIMAP_DEPRECATED void addSearchCriteria(const QByteArray &searchCriteria);
 
     /**
-     * Set the logic combining the search criterias.
+     * Set the logic combining the search criteria.
      * @param logic AND (the default), OR, NOT. See SearchLogics.
      * @deprecated since 4.13
      */

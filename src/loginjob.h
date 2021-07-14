@@ -27,10 +27,10 @@ class KIMAP_EXPORT LoginJob : public Job
 public:
     enum EncryptionMode {
         Unencrypted = 0,
-        SSLorTLS, /*!< Use SSL/TLS encryption, KIMAP will automatically negoatiate
+        SSLorTLS, /*!< Use SSL/TLS encryption, KIMAP will automatically negotiate
                        the best supported encryption protocol. */
         STARTTLS /*!< Use STARTTLS to upgrade an initially plaintext connection to
-                      encrypted connection. KIMAP will automatically negoatiate
+                      encrypted connection. KIMAP will automatically negotiate
                       the best supported encryption protocol. */
     };
 
