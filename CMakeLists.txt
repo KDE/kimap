@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
-set(PIM_VERSION "5.17.80")
+set(PIM_VERSION "5.17.90")
 
 project(KIMAP VERSION ${PIM_VERSION})
 
