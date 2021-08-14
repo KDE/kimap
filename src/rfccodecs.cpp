@@ -54,9 +54,14 @@ static const char especials[17] = "()<>@,;:\"/[]?.= ";
 //-----------------------------------------------------------------------------
 QByteArray KIMAP::decodeImapFolderName(const QByteArray &inSrc)
 {
-    unsigned char c, i, bitcount;
-    unsigned long ucs4, utf16, bitbuf;
-    unsigned char base64[256], utf8[6];
+    unsigned char c;
+    unsigned char i;
+    unsigned char bitcount;
+    unsigned long ucs4;
+    unsigned long utf16;
+    unsigned long bitbuf;
+    unsigned char base64[256];
+    unsigned char utf8[6];
     unsigned int srcPtr = 0;
     QByteArray dst;
     QByteArray src = inSrc;
@@ -181,8 +186,14 @@ QString KIMAP::encodeImapFolderName(const QString &inSrc)
 
 QByteArray KIMAP::encodeImapFolderName(const QByteArray &inSrc)
 {
-    unsigned int utf8pos, utf8total, c, utf7mode, bitstogo, utf16flag;
-    unsigned int ucs4, bitbuf;
+    unsigned int utf8pos;
+    unsigned int utf8total;
+    unsigned int c;
+    unsigned int utf7mode;
+    unsigned int bitstogo;
+    unsigned int utf16flag;
+    unsigned int ucs4;
+    unsigned int bitbuf;
     QByteArray src = inSrc;
     QByteArray dst;
 
@@ -309,9 +320,13 @@ const QString KIMAP::decodeRFC2047String(const QString &str, QString &charset, Q
     // FIXME get rid of the conversion?
     QByteArray aStr = str.toLatin1(); // QString.length() means Unicode chars
     QByteArray result;
-    char *pos, *beg, *end, *mid = nullptr;
+    char *pos;
+    char *beg;
+    char *end;
+    char *mid = nullptr;
     QByteArray cstr;
-    char encoding = 0, ch;
+    char encoding = 0;
+    char ch;
     bool valid;
     const int maxLen = 200;
     int i;
@@ -421,9 +436,13 @@ const QByteArray KIMAP::encodeRFC2047String(const QByteArray &str)
         return str;
     }
 
-    const signed char *latin = reinterpret_cast<const signed char *>(str.data()), *l, *start, *stop;
+    const signed char *latin = reinterpret_cast<const signed char *>(str.data());
+    const signed char *l;
+    const signed char *start;
+    const signed char *stop;
     char hexcode;
-    int numQuotes, i;
+    int numQuotes;
+    int i;
     int rptr = 0;
     // My stats show this number results in 12 resize() out of 73,000
     int resultLen = 3 * str.length() / 2;
@@ -607,7 +626,8 @@ const QString KIMAP::decodeRFC2231String(const QString &str)
 
     // qCDebug(KIMAP_LOG) << "Charset:" << charset << "Language:" << language;
 
-    char ch, ch2;
+    char ch;
+    char ch2;
     p = 0;
     while (p < st.length()) {
         if (st.at(p) == 37) {

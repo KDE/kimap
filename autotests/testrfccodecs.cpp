@@ -16,8 +16,10 @@ using namespace KIMAP;
 
 void RFCCodecsTest::testIMAPEncoding()
 {
-    QString encoded, decoded;
-    QByteArray bEncoded, bDecoded;
+    QString encoded;
+    QString decoded;
+    QByteArray bEncoded;
+    QByteArray bDecoded;
 
     encoded = encodeImapFolderName(QString::fromUtf8("Test.Frode Rønning"));
     QCOMPARE(encoded, QString::fromUtf8("Test.Frode R&APg-nning"));
