@@ -27,7 +27,7 @@ include(KDEGitCommitHooks)
 include(ECMQtDeclareLoggingCategory)
 
 
-set(QT_REQUIRED_VERSION "5.15.0")
+set(QT_REQUIRED_VERSION "5.15.2")
 
 set(KIMAP_LIB_VERSION ${PIM_VERSION})
 set(KMIME_LIBS_VERSION "5.18.40")
