@@ -4,4 +4,4 @@
 Dependencies:
 - 'on': ['@all']
   'require':
-    'kde/pim/kmime' : '@latest'
+    'kde/pim/kmime' : '@same'
