@@ -4,4 +4,5 @@
 Dependencies:
 - 'on': ['@all']
   'require':
+    'frameworks/extra-cmake-modules': '@latest'
     'kde/pim/kmime' : '@same'
