@@ -11,8 +11,8 @@
 #include "imapset.h"
 #include "job.h"
 
-#include <kmime/kmime_content.h>
-#include <kmime/kmime_message.h>
+#include <KMime/Content>
+#include <KMime/KMimeMessage>
 
 #include <tuple>
 
