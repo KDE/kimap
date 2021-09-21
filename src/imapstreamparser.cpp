@@ -192,7 +192,7 @@ QList<QByteArray> ImapStreamParser::readParenthesizedList()
     int count = 0;
     int sublistbegin = m_position;
     int i = m_position + 1;
-    Q_FOREVER {
+    for (;;) {
         if (!waitForMoreData(m_data.length() <= i)) {
             m_position = i;
             throw ImapParserException("Unable to read more data");
@@ -327,7 +327,7 @@ QByteArray ImapStreamParser::parseQuotedString()
     if (m_data.at(m_position) == '"') {
         ++m_position;
         int i = m_position;
-        Q_FOREVER {
+        for (;;) {
             if (!waitForMoreData(m_data.length() <= i)) {
                 m_position = i;
                 throw ImapParserException("Unable to read more data");
@@ -350,7 +350,7 @@ QByteArray ImapStreamParser::parseQuotedString()
     else {
         bool reachedInputEnd = true;
         int i = m_position;
-        Q_FOREVER {
+        for (;;) {
             if (!waitForMoreData(m_data.length() <= i)) {
                 m_position = i;
                 throw ImapParserException("Unable to read more data");
@@ -403,7 +403,7 @@ qint64 ImapStreamParser::readNumber(bool *ok)
         throw ImapParserException("Unable to read more data");
     }
     int i = m_position;
-    Q_FOREVER {
+    for (;;) {
         if (!waitForMoreData(m_data.length() <= i)) {
             m_position = i;
             throw ImapParserException("Unable to read more data");
@@ -489,7 +489,7 @@ QByteArray ImapStreamParser::readUntilCommandEnd()
     QByteArray result;
     int i = m_position;
     int paranthesisBalance = 0;
-    Q_FOREVER {
+    for (;;) {
         if (!waitForMoreData(m_data.length() <= i)) {
             m_position = i;
             throw ImapParserException("Unable to read more data");

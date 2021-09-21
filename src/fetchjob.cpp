@@ -511,7 +511,7 @@ QByteArray FetchJobPrivate::parseString(const QByteArray &structure, int &pos)
     // quoted string
     if (structure[pos] == '"') {
         pos++;
-        Q_FOREVER {
+        for (;;) {
             if (structure[pos] == '\\') {
                 pos += 2;
                 foundSlash = true;
@@ -525,7 +525,7 @@ QByteArray FetchJobPrivate::parseString(const QByteArray &structure, int &pos)
             pos++;
         }
     } else { // unquoted string
-        Q_FOREVER {
+        for (;;) {
             if (structure[pos] == ' ' || structure[pos] == '(' || structure[pos] == ')' || structure[pos] == '[' || structure[pos] == ']'
                 || structure[pos] == '\n' || structure[pos] == '\r' || structure[pos] == '"') {
                 break;
