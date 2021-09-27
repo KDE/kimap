@@ -195,7 +195,7 @@ void SessionThread::threadInit()
     // Delay the call to slotSocketDisconnected so that it finishes disconnecting before we call reconnect()
     connect(m_socket.get(), &QSslSocket::disconnected, this, &SessionThread::slotSocketDisconnected, Qt::QueuedConnection);
     connect(m_socket.get(), &QSslSocket::connected, this, &SessionThread::socketConnected);
-    connect(m_socket.get(), qOverload<QAbstractSocket::SocketError>(&QAbstractSocket::errorOccurred), this, &SessionThread::slotSocketError);
+    connect(m_socket.get(), &QAbstractSocket::errorOccurred, this, &SessionThread::slotSocketError);
 
     connect(m_socket.get(), &QIODevice::bytesWritten, this, &SessionThread::socketActivity);
     connect(m_socket.get(), &QSslSocket::encryptedBytesWritten, this, &SessionThread::socketActivity);
