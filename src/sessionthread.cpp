@@ -305,11 +305,8 @@ void SessionThread::doSslErrorHandlerResponse(bool response)
         Q_EMIT encryptionNegotiationResult(true, m_socket->sessionProtocol());
     } else {
         m_encryptedMode = false;
-        // reconnect in unencrypted mode, so new commands can be issued
+        Q_EMIT socketError(QAbstractSocket::SslInvalidUserDataError);
         m_socket->disconnectFromHost();
-        m_socket->waitForDisconnected();
-        m_socket->connectToHost(m_hostName, m_port);
-        Q_EMIT encryptionNegotiationResult(false, QSsl::UnknownProtocol);
     }
 }
 
