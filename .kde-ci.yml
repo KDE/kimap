@@ -6,3 +6,6 @@ Dependencies:
   'require':
     'frameworks/extra-cmake-modules': '@latest'
     'kde/pim/kmime' : '@same'
+    'frameworks/kcoreaddons': '@latest'
+    'frameworks/ki18n': '@latest'
+    'frameworks/kio': '@latest'
