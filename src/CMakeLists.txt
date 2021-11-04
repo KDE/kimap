@@ -50,6 +50,58 @@ target_sources(KF5IMAP PRIVATE
    storejob.cpp
    subscribejob.cpp
    unsubscribejob.cpp
+   deletejob.h
+   getquotarootjob.h
+   fetchjob.h
+   listrightsjob.h
+   sessionlogger_p.h
+   unsubscribejob.h
+   loginjob.h
+   response_p.h
+   sessionthread_p.h
+   imapset.h
+   closejob.h
+   getacljob.h
+   acl.h
+   idjob.h
+   capabilitiesjob.h
+   quotajobbase_p.h
+   enablejob.h
+   metadatajobbase_p.h
+   copyjob.h
+   session_p.h
+   storejob.h
+   selectjob.h
+   idlejob.h
+   setquotajob.h
+   job.h
+   subscribejob.h
+   namespacejob.h
+   session.h
+   metadatajobbase.h
+   sessionuiproxy.h
+   createjob.h
+   movejob.h
+   acljobbase_p.h
+   expungejob.h
+   imapstreamparser.h
+   getmetadatajob.h
+   rfccodecs.h
+   getquotajob.h
+   listjob.h
+   deleteacljob.h
+   quotajobbase.h
+   myrightsjob.h
+   common.h
+   renamejob.h
+   statusjob.h
+   setacljob.h
+   job_p.h
+   searchjob.h
+   acljobbase.h
+   appendjob.h
+   setmetadatajob.h
+   logoutjob.h
 )
 
 ecm_qt_declare_logging_category(KF5IMAP HEADER kimap_debug.h IDENTIFIER KIMAP_LOG CATEGORY_NAME org.kde.pim.kimap
