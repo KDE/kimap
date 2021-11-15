@@ -552,19 +552,15 @@ void LoginJob::connectionLost()
 {
     Q_D(LoginJob);
 
-    // don't emit the result if the connection was lost before getting the tls result, as it can mean
-    // the TLS handshake failed and the socket was reconnected in normal mode
-    if (d->authState != LoginJobPrivate::StartTls) {
-        qCWarning(KIMAP_LOG) << "Connection to server lost " << d->m_socketError;
-        if (d->m_socketError == QAbstractSocket::SslHandshakeFailedError) {
-            setError(KJob::UserDefinedError);
-            setErrorText(i18n("SSL handshake failed."));
-            emitResult();
-        } else {
-            setError(ERR_COULD_NOT_CONNECT);
-            setErrorText(i18n("Connection to server lost."));
-            emitResult();
-        }
+    qCWarning(KIMAP_LOG) << "Connection to server lost " << d->m_socketError;
+    if (d->m_socketError == QAbstractSocket::SslHandshakeFailedError) {
+        setError(KJob::UserDefinedError);
+        setErrorText(i18n("SSL handshake failed."));
+        emitResult();
+    } else {
+        setError(ERR_COULD_NOT_CONNECT);
+        setErrorText(i18n("Connection to server lost."));
+        emitResult();
     }
 }
 
