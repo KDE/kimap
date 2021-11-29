@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: none
+# SPDX-License-Identifier: BSD-3-Clause
+
 kde_enable_exceptions()
 
 set(kimaptest_SRCS
