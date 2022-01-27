@@ -129,7 +129,6 @@ LoginJob::LoginJob(Session *session)
     : Job(*new LoginJobPrivate(this, session, i18n("Login")))
 {
     Q_D(LoginJob);
-    connect(d->sessionInternal(), SIGNAL(encryptionNegotiationResult(bool)), this, SLOT(sslResponse(bool)));
     qCDebug(KIMAP_LOG) << this;
 }
 
@@ -187,23 +186,26 @@ void LoginJob::doStart()
         return;
     }
 
+    // Get notified once encryption is successfully negotiated
+    connect(d->sessionInternal(), SIGNAL(encryptionNegotiationResult(bool)), this, SLOT(sslResponse(bool)));
+
     // Trigger encryption negotiation only if needed
     EncryptionMode encryptionMode = d->encryptionMode;
 
     const auto negotiatedEncryption = d->sessionInternal()->negotiatedEncryption();
     if (negotiatedEncryption != QSsl::UnknownProtocol) {
-        // If the socket is already encrypted, pretend we did not want any
-        // encryption
-        encryptionMode = Unencrypted;
+        // If the socket is already encrypted, proceed to the next state
+        d->sslResponse(true);
+        return;
     }
 
     if (encryptionMode == SSLorTLS) {
-        d->sessionInternal()->startSsl(QSsl::SecureProtocols);
+        // Negotiation got started by Session, but didn't complete yet. Continue in sslResponse.
     } else if (encryptionMode == STARTTLS) {
         // Check if STARTTLS is supported
         d->authState = LoginJobPrivate::PreStartTlsCapability;
         d->tags << d->sessionInternal()->sendCommand("CAPABILITY");
-    } else {
+    } else if (encryptionMode == Unencrypted) {
         if (d->authMode.isEmpty()) {
             d->authState = LoginJobPrivate::Login;
             qCDebug(KIMAP_LOG) << "sending LOGIN";
@@ -343,6 +345,14 @@ void LoginJob::handleResponse(const Response &response)
             break;
 
         case LoginJobPrivate::Capability:
+            // If encryption was requested, verify that it's negotiated before logging in
+            if (d->encryptionMode != Unencrypted && d->sessionInternal()->negotiatedEncryption() == QSsl::UnknownProtocol) {
+                setError(LoginJob::UserDefinedError);
+                setErrorText(i18n("Internal error, tried to login before encryption"));
+                emitResult();
+                break;
+            }
+
             // cleartext login, if enabled
             if (d->authMode.isEmpty()) {
                 if (d->plainLoginDisabled) {

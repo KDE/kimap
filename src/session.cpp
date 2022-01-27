@@ -353,7 +353,7 @@ void SessionPrivate::socketConnected()
     }
 
     if (state == Session::Disconnected && willUseSsl) {
-        startNext();
+        startSsl(QSsl::SecureProtocols);
     } else {
         startSocketTimer();
     }
