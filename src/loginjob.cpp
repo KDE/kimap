@@ -203,7 +203,7 @@ void LoginJob::doStart()
         // Check if STARTTLS is supported
         d->authState = LoginJobPrivate::PreStartTlsCapability;
         d->tags << d->sessionInternal()->sendCommand("CAPABILITY");
-    } else {
+    } else if (encryptionMode == Unencrypted) {
         if (d->authMode.isEmpty()) {
             d->authState = LoginJobPrivate::Login;
             qCDebug(KIMAP_LOG) << "sending LOGIN";
@@ -343,6 +343,14 @@ void LoginJob::handleResponse(const Response &response)
             break;
 
         case LoginJobPrivate::Capability:
+            // If encryption was requested, verify that it's negotiated before logging in
+            if (d->encryptionMode != Unencrypted && d->sessionInternal()->negotiatedEncryption() == QSsl::UnknownProtocol) {
+                setError(LoginJob::UserDefinedError);
+                setErrorText(i18n("Internal error, tried to login before encryption"));
+                emitResult();
+                break;
+            }
+
             // cleartext login, if enabled
             if (d->authMode.isEmpty()) {
                 if (d->plainLoginDisabled) {
