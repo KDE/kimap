@@ -29,6 +29,7 @@ file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h *.c)
 kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
 
 include(ECMQtDeclareLoggingCategory)
+include(ECMDeprecationSettings)
 include(ECMAddQch)
 
 set(QT_REQUIRED_VERSION "5.15.2")
@@ -57,8 +58,7 @@ find_package(KF5Mime ${KMIME_LIBS_VERSION} CONFIG REQUIRED)
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5IMAP")
 add_definitions(-DTRANSLATION_DOMAIN=\"libkimap5\")
 
-add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050e00)
-add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x055A00)
+ecm_set_disabled_deprecation_versions(QT 5.14.0 KF 5.90.0)
 add_definitions(-DQT_NO_EMIT)
 
 
