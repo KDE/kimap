@@ -198,4 +198,3 @@ protected:
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KIMAP::SetMetaDataJob::MetaDataErrors)
-

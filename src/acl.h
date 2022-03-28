@@ -113,4 +113,3 @@ KIMAP_EXPORT Rights rightsFromString(const QByteArray &string);
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KIMAP::Acl::Rights)
-

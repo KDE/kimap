@@ -17,4 +17,3 @@ private Q_SLOTS:
     void testIMAPEncoding();
     void testQuotes();
 };
-

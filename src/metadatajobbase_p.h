@@ -35,4 +35,3 @@ public:
     QString mailBox;
 };
 }
-

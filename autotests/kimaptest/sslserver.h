@@ -25,4 +25,3 @@ private:
     QSslSocket mSocket;
     bool mWaitForStartTls = false;
 };
-

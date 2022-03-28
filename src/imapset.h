@@ -231,4 +231,3 @@ KIMAP_EXPORT QDebug &operator<<(QDebug &d, const KIMAP::ImapSet &set);
 Q_DECLARE_METATYPE(KIMAP::ImapInterval)
 Q_DECLARE_METATYPE(KIMAP::ImapInterval::List)
 Q_DECLARE_METATYPE(KIMAP::ImapSet)
-

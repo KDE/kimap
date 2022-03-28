@@ -223,4 +223,3 @@ private:
     bool m_waitForStartTls = false;
     QSsl::SslProtocol m_sslProtocol;
 };
-

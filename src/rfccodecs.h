@@ -118,4 +118,3 @@ Q_REQUIRED_RESULT KIMAP_EXPORT const QString encodeRFC2231String(const QString &
 */
 Q_REQUIRED_RESULT KIMAP_EXPORT const QString decodeRFC2231String(const QString &str);
 }
-

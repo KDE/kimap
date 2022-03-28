@@ -39,4 +39,3 @@ public:
     AclJobBase::AclModifier modifier;
 };
 }
-

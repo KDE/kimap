@@ -95,4 +95,3 @@ struct Response {
 
 Q_DECLARE_METATYPE(KIMAP::Response)
 static const int _kimap_messageTypeId = qRegisterMetaType<KIMAP::Response>();
-

@@ -30,4 +30,3 @@ public:
     QMap<QByteArray, QPair<qint64, qint64>> quota;
 };
 }
-
