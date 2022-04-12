@@ -9,3 +9,7 @@ Dependencies:
     'frameworks/kcoreaddons': '@latest'
     'frameworks/ki18n': '@latest'
     'frameworks/kio': '@latest'
+
+Options:
+  require-passing-tests-on: [ 'Linux', 'FreeBSD', 'Windows' ]
+
