@@ -97,7 +97,9 @@ FetchJob::FetchJob(Session *session)
     : Job(*new FetchJobPrivate(this, session, i18n("Fetch")))
 {
     Q_D(FetchJob);
-    connect(&d->emitPendingsTimer, SIGNAL(timeout()), this, SLOT(emitPendings()));
+    connect(&d->emitPendingsTimer, &QTimer::timeout, this, [d]() {
+        d->emitPendings();
+    });
 }
 
 void FetchJob::setSequenceSet(const ImapSet &set)

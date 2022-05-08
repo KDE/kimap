@@ -65,9 +65,13 @@ IdleJob::IdleJob(Session *session)
     : Job(*new IdleJobPrivate(this, session, i18nc("name of the idle job", "Idle")))
 {
     Q_D(IdleJob);
-    connect(&d->emitStatsTimer, SIGNAL(timeout()), this, SLOT(emitStats()));
+    connect(&d->emitStatsTimer, &QTimer::timeout, this, [d]() {
+        d->emitStats();
+    });
 
-    connect(this, SIGNAL(result(KJob *)), this, SLOT(resetTimeout()));
+    connect(this, &KJob::result, this, [d]() {
+        d->resetTimeout();
+    });
 }
 
 IdleJob::~IdleJob()

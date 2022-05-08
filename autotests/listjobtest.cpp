@@ -186,7 +186,7 @@ private Q_SLOTS:
         auto job = new KIMAP::ListJob(&session);
         job->setIncludeUnsubscribed(unsubscribed);
 
-        QSignalSpy spy(job, SIGNAL(mailBoxesReceived(const QList<KIMAP::MailBoxDescriptor> &, const QList<QList<QByteArray>> &)));
+        QSignalSpy spy(job, &KIMAP::ListJob::mailBoxesReceived);
 
         bool result = job->exec();
         QEXPECT_FAIL("bad", "Expected failure on BAD response", Continue);

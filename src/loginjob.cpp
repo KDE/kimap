@@ -187,7 +187,9 @@ void LoginJob::doStart()
     }
 
     // Get notified once encryption is successfully negotiated
-    connect(d->sessionInternal(), SIGNAL(encryptionNegotiationResult(bool)), this, SLOT(sslResponse(bool)));
+    connect(d->sessionInternal(), &KIMAP::SessionPrivate::encryptionNegotiationResult, this, [d](bool result) {
+        d->sslResponse(result);
+    });
 
     // Trigger encryption negotiation only if needed
     EncryptionMode encryptionMode = d->encryptionMode;

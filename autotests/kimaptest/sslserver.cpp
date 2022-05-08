@@ -100,8 +100,8 @@ void SslServer::incomingConnection(qintptr handle)
     socket->sslConfiguration().addCaCertificates(QList<QSslCertificate>() << ssl_cert);
     socket->setPeerVerifyMode(QSslSocket::VerifyNone);
     socket->ignoreSslErrors();
-    connect(socket, SIGNAL(sslErrors(QList<QSslError>)), this, SLOT(sslErrors(QList<QSslError>)));
-    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
+    connect(socket, qOverload<const QList<QSslError> &>(&QSslSocket::sslErrors), this, &SslServer::sslErrors);
+    connect(socket, &QAbstractSocket::errorOccurred, this, &SslServer::error);
     if (!mWaitForStartTls) {
         socket->startServerEncryption();
     }
