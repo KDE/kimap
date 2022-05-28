@@ -79,7 +79,7 @@ void GetQuotaRootJob::handleResponse(const Response &response)
 
                 const QMap<QByteArray, QPair<qint64, qint64>> &quota = d->readQuota(response.content[quotaContentIndex]);
                 if (d->quotas.contains(rootName)) {
-                    d->quotas[rootName].unite(quota);
+                    d->quotas[rootName].insert(quota);
                 } else {
                     d->quotas[rootName] = quota;
                 }

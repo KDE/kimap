@@ -46,11 +46,11 @@ public Q_SLOTS:
                            const QMap<qint64, KIMAP::MessagePtr> &messages)
     {
         m_signals << QStringLiteral("headersReceived");
-        m_uids.unite(uids);
-        m_sizes.unite(sizes);
-        m_flags.unite(flags);
-        m_messages.unite(messages);
-        m_attrs.unite(attrs);
+        m_uids.insert(uids);
+        m_sizes.insert(sizes);
+        m_flags.insert(flags);
+        m_messages.insert(messages);
+        m_attrs.insert(attrs);
     }
 
     void onMessagesReceived(const QString & /*mailbox*/,
@@ -59,9 +59,9 @@ public Q_SLOTS:
                             const QMap<qint64, KIMAP::MessagePtr> &messages)
     {
         m_signals << QStringLiteral("messagesReceived");
-        m_uids.unite(uids);
-        m_messages.unite(messages);
-        m_attrs.unite(attrs);
+        m_uids.insert(uids);
+        m_messages.insert(messages);
+        m_attrs.insert(attrs);
     }
 
     void onPartsReceived(const QString & /*mailbox*/,
@@ -70,14 +70,14 @@ public Q_SLOTS:
                          const QMap<qint64, KIMAP::MessageParts> &parts)
     {
         m_signals << QStringLiteral("partsReceived");
-        m_attrs.unite(attrs);
-        m_parts.unite(parts);
+        m_attrs.insert(attrs);
+        m_parts.insert(parts);
     }
 
     void onMessagesAvailable(const QMap<qint64, KIMAP::Message> &messages)
     {
         m_signals << QStringLiteral("messagesAvailable");
-        m_msgs.unite(messages);
+        m_msgs.insert(messages);
     }
 
 private Q_SLOTS:
