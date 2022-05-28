@@ -630,7 +630,7 @@ const QString KIMAP::decodeRFC2231String(const QString &str)
     char ch2;
     p = 0;
     while (p < st.length()) {
-        if (st.at(p) == 37) {
+        if (st.at(p) == QLatin1Char(37)) {
             ch = st.at(p + 1).toLatin1() - 48;
             if (ch > 16) {
                 ch -= 7;
@@ -639,7 +639,7 @@ const QString KIMAP::decodeRFC2231String(const QString &str)
             if (ch2 > 16) {
                 ch2 -= 7;
             }
-            st.replace(p, 1, ch * 16 + ch2);
+            st.replace(p, 1, QChar(ch * 16 + ch2));
             st.remove(p + 1, 2);
         }
         p++;
