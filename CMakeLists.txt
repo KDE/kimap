@@ -58,7 +58,7 @@ find_package(KF5Mime ${KMIME_LIBS_VERSION} CONFIG REQUIRED)
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5IMAP")
 add_definitions(-DTRANSLATION_DOMAIN=\"libkimap5\")
 
-ecm_set_disabled_deprecation_versions(QT 5.14.0
+ecm_set_disabled_deprecation_versions(QT 5.15.0
     KF 5.95.0
 )
 add_definitions(-DQT_NO_EMIT)
