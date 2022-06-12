@@ -15,6 +15,7 @@ if (COMPILE_WITH_UNITY_CMAKE_SUPPORT)
 endif()
 generate_export_header(kimaptest)
 add_library(KF5::kimaptest ALIAS kimaptest)
+target_include_directories(KF5IMAP INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF}/KIMAPTest>")
 target_link_libraries(kimaptest KF5IMAP Qt${QT_MAJOR_VERSION}::Test Qt${QT_MAJOR_VERSION}::Network Qt${QT_MAJOR_VERSION}::Core KF5::CoreAddons KF5::KIOCore KF5::I18n)
 
 install(TARGETS kimaptest EXPORT KF5IMAPTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
@@ -24,4 +25,4 @@ install(TARGETS kimaptest EXPORT KF5IMAPTargets ${KF5_INSTALL_TARGETS_DEFAULT_AR
 install(FILES
   fakeserver.h
   mockjob.h
-  DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF}/kimaptest COMPONENT Devel)
+  DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF}/KIMAPTest/kimaptest COMPONENT Devel)
