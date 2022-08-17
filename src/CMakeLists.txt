@@ -127,7 +127,7 @@ target_link_libraries(KF5IMAP
 PUBLIC
   KF5::Mime
   KF5::CoreAddons
-  Qt${QT_MAJOR_VERSION}::Network
+  Qt::Network
 PRIVATE
   KF5::KIOCore
   KF5::Codecs
