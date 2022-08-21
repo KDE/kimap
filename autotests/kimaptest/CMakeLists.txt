@@ -18,7 +18,7 @@ add_library(KF5::kimaptest ALIAS kimaptest)
 target_include_directories(KF5IMAP INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF}/KIMAPTest>")
 target_link_libraries(kimaptest KF5IMAP Qt::Test Qt::Network Qt::Core KF5::CoreAddons KF5::KIOCore KF5::I18n)
 
-install(TARGETS kimaptest EXPORT KF5IMAPTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kimaptest EXPORT KF5IMAPTargets ${KF_INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
