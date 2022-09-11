@@ -35,7 +35,7 @@ include(ECMAddQch)
 set(QT_REQUIRED_VERSION "5.15.2")
 
 set(KIMAP_LIB_VERSION ${PIM_VERSION})
-set(KMIME_LIBS_VERSION "5.21.1")
+set(KMIME_LIBS_VERSION "5.21.2")
 ecm_setup_version(PROJECT VARIABLE_PREFIX KIMAP
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kimap_version.h"
                         PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5IMAPConfigVersion.cmake"
