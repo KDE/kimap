@@ -1,0 +1,289 @@
+# Translation of libkimap5.po to Catalan
+# Copyright (C) 2009-2022 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Josep M. Ferrer <txemaq@gmail.com>, 2009, 2014, 2016, 2020, 2022.
+# Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009, 2010.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2014, 2016, 2018, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: kimap\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-11 00:45+0000\n"
+"PO-Revision-Date: 2022-01-28 09:30+0100\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.12.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+
+#: acljobbase.cpp:56
+#, kde-format
+msgid "AclJobBase"
+msgstr "TascaAclBase"
+
+#: appendjob.cpp:40
+#, kde-format
+msgid "Append"
+msgstr "Addició"
+
+#: capabilitiesjob.cpp:35
+#, kde-format
+msgid "Capabilities"
+msgstr "Capacitats"
+
+#: closejob.cpp:32
+#, kde-format
+msgid "Close"
+msgstr "Tanca"
+
+#: copyjob.cpp:41
+#, kde-format
+msgid "Copy"
+msgstr "Copia"
+
+#: createjob.cpp:36
+#, kde-format
+msgid "Create"
+msgstr "Crea"
+
+#: deleteacljob.cpp:37
+#, kde-format
+msgid "DeleteAclJob"
+msgstr "SuprimeixTascaAcl"
+
+#: deletejob.cpp:36
+#, kde-format
+msgid "Delete"
+msgstr "Suprimeix"
+
+#: enablejob.cpp:31
+#, kde-format
+msgid "Enable"
+msgstr "Habilita"
+
+#: expungejob.cpp:37
+#, kde-format
+msgid "Expunge"
+msgstr "Expurga"
+
+#: fetchjob.cpp:97
+#, kde-format
+msgid "Fetch"
+msgstr "Recupera"
+
+#: getacljob.cpp:37
+#, kde-format
+msgid "GetAcl"
+msgstr "ObténAcl"
+
+#: getmetadatajob.cpp:43
+#, kde-format
+msgid "GetMetaData"
+msgstr "ObténMetaDades"
+
+#: getmetadatajob.cpp:66
+#, kde-format
+msgid "GetAnnotation"
+msgstr "ObténAnotació"
+
+#: getquotajob.cpp:35
+#, kde-format
+msgid "GetQuota"
+msgstr "ObténQuota"
+
+#: getquotarootjob.cpp:38
+#, kde-format
+msgid "GetQuotaRoot"
+msgstr "ObténQuotaArrel"
+
+#: idjob.cpp:35
+#, kde-format
+msgid "Id"
+msgstr "ID"
+
+#: idlejob.cpp:65
+#, kde-format
+msgctxt "name of the idle job"
+msgid "Idle"
+msgstr "Inactiva"
+
+#: job.cpp:19
+#, kde-format
+msgid "Job"
+msgstr "Tasca"
+
+#: job.cpp:54 loginjob.cpp:574
+#, kde-format
+msgid "Connection to server lost."
+msgstr "S'ha perdut la connexió amb el servidor."
+
+#: job.cpp:65 loginjob.cpp:403 setmetadatajob.cpp:126
+#, kde-format
+msgid "%1 failed, malformed reply from the server."
+msgstr "%1 ha fallat, resposta amb format incorrecte des del servidor."
+
+#: job.cpp:68 loginjob.cpp:277 setmetadatajob.cpp:109 setmetadatajob.cpp:129
+#, kde-format
+msgid "%1 failed, server replied: %2"
+msgstr "%1 ha fallat, el servidor ha contestat: %2"
+
+#: listjob.cpp:59
+#, kde-format
+msgid "List"
+msgstr "Llista"
+
+#: listrightsjob.cpp:38
+#, kde-format
+msgid "ListRights"
+msgstr "LlistaDrets"
+
+#: loginjob.cpp:129 loginjob.cpp:233
+#, kde-format
+msgid "Login"
+msgstr "Entrada"
+
+#: loginjob.cpp:184
+#, kde-format
+msgid "IMAP session in the wrong state for authentication"
+msgstr "Sessió IMAP en estat erroni per autenticació"
+
+#: loginjob.cpp:235
+#, kde-format
+msgid "Capability"
+msgstr "Funcionalitats"
+
+#: loginjob.cpp:237
+#, kde-format
+msgid "StartTls"
+msgstr "IniciaTls"
+
+#: loginjob.cpp:340
+#, kde-format
+msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
+msgstr "STARTTLS no està acceptat pel servidor, proveu amb SSL/TLS."
+
+#: loginjob.cpp:353
+#, kde-format
+msgid "Internal error, tried to login before encryption"
+msgstr "Error intern, s'ha intentat l'entrada abans de l'encriptatge"
+
+#: loginjob.cpp:362
+#, kde-format
+msgid "Login failed, plain login is disabled by the server."
+msgstr ""
+"Ha fallat l'inici de la sessió, el servidor té desactivada l'entrada "
+"senzilla."
+
+#: loginjob.cpp:383
+#, kde-format
+msgid "Login failed, authentication mode %1 is not supported by the server."
+msgstr ""
+"Ha fallat l'inici de la sessió, el servidor té desactivat el mode "
+"d'autenticació %1."
+
+#: loginjob.cpp:413
+#, kde-format
+msgid "Login failed, client cannot initialize the SASL library."
+msgstr ""
+"Ha fallat l'inici de la sessió, el client no ha pogut inicialitzar la "
+"biblioteca SASL."
+
+#: loginjob.cpp:512
+#, kde-format
+msgid "Login failed, TLS negotiation failed."
+msgstr "Ha fallat l'inici de la sessió, ha fallat la negociació TLS."
+
+#: loginjob.cpp:570
+#, kde-format
+msgid "SSL handshake failed."
+msgstr "El protocol inicial de SSL ha fallat."
+
+#: logoutjob.cpp:33
+#, kde-format
+msgid "Logout"
+msgstr "Sortida"
+
+#: metadatajobbase.cpp:53
+#, kde-format
+msgid "MetaDataJobBase"
+msgstr "TascaMetaDadesBase"
+
+#: movejob.cpp:42
+#, kde-format
+msgid "Move"
+msgstr "Mou"
+
+#: myrightsjob.cpp:37
+#, kde-format
+msgid "MyRights"
+msgstr "ElsMeusDrets"
+
+# skip-rule: kct-namespace
+#: namespacejob.cpp:68
+#, kde-format
+msgid "Namespace"
+msgstr "EspaiDeNom"
+
+#: quotajobbase.cpp:34
+#, kde-format
+msgid "QuotaJobBase"
+msgstr "TascaQuotaBase"
+
+#: renamejob.cpp:37
+#, kde-format
+msgid "Rename"
+msgstr "Reanomena"
+
+#: searchjob.cpp:361
+#, kde-format
+msgctxt "Name of the search job"
+msgid "Search"
+msgstr "Cerca"
+
+#: selectjob.cpp:73
+#, kde-format
+msgctxt "name of the select job"
+msgid "Select"
+msgstr "Selecciona"
+
+#: setacljob.cpp:34
+#, kde-format
+msgid "SetAcl"
+msgstr "EstableixAcl"
+
+#: setmetadatajob.cpp:43
+#, kde-format
+msgid "SetMetaData"
+msgstr "EstableixMetaDades"
+
+#: setquotajob.cpp:37
+#, kde-format
+msgid "SetQuota"
+msgstr "EstableixQuota"
+
+#: statusjob.cpp:40
+#, kde-format
+msgctxt "name of the status job"
+msgid "Status"
+msgstr "Estat"
+
+#: storejob.cpp:70
+#, kde-format
+msgid "Store"
+msgstr "Emmagatzema"
+
+#: subscribejob.cpp:36
+#, kde-format
+msgid "Subscribe"
+msgstr "Subscriu"
+
+#: unsubscribejob.cpp:36
+#, kde-format
+msgid "Unsubscribe"
+msgstr "Cancel·la la subscripció"

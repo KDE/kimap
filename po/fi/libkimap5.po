@@ -1,0 +1,327 @@
+# Finnish translation for libkimap
+# Copyright © 2010 Rosetta Contributors and Canonical Ltd 2010
+# This file is distributed under the same license as the libkimap package.
+# Tommi Nieminen <translator@legisign.org>, 2012, 2016, 2018, 2021, 2022.
+# Lasse Liehu <lasse.liehu@gmail.com>, 2013, 2014, 2016.
+#
+# KDE Finnish translation sprint participants:
+# Jiri Grönroos <Unknown>, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: libkimap\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-11 00:45+0000\n"
+"PO-Revision-Date: 2022-02-12 19:14+0200\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
+"Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-POT-Import-Date: 2012-12-01 22:25:20+0000\n"
+"X-Generator: Lokalize 20.04.2\n"
+
+# ”AclJobBase” tarkoittaa käytännössä jotain ACL:ään liittyvää työtä, josta ei tiedetä tarkemmin.
+#: acljobbase.cpp:56
+#, kde-format
+msgid "AclJobBase"
+msgstr "Tuntematon ACL-työ"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: appendjob.cpp:40
+#, kde-format
+msgid "Append"
+msgstr "Append"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: capabilitiesjob.cpp:35
+#, kde-format
+msgid "Capabilities"
+msgstr "Capabilities"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: closejob.cpp:32
+#, kde-format
+msgid "Close"
+msgstr "Close"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: copyjob.cpp:41
+#, kde-format
+msgid "Copy"
+msgstr "Copy"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: createjob.cpp:36
+#, kde-format
+msgid "Create"
+msgstr "Create"
+
+# ”DeleteAclJob” tarkoittaa työtä, joka vastaa IMAP-komentoa ”DELETEACL”. IMAP-komento on jätetty tarkoituksella suomentamatta. Parempi alkuteksti saadaan toivottavasti pian.
+#: deleteacljob.cpp:37
+#, kde-format
+msgid "DeleteAclJob"
+msgstr "DeleteAcl"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: deletejob.cpp:36
+#, kde-format
+msgid "Delete"
+msgstr "Delete"
+
+#: enablejob.cpp:31
+#, kde-format
+msgid "Enable"
+msgstr "Käytä"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: expungejob.cpp:37
+#, kde-format
+msgid "Expunge"
+msgstr "Expunge"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: fetchjob.cpp:97
+#, kde-format
+msgid "Fetch"
+msgstr "Fetch"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: getacljob.cpp:37
+#, kde-format
+msgid "GetAcl"
+msgstr "GetAcl"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: getmetadatajob.cpp:43
+#, kde-format
+msgid "GetMetaData"
+msgstr "GetMetaData"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: getmetadatajob.cpp:66
+#, kde-format
+msgid "GetAnnotation"
+msgstr "GetAnnotation"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: getquotajob.cpp:35
+#, kde-format
+msgid "GetQuota"
+msgstr "GetQuota"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: getquotarootjob.cpp:38
+#, kde-format
+msgid "GetQuotaRoot"
+msgstr "GetQuotaRoot"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: idjob.cpp:35
+#, kde-format
+msgid "Id"
+msgstr "Id"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: idlejob.cpp:65
+#, kde-format
+msgctxt "name of the idle job"
+msgid "Idle"
+msgstr "Idle"
+
+#: job.cpp:19
+#, kde-format
+msgid "Job"
+msgstr "Työ"
+
+#: job.cpp:54 loginjob.cpp:574
+#, kde-format
+msgid "Connection to server lost."
+msgstr "Yhteys palvelimeen menetetty."
+
+#: job.cpp:65 loginjob.cpp:403 setmetadatajob.cpp:126
+#, kde-format
+msgid "%1 failed, malformed reply from the server."
+msgstr "%1 epäonnistui, virheellinen vastaus palvelimelta."
+
+#: job.cpp:68 loginjob.cpp:277 setmetadatajob.cpp:109 setmetadatajob.cpp:129
+#, kde-format
+msgid "%1 failed, server replied: %2"
+msgstr "%1 epäonnistui, palvelimen vastaus: %2"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: listjob.cpp:59
+#, kde-format
+msgid "List"
+msgstr "List"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: listrightsjob.cpp:38
+#, kde-format
+msgid "ListRights"
+msgstr "ListRights"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: loginjob.cpp:129 loginjob.cpp:233
+#, kde-format
+msgid "Login"
+msgstr "Login"
+
+#: loginjob.cpp:184
+#, kde-format
+msgid "IMAP session in the wrong state for authentication"
+msgstr "IMAP-istunto väärässä tilassa tunnistautumista varten"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: loginjob.cpp:235
+#, kde-format
+msgid "Capability"
+msgstr "Capability"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: loginjob.cpp:237
+#, kde-format
+msgid "StartTls"
+msgstr "StartTls"
+
+#: loginjob.cpp:340
+#, kde-format
+msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
+msgstr "Palvelin ei tue STARTTLS:ää, yritä käyttää sen sijaan SSL/TLS:ää."
+
+#: loginjob.cpp:353
+#, kde-format
+msgid "Internal error, tried to login before encryption"
+msgstr "Sisäinen virhe: yritettiin kirjautua ennen salausta"
+
+#: loginjob.cpp:362
+#, kde-format
+msgid "Login failed, plain login is disabled by the server."
+msgstr ""
+"Kirjautuminen epäonnistui: palvelin on poistanut käytöstä "
+"raakatekstikirjautumisen."
+
+#: loginjob.cpp:383
+#, kde-format
+msgid "Login failed, authentication mode %1 is not supported by the server."
+msgstr "Kirjautuminen epäonnistui: palvelin ei tue tunnistautumistapaa %1."
+
+#: loginjob.cpp:413
+#, kde-format
+msgid "Login failed, client cannot initialize the SASL library."
+msgstr "Kirjautuminen epäonnistui: ohjelma ei saa SASL-kirjastoa alustetuksi."
+
+#: loginjob.cpp:512
+#, kde-format
+msgid "Login failed, TLS negotiation failed."
+msgstr "Kirjautuminen epäonnistui: TLS-neuvottelu epäonnistui."
+
+#: loginjob.cpp:570
+#, kde-format
+msgid "SSL handshake failed."
+msgstr "SSL-kättely epäonnistui."
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: logoutjob.cpp:33
+#, kde-format
+msgid "Logout"
+msgstr "Logout"
+
+# ”MetaDataJobBase” tarkoittaa työtä, joka liittyy jotenkin metatietoihin, mutta josta ei tiedetä tarkemmin. MetaData on jätetty suomentamatta, koska muitakaan IMAP-komentojen nimiä ei ole tässä suomennettu.
+#: metadatajobbase.cpp:53
+#, kde-format
+msgid "MetaDataJobBase"
+msgstr "Tuntematon MetaData-työ"
+
+#: movejob.cpp:42
+#, kde-format
+msgid "Move"
+msgstr "Siirrä"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: myrightsjob.cpp:37
+#, kde-format
+msgid "MyRights"
+msgstr "MyRights"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: namespacejob.cpp:68
+#, kde-format
+msgid "Namespace"
+msgstr "Namespace"
+
+# ”MetaDataJobBase” tarkoittaa työtä, joka liittyy jotenkin quotaan, mutta josta ei tiedetä tarkemmin. Quota on jätetty suomentamatta, koska muitakaan IMAP-komentojen nimiä ei ole tässä suomennettu.
+#: quotajobbase.cpp:34
+#, kde-format
+msgid "QuotaJobBase"
+msgstr "Tuntematon Quota-työ"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: renamejob.cpp:37
+#, kde-format
+msgid "Rename"
+msgstr "Rename"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: searchjob.cpp:361
+#, kde-format
+msgctxt "Name of the search job"
+msgid "Search"
+msgstr "Search"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: selectjob.cpp:73
+#, kde-format
+msgctxt "name of the select job"
+msgid "Select"
+msgstr "Select"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: setacljob.cpp:34
+#, kde-format
+msgid "SetAcl"
+msgstr "SetAcl"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: setmetadatajob.cpp:43
+#, kde-format
+msgid "SetMetaData"
+msgstr "SetMetaData"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: setquotajob.cpp:37
+#, kde-format
+msgid "SetQuota"
+msgstr "SetQuota"
+
+#: statusjob.cpp:40
+#, kde-format
+msgctxt "name of the status job"
+msgid "Status"
+msgstr "Status"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: storejob.cpp:70
+#, kde-format
+msgid "Store"
+msgstr "Store"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: subscribejob.cpp:36
+#, kde-format
+msgid "Subscribe"
+msgstr "Subscribe"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#: unsubscribejob.cpp:36
+#, kde-format
+msgid "Unsubscribe"
+msgstr "Unsubscribe"
+
+# Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
+#~ msgid "SetAnnotation"
+#~ msgstr "SetAnnotation"
+
+#~ msgid "Mock"
+#~ msgstr "Mock"

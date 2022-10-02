@@ -1,0 +1,279 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2009, 2010, 2014.
+# pan93412 <pan93412@gmail.com>, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: libkimap\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-11 00:45+0000\n"
+"PO-Revision-Date: 2019-03-22 00:40+0800\n"
+"Last-Translator: pan93412 <pan93412@gmail.com>\n"
+"Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"dot tw>\n"
+"X-Generator: Lokalize 18.12.3\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: acljobbase.cpp:56
+#, kde-format
+msgid "AclJobBase"
+msgstr "AclJobBase"
+
+#: appendjob.cpp:40
+#, kde-format
+msgid "Append"
+msgstr "附加"
+
+#: capabilitiesjob.cpp:35
+#, kde-format
+msgid "Capabilities"
+msgstr "性能"
+
+#: closejob.cpp:32
+#, kde-format
+msgid "Close"
+msgstr "關閉"
+
+#: copyjob.cpp:41
+#, kde-format
+msgid "Copy"
+msgstr "複製"
+
+#: createjob.cpp:36
+#, kde-format
+msgid "Create"
+msgstr "建立"
+
+#: deleteacljob.cpp:37
+#, kde-format
+msgid "DeleteAclJob"
+msgstr "DeleteAclJob"
+
+#: deletejob.cpp:36
+#, kde-format
+msgid "Delete"
+msgstr "刪除"
+
+#: enablejob.cpp:31
+#, kde-format
+msgid "Enable"
+msgstr ""
+
+#: expungejob.cpp:37
+#, kde-format
+msgid "Expunge"
+msgstr "刪去"
+
+#: fetchjob.cpp:97
+#, kde-format
+msgid "Fetch"
+msgstr "抓取"
+
+#: getacljob.cpp:37
+#, kde-format
+msgid "GetAcl"
+msgstr "取得權限清單"
+
+#: getmetadatajob.cpp:43
+#, kde-format
+msgid "GetMetaData"
+msgstr "取得中繼資料"
+
+#: getmetadatajob.cpp:66
+#, kde-format
+msgid "GetAnnotation"
+msgstr "取得狀態註記"
+
+#: getquotajob.cpp:35
+#, kde-format
+msgid "GetQuota"
+msgstr "取得大小限制"
+
+#: getquotarootjob.cpp:38
+#, kde-format
+msgid "GetQuotaRoot"
+msgstr "GetQuotaRoot"
+
+#: idjob.cpp:35
+#, kde-format
+msgid "Id"
+msgstr "編號"
+
+#: idlejob.cpp:65
+#, kde-format
+msgctxt "name of the idle job"
+msgid "Idle"
+msgstr "閒置"
+
+#: job.cpp:19
+#, kde-format
+msgid "Job"
+msgstr "工作"
+
+#: job.cpp:54 loginjob.cpp:574
+#, kde-format
+msgid "Connection to server lost."
+msgstr "到伺服器的連線遺失"
+
+#: job.cpp:65 loginjob.cpp:403 setmetadatajob.cpp:126
+#, kde-format
+msgid "%1 failed, malformed reply from the server."
+msgstr "%1 失敗，伺服器的回應不正確。"
+
+#: job.cpp:68 loginjob.cpp:277 setmetadatajob.cpp:109 setmetadatajob.cpp:129
+#, kde-format
+msgid "%1 failed, server replied: %2"
+msgstr "%1 失敗，伺服器回應：%2"
+
+#: listjob.cpp:59
+#, kde-format
+msgid "List"
+msgstr "清單"
+
+#: listrightsjob.cpp:38
+#, kde-format
+msgid "ListRights"
+msgstr "清單權限"
+
+#: loginjob.cpp:129 loginjob.cpp:233
+#, kde-format
+msgid "Login"
+msgstr "登入"
+
+#: loginjob.cpp:184
+#, kde-format
+msgid "IMAP session in the wrong state for authentication"
+msgstr "IMAP 工作階段在認證時的狀態錯誤"
+
+#: loginjob.cpp:235
+#, kde-format
+msgid "Capability"
+msgstr "相容性"
+
+#: loginjob.cpp:237
+#, kde-format
+msgid "StartTls"
+msgstr "StartTls"
+
+#: loginjob.cpp:340
+#, kde-format
+msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
+msgstr "伺服器不支援 STARTTLS，嘗試使用 SSL/TLS 取代。"
+
+#: loginjob.cpp:353
+#, kde-format
+msgid "Internal error, tried to login before encryption"
+msgstr ""
+
+#: loginjob.cpp:362
+#, kde-format
+msgid "Login failed, plain login is disabled by the server."
+msgstr "登入失敗，plain login 已由伺服器關閉"
+
+#: loginjob.cpp:383
+#, kde-format
+msgid "Login failed, authentication mode %1 is not supported by the server."
+msgstr "登入失敗，伺服器未支援認證模式 %1。"
+
+#: loginjob.cpp:413
+#, kde-format
+msgid "Login failed, client cannot initialize the SASL library."
+msgstr "登入失敗，用戶端無法初始化 SASL 函式庫。"
+
+#: loginjob.cpp:512
+#, kde-format
+msgid "Login failed, TLS negotiation failed."
+msgstr "登入失敗，TLS 溝通失敗。"
+
+#: loginjob.cpp:570
+#, kde-format
+msgid "SSL handshake failed."
+msgstr "SSL 交換連線資訊失敗。"
+
+#: logoutjob.cpp:33
+#, kde-format
+msgid "Logout"
+msgstr "登出"
+
+#: metadatajobbase.cpp:53
+#, kde-format
+msgid "MetaDataJobBase"
+msgstr "MetaDataJobBase"
+
+#: movejob.cpp:42
+#, kde-format
+msgid "Move"
+msgstr "移動"
+
+#: myrightsjob.cpp:37
+#, kde-format
+msgid "MyRights"
+msgstr "MyRights"
+
+#: namespacejob.cpp:68
+#, kde-format
+msgid "Namespace"
+msgstr "命名空間"
+
+#: quotajobbase.cpp:34
+#, kde-format
+msgid "QuotaJobBase"
+msgstr "QuotaJobBase"
+
+#: renamejob.cpp:37
+#, kde-format
+msgid "Rename"
+msgstr "重新命名"
+
+#: searchjob.cpp:361
+#, kde-format
+msgctxt "Name of the search job"
+msgid "Search"
+msgstr "搜尋"
+
+#: selectjob.cpp:73
+#, kde-format
+msgctxt "name of the select job"
+msgid "Select"
+msgstr "選取"
+
+#: setacljob.cpp:34
+#, kde-format
+msgid "SetAcl"
+msgstr "設定權限清單"
+
+#: setmetadatajob.cpp:43
+#, kde-format
+msgid "SetMetaData"
+msgstr "設定中繼資料"
+
+#: setquotajob.cpp:37
+#, kde-format
+msgid "SetQuota"
+msgstr "設定大小限制"
+
+#: statusjob.cpp:40
+#, kde-format
+msgctxt "name of the status job"
+msgid "Status"
+msgstr "狀態"
+
+#: storejob.cpp:70
+#, kde-format
+msgid "Store"
+msgstr "儲存"
+
+#: subscribejob.cpp:36
+#, kde-format
+msgid "Subscribe"
+msgstr "訂閱"
+
+#: unsubscribejob.cpp:36
+#, kde-format
+msgid "Unsubscribe"
+msgstr "取消訂閱"

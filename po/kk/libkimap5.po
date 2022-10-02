@@ -1,0 +1,285 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sairan Kikkarin <sairan@computer.org>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-11 00:45+0000\n"
+"PO-Revision-Date: 2011-02-18 06:48+0600\n"
+"Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
+"Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: acljobbase.cpp:56
+#, kde-format
+msgid "AclJobBase"
+msgstr "AclJobBase"
+
+#: appendjob.cpp:40
+#, kde-format
+msgid "Append"
+msgstr "Жалғау"
+
+#: capabilitiesjob.cpp:35
+#, kde-format
+msgid "Capabilities"
+msgstr "Мүмкіндіктері"
+
+#: closejob.cpp:32
+#, kde-format
+msgid "Close"
+msgstr "Жабу"
+
+#: copyjob.cpp:41
+#, kde-format
+msgid "Copy"
+msgstr "Көшіріп алу"
+
+#: createjob.cpp:36
+#, kde-format
+msgid "Create"
+msgstr "Құрып алу"
+
+#: deleteacljob.cpp:37
+#, kde-format
+msgid "DeleteAclJob"
+msgstr "DeleteAclJob"
+
+#: deletejob.cpp:36
+#, kde-format
+msgid "Delete"
+msgstr "Өшіру"
+
+#: enablejob.cpp:31
+#, kde-format
+msgid "Enable"
+msgstr ""
+
+#: expungejob.cpp:37
+#, kde-format
+msgid "Expunge"
+msgstr "Тазалап шығу"
+
+#: fetchjob.cpp:97
+#, kde-format
+msgid "Fetch"
+msgstr "Алу"
+
+#: getacljob.cpp:37
+#, kde-format
+msgid "GetAcl"
+msgstr "GetAcl"
+
+#: getmetadatajob.cpp:43
+#, kde-format
+msgid "GetMetaData"
+msgstr "GetMetaData"
+
+#: getmetadatajob.cpp:66
+#, kde-format
+msgid "GetAnnotation"
+msgstr "GetAnnotation"
+
+#: getquotajob.cpp:35
+#, kde-format
+msgid "GetQuota"
+msgstr "GetQuota"
+
+#: getquotarootjob.cpp:38
+#, kde-format
+msgid "GetQuotaRoot"
+msgstr "GetQuotaRoot"
+
+#: idjob.cpp:35
+#, fuzzy, kde-format
+#| msgctxt "name of the idle job"
+#| msgid "Idle"
+msgid "Id"
+msgstr "Іссіз"
+
+#: idlejob.cpp:65
+#, kde-format
+msgctxt "name of the idle job"
+msgid "Idle"
+msgstr "Іссіз"
+
+#: job.cpp:19
+#, kde-format
+msgid "Job"
+msgstr "Тапсырма"
+
+#: job.cpp:54 loginjob.cpp:574
+#, kde-format
+msgid "Connection to server lost."
+msgstr "Серверімен байланыс үзілген."
+
+#: job.cpp:65 loginjob.cpp:403 setmetadatajob.cpp:126
+#, kde-format
+msgid "%1 failed, malformed reply from the server."
+msgstr "%1 жаңылысы, серверінен жарамсыз жауап келді."
+
+#: job.cpp:68 loginjob.cpp:277 setmetadatajob.cpp:109 setmetadatajob.cpp:129
+#, kde-format
+msgid "%1 failed, server replied: %2"
+msgstr "%1 жаңылысы, серверінің жауабы: %2"
+
+#: listjob.cpp:59
+#, kde-format
+msgid "List"
+msgstr "Тізім"
+
+#: listrightsjob.cpp:38
+#, kde-format
+msgid "ListRights"
+msgstr "ListRights"
+
+#: loginjob.cpp:129 loginjob.cpp:233
+#, kde-format
+msgid "Login"
+msgstr "Кіру"
+
+#: loginjob.cpp:184
+#, kde-format
+msgid "IMAP session in the wrong state for authentication"
+msgstr "IMAP сеансы аутентификацияны өткізуге лайық күйде емес"
+
+#: loginjob.cpp:235
+#, kde-format
+msgid "Capability"
+msgstr "Мүмкіндіктері"
+
+#: loginjob.cpp:237
+#, kde-format
+msgid "StartTls"
+msgstr "StartTls"
+
+#: loginjob.cpp:340
+#, kde-format
+msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
+msgstr ""
+
+#: loginjob.cpp:353
+#, kde-format
+msgid "Internal error, tried to login before encryption"
+msgstr ""
+
+#: loginjob.cpp:362
+#, kde-format
+msgid "Login failed, plain login is disabled by the server."
+msgstr ""
+"Кіру жаңылысы, бұл сервер й (шифрланбаған) паролімен кіруді қабылдамайды"
+
+#: loginjob.cpp:383
+#, kde-format
+msgid "Login failed, authentication mode %1 is not supported by the server."
+msgstr "Кіру жаңылысы, сервері %1 аутентификация режімін танымайды."
+
+#: loginjob.cpp:413
+#, kde-format
+msgid "Login failed, client cannot initialize the SASL library."
+msgstr ""
+"Кіру жаңылысы, клиент-бағдарламасы SASL жиын файлын.бастау күйіне келтіре "
+"алмады."
+
+#: loginjob.cpp:512
+#, kde-format
+msgid "Login failed, TLS negotiation failed."
+msgstr "Кіру жаңылысы, TLS - келісу қатесі."
+
+#: loginjob.cpp:570
+#, kde-format
+msgid "SSL handshake failed."
+msgstr ""
+
+#: logoutjob.cpp:33
+#, kde-format
+msgid "Logout"
+msgstr "Шығып кету"
+
+#: metadatajobbase.cpp:53
+#, kde-format
+msgid "MetaDataJobBase"
+msgstr "MetaDataJobBase"
+
+#: movejob.cpp:42
+#, kde-format
+msgid "Move"
+msgstr ""
+
+#: myrightsjob.cpp:37
+#, kde-format
+msgid "MyRights"
+msgstr "MyRights"
+
+#: namespacejob.cpp:68
+#, kde-format
+msgid "Namespace"
+msgstr "Атаулар кеңістігі"
+
+#: quotajobbase.cpp:34
+#, kde-format
+msgid "QuotaJobBase"
+msgstr "QuotaJobBase"
+
+#: renamejob.cpp:37
+#, kde-format
+msgid "Rename"
+msgstr "Атауын өзгерту"
+
+#: searchjob.cpp:361
+#, kde-format
+msgctxt "Name of the search job"
+msgid "Search"
+msgstr "Іздеу"
+
+#: selectjob.cpp:73
+#, kde-format
+msgctxt "name of the select job"
+msgid "Select"
+msgstr "Таңдау"
+
+#: setacljob.cpp:34
+#, kde-format
+msgid "SetAcl"
+msgstr "SetAcl"
+
+#: setmetadatajob.cpp:43
+#, kde-format
+msgid "SetMetaData"
+msgstr "SetMetaData"
+
+#: setquotajob.cpp:37
+#, kde-format
+msgid "SetQuota"
+msgstr "SetQuota"
+
+#: statusjob.cpp:40
+#, kde-format
+msgctxt "name of the status job"
+msgid "Status"
+msgstr ""
+
+#: storejob.cpp:70
+#, kde-format
+msgid "Store"
+msgstr "Сақтау"
+
+#: subscribejob.cpp:36
+#, kde-format
+msgid "Subscribe"
+msgstr "Жазылу"
+
+#: unsubscribejob.cpp:36
+#, kde-format
+msgid "Unsubscribe"
+msgstr "Жазылудан айну"
+
+#~ msgid "SetAnnotation"
+#~ msgstr "SetAnnotation"

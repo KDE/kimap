@@ -1,0 +1,274 @@
+# Translation of libkimap5.po into Serbian.
+# Chusslove Illich <caslav.ilic@gmx.net>, 2009, 2010, 2013, 2014, 2016.
+# Dalibor Djuric <dalibor.djuric@mozilla-srbija.org>, 2009.
+# Dalibor Djuric <daliborddjuric@gmail.com>, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: libkimap5\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2020-04-21 03:38+0200\n"
+"PO-Revision-Date: 2016-11-28 01:33+0100\n"
+"Last-Translator: Chusslove Illich <caslav.ilic@gmx.net>\n"
+"Language-Team: Serbian <kde-i18n-sr@kde.org>\n"
+"Language: sr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+"X-Environment: kde\n"
+
+#: acljobbase.cpp:69
+#, kde-format
+msgid "AclJobBase"
+msgstr "AclJobBase"
+
+#: appendjob.cpp:49
+#, kde-format
+msgid "Append"
+msgstr "Прикачивање"
+
+#: capabilitiesjob.cpp:43
+#, kde-format
+msgid "Capabilities"
+msgstr "Одређивање могућности"
+
+#: closejob.cpp:41
+#, kde-format
+msgid "Close"
+msgstr "Затварање"
+
+#: copyjob.cpp:49
+#, kde-format
+msgid "Copy"
+msgstr "Копирање"
+
+#: createjob.cpp:44
+#, kde-format
+msgid "Create"
+msgstr "Стварање"
+
+#: deleteacljob.cpp:45
+#, kde-format
+msgid "DeleteAclJob"
+msgstr "Брисање АЦЛ‑а"
+
+#: deletejob.cpp:44
+#, kde-format
+msgid "Delete"
+msgstr "Брисање"
+
+#: expungejob.cpp:45
+#, kde-format
+msgid "Expunge"
+msgstr "Прочишћавање"
+
+#: fetchjob.cpp:122
+#, kde-format
+msgid "Fetch"
+msgstr "Добављање"
+
+#: getacljob.cpp:45
+#, kde-format
+msgid "GetAcl"
+msgstr "Добављање АЦЛ‑а"
+
+#: getmetadatajob.cpp:50
+#, kde-format
+msgid "GetMetaData"
+msgstr "Добављање метаподатака"
+
+#: getmetadatajob.cpp:73
+#, kde-format
+msgid "GetAnnotation"
+msgstr "Добављање тумачења"
+
+#: getquotajob.cpp:43
+#, kde-format
+msgid "GetQuota"
+msgstr "Добављање квоте"
+
+#: getquotarootjob.cpp:46
+#, kde-format
+msgid "GetQuotaRoot"
+msgstr "Добављање квоте корена"
+
+#: idjob.cpp:43
+#, kde-format
+msgid "Id"
+msgstr "ИД"
+
+#: idlejob.cpp:77
+#, kde-format
+msgctxt "name of the idle job"
+msgid "Idle"
+msgstr "Мировање"
+
+#: job.cpp:31
+#, kde-format
+msgid "Job"
+msgstr "Посао"
+
+#: job.cpp:65 loginjob.cpp:583
+#, kde-format
+msgid "Connection to server lost."
+msgstr "Веза са сервером је изгубљена."
+
+# >> %1 is a job name, like 'Fetch', 'Delete', etc.
+#: job.cpp:77 loginjob.cpp:419 setmetadatajob.cpp:136
+#, kde-format
+msgid "%1 failed, malformed reply from the server."
+msgstr "%1 неуспело, лоше формиран одговор са сервера."
+
+# >> %1 is a job name, like 'Fetch', 'Delete', etc.
+#: job.cpp:80 loginjob.cpp:298 setmetadatajob.cpp:117 setmetadatajob.cpp:139
+#, kde-format
+msgid "%1 failed, server replied: %2"
+msgstr "%1 неуспело, сервер одговара: %2"
+
+# skip-rule: t-list
+#: listjob.cpp:66
+#, kde-format
+msgid "List"
+msgstr "Листање"
+
+# skip-rule: t-list
+#: listrightsjob.cpp:46
+#, kde-format
+msgid "ListRights"
+msgstr "Листање права"
+
+#: loginjob.cpp:146 loginjob.cpp:248
+#, kde-format
+msgid "Login"
+msgstr "Пријављивање"
+
+#: loginjob.cpp:202
+#, kde-format
+msgid "IMAP session in the wrong state for authentication"
+msgstr "ИМАП сесија је у погрешном стању за аутентификацију."
+
+#: loginjob.cpp:250
+#, kde-format
+msgid "Capability"
+msgstr "Одређивање могућности"
+
+#: loginjob.cpp:252
+#, kde-format
+msgid "StartTls"
+msgstr "Покретање ТЛС‑а"
+
+#: loginjob.cpp:361
+#, kde-format
+msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
+msgstr ""
+
+#: loginjob.cpp:375
+#, kde-format
+msgid "Login failed, plain login is disabled by the server."
+msgstr "Пријављивање неуспело, сервер не дозвољава просто пријављивање."
+
+#: loginjob.cpp:397
+#, kde-format
+msgid "Login failed, authentication mode %1 is not supported by the server."
+msgstr "Пријављивање неуспело, сервер не подржава режим аутентификације %1."
+
+#: loginjob.cpp:429
+#, kde-format
+msgid "Login failed, client cannot initialize the SASL library."
+msgstr "Пријављивање неуспело, клијент не може да припреми САСЛ библиотеку."
+
+#: loginjob.cpp:526
+#, kde-format
+msgid "Login failed, TLS negotiation failed."
+msgstr "Пријављивање неуспело, ТЛС преговори неуспешни."
+
+#: loginjob.cpp:579
+#, kde-format
+msgid "SSL handshake failed."
+msgstr "ССЛ руковање пропало."
+
+#: logoutjob.cpp:41
+#, kde-format
+msgid "Logout"
+msgstr "Одјављивање"
+
+#: metadatajobbase.cpp:66
+#, kde-format
+msgid "MetaDataJobBase"
+msgstr "MetaDataJobBase"
+
+#: movejob.cpp:54
+#, kde-format
+msgid "Move"
+msgstr "Премештање"
+
+#: myrightsjob.cpp:44
+#, kde-format
+msgid "MyRights"
+msgstr "Добављање мојих права"
+
+#: namespacejob.cpp:77
+#, kde-format
+msgid "Namespace"
+msgstr "Именски простор"
+
+#: quotajobbase.cpp:47
+#, kde-format
+msgid "QuotaJobBase"
+msgstr "QuotaJobBase"
+
+#: renamejob.cpp:45
+#, kde-format
+msgid "Rename"
+msgstr "Преименовање"
+
+#: searchjob.cpp:366
+#, kde-format
+msgctxt "Name of the search job"
+msgid "Search"
+msgstr "Претраживање"
+
+#: selectjob.cpp:59
+#, kde-format
+msgctxt "name of the select job"
+msgid "Select"
+msgstr "Бирање"
+
+#: setacljob.cpp:42
+#, kde-format
+msgid "SetAcl"
+msgstr "Постављање АЦЛ‑а"
+
+#: setmetadatajob.cpp:49
+#, kde-format
+msgid "SetMetaData"
+msgstr "Постављање метаподатака"
+
+#: setquotajob.cpp:45
+#, kde-format
+msgid "SetQuota"
+msgstr "Постављање квоте"
+
+#: statusjob.cpp:54
+#, kde-format
+msgctxt "name of the status job"
+msgid "Status"
+msgstr "Стање"
+
+#: storejob.cpp:77
+#, kde-format
+msgid "Store"
+msgstr "Складиштење"
+
+#: subscribejob.cpp:44
+#, kde-format
+msgid "Subscribe"
+msgstr "Претплаћивање"
+
+#: unsubscribejob.cpp:44
+#, kde-format
+msgid "Unsubscribe"
+msgstr "Укидање претплате"

@@ -1,0 +1,319 @@
+# Translation of libkimap5.po to Ukrainian
+# Copyright (C) 2018-2020 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2009, 2010, 2013, 2014, 2016, 2018, 2020, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: libkimap5\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-11 00:45+0000\n"
+"PO-Revision-Date: 2022-01-28 08:37+0200\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.12.0\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: acljobbase.cpp:56
+#, kde-format
+msgid "AclJobBase"
+msgstr "AclJobBase"
+
+#: appendjob.cpp:40
+#, kde-format
+msgid "Append"
+msgstr "Додати"
+
+#: capabilitiesjob.cpp:35
+#, kde-format
+msgid "Capabilities"
+msgstr "Можливості"
+
+#: closejob.cpp:32
+#, kde-format
+msgid "Close"
+msgstr "Закрити"
+
+#: copyjob.cpp:41
+#, kde-format
+msgid "Copy"
+msgstr "Копіювати"
+
+#: createjob.cpp:36
+#, kde-format
+msgid "Create"
+msgstr "Створити"
+
+#: deleteacljob.cpp:37
+#, kde-format
+msgid "DeleteAclJob"
+msgstr "DeleteAclJob"
+
+#: deletejob.cpp:36
+#, kde-format
+msgid "Delete"
+msgstr "Вилучити"
+
+#: enablejob.cpp:31
+#, kde-format
+msgid "Enable"
+msgstr "Увімкнути"
+
+#: expungejob.cpp:37
+#, kde-format
+msgid "Expunge"
+msgstr "Витерти"
+
+#: fetchjob.cpp:97
+#, kde-format
+msgid "Fetch"
+msgstr "Отримати"
+
+#: getacljob.cpp:37
+#, kde-format
+msgid "GetAcl"
+msgstr "GetAcl"
+
+#: getmetadatajob.cpp:43
+#, kde-format
+msgid "GetMetaData"
+msgstr "GetMetaData"
+
+#: getmetadatajob.cpp:66
+#, kde-format
+msgid "GetAnnotation"
+msgstr "GetAnnotation"
+
+#: getquotajob.cpp:35
+#, kde-format
+msgid "GetQuota"
+msgstr "GetQuota"
+
+#: getquotarootjob.cpp:38
+#, kde-format
+msgid "GetQuotaRoot"
+msgstr "GetQuotaRoot"
+
+#: idjob.cpp:35
+#, kde-format
+msgid "Id"
+msgstr "Ід."
+
+#: idlejob.cpp:65
+#, kde-format
+msgctxt "name of the idle job"
+msgid "Idle"
+msgstr "Простій"
+
+#: job.cpp:19
+#, kde-format
+msgid "Job"
+msgstr "Завдання"
+
+#: job.cpp:54 loginjob.cpp:574
+#, kde-format
+msgid "Connection to server lost."
+msgstr "З’єднання з сервером розірвано."
+
+#: job.cpp:65 loginjob.cpp:403 setmetadatajob.cpp:126
+#, kde-format
+msgid "%1 failed, malformed reply from the server."
+msgstr ""
+"Спроба виконання дії %1 завершилася невдало, некоректно сформована відповідь "
+"сервера."
+
+#: job.cpp:68 loginjob.cpp:277 setmetadatajob.cpp:109 setmetadatajob.cpp:129
+#, kde-format
+msgid "%1 failed, server replied: %2"
+msgstr "Спроба виконання дії %1 завершилася невдало, відповідь сервера: %2"
+
+#: listjob.cpp:59
+#, kde-format
+msgid "List"
+msgstr "Список"
+
+#: listrightsjob.cpp:38
+#, kde-format
+msgid "ListRights"
+msgstr "ListRights"
+
+#: loginjob.cpp:129 loginjob.cpp:233
+#, kde-format
+msgid "Login"
+msgstr "Увійти"
+
+#: loginjob.cpp:184
+#, kde-format
+msgid "IMAP session in the wrong state for authentication"
+msgstr "Сеанс IMAP перебуває у стані, непридатному для розпізнавання"
+
+#: loginjob.cpp:235
+#, kde-format
+msgid "Capability"
+msgstr "Можливість"
+
+#: loginjob.cpp:237
+#, kde-format
+msgid "StartTls"
+msgstr "StartTls"
+
+#: loginjob.cpp:340
+#, kde-format
+msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
+msgstr ""
+"Не сервері не передбачено підтримки STARTTLS, спробуйте скористатися SSL/TLS."
+
+#: loginjob.cpp:353
+#, kde-format
+msgid "Internal error, tried to login before encryption"
+msgstr "Внутрішня помилка, спроба увійти до встановлення шифрування"
+
+#: loginjob.cpp:362
+#, kde-format
+msgid "Login failed, plain login is disabled by the server."
+msgstr ""
+"Спроба реєстрації завершилася невдало, нешифровані паролі не приймаються "
+"сервером."
+
+#: loginjob.cpp:383
+#, kde-format
+msgid "Login failed, authentication mode %1 is not supported by the server."
+msgstr ""
+"Спроба реєстрації завершилася невдало, режим розпізнавання %1 не "
+"підтримується цим сервером."
+
+#: loginjob.cpp:413
+#, kde-format
+msgid "Login failed, client cannot initialize the SASL library."
+msgstr ""
+"Спроба реєстрації завершилася невдало, клієнтові не вдалося ініціалізувати "
+"бібліотеку SASL."
+
+#: loginjob.cpp:512
+#, kde-format
+msgid "Login failed, TLS negotiation failed."
+msgstr ""
+"Спроба реєстрації завершилася невдало, не вдалося встановити режим "
+"шифрування TLS."
+
+#: loginjob.cpp:570
+#, kde-format
+msgid "SSL handshake failed."
+msgstr "Помилка під час спроби встановлення з’єднання SSL."
+
+#: logoutjob.cpp:33
+#, kde-format
+msgid "Logout"
+msgstr "Вийти"
+
+#: metadatajobbase.cpp:53
+#, kde-format
+msgid "MetaDataJobBase"
+msgstr "MetaDataJobBase"
+
+#: movejob.cpp:42
+#, kde-format
+msgid "Move"
+msgstr "Пересунути"
+
+#: myrightsjob.cpp:37
+#, kde-format
+msgid "MyRights"
+msgstr "MyRights"
+
+#: namespacejob.cpp:68
+#, kde-format
+msgid "Namespace"
+msgstr "Простір назв"
+
+#: quotajobbase.cpp:34
+#, kde-format
+msgid "QuotaJobBase"
+msgstr "QuotaJobBase"
+
+#: renamejob.cpp:37
+#, kde-format
+msgid "Rename"
+msgstr "Перейменувати"
+
+#: searchjob.cpp:361
+#, kde-format
+msgctxt "Name of the search job"
+msgid "Search"
+msgstr "Пошук"
+
+#: selectjob.cpp:73
+#, kde-format
+msgctxt "name of the select job"
+msgid "Select"
+msgstr "Вибір"
+
+#: setacljob.cpp:34
+#, kde-format
+msgid "SetAcl"
+msgstr "SetAcl"
+
+#: setmetadatajob.cpp:43
+#, kde-format
+msgid "SetMetaData"
+msgstr "SetMetaData"
+
+#: setquotajob.cpp:37
+#, kde-format
+msgid "SetQuota"
+msgstr "SetQuota"
+
+#: statusjob.cpp:40
+#, kde-format
+msgctxt "name of the status job"
+msgid "Status"
+msgstr "Стан"
+
+#: storejob.cpp:70
+#, kde-format
+msgid "Store"
+msgstr "Зберегти"
+
+#: subscribejob.cpp:36
+#, kde-format
+msgid "Subscribe"
+msgstr "Підписатися"
+
+#: unsubscribejob.cpp:36
+#, kde-format
+msgid "Unsubscribe"
+msgstr "Скасувати підписку"
+
+#~ msgid "SetAnnotation"
+#~ msgstr "SetAnnotation"
+
+#~ msgid "Mock"
+#~ msgstr "Макет"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Юрій Чорноіван"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "yurchor@ukr.net"
+
+#~ msgctxt "Authentication method"
+#~ msgid "Clear text"
+#~ msgstr "Звичайний текст"
+
+#~ msgctxt "Authentication method"
+#~ msgid "Anonymous"
+#~ msgstr "Анонімний"
+
+#~ msgid "Check"
+#~ msgstr "Перевірити"
+
+#~ msgid "Noop"
+#~ msgstr "Порожній"

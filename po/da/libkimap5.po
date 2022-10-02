@@ -1,0 +1,300 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Martin Schlander <mschlander@opensuse.org>, 2009, 2010, 2014, 2016, 2017, 2020, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: libkimap\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-11 00:45+0000\n"
+"PO-Revision-Date: 2022-02-08 19:44+0100\n"
+"Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
+"Language-Team: Danish <kde-i18n-doc@kde.org>\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.04.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: acljobbase.cpp:56
+#, kde-format
+msgid "AclJobBase"
+msgstr "AclJobBase"
+
+#: appendjob.cpp:40
+#, kde-format
+msgid "Append"
+msgstr "Tilføj"
+
+#: capabilitiesjob.cpp:35
+#, kde-format
+msgid "Capabilities"
+msgstr "Kapabiliteter"
+
+#: closejob.cpp:32
+#, kde-format
+msgid "Close"
+msgstr "Luk"
+
+#: copyjob.cpp:41
+#, kde-format
+msgid "Copy"
+msgstr "Kopiér"
+
+#: createjob.cpp:36
+#, kde-format
+msgid "Create"
+msgstr "Opret"
+
+#: deleteacljob.cpp:37
+#, kde-format
+msgid "DeleteAclJob"
+msgstr "DeleteAclJob"
+
+#: deletejob.cpp:36
+#, kde-format
+msgid "Delete"
+msgstr "Slet"
+
+#: enablejob.cpp:31
+#, kde-format
+msgid "Enable"
+msgstr "Aktivér"
+
+#: expungejob.cpp:37
+#, kde-format
+msgid "Expunge"
+msgstr "Udslet"
+
+#: fetchjob.cpp:97
+#, kde-format
+msgid "Fetch"
+msgstr "Hent"
+
+#: getacljob.cpp:37
+#, kde-format
+msgid "GetAcl"
+msgstr "GetAcl"
+
+#: getmetadatajob.cpp:43
+#, kde-format
+msgid "GetMetaData"
+msgstr "GetMetaData"
+
+#: getmetadatajob.cpp:66
+#, kde-format
+msgid "GetAnnotation"
+msgstr "GetAnnotation"
+
+#: getquotajob.cpp:35
+#, kde-format
+msgid "GetQuota"
+msgstr "GetQuota"
+
+#: getquotarootjob.cpp:38
+#, kde-format
+msgid "GetQuotaRoot"
+msgstr "GetQuotaRoot"
+
+#: idjob.cpp:35
+#, kde-format
+msgid "Id"
+msgstr "Id"
+
+#: idlejob.cpp:65
+#, kde-format
+msgctxt "name of the idle job"
+msgid "Idle"
+msgstr "Inaktiv"
+
+#: job.cpp:19
+#, kde-format
+msgid "Job"
+msgstr "Job"
+
+#: job.cpp:54 loginjob.cpp:574
+#, kde-format
+msgid "Connection to server lost."
+msgstr "Mistede forbindelse til serveren."
+
+#: job.cpp:65 loginjob.cpp:403 setmetadatajob.cpp:126
+#, kde-format
+msgid "%1 failed, malformed reply from the server."
+msgstr "%1 mislykkedes, ukorrekt svar fra serveren."
+
+#: job.cpp:68 loginjob.cpp:277 setmetadatajob.cpp:109 setmetadatajob.cpp:129
+#, kde-format
+msgid "%1 failed, server replied: %2"
+msgstr "%1 mislykkedes, serveren svarede: %2"
+
+#: listjob.cpp:59
+#, kde-format
+msgid "List"
+msgstr "Liste"
+
+#: listrightsjob.cpp:38
+#, kde-format
+msgid "ListRights"
+msgstr "ListRights"
+
+#: loginjob.cpp:129 loginjob.cpp:233
+#, kde-format
+msgid "Login"
+msgstr "Login"
+
+#: loginjob.cpp:184
+#, kde-format
+msgid "IMAP session in the wrong state for authentication"
+msgstr "IMAP-session i forkert tilstand til autentificering"
+
+#: loginjob.cpp:235
+#, kde-format
+msgid "Capability"
+msgstr "Kapabilitet"
+
+#: loginjob.cpp:237
+#, kde-format
+msgid "StartTls"
+msgstr "StartTls"
+
+#: loginjob.cpp:340
+#, kde-format
+msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
+msgstr ""
+"STARTTLS understøttes ikke af serveren, prøv at bruge SSL/TLS i stedet."
+
+#: loginjob.cpp:353
+#, kde-format
+msgid "Internal error, tried to login before encryption"
+msgstr "Intern fejl, prøvede at logge ind før kryptering"
+
+#: loginjob.cpp:362
+#, kde-format
+msgid "Login failed, plain login is disabled by the server."
+msgstr "Login mislykkedes, almindeligt login er deaktiveret af serveren."
+
+#: loginjob.cpp:383
+#, kde-format
+msgid "Login failed, authentication mode %1 is not supported by the server."
+msgstr ""
+"Login mislykkedes, godkendelsestilstanden %1 er ikke understøttet af "
+"serveren."
+
+#: loginjob.cpp:413
+#, kde-format
+msgid "Login failed, client cannot initialize the SASL library."
+msgstr "Login mislykkedes, klienten kan ikke initialisers SASL-biblioteket."
+
+#: loginjob.cpp:512
+#, kde-format
+msgid "Login failed, TLS negotiation failed."
+msgstr "Login mislykkedes, TLS-forhandling mislykkedes."
+
+#: loginjob.cpp:570
+#, kde-format
+msgid "SSL handshake failed."
+msgstr "SSL-håndtryk mislykkedes."
+
+#: logoutjob.cpp:33
+#, kde-format
+msgid "Logout"
+msgstr "Log af"
+
+#: metadatajobbase.cpp:53
+#, kde-format
+msgid "MetaDataJobBase"
+msgstr "MetaDataJobBase"
+
+#: movejob.cpp:42
+#, kde-format
+msgid "Move"
+msgstr "Flyt"
+
+#: myrightsjob.cpp:37
+#, kde-format
+msgid "MyRights"
+msgstr "MyRights"
+
+#: namespacejob.cpp:68
+#, kde-format
+msgid "Namespace"
+msgstr "Navnerum"
+
+#: quotajobbase.cpp:34
+#, kde-format
+msgid "QuotaJobBase"
+msgstr "QuotaJobBase"
+
+#: renamejob.cpp:37
+#, kde-format
+msgid "Rename"
+msgstr "Omdøb"
+
+#: searchjob.cpp:361
+#, kde-format
+msgctxt "Name of the search job"
+msgid "Search"
+msgstr "Søg"
+
+#: selectjob.cpp:73
+#, kde-format
+msgctxt "name of the select job"
+msgid "Select"
+msgstr "Vælg"
+
+#: setacljob.cpp:34
+#, kde-format
+msgid "SetAcl"
+msgstr "SetAcl"
+
+#: setmetadatajob.cpp:43
+#, kde-format
+msgid "SetMetaData"
+msgstr "SetMetaData"
+
+#: setquotajob.cpp:37
+#, kde-format
+msgid "SetQuota"
+msgstr "SetQuota"
+
+#: statusjob.cpp:40
+#, kde-format
+msgctxt "name of the status job"
+msgid "Status"
+msgstr "Status"
+
+#: storejob.cpp:70
+#, kde-format
+msgid "Store"
+msgstr "Opbevar"
+
+#: subscribejob.cpp:36
+#, kde-format
+msgid "Subscribe"
+msgstr "Abonnér"
+
+#: unsubscribejob.cpp:36
+#, kde-format
+msgid "Unsubscribe"
+msgstr "Afmeld"
+
+#~ msgid "SetAnnotation"
+#~ msgstr "SetAnnotation"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Martin Schlander"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "mschlander@opensuse.org"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "Authentication method"
+#~ msgid "Clear text"
+#~ msgstr "Opret"
+
+#~ msgid "Check"
+#~ msgstr "Tjek"

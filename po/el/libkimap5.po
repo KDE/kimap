@@ -1,0 +1,312 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Toussis Manolis <manolis@koppermind.homelinux.org>, 2009.
+# Stelios <sstavra@gmail.com>, 2012, 2020, 2021.
+# Dimitrios Glentadakis <dglent@gmail.com>, 2012.
+# Dimitris Kardarakos <dimkard@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: libkimap\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-05-11 00:45+0000\n"
+"PO-Revision-Date: 2021-06-16 18:08+0300\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.04.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: acljobbase.cpp:56
+#, kde-format
+msgid "AclJobBase"
+msgstr "AclJobBase"
+
+#: appendjob.cpp:40
+#, kde-format
+msgid "Append"
+msgstr "Εισαγωγή"
+
+#: capabilitiesjob.cpp:35
+#, kde-format
+msgid "Capabilities"
+msgstr "Δυνατότητες"
+
+#: closejob.cpp:32
+#, kde-format
+msgid "Close"
+msgstr "Κλείσιμο"
+
+#: copyjob.cpp:41
+#, kde-format
+msgid "Copy"
+msgstr "Αντιγραφή"
+
+#: createjob.cpp:36
+#, kde-format
+msgid "Create"
+msgstr "Δημιουργία"
+
+#: deleteacljob.cpp:37
+#, kde-format
+msgid "DeleteAclJob"
+msgstr "DeleteAclJob"
+
+#: deletejob.cpp:36
+#, kde-format
+msgid "Delete"
+msgstr "Διαγραφή"
+
+#: enablejob.cpp:31
+#, kde-format
+msgid "Enable"
+msgstr "Ενεργοποίηση"
+
+#: expungejob.cpp:37
+#, kde-format
+msgid "Expunge"
+msgstr "Σβήσιμο"
+
+#: fetchjob.cpp:97
+#, kde-format
+msgid "Fetch"
+msgstr "Ανάκτηση"
+
+#: getacljob.cpp:37
+#, kde-format
+msgid "GetAcl"
+msgstr "GetAcl"
+
+#: getmetadatajob.cpp:43
+#, kde-format
+msgid "GetMetaData"
+msgstr "Λήψη μεταδεδομένων"
+
+#: getmetadatajob.cpp:66
+#, kde-format
+msgid "GetAnnotation"
+msgstr "Λήψη σημείωσης"
+
+#: getquotajob.cpp:35
+#, kde-format
+msgid "GetQuota"
+msgstr "Λήψη Quota"
+
+#: getquotarootjob.cpp:38
+#, kde-format
+msgid "GetQuotaRoot"
+msgstr "Λήψη βάσης Quota"
+
+#: idjob.cpp:35
+#, kde-format
+msgid "Id"
+msgstr "Id"
+
+#: idlejob.cpp:65
+#, kde-format
+msgctxt "name of the idle job"
+msgid "Idle"
+msgstr "Αδρανής"
+
+#: job.cpp:19
+#, kde-format
+msgid "Job"
+msgstr "Εργασία"
+
+#: job.cpp:54 loginjob.cpp:574
+#, kde-format
+msgid "Connection to server lost."
+msgstr "Η σύνδεση με τον εξυπηρετητή έχει χαθεί."
+
+#: job.cpp:65 loginjob.cpp:403 setmetadatajob.cpp:126
+#, kde-format
+msgid "%1 failed, malformed reply from the server."
+msgstr "Αποτυχία %1, μη έγκυρη απάντηση από τον εξυπηρετητή."
+
+#: job.cpp:68 loginjob.cpp:277 setmetadatajob.cpp:109 setmetadatajob.cpp:129
+#, kde-format
+msgid "%1 failed, server replied: %2"
+msgstr "Αποτυχία %1, απάντηση εξυπηρετητή: %2"
+
+#: listjob.cpp:59
+#, kde-format
+msgid "List"
+msgstr "Λίστα"
+
+#: listrightsjob.cpp:38
+#, kde-format
+msgid "ListRights"
+msgstr "Λίστα δικαιωμάτων"
+
+#: loginjob.cpp:129 loginjob.cpp:233
+#, kde-format
+msgid "Login"
+msgstr "Σύνδεση"
+
+#: loginjob.cpp:184
+#, kde-format
+msgid "IMAP session in the wrong state for authentication"
+msgstr "IMAP συνεδρία σε λάθος κατάσταση για την ταυτοποίηση"
+
+#: loginjob.cpp:235
+#, kde-format
+msgid "Capability"
+msgstr "Δυνατότητα"
+
+#: loginjob.cpp:237
+#, kde-format
+msgid "StartTls"
+msgstr "StartTls"
+
+#: loginjob.cpp:340
+#, kde-format
+msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
+msgstr ""
+"Το STARTTLS δεν υποστηρίζεται από τον εξυπηρετητή, δοκιμάστε το SSL/TLS."
+
+#: loginjob.cpp:353
+#, kde-format
+msgid "Internal error, tried to login before encryption"
+msgstr ""
+
+#: loginjob.cpp:362
+#, kde-format
+msgid "Login failed, plain login is disabled by the server."
+msgstr ""
+"Αποτυχία σύνδεσης, η σύνδεση απλού κειμένου είναι απενεργοποιημένη από τον "
+"εξυπηρετητή."
+
+#: loginjob.cpp:383
+#, kde-format
+msgid "Login failed, authentication mode %1 is not supported by the server."
+msgstr ""
+"Αποτυχία σύνδεσης, η μέθοδος ταυτοποίησης %1 δεν υποστηρίζεται από τον "
+"εξυπηρετητή."
+
+#: loginjob.cpp:413
+#, kde-format
+msgid "Login failed, client cannot initialize the SASL library."
+msgstr ""
+"Αποτυχία σύνδεσης, ο πελάτης δεν μπορεί να αρχικοποιήσει τη βιβλιοθήκη SASL."
+
+#: loginjob.cpp:512
+#, kde-format
+msgid "Login failed, TLS negotiation failed."
+msgstr "Αποτυχία σύνδεσης, αποτυχία διαπραγμάτευσης TLS."
+
+#: loginjob.cpp:570
+#, kde-format
+msgid "SSL handshake failed."
+msgstr "Αποτυχία χειραψίας SSL."
+
+#: logoutjob.cpp:33
+#, kde-format
+msgid "Logout"
+msgstr "Αποσύνδεση"
+
+#: metadatajobbase.cpp:53
+#, kde-format
+msgid "MetaDataJobBase"
+msgstr "MetaDataJobBase"
+
+#: movejob.cpp:42
+#, kde-format
+msgid "Move"
+msgstr "Μετακίνηση"
+
+#: myrightsjob.cpp:37
+#, kde-format
+msgid "MyRights"
+msgstr "Τα δικαιώματά μου"
+
+#: namespacejob.cpp:68
+#, kde-format
+msgid "Namespace"
+msgstr "Χώρος ονομάτων"
+
+#: quotajobbase.cpp:34
+#, kde-format
+msgid "QuotaJobBase"
+msgstr "QuotaJobBase"
+
+#: renamejob.cpp:37
+#, kde-format
+msgid "Rename"
+msgstr "Μετονομασία"
+
+#: searchjob.cpp:361
+#, kde-format
+msgctxt "Name of the search job"
+msgid "Search"
+msgstr "Αναζήτηση"
+
+#: selectjob.cpp:73
+#, kde-format
+msgctxt "name of the select job"
+msgid "Select"
+msgstr "Επιλογή"
+
+#: setacljob.cpp:34
+#, kde-format
+msgid "SetAcl"
+msgstr "ΟρισμόςAcl"
+
+#: setmetadatajob.cpp:43
+#, kde-format
+msgid "SetMetaData"
+msgstr "Ορισμός μεταδεδομένων"
+
+#: setquotajob.cpp:37
+#, kde-format
+msgid "SetQuota"
+msgstr "ΟρισμόςQuota"
+
+#: statusjob.cpp:40
+#, kde-format
+msgctxt "name of the status job"
+msgid "Status"
+msgstr "Κατάσταση"
+
+#: storejob.cpp:70
+#, kde-format
+msgid "Store"
+msgstr "Αποθήκευση"
+
+#: subscribejob.cpp:36
+#, kde-format
+msgid "Subscribe"
+msgstr "Εγγραφή"
+
+#: unsubscribejob.cpp:36
+#, kde-format
+msgid "Unsubscribe"
+msgstr "Διαγραφή"
+
+#~ msgid "SetAnnotation"
+#~ msgstr "Ορισμός σημείωσης"
+
+#~ msgid "Mock"
+#~ msgstr "Mock"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Τούσης Μανώλης"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "manolis@koppermind.homelinux.org"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "Authentication method"
+#~ msgid "Clear text"
+#~ msgstr "Δημιουργία"
+
+#~ msgid "Check"
+#~ msgstr "Έλεγχος"
+
+#~ msgid "Noop"
+#~ msgstr "Καμία λειτουργία"
