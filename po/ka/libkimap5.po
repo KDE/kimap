@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-11 00:45+0000\n"
-"PO-Revision-Date: 2022-09-30 18:51+0200\n"
+"PO-Revision-Date: 2022-11-25 12:03+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2\n"
 
 #: acljobbase.cpp:56
 #, kde-format
@@ -122,12 +122,12 @@ msgstr "სერვერთან კავშირი დაკარგუ�
 #: job.cpp:65 loginjob.cpp:403 setmetadatajob.cpp:126
 #, kde-format
 msgid "%1 failed, malformed reply from the server."
-msgstr ""
+msgstr "%1-ის შეცდომა. სერვერის პასუხი არასწორია."
 
 #: job.cpp:68 loginjob.cpp:277 setmetadatajob.cpp:109 setmetadatajob.cpp:129
 #, kde-format
 msgid "%1 failed, server replied: %2"
-msgstr ""
+msgstr "%1-ის შეცდომა. სერვერის პასუხია: %2"
 
 #: listjob.cpp:59
 #, kde-format
@@ -147,7 +147,7 @@ msgstr "შესვლა"
 #: loginjob.cpp:184
 #, kde-format
 msgid "IMAP session in the wrong state for authentication"
-msgstr ""
+msgstr "IMAP-ის სესია ავთენტიკაციისთვის არასწორ მდგომარეობაშია"
 
 #: loginjob.cpp:235
 #, kde-format
@@ -162,7 +162,7 @@ msgstr "StartTls"
 #: loginjob.cpp:340
 #, kde-format
 msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
-msgstr ""
+msgstr "STARTTLS მხარდაუჭერელია სერვერის მიერ. სცადეთ SSL/TLS გამოიყენოთ."
 
 #: loginjob.cpp:353
 #, kde-format
@@ -177,22 +177,22 @@ msgstr "შესვლის შეცდომა. დაუშიფრავ
 #: loginjob.cpp:383
 #, kde-format
 msgid "Login failed, authentication mode %1 is not supported by the server."
-msgstr ""
+msgstr "შესვლის შეცდომა. ავთენტიკაციის რეჟიმი %1 მხარდაუჭერელია სერვერის მიერ."
 
 #: loginjob.cpp:413
 #, kde-format
 msgid "Login failed, client cannot initialize the SASL library."
-msgstr ""
+msgstr "შესვლის შეცდომა. კლიენტს SASL ბიბლიოთეკის ინიციალიზაცია არ შეუძლია."
 
 #: loginjob.cpp:512
 #, kde-format
 msgid "Login failed, TLS negotiation failed."
-msgstr ""
+msgstr "შესვლის შეცდომა TLS მიმოცვლის შეცდომა."
 
 #: loginjob.cpp:570
 #, kde-format
 msgid "SSL handshake failed."
-msgstr ""
+msgstr "SSL მიმოცვლის შეცდომა."
 
 #: logoutjob.cpp:33
 #, kde-format
