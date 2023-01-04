@@ -1,159 +1,160 @@
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# Lukáš Tinkl <ltinkl@redhat.com>, 2010.
-# Vít Pelčák <vit@pelcak.org>, 2011, 2014, 2016.
-# Vit Pelcak <vit@pelcak.org>, 2022.
+# Translation for libkimap5.po to Euskara/Basque (eu).
+# Copyright (C) 2023 This file is copyright:
+# This file is distributed under the same license as the kimap package.
+# KDE euskaratzeko proiektuko arduraduna <xalba@ni.eus>.
 #
+# Translators:
+# Iñigo Salvador Azurmendi <xalba@ni.eus>, 2023.
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: kimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-11 00:45+0000\n"
-"PO-Revision-Date: 2022-01-31 16:34+0100\n"
-"Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
-"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
-"Language: cs\n"
+"PO-Revision-Date: 2023-01-03 09:03+0100\n"
+"Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
+"Language-Team: Basque <kde-i18n-eu@kde.org>\n"
+"Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 21.12.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 22.12.0\n"
 
 #: acljobbase.cpp:56
 #, kde-format
 msgid "AclJobBase"
-msgstr "AclJobBase"
+msgstr "AclAtazaOinarria"
 
 #: appendjob.cpp:40
 #, kde-format
 msgid "Append"
-msgstr "Přidání"
+msgstr "Erantsi"
 
 #: capabilitiesjob.cpp:35
 #, kde-format
 msgid "Capabilities"
-msgstr "Možnosti"
+msgstr "Gaitasunak"
 
 #: closejob.cpp:32
 #, kde-format
 msgid "Close"
-msgstr "Zavřít"
+msgstr "Itxi"
 
 #: copyjob.cpp:41
 #, kde-format
 msgid "Copy"
-msgstr "Kopírovat"
+msgstr "Kopiatu"
 
 #: createjob.cpp:36
 #, kde-format
 msgid "Create"
-msgstr "Vytvořit"
+msgstr "Sortu"
 
 #: deleteacljob.cpp:37
 #, kde-format
 msgid "DeleteAclJob"
-msgstr "DeleteAclJob"
+msgstr "EzabatuAclAtaza"
 
 #: deletejob.cpp:36
 #, kde-format
 msgid "Delete"
-msgstr "Smazat"
+msgstr "Ezabatu"
 
 #: enablejob.cpp:31
 #, kde-format
 msgid "Enable"
-msgstr "Povolit"
+msgstr "Gaitu"
 
 #: expungejob.cpp:37
 #, kde-format
 msgid "Expunge"
-msgstr "Zničit"
+msgstr "Desagerrarazi"
 
 #: fetchjob.cpp:97
 #, kde-format
 msgid "Fetch"
-msgstr "Stáhnout"
+msgstr "Ekarri"
 
 #: getacljob.cpp:37
 #, kde-format
 msgid "GetAcl"
-msgstr "GetAcl"
+msgstr "LortuAcl"
 
 #: getmetadatajob.cpp:43
 #, kde-format
 msgid "GetMetaData"
-msgstr "GetMetaData"
+msgstr "LortuMetaDatuak"
 
 #: getmetadatajob.cpp:66
 #, kde-format
 msgid "GetAnnotation"
-msgstr "GetAnnotation"
+msgstr "LortuIdatzoharra"
 
 #: getquotajob.cpp:35
 #, kde-format
 msgid "GetQuota"
-msgstr "GetQuota"
+msgstr "LortuKuota"
 
 #: getquotarootjob.cpp:38
 #, kde-format
 msgid "GetQuotaRoot"
-msgstr "GetQuotaRoot"
+msgstr "LortuKuotaErroa"
 
 #: idjob.cpp:35
 #, kde-format
 msgid "Id"
-msgstr "Id"
+msgstr "ID"
 
 #: idlejob.cpp:65
 #, kde-format
 msgctxt "name of the idle job"
 msgid "Idle"
-msgstr "Nečinný"
+msgstr "Inaktibo"
 
 #: job.cpp:19
 #, kde-format
 msgid "Job"
-msgstr "Úloha"
+msgstr "Ataza"
 
 #: job.cpp:54 loginjob.cpp:574
 #, kde-format
 msgid "Connection to server lost."
-msgstr "Spojení se serverem bylo ztraceno."
+msgstr "Zerbitzarirako konexioa galdu da."
 
 #: job.cpp:65 loginjob.cpp:403 setmetadatajob.cpp:126
 #, kde-format
 msgid "%1 failed, malformed reply from the server."
-msgstr "Metoda '%1' selhala, chybná odpověď ze serveru."
+msgstr "%1 huts egin du, gaizki eratutako erantzuna zerbitzaritik."
 
 #: job.cpp:68 loginjob.cpp:277 setmetadatajob.cpp:109 setmetadatajob.cpp:129
 #, kde-format
 msgid "%1 failed, server replied: %2"
-msgstr "Metoda '%1' selhala, server odpověděl: %2"
+msgstr "%1 huts egin du, zerbitzariak erantzun du: %2"
 
 #: listjob.cpp:59
 #, kde-format
 msgid "List"
-msgstr "Seznam"
+msgstr "Zerrenda"
 
 #: listrightsjob.cpp:38
 #, kde-format
 msgid "ListRights"
-msgstr "ListRights"
+msgstr "ZerrendatuEskubideak"
 
 #: loginjob.cpp:129 loginjob.cpp:233
 #, kde-format
 msgid "Login"
-msgstr "Přihlášení"
+msgstr "Saio-hasiera"
 
 #: loginjob.cpp:184
 #, kde-format
 msgid "IMAP session in the wrong state for authentication"
-msgstr "Sezení IMAP v neplatném stavu ověření"
+msgstr "IMAP saioa autentifikazioa egiteko okerreko egoeran"
 
 #: loginjob.cpp:235
 #, kde-format
 msgid "Capability"
-msgstr "Možnost"
+msgstr "Gaitasuna"
 
 #: loginjob.cpp:237
 #, kde-format
@@ -163,117 +164,121 @@ msgstr "StartTls"
 #: loginjob.cpp:340
 #, kde-format
 msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
-msgstr "Server nepodporuje STARTTLS. Zkuste použít SSL/TLS."
+msgstr ""
+"Zerbitzariak ez du STARTTLS onartzen, saiatu horren ordez SSL/TLS erabiltzen."
 
 #: loginjob.cpp:353
 #, kde-format
 msgid "Internal error, tried to login before encryption"
-msgstr "Vnitřní chyba. Pokus o přihlášení před šifrováním"
+msgstr "Barneko errorea, zifratzearen aurretik saio-hasten saiatu da"
 
 #: loginjob.cpp:362
 #, kde-format
 msgid "Login failed, plain login is disabled by the server."
-msgstr "Přihlášení selhalo, přihlášení prostým textem je na serveru zakázáno."
+msgstr ""
+"Saio-hastea huts egin du, zerbitzariak ageriko saio-hasiera ezgaitu du."
 
 #: loginjob.cpp:383
 #, kde-format
 msgid "Login failed, authentication mode %1 is not supported by the server."
-msgstr "Přihlášení selhalo, ověřovací režim %1 není serverem podporován."
+msgstr ""
+"Saio-hastea huts egin du, zerbitzariak ez du %1 autentifikazio moduaren "
+"euskarririk."
 
 #: loginjob.cpp:413
 #, kde-format
 msgid "Login failed, client cannot initialize the SASL library."
-msgstr "Přihlášení selhalo, klient nemůže inicializovat SASL knihovnu."
+msgstr "Saio-hastea huts egin du, ezin du SASL liburutegia hasieratu."
 
 #: loginjob.cpp:512
 #, kde-format
 msgid "Login failed, TLS negotiation failed."
-msgstr "Přihlášení selhalo, komunikace v TLS selhala."
+msgstr "Saio-hastea huts egin du, TLS negoziazioak huts egin du."
 
 #: loginjob.cpp:570
 #, kde-format
 msgid "SSL handshake failed."
-msgstr "Handshake SSL selhal."
+msgstr "SSL bostekoa estutzea huts egin du."
 
 #: logoutjob.cpp:33
 #, kde-format
 msgid "Logout"
-msgstr "Odhlášení"
+msgstr "Saio-ixtea"
 
 #: metadatajobbase.cpp:53
 #, kde-format
 msgid "MetaDataJobBase"
-msgstr "MetaDataJobBase"
+msgstr "MetaDatuenOinarriAtaza"
 
 #: movejob.cpp:42
 #, kde-format
 msgid "Move"
-msgstr "Přesunout"
+msgstr "Mugitu"
 
 #: myrightsjob.cpp:37
 #, kde-format
 msgid "MyRights"
-msgstr "MyRights"
+msgstr "NireEskubideak"
 
 #: namespacejob.cpp:68
 #, kde-format
 msgid "Namespace"
-msgstr "Jmenný prostor"
+msgstr "Izen-tartea"
 
 #: quotajobbase.cpp:34
 #, kde-format
 msgid "QuotaJobBase"
-msgstr "QuotaJobBase"
+msgstr "KuotaAtazaOinarria"
 
 #: renamejob.cpp:37
 #, kde-format
 msgid "Rename"
-msgstr "Přejmenovat"
+msgstr "Berrizendatu"
 
 #: searchjob.cpp:361
 #, kde-format
 msgctxt "Name of the search job"
 msgid "Search"
-msgstr "Vyhledat"
+msgstr "Bilatu"
 
 #: selectjob.cpp:73
 #, kde-format
 msgctxt "name of the select job"
 msgid "Select"
-msgstr "Vybrat"
+msgstr "Hautatu"
 
 #: setacljob.cpp:34
 #, kde-format
 msgid "SetAcl"
-msgstr "SetAcl"
+msgstr "EzarriAcl"
 
 #: setmetadatajob.cpp:43
 #, kde-format
 msgid "SetMetaData"
-msgstr "SetMetaData"
+msgstr "EzarriMetaDatuak"
 
 #: setquotajob.cpp:37
 #, kde-format
 msgid "SetQuota"
-msgstr "SetQuota"
+msgstr "EzarriKuota"
 
 #: statusjob.cpp:40
 #, kde-format
 msgctxt "name of the status job"
 msgid "Status"
-msgstr "Stav"
+msgstr "Egoera"
 
 #: storejob.cpp:70
 #, kde-format
 msgid "Store"
-msgstr "Uložit"
+msgstr "Biltegiratu"
 
 #: subscribejob.cpp:36
 #, kde-format
 msgid "Subscribe"
-msgstr "Zaregistrovat"
+msgstr "Harpidetu"
 
 #: unsubscribejob.cpp:36
 #, kde-format
 msgid "Unsubscribe"
-msgstr "Odhlásit se"
+msgstr "Harpidetza kendu"
