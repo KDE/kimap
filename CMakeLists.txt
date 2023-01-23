@@ -34,8 +34,13 @@ include(ECMAddQch)
 
 set(QT_REQUIRED_VERSION "5.15.2")
 if (QT_MAJOR_VERSION STREQUAL "6")
-    set(QT_REQUIRED_VERSION "6.4.0")
+    set(QT_MIN_VERSION "6.4.0")
+    set(KF_MIN_VERSION "5.240.0")
+    set(KF_MAJOR_VERSION "6")
+else()
+    set(KF_MAJOR_VERSION "5")
 endif()
+
 
 set(KIMAP_LIB_VERSION ${PIM_VERSION})
 set(KMIME_LIBS_VERSION "5.22.40")
@@ -52,9 +57,9 @@ set_package_properties(Sasl2 PROPERTIES TYPE REQUIRED)
 if (QT_MAJOR_VERSION STREQUAL "6")
     find_package(Qt6Core5Compat)
 endif()
-find_package(KF5CoreAddons ${KF_MIN_VERSION} CONFIG REQUIRED)
-find_package(KF5I18n ${KF_MIN_VERSION} CONFIG REQUIRED)
-find_package(KF5KIO ${KF_MIN_VERSION} CONFIG REQUIRED)
+find_package(KF${KF_MAJOR_VERSION}CoreAddons ${KF_MIN_VERSION} CONFIG REQUIRED)
+find_package(KF${KF_MAJOR_VERSION}I18n ${KF_MIN_VERSION} CONFIG REQUIRED)
+find_package(KF${KF_MAJOR_VERSION}KIO ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF5Mime ${KMIME_LIBS_VERSION} CONFIG REQUIRED)
 
 ########### CMake Config Files ###########

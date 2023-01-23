@@ -3,7 +3,7 @@
 kde_enable_exceptions()
 
 add_executable(testimapidle testimapidle.cpp)
-target_link_libraries(testimapidle KF5IMAP Qt::Test KF5::KIOCore Qt::Network)
+target_link_libraries(testimapidle KF5IMAP Qt::Test KF${KF_MAJOR_VERSION}::KIOCore Qt::Network)
 
 add_executable(testimapserver testimapserver.cpp)
-target_link_libraries(testimapserver KF5IMAP Qt::Test KF5::KIOCore Qt::Network)
+target_link_libraries(testimapserver KF5IMAP Qt::Test KF${KF_MAJOR_VERSION}::KIOCore Qt::Network)

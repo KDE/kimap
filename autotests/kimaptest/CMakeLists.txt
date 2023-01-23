@@ -16,7 +16,7 @@ endif()
 generate_export_header(kimaptest)
 add_library(KF5::kimaptest ALIAS kimaptest)
 target_include_directories(KF5IMAP INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF}/KIMAPTest>")
-target_link_libraries(kimaptest KF5IMAP Qt::Test Qt::Network Qt::Core KF5::CoreAddons KF5::KIOCore KF5::I18n)
+target_link_libraries(kimaptest KF5IMAP Qt::Test Qt::Network Qt::Core KF${KF_MAJOR_VERSION}::CoreAddons KF${KF_MAJOR_VERSION}::KIOCore KF${KF_MAJOR_VERSION}::I18n)
 
 install(TARGETS kimaptest EXPORT KF5IMAPTargets ${KF_INSTALL_TARGETS_DEFAULT_ARGS})
 

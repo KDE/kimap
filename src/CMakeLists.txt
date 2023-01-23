@@ -126,12 +126,12 @@ endif()
 target_link_libraries(KF5IMAP
 PUBLIC
   KF5::Mime
-  KF5::CoreAddons
+  KF${KF_MAJOR_VERSION}::CoreAddons
   Qt::Network
 PRIVATE
-  KF5::KIOCore
-  KF5::Codecs
-  KF5::I18n
+  KF${KF_MAJOR_VERSION}::KIOCore
+  KF${KF_MAJOR_VERSION}::Codecs
+  KF${KF_MAJOR_VERSION}::I18n
   Sasl2::Sasl2
   ${extra_LIBS}
 )
