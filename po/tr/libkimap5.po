@@ -5,13 +5,13 @@
 # H. İbrahim Güngör <ibrahim@pardus.org.tr>, 2011.
 # Volkan Gezer <volkangezer@gmail.com>, 2014, 2017.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: libkimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-11 00:45+0000\n"
-"PO-Revision-Date: 2022-11-15 05:06+0300\n"
+"PO-Revision-Date: 2023-02-08 19:39+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.3\n"
+"X-Generator: Lokalize 22.12.2\n"
 
 #: acljobbase.cpp:56
 #, kde-format
@@ -145,7 +145,7 @@ msgstr "Hakları Listele"
 #: loginjob.cpp:129 loginjob.cpp:233
 #, kde-format
 msgid "Login"
-msgstr "Giriş"
+msgstr "Oturumu Aç"
 
 #: loginjob.cpp:184
 #, kde-format
@@ -170,30 +170,31 @@ msgstr "STARTTLS sunucu tarafından desteklenmiyor, SSL/TLS kullanmayı deneyin.
 #: loginjob.cpp:353
 #, kde-format
 msgid "Internal error, tried to login before encryption"
-msgstr "İç hata, şifreleme öncesi giriş denendi"
+msgstr "İç hata, şifreleme öncesi oturum açma denendi"
 
 #: loginjob.cpp:362
 #, kde-format
 msgid "Login failed, plain login is disabled by the server."
 msgstr ""
-"Düz giriş sunucu tarafından devre dışı bırakıldığı için giriş yapılamadı."
+"Oturum açma başarısız, düz oturum açma yöntemi sunucu tarafından devre dışı "
+"bırakılmış."
 
 #: loginjob.cpp:383
 #, kde-format
 msgid "Login failed, authentication mode %1 is not supported by the server."
 msgstr ""
-"%1 kimlik doğrulama yöntemi sunucu tarafından desteklenmediğinden giriş "
-"başarısız oldu."
+"Oturum açma başarısız; %1 kimlik doğrulama yöntemi sunucu tarafından "
+"desteklenmiyor."
 
 #: loginjob.cpp:413
 #, kde-format
 msgid "Login failed, client cannot initialize the SASL library."
-msgstr "İstemci SASL kitaplığını başlatamadığından giriş yapılamadı."
+msgstr "İstemci SASL kitaplığını başlatamadığından oturum açılamadı."
 
 #: loginjob.cpp:512
 #, kde-format
 msgid "Login failed, TLS negotiation failed."
-msgstr "TLS anlaşması başarısız olduğundan giriş yapılamadı."
+msgstr "TLS antlaşması başarısız olduğundan oturum açılamadı."
 
 #: loginjob.cpp:570
 #, kde-format
@@ -203,12 +204,12 @@ msgstr "SSL el sıkışması başarısız."
 #: logoutjob.cpp:33
 #, kde-format
 msgid "Logout"
-msgstr "Çıkış"
+msgstr "Oturumu Kapat"
 
 #: metadatajobbase.cpp:53
 #, kde-format
 msgid "MetaDataJobBase"
-msgstr "MetaDataJobBase"
+msgstr "Üst Veri İş Tabanı "
 
 #: movejob.cpp:42
 #, kde-format
@@ -223,7 +224,7 @@ msgstr "Haklarım"
 #: namespacejob.cpp:68
 #, kde-format
 msgid "Namespace"
-msgstr "Namespace"
+msgstr "Ad Alanı"
 
 #: quotajobbase.cpp:34
 #, kde-format
@@ -255,7 +256,7 @@ msgstr "SetAcl"
 #: setmetadatajob.cpp:43
 #, kde-format
 msgid "SetMetaData"
-msgstr "SetMetaData"
+msgstr "Üst Veriyi Ayarla"
 
 #: setquotajob.cpp:37
 #, kde-format
