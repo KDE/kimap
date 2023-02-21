@@ -190,18 +190,11 @@ private Q_SLOTS:
                      << "C: A000002 LOGIN \"user\" \"password\""
                      << "S: A000002 OK";
 
-            // SSLv2 support was removed from openssl 1.1
-            // QTest::newRow("sslv2") << scenario << static_cast<int>(QSsl::SslV2);
-
-            // FIXME: SSLv3-only server is failing, likely openssl configuration problem
-            // QTest::newRow("sslv3") << scenario << static_cast<int>(QSsl::SslV3);
-
             // AnySslVersion doesn't mean the server can force a specific version (e.g. openssl always starts with a tls12 hello)
             QTest::newRow("any protocol with anyssl version") << scenario << static_cast<int>(QSsl::AnyProtocol);
 
-            QTest::newRow("tlsv10") << scenario << static_cast<int>(QSsl::TlsV1_0);
-            QTest::newRow("tlsv11") << scenario << static_cast<int>(QSsl::TlsV1_1);
             QTest::newRow("tlsv12") << scenario << static_cast<int>(QSsl::TlsV1_2);
+            QTest::newRow("tlsv13") << scenario << static_cast<int>(QSsl::TlsV1_3);
         }
     }
 
