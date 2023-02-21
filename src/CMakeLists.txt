@@ -135,6 +135,9 @@ PRIVATE
   Sasl2::Sasl2
   ${extra_LIBS}
 )
+if (QT_MAJOR_VERSION EQUAL "6")
+    target_link_libraries(KF5IMAP PRIVATE Qt6::Core5Compat)
+endif()
 
 set_target_properties(KF5IMAP PROPERTIES
     VERSION ${KIMAP_VERSION}
