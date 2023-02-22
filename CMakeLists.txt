@@ -54,9 +54,6 @@ add_feature_info(QCH ${BUILD_QCH} "API documentation in QCH format (for e.g. Qt 
 ########### Find packages ###########
 find_package(Sasl2)
 set_package_properties(Sasl2 PROPERTIES TYPE REQUIRED)
-if (QT_MAJOR_VERSION STREQUAL "6")
-    find_package(Qt6Core5Compat CONFIG REQUIRED)
-endif()
 find_package(KF${KF_MAJOR_VERSION}CoreAddons ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF${KF_MAJOR_VERSION}I18n ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF${KF_MAJOR_VERSION}KIO ${KF_MIN_VERSION} CONFIG REQUIRED)

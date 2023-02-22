@@ -23,8 +23,6 @@
 
 #include "kimap_export.h"
 
-class QTextCodec;
-
 namespace KIMAP
 {
 /**
@@ -66,55 +64,4 @@ Q_REQUIRED_RESULT KIMAP_EXPORT QString quoteIMAP(const QString &src);
   @since 4.3
 */
 Q_REQUIRED_RESULT KIMAP_EXPORT QByteArray quoteIMAP(const QByteArray &src);
-
-/**
-  Fetches a Codec by @p name.
-  @param name is the QString version of the Codec name.
-  @return Text Codec object
-*/
-KIMAP_EXPORT QTextCodec *codecForName(const QString &name);
-
-/**
-  Decodes a RFC2047 string @p str.
-  @param str is the QString to decode.
-  @param charset is the character set to use when decoding.
-  @param language is the language found in the charset.
-*/
-Q_REQUIRED_RESULT KIMAP_EXPORT const QString decodeRFC2047String(const QString &str, QString &charset, QString &language);
-/**
-  Decodes a RFC2047 string @p str.
-  @param str is the QString to decode.
-  @param charset is the character set to use when decoding.
-*/
-Q_REQUIRED_RESULT KIMAP_EXPORT const QString decodeRFC2047String(const QString &str, QString &charset);
-
-/**
-  Decodes a RFC2047 string @p str.
-  @param str is the QString to decode.
-*/
-Q_REQUIRED_RESULT KIMAP_EXPORT const QString decodeRFC2047String(const QString &str);
-
-/**
-  Encodes a RFC2047 string @p str.
-  @param str is the QString to encode.
-*/
-Q_REQUIRED_RESULT KIMAP_EXPORT const QString encodeRFC2047String(const QString &str);
-
-/**
-  Encodes a RFC2047 string @p str.
-  @param str is the QString to encode.
-*/
-Q_REQUIRED_RESULT KIMAP_EXPORT const QByteArray encodeRFC2047String(const QByteArray &str);
-
-/**
-  Encodes a RFC2231 string @p str.
-  @param str is the QString to encode.
-*/
-Q_REQUIRED_RESULT KIMAP_EXPORT const QString encodeRFC2231String(const QString &str);
-
-/**
-  Decodes a RFC2231 string @p str.
-  @param str is the QString to decode.
-*/
-Q_REQUIRED_RESULT KIMAP_EXPORT const QString decodeRFC2231String(const QString &str);
 }
