@@ -125,7 +125,7 @@ endif()
 
 target_link_libraries(KF5IMAP
 PUBLIC
-  KF5::Mime
+  KPim${KF_MAJOR_VERSION}::Mime
   KF${KF_MAJOR_VERSION}::CoreAddons
   Qt::Network
 PRIVATE
