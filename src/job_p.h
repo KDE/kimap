@@ -18,8 +18,8 @@ class JobPrivate
 public:
     JobPrivate(Session *session, const QString &name)
         : m_session(session)
+        , m_name(name)
     {
-        m_name = name;
     }
     virtual ~JobPrivate()
     {

@@ -22,9 +22,9 @@ public:
 
     Private(const Private &other)
         : QSharedData(other)
+        , begin(other.begin)
+        , end(other.end)
     {
-        begin = other.begin;
-        end = other.end;
     }
 
     Id begin;
@@ -40,8 +40,8 @@ public:
     }
     Private(const Private &other)
         : QSharedData(other)
+        , intervals(other.intervals)
     {
-        intervals = other.intervals;
     }
 
     ImapInterval::List intervals;
