@@ -46,7 +46,7 @@ set(KIMAP_LIB_VERSION ${PIM_VERSION})
 set(KMIME_LIBS_VERSION "5.22.40")
 ecm_setup_version(PROJECT VARIABLE_PREFIX KIMAP
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kimap_version.h"
-                        PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5IMAPConfigVersion.cmake"
+                        PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KPim${KF_MAJOR_VERSION}IMAPConfigVersion.cmake"
                         SOVERSION 5
 )
 option(BUILD_QCH "Build API documentation in QCH format (for e.g. Qt Assistant, Qt Creator & KDevelop)" OFF)
@@ -63,7 +63,8 @@ find_package(KF${KF_MAJOR_VERSION}KIO ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KPim${KF_MAJOR_VERSION}Mime ${KMIME_LIBS_VERSION} CONFIG REQUIRED)
 
 ########### CMake Config Files ###########
-set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5IMAP")
+set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KPim${KF_MAJOR_VERSION}IMAP")
+set(KIMAP_KF5_COMPAT FALSE)
 add_definitions(-DTRANSLATION_DOMAIN=\"libkimap5\")
 
 ecm_set_disabled_deprecation_versions(QT 6.4
@@ -73,8 +74,8 @@ add_definitions(-DQT_NO_EMIT)
 
 
 configure_package_config_file(
-  "${CMAKE_CURRENT_SOURCE_DIR}/KF5IMAPConfig.cmake.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/KF5IMAPConfig.cmake"
+  "${CMAKE_CURRENT_SOURCE_DIR}/KPimIMAPConfig.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/KPim${KF_MAJOR_VERSION}IMAPConfig.cmake"
   INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
 )
 
@@ -96,28 +97,58 @@ endif()
 
 ########### Install Files ###########
 install(FILES
-  "${CMAKE_CURRENT_BINARY_DIR}/KF5IMAPConfig.cmake"
-  "${CMAKE_CURRENT_BINARY_DIR}/KF5IMAPConfigVersion.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/KPim${KF_MAJOR_VERSION}IMAPConfig.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/KPim${KF_MAJOR_VERSION}IMAPConfigVersion.cmake"
   DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
   COMPONENT Devel
 )
 
-install(EXPORT KF5IMAPTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE KF5IMAPTargets.cmake NAMESPACE KF5::)
+install(EXPORT KPim${KF_MAJOR_VERSION}IMAPTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE KPim${KF_MAJOR_VERSION}IMAPTargets.cmake NAMESPACE KPim${KF_MAJOR_VERSION}::)
 
 install(FILES
    ${CMAKE_CURRENT_BINARY_DIR}/kimap_version.h
-  DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF}/KIMAP/ COMPONENT Devel
+  DESTINATION ${KDE_INSTALL_INCLUDEDIR}/KPim${KF_MAJOR_VERSION}/KIMAP/ COMPONENT Devel
 )
 
 if (BUILD_QCH)
     ecm_install_qch_export(
-        TARGETS KF5Imap_QCH
-        FILE KF5ImapQchTargets.cmake
+        TARGETS KPim${KF_MAJOR_VERSION}Imap_QCH
+        FILE KPim${KF_MAJOR_VERSION}ImapQchTargets.cmake
         DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
         COMPONENT Devel
     )
-    set(PACKAGE_INCLUDE_QCHTARGETS "include(\"\${CMAKE_CURRENT_LIST_DIR}/KF5ImapQchTargets.cmake\")")
+    set(PACKAGE_INCLUDE_QCHTARGETS "include(\"\${CMAKE_CURRENT_LIST_DIR}/KPim${KF_MAJOR_VERSION}ImapQchTargets.cmake\")")
 endif()
+
+#if (QT_MAJOR_VERSION STREQUAL "5")
+##
+# TODO: Backwards compatiblity. Remove in next major version
+##
+set(CMAKECONFIG_INSTALL_DIR_KF5 "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5IMAP")
+set(KIMAP_KF5_COMPAT TRUE)
+configure_package_config_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/KPimIMAPConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/KF5IMAPConfig.cmake"
+    INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR_KF5}
+)
+
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/KF5IMAPConfig.cmake"
+    DESTINATION "${CMAKECONFIG_INSTALL_DIR_KF5}"
+    COMPONENT Devel
+)
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/KPim${KF_MAJOR_VERSION}IMAPConfigVersion.cmake"
+    RENAME "KF5IMAPConfigVersion.cmake"
+    DESTINATION "${CMAKECONFIG_INSTALL_DIR_KF5}"
+    COMPONENT Devel
+)
+install(EXPORT KPim${KF_MAJOR_VERSION}IMAPTargets
+    DESTINATION "${CMAKECONFIG_INSTALL_DIR_KF5}"
+    FILE KPim${KF_MAJOR_VERSION}IMAPTargets.cmake
+    NAMESPACE KF5::
+)
+#endif()
 
 kde_configure_git_pre_commit_hook(CHECKS CLANG_FORMAT)
 ki18n_install(po)

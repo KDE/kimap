@@ -2,9 +2,10 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # Turn exceptions on
 kde_enable_exceptions()
-add_library(KF5IMAP)
-add_library(KF5::IMAP ALIAS KF5IMAP)
-target_sources(KF5IMAP PRIVATE
+add_library(KPim${KF_MAJOR_VERSION}IMAP)
+add_library(KPim${KF_MAJOR_VERSION}::IMAP ALIAS KPim${KF_MAJOR_VERSION}IMAP)
+add_library(KF5::IMAP ALIAS KPim${KF_MAJOR_VERSION}IMAP)
+target_sources(KPim${KF_MAJOR_VERSION}IMAP PRIVATE
    acl.cpp
    acljobbase.cpp
    appendjob.cpp
@@ -104,26 +105,26 @@ target_sources(KF5IMAP PRIVATE
    logoutjob.h
 )
 
-ecm_qt_declare_logging_category(KF5IMAP HEADER kimap_debug.h IDENTIFIER KIMAP_LOG CATEGORY_NAME org.kde.pim.kimap
+ecm_qt_declare_logging_category(KPim${KF_MAJOR_VERSION}IMAP HEADER kimap_debug.h IDENTIFIER KIMAP_LOG CATEGORY_NAME org.kde.pim.kimap
         OLD_CATEGORY_NAMES log_kimap
         DESCRIPTION "kimap (pim lib)" EXPORT KIMAP)
 
 if (COMPILE_WITH_UNITY_CMAKE_SUPPORT)
-    set_target_properties(KF5IMAP PROPERTIES UNITY_BUILD ON)
+    set_target_properties(KPim${KF_MAJOR_VERSION}IMAP PROPERTIES UNITY_BUILD ON)
 endif()
 
-generate_export_header(KF5IMAP BASE_NAME kimap)
+generate_export_header(KPim${KF_MAJOR_VERSION}IMAP BASE_NAME kimap)
 
 
 
-target_include_directories(KF5IMAP INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF}/KIMAP>")
-target_include_directories(KF5IMAP PUBLIC "$<BUILD_INTERFACE:${KIMAP_SOURCE_DIR}/src;${KIMAP_BINARY_DIR}/src>")
+target_include_directories(KPim${KF_MAJOR_VERSION}IMAP INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/KPim${KF_MAJOR_VERSION}/KIMAP>")
+target_include_directories(KPim${KF_MAJOR_VERSION}IMAP PUBLIC "$<BUILD_INTERFACE:${KIMAP_SOURCE_DIR}/src;${KIMAP_BINARY_DIR}/src>")
 
 if (WIN32)
     set(extra_LIBS ws2_32)
 endif()
 
-target_link_libraries(KF5IMAP
+target_link_libraries(KPim${KF_MAJOR_VERSION}IMAP
 PUBLIC
   KPim${KF_MAJOR_VERSION}::Mime
   KF${KF_MAJOR_VERSION}::CoreAddons
@@ -136,10 +137,10 @@ PRIVATE
   ${extra_LIBS}
 )
 if (QT_MAJOR_VERSION EQUAL "6")
-    target_link_libraries(KF5IMAP PRIVATE Qt6::Core5Compat)
+    target_link_libraries(KPim${KF_MAJOR_VERSION}IMAP PRIVATE Qt6::Core5Compat)
 endif()
 
-set_target_properties(KF5IMAP PROPERTIES
+set_target_properties(KPim${KF_MAJOR_VERSION}IMAP PROPERTIES
     VERSION ${KIMAP_VERSION}
     SOVERSION ${KIMAP_SOVERSION}
     EXPORT_NAME IMAP
@@ -194,31 +195,31 @@ ecm_generate_headers(KIMAP_CamelCase_HEADERS
   REQUIRED_HEADERS KIMAP_HEADERS
 )
 
-install(TARGETS KF5IMAP EXPORT KF5IMAPTargets ${KF_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS KPim${KF_MAJOR_VERSION}IMAP EXPORT KPim${KF_MAJOR_VERSION}IMAPTargets ${KF_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/kimap_export.h
     ${KIMAP_HEADERS}
     ${KIMAP_CamelCase_HEADERS}
-    DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF}/KIMAP/kimap
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/KPim${KF_MAJOR_VERSION}/KIMAP/kimap
     COMPONENT Devel
 )
 
 install(FILES
     ${KIMAP_CamelCase_HEADERS}
-    DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF}/KIMAP/KIMAP
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/KPim${KF_MAJOR_VERSION}/KIMAP/KIMAP
     COMPONENT Devel
 )
 
 ecm_qt_install_logging_categories(EXPORT KIMAP FILE kimap.categories DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
-ecm_generate_pri_file(BASE_NAME KIMAP LIB_NAME KF5IMAP DEPS "KMime" FILENAME_VAR PRI_FILENAME INCLUDE_INSTALL_DIR ${KDE_INSTALL_INCLUDEDIR_KF}/KIMAP)
+ecm_generate_pri_file(BASE_NAME KIMAP LIB_NAME KPim${KF_MAJOR_VERSION}IMAP DEPS "KMime" FILENAME_VAR PRI_FILENAME INCLUDE_INSTALL_DIR ${KDE_INSTALL_INCLUDEDIR}/KPim${KF_MAJOR_VERSION}/KIMAP)
 install(FILES ${PRI_FILENAME} DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
 
 if (BUILD_QCH)
     ecm_add_qch(
-        KF5Imap_QCH
+        KPim${KF_MAJOR_VERSION}Imap_QCH
         NAME KImap
-        BASE_NAME KF5Imap
+        BASE_NAME KPim${KF_MAJOR_VERSION}Imap
         VERSION ${PIM_VERSION}
         ORG_DOMAIN org.kde
         SOURCES # using only public headers, to cover only public API
