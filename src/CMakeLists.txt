@@ -4,7 +4,6 @@
 kde_enable_exceptions()
 add_library(KPim${KF_MAJOR_VERSION}IMAP)
 add_library(KPim${KF_MAJOR_VERSION}::IMAP ALIAS KPim${KF_MAJOR_VERSION}IMAP)
-add_library(KF5::IMAP ALIAS KPim${KF_MAJOR_VERSION}IMAP)
 target_sources(KPim${KF_MAJOR_VERSION}IMAP PRIVATE
    acl.cpp
    acljobbase.cpp
