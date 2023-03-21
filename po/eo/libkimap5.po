@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: libkimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-11 00:45+0000\n"
-"PO-Revision-Date: 2023-01-06 12:00+0100\n"
+"PO-Revision-Date: 2023-03-20 22:31+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -22,7 +22,7 @@ msgstr ""
 #: acljobbase.cpp:56
 #, kde-format
 msgid "AclJobBase"
-msgstr ""
+msgstr "AclJobBase"
 
 #: appendjob.cpp:40
 #, kde-format
@@ -138,12 +138,12 @@ msgstr "Listo"
 #: listrightsjob.cpp:38
 #, kde-format
 msgid "ListRights"
-msgstr ""
+msgstr "ListPermesoj"
 
 #: loginjob.cpp:129 loginjob.cpp:233
-#, fuzzy, kde-format
+#, kde-format
 msgid "Login"
-msgstr "Aliĝi"
+msgstr "Ensaluto"
 
 #: loginjob.cpp:184
 #, kde-format
@@ -184,16 +184,17 @@ msgstr ""
 #, kde-format
 msgid "Login failed, client cannot initialize the SASL library."
 msgstr ""
+"Ensaluto malsukcesis, kliento ne povas pravalorigi la SASL-bibliotekon."
 
 #: loginjob.cpp:512
 #, kde-format
 msgid "Login failed, TLS negotiation failed."
-msgstr ""
+msgstr "Ensaluto malsukcesis, TLS-intertraktado malsukcesis."
 
 #: loginjob.cpp:570
 #, kde-format
 msgid "SSL handshake failed."
-msgstr ""
+msgstr "SSL-kvitanco malsukcesis."
 
 #: logoutjob.cpp:33
 #, kde-format
@@ -203,7 +204,7 @@ msgstr "Elsaluti"
 #: metadatajobbase.cpp:53
 #, kde-format
 msgid "MetaDataJobBase"
-msgstr ""
+msgstr "MetaDataJobBase"
 
 #: movejob.cpp:42
 #, kde-format
@@ -213,7 +214,7 @@ msgstr "Movi"
 #: myrightsjob.cpp:37
 #, kde-format
 msgid "MyRights"
-msgstr ""
+msgstr "MiajPermesoj"
 
 #: namespacejob.cpp:68
 #, kde-format
@@ -223,7 +224,7 @@ msgstr "Nomospaco"
 #: quotajobbase.cpp:34
 #, kde-format
 msgid "QuotaJobBase"
-msgstr ""
+msgstr "QuotaJobBase"
 
 #: renamejob.cpp:37
 #, kde-format
@@ -245,17 +246,17 @@ msgstr "Elekti"
 #: setacljob.cpp:34
 #, kde-format
 msgid "SetAcl"
-msgstr ""
+msgstr "SetAcl"
 
 #: setmetadatajob.cpp:43
 #, kde-format
 msgid "SetMetaData"
-msgstr ""
+msgstr "SetMetaData"
 
 #: setquotajob.cpp:37
 #, kde-format
 msgid "SetQuota"
-msgstr ""
+msgstr "SetQuota"
 
 #: statusjob.cpp:40
 #, kde-format
