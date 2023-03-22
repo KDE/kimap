@@ -131,7 +131,6 @@ PUBLIC
   Qt::Network
 PRIVATE
   KF${KF_MAJOR_VERSION}::KIOCore
-  KF${KF_MAJOR_VERSION}::Codecs
   KF${KF_MAJOR_VERSION}::I18n
   Sasl2::Sasl2
   ${extra_LIBS}
