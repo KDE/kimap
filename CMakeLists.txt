@@ -71,13 +71,6 @@ ecm_set_disabled_deprecation_versions(QT 6.4
 )
 add_definitions(-DQT_NO_EMIT)
 
-
-configure_package_config_file(
-  "${CMAKE_CURRENT_SOURCE_DIR}/KPimIMAPConfig.cmake.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/KPim${KF_MAJOR_VERSION}IMAPConfig.cmake"
-  INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
-)
-
 option(USE_UNITY_CMAKE_SUPPORT "Use UNITY cmake support (speedup compile time)" OFF)
 
 set(COMPILE_WITH_UNITY_CMAKE_SUPPORT OFF)
@@ -95,6 +88,9 @@ if(BUILD_TESTING)
 endif()
 
 ########### Install Files ###########
+
+
+
 install(FILES
   "${CMAKE_CURRENT_BINARY_DIR}/KPim${KF_MAJOR_VERSION}IMAPConfig.cmake"
   "${CMAKE_CURRENT_BINARY_DIR}/KPim${KF_MAJOR_VERSION}IMAPConfigVersion.cmake"
@@ -118,6 +114,12 @@ if (BUILD_QCH)
     )
     set(PACKAGE_INCLUDE_QCHTARGETS "include(\"\${CMAKE_CURRENT_LIST_DIR}/KPim${KF_MAJOR_VERSION}ImapQchTargets.cmake\")")
 endif()
+
+configure_package_config_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/KPimIMAPConfig.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/KPim${KF_MAJOR_VERSION}IMAPConfig.cmake"
+  INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
+)
 
 if (BUILD_WITH_COMPAT_LIBS)
 if (QT_MAJOR_VERSION STREQUAL "5")
