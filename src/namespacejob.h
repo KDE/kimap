@@ -32,7 +32,7 @@ public:
     Q_REQUIRED_RESULT QList<MailBoxDescriptor> userNamespaces() const;
     Q_REQUIRED_RESULT QList<MailBoxDescriptor> sharedNamespaces() const;
 
-    bool containsEmptyNamespace() const;
+    Q_REQUIRED_RESULT bool containsEmptyNamespace() const;
 
 protected:
     void doStart() override;

@@ -49,7 +49,7 @@ public:
      * @see KIMAP::EnableJob
      * @since 5.16
      */
-    KIMAP::ImapSet vanishedMessages() const;
+    Q_REQUIRED_RESULT KIMAP::ImapSet vanishedMessages() const;
 
     /**
      * Returns new highest modification sequence number.
@@ -60,7 +60,7 @@ public:
      * @see KIMAP::EnableJob
      * @since 5.16
      */
-    quint64 newHighestModSeq() const;
+    Q_REQUIRED_RESULT quint64 newHighestModSeq() const;
 
 protected:
     void doStart() override;

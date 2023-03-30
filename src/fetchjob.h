@@ -225,7 +225,7 @@ public:
      *          interpreted as UIDs, if @c false it should be interpreted
      *          as sequence numbers
      */
-    bool isUidBased() const;
+    Q_REQUIRED_RESULT bool isUidBased() const;
 
     /**
      * Sets what data should be fetched.
@@ -239,7 +239,7 @@ public:
     /**
      * Specifies what data will be fetched.
      */
-    FetchScope scope() const;
+    Q_REQUIRED_RESULT FetchScope scope() const;
 
     // TODO: KF5: Move this to FetchScope
     /**
@@ -271,7 +271,7 @@ public:
      *
      * @since 5.6
      */
-    QString mailBox() const;
+    Q_REQUIRED_RESULT QString mailBox() const;
 
 Q_SIGNALS:
     /**

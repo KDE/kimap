@@ -89,7 +89,7 @@ public:
      *          interpreted as UIDs, if @c false it should be interpreted
      *          as sequence numbers
      */
-    bool isUidBased() const;
+    Q_REQUIRED_RESULT bool isUidBased() const;
 
     /**
      * The UIDs of the moved messages in the destination mailbox.

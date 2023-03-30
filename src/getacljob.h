@@ -66,7 +66,7 @@ public:
      * identifiers; in particular, identifiers starting with
      * '-' specify negative rights.
      */
-    QList<QByteArray> identifiers() const;
+    Q_REQUIRED_RESULT QList<QByteArray> identifiers() const;
     /**
      * Check whether an identifier has a given right set
      *
@@ -113,7 +113,7 @@ public:
      * identifiers; in particular, identifiers starting with
      * '-' specify negative rights.
      */
-    QMap<QByteArray, Acl::Rights> allRights() const;
+    Q_REQUIRED_RESULT QMap<QByteArray, Acl::Rights> allRights() const;
 
 protected:
     void doStart() override;

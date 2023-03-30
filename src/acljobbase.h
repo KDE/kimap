@@ -51,7 +51,7 @@ public:
     /**
      * The mailbox that will be acted upon.
      */
-    QString mailBox() const;
+    Q_REQUIRED_RESULT QString mailBox() const;
 
 protected:
     explicit AclJobBase(JobPrivate &dd);
