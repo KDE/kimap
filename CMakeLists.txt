@@ -67,7 +67,7 @@ set(KIMAP_KF5_COMPAT FALSE)
 add_definitions(-DTRANSLATION_DOMAIN=\"libkimap5\")
 
 ecm_set_disabled_deprecation_versions(QT 6.4
-     KF 5.104.0
+     KF 5.105.0
 )
 add_definitions(-DQT_NO_EMIT)
 
