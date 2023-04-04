@@ -43,7 +43,7 @@ public:
 
     Term();
     ~Term();
-    Term(Relation relation, const QVector<Term> &subterms);
+    Term(Relation relation, const QList<Term> &subterms);
     Term(SearchKey key, const QString &value);
     Term(BooleanSearchKey key);
     Term(DateSearchKey key, const QDate &date);
@@ -128,7 +128,7 @@ public:
      * @return the found items
      * @since 4.6
      */
-    QVector<qint64> results() const;
+    QList<qint64> results() const;
 
     /**
      * Add a search criteria that doesn't have an argument. Passing a criteria that

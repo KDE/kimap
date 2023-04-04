@@ -58,7 +58,7 @@ Term::Term()
     d->isNull = true;
 }
 
-Term::Term(Term::Relation relation, const QVector<Term> &subterms)
+Term::Term(Term::Relation relation, const QList<Term> &subterms)
     : d(new Term::Private)
 {
     if (subterms.size() >= 2) {
@@ -348,7 +348,7 @@ public:
     QMap<int, QByteArray> months;
     SearchJob::SearchLogic logic;
     QList<QByteArray> contents;
-    QVector<qint64> results;
+    QList<qint64> results;
     uint nextContent;
     bool uidBased;
     Term term;
@@ -573,7 +573,7 @@ bool SearchJob::isUidBased() const
     return d->uidBased;
 }
 
-QVector<qint64> SearchJob::results() const
+QList<qint64> SearchJob::results() const
 {
     Q_D(const SearchJob);
     return d->results;

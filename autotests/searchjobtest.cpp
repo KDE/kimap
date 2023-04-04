@@ -99,7 +99,7 @@ private Q_SLOTS:
         bool result = job->exec();
         QVERIFY(result);
         if (result) {
-            QVector<qint64> foundItems = job->results();
+            QList<qint64> foundItems = job->results();
             QCOMPARE(foundItems.size(), expectedResultsCount);
         }
 
@@ -131,8 +131,8 @@ private Q_SLOTS:
             QTest::newRow("OR search with no results")
                 << scenario << false << 0
                 << KIMAP::Term(KIMAP::Term::Or,
-                               QVector<KIMAP::Term>() << KIMAP::Term(KIMAP::Term::New)
-                                                      << KIMAP::Term(QStringLiteral("Message-Id"), QStringLiteral("<12345678@mail.box>")));
+                               QList<KIMAP::Term>() << KIMAP::Term(KIMAP::Term::New)
+                                                    << KIMAP::Term(QStringLiteral("Message-Id"), QStringLiteral("<12345678@mail.box>")));
         }
         {
             QList<QByteArray> scenario;
@@ -185,7 +185,7 @@ private Q_SLOTS:
         bool result = job->exec();
         QVERIFY(result);
         if (result) {
-            QVector<qint64> foundItems = job->results();
+            QList<qint64> foundItems = job->results();
             QCOMPARE(foundItems.size(), expectedResultsCount);
         }
 
