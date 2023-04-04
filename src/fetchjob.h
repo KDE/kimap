@@ -241,7 +241,7 @@ public:
      */
     Q_REQUIRED_RESULT FetchScope scope() const;
 
-    // TODO: KF5: Move this to FetchScope
+    // TODO: KF6: Move this to FetchScope
     /**
      * Enables retrieving of Gmail-specific extensions
      *

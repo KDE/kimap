@@ -2,9 +2,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # Turn exceptions on
 kde_enable_exceptions()
-add_library(KPim${KF_MAJOR_VERSION}IMAP)
-add_library(KPim${KF_MAJOR_VERSION}::IMAP ALIAS KPim${KF_MAJOR_VERSION}IMAP)
-target_sources(KPim${KF_MAJOR_VERSION}IMAP PRIVATE
+add_library(KPim6IMAP)
+add_library(KPim6::IMAP ALIAS KPim6IMAP)
+target_sources(KPim6IMAP PRIVATE
    acl.cpp
    acljobbase.cpp
    appendjob.cpp
@@ -104,38 +104,38 @@ target_sources(KPim${KF_MAJOR_VERSION}IMAP PRIVATE
    logoutjob.h
 )
 
-ecm_qt_declare_logging_category(KPim${KF_MAJOR_VERSION}IMAP HEADER kimap_debug.h IDENTIFIER KIMAP_LOG CATEGORY_NAME org.kde.pim.kimap
+ecm_qt_declare_logging_category(KPim6IMAP HEADER kimap_debug.h IDENTIFIER KIMAP_LOG CATEGORY_NAME org.kde.pim.kimap
         OLD_CATEGORY_NAMES log_kimap
         DESCRIPTION "kimap (pim lib)" EXPORT KIMAP)
 
 if (COMPILE_WITH_UNITY_CMAKE_SUPPORT)
-    set_target_properties(KPim${KF_MAJOR_VERSION}IMAP PROPERTIES UNITY_BUILD ON)
+    set_target_properties(KPim6IMAP PROPERTIES UNITY_BUILD ON)
 endif()
 
-generate_export_header(KPim${KF_MAJOR_VERSION}IMAP BASE_NAME kimap)
+generate_export_header(KPim6IMAP BASE_NAME kimap)
 
 
 
-target_include_directories(KPim${KF_MAJOR_VERSION}IMAP INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/KPim${KF_MAJOR_VERSION}/KIMAP>")
-target_include_directories(KPim${KF_MAJOR_VERSION}IMAP PUBLIC "$<BUILD_INTERFACE:${KIMAP_SOURCE_DIR}/src;${KIMAP_BINARY_DIR}/src>")
+target_include_directories(KPim6IMAP INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/KPim6/KIMAP>")
+target_include_directories(KPim6IMAP PUBLIC "$<BUILD_INTERFACE:${KIMAP_SOURCE_DIR}/src;${KIMAP_BINARY_DIR}/src>")
 
 if (WIN32)
     set(extra_LIBS ws2_32)
 endif()
 
-target_link_libraries(KPim${KF_MAJOR_VERSION}IMAP
+target_link_libraries(KPim6IMAP
 PUBLIC
-  KPim${KF_MAJOR_VERSION}::Mime
-  KF${KF_MAJOR_VERSION}::CoreAddons
+  KPim6::Mime
+  KF6::CoreAddons
   Qt::Network
 PRIVATE
-  KF${KF_MAJOR_VERSION}::KIOCore
-  KF${KF_MAJOR_VERSION}::I18n
+  KF6::KIOCore
+  KF6::I18n
   Sasl2::Sasl2
   ${extra_LIBS}
 )
 
-set_target_properties(KPim${KF_MAJOR_VERSION}IMAP PROPERTIES
+set_target_properties(KPim6IMAP PROPERTIES
     VERSION ${KIMAP_VERSION}
     SOVERSION ${KIMAP_SOVERSION}
     EXPORT_NAME IMAP
@@ -190,31 +190,31 @@ ecm_generate_headers(KIMAP_CamelCase_HEADERS
   REQUIRED_HEADERS KIMAP_HEADERS
 )
 
-install(TARGETS KPim${KF_MAJOR_VERSION}IMAP EXPORT KPim${KF_MAJOR_VERSION}IMAPTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS KPim6IMAP EXPORT KPim6IMAPTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/kimap_export.h
     ${KIMAP_HEADERS}
     ${KIMAP_CamelCase_HEADERS}
-    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/KPim${KF_MAJOR_VERSION}/KIMAP/kimap
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/KPim6/KIMAP/kimap
     COMPONENT Devel
 )
 
 install(FILES
     ${KIMAP_CamelCase_HEADERS}
-    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/KPim${KF_MAJOR_VERSION}/KIMAP/KIMAP
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/KPim6/KIMAP/KIMAP
     COMPONENT Devel
 )
 
 ecm_qt_install_logging_categories(EXPORT KIMAP FILE kimap.categories DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
-ecm_generate_pri_file(BASE_NAME KIMAP LIB_NAME KPim${KF_MAJOR_VERSION}IMAP DEPS "KMime" FILENAME_VAR PRI_FILENAME INCLUDE_INSTALL_DIR ${KDE_INSTALL_INCLUDEDIR}/KPim${KF_MAJOR_VERSION}/KIMAP)
+ecm_generate_pri_file(BASE_NAME KIMAP LIB_NAME KPim6IMAP DEPS "KMime" FILENAME_VAR PRI_FILENAME INCLUDE_INSTALL_DIR ${KDE_INSTALL_INCLUDEDIR}/KPim6/KIMAP)
 install(FILES ${PRI_FILENAME} DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
 
 if (BUILD_QCH)
     ecm_add_qch(
-        KPim${KF_MAJOR_VERSION}Imap_QCH
+        KPim6Imap_QCH
         NAME KImap
-        BASE_NAME KPim${KF_MAJOR_VERSION}Imap
+        BASE_NAME KPim6Imap
         VERSION ${PIM_VERSION}
         ORG_DOMAIN org.kde
         SOURCES # using only public headers, to cover only public API
@@ -222,7 +222,7 @@ if (BUILD_QCH)
         MD_MAINPAGE "${CMAKE_SOURCE_DIR}/README.md"
         #IMAGE_DIRS "${CMAKE_SOURCE_DIR}/docs/pics"
         LINK_QCHS
-            Qt${QT_MAJOR_VERSION}Core_QCH
+            Qt6Core_QCH
         INCLUDE_DIRS
             ${CMAKE_CURRENT_BINARY_DIR}
         BLANK_MACROS
