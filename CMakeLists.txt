@@ -54,7 +54,6 @@ find_package(KPim6Mime ${KMIME_LIBS_VERSION} CONFIG REQUIRED)
 
 ########### CMake Config Files ###########
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KPim6IMAP")
-set(KIMAP_KF6_COMPAT FALSE)
 add_definitions(-DTRANSLATION_DOMAIN=\"libkimap5\")
 
 ecm_set_disabled_deprecation_versions(QT 6.4
