@@ -19,7 +19,7 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 
-include(GenerateExportHeader)
+include(ECMGenerateExportHeader)
 include(ECMGenerateHeaders)
 include(ECMGeneratePriFile)
 
@@ -37,7 +37,7 @@ include(ECMAddQch)
 set(KIMAP_LIB_VERSION ${PIM_VERSION})
 set(KMIME_LIBS_VERSION "5.23.40")
 ecm_setup_version(PROJECT VARIABLE_PREFIX KIMAP
-                        VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kimap_version.h"
+                        VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/src/kimap_version.h"
                         PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KPim6IMAPConfigVersion.cmake"
                         SOVERSION 6
 )
@@ -91,7 +91,7 @@ install(FILES
 install(EXPORT KPim6IMAPTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE KPim6IMAPTargets.cmake NAMESPACE KPim6::)
 
 install(FILES
-   ${CMAKE_CURRENT_BINARY_DIR}/kimap_version.h
+   ${CMAKE_CURRENT_BINARY_DIR}/src/kimap_version.h
   DESTINATION ${KDE_INSTALL_INCLUDEDIR}/KPim6/KIMAP/ COMPONENT Devel
 )
 

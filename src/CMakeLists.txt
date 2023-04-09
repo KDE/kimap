@@ -112,8 +112,12 @@ if (COMPILE_WITH_UNITY_CMAKE_SUPPORT)
     set_target_properties(KPim6IMAP PROPERTIES UNITY_BUILD ON)
 endif()
 
-generate_export_header(KPim6IMAP BASE_NAME kimap)
-
+ecm_generate_export_header(KPim6IMAP
+    BASE_NAME kimap
+    VERSION ${KIMAP_VERSION}
+    DEPRECATED_BASE_VERSION 0
+    USE_VERSION_HEADER
+)
 
 
 target_include_directories(KPim6IMAP INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/KPim6/KIMAP>")
