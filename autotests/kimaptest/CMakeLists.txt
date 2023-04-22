@@ -18,7 +18,7 @@ add_library(KPim${KF_MAJOR_VERSION}::kimaptest ALIAS kimaptest)
 target_include_directories(KPim${KF_MAJOR_VERSION}IMAP INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/KPim${KF_MAJOR_VERSION}/KIMAPTest>")
 target_link_libraries(kimaptest KPim${KF_MAJOR_VERSION}IMAP Qt::Test Qt::Network Qt::Core KF${KF_MAJOR_VERSION}::CoreAddons KF${KF_MAJOR_VERSION}::KIOCore KF${KF_MAJOR_VERSION}::I18n)
 
-install(TARGETS kimaptest EXPORT KPim${KF_MAJOR_VERSION}IMAPTargets ${KF_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kimaptest EXPORT KPim${KF_MAJOR_VERSION}IMAPTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
