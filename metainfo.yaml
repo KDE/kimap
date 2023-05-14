@@ -4,7 +4,10 @@ description: A job-based API for interacting with IMAP servers
 tier: 3
 type: functional
 platforms:
-    - name: All
+    - name: Linux
+    - name: FreeBSD
+    - name: Windows
+    - name: macOS
 portingAid: false
 deprecated: false
 release: false
