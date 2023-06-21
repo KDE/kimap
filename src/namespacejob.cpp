@@ -127,3 +127,5 @@ void NamespaceJob::handleResponse(const Response &response)
         }
     }
 }
+
+#include "moc_namespacejob.cpp"

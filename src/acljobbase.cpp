@@ -77,3 +77,5 @@ QString AclJobBase::mailBox() const
     Q_D(const AclJobBase);
     return d->mailBox;
 }
+
+#include "moc_acljobbase.cpp"

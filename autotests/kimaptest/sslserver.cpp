@@ -128,3 +128,5 @@ void SslServer::error(QAbstractSocket::SocketError error)
     }
     qWarning() << error;
 }
+
+#include "moc_sslserver.cpp"

@@ -578,3 +578,5 @@ QList<qint64> SearchJob::results() const
     Q_D(const SearchJob);
     return d->results;
 }
+
+#include "moc_searchjob.cpp"

@@ -105,3 +105,5 @@ void StatusJob::handleResponse(const Response &response)
         }
     }
 }
+
+#include "moc_statusjob.cpp"

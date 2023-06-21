@@ -220,3 +220,5 @@ void StoreJob::handleResponse(const Response &response)
         }
     }
 }
+
+#include "moc_storejob.cpp"

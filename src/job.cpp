@@ -76,3 +76,5 @@ Job::HandlerResponse Job::handleErrorReplies(const Response &response)
 
     return NotHandled;
 }
+
+#include "moc_job.cpp"

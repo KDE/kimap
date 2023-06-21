@@ -67,3 +67,5 @@ qint64 QuotaJobBase::limit(const QByteArray &resource)
     }
     return -1;
 }
+
+#include "moc_quotajobbase.cpp"

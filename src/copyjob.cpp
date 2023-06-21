@@ -121,3 +121,5 @@ void CopyJob::handleResponse(const Response &response)
 
     handleErrorReplies(response);
 }
+
+#include "moc_copyjob.cpp"

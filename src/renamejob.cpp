@@ -73,3 +73,5 @@ QString RenameJob::destinationMailBox() const
     Q_D(const RenameJob);
     return d->destinationMailBox;
 }
+
+#include "moc_renamejob.cpp"

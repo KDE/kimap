@@ -267,3 +267,5 @@ QHash<QString, QMap<QByteArray, QByteArray>> GetMetaDataJob::allMetaDataForMailb
     }
     return mailboxHash;
 }
+
+#include "moc_getmetadatajob.cpp"

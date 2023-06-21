@@ -99,3 +99,5 @@ QMap<QByteArray, Acl::Rights> GetAclJob::allRights() const
     Q_D(const GetAclJob);
     return d->userRights;
 }
+
+#include "moc_getacljob.cpp"

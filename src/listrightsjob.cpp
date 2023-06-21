@@ -91,3 +91,5 @@ QList<Acl::Rights> ListRightsJob::possibleRights()
     Q_D(ListRightsJob);
     return d->possibleRights;
 }
+
+#include "moc_listrightsjob.cpp"

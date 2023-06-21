@@ -82,3 +82,5 @@ QString CreateJob::mailBox() const
     Q_D(const CreateJob);
     return d->mailBox;
 }
+
+#include "moc_createjob.cpp"

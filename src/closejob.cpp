@@ -55,3 +55,5 @@ void CloseJob::handleResponse(const Response &response)
 
     Job::handleErrorReplies(response);
 }
+
+#include "moc_closejob.cpp"

@@ -69,3 +69,5 @@ void IdJob::handleResponse(const Response &response)
         // Ignore the response
     }
 }
+
+#include "moc_idjob.cpp"

@@ -65,3 +65,5 @@ void CapabilitiesJob::handleResponse(const Response &response)
         }
     }
 }
+
+#include "moc_capabilitiesjob.cpp"

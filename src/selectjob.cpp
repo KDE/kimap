@@ -314,3 +314,5 @@ void SelectJob::handleResponse(const Response &response)
         Q_ASSERT(error() || d->m_session->selectedMailBox() == d->mailBox);
     }
 }
+
+#include "moc_selectjob.cpp"

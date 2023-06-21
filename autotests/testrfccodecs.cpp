@@ -66,3 +66,5 @@ void RFCCodecsTest::testQuotes()
     test = QStringLiteral("tom\\allen");
     QCOMPARE(quoteIMAP(test), QString::fromLatin1("tom\\\\allen"));
 }
+
+#include "moc_testrfccodecs.cpp"

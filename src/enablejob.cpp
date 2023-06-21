@@ -66,3 +66,5 @@ void EnableJob::handleResponse(const Response &response)
         }
     }
 }
+
+#include "moc_enablejob.cpp"

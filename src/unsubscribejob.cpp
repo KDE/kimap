@@ -58,3 +58,5 @@ QString UnsubscribeJob::mailBox() const
     Q_D(const UnsubscribeJob);
     return d->mailBox;
 }
+
+#include "moc_unsubscribejob.cpp"

@@ -144,3 +144,5 @@ void AppendJob::handleResponse(const Response &response)
         }
     }
 }
+
+#include "moc_appendjob.cpp"

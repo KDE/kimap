@@ -48,3 +48,5 @@ void LogoutJob::connectionLost()
 {
     emitResult();
 }
+
+#include "moc_logoutjob.cpp"

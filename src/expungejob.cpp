@@ -89,3 +89,5 @@ void ExpungeJob::handleResponse(const Response &response)
         qCDebug(KIMAP_LOG) << "Unhandled response: " << response.toString().constData();
     }
 }
+
+#include "moc_expungejob.cpp"

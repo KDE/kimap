@@ -71,3 +71,5 @@ Acl::Rights MyRightsJob::rights()
     Q_D(MyRightsJob);
     return d->myRights;
 }
+
+#include "moc_myrightsjob.cpp"

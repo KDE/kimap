@@ -123,3 +123,5 @@ void MoveJob::handleResponse(const Response &response)
 
     handleErrorReplies(response);
 }
+
+#include "moc_movejob.cpp"
