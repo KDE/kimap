@@ -43,7 +43,7 @@ endif()
 
 
 set(KIMAP_LIB_VERSION ${PIM_VERSION})
-set(KMIME_LIBS_VERSION "5.23.80")
+set(KMIME_LIBS_VERSION "5.23.90")
 ecm_setup_version(PROJECT VARIABLE_PREFIX KIMAP
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kimap_version.h"
                         PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KPim${KF_MAJOR_VERSION}IMAPConfigVersion.cmake"
