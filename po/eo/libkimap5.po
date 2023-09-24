@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: libkimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-11 00:45+0000\n"
-"PO-Revision-Date: 2023-03-20 22:31+0100\n"
+"PO-Revision-Date: 2023-09-23 12:31+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -52,7 +52,7 @@ msgstr "Krei"
 #: deleteacljob.cpp:37
 #, kde-format
 msgid "DeleteAclJob"
-msgstr ""
+msgstr "DeleteAclJob"
 
 #: deletejob.cpp:36
 #, kde-format
@@ -77,27 +77,27 @@ msgstr "Elŝuti"
 #: getacljob.cpp:37
 #, kde-format
 msgid "GetAcl"
-msgstr ""
+msgstr "GetAcl"
 
 #: getmetadatajob.cpp:43
 #, kde-format
 msgid "GetMetaData"
-msgstr ""
+msgstr "GetMetaData"
 
 #: getmetadatajob.cpp:66
 #, kde-format
 msgid "GetAnnotation"
-msgstr ""
+msgstr "GetAnnotation"
 
 #: getquotajob.cpp:35
 #, kde-format
 msgid "GetQuota"
-msgstr ""
+msgstr "GetQuota"
 
 #: getquotarootjob.cpp:38
 #, kde-format
 msgid "GetQuotaRoot"
-msgstr ""
+msgstr "GetQuotaRoot"
 
 #: idjob.cpp:35
 #, kde-format
@@ -148,7 +148,7 @@ msgstr "Ensaluto"
 #: loginjob.cpp:184
 #, kde-format
 msgid "IMAP session in the wrong state for authentication"
-msgstr ""
+msgstr "IMAP-seanco estas en la malĝusta stato por aŭtentigo"
 
 #: loginjob.cpp:235
 #, kde-format
@@ -158,27 +158,29 @@ msgstr "Kapablo"
 #: loginjob.cpp:237
 #, kde-format
 msgid "StartTls"
-msgstr ""
+msgstr "StartTls"
 
 #: loginjob.cpp:340
 #, kde-format
 msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
 msgstr ""
+"STARTTLS ne estas subtenata fare de la servilo, provu uzi SSL/TLS anstataŭe."
 
 #: loginjob.cpp:353
 #, kde-format
 msgid "Internal error, tried to login before encryption"
-msgstr ""
+msgstr "Interna eraro, provis ensaluti antaŭ ĉifrado"
 
 #: loginjob.cpp:362
 #, kde-format
 msgid "Login failed, plain login is disabled by the server."
-msgstr ""
+msgstr "Ensaluto malsukcesis, plata ensaluto estas malŝaltita de la servilo"
 
 #: loginjob.cpp:383
 #, kde-format
 msgid "Login failed, authentication mode %1 is not supported by the server."
 msgstr ""
+"Ensaluto malsukcesis, aŭtentiga reĝimo %1 ne estas subtenata de la servilo."
 
 #: loginjob.cpp:413
 #, kde-format
