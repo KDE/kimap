@@ -12,8 +12,7 @@ portingAid: false
 deprecated: false
 release: false
 libraries:
- - qmake: KImap
-   cmake: "KPim6::Imap"
+ - cmake: "KPim6::Imap"
 cmakename: KPim6Imap
 
 public_lib: true
