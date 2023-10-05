@@ -66,7 +66,7 @@ public:
     /**
      * The identifier that will be looked up
      */
-    Q_REQUIRED_RESULT QByteArray identifier();
+    [[nodiscard]] QByteArray identifier();
 
     /**
      * The rights that will always be assigned to the identifier,
@@ -75,7 +75,7 @@ public:
      * For example, under the UNIX permission model, the owner
      * of a mailbox will always have the Acl::Admin right.
      */
-    Q_REQUIRED_RESULT Acl::Rights defaultRights();
+    [[nodiscard]] Acl::Rights defaultRights();
 
     /**
      * The rights it is possible to assign to the identifier.
@@ -94,7 +94,7 @@ public:
      * - Acl::DeleteMessage
      * - Acl::Expunge
      */
-    Q_REQUIRED_RESULT QList<Acl::Rights> possibleRights();
+    [[nodiscard]] QList<Acl::Rights> possibleRights();
 
 protected:
     void doStart() override;

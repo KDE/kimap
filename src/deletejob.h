@@ -47,7 +47,7 @@ public:
     /**
      * The mailbox that will be deleted.
      */
-    Q_REQUIRED_RESULT QString mailBox() const;
+    [[nodiscard]] QString mailBox() const;
 
 protected:
     void doStart() override;

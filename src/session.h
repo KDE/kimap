@@ -30,9 +30,9 @@ public:
     Session(const QString &hostName, quint16 port, QObject *parent = nullptr);
     ~Session();
 
-    Q_REQUIRED_RESULT QString hostName() const;
-    Q_REQUIRED_RESULT quint16 port() const;
-    Q_REQUIRED_RESULT State state() const;
+    [[nodiscard]] QString hostName() const;
+    [[nodiscard]] quint16 port() const;
+    [[nodiscard]] State state() const;
 
     /**
      * Returns the name that has been set with LoginJob::setUserName()
@@ -40,9 +40,9 @@ public:
      * @note If the Session was pre-authenticated, userName() will return an empty string
      * @since 4.7
      */
-    Q_REQUIRED_RESULT QString userName() const;
+    [[nodiscard]] QString userName() const;
 
-    Q_REQUIRED_RESULT QByteArray serverGreeting() const;
+    [[nodiscard]] QByteArray serverGreeting() const;
 
     /**
      * Sets an ui proxy that displays the error messages and waits for user feedback.
@@ -68,13 +68,13 @@ public:
      * Returns the session timeout.
      * @since 4.12
      */
-    Q_REQUIRED_RESULT int timeout() const;
+    [[nodiscard]] int timeout() const;
 
     /**
      * Returns the currently selected mailbox.
      * @since 4.5
      */
-    Q_REQUIRED_RESULT QString selectedMailBox() const;
+    [[nodiscard]] QString selectedMailBox() const;
 
     /**
      * Sets whether the IMAP network connection should use the system proxy settings.
@@ -88,7 +88,7 @@ public:
      */
     void setUseNetworkProxy(bool useProxy);
 
-    Q_REQUIRED_RESULT int jobQueueSize() const;
+    [[nodiscard]] int jobQueueSize() const;
 
     void close();
 

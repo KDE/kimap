@@ -77,7 +77,7 @@ public:
      *
      * @return  a mailbox name, or an empty string
      */
-    Q_REQUIRED_RESULT QString mailBox() const;
+    [[nodiscard]] QString mailBox() const;
 
     /**
      * Set what version of the metadata extension to be compatible with.
@@ -100,7 +100,7 @@ public:
     /**
      * The version of the metadata extension that will be used.
      */
-    Q_REQUIRED_RESULT ServerCapability serverCapability() const;
+    [[nodiscard]] ServerCapability serverCapability() const;
 
 protected:
     MetaDataJobBase(JobPrivate &dd);

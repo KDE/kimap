@@ -31,14 +31,14 @@ public:
      * @param mailBox the original name of the mailbox
      */
     void setSourceMailBox(const QString &mailBox);
-    Q_REQUIRED_RESULT QString sourceMailBox() const;
+    [[nodiscard]] QString sourceMailBox() const;
 
     /**
      * The new name of the mailbox, see setMailBox.
      * @param mailBox the new mailbox name
      */
     void setDestinationMailBox(const QString &mailBox);
-    Q_REQUIRED_RESULT QString destinationMailBox() const;
+    [[nodiscard]] QString destinationMailBox() const;
 
 protected:
     void doStart() override;

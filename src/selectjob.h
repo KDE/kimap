@@ -30,7 +30,7 @@ public:
     ~SelectJob() override;
 
     void setMailBox(const QString &mailBox);
-    Q_REQUIRED_RESULT QString mailBox() const;
+    [[nodiscard]] QString mailBox() const;
 
     void setOpenReadOnly(bool readOnly);
     /**
@@ -38,17 +38,17 @@ public:
      * that this can return true even if setOpenReadOnly() was set to false,
      * as the mailbox may be read-only on the server.
      */
-    Q_REQUIRED_RESULT bool isOpenReadOnly() const;
+    [[nodiscard]] bool isOpenReadOnly() const;
 
-    Q_REQUIRED_RESULT QList<QByteArray> flags() const;
-    Q_REQUIRED_RESULT QList<QByteArray> permanentFlags() const;
+    [[nodiscard]] QList<QByteArray> flags() const;
+    [[nodiscard]] QList<QByteArray> permanentFlags() const;
 
-    Q_REQUIRED_RESULT int messageCount() const;
-    Q_REQUIRED_RESULT int recentCount() const;
-    Q_REQUIRED_RESULT int firstUnseenIndex() const;
+    [[nodiscard]] int messageCount() const;
+    [[nodiscard]] int recentCount() const;
+    [[nodiscard]] int firstUnseenIndex() const;
 
-    Q_REQUIRED_RESULT qint64 uidValidity() const;
-    Q_REQUIRED_RESULT qint64 nextUid() const;
+    [[nodiscard]] qint64 uidValidity() const;
+    [[nodiscard]] qint64 nextUid() const;
 
     /**
      * @return Highest mod-sequence value of all messages in the mailbox or 0
@@ -57,7 +57,7 @@ public:
      *
      * @since 4.12
      */
-    Q_REQUIRED_RESULT quint64 highestModSequence() const;
+    [[nodiscard]] quint64 highestModSequence() const;
 
     /**
      * Whether to append CONDSTORE parameter to the SELECT command.
@@ -75,7 +75,7 @@ public:
      *
      * @since 4.12
      */
-    Q_REQUIRED_RESULT bool condstoreEnabled() const;
+    [[nodiscard]] bool condstoreEnabled() const;
 
     /**
      * Set Quick Resynchronization parameters.

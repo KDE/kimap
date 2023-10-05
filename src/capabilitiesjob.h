@@ -44,7 +44,7 @@ public:
      *
      * This will return an empty list until the job has completed.
      */
-    Q_REQUIRED_RESULT QStringList capabilities() const;
+    [[nodiscard]] QStringList capabilities() const;
 
 Q_SIGNALS:
     /**

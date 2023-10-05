@@ -53,7 +53,7 @@ public:
     /**
      * The quota root that resource limit information will be fetched for.
      */
-    Q_REQUIRED_RESULT QByteArray root() const;
+    [[nodiscard]] QByteArray root() const;
 
 protected:
     void doStart() override;

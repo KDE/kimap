@@ -33,21 +33,21 @@ public:
     ~StoreJob() override;
 
     void setSequenceSet(const ImapSet &set);
-    Q_REQUIRED_RESULT ImapSet sequenceSet() const;
+    [[nodiscard]] ImapSet sequenceSet() const;
 
     void setUidBased(bool uidBased);
-    Q_REQUIRED_RESULT bool isUidBased() const;
+    [[nodiscard]] bool isUidBased() const;
 
     void setFlags(const MessageFlags &flags);
-    Q_REQUIRED_RESULT MessageFlags flags() const;
+    [[nodiscard]] MessageFlags flags() const;
 
     void setGMLabels(const MessageFlags &gmLabels);
-    Q_REQUIRED_RESULT MessageFlags gmLabels() const;
+    [[nodiscard]] MessageFlags gmLabels() const;
 
     void setMode(StoreMode mode);
-    Q_REQUIRED_RESULT StoreMode mode() const;
+    [[nodiscard]] StoreMode mode() const;
 
-    Q_REQUIRED_RESULT QMap<int, MessageFlags> resultingFlags() const;
+    [[nodiscard]] QMap<int, MessageFlags> resultingFlags() const;
 
 protected:
     void doStart() override;

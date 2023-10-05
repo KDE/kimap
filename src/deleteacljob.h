@@ -48,7 +48,7 @@ public:
     /**
      * The identifier that will be removed
      */
-    Q_REQUIRED_RESULT QByteArray identifier();
+    [[nodiscard]] QByteArray identifier();
 
 protected:
     void doStart() override;

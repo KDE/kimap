@@ -53,12 +53,12 @@ public:
     /**
      * The mailbox that the quota roots will be fetched for.
      */
-    Q_REQUIRED_RESULT QString mailBox() const;
+    [[nodiscard]] QString mailBox() const;
 
     /**
      * The quota roots for the mailbox.
      */
-    Q_REQUIRED_RESULT QList<QByteArray> roots() const;
+    [[nodiscard]] QList<QByteArray> roots() const;
     /**
      * Get the current usage for a resource.
      *
@@ -72,7 +72,7 @@ public:
      *          if the usage is unknown or there is no
      *          limit on the resource
      */
-    Q_REQUIRED_RESULT qint64 usage(const QByteArray &root, const QByteArray &resource) const;
+    [[nodiscard]] qint64 usage(const QByteArray &root, const QByteArray &resource) const;
     /**
      * Get the current limit for a resource.
      *
@@ -82,7 +82,7 @@ public:
      *          if the limit is unknown or there is no
      *          limit on the resource
      */
-    Q_REQUIRED_RESULT qint64 limit(const QByteArray &root, const QByteArray &resource) const;
+    [[nodiscard]] qint64 limit(const QByteArray &root, const QByteArray &resource) const;
 
     /**
      * Get a map containing all resource usage figures for a quota root.
@@ -90,14 +90,14 @@ public:
      * @param root  the quota root to get resource usage figures for
      * @return  a map from resource names to usage figures
      */
-    Q_REQUIRED_RESULT QMap<QByteArray, qint64> allUsages(const QByteArray &root) const;
+    [[nodiscard]] QMap<QByteArray, qint64> allUsages(const QByteArray &root) const;
     /**
      * Get a map containing all resource limits for a quota root.
      *
      * @param root  the quota root to get resource limits for
      * @return  a map from resource names to limits
      */
-    Q_REQUIRED_RESULT QMap<QByteArray, qint64> allLimits(const QByteArray &root) const;
+    [[nodiscard]] QMap<QByteArray, qint64> allLimits(const QByteArray &root) const;
 
 protected:
     void doStart() override;

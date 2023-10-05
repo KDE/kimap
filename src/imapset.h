@@ -106,7 +106,7 @@ public:
     /**
       Converts this set into an IMAP compatible sequence.
     */
-    Q_REQUIRED_RESULT QByteArray toImapSequence() const;
+    [[nodiscard]] QByteArray toImapSequence() const;
 
     /**
       Return the interval corresponding to the given IMAP-compatible QByteArray representation
@@ -192,7 +192,7 @@ public:
     /**
       Returns a IMAP-compatible QByteArray representation of this set.
     */
-    Q_REQUIRED_RESULT QByteArray toImapSequenceSet() const;
+    [[nodiscard]] QByteArray toImapSequenceSet() const;
 
     /**
       Return the set corresponding to the given IMAP-compatible QByteArray representation
@@ -202,12 +202,12 @@ public:
     /**
       Returns the intervals this set consists of.
     */
-    Q_REQUIRED_RESULT ImapInterval::List intervals() const;
+    [[nodiscard]] ImapInterval::List intervals() const;
 
     /**
       Returns true if this set doesn't contains any values.
     */
-    Q_REQUIRED_RESULT bool isEmpty() const;
+    [[nodiscard]] bool isEmpty() const;
 
     /**
      * Optimizes the ImapSet by sorting and merging overlapping intervals.

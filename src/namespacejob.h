@@ -28,11 +28,11 @@ public:
     NamespaceJob(Session *session);
     ~NamespaceJob() override;
 
-    Q_REQUIRED_RESULT QList<MailBoxDescriptor> personalNamespaces() const;
-    Q_REQUIRED_RESULT QList<MailBoxDescriptor> userNamespaces() const;
-    Q_REQUIRED_RESULT QList<MailBoxDescriptor> sharedNamespaces() const;
+    [[nodiscard]] QList<MailBoxDescriptor> personalNamespaces() const;
+    [[nodiscard]] QList<MailBoxDescriptor> userNamespaces() const;
+    [[nodiscard]] QList<MailBoxDescriptor> sharedNamespaces() const;
 
-    Q_REQUIRED_RESULT bool containsEmptyNamespace() const;
+    [[nodiscard]] bool containsEmptyNamespace() const;
 
 protected:
     void doStart() override;

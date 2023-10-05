@@ -28,12 +28,12 @@ public:
     ~StatusJob() override;
 
     void setMailBox(const QString &mailBox);
-    Q_REQUIRED_RESULT QString mailBox() const;
+    [[nodiscard]] QString mailBox() const;
 
     void setDataItems(const QList<QByteArray> &dataItems);
-    Q_REQUIRED_RESULT QList<QByteArray> dataItems() const;
+    [[nodiscard]] QList<QByteArray> dataItems() const;
 
-    Q_REQUIRED_RESULT QList<QPair<QByteArray, qint64>> status() const;
+    [[nodiscard]] QList<QPair<QByteArray, qint64>> status() const;
 
 protected:
     void doStart() override;

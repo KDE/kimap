@@ -49,7 +49,7 @@ public:
     /**
      * List of capabilities that were successfully enabled on the server.
      */
-    Q_REQUIRED_RESULT QStringList enabledCapabilities() const;
+    [[nodiscard]] QStringList enabledCapabilities() const;
 
 protected:
     void doStart() override;

@@ -26,9 +26,9 @@ public:
     }
 
     void setIdentifier(const QByteArray &identifier);
-    Q_REQUIRED_RESULT QByteArray identifier() const;
+    [[nodiscard]] QByteArray identifier() const;
 
-    Q_REQUIRED_RESULT bool hasRightEnabled(Acl::Right right) const;
+    [[nodiscard]] bool hasRightEnabled(Acl::Right right) const;
 
     void setRights(const QByteArray &rights);
     void setRights(AclJobBase::AclModifier modifier, Acl::Rights rights);

@@ -56,7 +56,7 @@ public:
      *          if the usage is unknown or there is no
      *          limit on the resource
      */
-    Q_REQUIRED_RESULT qint64 usage(const QByteArray &resource);
+    [[nodiscard]] qint64 usage(const QByteArray &resource);
     /**
      * Get the current limit for a resource.
      *
@@ -73,7 +73,7 @@ public:
      *          if the limit is unknown or there is no limit
      *          on the resource
      */
-    Q_REQUIRED_RESULT qint64 limit(const QByteArray &resource);
+    [[nodiscard]] qint64 limit(const QByteArray &resource);
 
 protected:
     QuotaJobBase(JobPrivate &dd);

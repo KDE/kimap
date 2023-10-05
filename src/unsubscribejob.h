@@ -27,7 +27,7 @@ public:
     ~UnsubscribeJob() override;
 
     void setMailBox(const QString &mailBox);
-    Q_REQUIRED_RESULT QString mailBox() const;
+    [[nodiscard]] QString mailBox() const;
 
 protected:
     void doStart() override;

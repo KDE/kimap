@@ -87,7 +87,7 @@ public:
     /**
      * The identifier that rights will be associated with
      */
-    Q_REQUIRED_RESULT QByteArray identifier();
+    [[nodiscard]] QByteArray identifier();
 
 protected:
     void doStart() override;

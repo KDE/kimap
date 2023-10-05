@@ -31,37 +31,37 @@ namespace KIMAP
   @param src is the QByteArray containing the IMAP mailbox.
   @since 4.3
 */
-Q_REQUIRED_RESULT KIMAP_EXPORT QByteArray encodeImapFolderName(const QByteArray &src);
+[[nodiscard]] KIMAP_EXPORT QByteArray encodeImapFolderName(const QByteArray &src);
 
 /**
   Converts an UTF-7 encoded IMAP mailbox to a QByteArray
   @param inSrc is the QByteArray containing the Unicode path.
   @since 4.3
 */
-Q_REQUIRED_RESULT KIMAP_EXPORT QByteArray decodeImapFolderName(const QByteArray &inSrc);
+[[nodiscard]] KIMAP_EXPORT QByteArray decodeImapFolderName(const QByteArray &inSrc);
 /**
   Converts an Unicode IMAP mailbox to a QString which can be used in
   IMAP communication.
   @param src is the QString containing the IMAP mailbox.
 */
-Q_REQUIRED_RESULT KIMAP_EXPORT QString encodeImapFolderName(const QString &src);
+[[nodiscard]] KIMAP_EXPORT QString encodeImapFolderName(const QString &src);
 
 /**
   Converts an UTF-7 encoded IMAP mailbox to a Unicode QString.
   @param inSrc is the QString containing the Unicode path.
 */
-Q_REQUIRED_RESULT KIMAP_EXPORT QString decodeImapFolderName(const QString &inSrc);
+[[nodiscard]] KIMAP_EXPORT QString decodeImapFolderName(const QString &inSrc);
 
 /**
   Replaces " with \" and \ with \\ " and \ characters.
   @param src is the QString to quote.
 */
-Q_REQUIRED_RESULT KIMAP_EXPORT QString quoteIMAP(const QString &src);
+[[nodiscard]] KIMAP_EXPORT QString quoteIMAP(const QString &src);
 
 /**
   Replaces " with \" and \ with \\ " and \ characters.
   @param src is the QString to quote.
   @since 4.3
 */
-Q_REQUIRED_RESULT KIMAP_EXPORT QByteArray quoteIMAP(const QByteArray &src);
+[[nodiscard]] KIMAP_EXPORT QByteArray quoteIMAP(const QByteArray &src);
 }

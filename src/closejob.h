@@ -57,7 +57,7 @@ public:
      * @see KIMAP::EnableJob
      * @since 5.16
      */
-    Q_REQUIRED_RESULT quint64 newHighestModSeq() const;
+    [[nodiscard]] quint64 newHighestModSeq() const;
 
 protected:
     void doStart() override;
