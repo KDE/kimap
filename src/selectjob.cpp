@@ -28,7 +28,7 @@ public:
         : JobPrivate(session, name)
         , q(q)
     {
-        QObject::connect(&emitPendingsTimer, &QTimer::timeout, q, [this]() {
+        QObject::connect(&emitPendingsTimer, &QTimer::timeout, [this]() {
             emitPendings();
         });
     }
