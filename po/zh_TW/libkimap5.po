@@ -3,20 +3,21 @@
 #
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2009, 2010, 2014.
 # pan93412 <pan93412@gmail.com>, 2019.
+# SPDX-FileCopyrightText: 2023 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: libkimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-11 00:45+0000\n"
-"PO-Revision-Date: 2019-03-22 00:40+0800\n"
-"Last-Translator: pan93412 <pan93412@gmail.com>\n"
-"Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
+"PO-Revision-Date: 2023-12-13 04:59+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "dot tw>\n"
-"X-Generator: Lokalize 18.12.3\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: acljobbase.cpp:56
@@ -62,7 +63,7 @@ msgstr "刪除"
 #: enablejob.cpp:31
 #, kde-format
 msgid "Enable"
-msgstr ""
+msgstr "啟用"
 
 #: expungejob.cpp:37
 #, kde-format
@@ -168,7 +169,7 @@ msgstr "伺服器不支援 STARTTLS，嘗試使用 SSL/TLS 取代。"
 #: loginjob.cpp:353
 #, kde-format
 msgid "Internal error, tried to login before encryption"
-msgstr ""
+msgstr "內部錯誤，在加密前嘗試登入"
 
 #: loginjob.cpp:362
 #, kde-format
