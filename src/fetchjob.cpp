@@ -381,7 +381,7 @@ void FetchJobPrivate::parseBodyStructure(const QByteArray &structure, int &pos, 
         content->contentType()->setMimeType("MULTIPART/MIXED");
         while (pos < structure.size() && structure[pos] == '(') {
             auto child = new KMime::Content;
-            content->addContent(child);
+            content->appendContent(child);
             parseBodyStructure(structure, pos, child);
             child->assemble();
         }
