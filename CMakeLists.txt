@@ -30,6 +30,7 @@ kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
 
 include(ECMQtDeclareLoggingCategory)
 include(ECMDeprecationSettings)
+include(ECMFeatureSummary)
 include(ECMAddQch)
 
 set(KIMAP_LIB_VERSION ${PIM_VERSION})
@@ -111,4 +112,4 @@ configure_package_config_file(
 
 kde_configure_git_pre_commit_hook(CHECKS CLANG_FORMAT)
 ki18n_install(po)
-feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
+ecm_feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
