@@ -72,7 +72,7 @@ private Q_SLOTS:
         fakeServer.setScenario(scenario);
         fakeServer.startAndWait();
 
-        KIMAP::Session session(QLatin1String("127.0.0.1"), 5989);
+        KIMAP::Session session(QLatin1StringView("127.0.0.1"), 5989);
 
         auto getMetadataJob = new KIMAP::GetMetaDataJob(&session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Metadata);
@@ -133,7 +133,7 @@ private Q_SLOTS:
         getMetadataJob->setDepth(KIMAP::GetMetaDataJob::NoDepth);
         QVERIFY(getMetadataJob->exec());
 
-        QCOMPARE(getMetadataJob->allMetaData(QLatin1String("Folder1")).size(), 0);
+        QCOMPARE(getMetadataJob->allMetaData(QLatin1StringView("Folder1")).size(), 0);
 
         // C: A000002 GETMETADATA "Folder1" (DEPTH 1) (/shared)
         getMetadataJob = new KIMAP::GetMetaDataJob(&session);
@@ -204,7 +204,7 @@ private Q_SLOTS:
         // C: A000010 GETMETADATA ""
         getMetadataJob = new KIMAP::GetMetaDataJob(&session);
         getMetadataJob->setServerCapability(KIMAP::MetaDataJobBase::Metadata);
-        getMetadataJob->setMailBox(QLatin1String(""));
+        getMetadataJob->setMailBox(QLatin1StringView(""));
         getMetadataJob->setDepth(KIMAP::GetMetaDataJob::NoDepth);
         QVERIFY(getMetadataJob->exec());
 
@@ -298,7 +298,7 @@ private Q_SLOTS:
         getMetadataJob->setMailBox(QStringLiteral("Folder1"));
         QVERIFY(getMetadataJob->exec());
 
-        QCOMPARE(getMetadataJob->allMetaData(QLatin1String("Folder1")).size(), 0);
+        QCOMPARE(getMetadataJob->allMetaData(QLatin1StringView("Folder1")).size(), 0);
 
         // C: A000002 GETANNOTATION "Folder1" ("/comment" "/motd") ("value.shared" "value.priv")
         getMetadataJob = new KIMAP::GetMetaDataJob(&session);

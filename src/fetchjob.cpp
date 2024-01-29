@@ -274,7 +274,7 @@ void FetchJob::handleResponse(const Response &response)
                 } else if (str == "RFC822.SIZE") {
                     d->pendingSizes[id] = msg.size = it->toLongLong();
                 } else if (str == "INTERNALDATE") {
-                    message->date()->setDateTime(QDateTime::fromString(QLatin1String(*it), Qt::RFC2822Date));
+                    message->date()->setDateTime(QDateTime::fromString(QLatin1StringView(*it), Qt::RFC2822Date));
                 } else if (str == "FLAGS") {
                     if ((*it).startsWith('(') && (*it).endsWith(')')) {
                         QByteArray str = *it;
@@ -446,7 +446,7 @@ void FetchJobPrivate::parsePart(const QByteArray &structure, int &pos, KMime::Co
          || content->contentDisposition()->disposition() == KMime::Headers::CDinline)
         && disposition.contains("FILENAME")) {
         QByteArray filename = disposition.remove(0, disposition.indexOf("FILENAME") + 11).split('\"')[0];
-        content->contentDisposition()->setFilename(QLatin1String(filename));
+        content->contentDisposition()->setFilename(QLatin1StringView(filename));
     }
 
     // Consume what's left

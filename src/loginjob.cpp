@@ -274,7 +274,7 @@ void LoginJob::handleResponse(const Response &response)
         }
 
         setError(UserDefinedError);
-        setErrorText(i18n("%1 failed, server replied: %2", commandName, QLatin1String(response.toString().constData())));
+        setErrorText(i18n("%1 failed, server replied: %2", commandName, QLatin1StringView(response.toString().constData())));
         emitResult();
         return;
 
@@ -284,9 +284,9 @@ void LoginJob::handleResponse(const Response &response)
             d->capabilities.clear();
             QList<Response::Part>::const_iterator p = response.content.begin() + 2;
             while (p != response.content.end()) {
-                QString capability = QLatin1String(p->toString());
+                QString capability = QLatin1StringView(p->toString());
                 d->capabilities << capability;
-                if (capability == QLatin1String("LOGINDISABLED")) {
+                if (capability == QLatin1StringView("LOGINDISABLED")) {
                     d->plainLoginDisabled = true;
                 }
                 ++p;
@@ -303,7 +303,7 @@ void LoginJob::handleResponse(const Response &response)
             break;
         }
 
-        if (d->authMode == QLatin1String("PLAIN")) {
+        if (d->authMode == QLatin1StringView("PLAIN")) {
             if (response.content.size() > 1 && response.content.at(1).toString() == "OK") {
                 return;
             }
@@ -331,7 +331,7 @@ void LoginJob::handleResponse(const Response &response)
 
         switch (d->authState) {
         case LoginJobPrivate::PreStartTlsCapability:
-            if (d->capabilities.contains(QLatin1String("STARTTLS"))) {
+            if (d->capabilities.contains(QLatin1StringView("STARTTLS"))) {
                 d->authState = LoginJobPrivate::StartTls;
                 d->tags << d->sessionInternal()->sendCommand("STARTTLS");
             } else {
@@ -371,7 +371,7 @@ void LoginJob::handleResponse(const Response &response)
                 bool authModeSupported = false;
                 // find the selected SASL authentication method
                 for (const QString &capability : std::as_const(d->capabilities)) {
-                    if (capability.startsWith(QLatin1String("AUTH="))) {
+                    if (capability.startsWith(QLatin1StringView("AUTH="))) {
                         if (QStringView(capability).mid(5) == d->authMode) {
                             authModeSupported = true;
                             break;
@@ -433,7 +433,7 @@ bool LoginJobPrivate::startAuthentication()
         result = sasl_client_start(conn,
                                    authMode.toLatin1().constData(),
                                    &client_interact,
-                                   capabilities.contains(QLatin1String("SASL-IR")) ? &out : nullptr,
+                                   capabilities.contains(QLatin1StringView("SASL-IR")) ? &out : nullptr,
                                    &outlen,
                                    &mechusing);
 
@@ -532,7 +532,7 @@ void LoginJob::setAuthenticationMode(AuthenticationMode mode)
     Q_D(LoginJob);
     switch (mode) {
     case ClearText:
-        d->authMode = QLatin1String("");
+        d->authMode = QLatin1StringView("");
         break;
     case Login:
         d->authMode = QStringLiteral("LOGIN");
@@ -586,12 +586,12 @@ void LoginJobPrivate::saveServerGreeting(const Response &response)
             serverGreeting += QLatin1Char('(');
             const QList<QByteArray> itemLst = response.content.at(i).toList();
             for (const QByteArray &item : itemLst) {
-                serverGreeting += QLatin1String(item) + QLatin1Char(' ');
+                serverGreeting += QLatin1StringView(item) + QLatin1Char(' ');
             }
             serverGreeting.chop(1);
             serverGreeting += QStringLiteral(") ");
         } else {
-            serverGreeting += QLatin1String(response.content.at(i).toString()) + QLatin1Char(' ');
+            serverGreeting += QLatin1StringView(response.content.at(i).toString()) + QLatin1Char(' ');
         }
     }
     serverGreeting.chop(1);

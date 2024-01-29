@@ -200,7 +200,7 @@ void ListJob::convertInboxName(KIMAP::MailBoxDescriptor &descriptor)
 {
     // Inbox must be case sensitive, according to the RFC, so make it always uppercase
     QStringList pathParts = descriptor.name.split(descriptor.separator);
-    if (!pathParts.isEmpty() && pathParts[0].compare(QLatin1String("INBOX"), Qt::CaseInsensitive) == 0) {
+    if (!pathParts.isEmpty() && pathParts[0].compare(QLatin1StringView("INBOX"), Qt::CaseInsensitive) == 0) {
         pathParts.removeAt(0);
         descriptor.name = QStringLiteral("INBOX");
         if (!pathParts.isEmpty()) {

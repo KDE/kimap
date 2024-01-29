@@ -70,14 +70,14 @@ void dumpContentHelper(KMime::Content *part, const QString &partId = QString())
     for (int i = 0; i < children.size(); i++) {
         QString newId = partId;
         if (!newId.isEmpty()) {
-            newId += QLatin1String(".");
+            newId += QLatin1StringView(".");
         }
         newId += QString::number(i + 1);
         dumpContentHelper(children[i], newId);
     }
 }
 
-void listFolders(Session *session, bool includeUnsubscribed = false, const QString &nameFilter = QLatin1String(""))
+void listFolders(Session *session, bool includeUnsubscribed = false, const QString &nameFilter = QLatin1StringView(""))
 {
     auto list = new ListJob(session);
     list->setOption(includeUnsubscribed ? KIMAP::ListJob::IncludeUnsubscribed : KIMAP::ListJob::NoOption);
@@ -118,14 +118,14 @@ void testMetaData(Session *session)
     getmetadata->setServerCapability(SetMetaDataJob::Annotatemore);
     getmetadata->addEntry("/*", "value.priv");
     getmetadata->exec();
-    Q_ASSERT_X(getmetadata->metaData(QLatin1String("INBOX/TestFolder"), "/check", "value.priv") == "true", "", "/check metadata should be true");
-    Q_ASSERT_X(getmetadata->metaData(QLatin1String("INBOX/TestFolder"), "/comment", "value.priv") == "My new comment",
+    Q_ASSERT_X(getmetadata->metaData(QLatin1StringView("INBOX/TestFolder"), "/check", "value.priv") == "true", "", "/check metadata should be true");
+    Q_ASSERT_X(getmetadata->metaData(QLatin1StringView("INBOX/TestFolder"), "/comment", "value.priv") == "My new comment",
                "",
                "/check metadata should be My new comment");
 
     // cleanup
     auto deletejob = new DeleteJob(session);
-    deletejob->setMailBox(QLatin1String("INBOX/TestFolder"));
+    deletejob->setMailBox(QLatin1StringView("INBOX/TestFolder"));
     deletejob->exec();
 }
 

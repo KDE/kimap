@@ -59,7 +59,7 @@ void CapabilitiesJob::handleResponse(const Response &response)
         const int responseSize(response.content.size());
         if (responseSize >= 2 && response.content[1].toString() == "CAPABILITY") {
             for (int i = 2; i < responseSize; ++i) {
-                d->capabilities << QLatin1String(response.content[i].toString().toUpper());
+                d->capabilities << QLatin1StringView(response.content[i].toString().toUpper());
             }
             Q_EMIT capabilitiesReceived(d->capabilities);
         }
