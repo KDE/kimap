@@ -7,9 +7,9 @@
 #include <QTest>
 
 #include "imapstreamparser.h"
+#include "response_p.h"
 #include <QBuffer>
 #include <QTest>
-#include <response_p.h>
 
 using namespace KIMAP;
 

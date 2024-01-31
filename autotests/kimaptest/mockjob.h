@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include <kimap/job.h>
+#include "kimap/job.h"
 
 class MockJobPrivate;
 
