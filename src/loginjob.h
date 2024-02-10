@@ -33,8 +33,20 @@ public:
                       encrypted connection. KIMAP will automatically negotiate
                       the best supported encryption protocol. */
     };
+    Q_ENUM(EncryptionMode)
 
-    enum AuthenticationMode { ClearText = 0, Login, Plain, CramMD5, DigestMD5, NTLM, GSSAPI, Anonymous, XOAuth2 };
+    enum AuthenticationMode {
+        ClearText = 0,
+        Login,
+        Plain,
+        CramMD5,
+        DigestMD5,
+        NTLM,
+        GSSAPI,
+        Anonymous,
+        XOAuth2,
+    };
+    Q_ENUM(AuthenticationMode)
 
     enum ErrorCode {
         ERR_COULD_NOT_CONNECT = KJob::UserDefinedError + 23 // same as in kio
