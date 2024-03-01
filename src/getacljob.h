@@ -84,7 +84,7 @@ public:
      * @param identifier  the identifier to check the rights for
      * @param right       the right to check for
      */
-    bool hasRightEnabled(const QByteArray &identifier, Acl::Right right) const;
+    [[nodiscard]] bool hasRightEnabled(const QByteArray &identifier, Acl::Right right) const;
     /**
      * Get the rights associated with an identifier.
      *
@@ -101,7 +101,7 @@ public:
      *
      * @param identifier  the identifier to check the rights for
      */
-    Acl::Rights rights(const QByteArray &identifier) const;
+    [[nodiscard]] Acl::Rights rights(const QByteArray &identifier) const;
 
     /**
      * Gets the full access control list.

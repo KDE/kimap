@@ -180,7 +180,7 @@ public:
      * @param entry the entry to get
      * @return  the metadata entry value
      */
-    QByteArray metaData(const QByteArray &entry) const;
+    [[nodiscard]] QByteArray metaData(const QByteArray &entry) const;
 
     /**
      * Get all the metadata for a given mailbox.
@@ -205,7 +205,7 @@ public:
      */
     // XXX: what's with the mailBox argument in a class that has setMailBox()?
     //      KJobs are not intended to be run more than once
-    QMap<QByteArray, QMap<QByteArray, QByteArray>> allMetaData(const QString &mailBox) const;
+    [[nodiscard]] QMap<QByteArray, QMap<QByteArray, QByteArray>> allMetaData(const QString &mailBox) const;
 
     /**
      * Get all the metadata for the mailbox set with setMailBox().
@@ -215,7 +215,7 @@ public:
      *
      * @return a map from metadata entry names to values
      */
-    QMap<QByteArray, QByteArray> allMetaData() const;
+    [[nodiscard]] QMap<QByteArray, QByteArray> allMetaData() const;
 
     /**
      * Get all the metadata for the mailbox.
@@ -235,7 +235,7 @@ public:
      *
      * @return a map in the form (mailbox, (entry, value))
      */
-    QHash<QString, QMap<QByteArray, QByteArray>> allMetaDataForMailboxes() const;
+    [[nodiscard]] QHash<QString, QMap<QByteArray, QByteArray>> allMetaDataForMailboxes() const;
 
 protected:
     void doStart() override;

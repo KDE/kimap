@@ -208,7 +208,7 @@ public:
     /**
      * The messages that will be fetched.
      */
-    ImapSet sequenceSet() const;
+    [[nodiscard]] ImapSet sequenceSet() const;
 
     /**
      * Set how the sequence set should be interpreted.
@@ -261,7 +261,7 @@ public:
      * @since 4.14
      * @see setGmailExtensionsEnabled()
      */
-    bool setGmailExtensionsEnabled() const;
+    [[nodiscard]] bool setGmailExtensionsEnabled() const;
 
     /**
      * Returns the name of the mailbox the fetch job is executed on.

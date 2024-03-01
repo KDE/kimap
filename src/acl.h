@@ -85,21 +85,21 @@ Q_DECLARE_FLAGS(Rights, Right)
  * @param rights set of #Rights flags to normalize
  * @since 4.6
  */
-KIMAP_EXPORT Rights normalizedRights(Rights rights);
+[[nodiscard]] KIMAP_EXPORT Rights normalizedRights(Rights rights);
 
 /**
  * Returns a rights mask that contains both obsolete and new flags if one of them is set.
  * @param rights set of #Rights flags to augment
  * @since 4.6
  */
-KIMAP_EXPORT Rights denormalizedRights(Rights rights);
+[[nodiscard]] KIMAP_EXPORT Rights denormalizedRights(Rights rights);
 
 /**
  * Convert a set of rights into text format
  *
  * No modifier flag ('+' or '-') will be included.
  */
-KIMAP_EXPORT QByteArray rightsToString(Rights rights);
+[[nodiscard]] KIMAP_EXPORT QByteArray rightsToString(Rights rights);
 /**
  * Convert the text form of a set of rights into a Rights bitflag
  *
@@ -107,8 +107,7 @@ KIMAP_EXPORT QByteArray rightsToString(Rights rights);
  * characters.  This method will not complain if you give it
  * something that is not a list of rights.
  */
-KIMAP_EXPORT Rights rightsFromString(const QByteArray &string);
-
+[[nodiscard]] KIMAP_EXPORT Rights rightsFromString(const QByteArray &string);
 }
 }
 
