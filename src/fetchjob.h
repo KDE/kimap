@@ -12,7 +12,7 @@
 #include "job.h"
 
 #include <KMime/Content>
-#include <KMime/KMimeMessage>
+#include <KMime/Message>
 
 #include <tuple>
 
