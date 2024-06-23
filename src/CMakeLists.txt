@@ -108,7 +108,7 @@ ecm_qt_declare_logging_category(KPim6IMAP HEADER kimap_debug.h IDENTIFIER KIMAP_
         OLD_CATEGORY_NAMES log_kimap
         DESCRIPTION "kimap (pim lib)" EXPORT KIMAP)
 
-if (COMPILE_WITH_UNITY_CMAKE_SUPPORT)
+if(COMPILE_WITH_UNITY_CMAKE_SUPPORT)
     set_target_properties(KPim6IMAP PROPERTIES UNITY_BUILD ON)
 endif()
 
@@ -123,7 +123,7 @@ ecm_generate_export_header(KPim6IMAP
 target_include_directories(KPim6IMAP INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/KPim6/KIMAP>")
 target_include_directories(KPim6IMAP PUBLIC "$<BUILD_INTERFACE:${KIMAP_SOURCE_DIR}/src;${KIMAP_BINARY_DIR}/src>")
 
-if (WIN32)
+if(WIN32)
     set(extra_LIBS ws2_32)
 endif()
 
@@ -214,7 +214,7 @@ install(FILES
 
 ecm_qt_install_logging_categories(EXPORT KIMAP FILE kimap.categories DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
 
-if (BUILD_QCH)
+if(BUILD_QCH)
     ecm_add_qch(
         KPim6Imap_QCH
         NAME KImap

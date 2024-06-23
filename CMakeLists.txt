@@ -63,7 +63,7 @@ add_definitions(-DQT_NO_EMIT)
 option(USE_UNITY_CMAKE_SUPPORT "Use UNITY cmake support (speedup compile time)" OFF)
 
 set(COMPILE_WITH_UNITY_CMAKE_SUPPORT OFF)
-if (USE_UNITY_CMAKE_SUPPORT)
+if(USE_UNITY_CMAKE_SUPPORT)
     set(COMPILE_WITH_UNITY_CMAKE_SUPPORT ON)
 endif()
 
@@ -94,7 +94,7 @@ install(FILES
   DESTINATION ${KDE_INSTALL_INCLUDEDIR}/KPim6/KIMAP/ COMPONENT Devel
 )
 
-if (BUILD_QCH)
+if(BUILD_QCH)
     ecm_install_qch_export(
         TARGETS KPim6Imap_QCH
         FILE KPim6ImapQchTargets.cmake

@@ -10,7 +10,7 @@ set(kimaptest_SRCS
 )
 
 add_library(kimaptest6 STATIC ${kimaptest_SRCS})
-if (COMPILE_WITH_UNITY_CMAKE_SUPPORT)
+if(COMPILE_WITH_UNITY_CMAKE_SUPPORT)
     set_target_properties(kimaptest6 PROPERTIES UNITY_BUILD ON)
 endif()
 generate_export_header(kimaptest6)
