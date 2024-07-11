@@ -413,7 +413,7 @@ qint64 ImapStreamParser::readNumber(bool *ok)
         }
         ++i;
     }
-    const QByteArray tmp = m_data.mid(m_position, i - m_position);
+    const auto tmp = QByteArrayView(m_data).mid(m_position, i - m_position);
     result = tmp.toLongLong(ok);
     m_position = i;
     return result;
@@ -497,7 +497,7 @@ QByteArray ImapStreamParser::readUntilCommandEnd()
         if (m_data.at(i) == '{') {
             m_position = i - 1;
             hasLiteral(); // init literal size
-            result.append(m_data.mid(i, m_position + 1));
+            result.append(QByteArrayView(m_data).mid(i, m_position + 1));
             while (!atLiteralEnd()) {
                 result.append(readLiteralPart());
             }
@@ -532,6 +532,6 @@ void ImapStreamParser::trimBuffer()
     if (m_position < 4096) { // right() is expensive, so don't do it for every line
         return;
     }
-    m_data = m_data.right(m_data.size() - m_position);
+    m_data = std::move(m_data).right(m_data.size() - m_position);
     m_position = 0;
 }
