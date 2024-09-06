@@ -4,7 +4,7 @@
 # Johannes Obermayr <johannesobermayr@gmx.de>, 2010.
 msgid ""
 msgstr ""
-"Project-Id-Version: libkimap\n"
+"Project-Id-Version: libkimap6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-11 00:45+0000\n"
 "PO-Revision-Date: 2022-06-15 11:31+0200\n"
