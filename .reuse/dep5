@@ -1,8 +1,0 @@
-Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: kimap
-Upstream-Contact: Montel Laurent <montel@kde.org>
-Source: https://invent.kde.org/pim/kimap
-
-Files: autotests/fakeserverscenario.log readme-build-ftime.txt
-Copyright: none
-License: CC0-1.0

@@ -1,0 +1,10 @@
+version = 1
+SPDX-PackageName = "kimap"
+SPDX-PackageSupplier = "Montel Laurent <montel@kde.org>"
+SPDX-PackageDownloadLocation = "https://invent.kde.org/pim/kimap"
+
+[[annotations]]
+path = ["autotests/fakeserverscenario.log", "readme-build-ftime.txt"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "none"
+SPDX-License-Identifier = "CC0-1.0"
