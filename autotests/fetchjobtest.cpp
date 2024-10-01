@@ -379,12 +379,12 @@ private Q_SLOTS:
 
         // Check that we received the part we requested
         QByteArray partId = m_parts[2].keys().first();
-        QString text = m_parts[2].value(partId)->decodedText(true, true);
+        QString text = m_parts[2].value(partId)->decodedText(KMime::Content::TrimSpaces);
         QCOMPARE(partId, QByteArray("1.1.1"));
         QCOMPARE(text, QStringLiteral("Hi Jane, nice to meet you!"));
 
         QCOMPARE(m_msgs[2].parts.keys().first(), QByteArray("1.1.1"));
-        QCOMPARE(m_msgs[2].parts.value(partId)->decodedText(true, true), QStringLiteral("Hi Jane, nice to meet you!"));
+        QCOMPARE(m_msgs[2].parts.value(partId)->decodedText(KMime::Content::TrimSpaces), QStringLiteral("Hi Jane, nice to meet you!"));
 
         fakeServer.quit();
 
