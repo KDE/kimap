@@ -31,15 +31,50 @@ class SearchJobPrivate;
 class KIMAP_EXPORT Term
 {
 public:
-    enum Relation { And, Or };
+    enum Relation {
+        And,
+        Or
+    };
 
-    enum SearchKey { All, Bcc, Body, Cc, From, Subject, Text, To, Keyword };
+    enum SearchKey {
+        All,
+        Bcc,
+        Body,
+        Cc,
+        From,
+        Subject,
+        Text,
+        To,
+        Keyword
+    };
 
-    enum BooleanSearchKey { New, Old, Recent, Seen, Draft, Deleted, Flagged, Answered };
+    enum BooleanSearchKey {
+        New,
+        Old,
+        Recent,
+        Seen,
+        Draft,
+        Deleted,
+        Flagged,
+        Answered
+    };
 
-    enum DateSearchKey { Before, On, Since, SentBefore, SentOn, SentSince };
-    enum NumberSearchKey { Larger, Smaller };
-    enum SequenceSearchKey { Uid, SequenceNumber };
+    enum DateSearchKey {
+        Before,
+        On,
+        Since,
+        SentBefore,
+        SentOn,
+        SentSince
+    };
+    enum NumberSearchKey {
+        Larger,
+        Smaller
+    };
+    enum SequenceSearchKey {
+        Uid,
+        SequenceNumber
+    };
 
     Term();
     ~Term();
@@ -76,7 +111,11 @@ class KIMAP_EXPORT SearchJob : public Job
     friend class SessionPrivate;
 
 public:
-    enum SearchLogic { And = 0, Or, Not };
+    enum SearchLogic {
+        And = 0,
+        Or,
+        Not
+    };
 
     enum SearchCriteria {
         All = 0,

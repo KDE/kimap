@@ -40,7 +40,11 @@ public:
     /**
      * Used when subclassing to specify how the ACL will be modified.
      */
-    enum AclModifier { Add = 0, Remove, Change };
+    enum AclModifier {
+        Add = 0,
+        Remove,
+        Change
+    };
 
     /**
      * Set the mailbox to act on

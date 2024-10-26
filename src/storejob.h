@@ -27,7 +27,11 @@ class KIMAP_EXPORT StoreJob : public Job
     friend class SessionPrivate;
 
 public:
-    enum StoreMode { SetFlags, AppendFlags, RemoveFlags };
+    enum StoreMode {
+        SetFlags,
+        AppendFlags,
+        RemoveFlags
+    };
 
     explicit StoreJob(Session *session);
     ~StoreJob() override;

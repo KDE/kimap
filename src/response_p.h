@@ -16,7 +16,10 @@ struct Response {
     class Part
     {
     public:
-        enum Type { String = 0, List };
+        enum Type {
+            String = 0,
+            List
+        };
 
         explicit Part(const QByteArray &string)
             : m_type(String)

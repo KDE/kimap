@@ -25,7 +25,12 @@ class KIMAP_EXPORT Session : public QObject
     friend class JobPrivate;
 
 public:
-    enum State { Disconnected = 0, NotAuthenticated, Authenticated, Selected };
+    enum State {
+        Disconnected = 0,
+        NotAuthenticated,
+        Authenticated,
+        Selected
+    };
     Q_ENUM(State)
     Session(const QString &hostName, quint16 port, QObject *parent = nullptr);
     ~Session();

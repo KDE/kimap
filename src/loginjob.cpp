@@ -37,7 +37,13 @@ namespace KIMAP
 class LoginJobPrivate : public JobPrivate
 {
 public:
-    enum AuthState { PreStartTlsCapability = 0, StartTls, Capability, Login, Authenticate };
+    enum AuthState {
+        PreStartTlsCapability = 0,
+        StartTls,
+        Capability,
+        Login,
+        Authenticate
+    };
 
     LoginJobPrivate(LoginJob *job, Session *session, const QString &name)
         : JobPrivate(session, name)
@@ -237,7 +243,13 @@ void LoginJob::handleResponse(const Response &response)
         commandName = i18n("StartTls");
     }
 
-    enum ResponseCode { OK, ERR, UNTAGGED, CONTINUATION, MALFORMED };
+    enum ResponseCode {
+        OK,
+        ERR,
+        UNTAGGED,
+        CONTINUATION,
+        MALFORMED
+    };
 
     QByteArray tag = response.content.first().toString();
     ResponseCode code = OK;
