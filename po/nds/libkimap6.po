@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-05-11 00:45+0000\n"
+"POT-Creation-Date: 2024-10-27 00:40+0000\n"
 "PO-Revision-Date: 2014-08-14 00:19+0200\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -117,17 +117,17 @@ msgstr "Nixdoon"
 msgid "Job"
 msgstr "Opgaav"
 
-#: job.cpp:54 loginjob.cpp:574
+#: job.cpp:54 loginjob.cpp:586
 #, kde-format
 msgid "Connection to server lost."
 msgstr "Verbinnen na Server afbraken."
 
-#: job.cpp:65 loginjob.cpp:403 setmetadatajob.cpp:126
+#: job.cpp:65 loginjob.cpp:415 setmetadatajob.cpp:126
 #, kde-format
 msgid "%1 failed, malformed reply from the server."
 msgstr "%1 fehlslaan. Leeg Serverantwoort kregen."
 
-#: job.cpp:68 loginjob.cpp:277 setmetadatajob.cpp:109 setmetadatajob.cpp:129
+#: job.cpp:68 loginjob.cpp:289 setmetadatajob.cpp:109 setmetadatajob.cpp:129
 #, kde-format
 msgid "%1 failed, server replied: %2"
 msgstr "%1 fehlslaan. De Server anter: %2"
@@ -142,59 +142,59 @@ msgstr "List"
 msgid "ListRights"
 msgstr "Verlöven oplisten"
 
-#: loginjob.cpp:129 loginjob.cpp:233
+#: loginjob.cpp:135 loginjob.cpp:239
 #, kde-format
 msgid "Login"
 msgstr "Anmellen"
 
-#: loginjob.cpp:184
+#: loginjob.cpp:190
 #, kde-format
 msgid "IMAP session in the wrong state for authentication"
 msgstr "IMAP-Törn in leeg Status för Identiteetprööv"
 
-#: loginjob.cpp:235
+#: loginjob.cpp:241
 #, kde-format
 msgid "Capability"
 msgstr "Könen"
 
-#: loginjob.cpp:237
+#: loginjob.cpp:243
 #, kde-format
 msgid "StartTls"
 msgstr "TIs starten"
 
-#: loginjob.cpp:340
+#: loginjob.cpp:352
 #, kde-format
 msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
 msgstr ""
 
-#: loginjob.cpp:353
+#: loginjob.cpp:365
 #, kde-format
 msgid "Internal error, tried to login before encryption"
 msgstr ""
 
-#: loginjob.cpp:362
+#: loginjob.cpp:374
 #, kde-format
 msgid "Login failed, plain login is disabled by the server."
 msgstr "Anmellen fehlslaan. Nich verslötelt Anmellen is op den Server utmaakt."
 
-#: loginjob.cpp:383
+#: loginjob.cpp:395
 #, kde-format
 msgid "Login failed, authentication mode %1 is not supported by the server."
 msgstr ""
 "Anmellen fehlslaan. De Server ünnerstütt de Metood  \"%1\" för de "
 "Identiteetprööv nich."
 
-#: loginjob.cpp:413
+#: loginjob.cpp:425
 #, kde-format
 msgid "Login failed, client cannot initialize the SASL library."
 msgstr "Anmellen fehlslaan. De SASL-Bibliotheek lett sik nich torechtmaken."
 
-#: loginjob.cpp:512
+#: loginjob.cpp:524
 #, kde-format
 msgid "Login failed, TLS negotiation failed."
 msgstr "Anmellen fehlslaan. Uthanneln vun TLS fehlslaan."
 
-#: loginjob.cpp:570
+#: loginjob.cpp:582
 #, kde-format
 msgid "SSL handshake failed."
 msgstr "SSL-Uthanneln is fehlslaan."

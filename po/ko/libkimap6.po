@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-05-11 00:45+0000\n"
+"POT-Creation-Date: 2024-10-27 00:40+0000\n"
 "PO-Revision-Date: 2022-02-20 22:18+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -113,17 +113,17 @@ msgstr "대기"
 msgid "Job"
 msgstr "작업"
 
-#: job.cpp:54 loginjob.cpp:574
+#: job.cpp:54 loginjob.cpp:586
 #, kde-format
 msgid "Connection to server lost."
 msgstr "서버와의 연결이 끊어졌습니다."
 
-#: job.cpp:65 loginjob.cpp:403 setmetadatajob.cpp:126
+#: job.cpp:65 loginjob.cpp:415 setmetadatajob.cpp:126
 #, kde-format
 msgid "%1 failed, malformed reply from the server."
 msgstr "%1 실패. 서버에서 잘못된 응답이 돌아왔습니다."
 
-#: job.cpp:68 loginjob.cpp:277 setmetadatajob.cpp:109 setmetadatajob.cpp:129
+#: job.cpp:68 loginjob.cpp:289 setmetadatajob.cpp:109 setmetadatajob.cpp:129
 #, kde-format
 msgid "%1 failed, server replied: %2"
 msgstr "%1 실패. 서버 응답: %2"
@@ -138,57 +138,57 @@ msgstr "목록"
 msgid "ListRights"
 msgstr "권한 목록"
 
-#: loginjob.cpp:129 loginjob.cpp:233
+#: loginjob.cpp:135 loginjob.cpp:239
 #, kde-format
 msgid "Login"
 msgstr "로그인"
 
-#: loginjob.cpp:184
+#: loginjob.cpp:190
 #, kde-format
 msgid "IMAP session in the wrong state for authentication"
 msgstr "IMAP 세션이 잘못된 인증 상태에 있음"
 
-#: loginjob.cpp:235
+#: loginjob.cpp:241
 #, kde-format
 msgid "Capability"
 msgstr "기능"
 
-#: loginjob.cpp:237
+#: loginjob.cpp:243
 #, kde-format
 msgid "StartTls"
 msgstr "StartTls"
 
-#: loginjob.cpp:340
+#: loginjob.cpp:352
 #, kde-format
 msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
 msgstr "서버에서 STARTTLS를 사용할 수 없습니다. SSL/TLS를 사용하십시오."
 
-#: loginjob.cpp:353
+#: loginjob.cpp:365
 #, kde-format
 msgid "Internal error, tried to login before encryption"
 msgstr "내부 오류, 암호화 전에 로그인을 시도함"
 
-#: loginjob.cpp:362
+#: loginjob.cpp:374
 #, kde-format
 msgid "Login failed, plain login is disabled by the server."
 msgstr "로그인 실패. 서버에서 로그인을 지원하지 않습니다."
 
-#: loginjob.cpp:383
+#: loginjob.cpp:395
 #, kde-format
 msgid "Login failed, authentication mode %1 is not supported by the server."
 msgstr "로그인 실패. 서버에서 인증 모드 %1을(를) 지원하지 않습니다."
 
-#: loginjob.cpp:413
+#: loginjob.cpp:425
 #, kde-format
 msgid "Login failed, client cannot initialize the SASL library."
 msgstr "로그인 실패. 클라이언트가 SASL 라이브러리를 초기화할 수 없습니다."
 
-#: loginjob.cpp:512
+#: loginjob.cpp:524
 #, kde-format
 msgid "Login failed, TLS negotiation failed."
 msgstr "로그인 실패. TLS 협상이 실패했습니다."
 
-#: loginjob.cpp:570
+#: loginjob.cpp:582
 #, kde-format
 msgid "SSL handshake failed."
 msgstr "SSL 악수가 실패했습니다."
