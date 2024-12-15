@@ -105,7 +105,7 @@ msgstr "Id"
 #, kde-format
 msgctxt "name of the idle job"
 msgid "Idle"
-msgstr ""
+msgstr "आलम"
 
 #: job.cpp:19
 #, kde-format
@@ -231,13 +231,13 @@ msgstr "पुनर्नाम"
 #, kde-format
 msgctxt "Name of the search job"
 msgid "Search"
-msgstr ""
+msgstr "अन्वेषण"
 
 #: selectjob.cpp:73
 #, kde-format
 msgctxt "name of the select job"
 msgid "Select"
-msgstr ""
+msgstr "विचि"
 
 #: setacljob.cpp:34
 #, kde-format
@@ -258,7 +258,7 @@ msgstr "सेट्कोटा"
 #, kde-format
 msgctxt "name of the status job"
 msgid "Status"
-msgstr ""
+msgstr "स्थितिः"
 
 #: storejob.cpp:70
 #, kde-format
