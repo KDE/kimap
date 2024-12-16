@@ -1,4 +1,4 @@
-# Sanskrit translations for kimap package.
+# Hindi translations for kimap package.
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kimap package.
 # Kali <EMAIL@ADDRESS>, 2024.
@@ -8,34 +8,33 @@ msgstr ""
 "Project-Id-Version: kimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-27 00:40+0000\n"
-"PO-Revision-Date: 2024-12-13 19:09+0530\n"
+"PO-Revision-Date: 2024-12-15 17:36+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
-"Language-Team: Sanskrit\n"
-"Language: sa\n"
+"Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
+"Language: hi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n>2);\n"
 
 #: acljobbase.cpp:56
 #, kde-format
 msgid "AclJobBase"
-msgstr "AclJobBase इति"
+msgstr "एसीएलजॉबबेस"
 
 #: appendjob.cpp:40
 #, kde-format
 msgid "Append"
-msgstr "परिशिष्टम्"
+msgstr "संलग्न"
 
 #: capabilitiesjob.cpp:35
 #, kde-format
 msgid "Capabilities"
-msgstr "क्षमता"
+msgstr "क्षमताओं"
 
 #: closejob.cpp:32
 #, kde-format
 msgid "Close"
-msgstr "पिधानं करोतु"
+msgstr "बंद करना"
 
 #: copyjob.cpp:41
 #, kde-format
@@ -45,32 +44,32 @@ msgstr "प्रतिलिपि"
 #: createjob.cpp:36
 #, kde-format
 msgid "Create"
-msgstr "निर्मियताम्"
+msgstr "बनाएं"
 
 #: deleteacljob.cpp:37
 #, kde-format
 msgid "DeleteAclJob"
-msgstr "DeleteAclJob"
+msgstr "डिलीटAclजॉब"
 
 #: deletejob.cpp:36
 #, kde-format
 msgid "Delete"
-msgstr "लुप्"
+msgstr "मिटाना"
 
 #: enablejob.cpp:31
 #, kde-format
 msgid "Enable"
-msgstr "सक्रियं करोतु"
+msgstr "सक्षम"
 
 #: expungejob.cpp:37
 #, kde-format
 msgid "Expunge"
-msgstr "Expunge इति"
+msgstr "हटाए"
 
 #: fetchjob.cpp:97
 #, kde-format
 msgid "Fetch"
-msgstr "उपानी"
+msgstr "लाना"
 
 #: getacljob.cpp:37
 #, kde-format
@@ -80,12 +79,12 @@ msgstr "GetAcl"
 #: getmetadatajob.cpp:43
 #, kde-format
 msgid "GetMetaData"
-msgstr "मेटाडाटा प्राप्त करें"
+msgstr "GetMetaData"
 
 #: getmetadatajob.cpp:66
 #, kde-format
 msgid "GetAnnotation"
-msgstr "GetAnnotation"
+msgstr "एनोटेशन प्राप्त करें"
 
 #: getquotajob.cpp:35
 #, kde-format
@@ -95,38 +94,38 @@ msgstr "GetQuota"
 #: getquotarootjob.cpp:38
 #, kde-format
 msgid "GetQuotaRoot"
-msgstr "GetQuotaRoot"
+msgstr "GetQuotaरूट"
 
 #: idjob.cpp:35
 #, kde-format
 msgid "Id"
-msgstr "Id"
+msgstr "पहचान"
 
 #: idlejob.cpp:65
 #, kde-format
 msgctxt "name of the idle job"
 msgid "Idle"
-msgstr "आलम"
+msgstr "निठल्ला"
 
 #: job.cpp:19
 #, kde-format
 msgid "Job"
-msgstr "कार्य"
+msgstr "काम"
 
 #: job.cpp:54 loginjob.cpp:586
 #, kde-format
 msgid "Connection to server lost."
-msgstr "सर्वरेण सह संयोजनं नष्टम्।"
+msgstr "सर्वर से कनेक्शन टूट गया."
 
 #: job.cpp:65 loginjob.cpp:415 setmetadatajob.cpp:126
 #, kde-format
 msgid "%1 failed, malformed reply from the server."
-msgstr "%1 विफलम्, सर्वरतः विकृतं उत्तरम् ।"
+msgstr "%1 विफल, सर्वर से विकृत उत्तर."
 
 #: job.cpp:68 loginjob.cpp:289 setmetadatajob.cpp:109 setmetadatajob.cpp:129
 #, kde-format
 msgid "%1 failed, server replied: %2"
-msgstr "%1 विफलम्, सर्वरः उत्तरं दत्तवान्: %2"
+msgstr "%1 विफल, सर्वर ने उत्तर दिया: %2"
 
 #: listjob.cpp:59
 #, kde-format
@@ -141,82 +140,83 @@ msgstr "सूचीअधिकार"
 #: loginjob.cpp:135 loginjob.cpp:239
 #, kde-format
 msgid "Login"
-msgstr "प्रवेशः"
+msgstr "लॉग इन करें"
 
 #: loginjob.cpp:190
 #, kde-format
 msgid "IMAP session in the wrong state for authentication"
-msgstr "प्रमाणीकरणार्थं गलत् अवस्थायां IMAP सत्रम्"
+msgstr "प्रमाणीकरण के लिए IMAP सत्र ग़लत स्थिति में है"
 
 #: loginjob.cpp:241
 #, kde-format
 msgid "Capability"
-msgstr "सामर्थ्यम्"
+msgstr "क्षमता"
 
 #: loginjob.cpp:243
 #, kde-format
 msgid "StartTls"
-msgstr "प्रारम्भTls"
+msgstr "प्रारंभTls"
 
 #: loginjob.cpp:352
 #, kde-format
 msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
-msgstr "STARTTLS सर्वरेण समर्थितं नास्ति, तस्य स्थाने SSL/TLS इत्यस्य उपयोगं प्रयतस्व ।"
+msgstr ""
+"STARTTLS सर्वर द्वारा समर्थित नहीं है, इसके बजाय SSL/TLS का उपयोग करने का प्रयास करें।"
 
 #: loginjob.cpp:365
 #, kde-format
 msgid "Internal error, tried to login before encryption"
-msgstr "आन्तरिकदोषः, एन्क्रिप्शनात् पूर्वं प्रवेशं कर्तुं प्रयतितवान्"
+msgstr "आंतरिक त्रुटि, एन्क्रिप्शन से पहले लॉगिन करने का प्रयास किया गया"
 
 #: loginjob.cpp:374
 #, kde-format
 msgid "Login failed, plain login is disabled by the server."
-msgstr "प्रवेशः विफलः, साधारणप्रवेशः सर्वरेण निष्क्रियः अस्ति ।"
+msgstr "लॉगिन विफल, सर्वर द्वारा सादा लॉगिन अक्षम कर दिया गया है।"
 
 #: loginjob.cpp:395
 #, kde-format
 msgid "Login failed, authentication mode %1 is not supported by the server."
-msgstr "प्रवेशः विफलः, प्रमाणीकरणविधिः %1 सर्वरेण समर्थितः नास्ति ।"
+msgstr "लॉगिन विफल, प्रमाणीकरण मोड %1 सर्वर द्वारा समर्थित नहीं है."
 
 #: loginjob.cpp:425
 #, kde-format
 msgid "Login failed, client cannot initialize the SASL library."
-msgstr "प्रवेशः विफलः, क्लायन्ट् SASL पुस्तकालयं आरभुं न शक्नोति ।"
+msgstr "लॉगिन विफल, क्लाइंट SASL लाइब्रेरी आरंभ नहीं कर सकता।"
 
 #: loginjob.cpp:524
 #, kde-format
 msgid "Login failed, TLS negotiation failed."
-msgstr "प्रवेशः असफलः, TLS वार्ता विफलः ।"
+msgstr "लॉगिन विफल, TLS बातचीत विफल."
 
 #: loginjob.cpp:582
 #, kde-format
 msgid "SSL handshake failed."
-msgstr "SSL हस्तप्रहारः विफलः अभवत् ।"
+msgstr "SSL हैंडशेक विफल हुआ."
 
 #: logoutjob.cpp:33
 #, kde-format
 msgid "Logout"
-msgstr "लॉगआउट्"
+msgstr "लॉग आउट"
 
 #: metadatajobbase.cpp:53
 #, kde-format
 msgid "MetaDataJobBase"
-msgstr "मेटाडाटाजॉबबेस"
+msgstr "मेटाडेटाजॉबबेस"
 
 #: movejob.cpp:42
 #, kde-format
 msgid "Move"
-msgstr "चलनम्"
+msgstr "कदम"
 
 #: myrightsjob.cpp:37
 #, kde-format
 msgid "MyRights"
-msgstr "मम अधिकारः"
+msgstr "माईराइट्स"
 
 #: namespacejob.cpp:68
 #, kde-format
 msgid "Namespace"
-msgstr "नामस्थानम्"
+msgstr "नाम स्थान"
 
 #: quotajobbase.cpp:34
 #, kde-format
@@ -226,52 +226,52 @@ msgstr "कोटाजॉबबेस"
 #: renamejob.cpp:37
 #, kde-format
 msgid "Rename"
-msgstr "पुनर्नाम"
+msgstr "नाम बदलें"
 
 #: searchjob.cpp:361
 #, kde-format
 msgctxt "Name of the search job"
 msgid "Search"
-msgstr "अन्वेषण"
+msgstr "खोज"
 
 #: selectjob.cpp:73
 #, kde-format
 msgctxt "name of the select job"
 msgid "Select"
-msgstr "विचि"
+msgstr "चुनना"
 
 #: setacljob.cpp:34
 #, kde-format
 msgid "SetAcl"
-msgstr "SetAcl"
+msgstr "सेटएसीएल"
 
 #: setmetadatajob.cpp:43
 #, kde-format
 msgid "SetMetaData"
-msgstr "सेटमेटाडाटा"
+msgstr "सेटमेटाडेटा"
 
 #: setquotajob.cpp:37
 #, kde-format
 msgid "SetQuota"
-msgstr "सेट्कोटा"
+msgstr "सेटकोटा"
 
 #: statusjob.cpp:40
 #, kde-format
 msgctxt "name of the status job"
 msgid "Status"
-msgstr "स्थितिः"
+msgstr "स्थिति"
 
 #: storejob.cpp:70
 #, kde-format
 msgid "Store"
-msgstr "संग्रहः"
+msgstr "इकट्ठा करना"
 
 #: subscribejob.cpp:36
 #, kde-format
 msgid "Subscribe"
-msgstr "सब्सक्राइब करें"
+msgstr "सदस्यता लें"
 
 #: unsubscribejob.cpp:36
 #, kde-format
 msgid "Unsubscribe"
-msgstr "सदस्यता रद्द करें"
+msgstr "सदस्यता रद्द"
