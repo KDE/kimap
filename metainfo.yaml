@@ -1,5 +1,5 @@
 fancyname: KIMAP
-maintainer: dvratil 
+maintainer: dvratil
 description: A job-based API for interacting with IMAP servers
 tier: 3
 type: functional
@@ -12,10 +12,8 @@ portingAid: false
 deprecated: false
 release: false
 libraries:
- - cmake: "KPim6::Imap"
+    - cmake: "KPim6::Imap"
 cmakename: KPim6Imap
 
 public_lib: true
 group: kdepim
-platforms:
-    - name: Linux
