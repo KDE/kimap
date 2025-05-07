@@ -50,6 +50,9 @@ private Q_SLOTS:
 
     void shouldFailForInvalidHosts()
     {
+#ifdef Q_OS_FREEBSD
+        QSKIP("QTest::qWait in this test triggers a busy-loop within Qt");
+#endif
         KIMAP::Session s(QStringLiteral("0.0.0.0"), 1234);
         s.setTimeout(1); // 1 second timeout
 
