@@ -119,13 +119,13 @@ void GetMetaDataJob::doStart()
     }
 
     d->tags << d->sessionInternal()->sendCommand(command, parameters);
-    //  qCDebug(KIMAP_LOG) << "SENT: " << command << " " << parameters;
+    //  qCDebug(KIMAP_LOG) << "SENT:" << command << " " << parameters;
 }
 
 void GetMetaDataJob::handleResponse(const Response &response)
 {
     Q_D(GetMetaDataJob);
-    //  qCDebug(KIMAP_LOG) << "GOT: " << response.toString();
+    //  qCDebug(KIMAP_LOG) << "GOT:" << response.toString();
 
     // TODO: handle NO error messages having [METADATA MAXSIZE NNN], [METADATA TOOMANY], [METADATA NOPRIVATE] (see rfc5464)
     // or [ANNOTATEMORE TOOBIG], [ANNOTATEMORE TOOMANY] respectively

@@ -221,7 +221,7 @@ void SessionPrivate::responseReceived(const Response &response)
             simplified.content.removeFirst(); // Strip the tag
             simplified.content.removeFirst(); // Strip the code
         }
-        qCDebug(KIMAP_LOG) << "Received BYE: " << simplified.toString();
+        qCDebug(KIMAP_LOG) << "Received BYE:" << simplified.toString();
         return;
     }
 

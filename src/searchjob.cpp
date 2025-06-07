@@ -486,7 +486,7 @@ void SearchJob::addSearchCriteria(SearchCriteria criteria)
         break;
     default:
         // TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
-        qCDebug(KIMAP_LOG) << "Criteria " << d->criteriaMap[criteria] << " needs an argument, but none was specified.";
+        qCDebug(KIMAP_LOG) << "Criteria" << d->criteriaMap[criteria] << "needs an argument, but none was specified.";
         break;
     }
 }
@@ -501,7 +501,7 @@ void SearchJob::addSearchCriteria(SearchCriteria criteria, int argument)
         break;
     default:
         // TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
-        qCDebug(KIMAP_LOG) << "Criteria " << d->criteriaMap[criteria] << " doesn't accept an integer as an argument.";
+        qCDebug(KIMAP_LOG) << "Criteria" << d->criteriaMap[criteria] << "doesn't accept an integer as an argument.";
         break;
     }
 }
@@ -528,7 +528,7 @@ void SearchJob::addSearchCriteria(SearchCriteria criteria, const QByteArray &arg
         break;
     default:
         // TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
-        qCDebug(KIMAP_LOG) << "Criteria " << d->criteriaMap[criteria] << " doesn't accept any argument.";
+        qCDebug(KIMAP_LOG) << "Criteria" << d->criteriaMap[criteria] << "doesn't accept any argument.";
         break;
     }
 }
@@ -550,7 +550,7 @@ void SearchJob::addSearchCriteria(SearchCriteria criteria, const QDate &argument
     }
     default:
         // TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
-        qCDebug(KIMAP_LOG) << "Criteria " << d->criteriaMap[criteria] << " doesn't accept a date as argument.";
+        qCDebug(KIMAP_LOG) << "Criteria" << d->criteriaMap[criteria] << "doesn't accept a date as argument.";
         break;
     }
 }

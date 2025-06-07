@@ -303,7 +303,7 @@ void LoginJob::handleResponse(const Response &response)
                 }
                 ++p;
             }
-            qCDebug(KIMAP_LOG) << "Capabilities updated: " << d->capabilities;
+            qCDebug(KIMAP_LOG) << "Capabilities updated:" << d->capabilities;
         }
         break;
 
@@ -576,7 +576,7 @@ void LoginJob::connectionLost()
 {
     Q_D(LoginJob);
 
-    qCWarning(KIMAP_LOG) << "Connection to server lost " << d->m_socketError;
+    qCWarning(KIMAP_LOG) << "Connection to server lost" << d->m_socketError;
     if (d->m_socketError == QAbstractSocket::SslHandshakeFailedError) {
         setError(KJob::UserDefinedError);
         setErrorText(i18n("SSL handshake failed."));

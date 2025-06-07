@@ -95,7 +95,7 @@ void SetMetaDataJob::doStart()
     }
 
     d->tags << d->sessionInternal()->sendCommand(command, parameters);
-    //   qCDebug(KIMAP_LOG) << "SENT: " << command << " " << parameters;
+    //   qCDebug(KIMAP_LOG) << "SENT:" << command << " " << parameters;
 }
 
 void SetMetaDataJob::handleResponse(const Response &response)
@@ -144,7 +144,7 @@ void SetMetaDataJob::handleResponse(const Response &response)
             int size = d->entriesIt.value().size();
             content += " {" + QByteArray::number(size == 0 ? 3 : size) + '}';
         }
-        //      qCDebug(KIMAP_LOG) << "SENT: " << content;
+        //      qCDebug(KIMAP_LOG) << "SENT:" << content;
         d->sessionInternal()->sendData(content);
     }
 }

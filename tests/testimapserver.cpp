@@ -140,29 +140,29 @@ void testAcl(Session *session, const QString &user)
     listRights->setMailBox(QStringLiteral("INBOX/TestFolder"));
     listRights->setIdentifier(user.toLatin1());
     listRights->exec();
-    qDebug() << "Default rights on INBOX/TestFolder: " << Acl::rightsToString(listRights->defaultRights());
+    qDebug() << "Default rights on INBOX/TestFolder:" << Acl::rightsToString(listRights->defaultRights());
     const QList<Acl::Rights> possible = listRights->possibleRights();
     QStringList strList;
     for (Acl::Rights r : std::as_const(possible)) {
         strList << QString::fromLatin1(Acl::rightsToString(r));
     }
-    qDebug() << "Possible rights on INBOX/TestFolder: " << strList;
+    qDebug() << "Possible rights on INBOX/TestFolder:" << strList;
 
     auto myRights = new MyRightsJob(session);
     myRights->setMailBox(QStringLiteral("INBOX/TestFolder"));
     myRights->exec();
 
     Acl::Rights mine = myRights->rights();
-    qDebug() << "My rights on INBOX/TestFolder: " << Acl::rightsToString(mine);
-    qDebug() << "Reading INBOX/TestFolder is possible: " << myRights->hasRightEnabled(Acl::Read);
+    qDebug() << "My rights on INBOX/TestFolder:" << Acl::rightsToString(mine);
+    qDebug() << "Reading INBOX/TestFolder is possible:" << myRights->hasRightEnabled(Acl::Read);
     Q_ASSERT_X(myRights->hasRightEnabled(Acl::Read), "Reading INBOX is NOT possible", "");
 
     auto getAcl = new GetAclJob(session);
     getAcl->setMailBox(QStringLiteral("INBOX/TestFolder"));
     getAcl->exec();
-    qDebug() << "Anyone rights on INBOX/TestFolder: " << getAcl->rights("anyone");
+    qDebug() << "Anyone rights on INBOX/TestFolder:" << getAcl->rights("anyone");
     Acl::Rights users = getAcl->rights(user.toLatin1());
-    qDebug() << user << " rights on INBOX/TestFolder: " << Acl::rightsToString(users);
+    qDebug() << user << "rights on INBOX/TestFolder:" << Acl::rightsToString(users);
     Q_ASSERT_X(mine == users, "GETACL returns different rights for the same user", "");
 
     qDebug() << "Removing Delete right ";
@@ -177,7 +177,7 @@ void testAcl(Session *session, const QString &user)
     getAcl->setMailBox(QStringLiteral("INBOX/TestFolder"));
     getAcl->exec();
     users = getAcl->rights(user.toLatin1());
-    qDebug() << user << " rights on INBOX/TestFolder: " << Acl::rightsToString(users);
+    qDebug() << user << "rights on INBOX/TestFolder:" << Acl::rightsToString(users);
 
     qDebug() << "Adding back Delete right ";
     mine = Acl::Delete;
@@ -191,7 +191,7 @@ void testAcl(Session *session, const QString &user)
     getAcl->setMailBox(QStringLiteral("INBOX/TestFolder"));
     getAcl->exec();
     users = getAcl->rights(user.toLatin1());
-    qDebug() << user << " rights on INBOX/TestFolder: " << Acl::rightsToString(users);
+    qDebug() << user << "rights on INBOX/TestFolder:" << Acl::rightsToString(users);
 
     // cleanup
     auto deletejob = new DeleteJob(session);

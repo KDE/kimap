@@ -112,7 +112,7 @@ void SslServer::incomingConnection(qintptr handle)
 void SslServer::sslErrors(const QList<QSslError> &errors)
 {
     for (const QSslError &error : errors) {
-        qWarning() << "Received ssl error: " << error.errorString();
+        qWarning() << "Received SSL error:" << error.errorString();
     }
     auto socket = qobject_cast<QSslSocket *>(QObject::sender());
     if (socket) {

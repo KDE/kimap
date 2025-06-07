@@ -86,7 +86,7 @@ void ExpungeJob::handleResponse(const Response &response)
                 return;
             }
         }
-        qCDebug(KIMAP_LOG) << "Unhandled response: " << response.toString().constData();
+        qCDebug(KIMAP_LOG) << "Unhandled response:" << response.toString().constData();
     }
 }
 
