@@ -7,19 +7,29 @@ include(ECMMarkAsTest)
 add_subdirectory(kimaptest)
 
 macro(KIMAP_UNIT_TESTS)
-  foreach(_testname ${ARGN})
-    add_executable(${_testname} ${_testname}.cpp)
-    add_test(NAME ${_testname} COMMAND ${_testname})
-    ecm_mark_as_test(${_testname})
-    target_link_libraries(${_testname} KPim6IMAP Qt::Test kimaptest6 Qt::Network)
-    set_target_properties(${_testname} PROPERTIES COMPILE_FLAGS -DTEST_DATA="\\"${CMAKE_CURRENT_SOURCE_DIR}\\"")
-    set_tests_properties(${_testname} PROPERTIES RUN_SERIAL TRUE)
-  endforeach()
+    foreach(_testname ${ARGN})
+        add_executable(${_testname} ${_testname}.cpp)
+        add_test(NAME ${_testname} COMMAND ${_testname})
+        ecm_mark_as_test(${_testname})
+        target_link_libraries(
+            ${_testname}
+            KPim6IMAP
+            Qt::Test
+            kimaptest6
+            Qt::Network
+        )
+        set_target_properties(
+            ${_testname}
+            PROPERTIES
+                COMPILE_FLAGS -DTEST_DATA="\\"${CMAKE_CURRENT_SOURCE_DIR}\\""
+        )
+        set_tests_properties(${_testname} PROPERTIES RUN_SERIAL TRUE)
+    endforeach()
 endmacro()
 
 ########### automated tests ###############
 
-KIMAP_UNIT_TESTS(
+kimap_unit_tests(
   fakeservertest
   testrfccodecs
   testsession

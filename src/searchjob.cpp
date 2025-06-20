@@ -343,7 +343,7 @@ public:
     }
 
     QByteArray charset;
-    QList<QByteArray> criterias;
+    QList<QByteArray> criteria;
     QMap<SearchJob::SearchCriteria, QByteArray> criteriaMap;
     QMap<int, QByteArray> months;
     SearchJob::SearchLogic logic;
@@ -392,23 +392,23 @@ void SearchJob::doStart()
     } else {
         if (d->logic == SearchJob::Not) {
             searchKey += "NOT ";
-        } else if (d->logic == SearchJob::Or && d->criterias.size() > 1) {
+        } else if (d->logic == SearchJob::Or && d->criteria.size() > 1) {
             searchKey += "OR ";
         }
 
         if (d->logic == SearchJob::And) {
-            const int numberCriterias(d->criterias.size());
+            const int numberCriterias(d->criteria.size());
             for (int i = 0; i < numberCriterias; i++) {
-                const QByteArray key = d->criterias.at(i);
+                const QByteArray key = d->criteria.at(i);
                 if (i > 0) {
                     searchKey += ' ';
                 }
                 searchKey += key;
             }
         } else {
-            const int numberCriterias(d->criterias.size());
+            const int numberCriterias(d->criteria.size());
             for (int i = 0; i < numberCriterias; i++) {
-                const QByteArray key = d->criterias.at(i);
+                const QByteArray key = d->criteria.at(i);
                 if (i > 0) {
                     searchKey += ' ';
                 }
@@ -482,7 +482,7 @@ void SearchJob::addSearchCriteria(SearchCriteria criteria)
     case Undraft:
     case Unflagged:
     case Unseen:
-        d->criterias.append(d->criteriaMap[criteria]);
+        d->criteria.append(d->criteriaMap[criteria]);
         break;
     default:
         // TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
@@ -497,7 +497,7 @@ void SearchJob::addSearchCriteria(SearchCriteria criteria, int argument)
     switch (criteria) {
     case Larger:
     case Smaller:
-        d->criterias.append(d->criteriaMap[criteria] + ' ' + QByteArray::number(argument));
+        d->criteria.append(d->criteriaMap[criteria] + ' ' + QByteArray::number(argument));
         break;
     default:
         // TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
@@ -518,13 +518,13 @@ void SearchJob::addSearchCriteria(SearchCriteria criteria, const QByteArray &arg
     case Text:
     case To:
         d->contents.append(argument);
-        d->criterias.append(d->criteriaMap[criteria] + " {" + QByteArray::number(argument.size()) + '}');
+        d->criteria.append(d->criteriaMap[criteria] + " {" + QByteArray::number(argument.size()) + '}');
         break;
     case Keyword:
     case Unkeyword:
     case Header:
     case Uid:
-        d->criterias.append(d->criteriaMap[criteria] + ' ' + argument);
+        d->criteria.append(d->criteriaMap[criteria] + ' ' + argument);
         break;
     default:
         // TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
@@ -545,7 +545,7 @@ void SearchJob::addSearchCriteria(SearchCriteria criteria, const QDate &argument
         QByteArray date = QByteArray::number(argument.day()) + '-';
         date += d->months[argument.month()] + '-';
         date += QByteArray::number(argument.year());
-        d->criterias.append(d->criteriaMap[criteria] + " \"" + date + '\"');
+        d->criteria.append(d->criteriaMap[criteria] + " \"" + date + '\"');
         break;
     }
     default:
@@ -558,7 +558,7 @@ void SearchJob::addSearchCriteria(SearchCriteria criteria, const QDate &argument
 void SearchJob::addSearchCriteria(const QByteArray &searchCriteria)
 {
     Q_D(SearchJob);
-    d->criterias.append(searchCriteria);
+    d->criteria.append(searchCriteria);
 }
 
 void SearchJob::setUidBased(bool uidBased)
