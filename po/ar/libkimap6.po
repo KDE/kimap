@@ -1,21 +1,22 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2025 This file is copyright:
 # This file is distributed under the same license as the kimap package.
+# SPDX-FileCopyrightText: 2022, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 #
-# Zayed Al-Saidi <zayed.alsaidi@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-27 00:40+0000\n"
-"PO-Revision-Date: 2022-02-17 19:06+0400\n"
+"PO-Revision-Date: 2025-08-20 21:26+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
-"Language-Team: Arabic <kde-l10n-ar@kde.org>\n"
+"Language-Team: ar\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: acljobbase.cpp:56
 #, kde-format
@@ -116,7 +117,7 @@ msgstr "وظيفة"
 #: job.cpp:54 loginjob.cpp:586
 #, kde-format
 msgid "Connection to server lost."
-msgstr "فُقد الاتّصال بالخادوم."
+msgstr "فُقد الاتّصال بالخادم."
 
 #: job.cpp:65 loginjob.cpp:415 setmetadatajob.cpp:126
 #, kde-format
@@ -146,7 +147,7 @@ msgstr "ولوج"
 #: loginjob.cpp:190
 #, kde-format
 msgid "IMAP session in the wrong state for authentication"
-msgstr "جلسة IMAP في حالة خاطئة للمصادقة"
+msgstr "جلسة IMAP في حالة خاطئة للاستيثاق"
 
 #: loginjob.cpp:241
 #, kde-format
@@ -166,7 +167,7 @@ msgstr "لا يدعم الخادم STARTTLS، حاول استخدام SSL / TLS 
 #: loginjob.cpp:365
 #, kde-format
 msgid "Internal error, tried to login before encryption"
-msgstr "خطأ داخلي، حاول الولوج قبل التشفير"
+msgstr "خطأ داخلي، حاول الولوج قبل التعمية"
 
 #: loginjob.cpp:374
 #, kde-format
@@ -176,7 +177,7 @@ msgstr "فشل الولوج، عُطل الولوج البسيط بواسطة ا
 #: loginjob.cpp:395
 #, kde-format
 msgid "Login failed, authentication mode %1 is not supported by the server."
-msgstr "فشل الولوج، وضع المصادقة %1 غير معتمد من قبل الخادم."
+msgstr "فشل الولوج، وضع الاستيثاق %1 غير معتمد من قبل الخادم."
 
 #: loginjob.cpp:425
 #, kde-format
