@@ -6,6 +6,7 @@
 */
 
 #include "loginjob.h"
+using namespace Qt::Literals::StringLiterals;
 
 #include <KLocalizedString>
 
@@ -595,15 +596,15 @@ void LoginJobPrivate::saveServerGreeting(const Response &response)
 
     for (int i = 2; i < response.content.size(); i++) {
         if (response.content.at(i).type() == Response::Part::List) {
-            serverGreeting += QLatin1Char('(');
+            serverGreeting += u'(';
             const QList<QByteArray> itemLst = response.content.at(i).toList();
             for (const QByteArray &item : itemLst) {
-                serverGreeting += QLatin1StringView(item) + QLatin1Char(' ');
+                serverGreeting += QLatin1StringView(item) + u' ';
             }
             serverGreeting.chop(1);
             serverGreeting += QStringLiteral(") ");
         } else {
-            serverGreeting += QLatin1StringView(response.content.at(i).toString()) + QLatin1Char(' ');
+            serverGreeting += QLatin1StringView(response.content.at(i).toString()) + u' ';
         }
     }
     serverGreeting.chop(1);

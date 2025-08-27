@@ -167,8 +167,8 @@ QString KIMAP::quoteIMAP(const QString &src)
     QString result;
     result.reserve(2 * len);
     for (unsigned int i = 0; i < len; i++) {
-        if (src[i] == QLatin1Char('"') || src[i] == QLatin1Char('\\')) {
-            result += QLatin1Char('\\');
+        if ((src[i] == u'"') || (src[i] == u'\\')) {
+            result += u'\\';
         }
         result += src[i];
     }

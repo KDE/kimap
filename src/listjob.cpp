@@ -147,7 +147,7 @@ void ListJob::doStart()
                 d->tags << d->sessionInternal()->sendCommand(d->command, parameters.arg(name).toUtf8());
             }
 
-            d->tags << d->sessionInternal()->sendCommand(d->command, parameters.arg(descriptor.name + QLatin1Char('*')).toUtf8());
+            d->tags << d->sessionInternal()->sendCommand(d->command, parameters.arg(descriptor.name + u'*').toUtf8());
         }
     }
 }

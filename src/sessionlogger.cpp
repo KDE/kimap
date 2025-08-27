@@ -17,8 +17,7 @@ SessionLogger::SessionLogger()
     static qint64 nextId = 0;
     m_id = ++nextId;
 
-    m_file.setFileName(QLatin1StringView(qgetenv("KIMAP_LOGFILE")) + QLatin1Char('.') + QString::number(QCoreApplication::applicationPid()) + QLatin1Char('.')
-                       + QString::number(m_id));
+    m_file.setFileName(QLatin1StringView(qgetenv("KIMAP_LOGFILE")) + u'.' + QString::number(QCoreApplication::applicationPid()) + u'.' + QString::number(m_id));
     if (!m_file.open(QFile::WriteOnly)) {
         qCWarning(KIMAP_LOG) << "Could not open log file for writing:" << m_file.fileName();
     }
