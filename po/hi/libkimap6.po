@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-27 00:40+0000\n"
+"POT-Creation-Date: 2025-08-28 00:43+0000\n"
 "PO-Revision-Date: 2024-12-15 17:36+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -113,17 +113,17 @@ msgstr "निठल्ला"
 msgid "Job"
 msgstr "काम"
 
-#: job.cpp:54 loginjob.cpp:586
+#: job.cpp:54 loginjob.cpp:587
 #, kde-format
 msgid "Connection to server lost."
 msgstr "सर्वर से कनेक्शन टूट गया."
 
-#: job.cpp:65 loginjob.cpp:415 setmetadatajob.cpp:126
+#: job.cpp:65 loginjob.cpp:416 setmetadatajob.cpp:126
 #, kde-format
 msgid "%1 failed, malformed reply from the server."
 msgstr "%1 विफल, सर्वर से विकृत उत्तर."
 
-#: job.cpp:68 loginjob.cpp:289 setmetadatajob.cpp:109 setmetadatajob.cpp:129
+#: job.cpp:68 loginjob.cpp:290 setmetadatajob.cpp:109 setmetadatajob.cpp:129
 #, kde-format
 msgid "%1 failed, server replied: %2"
 msgstr "%1 विफल, सर्वर ने उत्तर दिया: %2"
@@ -138,58 +138,58 @@ msgstr "सूची"
 msgid "ListRights"
 msgstr "सूचीअधिकार"
 
-#: loginjob.cpp:135 loginjob.cpp:239
+#: loginjob.cpp:136 loginjob.cpp:240
 #, kde-format
 msgid "Login"
 msgstr "लॉग इन करें"
 
-#: loginjob.cpp:190
+#: loginjob.cpp:191
 #, kde-format
 msgid "IMAP session in the wrong state for authentication"
 msgstr "प्रमाणीकरण के लिए IMAP सत्र ग़लत स्थिति में है"
 
-#: loginjob.cpp:241
+#: loginjob.cpp:242
 #, kde-format
 msgid "Capability"
 msgstr "क्षमता"
 
-#: loginjob.cpp:243
+#: loginjob.cpp:244
 #, kde-format
 msgid "StartTls"
 msgstr "प्रारंभTls"
 
-#: loginjob.cpp:352
+#: loginjob.cpp:353
 #, kde-format
 msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
 msgstr ""
 "STARTTLS सर्वर द्वारा समर्थित नहीं है, इसके बजाय SSL/TLS का उपयोग करने का प्रयास करें।"
 
-#: loginjob.cpp:365
+#: loginjob.cpp:366
 #, kde-format
 msgid "Internal error, tried to login before encryption"
 msgstr "आंतरिक त्रुटि, एन्क्रिप्शन से पहले लॉगिन करने का प्रयास किया गया"
 
-#: loginjob.cpp:374
+#: loginjob.cpp:375
 #, kde-format
 msgid "Login failed, plain login is disabled by the server."
 msgstr "लॉगिन विफल, सर्वर द्वारा सादा लॉगिन अक्षम कर दिया गया है।"
 
-#: loginjob.cpp:395
+#: loginjob.cpp:396
 #, kde-format
 msgid "Login failed, authentication mode %1 is not supported by the server."
 msgstr "लॉगिन विफल, प्रमाणीकरण मोड %1 सर्वर द्वारा समर्थित नहीं है."
 
-#: loginjob.cpp:425
+#: loginjob.cpp:426
 #, kde-format
 msgid "Login failed, client cannot initialize the SASL library."
 msgstr "लॉगिन विफल, क्लाइंट SASL लाइब्रेरी आरंभ नहीं कर सकता।"
 
-#: loginjob.cpp:524
+#: loginjob.cpp:525
 #, kde-format
 msgid "Login failed, TLS negotiation failed."
 msgstr "लॉगिन विफल, TLS बातचीत विफल."
 
-#: loginjob.cpp:582
+#: loginjob.cpp:583
 #, kde-format
 msgid "SSL handshake failed."
 msgstr "SSL हैंडशेक विफल हुआ."

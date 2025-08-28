@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-27 00:40+0000\n"
+"POT-Creation-Date: 2025-08-28 00:43+0000\n"
 "PO-Revision-Date: 2019-11-17 00:57+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -114,17 +114,17 @@ msgstr "Jõude"
 msgid "Job"
 msgstr "Töö"
 
-#: job.cpp:54 loginjob.cpp:586
+#: job.cpp:54 loginjob.cpp:587
 #, kde-format
 msgid "Connection to server lost."
 msgstr "Ühendus serveriga kadus."
 
-#: job.cpp:65 loginjob.cpp:415 setmetadatajob.cpp:126
+#: job.cpp:65 loginjob.cpp:416 setmetadatajob.cpp:126
 #, kde-format
 msgid "%1 failed, malformed reply from the server."
 msgstr "%1 nurjus, serverist saadi vigane vastus."
 
-#: job.cpp:68 loginjob.cpp:289 setmetadatajob.cpp:109 setmetadatajob.cpp:129
+#: job.cpp:68 loginjob.cpp:290 setmetadatajob.cpp:109 setmetadatajob.cpp:129
 #, kde-format
 msgid "%1 failed, server replied: %2"
 msgstr "%1 nurjus, server vastas: %2"
@@ -139,57 +139,57 @@ msgstr "Nimekiri"
 msgid "ListRights"
 msgstr "ListRights"
 
-#: loginjob.cpp:135 loginjob.cpp:239
+#: loginjob.cpp:136 loginjob.cpp:240
 #, kde-format
 msgid "Login"
 msgstr "Sisselogimine"
 
-#: loginjob.cpp:190
+#: loginjob.cpp:191
 #, kde-format
 msgid "IMAP session in the wrong state for authentication"
 msgstr "IMAP seanss on autentimiseks vales olekus"
 
-#: loginjob.cpp:241
+#: loginjob.cpp:242
 #, kde-format
 msgid "Capability"
 msgstr "Omadus"
 
-#: loginjob.cpp:243
+#: loginjob.cpp:244
 #, kde-format
 msgid "StartTls"
 msgstr "StartTls"
 
-#: loginjob.cpp:352
+#: loginjob.cpp:353
 #, kde-format
 msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
 msgstr "STARTTLS ei ole serveris toetatud, selle asemel kasutatakse SSL/TLS."
 
-#: loginjob.cpp:365
+#: loginjob.cpp:366
 #, kde-format
 msgid "Internal error, tried to login before encryption"
 msgstr ""
 
-#: loginjob.cpp:374
+#: loginjob.cpp:375
 #, kde-format
 msgid "Login failed, plain login is disabled by the server."
 msgstr "Sisselogimine nurjus, server keelab lihttekstiga sisselogimise."
 
-#: loginjob.cpp:395
+#: loginjob.cpp:396
 #, kde-format
 msgid "Login failed, authentication mode %1 is not supported by the server."
 msgstr "Sisselogimine nurjus, server ei toeta autentimisrežiim %1."
 
-#: loginjob.cpp:425
+#: loginjob.cpp:426
 #, kde-format
 msgid "Login failed, client cannot initialize the SASL library."
 msgstr "Sisselogimine nurjus, klient ei suutnud initsialiseerida SASL teeki."
 
-#: loginjob.cpp:524
+#: loginjob.cpp:525
 #, kde-format
 msgid "Login failed, TLS negotiation failed."
 msgstr "Sisselogimine nurjus, TLS läbirääkimised nurjusid."
 
-#: loginjob.cpp:582
+#: loginjob.cpp:583
 #, kde-format
 msgid "SSL handshake failed."
 msgstr "SSL-käepigistus nurjus."

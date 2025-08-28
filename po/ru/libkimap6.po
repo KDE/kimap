@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-27 00:40+0000\n"
+"POT-Creation-Date: 2025-08-28 00:43+0000\n"
 "PO-Revision-Date: 2022-10-01 15:04+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -151,19 +151,19 @@ msgstr "задание бездействия"
 msgid "Job"
 msgstr "задание"
 
-#: job.cpp:54 loginjob.cpp:586
+#: job.cpp:54 loginjob.cpp:587
 #, kde-format
 msgid "Connection to server lost."
 msgstr "Соединение с сервером разорвано."
 
 # %1 = JobPrivate::m_name, в винительном падеже --aspotashev
-#: job.cpp:65 loginjob.cpp:415 setmetadatajob.cpp:126
+#: job.cpp:65 loginjob.cpp:416 setmetadatajob.cpp:126
 #, kde-format
 msgid "%1 failed, malformed reply from the server."
 msgstr "Не удалось выполнить %1, неправильный формат ответа сервера."
 
 # %1 = JobPrivate::m_name, в винительном падеже --aspotashev
-#: job.cpp:68 loginjob.cpp:289 setmetadatajob.cpp:109 setmetadatajob.cpp:129
+#: job.cpp:68 loginjob.cpp:290 setmetadatajob.cpp:109 setmetadatajob.cpp:129
 #, kde-format
 msgid "%1 failed, server replied: %2"
 msgstr "Не удалось выполнить %1, ответ сервера: %2"
@@ -184,63 +184,63 @@ msgstr "получение списка возможных прав"
 
 # [JobPrivate::m_name]
 # http://tools.ietf.org/html/rfc3501#section-6.2.3
-#: loginjob.cpp:135 loginjob.cpp:239
+#: loginjob.cpp:136 loginjob.cpp:240
 #, kde-format
 msgid "Login"
 msgstr "аутентификацию пользователя"
 
-#: loginjob.cpp:190
+#: loginjob.cpp:191
 #, kde-format
 msgid "IMAP session in the wrong state for authentication"
 msgstr "Сессия IMAP в состоянии, не подходящем для аутентификации"
 
 # [JobPrivate::m_name]
 # http://tools.ietf.org/html/rfc3501#section-6.1.1
-#: loginjob.cpp:241
+#: loginjob.cpp:242
 #, kde-format
 msgid "Capability"
 msgstr "определение возможностей сервера"
 
 # [JobPrivate::m_name]
 # http://tools.ietf.org/html/rfc2595#section-3.1
-#: loginjob.cpp:243
+#: loginjob.cpp:244
 #, kde-format
 msgid "StartTls"
 msgstr "переход в режим шифрования TLS/SSL"
 
-#: loginjob.cpp:352
+#: loginjob.cpp:353
 #, kde-format
 msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
 msgstr ""
 "Протокол установления защищённого соединения STARTTLS не поддерживается "
 "сервером, попробуйте использовать протокол SSL/TLS."
 
-#: loginjob.cpp:365
+#: loginjob.cpp:366
 #, kde-format
 msgid "Internal error, tried to login before encryption"
 msgstr "Внутренняя ошибка: попытка входа до начала использования шифрования"
 
-#: loginjob.cpp:374
+#: loginjob.cpp:375
 #, kde-format
 msgid "Login failed, plain login is disabled by the server."
 msgstr "Вход не удался (простая аутентификация запрещена на сервере)."
 
-#: loginjob.cpp:395
+#: loginjob.cpp:396
 #, kde-format
 msgid "Login failed, authentication mode %1 is not supported by the server."
 msgstr "Вход не удался (сервер не поддерживает режим «%1»)."
 
-#: loginjob.cpp:425
+#: loginjob.cpp:426
 #, kde-format
 msgid "Login failed, client cannot initialize the SASL library."
 msgstr "Вход не удался (клиент не смог инициализировать библиотеку SASL)."
 
-#: loginjob.cpp:524
+#: loginjob.cpp:525
 #, kde-format
 msgid "Login failed, TLS negotiation failed."
 msgstr "Вход не удался (ошибка согласования TLS)."
 
-#: loginjob.cpp:582
+#: loginjob.cpp:583
 #, kde-format
 msgid "SSL handshake failed."
 msgstr "Произошла ошибка во время обмена приветствиями SSL."
