@@ -174,7 +174,7 @@ private Q_SLOTS:
         QFETCH(QList<int>, expectedRecentCounts);
         QFETCH(QList<qint64>, expectedFlagsNotifications);
 
-        QVERIFY(expectedMessageCounts.size() == expectedRecentCounts.size());
+        QCOMPARE(expectedMessageCounts.size(), expectedRecentCounts.size());
 
         FakeServer fakeServer;
         fakeServer.setScenario(scenario);
