@@ -251,7 +251,7 @@ msgstr "Busca"
 #, kde-format
 msgctxt "name of the select job"
 msgid "Select"
-msgstr "Selecciona"
+msgstr "Tria"
 
 #: setacljob.cpp:34
 #, kde-format
