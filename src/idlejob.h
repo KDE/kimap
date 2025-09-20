@@ -11,7 +11,6 @@
 #include "imapset.h"
 #include "job.h"
 
-#include <KMime/Content>
 #include <KMime/Message>
 
 namespace KIMAP
