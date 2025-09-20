@@ -55,7 +55,7 @@ void ListRightsJob::handleResponse(const Response &response)
     Q_D(ListRightsJob);
 
     if (handleErrorReplies(response) == NotHandled) {
-        if (response.content.size() >= 4 && response.content[1].toString() == "LISTRIGHTS") {
+        if (response.content.size() >= 5 && response.content[1].toString() == "LISTRIGHTS") {
             QByteArray s = response.content[4].toString();
             d->defaultRights = Acl::rightsFromString(s);
             int i = 5;

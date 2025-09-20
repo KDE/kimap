@@ -503,10 +503,10 @@ QByteArray ImapStreamParser::readUntilCommandEnd()
             }
             i = m_position;
         }
-        if (m_data.at(i) == '(') {
+        if (i < m_data.length() && m_data.at(i) == '(') {
             paranthesisBalance++;
         }
-        if (m_data.at(i) == ')') {
+        if (i < m_data.length() && m_data.at(i) == ')') {
             paranthesisBalance--;
         }
         if ((i == m_data.length() && paranthesisBalance == 0) || m_data.at(i) == '\n' || m_data.at(i) == '\r') {
