@@ -94,7 +94,7 @@ set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KPim6IMAP")
 add_definitions(-DTRANSLATION_DOMAIN=\"libkimap6\")
 
 ecm_set_disabled_deprecation_versions(QT 6.10.0
-     KF 6.20.0
+     KF 6.21.0
 )
 add_definitions(-DQT_NO_EMIT)
 
