@@ -66,7 +66,7 @@ void dumpContentHelper(KMime::Content *part, const QString &partId = QString())
 
     qDebug() << part->head();
 
-    KMime::Content::List children = part->contents();
+    const QList<KMime::Content *> children = part->contents();
     for (int i = 0; i < children.size(); i++) {
         QString newId = partId;
         if (!newId.isEmpty()) {
