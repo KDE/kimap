@@ -22,10 +22,8 @@ class Session;
 struct Response;
 class FetchJobPrivate;
 
-using ContentPtr = QSharedPointer<KMime::Content>;
-using MessageParts = QMap<QByteArray, ContentPtr>;
+using MessageParts = QMap<QByteArray, std::shared_ptr<KMime::Content>>;
 
-using MessagePtr = QSharedPointer<KMime::Message>;
 using MessageFlags = QList<QByteArray>;
 
 using MessageAttribute = QPair<QByteArray, QVariant>;
@@ -42,7 +40,7 @@ struct Message {
     MessageFlags flags;
     QMap<QByteArray, QVariant> attributes;
     MessageParts parts;
-    MessagePtr message;
+    std::shared_ptr<KMime::Message> message;
 };
 
 /**
@@ -311,7 +309,7 @@ Q_SIGNALS:
                          const QMap<qint64, qint64> &uids,
                          const QMap<qint64, qint64> &sizes,
                          const QMap<qint64, KIMAP::MessageFlags> &flags,
-                         const QMap<qint64, KIMAP::MessagePtr> &messages);
+                         const QMap<qint64, std::shared_ptr<KMime::Message>> &messages);
 
     /**
      * An overloaded version of headersReceived(), which includes additional attribute
@@ -345,7 +343,7 @@ Q_SIGNALS:
                          const QMap<qint64, qint64> &sizes,
                          const QMap<qint64, KIMAP::MessageAttribute> &attrs,
                          const QMap<qint64, KIMAP::MessageFlags> &flags,
-                         const QMap<qint64, KIMAP::MessagePtr> &messages);
+                         const QMap<qint64, std::shared_ptr<KMime::Message>> &messages);
 
     /**
      * Provides header and message results.
@@ -368,7 +366,7 @@ Q_SIGNALS:
      * @deprecated Use messagesAvailable() instead.
      */
     KIMAP_DEPRECATED
-    void messagesReceived(const QString &mailBox, const QMap<qint64, qint64> &uids, const QMap<qint64, KIMAP::MessagePtr> &messages);
+    void messagesReceived(const QString &mailBox, const QMap<qint64, qint64> &uids, const QMap<qint64, std::shared_ptr<KMime::Message>> &messages);
 
     /**
      * An overloaded version of messagesReceived(), which includes additional attribute
@@ -391,7 +389,7 @@ Q_SIGNALS:
     void messagesReceived(const QString &mailBox,
                           const QMap<qint64, qint64> &uids,
                           const QMap<qint64, KIMAP::MessageAttribute> &attrs,
-                          const QMap<qint64, KIMAP::MessagePtr> &messages);
+                          const QMap<qint64, std::shared_ptr<KMime::Message>> &messages);
     /**
      * Provides header and message results.
      *

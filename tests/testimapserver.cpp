@@ -44,7 +44,7 @@ using HeadersReceivedSignal = void (FetchJob::*)(const QString &,
                                                  const QMap<qint64, qint64> &,
                                                  const QMap<qint64, qint64> &,
                                                  const QMap<qint64, MessageFlags> &,
-                                                 const QMap<qint64, MessagePtr> &);
+                                                 const QMap<qint64, std::shared_ptr<KMime::Message>> &);
 
 class UiProxy : public SessionUiProxy
 {
@@ -236,7 +236,7 @@ void testAppendAndStore(Session *session)
     scope.parts.clear();
     scope.mode = FetchJob::FetchScope::Content;
     fetch->setScope(scope);
-    MessagePtr message;
+    std::shared_ptr<KMime::Message> message;
     QObject::connect(fetch,
                      static_cast<HeadersReceivedSignal>(&FetchJob::headersReceived),
                      fetch,
@@ -244,7 +244,7 @@ void testAppendAndStore(Session *session)
                          const QMap<qint64, qint64> &,
                          const QMap<qint64, qint64> &,
                          const QMap<qint64, MessageFlags> &,
-                         const QMap<qint64, MessagePtr> &msgs) {
+                         const QMap<qint64, std::shared_ptr<KMime::Message>> &msgs) {
                          message = msgs[1];
                      });
     fetch->exec();
@@ -267,7 +267,7 @@ void testAppendAndStore(Session *session)
                          const QMap<qint64, qint64> &,
                          const QMap<qint64, qint64> &,
                          const QMap<qint64, MessageFlags> &flags,
-                         const QMap<qint64, MessagePtr> &) {
+                         const QMap<qint64, std::shared_ptr<KMime::Message>> &) {
                          expectedFlags = flags[1];
                      });
     fetch->exec();
@@ -501,7 +501,7 @@ int main(int argc, char **argv)
     scope.mode = FetchJob::FetchScope::Headers;
     fetch->setScope(scope);
     QMap<qint64, qint64> sizes;
-    QMap<qint64, MessagePtr> messages;
+    QMap<qint64, std::shared_ptr<KMime::Message>> messages;
 
     QObject::connect(fetch,
                      static_cast<HeadersReceivedSignal>(&FetchJob::headersReceived),
@@ -510,7 +510,7 @@ int main(int argc, char **argv)
                          const QMap<qint64, qint64> &,
                          const QMap<qint64, qint64> &sizes_,
                          const QMap<qint64, MessageFlags> &,
-                         const QMap<qint64, MessagePtr> &msgs_) {
+                         const QMap<qint64, std::shared_ptr<KMime::Message>> &msgs_) {
                          sizes = sizes_;
                          messages = msgs_;
                      });
@@ -542,7 +542,7 @@ int main(int argc, char **argv)
                          const QMap<qint64, qint64> &,
                          const QMap<qint64, qint64> &,
                          const QMap<qint64, MessageFlags> &flags_,
-                         const QMap<qint64, MessagePtr> &) {
+                         const QMap<qint64, std::shared_ptr<KMime::Message>> &) {
                          flags = flags_;
                      });
     fetch->exec();
@@ -567,14 +567,14 @@ int main(int argc, char **argv)
                          const QMap<qint64, qint64> &,
                          const QMap<qint64, qint64> &,
                          const QMap<qint64, MessageFlags> &,
-                         const QMap<qint64, MessagePtr> &msgs_) {
+                         const QMap<qint64, std::shared_ptr<KMime::Message>> &msgs_) {
                          messages = msgs_;
                      });
     fetch->exec();
     Q_ASSERT_X(fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit().constData());
     Q_ASSERT(session.state() == Session::Selected);
-    MessagePtr message = messages[1];
-    dumpContentHelper(message.data());
+    std::shared_ptr<KMime::Message> message = messages[1];
+    dumpContentHelper(message.get());
     qDebug();
 
     qDebug() << "Fetching first message second part headers:";

@@ -30,7 +30,7 @@ private:
     QMap<qint64, qint64> m_uids;
     QMap<qint64, qint64> m_sizes;
     QMap<qint64, KIMAP::MessageFlags> m_flags;
-    QMap<qint64, KIMAP::MessagePtr> m_messages;
+    QMap<qint64, std::shared_ptr<KMime::Message>> m_messages;
     QMap<qint64, KIMAP::MessageParts> m_parts;
     QMap<qint64, KIMAP::MessageAttribute> m_attrs;
     QMap<qint64, KIMAP::Message> m_msgs;
@@ -41,7 +41,7 @@ public Q_SLOTS:
                            const QMap<qint64, qint64> &sizes,
                            const QMap<qint64, KIMAP::MessageAttribute> &attrs,
                            const QMap<qint64, KIMAP::MessageFlags> &flags,
-                           const QMap<qint64, KIMAP::MessagePtr> &messages)
+                           const QMap<qint64, std::shared_ptr<KMime::Message>> &messages)
     {
         m_signals << QStringLiteral("headersReceived");
         m_uids.insert(uids);
@@ -54,7 +54,7 @@ public Q_SLOTS:
     void onMessagesReceived(const QString & /*mailbox*/,
                             const QMap<qint64, qint64> &uids,
                             const QMap<qint64, KIMAP::MessageAttribute> &attrs,
-                            const QMap<qint64, KIMAP::MessagePtr> &messages)
+                            const QMap<qint64, std::shared_ptr<KMime::Message>> &messages)
     {
         m_signals << QStringLiteral("messagesReceived");
         m_uids.insert(uids);
@@ -205,14 +205,14 @@ private Q_SLOTS:
                                        QMap<qint64, qint64>,
                                        QMap<qint64, KIMAP::MessageAttribute>,
                                        QMap<qint64, KIMAP::MessageFlags>,
-                                       QMap<qint64, KIMAP::MessagePtr>)),
+                                       QMap<qint64, std::shared_ptr<KMime::Message>>)),
                 this,
                 SLOT(onHeadersReceived(QString,
                                        QMap<qint64, qint64>,
                                        QMap<qint64, qint64>,
                                        QMap<qint64, KIMAP::MessageAttribute>,
                                        QMap<qint64, KIMAP::MessageFlags>,
-                                       QMap<qint64, KIMAP::MessagePtr>)));
+                                       QMap<qint64, std::shared_ptr<KMime::Message>>)));
         connect(job, &KIMAP::FetchJob::messagesAvailable, this, &FetchJobTest::onMessagesAvailable);
 
         QSignalSpy vanishedSpy(job, &KIMAP::FetchJob::messagesVanished);
@@ -270,9 +270,9 @@ private Q_SLOTS:
         job->setScope(scope);
 
         connect(job,
-                SIGNAL(messagesReceived(QString, QMap<qint64, qint64>, QMap<qint64, KIMAP::MessageAttribute>, QMap<qint64, KIMAP::MessagePtr>)),
+                SIGNAL(messagesReceived(QString, QMap<qint64, qint64>, QMap<qint64, KIMAP::MessageAttribute>, QMap<qint64, std::shared_ptr<KMime::Message>>)),
                 this,
-                SLOT(onMessagesReceived(QString, QMap<qint64, qint64>, QMap<qint64, KIMAP::MessageAttribute>, QMap<qint64, KIMAP::MessagePtr>)));
+                SLOT(onMessagesReceived(QString, QMap<qint64, qint64>, QMap<qint64, KIMAP::MessageAttribute>, QMap<qint64, std::shared_ptr<KMime::Message>>)));
         connect(job, &KIMAP::FetchJob::messagesAvailable, this, &FetchJobTest::onMessagesAvailable);
 
         bool result = job->exec();
@@ -337,14 +337,14 @@ private Q_SLOTS:
                                        QMap<qint64, qint64>,
                                        QMap<qint64, KIMAP::MessageAttribute>,
                                        QMap<qint64, KIMAP::MessageFlags>,
-                                       QMap<qint64, KIMAP::MessagePtr>)),
+                                       QMap<qint64, std::shared_ptr<KMime::Message>>)),
                 this,
                 SLOT(onHeadersReceived(QString,
                                        QMap<qint64, qint64>,
                                        QMap<qint64, qint64>,
                                        QMap<qint64, KIMAP::MessageAttribute>,
                                        QMap<qint64, KIMAP::MessageFlags>,
-                                       QMap<qint64, KIMAP::MessagePtr>)));
+                                       QMap<qint64, std::shared_ptr<KMime::Message>>)));
         connect(job,
                 SIGNAL(partsReceived(QString, QMap<qint64, qint64>, QMap<qint64, KIMAP::MessageAttribute>, QMap<qint64, KIMAP::MessageParts>)),
                 this,

@@ -74,7 +74,7 @@ public:
     bool gmailEnabled = false;
 
     QTimer emitPendingsTimer;
-    QMap<qint64, MessagePtr> pendingMessages;
+    QMap<qint64, std::shared_ptr<KMime::Message>> pendingMessages;
     QMap<qint64, MessageParts> pendingParts;
     QMap<qint64, MessageFlags> pendingFlags;
     QMap<qint64, MessageAttribute> pendingAttributes;
@@ -256,7 +256,7 @@ void FetchJob::handleResponse(const Response &response)
             const QList<QByteArray> content = response.content[3].toList();
 
             Message msg;
-            MessagePtr message(new KMime::Message);
+            auto message = std::make_shared<KMime::Message>();
             bool shouldParseMessage = false;
             MessageParts parts;
 
@@ -298,7 +298,7 @@ void FetchJob::handleResponse(const Response &response)
                     msg.attributes.insert("X-GM-MSGID", *it);
                 } else if (str == "BODYSTRUCTURE") {
                     int pos = 0;
-                    d->parseBodyStructure(*it, pos, message.data());
+                    d->parseBodyStructure(*it, pos, message.get());
                     message->assemble();
                     d->pendingMessages[id] = message;
                     msg.message = message;
@@ -315,7 +315,7 @@ void FetchJob::handleResponse(const Response &response)
                         if (str[index - 1] == '.') {
                             QByteArray partId = str.mid(5, index - 6);
                             if (!parts.contains(partId)) {
-                                parts[partId] = ContentPtr(new KMime::Content);
+                                parts[partId] = std::make_shared<KMime::Content>();
                             }
                             parts[partId]->setHead(*it);
                             parts[partId]->parse();
@@ -335,7 +335,7 @@ void FetchJob::handleResponse(const Response &response)
                         } else {
                             QByteArray partId = str.mid(5, str.size() - 6);
                             if (!parts.contains(partId)) {
-                                parts[partId] = ContentPtr(new KMime::Content);
+                                parts[partId] = std::make_shared<KMime::Content>();
                             }
                             parts[partId]->setBody(*it);
                             parts[partId]->parse();
