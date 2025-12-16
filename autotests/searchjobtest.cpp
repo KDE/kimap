@@ -5,10 +5,8 @@
  *
  */
 
-#include <QTest>
-
-#include "kimap/loginjob.h"
 #include "kimap/searchjob.h"
+#include "kimap/loginjob.h"
 #include "kimap/session.h"
 #include "kimaptest/fakeserver.h"
 

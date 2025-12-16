@@ -7,10 +7,8 @@
    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include <QTest>
-
-#include "kimap/session.h"
 #include "kimap/unsubscribejob.h"
+#include "kimap/session.h"
 #include "kimaptest/fakeserver.h"
 
 #include <QTest>

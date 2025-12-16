@@ -4,8 +4,6 @@
    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include <QTest>
-
 #include "imapstreamparser.h"
 #include "response_p.h"
 #include <QBuffer>

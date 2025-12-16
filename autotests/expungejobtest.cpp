@@ -4,10 +4,8 @@
    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include <QTest>
-
-#include "imapset.h"
 #include "kimap/expungejob.h"
+#include "imapset.h"
 #include "kimap/session.h"
 #include "kimaptest/fakeserver.h"
 
