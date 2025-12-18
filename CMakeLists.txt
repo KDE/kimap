@@ -95,6 +95,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"libkimap6\")
 
 ecm_set_disabled_deprecation_versions(QT 6.10.0
      KF 6.21.0
+     # KMIME 6.7.0 activate it when all code will be ported
 )
 add_definitions(-DQT_NO_EMIT)
 
