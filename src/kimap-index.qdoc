@@ -15,6 +15,6 @@
     \section1 API Reference
 
     \list
-        \li \l{KMailTransport C++ Classes}
+        \li \l{KIMAP C++ Classes}
     \endlist
 */

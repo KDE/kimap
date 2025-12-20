@@ -14,7 +14,7 @@ class Session;
 struct Response;
 class SetQuotaJobPrivate;
 
-/**
+/*!
  * Sets resource limits on a quota root.
  *
  * Quotas are defined with respect to "resources" and "quota roots".
@@ -44,7 +44,7 @@ public:
     explicit SetQuotaJob(Session *session);
     ~SetQuotaJob() override;
 
-    /**
+    /*!
      * Set a limit for a quota resource.
      *
      * For example, you might set the limit for "STORAGE" to
@@ -58,23 +58,24 @@ public:
      * almost certainly be composed entirely of upper-case latin
      * letters (A-Z).
      *
-     * @param resource  the resource name
-     * @param limit     the maximum value the resource may take
+     * \a resource  the resource name
+     * \a limit     the maximum value the resource may take
      */
     void setQuota(const QByteArray &resource, qint64 limit);
 
-    /**
+    /*!
      * Set the quota root the resource limits should be set for.
      *
-     * Note: if the quota root does not already exist, the server
+     * \
+ote if the quota root does not already exist, the server
      * may create it and change the quota roots for any number of
      * existing mailboxes in an implementation-defined manner.
      *
-     * @param root the quota root to set, in bytes
-     * @see GetQuotaRootJob
+     * \a root the quota root to set, in bytes
+     * \sa GetQuotaRootJob
      */
     void setRoot(const QByteArray &root);
-    /**
+    /*!
      * The quota root that will be modified.
      */
     [[nodiscard]] QByteArray root() const;

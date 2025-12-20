@@ -18,7 +18,7 @@ class Session;
 struct Response;
 class EnableJobPrivate;
 
-/**
+/*!
  * Job to enable additional IMAP capabilities.
  *
  * Requires server to implement the IMAP ENABLE Extension (RFC5161). The
@@ -28,7 +28,7 @@ class EnableJobPrivate;
  * The example usecase for this job is to enable support for the QRESYNC
  * extension (RFC5162) on the server.
  *
- * @since 5.16
+ * \since 5.16
  */
 class KIMAP_EXPORT EnableJob : public Job
 {
@@ -41,12 +41,12 @@ public:
     explicit EnableJob(Session *session);
     ~EnableJob() override;
 
-    /**
+    /*!
      * List of server capabilities to enable.
      */
     void setCapabilities(const QStringList &capabilities);
 
-    /**
+    /*!
      * List of capabilities that were successfully enabled on the server.
      */
     [[nodiscard]] QStringList enabledCapabilities() const;

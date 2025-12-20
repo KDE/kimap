@@ -16,7 +16,7 @@ class Session;
 struct Response;
 class MyRightsJobPrivate;
 
-/**
+/*!
  * Determine the rights the currently-logged-in user
  * has on the current mailbox.
  *
@@ -50,17 +50,17 @@ public:
     explicit MyRightsJob(Session *session);
     ~MyRightsJob() override;
 
-    /**
+    /*!
      * Check whether the current user has the a particular right
      * on the mailbox.
      *
      * The result of this method is undefined if the job has
      * not yet completed.
      *
-     * @param right       the right to check for
+     * \a right       the right to check for
      */
     [[nodiscard]] bool hasRightEnabled(Acl::Right right);
-    /**
+    /*!
      * Get the rights for the current user on the mailbox.
      *
      * The result of this method is undefined if the job has

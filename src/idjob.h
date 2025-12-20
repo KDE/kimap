@@ -16,7 +16,7 @@ class Session;
 struct Message;
 class IdJobPrivate;
 
-/**
+/*!
  * Reports client id.
  *
  * This job can be run in any open session.

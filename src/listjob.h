@@ -40,9 +40,9 @@ class KIMAP_EXPORT ListJob : public Job
 
 public:
     enum Option {
-        NoOption = 0x0, /**< List only subscribed mailboxes. (Uses the LSUB IMAP command.) */
-        IncludeUnsubscribed, /**< List subscribed and unsubscribed mailboxes. (Uses the LIST IMAP command.) */
-        IncludeFolderRoleFlags /**< List subscribed and unsubscribed mailboxes with flags to identify standard mailboxes whose name may be localized.
+        NoOption = 0x0, /*!< List only subscribed mailboxes. (Uses the LSUB IMAP command.) */
+        IncludeUnsubscribed, /*!< List subscribed and unsubscribed mailboxes. (Uses the LIST IMAP command.) */
+        IncludeFolderRoleFlags /*!< List subscribed and unsubscribed mailboxes with flags to identify standard mailboxes whose name may be localized.
                                   The server must support the XLIST extension. */
     };
 
@@ -71,11 +71,11 @@ protected:
 private:
     Q_PRIVATE_SLOT(d_func(), void emitPendings())
 
-    /**
-     * @brief Converts a mailbox descriptor's name to uppercase if it is the Inbox or an Inbox subfolder.
+    /*!
+     * \brief Converts a mailbox descriptor's name to uppercase if it is the Inbox or an Inbox subfolder.
      *  This is according to the RFC3501, 5.1. Mailbox Naming section.
      *
-     * @param descriptor the descriptor to convert, conversion happens in place
+     * \a descriptor the descriptor to convert, conversion happens in place
      **/
     void convertInboxName(KIMAP::MailBoxDescriptor &descriptor);
 };

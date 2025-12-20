@@ -16,7 +16,7 @@ class Session;
 struct Response;
 class MetaDataJobBasePrivate;
 
-/**
+/*!
  * Base class for jobs that operate on mailbox metadata
  *
  * Provides support for the IMAP METADATA extension; both the
@@ -41,18 +41,18 @@ public:
     explicit MetaDataJobBase(Session *session);
     ~MetaDataJobBase() override;
 
-    /**
+    /*!
      * Represents the capability level of the server.
      */
     enum ServerCapability {
-        /**
+        /*!
          * Used to indicate that the server supports the RFC 5464 version
          * of the extension.
          *
          * This corresponds to the METADATA server capability.
          */
         Metadata = 0,
-        /**
+        /*!
          * Used to indicate that the server supports the
          * draft-daboo-imap-annotatemore-07 version of the extension.
          *
@@ -61,25 +61,25 @@ public:
         Annotatemore
     };
 
-    /**
+    /*!
      * Set the mailbox to act on
      *
      * This may be an empty string, in which case metadata for the
      * server (rather than a specific mailbox) will be retrieved.
      *
-     * @param mailBox  the name of an existing mailbox, or an empty string
+     * \a mailBox  the name of an existing mailbox, or an empty string
      */
     void setMailBox(const QString &mailBox);
-    /**
+    /*!
      * The mailbox that will be acted upon.
      *
      * If this is an empty string, server metadata will be retrieved.
      *
-     * @return  a mailbox name, or an empty string
+     * Returns  a mailbox name, or an empty string
      */
     [[nodiscard]] QString mailBox() const;
 
-    /**
+    /*!
      * Set what version of the metadata extension to be compatible with.
      *
      * This will determine the commands that will be sent to the server.
@@ -94,10 +94,10 @@ public:
      *
      * The default mode is Metadata.
      *
-     * @param capability  the version of the extension implemented by the server
+     * \a capability  the version of the extension implemented by the server
      */
     void setServerCapability(ServerCapability capability);
-    /**
+    /*!
      * The version of the metadata extension that will be used.
      */
     [[nodiscard]] ServerCapability serverCapability() const;

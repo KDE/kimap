@@ -15,7 +15,7 @@ namespace KIMAP
 class Session;
 class DeleteJobPrivate;
 
-/**
+/*!
  * Delete a mailbox
  *
  * Note that some servers will refuse to delete a
@@ -40,11 +40,11 @@ public:
     explicit DeleteJob(Session *session);
     ~DeleteJob() override;
 
-    /**
+    /*!
      * Set the mailbox to delete.
      */
     void setMailBox(const QString &mailBox);
-    /**
+    /*!
      * The mailbox that will be deleted.
      */
     [[nodiscard]] QString mailBox() const;

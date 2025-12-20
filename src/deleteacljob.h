@@ -16,7 +16,7 @@ class Session;
 struct Response;
 class DeleteAclJobPrivate;
 
-/**
+/*!
  * Removes an identifier from the ACL of a mailbox.
  *
  * This job can only be run when the session is in the
@@ -41,11 +41,11 @@ public:
     explicit DeleteAclJob(Session *session);
     ~DeleteAclJob() override;
 
-    /**
+    /*!
      * Sets the identifier to remove
      */
     void setIdentifier(const QByteArray &identifier);
-    /**
+    /*!
      * The identifier that will be removed
      */
     [[nodiscard]] QByteArray identifier();

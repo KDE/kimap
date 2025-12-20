@@ -58,50 +58,50 @@ public:
     [[nodiscard]] QString userName() const;
     void setUserName(const QString &userName);
 
-    /**
+    /*!
      * Get the authorization identity.
-     * @since 4.10
+     * \since 4.10
      */
     [[nodiscard]] QString authorizationName() const;
 
-    /**
+    /*!
      * Set the authorization identity.
      *
      * If set, proxy-authentication according to RFC4616 will be used.
      *
      * Note that this feature only works with the "PLAIN" AuthenticationMode.
      *
-     * The @param authorizationName will be used together with the password() to get authenticated as userName() by the authorization of the provided
+     * The \a authorizationName will be used together with the password() to get authenticated as userName() by the authorization of the provided
      * credentials. This allows to login as a user using the admin credentials and the users name.
-     * @since 4.10
+     * \since 4.10
      */
     void setAuthorizationName(const QString &authorizationName);
 
     [[nodiscard]] QString password() const;
     void setPassword(const QString &password);
 
-    /**
+    /*!
      * Returns the server greeting, in case of a successful login.
      * If the login wasn't successful, this method returns an empty string. Use errorString() to
      * get the error message in this case.
      *
      * Note that the content of this response is not defined by the IMAP protocol and is
      * implementation-dependent.
-     * @since 4.7
+     * \since 4.7
      */
     [[nodiscard]] QString serverGreeting() const;
 
-    /**
+    /*!
      * Set the encryption mode for the connection. In case an encryption mode is set, the caller
      * MUST check the encryptionMode() result after executing the job, to see if the connection is
      * encrypted or not (e.g handshaking failed).
-     * @param mode the encryption mode, see EncryptionModes
+     * \a mode the encryption mode, see EncryptionModes
      */
     void setEncryptionMode(EncryptionMode mode);
 
-    /**
+    /*!
       Get the encryption mode.
-      @return the currently active encryption mode
+      Returns the currently active encryption mode
     */
     [[nodiscard]] EncryptionMode encryptionMode();
 

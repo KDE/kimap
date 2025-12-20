@@ -16,7 +16,7 @@ class Session;
 struct Response;
 class CapabilitiesJobPrivate;
 
-/**
+/*!
  * Checks server capabilities.
  *
  * This job can be run in any open session.
@@ -39,7 +39,7 @@ public:
     CapabilitiesJob(Session *session);
     ~CapabilitiesJob() override;
 
-    /**
+    /*!
      * The capabilities the server claims to support.
      *
      * This will return an empty list until the job has completed.
@@ -47,10 +47,10 @@ public:
     [[nodiscard]] QStringList capabilities() const;
 
 Q_SIGNALS:
-    /**
+    /*!
      * Notifies listeners that the capabilities have been fetched.
      *
-     * @param capabilities  The capabilities the server claims to support.
+     * \a capabilities  The capabilities the server claims to support.
      */
     void capabilitiesReceived(const QStringList &capabilities);
 

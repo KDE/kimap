@@ -16,7 +16,7 @@ class Session;
 struct Response;
 class GetMetaDataJobPrivate;
 
-/**
+/*!
  * Fetches mailbox metadata.
  *
  * Provides support for the IMAP METADATA extension; both the
@@ -55,18 +55,18 @@ public:
     explicit GetMetaDataJob(Session *session);
     ~GetMetaDataJob() override;
 
-    /**
+    /*!
      * Used to specify the depth of the metadata hierarchy to walk.
      */
     enum Depth {
-        NoDepth = 0, /**< Only the requested entries */
-        OneLevel, /**< The requested entries and all their direct children */
-        AllLevels /**< The requested entries and all their descendants */
+        NoDepth = 0, /*!< Only the requested entries */
+        OneLevel, /*!< The requested entries and all their direct children */
+        AllLevels /*!< The requested entries and all their descendants */
     };
 
     Q_DECLARE_FLAGS(Depths, Depth)
 
-    /**
+    /*!
      * Add an entry to the query list.
      *
      * See SetMetaDataJob for a description of metadata entry names.
@@ -76,14 +76,14 @@ public:
      * although you might want to fetch the "content-type" or
      * "content-language" attributes as well.
      *
-     * @param entry      the metadata entry name
-     * @param attribute  the attribute name, in Annotatemore mode
+     * \a entry      the metadata entry name
+     * \a attribute  the attribute name, in Annotatemore mode
      *
-     * @deprecated use addRequestedEntry(QByteArray) instead
+     * \deprecated use addRequestedEntry(QByteArray) instead
      */
     KIMAP_DEPRECATED void addEntry(const QByteArray &entry, const QByteArray &attribute = QByteArray());
 
-    /**
+    /*!
      * Add an entry to the query list.
      *
      * See SetMetaDataJob for a description of metadata entry names.
@@ -91,11 +91,11 @@ public:
      * Note that this expects METADATA style entries (with a /shared or /private prefix typically).
      * In ANNOTATEMORE mode, this prefix is automatically replaced with an appropriate attribute.
      *
-     * @param entry the metadata entry name
+     * \a entry the metadata entry name
      */
     void addRequestedEntry(const QByteArray &entry);
 
-    /**
+    /*!
      * Limits the size of returned metadata entries.
      *
      * In order to save time or bandwidth, it is possible to prevent the
@@ -110,11 +110,11 @@ public:
      * The default is no limit (-1).  A value of less than -1 will cause
      * the job to fail.
      *
-     * @param size  the entry size limit, in octets, or -1 for no limit
+     * \a size  the entry size limit, in octets, or -1 for no limit
      */
     void setMaximumSize(qint64 size);
 
-    /**
+    /*!
      * Sets whether to retrieve children or descendants of the requested entries.
      *
      * Metadata entry names are hierarchical, much like UNIX path names.
@@ -132,11 +132,11 @@ public:
      * Note that this is only used when the server capability mode is
      * Metadata.
      *
-     * @param depth  the depth of the metadata tree to return
+     * \a depth  the depth of the metadata tree to return
      */
     void setDepth(Depth depth);
 
-    /**
+    /*!
      * Get a single metadata entry.
      *
      * The metadata must have been requested using addEntry(), and
@@ -149,19 +149,19 @@ public:
      * server.  This will happen when the metadata entry is larger
      * than the size limit given to setMaximumSize().
      *
-     * @param mailBox    the mailbox the metadata is attached to, or
+     * \a mailBox    the mailbox the metadata is attached to, or
      *                   an empty string for server metadata
-     * @param entry      the entry to get
-     * @param attribute  (only in Annotatemore mode) the attribute to get
-     * @return  the metadata entry value
+     * \a entry      the entry to get
+     * \a attribute  (only in Annotatemore mode) the attribute to get
+     * Returns  the metadata entry value
      *
-     * @deprecated use metaData(QByteArray entry) instead
+     * \deprecated use metaData(QByteArray entry) instead
      */
     // XXX: what's with the mailBox argument in a class that has setMailBox()?
     //      KJobs are not intended to be run more than once
     KIMAP_DEPRECATED QByteArray metaData(const QString &mailBox, const QByteArray &entry, const QByteArray &attribute = QByteArray()) const;
 
-    /**
+    /*!
      * Get a single metadata entry.
      *
      * The metadata must have been requested using addEntry(), and
@@ -177,63 +177,63 @@ public:
      * Note that this expects METADATA style entries (with a /shared or /private prefix typically).
      * In ANNOTATEMORE mode, this prefix is automatically replaced with an appropriate attribute.
      *
-     * @param entry the entry to get
-     * @return  the metadata entry value
+     * \a entry the entry to get
+     * Returns  the metadata entry value
      */
     [[nodiscard]] QByteArray metaData(const QByteArray &entry) const;
 
-    /**
+    /*!
      * Get all the metadata for a given mailbox.
      *
      * The returned map is from metadata entry names to attributes or values.
      *
      * If operating in Metadata mode, the metadata value is stored against the
      * empty QByteArray:
-     * @code
+     * \de
      * map = job.allMetaData( "INBOX" );
      * QByteArray value = map[ "/shared/comment" ].value( QByteArray() );
-     * @endcode
+     * \endcode
      *
      * The equivalent in Annotatemore mode would be:
-     * @code
+     * \de
      * map = job.allMetaData( "INBOX" );
      * QByteArray value = map[ "/comment" ].value( "value.shared" );
-     * @endcode
+     * \endcode
      *
-     * @param mailBox  a mailbox name or an empty string for server metadata
-     * @return  a map from metadata entry names to attributes or values
+     * \a mailBox  a mailbox name or an empty string for server metadata
+     * Returns  a map from metadata entry names to attributes or values
      */
     // XXX: what's with the mailBox argument in a class that has setMailBox()?
     //      KJobs are not intended to be run more than once
     [[nodiscard]] QMap<QByteArray, QMap<QByteArray, QByteArray>> allMetaData(const QString &mailBox) const;
 
-    /**
+    /*!
      * Get all the metadata for the mailbox set with setMailBox().
      *
      * Note that the returned map uses METADATA style entries (with a /shared or /private prefix typically),
      * also in ANNOTATEMORE mode.
      *
-     * @return a map from metadata entry names to values
+     * Returns a map from metadata entry names to values
      */
     [[nodiscard]] QMap<QByteArray, QByteArray> allMetaData() const;
 
-    /**
+    /*!
      * Get all the metadata for the mailbox.
      *
      * Note that the returned map uses METADATA style entries (with a /shared or /private prefix typically),
      * also in ANNOTATEMORE mode.
      *
-     * @return a map from metadata entry names to values
+     * Returns a map from metadata entry names to values
      */
     QMap<QByteArray, QByteArray> allMetaDataForMailbox(const QString &mailbox) const;
 
-    /**
+    /*!
      * Get all the metadata for for all mailboxes.
      *
      * Note that the returned map uses METADATA style entries (with a /shared or /private prefix typically),
      * also in ANNOTATEMORE mode.
      *
-     * @return a map in the form (mailbox, (entry, value))
+     * Returns a map in the form (mailbox, (entry, value))
      */
     [[nodiscard]] QHash<QString, QMap<QByteArray, QByteArray>> allMetaDataForMailboxes() const;
 

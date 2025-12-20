@@ -14,7 +14,7 @@ class Session;
 struct Message;
 class GetQuotaJobPrivate;
 
-/**
+/*!
  * Gets resource limits for a quota root.
  *
  * Quotas are defined with respect to "resources" and "quota roots".
@@ -44,13 +44,13 @@ public:
     explicit GetQuotaJob(Session *session);
     ~GetQuotaJob() override;
 
-    /**
+    /*!
      * Set the quota root to get the resource limits for.
-     * @param root the quota root to set
-     * @see GetQuotaRootJob
+     * \a root the quota root to set
+     * \sa GetQuotaRootJob
      */
     void setRoot(const QByteArray &root);
-    /**
+    /*!
      * The quota root that resource limit information will be fetched for.
      */
     [[nodiscard]] QByteArray root() const;

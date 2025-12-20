@@ -16,7 +16,7 @@ class Session;
 struct Response;
 class SetAclJobPrivate;
 
-/**
+/*!
  * Sets the rights that correspond to an identifier on a mailbox
  *
  * This job can only be run when the session is in the
@@ -37,11 +37,11 @@ public:
     explicit SetAclJob(Session *session);
     ~SetAclJob() override;
 
-    /**
+    /*!
      * Sets the rights that will be changed for the identifier
      *
      * Note that multiple calls to this method will have a
-     * non-intuitive effect: the @p modifier value of the most
+     * non-intuitive effect: the \a modifier value of the most
      * recent call will be used, but the OR'd-together values
      * of all calls to setRights() will be used.
      *
@@ -55,16 +55,16 @@ public:
      * of rights if you have requested that all the rights in that
      * group should be set.
      *
-     * @param modifier  determines whether the rights will be
+     * \a modifier  determines whether the rights will be
      *                  added to the identifier, removed from
      *                  the identifier or will replace any
      *                  existing rights assigned to the
      *                  identifier
-     * @param rights    the rights to be added, removed or set
+     * \a rights    the rights to be added, removed or set
      */
     void setRights(AclModifier modifier, Acl::Rights rights);
 
-    /**
+    /*!
      * Sets the identifier the rights will be modified for
      *
      * The meaning of identifiers depends on the server implementation,
@@ -81,10 +81,10 @@ public:
      * Note that negative rights override positive rights: if
      * "fred" and "-fred" are both assigned the 'w' right, the
      * user "fred" will not have the 'w' right.
-     * @param identifier the identifier to set
+     * \a identifier the identifier to set
      */
     void setIdentifier(const QByteArray &identifier);
-    /**
+    /*!
      * The identifier that rights will be associated with
      */
     [[nodiscard]] QByteArray identifier();

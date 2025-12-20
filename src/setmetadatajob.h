@@ -16,7 +16,7 @@ class Session;
 struct Response;
 class SetMetaDataJobPrivate;
 
-/**
+/*!
  * Sets mailbox metadata.
  *
  * Provides support for the IMAP METADATA extension; both the
@@ -62,14 +62,14 @@ public:
     explicit SetMetaDataJob(Session *session);
     ~SetMetaDataJob() override;
 
-    /**
+    /*!
      * Adds a metadata entry or attribute to the list of modifications to make
      *
      * When in Metadata mode, this method adds a metadata
      * entry to the list of metadata additions and updates that
      * will be performed when the job is run.
      *
-     * @p name must be a valid ASCII string and may not contain two
+     * \a name must be a valid ASCII string and may not contain two
      * consecutive forward slashes ('/'), must not end with '/' and
      * must not contain '*', '%', non-ASCII characters or characters
      * in the ASCII range 0x00 to 0x19 (in practice, all control
@@ -92,7 +92,7 @@ public:
      * - /shared/vendor/<vendor-token>/something
      * - /private/vendor/<vendor-token>/something
      *
-     * @p value can be any data, although if it is a multi-line string
+     * \a value can be any data, although if it is a multi-line string
      * value, CRLF line-endings must be used.
      *
      * In Annotatemore mode it is possible to prefix the entry name with a /shared or /private prefix, that is automatically translated
@@ -103,7 +103,7 @@ public:
      * entry to the list of additions and updates that will be
      * performed on the metadata entry when the job is run.
      *
-     * @p name must be a valid UTF-8 string, and may not contain the
+     * \a name must be a valid UTF-8 string, and may not contain the
      * '%' or '*' characters, or NUL.  Use of non-visible UTF-8 characters
      * is strongly discouraged.
      *
@@ -119,14 +119,14 @@ public:
      * attributes set by the server, and so cannot be used with
      * SetMetaDataJob.
      *
-     * @param name   the metadata entry name (Metadata or Annotatemore mode) in ASCII or
+     * \a name   the metadata entry name (Metadata or Annotatemore mode) in ASCII or
      *               attribute name (Annotatemore mode, if used without /shared or /private prefix) in UTF-8
-     * @param value  the value of the entry or attribute
+     * \a value  the value of the entry or attribute
      */
     // KDE5: drop ANNOTATEMORE support
     void addMetaData(const QByteArray &name, const QByteArray &value);
 
-    /**
+    /*!
      * Sets the metadata entry name to operate on (in Annotatemore mode)
      *
      * In Annotatemore mode, this specifies the metadata entry name to
@@ -151,42 +151,42 @@ public:
      * In Metadata mode, this has no effect.  Metadata entry names
      * should instead be specified as the first argument to addMetaData().
      *
-     * @see setServerCapability()
+     * \sa setServerCapability()
      *
-     * @param entry  the metadata entry name in UTF-8
+     * \a entry  the metadata entry name in UTF-8
      *
-     * @deprecated Use a /shared or /private prefix with addMetaData instead.
+     * \deprecated Use a /shared or /private prefix with addMetaData instead.
      */
     // KDE5: remove
     KIMAP_DEPRECATED void setEntry(const QByteArray &entry);
 
-    /**
+    /*!
      * Possible error codes that may be returned by the server.
      */
     enum MetaDataError {
-        NoError = 0, /**< Used to indicate that no errors have been received */
-        TooMany = 1, /**< Cannot add a new metadata item, because the limit has already been reached */
-        TooBig = 2, /**< A metadata value was too big (see maxAcceptedSize()) */
-        NoPrivate = 4 /**< The server does not support private metadata entries */
+        NoError = 0, /*!< Used to indicate that no errors have been received */
+        TooMany = 1, /*!< Cannot add a new metadata item, because the limit has already been reached */
+        TooBig = 2, /*!< A metadata value was too big (see maxAcceptedSize()) */
+        NoPrivate = 4 /*!< The server does not support private metadata entries */
     };
 
     // Q_DECLARE_WHATEVER_THAT_WAS missing
     Q_DECLARE_FLAGS(MetaDataErrors, MetaDataError)
 
-    /**
+    /*!
      * The metadata errors received from the server.
      *
-     * @return  a set of error codes
+     * Returns  a set of error codes
      */
     [[nodiscard]] MetaDataErrors metaDataErrors() const;
-    /**
+    /*!
      * The maximum accepted metadata size.
      *
      * If the server replied that one of the metadata values was too
      * large (see metaDataErrors), this should indicate what the
      * maximum size accepted by the server is.
      *
-     * @return  the maximum value size in octets, or -1 if the limit is unknown
+     * Returns  the maximum value size in octets, or -1 if the limit is unknown
      */
     [[nodiscard]] qint64 maxAcceptedSize();
 

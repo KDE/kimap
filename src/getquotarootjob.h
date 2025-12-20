@@ -14,7 +14,7 @@ class Session;
 struct Message;
 class GetQuotaRootJobPrivate;
 
-/**
+/*!
  * Gets the quota root and resource limits for a mailbox.
  *
  * Quotas are defined with respect to "resources" and "quota roots".
@@ -44,58 +44,58 @@ public:
     explicit GetQuotaRootJob(Session *session);
     ~GetQuotaRootJob() override;
 
-    /**
+    /*!
      * Set the mailbox to get the quota roots for.
      *
-     * @param mailBox  the name of an existing mailbox
+     * \a mailBox  the name of an existing mailbox
      */
     void setMailBox(const QString &mailBox);
-    /**
+    /*!
      * The mailbox that the quota roots will be fetched for.
      */
     [[nodiscard]] QString mailBox() const;
 
-    /**
+    /*!
      * The quota roots for the mailbox.
      */
     [[nodiscard]] QList<QByteArray> roots() const;
-    /**
+    /*!
      * Get the current usage for a resource.
      *
      * Note that if there is no limit for a resource, the
      * server will not provide information about resource
      * usage.
      *
-     * @param root      the quota root to get the resource usage for
-     * @param resource  the resource to get the usage for
-     * @return  the resource usage in appropriate units, or -1
+     * \a root      the quota root to get the resource usage for
+     * \a resource  the resource to get the usage for
+     * Returns  the resource usage in appropriate units, or -1
      *          if the usage is unknown or there is no
      *          limit on the resource
      */
     [[nodiscard]] qint64 usage(const QByteArray &root, const QByteArray &resource) const;
-    /**
+    /*!
      * Get the current limit for a resource.
      *
-     * @param root      the quota root to get the resource limit for
-     * @param resource  the resource to get the limit for
-     * @return  the resource limit in appropriate units, or -1
+     * \a root      the quota root to get the resource limit for
+     * \a resource  the resource to get the limit for
+     * Returns  the resource limit in appropriate units, or -1
      *          if the limit is unknown or there is no
      *          limit on the resource
      */
     [[nodiscard]] qint64 limit(const QByteArray &root, const QByteArray &resource) const;
 
-    /**
+    /*!
      * Get a map containing all resource usage figures for a quota root.
      *
-     * @param root  the quota root to get resource usage figures for
-     * @return  a map from resource names to usage figures
+     * \a root  the quota root to get resource usage figures for
+     * Returns  a map from resource names to usage figures
      */
     [[nodiscard]] QMap<QByteArray, qint64> allUsages(const QByteArray &root) const;
-    /**
+    /*!
      * Get a map containing all resource limits for a quota root.
      *
-     * @param root  the quota root to get resource limits for
-     * @return  a map from resource names to limits
+     * \a root  the quota root to get resource limits for
+     * Returns  a map from resource names to limits
      */
     [[nodiscard]] QMap<QByteArray, qint64> allLimits(const QByteArray &root) const;
 

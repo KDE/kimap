@@ -16,7 +16,7 @@ class Session;
 struct Response;
 class CloseJobPrivate;
 
-/**
+/*!
  * Closes the current mailbox.
  *
  * This job can only be run when the session is in the selected state.
@@ -48,14 +48,14 @@ public:
     explicit CloseJob(Session *session);
     ~CloseJob() override = default;
 
-    /**
+    /*!
      * Returns new modification sequence number after expunging messages.
      *
      * This value is only valid when server supports the QRESYNC extension
      * (RFC5162) and it has been explicitly enabled on this session.
      *
-     * @see KIMAP::EnableJob
-     * @since 5.16
+     * \sa KIMAP::EnableJob
+     * \since 5.16
      */
     [[nodiscard]] quint64 newHighestModSeq() const;
 

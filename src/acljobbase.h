@@ -17,7 +17,7 @@ class Session;
 struct Response;
 class AclJobBasePrivate;
 
-/**
+/*!
  * Base class for jobs that operate on mailbox ACLs
  *
  * Provides support for the IMAP ACL extension, as defined by
@@ -37,7 +37,7 @@ public:
     AclJobBase(Session *session);
     ~AclJobBase() override;
 
-    /**
+    /*!
      * Used when subclassing to specify how the ACL will be modified.
      */
     enum AclModifier {
@@ -46,13 +46,13 @@ public:
         Change
     };
 
-    /**
+    /*!
      * Set the mailbox to act on
      *
-     * @param mailBox  the name of an existing mailbox
+     * \a mailBox  the name of an existing mailbox
      */
     void setMailBox(const QString &mailBox);
-    /**
+    /*!
      * The mailbox that will be acted upon.
      */
     [[nodiscard]] QString mailBox() const;

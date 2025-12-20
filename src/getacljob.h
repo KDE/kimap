@@ -16,7 +16,7 @@ class Session;
 struct Response;
 class GetAclJobPrivate;
 
-/**
+/*!
  * Gets the ACL for a mailbox
  *
  * This job can only be run when the session is in the
@@ -56,7 +56,7 @@ public:
     explicit GetAclJob(Session *session);
     ~GetAclJob() override;
 
-    /**
+    /*!
      * The identifiers present in the ACL.
      *
      * This method will return an empty list if the job has
@@ -67,7 +67,7 @@ public:
      * '-' specify negative rights.
      */
     [[nodiscard]] QList<QByteArray> identifiers() const;
-    /**
+    /*!
      * Check whether an identifier has a given right set
      *
      * The result of this method is undefined if the job has
@@ -81,11 +81,11 @@ public:
      * of all the ACL entries means that a given user has
      * a certain right.
      *
-     * @param identifier  the identifier to check the rights for
-     * @param right       the right to check for
+     * \a identifier  the identifier to check the rights for
+     * \a right       the right to check for
      */
     [[nodiscard]] bool hasRightEnabled(const QByteArray &identifier, Acl::Right right) const;
-    /**
+    /*!
      * Get the rights associated with an identifier.
      *
      * The result of this method is undefined if the job has
@@ -99,11 +99,11 @@ public:
      * given user will have once all the ACL entries have
      * been taken into account.
      *
-     * @param identifier  the identifier to check the rights for
+     * \a identifier  the identifier to check the rights for
      */
     [[nodiscard]] Acl::Rights rights(const QByteArray &identifier) const;
 
-    /**
+    /*!
      * Gets the full access control list.
      *
      * The result of this method is undefined if the job has

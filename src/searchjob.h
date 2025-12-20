@@ -23,10 +23,10 @@ class Session;
 struct Response;
 class SearchJobPrivate;
 
-/**
+/*!
  * A query term.
  * Refer to the IMAP RFC for the meaning of the individual terms.
- * @since 4.13
+ * \since 4.13
  */
 class KIMAP_EXPORT Term
 {
@@ -162,70 +162,70 @@ public:
     void setCharset(const QByteArray &charSet);
     QByteArray charset() const;
 
-    /**
+    /*!
      * Get the search result, as a list of sequence numbers or UIDs, based on the isUidBased status
-     * @return the found items
-     * @since 4.6
+     * Returns the found items
+     * \since 4.6
      */
     QList<qint64> results() const;
 
-    /**
+    /*!
      * Add a search criteria that doesn't have an argument. Passing a criteria that
      * should have an argument will be ignored.
-     * @param criteria a criteria from SearchCriterias
-     * @deprecated since 4.13
+     * \a criteria a criteria from SearchCriterias
+     * \deprecated since 4.13
      */
     KIMAP_DEPRECATED void addSearchCriteria(SearchCriteria criteria);
 
-    /**
+    /*!
      * Add a search criteria that has one or more space separate string arguments.
      * Passing a criteria that accepts a different type or argument or no
      * argument will be ignored.
-     * @param criteria a criteria from SearchCriterias
-     * @param argument the arguments
-     * @deprecated since 4.13
+     * \a criteria a criteria from SearchCriterias
+     * \a argument the arguments
+     * \deprecated since 4.13
      */
     KIMAP_DEPRECATED void addSearchCriteria(SearchCriteria criteria, const QByteArray &argument);
 
-    /**
+    /*!
      * Add a search criteria that has an integer argument.
      * Passing a criteria that accepts a different type or argument or no
      * argument will be ignored.
-     * @param criteria a criteria from SearchCriterias
-     * @param argument a number argument
-     * @deprecated since 4.13
+     * \a criteria a criteria from SearchCriterias
+     * \a argument a number argument
+     * \deprecated since 4.13
      */
     KIMAP_DEPRECATED void addSearchCriteria(SearchCriteria criteria, int argument);
 
-    /**
+    /*!
      * Add a search criteria that has a date as argument.
      * Passing a criteria that accepts a different type or argument or no
      * argument will be ignored.
-     * @param criteria a criteria from SearchCriterias
-     * @param argument a date
-     * @deprecated since 4.13
+     * \a criteria a criteria from SearchCriterias
+     * \a argument a date
+     * \deprecated since 4.13
      */
     KIMAP_DEPRECATED void addSearchCriteria(SearchCriteria criteria, const QDate &argument);
 
-    /**
+    /*!
      * Add a custom criteria. No checks are done, the data is sent as it is
      * to the server.
-     * @param searchCriteria free form search criteria.
-     * @deprecated since 4.13
+     * \a searchCriteria free form search criteria.
+     * \deprecated since 4.13
      */
     KIMAP_DEPRECATED void addSearchCriteria(const QByteArray &searchCriteria);
 
-    /**
+    /*!
      * Set the logic combining the search criteria.
-     * @param logic AND (the default), OR, NOT. See SearchLogics.
-     * @deprecated since 4.13
+     * \a logic AND (the default), OR, NOT. See SearchLogics.
+     * \deprecated since 4.13
      */
     KIMAP_DEPRECATED void setSearchLogic(SearchLogic logic);
 
-    /**
+    /*!
      * Sets the search term.
-     * @param term The search term.
-     * @since 4.13
+     * \a term The search term.
+     * \since 4.13
      */
     void setTerm(const Term &);
 

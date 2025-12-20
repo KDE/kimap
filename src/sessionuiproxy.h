@@ -16,17 +16,17 @@ class KSslErrorUiData;
 
 namespace KIMAP
 {
-/** @short Interface to display communication errors and wait for user feedback. */
+/*! \brief Interface to display communication errors and wait for user feedback. */
 class KIMAP_EXPORT SessionUiProxy
 {
 public:
     using Ptr = QSharedPointer<SessionUiProxy>;
 
     virtual ~SessionUiProxy();
-    /**
+    /*!
      * Show an SSL error and ask the user whether it should be ignored or not.
      * The recommended KDE UI is the following:
-     * @code
+     * \de
      * #include <kio/ksslui.h>
      * class UiProxy: public SessionUiProxy {
      *   public:
@@ -42,9 +42,9 @@ public:
      * Session session(server, port);
      * UiProxy *proxy = new UiProxy();
      * session.setUiProxy(proxy);
-     * @endcode
-     * @param errorData contains details about the error.
-     * @return true if the error can be ignored
+     * \endcode
+     * \a errorData contains details about the error.
+     * Returns true if the error can be ignored
      */
     virtual bool ignoreSslError(const KSslErrorUiData &errorData) = 0;
 };

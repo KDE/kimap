@@ -16,7 +16,7 @@ class Session;
 struct Response;
 class CreateJobPrivate;
 
-/**
+/*!
  * Creates a new mailbox
  *
  * This job can only be run when the session is in the
@@ -41,14 +41,14 @@ public:
     explicit CreateJob(Session *session);
     ~CreateJob() override;
 
-    /**
+    /*!
      * Set the name of the new mailbox
      *
-     * @param mailBox  an (unquoted) identifier that does not correspond
+     * \a mailBox  an (unquoted) identifier that does not correspond
      *                 to an existing mailbox name
      */
     void setMailBox(const QString &mailBox);
-    /**
+    /*!
      * The name of the mailbox that will be created
      */
     [[nodiscard]] QString mailBox() const;

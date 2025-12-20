@@ -17,7 +17,7 @@ struct Response;
 class ImapSet;
 class ExpungeJobPrivate;
 
-/**
+/*!
  * Expunges the deleted messages in the selected mailbox.
  *
  * This permanently removes any messages that have the
@@ -40,25 +40,25 @@ public:
     explicit ExpungeJob(Session *session);
     ~ExpungeJob() override = default;
 
-    /**
+    /*!
      * Returns UIDs of messages that have been expunged.
      *
      * This feature is only available when QRESYNC capability (RFC5162) is
      * supported by the server and have been enabled on the current session.
      *
-     * @see KIMAP::EnableJob
-     * @since 5.16
+     * \sa KIMAP::EnableJob
+     * \since 5.16
      */
     [[nodiscard]] KIMAP::ImapSet vanishedMessages() const;
 
-    /**
+    /*!
      * Returns new highest modification sequence number.
      *
      * This feature is only available when QRESYNC capability (RFC5162) is
      * supported by the server and have been enabled on the current session.
      *
-     * @see KIMAP::EnableJob
-     * @since 5.16
+     * \sa KIMAP::EnableJob
+     * \since 5.16
      */
     [[nodiscard]] quint64 newHighestModSeq() const;
 

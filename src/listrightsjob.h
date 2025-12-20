@@ -16,7 +16,7 @@ class Session;
 struct Response;
 class ListRightsJobPrivate;
 
-/**
+/*!
  * Lists the possible and automatic rights for
  * an identifier on a mailbox
  *
@@ -42,7 +42,7 @@ public:
     explicit ListRightsJob(Session *session);
     ~ListRightsJob() override;
 
-    /**
+    /*!
      * Sets the identifier that should be looked up
      *
      * The meaning of identifiers depends on the server implementation,
@@ -60,15 +60,15 @@ public:
      * "fred" and "-fred" are both assigned the 'w' right, the
      * user "fred" will not have the 'w' right.
      *
-     * @param identifier  the identifier to list the rights for
+     * \a identifier  the identifier to list the rights for
      */
     void setIdentifier(const QByteArray &identifier);
-    /**
+    /*!
      * The identifier that will be looked up
      */
     [[nodiscard]] QByteArray identifier();
 
-    /**
+    /*!
      * The rights that will always be assigned to the identifier,
      * regardless of the access control list.
      *
@@ -77,7 +77,7 @@ public:
      */
     [[nodiscard]] Acl::Rights defaultRights();
 
-    /**
+    /*!
      * The rights it is possible to assign to the identifier.
      *
      * The rights are grouped by those that are tied together.
