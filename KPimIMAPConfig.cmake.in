@@ -9,4 +9,3 @@ include(CMakeFindDependencyMacro)
 find_dependency(KF6CoreAddons "@KF_MIN_VERSION@")
 find_dependency(KPim6Mime "@KMIME_LIBS_VERSION@")
 include("${CMAKE_CURRENT_LIST_DIR}/KPim6IMAPTargets.cmake")
-@PACKAGE_INCLUDE_QCHTARGETS@

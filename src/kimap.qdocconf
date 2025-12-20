@@ -1,0 +1,33 @@
+include($KDE_DOCS/global/qt-module-defaults.qdocconf)
+
+project = KIMAP
+description = A job-based API for interacting with IMAP servers.
+
+
+documentationinheaders = true
+
+headerdirs += .
+sourcedirs += .
+
+outputformats = HTML
+
+depends += \
+    qtcore
+
+navigation.landingpage = "KIMAP"
+
+qhp.projects            = KIMAP
+
+qhp.kimap.file                = kimap.qhp
+qhp.kimap.namespace           = org.kde.kimap.$QT_VERSION_TAG
+qhp.kimap.virtualFolder       = kimap
+qhp.kimap.indexTitle          = kimap
+qhp.kimap.indexRoot           =
+
+qhp.kimap.subprojects         = classes
+qhp.kimap.subprojects.classes.title = C++ Classes
+qhp.kimap.subprojects.classes.indexTitle = KIMAP C++ Classes
+qhp.kimap.subprojects.classes.selectors = class fake:headerfile
+qhp.kimap.subprojects.classes.sortPages = true
+
+tagfile = kimap.tags

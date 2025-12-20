@@ -49,7 +49,7 @@ endif()
 include(ECMQtDeclareLoggingCategory)
 include(ECMDeprecationSettings)
 include(ECMFeatureSummary)
-include(ECMAddQch)
+include(ECMGenerateQDoc)
 
 include(ECMCheckOutboundLicense)
 file(
@@ -71,16 +71,6 @@ ecm_setup_version(PROJECT VARIABLE_PREFIX KIMAP
                         SOVERSION 6
 )
 
-option(
-    BUILD_QCH
-    "Build API documentation in QCH format (for e.g. Qt Assistant, Qt Creator & KDevelop)"
-    OFF
-)
-add_feature_info(
-    QCH
-    ${BUILD_QCH}
-    "API documentation in QCH format (for e.g. Qt Assistant, Qt Creator & KDevelop)"
-)
 ########### Find packages ###########
 find_package(Sasl2)
 set_package_properties(Sasl2 PROPERTIES TYPE REQUIRED)
@@ -141,18 +131,6 @@ install(
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/KPim6/KIMAP/
     COMPONENT Devel
 )
-
-if(BUILD_QCH)
-    ecm_install_qch_export(
-        TARGETS KPim6Imap_QCH
-        FILE KPim6ImapQchTargets.cmake
-        DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-        COMPONENT Devel
-    )
-    set(PACKAGE_INCLUDE_QCHTARGETS
-        "include(\"\${CMAKE_CURRENT_LIST_DIR}/KPim6ImapQchTargets.cmake\")"
-    )
-endif()
 
 configure_package_config_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/KPimIMAPConfig.cmake.in"

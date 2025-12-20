@@ -222,26 +222,4 @@ install(
 )
 
 ecm_qt_install_logging_categories(EXPORT KIMAP FILE kimap.categories DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
-
-if(BUILD_QCH)
-    ecm_add_qch(
-        KPim6Imap_QCH
-        NAME KImap
-        BASE_NAME KPim6Imap
-        VERSION ${PIM_VERSION}
-        ORG_DOMAIN org.kde
-        SOURCES # using only public headers, to cover only public API
-            ${KIMAP_HEADERS}
-        MD_MAINPAGE "${CMAKE_SOURCE_DIR}/README.md"
-        #IMAGE_DIRS "${CMAKE_SOURCE_DIR}/docs/pics"
-        LINK_QCHS
-            Qt6Core_QCH
-        INCLUDE_DIRS
-            ${CMAKE_CURRENT_BINARY_DIR}
-        BLANK_MACROS
-            KIMAP_EXPORT
-        TAGFILE_INSTALL_DESTINATION ${KDE_INSTALL_QTQCHDIR}
-        QCH_INSTALL_DESTINATION ${KDE_INSTALL_QTQCHDIR}
-        COMPONENT Devel
-    )
-endif()
+ecm_generate_qdoc(KPim6IMAP kimap.qdocconf)
