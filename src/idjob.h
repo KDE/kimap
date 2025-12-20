@@ -29,7 +29,7 @@ class KIMAP_EXPORT IdJob : public Job
     friend class SessionPrivate;
 
 public:
-    IdJob(Session *session);
+    explicit IdJob(Session *session);
     ~IdJob() override;
 
     void setField(const QByteArray &name, const QByteArray &field);

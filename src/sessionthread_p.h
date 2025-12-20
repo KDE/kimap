@@ -26,7 +26,7 @@ class SessionThread : public QObject
 
 public:
     explicit SessionThread(const QString &hostName, quint16 port);
-    ~SessionThread();
+    ~SessionThread() override;
 
     inline QString hostName()
     {

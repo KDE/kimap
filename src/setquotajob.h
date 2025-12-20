@@ -66,8 +66,7 @@ public:
     /*!
      * Set the quota root the resource limits should be set for.
      *
-     * \
-ote if the quota root does not already exist, the server
+     * Note if the quota root does not already exist, the server
      * may create it and change the quota roots for any number of
      * existing mailboxes in an implementation-defined manner.
      *

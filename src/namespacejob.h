@@ -25,7 +25,7 @@ class KIMAP_EXPORT NamespaceJob : public Job
     friend class SessionPrivate;
 
 public:
-    NamespaceJob(Session *session);
+    explicit NamespaceJob(Session *session);
     ~NamespaceJob() override;
 
     [[nodiscard]] QList<MailBoxDescriptor> personalNamespaces() const;

@@ -22,7 +22,7 @@ public:
     {
     }
 
-    ~MetaDataJobBasePrivate()
+    ~MetaDataJobBasePrivate() override
     {
     }
 

@@ -22,7 +22,7 @@ public:
     {
     }
 
-    ~QuotaJobBasePrivate()
+    ~QuotaJobBasePrivate() override
     {
     }
     static QMap<QByteArray, QPair<qint64, qint64>> readQuota(const Response::Part &content);

@@ -42,8 +42,7 @@ public:
     /*!
      * Returns the name that has been set with LoginJob::setUserName()
      * The user name is useful to uniquely identify an IMAP resource, in combination with the host name
-     * \
-ote If the Session was pre-authenticated, userName() will return an empty string
+     * Note If the Session was pre-authenticated, userName() will return an empty string
      * \since 4.7
      */
     [[nodiscard]] QString userName() const;
@@ -89,8 +88,7 @@ ote If the Session was pre-authenticated, userName() will return an empty string
      * The default is to not use the proxy.
      * \since 5.11.41
      *
-     * \
-ote If the session is currently connected to the IMAP server, calling this
+     * Note If the session is currently connected to the IMAP server, calling this
      * function will disconnect and reconnect to it with the changed proxy setting.
      */
     void setUseNetworkProxy(bool useProxy);

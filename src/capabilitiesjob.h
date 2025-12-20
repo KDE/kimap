@@ -36,7 +36,7 @@ class KIMAP_EXPORT CapabilitiesJob : public Job
     friend class SessionPrivate;
 
 public:
-    CapabilitiesJob(Session *session);
+    explicit CapabilitiesJob(Session *session);
     ~CapabilitiesJob() override;
 
     /*!
