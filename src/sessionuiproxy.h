@@ -26,7 +26,7 @@ public:
     /*!
      * Show an SSL error and ask the user whether it should be ignored or not.
      * The recommended KDE UI is the following:
-     * \de
+     * \code
      * #include <kio/ksslui.h>
      * class UiProxy: public SessionUiProxy {
      *   public:
