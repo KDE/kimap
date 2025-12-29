@@ -18,6 +18,10 @@ class ImapSet;
 class ExpungeJobPrivate;
 
 /*!
+ * \class KIMAP::ExpungeJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/ExpungeJob
+ *
  * Expunges the deleted messages in the selected mailbox.
  *
  * This permanently removes any messages that have the

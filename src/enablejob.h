@@ -19,6 +19,10 @@ struct Response;
 class EnableJobPrivate;
 
 /*!
+ * \class KIMAP::EnableJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/EnableJob
+ *
  * Job to enable additional IMAP capabilities.
  *
  * Requires server to implement the IMAP ENABLE Extension (RFC5161). The

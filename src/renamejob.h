@@ -14,7 +14,13 @@ namespace KIMAP
 {
 class Session;
 class RenameJobPrivate;
-
+/*!
+ * \class KIMAP::RenameJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/RenameJob
+ *
+ * \brief The RenameJob class
+ */
 class KIMAP_EXPORT RenameJob : public Job
 {
     Q_OBJECT

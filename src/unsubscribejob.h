@@ -14,7 +14,11 @@ namespace KIMAP
 {
 class Session;
 class UnsubscribeJobPrivate;
-
+/*!
+ * \class KIMAP::UnsubscribeJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/UnsubscribeJob
+ */
 class KIMAP_EXPORT UnsubscribeJob : public Job
 {
     Q_OBJECT
@@ -23,10 +27,22 @@ class KIMAP_EXPORT UnsubscribeJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     * \brief UnsubscribeJob
+     * \param session
+     */
     explicit UnsubscribeJob(Session *session);
     ~UnsubscribeJob() override;
 
+    /*!
+     * \brief setMailBox
+     * \param mailBox
+     */
     void setMailBox(const QString &mailBox);
+    /*!
+     * \brief mailBox
+     * \return
+     */
     [[nodiscard]] QString mailBox() const;
 
 protected:

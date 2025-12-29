@@ -15,6 +15,10 @@ struct Response;
 class SetQuotaJobPrivate;
 
 /*!
+ * \class KIMAP::SetQuotaJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/SetQuotaJob
+ *
  * Sets resource limits on a quota root.
  *
  * Quotas are defined with respect to "resources" and "quota roots".

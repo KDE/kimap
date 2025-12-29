@@ -20,6 +20,10 @@ struct Response;
 class IdleJobPrivate;
 
 /*!
+ * \class KIMAP::IdleJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/IdleJob
+ *
  * Idles the connection to the IMAP server.
  *
  * This job can be run while the client has no other use

@@ -17,6 +17,10 @@ struct Message;
 class IdJobPrivate;
 
 /*!
+ * \class KIMAP::IdJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/IdJob
+ *
  * Reports client id.
  *
  * This job can be run in any open session.

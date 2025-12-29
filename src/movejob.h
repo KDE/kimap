@@ -16,6 +16,10 @@ namespace KIMAP
 class MoveJobPrivate;
 
 /*!
+ * \class KIMAP::MoveJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/MoveJob
+ *
  * Moves messages from current mailbox to another
  *
  * Note that move functionality is not specified in the base IMAP

@@ -17,6 +17,10 @@ struct Response;
 class CapabilitiesJobPrivate;
 
 /*!
+ * \class KIMAP::CapabilitiesJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/CapabilitiesJob
+ *
  * Checks server capabilities.
  *
  * This job can be run in any open session.

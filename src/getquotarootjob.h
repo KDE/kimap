@@ -15,6 +15,10 @@ struct Message;
 class GetQuotaRootJobPrivate;
 
 /*!
+ * \class KIMAP::GetQuotaRootJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/GetQuotaRootJob
+ *
  * Gets the quota root and resource limits for a mailbox.
  *
  * Quotas are defined with respect to "resources" and "quota roots".

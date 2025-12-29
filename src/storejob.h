@@ -18,7 +18,11 @@ struct Response;
 class StoreJobPrivate;
 
 using MessageFlags = QList<QByteArray>;
-
+/*!
+ * \class KIMAP::StoreJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/StoreJob
+ */
 class KIMAP_EXPORT StoreJob : public Job
 {
     Q_OBJECT

@@ -17,6 +17,10 @@ struct Response;
 class CloseJobPrivate;
 
 /*!
+ * \class KIMAP::CloseJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/CloseJob
+ *
  * Closes the current mailbox.
  *
  * This job can only be run when the session is in the selected state.

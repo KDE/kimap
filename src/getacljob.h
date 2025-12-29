@@ -17,6 +17,10 @@ struct Response;
 class GetAclJobPrivate;
 
 /*!
+ * \class KIMAP::GetAclJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/GetAclJob
+ *
  * Gets the ACL for a mailbox
  *
  * This job can only be run when the session is in the

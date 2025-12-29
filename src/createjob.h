@@ -17,6 +17,10 @@ struct Response;
 class CreateJobPrivate;
 
 /*!
+ * \class KIMAP::CreateJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/CreateJob
+ *
  * Creates a new mailbox
  *
  * This job can only be run when the session is in the

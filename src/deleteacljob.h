@@ -17,6 +17,10 @@ struct Response;
 class DeleteAclJobPrivate;
 
 /*!
+ * \class KIMAP::DeleteAclJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/DeleteAclJob
+ *
  * Removes an identifier from the ACL of a mailbox.
  *
  * This job can only be run when the session is in the

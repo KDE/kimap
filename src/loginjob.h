@@ -17,6 +17,13 @@ class Session;
 struct Response;
 class LoginJobPrivate;
 
+/*!
+ * \class KIMAP::LoginJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/LoginJob
+ *
+ * \brief The LoginJob class
+ */
 class KIMAP_EXPORT LoginJob : public Job
 {
     Q_OBJECT
@@ -52,10 +59,20 @@ public:
         ERR_COULD_NOT_CONNECT = KJob::UserDefinedError + 23 // same as in kio
     };
 
+    /*!
+     * \brief LoginJob
+     * \param session
+     */
     explicit LoginJob(Session *session);
     ~LoginJob() override;
 
+    /*!
+     * \brief userName
+     * \return
+     */
     [[nodiscard]] QString userName() const;
+    /*!
+     */
     void setUserName(const QString &userName);
 
     /*!

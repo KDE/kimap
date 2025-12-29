@@ -17,7 +17,11 @@ class Session;
 struct Response;
 class SelectJobPrivate;
 class ImapSet;
-
+/*!
+ * \class KIMAP::SelectJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/SelectJob
+ */
 class KIMAP_EXPORT SelectJob : public Job
 {
     Q_OBJECT

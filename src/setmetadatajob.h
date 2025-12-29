@@ -17,6 +17,10 @@ struct Response;
 class SetMetaDataJobPrivate;
 
 /*!
+ * \class KIMAP::SetMetaDataJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/SetMetaDataJob
+ *
  * Sets mailbox metadata.
  *
  * Provides support for the IMAP METADATA extension; both the

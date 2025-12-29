@@ -14,7 +14,11 @@ namespace KIMAP
 {
 class Session;
 class SubscribeJobPrivate;
-
+/*!
+ * \class KIMAP::SubscribeJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/SubscribeJob
+ */
 class KIMAP_EXPORT SubscribeJob : public Job
 {
     Q_OBJECT

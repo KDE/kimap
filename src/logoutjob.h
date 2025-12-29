@@ -14,7 +14,13 @@ namespace KIMAP
 {
 class Session;
 class LogoutJobPrivate;
-
+/*!
+ * \class KIMAP::LogoutJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/LogoutJob
+ *
+ * \brief The LogoutJob class
+ */
 class KIMAP_EXPORT LogoutJob : public Job
 {
     Q_OBJECT

@@ -17,6 +17,10 @@
 namespace KIMAP
 {
 /*!
+  \class KIMAP::ImapInterval
+  \inmodule KIMAP
+  \inheaderfile KIMAP/ImapInterval
+
   Represents a single interval in an ImapSet.
   This class is implicitly shared.
 */

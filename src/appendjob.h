@@ -18,6 +18,10 @@ struct Response;
 class AppendJobPrivate;
 
 /*!
+ * \class KIMAP::AppendJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/AppendJob
+ *
  * Appends a message to a mailbox.
  *
  * This job can only be run when the session is in the

@@ -44,6 +44,10 @@ struct Message {
 };
 
 /*!
+ * \class KIMAP::FetchJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/FetchJob
+ *
  * Fetch message data from the server
  *
  * All data is returned using the signals, so you need to connect to

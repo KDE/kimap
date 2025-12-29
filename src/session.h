@@ -17,7 +17,11 @@ namespace KIMAP
 class SessionPrivate;
 class JobPrivate;
 struct Response;
-
+/*!
+ * \class KIMAP::Session
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/Session
+ */
 class KIMAP_EXPORT Session : public QObject
 {
     Q_OBJECT

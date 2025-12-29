@@ -17,6 +17,10 @@ struct Response;
 class MyRightsJobPrivate;
 
 /*!
+ * \class KIMAP::MyRightsJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/MyRightsJob
+ *
  * Determine the rights the currently-logged-in user
  * has on the current mailbox.
  *

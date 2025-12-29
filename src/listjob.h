@@ -30,7 +30,13 @@ struct KIMAP_EXPORT MailBoxDescriptor {
         return other.name < name || (other.name == name && other.separator < separator);
     }
 };
-
+/*!
+ * \class KIMAP::ListJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/ListJob
+ *
+ * \brief The ListJob class
+ */
 class KIMAP_EXPORT ListJob : public Job
 {
     Q_OBJECT

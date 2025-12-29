@@ -18,6 +18,10 @@ struct Message;
 class CopyJobPrivate;
 
 /*!
+ * \class KIMAP::CopyJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/CopyJob
+ *
  * Copies one or more messages to another mailbox.
  *
  * This job can only be run when the session is in the selected state.

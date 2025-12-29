@@ -17,6 +17,10 @@ struct Response;
 class ListRightsJobPrivate;
 
 /*!
+ * \class KIMAP::ListRightsJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/ListRightsJob
+ *
  * Lists the possible and automatic rights for
  * an identifier on a mailbox
  *

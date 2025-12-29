@@ -16,6 +16,10 @@ class Session;
 class DeleteJobPrivate;
 
 /*!
+ * \class KIMAP::DeleteJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/DeleteJob
+ *
  * Delete a mailbox
  *
  * Note that some servers will refuse to delete a

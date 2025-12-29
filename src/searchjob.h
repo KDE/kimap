@@ -24,6 +24,10 @@ struct Response;
 class SearchJobPrivate;
 
 /*!
+ * \class KIMAP::Term
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/Term
+ *
  * A query term.
  * Refer to the IMAP RFC for the meaning of the individual terms.
  * \since 4.13

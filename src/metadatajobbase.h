@@ -17,6 +17,10 @@ struct Response;
 class MetaDataJobBasePrivate;
 
 /*!
+ * \class KIMAP::MetaDataJobBase
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/MetaDataJobBase
+ *
  * Base class for jobs that operate on mailbox metadata
  *
  * Provides support for the IMAP METADATA extension; both the

@@ -18,6 +18,10 @@ struct Response;
 class AclJobBasePrivate;
 
 /*!
+ * \class KIMAP::AclJobBase
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/AclJobBase
+ *
  * Base class for jobs that operate on mailbox ACLs
  *
  * Provides support for the IMAP ACL extension, as defined by

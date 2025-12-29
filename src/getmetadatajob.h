@@ -17,6 +17,10 @@ struct Response;
 class GetMetaDataJobPrivate;
 
 /*!
+ * \class KIMAP::GetMetaDataJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/GetMetaDataJob
+ *
  * Fetches mailbox metadata.
  *
  * Provides support for the IMAP METADATA extension; both the

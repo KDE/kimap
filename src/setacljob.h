@@ -17,6 +17,10 @@ struct Response;
 class SetAclJobPrivate;
 
 /*!
+ * \class KIMAP::SetAclJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/SetAclJob
+ *
  * Sets the rights that correspond to an identifier on a mailbox
  *
  * This job can only be run when the session is in the

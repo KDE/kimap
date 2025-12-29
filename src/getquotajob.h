@@ -15,6 +15,10 @@ struct Message;
 class GetQuotaJobPrivate;
 
 /*!
+ * \class KIMAP::GetQuotaJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/GetQuotaJob
+ *
  * Gets resource limits for a quota root.
  *
  * Quotas are defined with respect to "resources" and "quota roots".
