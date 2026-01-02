@@ -28,11 +28,15 @@ class KIMAP_EXPORT ImapInterval
 {
 public:
     /*!
+     * \typealias KIMAP::ImapInterval::Id
+     *
      * Describes the ids stored in the interval.
      */
     using Id = qint64;
 
     /*!
+      \typealias KIMAP::ImapInterval::List
+
       A list of ImapInterval objects.
     */
     using List = QList<ImapInterval>;
@@ -131,6 +135,8 @@ class KIMAP_EXPORT ImapSet
 {
 public:
     /*!
+     * \typealias KIMAP::ImapSet::Id
+     *
      * Describes the ids stored in the set.
      */
     using Id = qint64;
