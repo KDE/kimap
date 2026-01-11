@@ -27,51 +27,9 @@ public:
 private:
     QStringList m_signals;
 
-    QMap<qint64, qint64> m_uids;
-    QMap<qint64, qint64> m_sizes;
-    QMap<qint64, KIMAP::MessageFlags> m_flags;
-    QMap<qint64, std::shared_ptr<KMime::Message>> m_messages;
-    QMap<qint64, KIMAP::MessageParts> m_parts;
-    QMap<qint64, KIMAP::MessageAttribute> m_attrs;
     QMap<qint64, KIMAP::Message> m_msgs;
 
 public Q_SLOTS:
-    void onHeadersReceived(const QString & /*mailBox*/,
-                           const QMap<qint64, qint64> &uids,
-                           const QMap<qint64, qint64> &sizes,
-                           const QMap<qint64, KIMAP::MessageAttribute> &attrs,
-                           const QMap<qint64, KIMAP::MessageFlags> &flags,
-                           const QMap<qint64, std::shared_ptr<KMime::Message>> &messages)
-    {
-        m_signals << QStringLiteral("headersReceived");
-        m_uids.insert(uids);
-        m_sizes.insert(sizes);
-        m_flags.insert(flags);
-        m_messages.insert(messages);
-        m_attrs.insert(attrs);
-    }
-
-    void onMessagesReceived(const QString & /*mailbox*/,
-                            const QMap<qint64, qint64> &uids,
-                            const QMap<qint64, KIMAP::MessageAttribute> &attrs,
-                            const QMap<qint64, std::shared_ptr<KMime::Message>> &messages)
-    {
-        m_signals << QStringLiteral("messagesReceived");
-        m_uids.insert(uids);
-        m_messages.insert(messages);
-        m_attrs.insert(attrs);
-    }
-
-    void onPartsReceived(const QString & /*mailbox*/,
-                         const QMap<qint64, qint64> & /*uids*/,
-                         const QMap<qint64, KIMAP::MessageAttribute> &attrs,
-                         const QMap<qint64, KIMAP::MessageParts> &parts)
-    {
-        m_signals << QStringLiteral("partsReceived");
-        m_attrs.insert(attrs);
-        m_parts.insert(parts);
-    }
-
     void onMessagesAvailable(const QMap<qint64, KIMAP::Message> &messages)
     {
         m_signals << QStringLiteral("messagesAvailable");
@@ -199,20 +157,6 @@ private Q_SLOTS:
         job->setSequenceSet(set);
         job->setScope(scope);
 
-        connect(job,
-                SIGNAL(headersReceived(QString,
-                                       QMap<qint64, qint64>,
-                                       QMap<qint64, qint64>,
-                                       QMap<qint64, KIMAP::MessageAttribute>,
-                                       QMap<qint64, KIMAP::MessageFlags>,
-                                       QMap<qint64, std::shared_ptr<KMime::Message>>)),
-                this,
-                SLOT(onHeadersReceived(QString,
-                                       QMap<qint64, qint64>,
-                                       QMap<qint64, qint64>,
-                                       QMap<qint64, KIMAP::MessageAttribute>,
-                                       QMap<qint64, KIMAP::MessageFlags>,
-                                       QMap<qint64, std::shared_ptr<KMime::Message>>)));
         connect(job, &KIMAP::FetchJob::messagesAvailable, this, &FetchJobTest::onMessagesAvailable);
 
         QSignalSpy vanishedSpy(job, &KIMAP::FetchJob::messagesVanished);
@@ -225,7 +169,6 @@ private Q_SLOTS:
         QVERIFY(result);
         if (result) {
             QVERIFY(m_signals.count() > 0);
-            QCOMPARE(m_uids.count(), expectedMessageCount);
             QCOMPARE(m_msgs.count(), expectedMessageCount);
             if (scope.qresync) {
                 QCOMPARE(vanishedSpy.size(), 1);
@@ -237,12 +180,6 @@ private Q_SLOTS:
         fakeServer.quit();
 
         m_signals.clear();
-        m_uids.clear();
-        m_sizes.clear();
-        m_flags.clear();
-        m_messages.clear();
-        m_parts.clear();
-        m_attrs.clear();
         m_msgs.clear();
     }
 
@@ -269,21 +206,11 @@ private Q_SLOTS:
         job->setSequenceSet(KIMAP::ImapSet(1, 2));
         job->setScope(scope);
 
-        connect(job,
-                SIGNAL(messagesReceived(QString, QMap<qint64, qint64>, QMap<qint64, KIMAP::MessageAttribute>, QMap<qint64, std::shared_ptr<KMime::Message>>)),
-                this,
-                SLOT(onMessagesReceived(QString, QMap<qint64, qint64>, QMap<qint64, KIMAP::MessageAttribute>, QMap<qint64, std::shared_ptr<KMime::Message>>)));
         connect(job, &KIMAP::FetchJob::messagesAvailable, this, &FetchJobTest::onMessagesAvailable);
 
         bool result = job->exec();
         QVERIFY(result);
         QVERIFY(m_signals.count() > 0);
-        QCOMPARE(m_uids.count(), 2);
-        QCOMPARE(m_messages[1]->attachments().count(), 0);
-        QCOMPARE(m_messages[2]->attachments().count(), 1);
-        QCOMPARE(m_messages[2]->contents().size(), 2);
-        QCOMPARE(m_messages[2]->contents()[0]->contents().size(), 2);
-        QCOMPARE(m_messages[2]->attachments().at(0)->contentDisposition()->filename(), QStringLiteral("photo.jpg"));
         QCOMPARE(m_msgs.count(), 2);
         QCOMPARE(m_msgs[1].message->attachments().count(), 0);
         QCOMPARE(m_msgs[2].message->attachments().count(), 1);
@@ -294,12 +221,6 @@ private Q_SLOTS:
         fakeServer.quit();
 
         m_signals.clear();
-        m_uids.clear();
-        m_sizes.clear();
-        m_flags.clear();
-        m_messages.clear();
-        m_parts.clear();
-        m_attrs.clear();
         m_msgs.clear();
     }
 
@@ -331,68 +252,33 @@ private Q_SLOTS:
         job->setSequenceSet(KIMAP::ImapSet(2, 2));
         job->setScope(scope);
 
-        connect(job,
-                SIGNAL(headersReceived(QString,
-                                       QMap<qint64, qint64>,
-                                       QMap<qint64, qint64>,
-                                       QMap<qint64, KIMAP::MessageAttribute>,
-                                       QMap<qint64, KIMAP::MessageFlags>,
-                                       QMap<qint64, std::shared_ptr<KMime::Message>>)),
-                this,
-                SLOT(onHeadersReceived(QString,
-                                       QMap<qint64, qint64>,
-                                       QMap<qint64, qint64>,
-                                       QMap<qint64, KIMAP::MessageAttribute>,
-                                       QMap<qint64, KIMAP::MessageFlags>,
-                                       QMap<qint64, std::shared_ptr<KMime::Message>>)));
-        connect(job,
-                SIGNAL(partsReceived(QString, QMap<qint64, qint64>, QMap<qint64, KIMAP::MessageAttribute>, QMap<qint64, KIMAP::MessageParts>)),
-                this,
-                SLOT(onPartsReceived(QString, QMap<qint64, qint64>, QMap<qint64, KIMAP::MessageAttribute>, QMap<qint64, KIMAP::MessageParts>)));
         connect(job, &KIMAP::FetchJob::messagesAvailable, this, &FetchJobTest::onMessagesAvailable);
         bool result = job->exec();
 
         QVERIFY(result);
         QVERIFY(m_signals.count() > 0);
-        QCOMPARE(m_uids.count(), 1);
-        QCOMPARE(m_parts.count(), 1);
-        QCOMPARE(m_attrs.count(), 0);
         QCOMPARE(m_msgs.count(), 1);
 
         // Check that we received the message header
-        QCOMPARE(m_messages[2]->messageID()->identifier(), QByteArray("1234@example.com"));
         QCOMPARE(m_msgs[2].message->messageID()->identifier(), QByteArray("1234@example.com"));
 
         // Check that we received the flags
         QMap<qint64, KIMAP::MessageFlags> expectedFlags;
         expectedFlags.insert(2, KIMAP::MessageFlags() << "\\Seen");
-        QCOMPARE(m_flags, expectedFlags);
         QCOMPARE(m_msgs[2].flags, expectedFlags[2]);
 
         // Check that we didn't received the full message body, since we only requested a specific part
-        QCOMPARE(m_messages[2]->decodedText().length(), 0);
-        QCOMPARE(m_messages[2]->attachments().count(), 0);
         QCOMPARE(m_msgs[2].message->decodedText().length(), 0);
         QCOMPARE(m_msgs[2].message->attachments().count(), 0);
 
         // Check that we received the part we requested
-        QByteArray partId = m_parts[2].keys().first();
-        QString text = m_parts[2].value(partId)->decodedText(KMime::Content::TrimSpaces);
-        QCOMPARE(partId, QByteArray("1.1.1"));
-        QCOMPARE(text, QStringLiteral("Hi Jane, nice to meet you!"));
-
+        QByteArray partId = m_msgs[2].parts.keys().first();
         QCOMPARE(m_msgs[2].parts.keys().first(), QByteArray("1.1.1"));
         QCOMPARE(m_msgs[2].parts.value(partId)->decodedText(KMime::Content::TrimSpaces), QStringLiteral("Hi Jane, nice to meet you!"));
 
         fakeServer.quit();
 
         m_signals.clear();
-        m_uids.clear();
-        m_sizes.clear();
-        m_flags.clear();
-        m_messages.clear();
-        m_parts.clear();
-        m_attrs.clear();
         m_msgs.clear();
     }
 };
