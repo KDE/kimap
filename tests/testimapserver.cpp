@@ -237,16 +237,9 @@ void testAppendAndStore(Session *session)
     scope.mode = FetchJob::FetchScope::Content;
     fetch->setScope(scope);
     std::shared_ptr<KMime::Message> message;
-    QObject::connect(fetch,
-                     static_cast<HeadersReceivedSignal>(&FetchJob::headersReceived),
-                     fetch,
-                     [&](const QString &,
-                         const QMap<qint64, qint64> &,
-                         const QMap<qint64, qint64> &,
-                         const QMap<qint64, MessageFlags> &,
-                         const QMap<qint64, std::shared_ptr<KMime::Message>> &msgs) {
-                         message = msgs[1];
-                     });
+    QObject::connect(fetch, &FetchJob::messagesAvailable, fetch, [&](const QMap<qint64, KIMAP::Message> &msgs) {
+        message = msgs[1].message;
+    });
     fetch->exec();
     Q_ASSERT_X(fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit().constData());
     testMailContent.replace("\r\n", "\n");
@@ -260,16 +253,9 @@ void testAppendAndStore(Session *session)
     scope.mode = FetchJob::FetchScope::Flags;
     fetch->setScope(scope);
     MessageFlags expectedFlags;
-    QObject::connect(fetch,
-                     static_cast<HeadersReceivedSignal>(&FetchJob::headersReceived),
-                     fetch,
-                     [&](const QString &,
-                         const QMap<qint64, qint64> &,
-                         const QMap<qint64, qint64> &,
-                         const QMap<qint64, MessageFlags> &flags,
-                         const QMap<qint64, std::shared_ptr<KMime::Message>> &) {
-                         expectedFlags = flags[1];
-                     });
+    QObject::connect(fetch, &FetchJob::messagesAvailable, fetch, [&](const QMap<qint64, KIMAP::Message> &msgs) {
+        expectedFlags = msgs[1].flags;
+    });
     fetch->exec();
     qDebug() << "Read the message flags:" << expectedFlags;
 
@@ -500,31 +486,22 @@ int main(int argc, char **argv)
     scope.parts.clear();
     scope.mode = FetchJob::FetchScope::Headers;
     fetch->setScope(scope);
-    QMap<qint64, qint64> sizes;
-    QMap<qint64, std::shared_ptr<KMime::Message>> messages;
+    QMap<qint64, KIMAP::Message> messages;
 
-    QObject::connect(fetch,
-                     static_cast<HeadersReceivedSignal>(&FetchJob::headersReceived),
-                     fetch,
-                     [&](const QString &,
-                         const QMap<qint64, qint64> &,
-                         const QMap<qint64, qint64> &sizes_,
-                         const QMap<qint64, MessageFlags> &,
-                         const QMap<qint64, std::shared_ptr<KMime::Message>> &msgs_) {
-                         sizes = sizes_;
-                         messages = msgs_;
-                     });
+    QObject::connect(fetch, &FetchJob::messagesAvailable, fetch, [&](const QMap<qint64, KIMAP::Message> &msgs_) {
+        messages = msgs_;
+    });
     fetch->exec();
     Q_ASSERT_X(fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit().constData());
     Q_ASSERT(session.state() == Session::Selected);
     const auto messagesKey = messages.keys();
     for (qint64 id : messagesKey) {
-        qDebug() << "* Message" << id << "(" << sizes[id] << "bytes )";
-        qDebug() << "  From      :" << messages[id]->from()->asUnicodeString();
-        qDebug() << "  To        :" << messages[id]->to()->asUnicodeString();
-        qDebug() << "  Date      :" << messages[id]->date()->asUnicodeString();
-        qDebug() << "  Subject   :" << messages[id]->subject()->asUnicodeString();
-        qDebug() << "  Message-ID:" << messages[id]->messageID()->asUnicodeString();
+        qDebug() << "* Message" << id << "(" << messages[id].size << "bytes )";
+        qDebug() << "  From      :" << messages[id].message->from()->asUnicodeString();
+        qDebug() << "  To        :" << messages[id].message->to()->asUnicodeString();
+        qDebug() << "  Date      :" << messages[id].message->date()->asUnicodeString();
+        qDebug() << "  Subject   :" << messages[id].message->subject()->asUnicodeString();
+        qDebug() << "  Message-ID:" << messages[id].message->messageID()->asUnicodeString();
     }
     qDebug();
 
@@ -534,23 +511,15 @@ int main(int argc, char **argv)
     scope.parts.clear();
     scope.mode = FetchJob::FetchScope::Flags;
     fetch->setScope(scope);
-    QMap<qint64, MessageFlags> flags;
-    QObject::connect(fetch,
-                     static_cast<HeadersReceivedSignal>(&FetchJob::headersReceived),
-                     fetch,
-                     [&](const QString &,
-                         const QMap<qint64, qint64> &,
-                         const QMap<qint64, qint64> &,
-                         const QMap<qint64, MessageFlags> &flags_,
-                         const QMap<qint64, std::shared_ptr<KMime::Message>> &) {
-                         flags = flags_;
-                     });
+    QObject::connect(fetch, &FetchJob::messagesAvailable, fetch, [&](const QMap<qint64, KIMAP::Message> &msgs_) {
+        messages = msgs_;
+    });
     fetch->exec();
     Q_ASSERT_X(fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit().constData());
     Q_ASSERT(session.state() == Session::Selected);
-    const auto flagsKey = flags.keys();
+    const auto flagsKey = messages.keys();
     for (qint64 id : flagsKey) {
-        qDebug() << "* Message" << id << "flags:" << flags[id];
+        qDebug() << "* Message" << id << "flags:" << messages[id].flags;
     }
     qDebug();
 
@@ -560,20 +529,13 @@ int main(int argc, char **argv)
     scope.parts.clear();
     scope.mode = FetchJob::FetchScope::Structure;
     fetch->setScope(scope);
-    QObject::connect(fetch,
-                     static_cast<HeadersReceivedSignal>(&FetchJob::headersReceived),
-                     fetch,
-                     [&](const QString &,
-                         const QMap<qint64, qint64> &,
-                         const QMap<qint64, qint64> &,
-                         const QMap<qint64, MessageFlags> &,
-                         const QMap<qint64, std::shared_ptr<KMime::Message>> &msgs_) {
-                         messages = msgs_;
-                     });
+    QObject::connect(fetch, &FetchJob::messagesAvailable, fetch, [&](const QMap<qint64, KIMAP::Message> &msgs_) {
+        messages = msgs_;
+    });
     fetch->exec();
     Q_ASSERT_X(fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit().constData());
     Q_ASSERT(session.state() == Session::Selected);
-    std::shared_ptr<KMime::Message> message = messages[1];
+    std::shared_ptr<KMime::Message> message = messages[1].message;
     dumpContentHelper(message.get());
     qDebug();
 
@@ -584,20 +546,17 @@ int main(int argc, char **argv)
     scope.parts << "2";
     scope.mode = FetchJob::FetchScope::Headers;
     fetch->setScope(scope);
-    QMap<qint64, MessageParts> allParts;
-    QObject::connect(fetch,
-                     static_cast<PartsReceivedSignal>(&FetchJob::partsReceived),
-                     fetch,
-                     [&](const QString &, const QMap<qint64, qint64> &, const QMap<qint64, MessageParts> &parts_) {
-                         allParts = parts_;
-                     });
+    QMap<qint64, KIMAP::Message> allMsgs;
+    QObject::connect(fetch, &FetchJob::messagesAvailable, fetch, [&](const QMap<qint64, KIMAP::Message> &msgs_) {
+        allMsgs = msgs_;
+    });
     fetch->exec();
     Q_ASSERT_X(fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit().constData());
     Q_ASSERT(session.state() == Session::Selected);
-    const auto allkeys = allParts.keys();
+    const auto allkeys = allMsgs.keys();
     for (qint64 id : allkeys) {
         qDebug() << "* Message" << id << "parts headers";
-        MessageParts parts = allParts[id];
+        MessageParts parts = allMsgs[id].parts;
         const auto parsKeys = parts.keys();
         for (const QByteArray &partId : parsKeys) {
             qDebug() << "  ** Part" << partId;
@@ -615,18 +574,15 @@ int main(int argc, char **argv)
     scope.parts << "2";
     scope.mode = FetchJob::FetchScope::Content;
     fetch->setScope(scope);
-    QObject::connect(fetch,
-                     static_cast<PartsReceivedSignal>(&FetchJob::partsReceived),
-                     fetch,
-                     [&](const QString &, const QMap<qint64, qint64> &, const QMap<qint64, MessageParts> &parts_) {
-                         allParts = parts_;
-                     });
+    QObject::connect(fetch, &FetchJob::messagesAvailable, fetch, [&](const QMap<qint64, KIMAP::Message> &msgs_) {
+        allMsgs = msgs_;
+    });
     fetch->exec();
     Q_ASSERT_X(fetch->error() == 0, "FetchJob", fetch->errorString().toLocal8Bit().constData());
     Q_ASSERT(session.state() == Session::Selected);
-    const auto allpartskeys = allParts.keys();
+    const auto allpartskeys = allMsgs.keys();
     for (int id : allpartskeys) {
-        MessageParts parts = allParts[id];
+        MessageParts parts = allMsgs[id].parts;
         const auto partsKeys = parts.keys();
         for (const QByteArray &partId : partsKeys) {
             qDebug() << "* Message" << id << "part" << partId << "content:";
