@@ -161,12 +161,6 @@ void SetMetaDataJob::addMetaData(const QByteArray &name, const QByteArray &value
     }
 }
 
-void SetMetaDataJob::setEntry(const QByteArray &entry)
-{
-    Q_D(SetMetaDataJob);
-    d->entryName = entry;
-}
-
 SetMetaDataJob::MetaDataErrors SetMetaDataJob::metaDataErrors() const
 {
     Q_D(const SetMetaDataJob);

@@ -131,40 +131,6 @@ public:
     void addMetaData(const QByteArray &name, const QByteArray &value);
 
     /*!
-     * Sets the metadata entry name to operate on (in Annotatemore mode)
-     *
-     * In Annotatemore mode, this specifies the metadata entry name to
-     * operate on.  For server metadata, this is one of:
-     * - /comment
-     * - /motd
-     * - /admin
-     * - /vendor/<vendor-token>/something
-     *
-     * For mailbox metadata, this is one of:
-     * - /comment
-     * - /sort
-     * - /thread
-     * - /check
-     * - /checkperiod
-     * - /vendor/<vendor-token>/something
-     *
-     * Entry names must be valid UTF-8 strings that do not contain the
-     * '%' or '*' characters, or NUL.  Use of non-visible UTF-8
-     * characters is strongly discouraged.
-     *
-     * In Metadata mode, this has no effect.  Metadata entry names
-     * should instead be specified as the first argument to addMetaData().
-     *
-     * \sa setServerCapability()
-     *
-     * \a entry  the metadata entry name in UTF-8
-     *
-     * \deprecated Use a /shared or /private prefix with addMetaData instead.
-     */
-    // KDE5: remove
-    KIMAP_DEPRECATED void setEntry(const QByteArray &entry);
-
-    /*!
      * Possible error codes that may be returned by the server.
      */
     enum MetaDataError {

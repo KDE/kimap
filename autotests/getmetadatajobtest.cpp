@@ -85,7 +85,6 @@ private Q_SLOTS:
         QCOMPARE(allMetaData.size(), expectedAnnotations.size());
         const auto keys = expectedAnnotations.keys();
         for (const QByteArray &entry : keys) {
-            QCOMPARE(getMetadataJob->metaData(mailbox, entry), expectedAnnotations.value(entry));
             QCOMPARE(getMetadataJob->metaData(entry), expectedAnnotations.value(entry));
             QCOMPARE(allMetaData.value(entry), expectedAnnotations.value(entry));
         }

@@ -102,7 +102,6 @@ private Q_SLOTS:
         QTest::addColumn<QList<QByteArray>>("scenario");
         QTest::addColumn<QString>("mailbox");
         QTest::addColumn<QMap<QByteArray, QByteArray>>("annotations");
-        QTest::addColumn<bool>("legacyMode");
 
         {
             QList<QByteArray> scenario;
@@ -111,8 +110,7 @@ private Q_SLOTS:
 
             QMap<QByteArray, QByteArray> annotations;
             annotations.insert("/comment", "Shared comment");
-            QTest::newRow("normal") << scenario << "Folder1" << annotations << false;
-            QTest::newRow("legacy") << scenario << "Folder1" << annotations << true;
+            QTest::newRow("normal") << scenario << "Folder1" << annotations;
         }
     }
 
@@ -121,7 +119,6 @@ private Q_SLOTS:
         QFETCH(QList<QByteArray>, scenario);
         QFETCH(QString, mailbox);
         QFETCH(MAP, annotations);
-        QFETCH(bool, legacyMode);
 
         FakeServer fakeServer;
         fakeServer.setScenario(scenario);
@@ -134,12 +131,7 @@ private Q_SLOTS:
         setMetadataJob->setMailBox(mailbox);
         const auto keys = annotations.keys();
         for (const QByteArray &entry : keys) {
-            if (legacyMode) {
-                setMetadataJob->setEntry(entry);
-                setMetadataJob->addMetaData("value.shared", annotations[entry]);
-            } else {
-                setMetadataJob->addMetaData(QByteArray("/shared") + entry, annotations[entry]);
-            }
+            setMetadataJob->addMetaData("/shared" + entry, annotations[entry]);
         }
 
         QVERIFY(setMetadataJob->exec());

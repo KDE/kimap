@@ -75,23 +75,6 @@ public:
      *
      * See SetMetaDataJob for a description of metadata entry names.
      *
-     * When operating in Annotatemore mode, you should provide an attribute
-     * name.  Typically this will be "value", "value.priv" or "value.shared",
-     * although you might want to fetch the "content-type" or
-     * "content-language" attributes as well.
-     *
-     * \a entry      the metadata entry name
-     * \a attribute  the attribute name, in Annotatemore mode
-     *
-     * \deprecated use addRequestedEntry(QByteArray) instead
-     */
-    KIMAP_DEPRECATED void addEntry(const QByteArray &entry, const QByteArray &attribute = QByteArray());
-
-    /*!
-     * Add an entry to the query list.
-     *
-     * See SetMetaDataJob for a description of metadata entry names.
-     *
      * Note that this expects METADATA style entries (with a /shared or /private prefix typically).
      * In ANNOTATEMORE mode, this prefix is automatically replaced with an appropriate attribute.
      *
@@ -139,31 +122,6 @@ public:
      * \a depth  the depth of the metadata tree to return
      */
     void setDepth(Depth depth);
-
-    /*!
-     * Get a single metadata entry.
-     *
-     * The metadata must have been requested using addEntry(), and
-     * the job must have completed successfully, or this method
-     * will not return anything.
-     *
-     * Note that if setMaximumSize() was used to limit the size of
-     * returned metadata, this method may return an empty QByteArray
-     * even if the metadata entry was requested and exists on the
-     * server.  This will happen when the metadata entry is larger
-     * than the size limit given to setMaximumSize().
-     *
-     * \a mailBox    the mailbox the metadata is attached to, or
-     *                   an empty string for server metadata
-     * \a entry      the entry to get
-     * \a attribute  (only in Annotatemore mode) the attribute to get
-     * Returns  the metadata entry value
-     *
-     * \deprecated use metaData(QByteArray entry) instead
-     */
-    // XXX: what's with the mailBox argument in a class that has setMailBox()?
-    //      KJobs are not intended to be run more than once
-    KIMAP_DEPRECATED QByteArray metaData(const QString &mailBox, const QByteArray &entry, const QByteArray &attribute = QByteArray()) const;
 
     /*!
      * Get a single metadata entry.

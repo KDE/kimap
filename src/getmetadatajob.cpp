@@ -163,16 +163,6 @@ void GetMetaDataJob::handleResponse(const Response &response)
     }
 }
 
-void GetMetaDataJob::addEntry(const QByteArray &entry, const QByteArray &attribute)
-{
-    Q_D(GetMetaDataJob);
-    if (d->serverCapability == Annotatemore && attribute.isNull()) {
-        qCWarning(KIMAP_LOG) << "In ANNOTATEMORE mode an attribute must be specified with addEntry!";
-    }
-    d->entries.insert(entry);
-    d->attributes.insert(attribute);
-}
-
 void GetMetaDataJob::addRequestedEntry(const QByteArray &entry)
 {
     Q_D(GetMetaDataJob);
@@ -200,24 +190,6 @@ void GetMetaDataJob::setDepth(Depth depth)
     default:
         d->depth = "0"; // krazy:exclude=doublequote_chars
     }
-}
-
-QByteArray GetMetaDataJob::metaData(const QString &mailBox, const QByteArray &entry, const QByteArray &attribute) const
-{
-    Q_D(const GetMetaDataJob);
-    QByteArray attr = attribute;
-
-    if (d->serverCapability == Metadata) {
-        attr = "";
-    }
-
-    QByteArray result;
-    if (d->metadata.contains(mailBox)) {
-        if (d->metadata[mailBox].contains(entry)) {
-            result = d->metadata[mailBox][entry].value(attr);
-        }
-    }
-    return result;
 }
 
 QByteArray GetMetaDataJob::metaData(const QByteArray &entry) const

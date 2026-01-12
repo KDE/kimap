@@ -102,26 +102,22 @@ void testMetaData(Session *session)
     auto setmetadata = new SetMetaDataJob(session);
     setmetadata->setMailBox(QStringLiteral("INBOX/TestFolder"));
     setmetadata->setServerCapability(SetMetaDataJob::Annotatemore);
-    setmetadata->setEntry("/comment");
-    setmetadata->addMetaData("value.priv", "My new comment");
+    setmetadata->addMetaData("/private/comment", "My new comment");
     setmetadata->exec();
 
     setmetadata = new SetMetaDataJob(session);
     setmetadata->setMailBox(QStringLiteral("INBOX/TestFolder"));
     setmetadata->setServerCapability(SetMetaDataJob::Annotatemore);
-    setmetadata->setEntry("/check");
-    setmetadata->addMetaData("value.priv", "true");
+    setmetadata->addMetaData("/private/check", "true");
     setmetadata->exec();
 
     auto getmetadata = new GetMetaDataJob(session);
     getmetadata->setMailBox(QStringLiteral("INBOX/TestFolder"));
     getmetadata->setServerCapability(SetMetaDataJob::Annotatemore);
-    getmetadata->addEntry("/*", "value.priv");
+    getmetadata->addRequestedEntry("/private/*");
     getmetadata->exec();
-    Q_ASSERT_X(getmetadata->metaData(QLatin1StringView("INBOX/TestFolder"), "/check", "value.priv") == "true", "", "/check metadata should be true");
-    Q_ASSERT_X(getmetadata->metaData(QLatin1StringView("INBOX/TestFolder"), "/comment", "value.priv") == "My new comment",
-               "",
-               "/check metadata should be My new comment");
+    Q_ASSERT_X(getmetadata->metaData("/private/check") == "true", "", "/check metadata should be true");
+    Q_ASSERT_X(getmetadata->metaData("/private/comment") == "My new comment", "", "/check metadata should be My new comment");
 
     // cleanup
     auto deletejob = new DeleteJob(session);
