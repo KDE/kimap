@@ -285,72 +285,14 @@ class SearchJobPrivate : public JobPrivate
 public:
     SearchJobPrivate(Session *session, const QString &name)
         : JobPrivate(session, name)
-        , logic(SearchJob::And)
-    {
-        criteriaMap[SearchJob::All] = "ALL";
-        criteriaMap[SearchJob::Answered] = "ANSWERED";
-        criteriaMap[SearchJob::BCC] = "BCC";
-        criteriaMap[SearchJob::Before] = "BEFORE";
-        criteriaMap[SearchJob::Body] = "BODY";
-        criteriaMap[SearchJob::CC] = "CC";
-        criteriaMap[SearchJob::Deleted] = "DELETED";
-        criteriaMap[SearchJob::Draft] = "DRAFT";
-        criteriaMap[SearchJob::Flagged] = "FLAGGED";
-        criteriaMap[SearchJob::From] = "FROM";
-        criteriaMap[SearchJob::Header] = "HEADER";
-        criteriaMap[SearchJob::Keyword] = "KEYWORD";
-        criteriaMap[SearchJob::Larger] = "LARGER";
-        criteriaMap[SearchJob::New] = "NEW";
-        criteriaMap[SearchJob::Old] = "OLD";
-        criteriaMap[SearchJob::On] = "ON";
-        criteriaMap[SearchJob::Recent] = "RECENT";
-        criteriaMap[SearchJob::Seen] = "SEEN";
-        criteriaMap[SearchJob::SentBefore] = "SENTBEFORE";
-        criteriaMap[SearchJob::SentOn] = "SENTON";
-        criteriaMap[SearchJob::SentSince] = "SENTSINCE";
-        criteriaMap[SearchJob::Since] = "SINCE";
-        criteriaMap[SearchJob::Smaller] = "SMALLER";
-        criteriaMap[SearchJob::Subject] = "SUBJECT";
-        criteriaMap[SearchJob::Text] = "TEXT";
-        criteriaMap[SearchJob::To] = "TO";
-        criteriaMap[SearchJob::Uid] = "UID";
-        criteriaMap[SearchJob::Unanswered] = "UNANSWERED";
-        criteriaMap[SearchJob::Undeleted] = "UNDELETED";
-        criteriaMap[SearchJob::Undraft] = "UNDRAFT";
-        criteriaMap[SearchJob::Unflagged] = "UNFLAGGED";
-        criteriaMap[SearchJob::Unkeyword] = "UNKEYWORD";
-        criteriaMap[SearchJob::Unseen] = "UNSEEN";
-
-        // don't use QDate::shortMonthName(), it returns a localized month name
-        months[1] = "Jan";
-        months[2] = "Feb";
-        months[3] = "Mar";
-        months[4] = "Apr";
-        months[5] = "May";
-        months[6] = "Jun";
-        months[7] = "Jul";
-        months[8] = "Aug";
-        months[9] = "Sep";
-        months[10] = "Oct";
-        months[11] = "Nov";
-        months[12] = "Dec";
-
-        nextContent = 0;
-        uidBased = false;
-    }
-    ~SearchJobPrivate()
     {
     }
 
     QByteArray charset;
-    QList<QByteArray> criteria;
-    QMap<SearchJob::SearchCriteria, QByteArray> criteriaMap;
-    QMap<int, QByteArray> months;
-    SearchJob::SearchLogic logic;
     QList<QByteArray> contents;
     QList<qint64> results;
-    uint nextContent;
-    bool uidBased;
+    uint nextContent = 0;
+    bool uidBased = false;
     Term term;
 };
 }
@@ -382,39 +324,11 @@ void SearchJob::doStart()
         searchKey = "CHARSET " + d->charset;
     }
 
-    if (!d->term.isNull()) {
-        const QByteArray term = d->term.serialize();
-        if (term.startsWith('(')) {
-            searchKey += term.mid(1, term.size() - 2);
-        } else {
-            searchKey += term;
-        }
+    const QByteArray term = d->term.serialize();
+    if (term.startsWith('(')) {
+        searchKey += term.mid(1, term.size() - 2);
     } else {
-        if (d->logic == SearchJob::Not) {
-            searchKey += "NOT ";
-        } else if (d->logic == SearchJob::Or && d->criteria.size() > 1) {
-            searchKey += "OR ";
-        }
-
-        if (d->logic == SearchJob::And) {
-            const int numberCriterias(d->criteria.size());
-            for (int i = 0; i < numberCriterias; i++) {
-                const QByteArray key = d->criteria.at(i);
-                if (i > 0) {
-                    searchKey += ' ';
-                }
-                searchKey += key;
-            }
-        } else {
-            const int numberCriterias(d->criteria.size());
-            for (int i = 0; i < numberCriterias; i++) {
-                const QByteArray key = d->criteria.at(i);
-                if (i > 0) {
-                    searchKey += ' ';
-                }
-                searchKey += '(' + key + ')';
-            }
-        }
+        searchKey += term;
     }
 
     QByteArray command = "SEARCH";
@@ -455,110 +369,6 @@ QByteArray SearchJob::charset() const
 {
     Q_D(const SearchJob);
     return d->charset;
-}
-
-void SearchJob::setSearchLogic(SearchLogic logic)
-{
-    Q_D(SearchJob);
-    d->logic = logic;
-}
-
-void SearchJob::addSearchCriteria(SearchCriteria criteria)
-{
-    Q_D(SearchJob);
-
-    switch (criteria) {
-    case All:
-    case Answered:
-    case Deleted:
-    case Draft:
-    case Flagged:
-    case New:
-    case Old:
-    case Recent:
-    case Seen:
-    case Unanswered:
-    case Undeleted:
-    case Undraft:
-    case Unflagged:
-    case Unseen:
-        d->criteria.append(d->criteriaMap[criteria]);
-        break;
-    default:
-        // TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
-        qCDebug(KIMAP_LOG) << "Criteria" << d->criteriaMap[criteria] << "needs an argument, but none was specified.";
-        break;
-    }
-}
-
-void SearchJob::addSearchCriteria(SearchCriteria criteria, int argument)
-{
-    Q_D(SearchJob);
-    switch (criteria) {
-    case Larger:
-    case Smaller:
-        d->criteria.append(d->criteriaMap[criteria] + ' ' + QByteArray::number(argument));
-        break;
-    default:
-        // TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
-        qCDebug(KIMAP_LOG) << "Criteria" << d->criteriaMap[criteria] << "doesn't accept an integer as an argument.";
-        break;
-    }
-}
-
-void SearchJob::addSearchCriteria(SearchCriteria criteria, const QByteArray &argument)
-{
-    Q_D(SearchJob);
-    switch (criteria) {
-    case BCC:
-    case Body:
-    case CC:
-    case From:
-    case Subject:
-    case Text:
-    case To:
-        d->contents.append(argument);
-        d->criteria.append(d->criteriaMap[criteria] + " {" + QByteArray::number(argument.size()) + '}');
-        break;
-    case Keyword:
-    case Unkeyword:
-    case Header:
-    case Uid:
-        d->criteria.append(d->criteriaMap[criteria] + ' ' + argument);
-        break;
-    default:
-        // TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
-        qCDebug(KIMAP_LOG) << "Criteria" << d->criteriaMap[criteria] << "doesn't accept any argument.";
-        break;
-    }
-}
-
-void SearchJob::addSearchCriteria(SearchCriteria criteria, const QDate &argument)
-{
-    Q_D(SearchJob);
-    switch (criteria) {
-    case Before:
-    case On:
-    case SentBefore:
-    case SentSince:
-    case Since: {
-        QByteArray date = QByteArray::number(argument.day()) + '-';
-        date += d->months[argument.month()] + '-';
-        date += QByteArray::number(argument.year());
-        d->criteria.append(d->criteriaMap[criteria] + " \"" + date + '\"');
-        break;
-    }
-    default:
-        // TODO Discuss if we keep error checking here, or accept anything, even if it is wrong
-        qCDebug(KIMAP_LOG) << "Criteria" << d->criteriaMap[criteria] << "doesn't accept a date as argument.";
-        break;
-    }
-}
-
-void SearchJob::addSearchCriteria(const QByteArray &searchCriteria)
-{
-    Q_D(SearchJob);
-    d->criteria.append(searchCriteria);
 }
 
 void SearchJob::setUidBased(bool uidBased)
