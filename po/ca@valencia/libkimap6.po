@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-01-13 08:42+0000\n"
 "PO-Revision-Date: 2022-01-28 09:30+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -72,7 +72,7 @@ msgstr "Habilita"
 msgid "Expunge"
 msgstr "Expurga"
 
-#: fetchjob.cpp:97
+#: fetchjob.cpp:71
 #, kde-format
 msgid "Fetch"
 msgstr "Recupera"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-01-13 08:42+0000\n"
 "PO-Revision-Date: 2022-01-29 00:26+0100\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -69,7 +69,7 @@ msgstr "Abilita"
 msgid "Expunge"
 msgstr "Expunge"
 
-#: fetchjob.cpp:97
+#: fetchjob.cpp:71
 #, kde-format
 msgid "Fetch"
 msgstr "Fetch"

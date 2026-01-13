@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:52+0000\n"
+"POT-Creation-Date: 2026-01-13 08:42+0000\n"
 "PO-Revision-Date: 2024-01-27 16:20+0200\n"
 "Last-Translator: Māris Nartišs <maris.kde@gmail.com>\n"
 "Language-Team: \n"
@@ -71,7 +71,7 @@ msgstr "Ieslēgt"
 msgid "Expunge"
 msgstr "Izmest"
 
-#: fetchjob.cpp:97
+#: fetchjob.cpp:71
 #, kde-format
 msgid "Fetch"
 msgstr "Ielādēt"
