@@ -69,11 +69,6 @@ void Session::setUiProxy(const SessionUiProxy::Ptr &proxy)
     d->uiProxy = proxy;
 }
 
-void Session::setUiProxy(SessionUiProxy *proxy)
-{
-    setUiProxy(SessionUiProxy::Ptr(proxy));
-}
-
 QString Session::hostName() const
 {
     return d->thread->hostName();

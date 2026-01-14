@@ -81,11 +81,13 @@ void listFolders(Session *session, bool includeUnsubscribed = false, const QStri
 {
     auto list = new ListJob(session);
     list->setOption(includeUnsubscribed ? KIMAP::ListJob::IncludeUnsubscribed : KIMAP::ListJob::NoOption);
+    QList<MailBoxDescriptor> mailboxes;
+    QObject::connect(list, &ListJob::mailBoxesReceived, [&](const auto &mbs, [[maybe_unused]] const auto &flags) {
+        mailboxes = mbs;
+    });
     list->exec();
     Q_ASSERT_X(list->error() == 0, "ListJob", list->errorString().toLocal8Bit().constData());
-    int count = list->mailBoxes().size();
-    for (int i = 0; i < count; ++i) {
-        MailBoxDescriptor descriptor = list->mailBoxes()[i];
+    for (const auto &descriptor : std::as_const(mailboxes)) {
         if (descriptor.name.endsWith(nameFilter)) {
             qDebug() << descriptor.separator << descriptor.name;
         }

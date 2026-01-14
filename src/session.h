@@ -60,13 +60,6 @@ public:
     void setUiProxy(const SessionUiProxy::Ptr &proxy);
 
     /*!
-     * Sets an ui proxy that displays the error messages and waits for user feedback.
-     * \a proxy the ui proxy object
-     * \deprecated Use the shared pointer version instead
-     */
-    KIMAP_DEPRECATED void setUiProxy(SessionUiProxy *proxy);
-
-    /*!
      * Set the session timeout. The default is 30 seconds.
      * \a timeout The socket timeout in seconds, negative values disable the timeout.
      * \since 4.6

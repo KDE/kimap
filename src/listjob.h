@@ -55,17 +55,11 @@ public:
     explicit ListJob(Session *session);
     ~ListJob() override;
 
-    KIMAP_DEPRECATED void setIncludeUnsubscribed(bool include);
-    KIMAP_DEPRECATED bool isIncludeUnsubscribed() const;
-
     void setOption(Option option);
     [[nodiscard]] Option option() const;
 
     void setQueriedNamespaces(const QList<MailBoxDescriptor> &namespaces);
     [[nodiscard]] QList<MailBoxDescriptor> queriedNamespaces() const;
-
-    KIMAP_DEPRECATED QList<MailBoxDescriptor> mailBoxes() const;
-    KIMAP_DEPRECATED QMap<MailBoxDescriptor, QList<QByteArray>> flags() const;
 
 Q_SIGNALS:
     void mailBoxesReceived(const QList<KIMAP::MailBoxDescriptor> &descriptors, const QList<QList<QByteArray>> &flags);
