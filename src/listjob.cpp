@@ -68,22 +68,6 @@ ListJob::~ListJob()
 {
 }
 
-void ListJob::setIncludeUnsubscribed(bool include)
-{
-    Q_D(ListJob);
-    if (include) {
-        d->option = ListJob::IncludeUnsubscribed;
-    } else {
-        d->option = ListJob::NoOption;
-    }
-}
-
-bool ListJob::isIncludeUnsubscribed() const
-{
-    Q_D(const ListJob);
-    return (d->option == ListJob::IncludeUnsubscribed);
-}
-
 void ListJob::setOption(Option option)
 {
     Q_D(ListJob);
@@ -106,16 +90,6 @@ QList<MailBoxDescriptor> ListJob::queriedNamespaces() const
 {
     Q_D(const ListJob);
     return d->namespaces;
-}
-
-QList<MailBoxDescriptor> ListJob::mailBoxes() const
-{
-    return QList<MailBoxDescriptor>();
-}
-
-QMap<MailBoxDescriptor, QList<QByteArray>> ListJob::flags() const
-{
-    return QMap<MailBoxDescriptor, QList<QByteArray>>();
 }
 
 void ListJob::doStart()
