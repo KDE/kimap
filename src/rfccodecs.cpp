@@ -146,7 +146,7 @@ QString KIMAP::decodeImapFolderName(const QString &inSrc)
 
 //-----------------------------------------------------------------------------
 
-QByteArray KIMAP::quoteIMAP(const QByteArray &src)
+QByteArray KIMAP::quoteIMAP(QByteArrayView src)
 {
     const auto len = src.length();
     QByteArray result;
@@ -161,7 +161,7 @@ QByteArray KIMAP::quoteIMAP(const QByteArray &src)
     return result;
 }
 
-QString KIMAP::quoteIMAP(const QString &src)
+QString KIMAP::quoteIMAP(QStringView src)
 {
     const auto len = src.length();
     QString result;

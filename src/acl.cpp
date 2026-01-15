@@ -52,7 +52,7 @@ Q_GLOBAL_STATIC(RightsMap, globalRights)
 }
 }
 
-KIMAP::Acl::Rights KIMAP::Acl::rightsFromString(const QByteArray &string)
+KIMAP::Acl::Rights KIMAP::Acl::rightsFromString(QByteArrayView string)
 {
     Rights result;
 
