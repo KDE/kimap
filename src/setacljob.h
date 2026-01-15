@@ -91,7 +91,7 @@ public:
     /*!
      * The identifier that rights will be associated with
      */
-    [[nodiscard]] QByteArray identifier();
+    [[nodiscard]] QByteArray identifier() const;
 
 protected:
     void doStart() override;

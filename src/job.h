@@ -34,7 +34,7 @@ class KIMAP_EXPORT Job : public KJob
 public:
     ~Job() override;
 
-    Session *session() const;
+    [[nodiscard]] Session *session() const;
 
     void start() override;
 

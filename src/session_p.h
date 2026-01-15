@@ -46,10 +46,10 @@ public:
     void startSsl(QSsl::SslProtocol protocol);
     void sendData(const QByteArray &data);
 
-    QSsl::SslProtocol negotiatedEncryption() const;
+    [[nodiscard]] QSsl::SslProtocol negotiatedEncryption() const;
 
     void setSocketTimeout(int ms);
-    int socketTimeout() const;
+    [[nodiscard]] int socketTimeout() const;
 
 Q_SIGNALS:
     void encryptionNegotiationResult(bool);
@@ -78,7 +78,7 @@ private:
     void startSocketTimer();
     void stopSocketTimer();
     void restartSocketTimer();
-    bool isConnected() const;
+    [[nodiscard]] bool isConnected() const;
 
     Session *const q;
 

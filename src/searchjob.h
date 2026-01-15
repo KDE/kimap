@@ -119,17 +119,17 @@ public:
     ~SearchJob() override;
 
     void setUidBased(bool uidBased);
-    bool isUidBased() const;
+    [[nodiscard]] bool isUidBased() const;
 
     void setCharset(const QByteArray &charSet);
-    QByteArray charset() const;
+    [[nodiscard]] QByteArray charset() const;
 
     /*!
      * Get the search result, as a list of sequence numbers or UIDs, based on the isUidBased status
      * Returns the found items
      * \since 4.6
      */
-    QList<qint64> results() const;
+    [[nodiscard]] QList<qint64> results() const;
 
     /*!
      * Sets the search term.

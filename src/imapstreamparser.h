@@ -137,7 +137,7 @@ public:
      * Check if the literal data end was reached. See \ hasLiteral and \ readLiteralPart .
      * Returns true if the literal was completely read.
      */
-    bool atLiteralEnd() const;
+    [[nodiscard]] bool atLiteralEnd() const;
 
     /*!
      * Check if the next data is a parenthesized list. This call might block.

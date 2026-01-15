@@ -34,7 +34,7 @@ public:
     /**
      * The command that will be sent.
      */
-    QByteArray command() const;
+    [[nodiscard]] QByteArray command() const;
     /**
      * Sets the timeout before the job completes.
      */
@@ -42,7 +42,7 @@ public:
     /**
      * The timeout used by the job.
      */
-    int timeout() const;
+    [[nodiscard]] int timeout() const;
     /**
      * Whether the command is empty.
      *
@@ -50,7 +50,7 @@ public:
      *
      * @return @c true if no command is set, @c false otherwise
      */
-    bool isNull() const;
+    [[nodiscard]] bool isNull() const;
 
     /**
      * Starts the job.

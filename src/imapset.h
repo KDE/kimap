@@ -77,29 +77,29 @@ public:
       Returns the size of this interval.
       Size is only defined for finite intervals.
     */
-    Id size() const;
+    [[nodiscard]] Id size() const;
 
     /*!
       Returns true if this interval has a defined begin.
     */
-    bool hasDefinedBegin() const;
+    [[nodiscard]] bool hasDefinedBegin() const;
 
     /*!
       Returns the begin of this interval. The value is the smallest value part of the interval.
       Only valid if begin is defined.
     */
-    Id begin() const;
+    [[nodiscard]] Id begin() const;
 
     /*!
       Returns true if this intercal has been defined.
     */
-    bool hasDefinedEnd() const;
+    [[nodiscard]] bool hasDefinedEnd() const;
 
     /*!
       Returns the end of this interval. This value is the largest value part of the interval.
       Only valid if hasDefinedEnd() returned true.
     */
-    Id end() const;
+    [[nodiscard]] Id end() const;
 
     /*!
       Sets the begin of the interval.
