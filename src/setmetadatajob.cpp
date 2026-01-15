@@ -80,7 +80,7 @@ void SetMetaDataJob::doStart()
     } else {
         if (!d->entries.isEmpty()) {
             parameters += '\"' + d->entriesIt.key() + "\"";
-            int size = d->entriesIt.value().size();
+            const auto size = d->entriesIt.value().size();
             parameters += " {" + QByteArray::number(size == 0 ? 3 : size) + '}';
         }
     }
@@ -136,7 +136,7 @@ void SetMetaDataJob::handleResponse(const Response &response)
             content += ')';
         } else {
             content += " \"" + d->entriesIt.key() + '\"';
-            int size = d->entriesIt.value().size();
+            const auto size = d->entriesIt.value().size();
             content += " {" + QByteArray::number(size == 0 ? 3 : size) + '}';
         }
         //      qCDebug(KIMAP_LOG) << "SENT:" << content;

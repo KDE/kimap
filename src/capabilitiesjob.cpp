@@ -51,7 +51,7 @@ void CapabilitiesJob::handleResponse(const Response &response)
 {
     Q_D(CapabilitiesJob);
     if (handleErrorReplies(response) == NotHandled) {
-        const int responseSize(response.content.size());
+        const auto responseSize(response.content.size());
         if (responseSize >= 2 && response.content[1].toString() == "CAPABILITY") {
             for (int i = 2; i < responseSize; ++i) {
                 d->capabilities << QLatin1StringView(response.content[i].toString().toUpper());

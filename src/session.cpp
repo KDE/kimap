@@ -99,7 +99,7 @@ QByteArray Session::serverGreeting() const
     return d->greeting;
 }
 
-int Session::jobQueueSize() const
+qsizetype Session::jobQueueSize() const
 {
     return d->queue.size() + (d->jobRunning ? 1 : 0);
 }

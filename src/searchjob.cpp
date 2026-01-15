@@ -356,7 +356,7 @@ void SearchJob::doStart()
         }
 
         if (d->logic == SearchJob::And) {
-            const int numberCriterias(d->criteria.size());
+            const auto numberCriterias(d->criteria.size());
             for (int i = 0; i < numberCriterias; i++) {
                 const QByteArray key = d->criteria.at(i);
                 if (i > 0) {
@@ -365,7 +365,7 @@ void SearchJob::doStart()
                 searchKey += key;
             }
         } else {
-            const int numberCriterias(d->criteria.size());
+            const auto numberCriterias(d->criteria.size());
             for (int i = 0; i < numberCriterias; i++) {
                 const QByteArray key = d->criteria.at(i);
                 if (i > 0) {
