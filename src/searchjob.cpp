@@ -138,10 +138,10 @@ Term::Term(Term::BooleanSearchKey key)
     }
 }
 
-static QByteArray monthName(int month)
+static QByteArrayView monthName(int month)
 {
-    static const char *names[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-    return (month >= 1 && month <= 12) ? QByteArray(names[month - 1]) : QByteArray();
+    static const char names[12][4] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    return (month >= 1 && month <= 12) ? QByteArrayView(names[month - 1]) : QByteArrayView();
 }
 
 Term::Term(Term::DateSearchKey key, const QDate &date)

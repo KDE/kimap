@@ -123,7 +123,7 @@ Q_DECLARE_FLAGS(Rights, Right)
  * characters.  This method will not complain if you give it
  * something that is not a list of rights.
  */
-[[nodiscard]] KIMAP_EXPORT Rights rightsFromString(const QByteArray &string);
+[[nodiscard]] KIMAP_EXPORT Rights rightsFromString(QByteArrayView string);
 }
 }
 

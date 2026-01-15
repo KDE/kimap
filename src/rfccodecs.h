@@ -76,7 +76,7 @@ namespace KIMAP
   Replaces " with \" and \ with \\ " and \ characters.
   \a src is the QString to quote.
 */
-[[nodiscard]] KIMAP_EXPORT QString quoteIMAP(const QString &src);
+[[nodiscard]] KIMAP_EXPORT QString quoteIMAP(QStringView src);
 
 /*!
   \fn KIMAP::quoteIMAP(const QByteArray &src)
@@ -87,5 +87,5 @@ namespace KIMAP
   \a src is the QString to quote.
   \since 4.3
 */
-[[nodiscard]] KIMAP_EXPORT QByteArray quoteIMAP(const QByteArray &src);
+[[nodiscard]] KIMAP_EXPORT QByteArray quoteIMAP(QByteArrayView src);
 }
