@@ -196,7 +196,7 @@ public:
     };
 
     explicit FetchJob(Session *session);
-    ~FetchJob() override = default;
+    ~FetchJob() override;
 
     /*!
      * Set which messages to fetch data for.

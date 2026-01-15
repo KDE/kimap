@@ -21,9 +21,6 @@ public:
         : QuotaJobBasePrivate(session, name)
     {
     }
-    ~GetQuotaJobPrivate()
-    {
-    }
 
     QByteArray root;
 };
@@ -36,9 +33,7 @@ GetQuotaJob::GetQuotaJob(Session *session)
 {
 }
 
-GetQuotaJob::~GetQuotaJob()
-{
-}
+GetQuotaJob::~GetQuotaJob() = default;
 
 void GetQuotaJob::doStart()
 {

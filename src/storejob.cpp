@@ -20,10 +20,6 @@ class StoreJobPrivate : public JobPrivate
 public:
     StoreJobPrivate(Session *session, const QString &name)
         : JobPrivate(session, name)
-        , uidBased(false)
-    {
-    }
-    ~StoreJobPrivate()
     {
     }
 
@@ -55,8 +51,8 @@ public:
     }
 
     ImapSet set;
-    bool uidBased;
-    StoreJob::StoreMode mode;
+    bool uidBased = false;
+    StoreJob::StoreMode mode = StoreJob::SetFlags;
     MessageFlags flags;
     MessageFlags gmLabels;
 
@@ -70,13 +66,9 @@ StoreJob::StoreJob(Session *session)
     : Job(*new StoreJobPrivate(session, i18n("Store")))
 {
     Q_D(StoreJob);
-    d->uidBased = false;
-    d->mode = SetFlags;
 }
 
-StoreJob::~StoreJob()
-{
-}
+StoreJob::~StoreJob() = default;
 
 void StoreJob::setSequenceSet(const ImapSet &set)
 {

@@ -50,7 +50,7 @@ class KIMAP_EXPORT CloseJob : public Job
 
 public:
     explicit CloseJob(Session *session);
-    ~CloseJob() override = default;
+    ~CloseJob() override;
 
     /*!
      * Returns new modification sequence number after expunging messages.

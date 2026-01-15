@@ -24,9 +24,6 @@ public:
         , depth("0")
     {
     }
-    ~GetMetaDataJobPrivate()
-    {
-    }
 
     qint64 maxSize = -1;
     QByteArray depth;
@@ -44,9 +41,7 @@ GetMetaDataJob::GetMetaDataJob(Session *session)
 {
 }
 
-GetMetaDataJob::~GetMetaDataJob()
-{
-}
+GetMetaDataJob::~GetMetaDataJob() = default;
 
 static QList<QByteArray> sort(const QSet<QByteArray> &set)
 {

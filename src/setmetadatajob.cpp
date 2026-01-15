@@ -25,9 +25,6 @@ public:
         , maxAcceptedSize(-1)
     {
     }
-    ~SetMetaDataJobPrivate()
-    {
-    }
 
     QMap<QByteArray, QByteArray> entries;
     QMap<QByteArray, QByteArray>::ConstIterator entriesIt;
@@ -44,9 +41,7 @@ SetMetaDataJob::SetMetaDataJob(Session *session)
 {
 }
 
-SetMetaDataJob::~SetMetaDataJob()
-{
-}
+SetMetaDataJob::~SetMetaDataJob() = default;
 
 void SetMetaDataJob::doStart()
 {

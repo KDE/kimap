@@ -21,9 +21,6 @@ public:
         : JobPrivate(session, name)
     {
     }
-    ~CapabilitiesJobPrivate()
-    {
-    }
 
     QStringList capabilities;
 };
@@ -36,9 +33,7 @@ CapabilitiesJob::CapabilitiesJob(Session *session)
 {
 }
 
-CapabilitiesJob::~CapabilitiesJob()
-{
-}
+CapabilitiesJob::~CapabilitiesJob() = default;
 
 QStringList CapabilitiesJob::capabilities() const
 {

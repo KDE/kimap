@@ -74,9 +74,7 @@ SelectJob::SelectJob(Session *session)
 {
 }
 
-SelectJob::~SelectJob()
-{
-}
+SelectJob::~SelectJob() = default;
 
 void SelectJob::setMailBox(const QString &mailBox)
 {

@@ -122,15 +122,6 @@ void SessionPrivate::handleSslError(const KSslErrorUiData &errorData)
 SessionPrivate::SessionPrivate(Session *session)
     : QObject(session)
     , q(session)
-    , isSocketConnected(false)
-    , state(Session::Disconnected)
-    , logger(nullptr)
-    , thread(nullptr)
-    , jobRunning(false)
-    , currentJob(nullptr)
-    , tagCount(0)
-    , sslVersion(QSsl::UnknownProtocol)
-    , socketTimerInterval(30000) // By default timeouts on 30s
 {
 }
 

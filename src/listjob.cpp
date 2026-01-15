@@ -22,10 +22,6 @@ public:
     ListJobPrivate(ListJob *job, Session *session, const QString &name)
         : JobPrivate(session, name)
         , q(job)
-        , option(ListJob::NoOption)
-    {
-    }
-    ~ListJobPrivate()
     {
     }
 
@@ -43,7 +39,7 @@ public:
 
     ListJob *const q;
 
-    ListJob::Option option;
+    ListJob::Option option = ListJob::NoOption;
     QList<MailBoxDescriptor> namespaces;
     QByteArray command;
 
@@ -64,9 +60,7 @@ ListJob::ListJob(Session *session)
     });
 }
 
-ListJob::~ListJob()
-{
-}
+ListJob::~ListJob() = default;
 
 void ListJob::setOption(Option option)
 {
