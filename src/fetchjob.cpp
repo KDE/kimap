@@ -26,10 +26,10 @@ public:
     }
 
     void parseBodyStructure(const QByteArray &structure, int &pos, KMime::Content *content);
-    void parsePart(const QByteArray &structure, int &pos, KMime::Content *content);
-    QByteArray parseString(const QByteArray &structure, int &pos);
-    QByteArray parseSentence(const QByteArray &structure, int &pos);
-    void skipLeadingSpaces(const QByteArray &structure, int &pos);
+    static void parsePart(const QByteArray &structure, int &pos, KMime::Content *content);
+    static QByteArray parseString(const QByteArray &structure, int &pos);
+    static QByteArray parseSentence(const QByteArray &structure, int &pos);
+    static void skipLeadingSpaces(const QByteArray &structure, int &pos);
 
     void emitPendings()
     {

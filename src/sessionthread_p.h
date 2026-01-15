@@ -28,11 +28,11 @@ public:
     explicit SessionThread(const QString &hostName, quint16 port);
     ~SessionThread() override;
 
-    inline QString hostName()
+    [[nodiscard]] QString hostName() const
     {
         return m_hostName;
     }
-    inline quint16 port()
+    [[nodiscard]] quint16 port() const
     {
         return m_port;
     }

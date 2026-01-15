@@ -32,15 +32,15 @@ struct Response {
         {
         }
 
-        inline Type type() const
+        [[nodiscard]] Type type() const
         {
             return m_type;
         }
-        inline QByteArray toString() const
+        [[nodiscard]] QByteArray toString() const
         {
             return m_string;
         }
-        inline QList<QByteArray> toList() const
+        [[nodiscard]] QList<QByteArray> toList() const
         {
             return m_list;
         }
@@ -51,7 +51,7 @@ struct Response {
         QList<QByteArray> m_list;
     };
 
-    inline QByteArray toString() const
+    [[nodiscard]] QByteArray toString() const
     {
         QByteArray result;
 

@@ -58,9 +58,9 @@ void SetAclJob::setIdentifier(const QByteArray &identifier)
     d->setIdentifier(identifier);
 }
 
-QByteArray SetAclJob::identifier()
+QByteArray SetAclJob::identifier() const
 {
-    Q_D(SetAclJob);
+    Q_D(const SetAclJob);
     return d->identifier();
 }
 

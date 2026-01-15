@@ -187,7 +187,7 @@ public:
      *
      * Returns a map from metadata entry names to values
      */
-    QMap<QByteArray, QByteArray> allMetaDataForMailbox(const QString &mailbox) const;
+    [[nodiscard]] QMap<QByteArray, QByteArray> allMetaDataForMailbox(const QString &mailbox) const;
 
     /*!
      * Get all the metadata for for all mailboxes.
