@@ -23,7 +23,7 @@ public:
     {
     }
 
-    QByteArray addFlags(const QByteArray &param, const MessageFlags &flags)
+    [[nodiscard]] QByteArray addFlags(const QByteArray &param, const MessageFlags &flags) const
     {
         QByteArray parameters;
         switch (mode) {

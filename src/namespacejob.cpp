@@ -26,7 +26,7 @@ public:
     {
     }
 
-    QList<MailBoxDescriptor> processNamespaceList(const QList<QByteArray> &namespaceList)
+    static QList<MailBoxDescriptor> processNamespaceList(const QList<QByteArray> &namespaceList)
     {
         QList<MailBoxDescriptor> result;
 
