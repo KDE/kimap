@@ -56,7 +56,7 @@ Q_SIGNALS:
     void encryptionNegotiationResult(bool);
 
 private Q_SLOTS:
-    void onEncryptionNegotiationResult(bool isEncrypted, QSsl::SslProtocol sslVersion);
+    void onEncryptionNegotiationResult(bool isEncrypted, QSsl::SslProtocol protocol);
     void onSocketTimeout();
 
     void doStartNext();
