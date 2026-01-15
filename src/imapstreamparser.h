@@ -22,29 +22,29 @@ namespace KIMAP
 class ImapParserException : public std::exception
 {
 public:
-    explicit ImapParserException(const char *what) throw()
+    explicit ImapParserException(const char *what) noexcept
         : mWhat(what)
     {
     }
-    explicit ImapParserException(const QByteArray &what) throw()
+    explicit ImapParserException(const QByteArray &what) noexcept
         : mWhat(what)
     {
     }
-    explicit ImapParserException(const QString &what) throw()
+    explicit ImapParserException(const QString &what) noexcept
         : mWhat(what.toUtf8())
     {
     }
-    ImapParserException(const ImapParserException &other) throw()
+    ImapParserException(const ImapParserException &other) noexcept
         : std::exception(other)
         , mWhat(other.what())
     {
     }
     ~ImapParserException() noexcept override = default;
-    const char *what() const throw() override
+    [[nodiscard]] const char *what() const noexcept override
     {
         return mWhat.constData();
     }
-    virtual const char *type() const throw()
+    [[nodiscard]] virtual const char *type() const noexcept
     {
         return "ImapParserException";
     }
