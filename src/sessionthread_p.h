@@ -44,7 +44,7 @@ public:
 public Q_SLOTS:
     void closeSocket();
     void startSsl(QSsl::SslProtocol protocol);
-    void sslErrorHandlerResponse(bool result);
+    void sslErrorHandlerResponse(bool response);
 
 Q_SIGNALS:
     void socketConnected();
@@ -66,7 +66,7 @@ private Q_SLOTS:
     void slotSocketError(QAbstractSocket::SocketError);
     void slotSocketDisconnected();
     void doStartSsl(QSsl::SslProtocol);
-    void doSslErrorHandlerResponse(bool result);
+    void doSslErrorHandlerResponse(bool response);
     void setUseProxyInternal(bool useProxy);
 
 private:

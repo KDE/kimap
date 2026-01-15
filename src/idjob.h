@@ -36,7 +36,7 @@ public:
     explicit IdJob(Session *session);
     ~IdJob() override;
 
-    void setField(const QByteArray &name, const QByteArray &field);
+    void setField(const QByteArray &name, const QByteArray &value);
 
 protected:
     void doStart() override;
