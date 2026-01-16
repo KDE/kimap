@@ -18,7 +18,7 @@
 
 namespace KIMAP
 {
-class Term::Private : public QSharedData
+class TermPrivate : public QSharedData
 {
 public:
     QByteArray command;
@@ -28,13 +28,13 @@ public:
 };
 
 Term::Term()
-    : d(new Term::Private)
+    : d(new TermPrivate)
 {
     d->isNull = true;
 }
 
 Term::Term(Term::Relation relation, const QList<Term> &subterms)
-    : d(new Term::Private)
+    : d(new TermPrivate)
 {
     if (subterms.size() >= 2) {
         if (relation == KIMAP::Term::Or) {
@@ -63,7 +63,7 @@ Term::Term(Term::Relation relation, const QList<Term> &subterms)
 }
 
 Term::Term(Term::SearchKey key, const QString &value)
-    : d(new Term::Private)
+    : d(new TermPrivate)
 {
     switch (key) {
     case All:
@@ -100,7 +100,7 @@ Term::Term(Term::SearchKey key, const QString &value)
 }
 
 Term::Term(const QString &header, const QString &value)
-    : d(new Term::Private)
+    : d(new TermPrivate)
 {
     d->command += "HEADER";
     d->command += ' ' + QByteArray(header.toUtf8().constData());
@@ -108,7 +108,7 @@ Term::Term(const QString &header, const QString &value)
 }
 
 Term::Term(Term::BooleanSearchKey key)
-    : d(new Term::Private)
+    : d(new TermPrivate)
 {
     switch (key) {
     case Answered:
@@ -145,7 +145,7 @@ static QByteArrayView monthName(int month)
 }
 
 Term::Term(Term::DateSearchKey key, const QDate &date)
-    : d(new Term::Private)
+    : d(new TermPrivate)
 {
     switch (key) {
     case Before:
@@ -175,7 +175,7 @@ Term::Term(Term::DateSearchKey key, const QDate &date)
 }
 
 Term::Term(Term::NumberSearchKey key, int value)
-    : d(new Term::Private)
+    : d(new TermPrivate)
 {
     switch (key) {
     case Larger:
@@ -189,7 +189,7 @@ Term::Term(Term::NumberSearchKey key, int value)
 }
 
 Term::Term(Term::SequenceSearchKey key, const ImapSet &set)
-    : d(new Term::Private)
+    : d(new TermPrivate)
 {
     switch (key) {
     case Uid:
