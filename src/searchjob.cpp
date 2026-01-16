@@ -95,7 +95,7 @@ Term::Term(Term::SearchKey key, const QString &value)
         break;
     }
     if (key != All) {
-        d->command += " \"" + QByteArray(value.toUtf8().constData()) + "\"";
+        d->command += " \"" + value.toUtf8() + "\"";
     }
 }
 
@@ -103,8 +103,8 @@ Term::Term(const QString &header, const QString &value)
     : d(new TermPrivate)
 {
     d->command += "HEADER";
-    d->command += ' ' + QByteArray(header.toUtf8().constData());
-    d->command += " \"" + QByteArray(value.toUtf8().constData()) + "\"";
+    d->command += ' ' + header.toUtf8();
+    d->command += " \"" + value.toUtf8() + "\"";
 }
 
 Term::Term(Term::BooleanSearchKey key)

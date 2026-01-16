@@ -281,7 +281,7 @@ void LoginJob::handleResponse(const Response &response)
         }
 
         setError(UserDefinedError);
-        setErrorText(i18n("%1 failed, server replied: %2", commandName, QLatin1StringView(response.toString().constData())));
+        setErrorText(i18n("%1 failed, server replied: %2", commandName, QLatin1StringView(response.toString())));
         emitResult();
         return;
 
