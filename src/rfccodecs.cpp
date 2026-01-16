@@ -141,7 +141,7 @@ QByteArray KIMAP::decodeImapFolderName(const QByteArray &inSrc)
 
 QString KIMAP::decodeImapFolderName(const QString &inSrc)
 {
-    return QString::fromUtf8(decodeImapFolderName(inSrc.toUtf8()).constData());
+    return QString::fromUtf8(decodeImapFolderName(inSrc.toUtf8()));
 }
 
 //-----------------------------------------------------------------------------
@@ -179,7 +179,7 @@ QString KIMAP::quoteIMAP(QStringView src)
 //-----------------------------------------------------------------------------
 QString KIMAP::encodeImapFolderName(const QString &inSrc)
 {
-    return QString::fromUtf8(encodeImapFolderName(inSrc.toUtf8()).constData());
+    return QString::fromUtf8(encodeImapFolderName(inSrc.toUtf8()));
 }
 
 QByteArray KIMAP::encodeImapFolderName(const QByteArray &inSrc)
