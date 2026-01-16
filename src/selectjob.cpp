@@ -53,7 +53,7 @@ public:
     QList<QByteArray> permanentFlags;
     int messageCount = -1;
     int recentCount = -1;
-    int firstUnseenIndex = -1;
+    qint64 firstUnseenIndex = -1;
     qint64 uidValidity = -1;
     qint64 nextUid = -1;
     quint64 highestmodseq = 0;
@@ -124,7 +124,7 @@ int SelectJob::recentCount() const
     return d->recentCount;
 }
 
-int SelectJob::firstUnseenIndex() const
+qint64 SelectJob::firstUnseenIndex() const
 {
     Q_D(const SelectJob);
     return d->firstUnseenIndex;
