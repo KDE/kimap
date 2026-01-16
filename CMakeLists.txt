@@ -85,12 +85,9 @@ file(
     GLOB_RECURSE ALL_SOURCE_FILES
     src/*.cpp
     src/*.h
-    tests/*.cpp
-    tests/*.h
-    autotests/*.cpp
-    autotests/*.h
 )
-ecm_check_outbound_license(LICENSES GPL-2.0-only  FILES ${ALL_SOURCE_FILES})
+ecm_check_outbound_license(LICENSES LGPL-2.0-only FILES ${ALL_SOURCE_FILES})
+ecm_check_outbound_license(LICENSES LGPL-3.0-only FILES ${ALL_SOURCE_FILES})
 
 set(KIMAP_LIB_VERSION ${PIM_VERSION})
 set(KMIME_LIBS_VERSION "6.6.40")
