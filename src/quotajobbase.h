@@ -80,7 +80,7 @@ public:
     [[nodiscard]] qint64 limit(const QByteArray &resource);
 
 protected:
-    QuotaJobBase(JobPrivate &dd);
+    KIMAP_NO_EXPORT explicit QuotaJobBase(JobPrivate &dd);
 };
 
 }

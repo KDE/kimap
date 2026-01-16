@@ -62,7 +62,7 @@ public:
     [[nodiscard]] QString mailBox() const;
 
 protected:
-    explicit AclJobBase(JobPrivate &dd);
+    KIMAP_NO_EXPORT explicit AclJobBase(JobPrivate &dd);
 };
 
 }

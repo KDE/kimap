@@ -22,6 +22,7 @@ class ImapSet;
 class Session;
 struct Response;
 class SearchJobPrivate;
+class TermPrivate;
 
 /*!
  * \class KIMAP::Term
@@ -103,8 +104,7 @@ public:
     [[nodiscard]] QByteArray serialize() const;
 
 private:
-    class Private;
-    QSharedDataPointer<Private> d;
+    QSharedDataPointer<TermPrivate> d;
 };
 
 class KIMAP_EXPORT SearchJob : public Job

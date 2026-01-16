@@ -31,7 +31,7 @@ class SessionThread;
  *
  * \internal
  */
-class KIMAP_EXPORT SessionPrivate : public QObject
+class SessionPrivate : public QObject
 {
     Q_OBJECT
 
@@ -42,7 +42,8 @@ public:
     ~SessionPrivate() override;
 
     void addJob(Job *job);
-    QByteArray sendCommand(const QByteArray &command, const QByteArray &args = QByteArray());
+    // exported for MockJob
+    KIMAP_EXPORT QByteArray sendCommand(const QByteArray &command, const QByteArray &args = QByteArray());
     void startSsl(QSsl::SslProtocol protocol);
     void sendData(const QByteArray &data);
 

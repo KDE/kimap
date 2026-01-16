@@ -107,7 +107,7 @@ public:
     [[nodiscard]] ServerCapability serverCapability() const;
 
 protected:
-    MetaDataJobBase(JobPrivate &dd);
+    KIMAP_NO_EXPORT explicit MetaDataJobBase(JobPrivate &dd);
 };
 
 }

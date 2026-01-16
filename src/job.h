@@ -51,7 +51,8 @@ protected:
 
     HandlerResponse handleErrorReplies(const Response &response);
 
-    explicit Job(Session *session);
+    KIMAP_NO_EXPORT explicit Job(Session *session);
+    // exported for MockJob
     explicit Job(JobPrivate &dd);
 
     JobPrivate *const d_ptr;
