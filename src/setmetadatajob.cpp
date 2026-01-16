@@ -101,7 +101,7 @@ void SetMetaDataJob::handleResponse(const Response &response)
     if (!response.content.isEmpty() && d->tags.contains(response.content.first().toString())) {
         if (response.content[1].toString() == "NO") {
             setError(UserDefinedError);
-            setErrorText(i18n("%1 failed, server replied: %2", d->m_name, QLatin1StringView(response.toString().constData())));
+            setErrorText(i18n("%1 failed, server replied: %2", d->m_name, QLatin1StringView(response.toString())));
             const QByteArray responseBa = response.content[2].toString();
             if (responseBa == "[ANNOTATEMORE TOOMANY]" || responseBa == "[METADATA TOOMANY]") {
                 d->metaDataErrors |= TooMany;
@@ -121,7 +121,7 @@ void SetMetaDataJob::handleResponse(const Response &response)
             setErrorText(i18n("%1 failed, malformed reply from the server.", d->m_name));
         } else if (response.content[1].toString() != "OK") {
             setError(UserDefinedError);
-            setErrorText(i18n("%1 failed, server replied: %2", d->m_name, QLatin1StringView(response.toString().constData())));
+            setErrorText(i18n("%1 failed, server replied: %2", d->m_name, QLatin1StringView(response.toString())));
         }
         emitResult();
     } else if (d->serverCapability == Metadata && response.content[0].toString() == "+") {
