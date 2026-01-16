@@ -56,7 +56,7 @@ public:
     MessageFlags flags;
     MessageFlags gmLabels;
 
-    QMap<int, MessageFlags> resultingFlags;
+    QMap<qint64, MessageFlags> resultingFlags;
 };
 }
 
@@ -130,7 +130,7 @@ StoreJob::StoreMode StoreJob::mode() const
     return d->mode;
 }
 
-QMap<int, MessageFlags> StoreJob::resultingFlags() const
+QMap<qint64, MessageFlags> StoreJob::resultingFlags() const
 {
     Q_D(const StoreJob);
     return d->resultingFlags;

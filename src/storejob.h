@@ -55,7 +55,7 @@ public:
     void setMode(StoreMode mode);
     [[nodiscard]] StoreMode mode() const;
 
-    [[nodiscard]] QMap<int, MessageFlags> resultingFlags() const;
+    [[nodiscard]] QMap<qint64, MessageFlags> resultingFlags() const;
 
 protected:
     void doStart() override;

@@ -49,7 +49,7 @@ public:
 
     [[nodiscard]] int messageCount() const;
     [[nodiscard]] int recentCount() const;
-    [[nodiscard]] int firstUnseenIndex() const;
+    [[nodiscard]] qint64 firstUnseenIndex() const;
 
     [[nodiscard]] qint64 uidValidity() const;
     [[nodiscard]] qint64 nextUid() const;
