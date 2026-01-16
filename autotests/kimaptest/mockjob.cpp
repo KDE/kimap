@@ -37,7 +37,7 @@ void MockJob::doStart()
 {
     Q_D(MockJob);
     if (isNull()) {
-        QTimer::singleShot(d->timeout, this, SLOT(done()));
+        QTimer::singleShot(d->timeout, this, &MockJob::done);
     } else {
         d->m_session->setTimeout(d->timeout);
         d->tags << d->sessionInternal()->sendCommand(d->command);
