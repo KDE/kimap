@@ -86,7 +86,7 @@ private:
     bool isSocketConnected = false;
     Session::State state = Session::Disconnected;
 
-    SessionLogger *logger = nullptr;
+    std::unique_ptr<SessionLogger> logger;
     SessionThread *thread = nullptr;
     SessionUiProxy::Ptr uiProxy;
 

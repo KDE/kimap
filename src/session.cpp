@@ -34,7 +34,7 @@ Session::Session(const QString &hostName, quint16 port, QObject *parent)
     , d(new SessionPrivate(this))
 {
     if (!qEnvironmentVariableIsEmpty("KIMAP_LOGFILE")) {
-        d->logger = new SessionLogger;
+        d->logger = std::make_unique<SessionLogger>();
     }
 
     d->isSocketConnected = false;
@@ -125,10 +125,7 @@ SessionPrivate::SessionPrivate(Session *session)
 {
 }
 
-SessionPrivate::~SessionPrivate()
-{
-    delete logger;
-}
+SessionPrivate::~SessionPrivate() = default;
 
 void SessionPrivate::addJob(Job *job)
 {
