@@ -76,8 +76,6 @@ protected:
     void handleResponse(const Response &response) override;
 
 private:
-    Q_PRIVATE_SLOT(d_func(), void emitPendings())
-
     /*!
      * \brief Converts a mailbox descriptor's name to uppercase if it is the Inbox or an Inbox subfolder.
      *  This is according to the RFC3501, 5.1. Mailbox Naming section.
