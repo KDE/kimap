@@ -130,9 +130,6 @@ protected:
     void doStart() override;
     void handleResponse(const Response &response) override;
     void connectionLost() override;
-
-private:
-    Q_PRIVATE_SLOT(d_func(), void sslResponse(bool))
 };
 
 }
