@@ -90,12 +90,12 @@ public:
      */
     void setUseNetworkProxy(bool useProxy);
 
-    [[nodiscard]] int jobQueueSize() const;
+    [[nodiscard]] qsizetype jobQueueSize() const;
 
     void close();
 
 Q_SIGNALS:
-    void jobQueueSizeChanged(int queueSize);
+    void jobQueueSizeChanged(qsizetype queueSize);
 
     /*!
       Emitted when we lose a previously established connection

@@ -63,7 +63,7 @@ QByteArray KIMAP::decodeImapFolderName(const QByteArray &inSrc)
     unsigned int srcPtr = 0;
     QByteArray dst;
     QByteArray src = inSrc;
-    uint srcLen = inSrc.length();
+    const auto srcLen = inSrc.length();
 
     /* initialize modified base64 decoding table */
     memset(base64, UNDEFINED, sizeof(base64));
@@ -148,7 +148,7 @@ QString KIMAP::decodeImapFolderName(const QString &inSrc)
 
 QByteArray KIMAP::quoteIMAP(const QByteArray &src)
 {
-    int len = src.length();
+    const auto len = src.length();
     QByteArray result;
     result.reserve(2 * len);
     for (int i = 0; i < len; i++) {
@@ -163,7 +163,7 @@ QByteArray KIMAP::quoteIMAP(const QByteArray &src)
 
 QString KIMAP::quoteIMAP(const QString &src)
 {
-    uint len = src.length();
+    const auto len = src.length();
     QString result;
     result.reserve(2 * len);
     for (unsigned int i = 0; i < len; i++) {

@@ -271,7 +271,7 @@ void FetchJob::handleResponse(const Response &response)
                         ++it;
                     }
 
-                    int index;
+                    qsizetype index;
                     if ((index = str.indexOf("HEADER")) > 0 || (index = str.indexOf("MIME")) > 0) { // headers
                         if (str[index - 1] == '.') {
                             QByteArray partId = str.mid(5, index - 6);

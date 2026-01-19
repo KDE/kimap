@@ -181,7 +181,7 @@ public:
      */
     QByteArray readRemainingData();
 
-    int availableDataSize() const;
+    [[nodiscard]] qsizetype availableDataSize() const;
 
     void setData(const QByteArray &data);
 
@@ -210,7 +210,7 @@ private:
     QIODevice *m_socket = nullptr;
     bool m_isServerModeEnabled = false;
     QByteArray m_data;
-    int m_position = -1;
+    qsizetype m_position = -1;
     qint64 m_literalSize = -1;
 };
 

@@ -18,7 +18,7 @@ QMap<QByteArray, QPair<qint64, qint64>> QuotaJobBasePrivate::readQuota(const Res
     QMap<QByteArray, QPair<qint64, qint64>> quotaMap;
     QList<QByteArray> quotas = content.toList();
 
-    int i = 0;
+    qsizetype i = 0;
     while (i < quotas.size() - 2) {
         QByteArray resource = quotas[i].toUpper();
         qint64 usage = quotas[i + 1].toInt();
