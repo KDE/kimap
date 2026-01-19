@@ -22,9 +22,6 @@ public:
         : JobPrivate(session, name)
     {
     }
-    ~DeleteJobPrivate()
-    {
-    }
 
     QString mailBox;
 };
@@ -37,9 +34,7 @@ DeleteJob::DeleteJob(Session *session)
 {
 }
 
-DeleteJob::~DeleteJob()
-{
-}
+DeleteJob::~DeleteJob() = default;
 
 void DeleteJob::doStart()
 {

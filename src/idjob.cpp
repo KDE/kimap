@@ -21,9 +21,6 @@ public:
         : JobPrivate(session, name)
     {
     }
-    ~IdJobPrivate()
-    {
-    }
 
     QMap<QByteArray, QByteArray> fields;
 };
@@ -36,9 +33,7 @@ IdJob::IdJob(Session *session)
 {
 }
 
-IdJob::~IdJob()
-{
-}
+IdJob::~IdJob() = default;
 
 void IdJob::setField(const QByteArray &name, const QByteArray &value)
 {

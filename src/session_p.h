@@ -83,7 +83,7 @@ private:
     Session *const q;
 
     bool isSocketConnected = false;
-    Session::State state;
+    Session::State state = Session::Disconnected;
 
     SessionLogger *logger = nullptr;
     SessionThread *thread = nullptr;
@@ -101,11 +101,11 @@ private:
     QByteArray greeting;
     QByteArray currentMailBox;
     QByteArray upcomingMailBox;
-    quint16 tagCount;
+    quint16 tagCount = 0;
 
-    QSsl::SslProtocol sslVersion;
+    QSsl::SslProtocol sslVersion = QSsl::UnknownProtocol;
 
-    int socketTimerInterval = 0;
+    int socketTimerInterval = 30000; // By default timeouts on 30s
     QTimer socketTimer;
 };
 

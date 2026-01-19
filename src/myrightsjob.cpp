@@ -23,9 +23,6 @@ public:
         , myRights(Acl::None)
     {
     }
-    ~MyRightsJobPrivate()
-    {
-    }
 
     Acl::Rights myRights;
 };
@@ -38,9 +35,7 @@ MyRightsJob::MyRightsJob(Session *session)
 {
 }
 
-MyRightsJob::~MyRightsJob()
-{
-}
+MyRightsJob::~MyRightsJob() = default;
 
 void MyRightsJob::doStart()
 {

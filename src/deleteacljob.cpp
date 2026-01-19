@@ -22,9 +22,6 @@ public:
         : AclJobBasePrivate(session, name)
     {
     }
-    ~DeleteAclJobPrivate()
-    {
-    }
 };
 }
 
@@ -37,9 +34,7 @@ DeleteAclJob::DeleteAclJob(Session *session)
     d->m_name = i18n("DeleteAclJob");
 }
 
-DeleteAclJob::~DeleteAclJob()
-{
-}
+DeleteAclJob::~DeleteAclJob() = default;
 
 void DeleteAclJob::doStart()
 {

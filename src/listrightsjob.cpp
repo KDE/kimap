@@ -23,9 +23,6 @@ public:
         , defaultRights(Acl::None)
     {
     }
-    ~ListRightsJobPrivate()
-    {
-    }
 
     QList<Acl::Rights> possibleRights;
     Acl::Rights defaultRights;
@@ -39,9 +36,7 @@ ListRightsJob::ListRightsJob(Session *session)
 {
 }
 
-ListRightsJob::~ListRightsJob()
-{
-}
+ListRightsJob::~ListRightsJob() = default;
 
 void ListRightsJob::doStart()
 {

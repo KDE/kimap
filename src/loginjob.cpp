@@ -49,15 +49,9 @@ public:
     LoginJobPrivate(LoginJob *job, Session *session, const QString &name)
         : JobPrivate(session, name)
         , q(job)
-        , encryptionMode(LoginJob::Unencrypted)
-        , authState(Login)
-        , plainLoginDisabled(false)
     {
         conn = nullptr;
         client_interact = nullptr;
-    }
-    ~LoginJobPrivate()
-    {
     }
     bool sasl_interact();
 
@@ -73,11 +67,11 @@ public:
     QString password;
     QString serverGreeting;
 
-    LoginJob::EncryptionMode encryptionMode;
+    LoginJob::EncryptionMode encryptionMode = LoginJob::Unencrypted;
     QString authMode;
-    AuthState authState;
+    AuthState authState = Login;
     QStringList capabilities;
-    bool plainLoginDisabled;
+    bool plainLoginDisabled = false;
 
     sasl_conn_t *conn;
     sasl_interact_t *client_interact;

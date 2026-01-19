@@ -22,9 +22,6 @@ public:
         : JobPrivate(session, name)
     {
     }
-    ~CreateJobPrivate()
-    {
-    }
 
     QString mailBox;
 };
@@ -37,9 +34,7 @@ CreateJob::CreateJob(Session *session)
 {
 }
 
-CreateJob::~CreateJob()
-{
-}
+CreateJob::~CreateJob() = default;
 
 void CreateJob::doStart()
 {

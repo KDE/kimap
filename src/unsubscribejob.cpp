@@ -22,9 +22,6 @@ public:
         : JobPrivate(session, name)
     {
     }
-    ~UnsubscribeJobPrivate()
-    {
-    }
 
     QString mailBox;
 };
@@ -37,9 +34,7 @@ UnsubscribeJob::UnsubscribeJob(Session *session)
 {
 }
 
-UnsubscribeJob::~UnsubscribeJob()
-{
-}
+UnsubscribeJob::~UnsubscribeJob() = default;
 
 void UnsubscribeJob::doStart()
 {

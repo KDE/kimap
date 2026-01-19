@@ -23,10 +23,6 @@ public:
     {
     }
 
-    ~StatusJobPrivate()
-    {
-    }
-
     QString mailBox;
     QList<QByteArray> dataItems;
     QList<QPair<QByteArray, qint64>> status;
@@ -41,9 +37,7 @@ StatusJob::StatusJob(Session *session)
 {
 }
 
-StatusJob::~StatusJob()
-{
-}
+StatusJob::~StatusJob() = default;
 
 void StatusJob::setMailBox(const QString &mailBox)
 {

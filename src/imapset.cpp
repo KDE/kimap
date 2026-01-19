@@ -13,37 +13,13 @@ using namespace KIMAP;
 class ImapInterval::Private : public QSharedData
 {
 public:
-    Private()
-        : QSharedData()
-        , begin(0)
-        , end(0)
-    {
-    }
-
-    Private(const Private &other)
-        : QSharedData(other)
-        , begin(other.begin)
-        , end(other.end)
-    {
-    }
-
-    Id begin;
-    Id end;
+    Id begin = 0;
+    Id end = 0;
 };
 
 class ImapSet::Private : public QSharedData
 {
 public:
-    Private()
-        : QSharedData()
-    {
-    }
-    Private(const Private &other)
-        : QSharedData(other)
-        , intervals(other.intervals)
-    {
-    }
-
     ImapInterval::List intervals;
 };
 
@@ -52,10 +28,7 @@ ImapInterval::ImapInterval()
 {
 }
 
-ImapInterval::ImapInterval(const ImapInterval &other)
-    : d(other.d)
-{
-}
+ImapInterval::ImapInterval(const ImapInterval &other) = default;
 
 ImapInterval::ImapInterval(Id begin, Id end)
     : d(new Private)
@@ -64,17 +37,9 @@ ImapInterval::ImapInterval(Id begin, Id end)
     d->end = end;
 }
 
-ImapInterval::~ImapInterval()
-{
-}
+ImapInterval::~ImapInterval() = default;
 
-ImapInterval &ImapInterval::operator=(const ImapInterval &other)
-{
-    if (this != &other) {
-        d = other.d;
-    }
-    return *this;
-}
+ImapInterval &ImapInterval::operator=(const ImapInterval &other) = default;
 
 bool ImapInterval::operator==(const ImapInterval &other) const
 {
@@ -194,22 +159,11 @@ ImapSet::ImapSet(Id value)
     add(QList<Id>() << value);
 }
 
-ImapSet::ImapSet(const ImapSet &other)
-    : d(other.d)
-{
-}
+ImapSet::ImapSet(const ImapSet &other) = default;
 
-ImapSet::~ImapSet()
-{
-}
+ImapSet::~ImapSet() = default;
 
-ImapSet &ImapSet::operator=(const ImapSet &other)
-{
-    if (this != &other) {
-        d = other.d;
-    }
-    return *this;
-}
+ImapSet &ImapSet::operator=(const ImapSet &other) = default;
 
 bool ImapSet::operator==(const ImapSet &other) const
 {

@@ -23,9 +23,6 @@ public:
         , q(job)
     {
     }
-    ~IdleJobPrivate()
-    {
-    }
 
     void emitStats()
     {
@@ -74,9 +71,7 @@ IdleJob::IdleJob(Session *session)
     });
 }
 
-IdleJob::~IdleJob()
-{
-}
+IdleJob::~IdleJob() = default;
 
 void KIMAP::IdleJob::stop()
 {

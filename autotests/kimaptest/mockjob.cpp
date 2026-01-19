@@ -21,16 +21,11 @@ class MockJobPrivate : public KIMAP::JobPrivate
 public:
     MockJobPrivate(KIMAP::Session *session, const QString &name)
         : KIMAP::JobPrivate(session, name)
-        , timeout(10)
-    {
-    }
-
-    ~MockJobPrivate()
     {
     }
 
     QByteArray command;
-    int timeout;
+    int timeout = 10;
 };
 
 MockJob::MockJob(KIMAP::Session *session)

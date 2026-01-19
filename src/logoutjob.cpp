@@ -21,9 +21,6 @@ public:
         : JobPrivate(session, name)
     {
     }
-    ~LogoutJobPrivate()
-    {
-    }
 };
 }
 
@@ -34,9 +31,7 @@ LogoutJob::LogoutJob(Session *session)
 {
 }
 
-LogoutJob::~LogoutJob()
-{
-}
+LogoutJob::~LogoutJob() = default;
 
 void LogoutJob::doStart()
 {

@@ -59,9 +59,7 @@ MetaDataJobBase::MetaDataJobBase(JobPrivate &dd)
 {
 }
 
-MetaDataJobBase::~MetaDataJobBase()
-{
-}
+MetaDataJobBase::~MetaDataJobBase() = default;
 
 void MetaDataJobBase::setMailBox(const QString &mailBox)
 {

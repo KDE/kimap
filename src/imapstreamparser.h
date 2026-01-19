@@ -39,9 +39,7 @@ public:
         , mWhat(other.what())
     {
     }
-    ~ImapParserException() throw() override
-    {
-    }
+    ~ImapParserException() noexcept override = default;
     const char *what() const throw() override
     {
         return mWhat.constData();

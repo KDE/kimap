@@ -25,9 +25,6 @@ public:
         : JobPrivate(session, name)
     {
     }
-    ~NamespaceJobPrivate()
-    {
-    }
 
     QList<MailBoxDescriptor> processNamespaceList(const QList<QByteArray> &namespaceList)
     {
@@ -69,9 +66,7 @@ NamespaceJob::NamespaceJob(Session *session)
 {
 }
 
-NamespaceJob::~NamespaceJob()
-{
-}
+NamespaceJob::~NamespaceJob() = default;
 
 QList<MailBoxDescriptor> NamespaceJob::personalNamespaces() const
 {

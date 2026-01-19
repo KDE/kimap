@@ -21,35 +21,10 @@ namespace KIMAP
 class Term::Private : public QSharedData
 {
 public:
-    Private()
-        : QSharedData()
-        , isFuzzy(false)
-        , isNegated(false)
-        , isNull(false)
-    {
-    }
-    Private(const Private &other)
-        : QSharedData(other)
-        , command(other.command)
-        , isFuzzy(other.isFuzzy)
-        , isNegated(other.isNegated)
-        , isNull(other.isNull)
-    {
-    }
-
-    Private &operator=(const Private &other)
-    {
-        command = other.command;
-        isFuzzy = other.isFuzzy;
-        isNegated = other.isNegated;
-        isNull = other.isNull;
-        return *this;
-    }
-
     QByteArray command;
-    bool isFuzzy;
-    bool isNegated;
-    bool isNull;
+    bool isFuzzy = false;
+    bool isNegated = false;
+    bool isNull = false;
 };
 
 Term::Term()
@@ -228,21 +203,11 @@ Term::Term(Term::SequenceSearchKey key, const ImapSet &set)
     d->command += " " + optimizedSet.toImapSequenceSet();
 }
 
-Term::Term(const Term &other)
-    : d(new Term::Private)
-{
-    *d = *other.d;
-}
+Term::Term(const Term &other) = default;
 
-Term::~Term()
-{
-}
+Term::~Term() = default;
 
-Term &Term::operator=(const Term &other)
-{
-    *d = *other.d;
-    return *this;
-}
+Term &Term::operator=(const Term &other) = default;
 
 bool Term::operator==(const Term &other) const
 {
@@ -304,9 +269,7 @@ SearchJob::SearchJob(Session *session)
 {
 }
 
-SearchJob::~SearchJob()
-{
-}
+SearchJob::~SearchJob() = default;
 
 void SearchJob::setTerm(const Term &term)
 {

@@ -23,9 +23,6 @@ public:
         : AclJobBasePrivate(session, name)
     {
     }
-    ~GetAclJobPrivate()
-    {
-    }
 
     QMap<QByteArray, Acl::Rights> userRights;
 };
@@ -38,9 +35,7 @@ GetAclJob::GetAclJob(Session *session)
 {
 }
 
-GetAclJob::~GetAclJob()
-{
-}
+GetAclJob::~GetAclJob() = default;
 
 void GetAclJob::doStart()
 {

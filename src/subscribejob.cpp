@@ -22,9 +22,6 @@ public:
         : JobPrivate(session, name)
     {
     }
-    ~SubscribeJobPrivate()
-    {
-    }
 
     QString mailBox;
 };
@@ -37,9 +34,7 @@ SubscribeJob::SubscribeJob(Session *session)
 {
 }
 
-SubscribeJob::~SubscribeJob()
-{
-}
+SubscribeJob::~SubscribeJob() = default;
 
 void SubscribeJob::doStart()
 {

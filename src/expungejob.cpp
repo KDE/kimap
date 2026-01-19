@@ -38,6 +38,8 @@ ExpungeJob::ExpungeJob(Session *session)
 {
 }
 
+ExpungeJob::~ExpungeJob() = default;
+
 KIMAP::ImapSet ExpungeJob::vanishedMessages() const
 {
     Q_D(const ExpungeJob);

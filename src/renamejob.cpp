@@ -22,9 +22,6 @@ public:
         : JobPrivate(session, name)
     {
     }
-    ~RenameJobPrivate()
-    {
-    }
 
     QString sourceMailBox;
     QString destinationMailBox;
@@ -38,9 +35,7 @@ RenameJob::RenameJob(Session *session)
 {
 }
 
-RenameJob::~RenameJob()
-{
-}
+RenameJob::~RenameJob() = default;
 
 void RenameJob::doStart()
 {
