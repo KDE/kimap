@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkimap5\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-13 08:42+0000\n"
+"POT-Creation-Date: 2026-01-19 00:44+0000\n"
 "PO-Revision-Date: 2022-04-09 20:15+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -228,7 +228,7 @@ msgstr "QuotaJobBase"
 msgid "Rename"
 msgstr "Premenovať"
 
-#: searchjob.cpp:361
+#: searchjob.cpp:303
 #, kde-format
 msgctxt "Name of the search job"
 msgid "Search"

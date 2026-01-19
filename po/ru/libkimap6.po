@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-13 08:42+0000\n"
+"POT-Creation-Date: 2026-01-19 00:44+0000\n"
 "PO-Revision-Date: 2022-10-01 15:04+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -292,7 +292,7 @@ msgstr "переименование папки"
 
 # [JobPrivate::m_name]
 # http://tools.ietf.org/html/rfc3501#section-6.4.4
-#: searchjob.cpp:361
+#: searchjob.cpp:303
 #, kde-format
 msgctxt "Name of the search job"
 msgid "Search"
