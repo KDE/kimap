@@ -22,9 +22,6 @@ public:
         : JobPrivate(session, name)
     {
     }
-    ~AppendJobPrivate()
-    {
-    }
 
     QString mailBox;
     QList<QByteArray> flags;
@@ -41,9 +38,7 @@ AppendJob::AppendJob(Session *session)
 {
 }
 
-AppendJob::~AppendJob()
-{
-}
+AppendJob::~AppendJob() = default;
 
 void AppendJob::setMailBox(const QString &mailBox)
 {

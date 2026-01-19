@@ -24,9 +24,6 @@ public:
         : JobPrivate(session, name)
     {
     }
-    ~CopyJobPrivate()
-    {
-    }
 
     QString mailBox;
     ImapSet set;
@@ -44,9 +41,7 @@ CopyJob::CopyJob(Session *session)
     d->uidBased = false;
 }
 
-CopyJob::~CopyJob()
-{
-}
+CopyJob::~CopyJob() = default;
 
 void CopyJob::setMailBox(const QString &mailBox)
 {

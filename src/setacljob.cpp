@@ -22,9 +22,6 @@ public:
         : AclJobBasePrivate(session, name)
     {
     }
-    ~SetAclJobPrivate()
-    {
-    }
 };
 }
 
@@ -35,9 +32,7 @@ SetAclJob::SetAclJob(Session *session)
 {
 }
 
-SetAclJob::~SetAclJob()
-{
-}
+SetAclJob::~SetAclJob() = default;
 
 void SetAclJob::doStart()
 {

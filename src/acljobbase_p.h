@@ -17,11 +17,6 @@ class AclJobBasePrivate : public JobPrivate
 public:
     AclJobBasePrivate(Session *session, const QString &name)
         : JobPrivate(session, name)
-        , rightList(Acl::None)
-        , modifier(AclJobBase::Change)
-    {
-    }
-    ~AclJobBasePrivate() override
     {
     }
 
@@ -35,7 +30,7 @@ public:
 
     QString mailBox;
     QByteArray id;
-    Acl::Rights rightList;
-    AclJobBase::AclModifier modifier;
+    Acl::Rights rightList = Acl::None;
+    AclJobBase::AclModifier modifier = AclJobBase::Change;
 };
 }

@@ -22,9 +22,6 @@ public:
         : QuotaJobBasePrivate(session, name)
     {
     }
-    ~GetQuotaRootJobPrivate()
-    {
-    }
 
     QString mailBox;
     QList<QByteArray> rootList;
@@ -39,9 +36,7 @@ GetQuotaRootJob::GetQuotaRootJob(Session *session)
 {
 }
 
-GetQuotaRootJob::~GetQuotaRootJob()
-{
-}
+GetQuotaRootJob::~GetQuotaRootJob() = default;
 
 void GetQuotaRootJob::doStart()
 {

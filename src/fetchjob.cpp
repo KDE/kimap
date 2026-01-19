@@ -25,10 +25,6 @@ public:
     {
     }
 
-    ~FetchJobPrivate()
-    {
-    }
-
     void parseBodyStructure(const QByteArray &structure, int &pos, KMime::Content *content);
     void parsePart(const QByteArray &structure, int &pos, KMime::Content *content);
     QByteArray parseString(const QByteArray &structure, int &pos);
@@ -60,12 +56,7 @@ public:
 
 using namespace KIMAP;
 
-FetchJob::FetchScope::FetchScope()
-    : mode(FetchScope::Content)
-    , changedSince(0)
-    , qresync(false)
-{
-}
+FetchJob::FetchScope::FetchScope() = default;
 
 FetchJob::FetchJob(Session *session)
     : Job(*new FetchJobPrivate(this, session, i18n("Fetch")))
@@ -75,6 +66,8 @@ FetchJob::FetchJob(Session *session)
         d->emitPendings();
     });
 }
+
+FetchJob::~FetchJob() = default;
 
 void FetchJob::setSequenceSet(const ImapSet &set)
 {

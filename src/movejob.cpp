@@ -25,10 +25,6 @@ public:
     {
     }
 
-    ~MoveJobPrivate()
-    {
-    }
-
     QString mailBox;
     ImapSet set;
     ImapSet resultingUids;
@@ -45,9 +41,7 @@ MoveJob::MoveJob(Session *session)
     d->uidBased = false;
 }
 
-MoveJob::~MoveJob()
-{
-}
+MoveJob::~MoveJob() = default;
 
 void MoveJob::setMailBox(const QString &mailBox)
 {

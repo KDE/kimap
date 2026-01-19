@@ -33,6 +33,8 @@ CloseJob::CloseJob(Session *session)
 {
 }
 
+CloseJob::~CloseJob() = default;
+
 void CloseJob::doStart()
 {
     Q_D(CloseJob);

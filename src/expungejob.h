@@ -42,7 +42,7 @@ class KIMAP_EXPORT ExpungeJob : public Job
 
 public:
     explicit ExpungeJob(Session *session);
-    ~ExpungeJob() override = default;
+    ~ExpungeJob() override;
 
     /*!
      * Returns UIDs of messages that have been expunged.

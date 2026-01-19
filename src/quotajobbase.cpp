@@ -40,9 +40,7 @@ QuotaJobBase::QuotaJobBase(JobPrivate &dd)
 {
 }
 
-QuotaJobBase::~QuotaJobBase()
-{
-}
+QuotaJobBase::~QuotaJobBase() = default;
 
 qint64 QuotaJobBase::usage(const QByteArray &resource)
 {

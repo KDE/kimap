@@ -6,6 +6,4 @@
 
 #include "sessionuiproxy.h"
 
-KIMAP::SessionUiProxy::~SessionUiProxy()
-{
-}
+KIMAP::SessionUiProxy::~SessionUiProxy() = default;
