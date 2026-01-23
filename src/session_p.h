@@ -24,6 +24,13 @@ struct Response;
 class SessionLogger;
 class SessionThread;
 
+/*!
+ * \class KIMAP::SessionPrivate
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/SessionPrivate
+ *
+ * \internal
+ */
 class KIMAP_EXPORT SessionPrivate : public QObject
 {
     Q_OBJECT

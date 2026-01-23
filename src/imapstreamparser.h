@@ -56,6 +56,10 @@ private:
 };
 
 /*!
+  \class KIMAP::ImapStreamParser
+  \inmodule KIMAP
+  \inheaderfile KIMAP/ImapStreamParser
+
   Parser for IMAP messages that operates on a local socket stream.
 */
 class KIMAP_EXPORT ImapStreamParser

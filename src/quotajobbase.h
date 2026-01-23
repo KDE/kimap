@@ -17,6 +17,10 @@ struct Response;
 class QuotaJobBasePrivate;
 
 /*!
+ * \class KIMAP::QuotaJobBase
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/QuotaJobBase
+ *
  * Base class for jobs that operate on mailbox quotas
  *
  * Provides support for the IMAP QUOTA extension, as defined by

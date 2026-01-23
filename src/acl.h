@@ -80,6 +80,10 @@ enum Right {
 Q_DECLARE_FLAGS(Rights, Right)
 
 /*!
+ * \fn KIMAP::Acl::normalizedRights
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/Acl
+ *
  * Returns a rights mask that has no obsolete members anymore, i.e. obsolete flags are removed and
  * replaced by their successors.
  * \a rights set of #Rights flags to normalize
@@ -88,6 +92,10 @@ Q_DECLARE_FLAGS(Rights, Right)
 [[nodiscard]] KIMAP_EXPORT Rights normalizedRights(Rights rights);
 
 /*!
+ * \fn KIMAP::Acl::denormalizedRights
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/Acl
+ *
  * Returns a rights mask that contains both obsolete and new flags if one of them is set.
  * \a rights set of #Rights flags to augment
  * \since 4.6
@@ -95,12 +103,20 @@ Q_DECLARE_FLAGS(Rights, Right)
 [[nodiscard]] KIMAP_EXPORT Rights denormalizedRights(Rights rights);
 
 /*!
+ * \fn KIMAP::Acl::rightsToString
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/Acl
+ *
  * Convert a set of rights into text format
  *
  * No modifier flag ('+' or '-') will be included.
  */
 [[nodiscard]] KIMAP_EXPORT QByteArray rightsToString(Rights rights);
 /*!
+ * \fn KIMAP::Acl::rightsFromString
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/Acl
+ *
  * Convert the text form of a set of rights into a Rights bitflag
  *
  * Modifier flags ('+' and '-') are ignored, as are any unknown

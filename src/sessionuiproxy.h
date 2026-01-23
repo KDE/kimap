@@ -16,7 +16,13 @@ class KSslErrorUiData;
 
 namespace KIMAP
 {
-/*! \brief Interface to display communication errors and wait for user feedback. */
+/*!
+ * \class KIMAP::SessionUiProxy
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/SessionUiProxy
+ *
+ * \brief Interface to display communication errors and wait for user feedback.
+ */
 class KIMAP_EXPORT SessionUiProxy
 {
 public:

@@ -235,7 +235,21 @@ private:
 
 }
 
+/*!
+ * \fn operator<<(QDebug &d, const KIMAP::ImapInterval &interval)
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/ImapSet
+ *
+ * Debug stream operator for ImapInterval.
+ */
 KIMAP_EXPORT QDebug &operator<<(QDebug &d, const KIMAP::ImapInterval &interval);
+/*!
+ * \fn operator<<(QDebug &d, const KIMAP::ImapSet &set)
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/ImapSet
+ *
+ * Debug stream operator for ImapSet.
+ */
 KIMAP_EXPORT QDebug &operator<<(QDebug &d, const KIMAP::ImapSet &set);
 
 Q_DECLARE_METATYPE(KIMAP::ImapInterval)

@@ -17,6 +17,13 @@ class SessionPrivate;
 class JobPrivate;
 struct Response;
 
+/*!
+ * \class KIMAP::Job
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/Job
+ *
+ * \brief Base class for all KIMAP jobs.
+ */
 class KIMAP_EXPORT Job : public KJob
 {
     Q_OBJECT

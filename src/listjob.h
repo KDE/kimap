@@ -16,6 +16,13 @@ class Session;
 struct Response;
 class ListJobPrivate;
 
+/*!
+ * \struct KIMAP::MailBoxDescriptor
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/ListJob
+ *
+ * Describes a mailbox name and separator.
+ */
 struct KIMAP_EXPORT MailBoxDescriptor {
     QString name;
     QChar separator;
