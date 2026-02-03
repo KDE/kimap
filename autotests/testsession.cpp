@@ -39,13 +39,12 @@ private Q_SLOTS:
         fakeServer.startAndWait();
         KIMAP::Session s(QStringLiteral("127.0.0.1"), 5989);
         QSignalSpy spy(&s, &KIMAP::Session::stateChanged);
-        QCOMPARE((int)s.state(), (int)KIMAP::Session::Disconnected);
-        QTest::qWait(600);
-        QCOMPARE((int)s.state(), (int)KIMAP::Session::NotAuthenticated);
-        QCOMPARE(spy.count(), 1); // NotAuthenticated
+        QCOMPARE(s.state(), KIMAP::Session::Disconnected);
+        QVERIFY(spy.wait());
+        QCOMPARE(s.state(), KIMAP::Session::NotAuthenticated);
         QList<QVariant> arguments = spy.takeFirst();
-        QCOMPARE((int)qvariant_cast<KIMAP::Session::State>(arguments.at(0)), (int)KIMAP::Session::NotAuthenticated);
-        QCOMPARE((int)qvariant_cast<KIMAP::Session::State>(arguments.at(1)), (int)KIMAP::Session::Disconnected);
+        QCOMPARE(qvariant_cast<KIMAP::Session::State>(arguments.at(0)), KIMAP::Session::NotAuthenticated);
+        QCOMPARE(qvariant_cast<KIMAP::Session::State>(arguments.at(1)), KIMAP::Session::Disconnected);
     }
 
     void shouldFailForInvalidHosts()
@@ -60,10 +59,10 @@ private Q_SLOTS:
         QSignalSpy spyLost(&s, &KIMAP::Session::connectionLost);
         QSignalSpy spyState(&s, &KIMAP::Session::stateChanged);
 
-        QCOMPARE((int)s.state(), (int)KIMAP::Session::Disconnected);
+        QCOMPARE(s.state(), KIMAP::Session::Disconnected);
 
-        QTest::qWait(500);
-        QCOMPARE((int)s.state(), (int)KIMAP::Session::Disconnected);
+        QVERIFY(spyFail.wait());
+        QCOMPARE(s.state(), KIMAP::Session::Disconnected);
         QCOMPARE(spyFail.count(), 1);
         QCOMPARE(spyLost.count(), 0);
         QCOMPARE(spyState.count(), 0);
@@ -89,20 +88,20 @@ private Q_SLOTS:
         QSignalSpy spyFail(&s, &KIMAP::Session::connectionFailed);
         QSignalSpy spyLost(&s, &KIMAP::Session::connectionLost);
         QSignalSpy spyState(&s, &KIMAP::Session::stateChanged);
-        QCOMPARE((int)s.state(), (int)KIMAP::Session::Disconnected);
+        QCOMPARE(s.state(), KIMAP::Session::Disconnected);
 
         // Wait 1.8 second. Since the timeout is set to 2 seconds, the socket should be still
         // disconnected at this point, yet the connectionFailed() signal shouldn't have been emitted.
         QTest::qWait(1800);
-        QCOMPARE((int)s.state(), (int)KIMAP::Session::Disconnected);
+        QCOMPARE(s.state(), KIMAP::Session::Disconnected);
         QCOMPARE(spyFail.count(), 0);
         QCOMPARE(spyLost.count(), 0);
         QCOMPARE(spyState.count(), 0);
 
         // Wait 0.5 second more. Now we are at 2.3 seconds, the socket should have timed out, and the
         // connectionFailed() signal should have been emitted.
-        QTest::qWait(500);
-        QCOMPARE((int)s.state(), (int)KIMAP::Session::Disconnected);
+        QVERIFY(spyLost.wait());
+        QCOMPARE(s.state(), KIMAP::Session::Disconnected);
         QCOMPARE(spyFail.count(), 0);
         QCOMPARE(spyLost.count(), 1);
         QCOMPARE(spyState.count(), 0);
@@ -116,13 +115,13 @@ private Q_SLOTS:
 
         KIMAP::Session s(QStringLiteral("127.0.0.1"), 5989);
         QSignalSpy spy(&s, &KIMAP::Session::stateChanged);
-        QCOMPARE((int)s.state(), (int)KIMAP::Session::Disconnected);
-        QTest::qWait(500);
-        QCOMPARE((int)s.state(), (int)KIMAP::Session::Authenticated);
+        QCOMPARE(s.state(), KIMAP::Session::Disconnected);
+        QVERIFY(spy.wait());
+        QCOMPARE(s.state(), KIMAP::Session::Authenticated);
         QCOMPARE(spy.count(), 1); // Authenticated
         QList<QVariant> arguments = spy.takeFirst();
-        QCOMPARE((int)qvariant_cast<KIMAP::Session::State>(arguments.at(0)), (int)KIMAP::Session::Authenticated);
-        QCOMPARE((int)qvariant_cast<KIMAP::Session::State>(arguments.at(1)), (int)KIMAP::Session::Disconnected);
+        QCOMPARE(qvariant_cast<KIMAP::Session::State>(arguments.at(0)), KIMAP::Session::Authenticated);
+        QCOMPARE(qvariant_cast<KIMAP::Session::State>(arguments.at(1)), KIMAP::Session::Disconnected);
     }
 
     void shouldRespectStartOrder()
@@ -310,7 +309,7 @@ private Q_SLOTS:
 
             mock->setAutoDelete(false);
             mock->start();
-            QTest::qWait(250); // Should be plenty
+            QVERIFY(spyLost.wait());
 
             // We expect to get an error here due to the inconsistency
             QVERIFY(mock->error() != 0);
