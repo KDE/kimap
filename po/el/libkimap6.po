@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-19 00:44+0000\n"
+"POT-Creation-Date: 2026-02-05 00:44+0000\n"
 "PO-Revision-Date: 2021-06-16 18:08+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -25,12 +25,12 @@ msgstr ""
 msgid "AclJobBase"
 msgstr "AclJobBase"
 
-#: appendjob.cpp:40
+#: appendjob.cpp:37
 #, kde-format
 msgid "Append"
 msgstr "Εισαγωγή"
 
-#: capabilitiesjob.cpp:35
+#: capabilitiesjob.cpp:32
 #, kde-format
 msgid "Capabilities"
 msgstr "Δυνατότητες"
@@ -40,22 +40,22 @@ msgstr "Δυνατότητες"
 msgid "Close"
 msgstr "Κλείσιμο"
 
-#: copyjob.cpp:41
+#: copyjob.cpp:38
 #, kde-format
 msgid "Copy"
 msgstr "Αντιγραφή"
 
-#: createjob.cpp:36
+#: createjob.cpp:33
 #, kde-format
 msgid "Create"
 msgstr "Δημιουργία"
 
-#: deleteacljob.cpp:37
+#: deleteacljob.cpp:34
 #, kde-format
 msgid "DeleteAclJob"
 msgstr "DeleteAclJob"
 
-#: deletejob.cpp:36
+#: deletejob.cpp:33
 #, kde-format
 msgid "Delete"
 msgstr "Διαγραφή"
@@ -70,42 +70,42 @@ msgstr "Ενεργοποίηση"
 msgid "Expunge"
 msgstr "Σβήσιμο"
 
-#: fetchjob.cpp:71
+#: fetchjob.cpp:62
 #, kde-format
 msgid "Fetch"
 msgstr "Ανάκτηση"
 
-#: getacljob.cpp:37
+#: getacljob.cpp:34
 #, kde-format
 msgid "GetAcl"
 msgstr "GetAcl"
 
-#: getmetadatajob.cpp:43
+#: getmetadatajob.cpp:40
 #, kde-format
 msgid "GetMetaData"
 msgstr "Λήψη μεταδεδομένων"
 
-#: getmetadatajob.cpp:66
+#: getmetadatajob.cpp:61
 #, kde-format
 msgid "GetAnnotation"
 msgstr "Λήψη σημείωσης"
 
-#: getquotajob.cpp:35
+#: getquotajob.cpp:32
 #, kde-format
 msgid "GetQuota"
 msgstr "Λήψη Quota"
 
-#: getquotarootjob.cpp:38
+#: getquotarootjob.cpp:35
 #, kde-format
 msgid "GetQuotaRoot"
 msgstr "Λήψη βάσης Quota"
 
-#: idjob.cpp:35
+#: idjob.cpp:32
 #, kde-format
 msgid "Id"
 msgstr "Id"
 
-#: idlejob.cpp:65
+#: idlejob.cpp:62
 #, kde-format
 msgctxt "name of the idle job"
 msgid "Idle"
@@ -116,93 +116,93 @@ msgstr "Αδρανής"
 msgid "Job"
 msgstr "Εργασία"
 
-#: job.cpp:54 loginjob.cpp:587
+#: job.cpp:54 loginjob.cpp:581
 #, kde-format
 msgid "Connection to server lost."
 msgstr "Η σύνδεση με τον εξυπηρετητή έχει χαθεί."
 
-#: job.cpp:65 loginjob.cpp:416 setmetadatajob.cpp:126
+#: job.cpp:65 loginjob.cpp:410 setmetadatajob.cpp:121
 #, kde-format
 msgid "%1 failed, malformed reply from the server."
 msgstr "Αποτυχία %1, μη έγκυρη απάντηση από τον εξυπηρετητή."
 
-#: job.cpp:68 loginjob.cpp:290 setmetadatajob.cpp:109 setmetadatajob.cpp:129
+#: job.cpp:68 loginjob.cpp:284 setmetadatajob.cpp:104 setmetadatajob.cpp:124
 #, kde-format
 msgid "%1 failed, server replied: %2"
 msgstr "Αποτυχία %1, απάντηση εξυπηρετητή: %2"
 
-#: listjob.cpp:59
+#: listjob.cpp:55
 #, kde-format
 msgid "List"
 msgstr "Λίστα"
 
-#: listrightsjob.cpp:38
+#: listrightsjob.cpp:35
 #, kde-format
 msgid "ListRights"
 msgstr "Λίστα δικαιωμάτων"
 
-#: loginjob.cpp:136 loginjob.cpp:240
+#: loginjob.cpp:130 loginjob.cpp:234
 #, kde-format
 msgid "Login"
 msgstr "Σύνδεση"
 
-#: loginjob.cpp:191
+#: loginjob.cpp:185
 #, kde-format
 msgid "IMAP session in the wrong state for authentication"
 msgstr "IMAP συνεδρία σε λάθος κατάσταση για την ταυτοποίηση"
 
-#: loginjob.cpp:242
+#: loginjob.cpp:236
 #, kde-format
 msgid "Capability"
 msgstr "Δυνατότητα"
 
-#: loginjob.cpp:244
+#: loginjob.cpp:238
 #, kde-format
 msgid "StartTls"
 msgstr "StartTls"
 
-#: loginjob.cpp:353
+#: loginjob.cpp:347
 #, kde-format
 msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
 msgstr ""
 "Το STARTTLS δεν υποστηρίζεται από τον εξυπηρετητή, δοκιμάστε το SSL/TLS."
 
-#: loginjob.cpp:366
+#: loginjob.cpp:360
 #, kde-format
 msgid "Internal error, tried to login before encryption"
 msgstr ""
 
-#: loginjob.cpp:375
+#: loginjob.cpp:369
 #, kde-format
 msgid "Login failed, plain login is disabled by the server."
 msgstr ""
 "Αποτυχία σύνδεσης, η σύνδεση απλού κειμένου είναι απενεργοποιημένη από τον "
 "εξυπηρετητή."
 
-#: loginjob.cpp:396
+#: loginjob.cpp:390
 #, kde-format
 msgid "Login failed, authentication mode %1 is not supported by the server."
 msgstr ""
 "Αποτυχία σύνδεσης, η μέθοδος ταυτοποίησης %1 δεν υποστηρίζεται από τον "
 "εξυπηρετητή."
 
-#: loginjob.cpp:426
+#: loginjob.cpp:420
 #, kde-format
 msgid "Login failed, client cannot initialize the SASL library."
 msgstr ""
 "Αποτυχία σύνδεσης, ο πελάτης δεν μπορεί να αρχικοποιήσει τη βιβλιοθήκη SASL."
 
-#: loginjob.cpp:525
+#: loginjob.cpp:519
 #, kde-format
 msgid "Login failed, TLS negotiation failed."
 msgstr "Αποτυχία σύνδεσης, αποτυχία διαπραγμάτευσης TLS."
 
-#: loginjob.cpp:583
+#: loginjob.cpp:577
 #, kde-format
 msgid "SSL handshake failed."
 msgstr "Αποτυχία χειραψίας SSL."
 
-#: logoutjob.cpp:33
+#: logoutjob.cpp:30
 #, kde-format
 msgid "Logout"
 msgstr "Αποσύνδεση"
@@ -212,17 +212,17 @@ msgstr "Αποσύνδεση"
 msgid "MetaDataJobBase"
 msgstr "MetaDataJobBase"
 
-#: movejob.cpp:42
+#: movejob.cpp:38
 #, kde-format
 msgid "Move"
 msgstr "Μετακίνηση"
 
-#: myrightsjob.cpp:37
+#: myrightsjob.cpp:34
 #, kde-format
 msgid "MyRights"
 msgstr "Τα δικαιώματά μου"
 
-#: namespacejob.cpp:68
+#: namespacejob.cpp:65
 #, kde-format
 msgid "Namespace"
 msgstr "Χώρος ονομάτων"
@@ -232,12 +232,12 @@ msgstr "Χώρος ονομάτων"
 msgid "QuotaJobBase"
 msgstr "QuotaJobBase"
 
-#: renamejob.cpp:37
+#: renamejob.cpp:34
 #, kde-format
 msgid "Rename"
 msgstr "Μετονομασία"
 
-#: searchjob.cpp:303
+#: searchjob.cpp:268
 #, kde-format
 msgctxt "Name of the search job"
 msgid "Search"
@@ -249,12 +249,12 @@ msgctxt "name of the select job"
 msgid "Select"
 msgstr "Επιλογή"
 
-#: setacljob.cpp:34
+#: setacljob.cpp:31
 #, kde-format
 msgid "SetAcl"
 msgstr "ΟρισμόςAcl"
 
-#: setmetadatajob.cpp:43
+#: setmetadatajob.cpp:40
 #, kde-format
 msgid "SetMetaData"
 msgstr "Ορισμός μεταδεδομένων"
@@ -264,23 +264,23 @@ msgstr "Ορισμός μεταδεδομένων"
 msgid "SetQuota"
 msgstr "ΟρισμόςQuota"
 
-#: statusjob.cpp:40
+#: statusjob.cpp:36
 #, kde-format
 msgctxt "name of the status job"
 msgid "Status"
 msgstr "Κατάσταση"
 
-#: storejob.cpp:70
+#: storejob.cpp:66
 #, kde-format
 msgid "Store"
 msgstr "Αποθήκευση"
 
-#: subscribejob.cpp:36
+#: subscribejob.cpp:33
 #, kde-format
 msgid "Subscribe"
 msgstr "Εγγραφή"
 
-#: unsubscribejob.cpp:36
+#: unsubscribejob.cpp:33
 #, kde-format
 msgid "Unsubscribe"
 msgstr "Διαγραφή"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-19 00:44+0000\n"
+"POT-Creation-Date: 2026-02-05 00:44+0000\n"
 "PO-Revision-Date: 2014-09-23 22:05+0200\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -24,12 +24,12 @@ msgstr ""
 msgid "AclJobBase"
 msgstr "AclJobBase"
 
-#: appendjob.cpp:40
+#: appendjob.cpp:37
 #, kde-format
 msgid "Append"
 msgstr "Legg til"
 
-#: capabilitiesjob.cpp:35
+#: capabilitiesjob.cpp:32
 #, kde-format
 msgid "Capabilities"
 msgstr "Muligheter"
@@ -39,22 +39,22 @@ msgstr "Muligheter"
 msgid "Close"
 msgstr "Lukk"
 
-#: copyjob.cpp:41
+#: copyjob.cpp:38
 #, kde-format
 msgid "Copy"
 msgstr "Kopier"
 
-#: createjob.cpp:36
+#: createjob.cpp:33
 #, kde-format
 msgid "Create"
 msgstr "Opprett"
 
-#: deleteacljob.cpp:37
+#: deleteacljob.cpp:34
 #, kde-format
 msgid "DeleteAclJob"
 msgstr "DeleteAclJob"
 
-#: deletejob.cpp:36
+#: deletejob.cpp:33
 #, kde-format
 msgid "Delete"
 msgstr "Slett"
@@ -69,42 +69,42 @@ msgstr ""
 msgid "Expunge"
 msgstr "Slett fullstendig"
 
-#: fetchjob.cpp:71
+#: fetchjob.cpp:62
 #, kde-format
 msgid "Fetch"
 msgstr "Hent"
 
-#: getacljob.cpp:37
+#: getacljob.cpp:34
 #, kde-format
 msgid "GetAcl"
 msgstr "GetAcl"
 
-#: getmetadatajob.cpp:43
+#: getmetadatajob.cpp:40
 #, kde-format
 msgid "GetMetaData"
 msgstr "GetMetaData"
 
-#: getmetadatajob.cpp:66
+#: getmetadatajob.cpp:61
 #, kde-format
 msgid "GetAnnotation"
 msgstr "GetAnnotation"
 
-#: getquotajob.cpp:35
+#: getquotajob.cpp:32
 #, kde-format
 msgid "GetQuota"
 msgstr "GetQuota"
 
-#: getquotarootjob.cpp:38
+#: getquotarootjob.cpp:35
 #, kde-format
 msgid "GetQuotaRoot"
 msgstr "GetQuotaRoot"
 
-#: idjob.cpp:35
+#: idjob.cpp:32
 #, kde-format
 msgid "Id"
 msgstr ""
 
-#: idlejob.cpp:65
+#: idlejob.cpp:62
 #, kde-format
 msgctxt "name of the idle job"
 msgid "Idle"
@@ -115,87 +115,87 @@ msgstr "Inaktiv"
 msgid "Job"
 msgstr "Jobb"
 
-#: job.cpp:54 loginjob.cpp:587
+#: job.cpp:54 loginjob.cpp:581
 #, kde-format
 msgid "Connection to server lost."
 msgstr "Tilkobling til tjeneren er tapt."
 
-#: job.cpp:65 loginjob.cpp:416 setmetadatajob.cpp:126
+#: job.cpp:65 loginjob.cpp:410 setmetadatajob.cpp:121
 #, kde-format
 msgid "%1 failed, malformed reply from the server."
 msgstr "%1 mislyktes, feil i svar fra tjeneren."
 
-#: job.cpp:68 loginjob.cpp:290 setmetadatajob.cpp:109 setmetadatajob.cpp:129
+#: job.cpp:68 loginjob.cpp:284 setmetadatajob.cpp:104 setmetadatajob.cpp:124
 #, kde-format
 msgid "%1 failed, server replied: %2"
 msgstr "%1 mislyktes, tjeneren svarte: %2"
 
-#: listjob.cpp:59
+#: listjob.cpp:55
 #, kde-format
 msgid "List"
 msgstr "List"
 
-#: listrightsjob.cpp:38
+#: listrightsjob.cpp:35
 #, kde-format
 msgid "ListRights"
 msgstr "ListRights"
 
-#: loginjob.cpp:136 loginjob.cpp:240
+#: loginjob.cpp:130 loginjob.cpp:234
 #, kde-format
 msgid "Login"
 msgstr "Logg inn"
 
-#: loginjob.cpp:191
+#: loginjob.cpp:185
 #, kde-format
 msgid "IMAP session in the wrong state for authentication"
 msgstr "IMAP-økta er i feil tilstand for autentisering"
 
-#: loginjob.cpp:242
+#: loginjob.cpp:236
 #, kde-format
 msgid "Capability"
 msgstr "Mulighet"
 
-#: loginjob.cpp:244
+#: loginjob.cpp:238
 #, kde-format
 msgid "StartTls"
 msgstr "StartTls"
 
-#: loginjob.cpp:353
+#: loginjob.cpp:347
 #, kde-format
 msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
 msgstr ""
 
-#: loginjob.cpp:366
+#: loginjob.cpp:360
 #, kde-format
 msgid "Internal error, tried to login before encryption"
 msgstr ""
 
-#: loginjob.cpp:375
+#: loginjob.cpp:369
 #, kde-format
 msgid "Login failed, plain login is disabled by the server."
 msgstr "Innlogging mislyktes, tjeneren tillater ikke enkel innlogging."
 
-#: loginjob.cpp:396
+#: loginjob.cpp:390
 #, kde-format
 msgid "Login failed, authentication mode %1 is not supported by the server."
 msgstr "Innlogging mislyktes, tjeneren støtter ikke autentiseringsmåte %1."
 
-#: loginjob.cpp:426
+#: loginjob.cpp:420
 #, kde-format
 msgid "Login failed, client cannot initialize the SASL library."
 msgstr "Innlogging mislyktes, klienten kan ikke klargjøre SASL-biblioteket."
 
-#: loginjob.cpp:525
+#: loginjob.cpp:519
 #, kde-format
 msgid "Login failed, TLS negotiation failed."
 msgstr "Innlogging mislyktes, TLS-forhandling lyktes ikke."
 
-#: loginjob.cpp:583
+#: loginjob.cpp:577
 #, kde-format
 msgid "SSL handshake failed."
 msgstr "SSL-håndtryk mislyktes."
 
-#: logoutjob.cpp:33
+#: logoutjob.cpp:30
 #, kde-format
 msgid "Logout"
 msgstr "Logg ut"
@@ -205,17 +205,17 @@ msgstr "Logg ut"
 msgid "MetaDataJobBase"
 msgstr "MetaDataJobBase"
 
-#: movejob.cpp:42
+#: movejob.cpp:38
 #, kde-format
 msgid "Move"
 msgstr ""
 
-#: myrightsjob.cpp:37
+#: myrightsjob.cpp:34
 #, kde-format
 msgid "MyRights"
 msgstr "MyRights"
 
-#: namespacejob.cpp:68
+#: namespacejob.cpp:65
 #, kde-format
 msgid "Namespace"
 msgstr "Navnerom"
@@ -225,12 +225,12 @@ msgstr "Navnerom"
 msgid "QuotaJobBase"
 msgstr "QuotaJobBase"
 
-#: renamejob.cpp:37
+#: renamejob.cpp:34
 #, kde-format
 msgid "Rename"
 msgstr "Endre navn"
 
-#: searchjob.cpp:303
+#: searchjob.cpp:268
 #, kde-format
 msgctxt "Name of the search job"
 msgid "Search"
@@ -242,12 +242,12 @@ msgctxt "name of the select job"
 msgid "Select"
 msgstr "Velg"
 
-#: setacljob.cpp:34
+#: setacljob.cpp:31
 #, kde-format
 msgid "SetAcl"
 msgstr "SetAcl"
 
-#: setmetadatajob.cpp:43
+#: setmetadatajob.cpp:40
 #, kde-format
 msgid "SetMetaData"
 msgstr "SetMetaData"
@@ -257,23 +257,23 @@ msgstr "SetMetaData"
 msgid "SetQuota"
 msgstr "SetQuota"
 
-#: statusjob.cpp:40
+#: statusjob.cpp:36
 #, kde-format
 msgctxt "name of the status job"
 msgid "Status"
 msgstr ""
 
-#: storejob.cpp:70
+#: storejob.cpp:66
 #, kde-format
 msgid "Store"
 msgstr "Lagre"
 
-#: subscribejob.cpp:36
+#: subscribejob.cpp:33
 #, kde-format
 msgid "Subscribe"
 msgstr "Abonner"
 
-#: unsubscribejob.cpp:36
+#: unsubscribejob.cpp:33
 #, kde-format
 msgid "Unsubscribe"
 msgstr "Stopp abonnement"
