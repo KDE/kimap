@@ -118,7 +118,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     string(APPEND CMAKE_CXX_FLAGS " -Wshadow")
 endif()
 ecm_set_disabled_deprecation_versions(QT 6.11.0
-     KF 6.22.0
+     KF 6.23.0
      # KMIME 6.7.0 activate it when all code will be ported
 )
 add_definitions(-DQT_NO_EMIT)
