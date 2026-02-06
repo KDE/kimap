@@ -11,3 +11,9 @@ path = ["autotests/fakeserverscenario.log", "readme-build-ftime.txt", "src/kimap
 precedence = "aggregate"
 SPDX-FileCopyrightText = "none"
 SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = [".gersemirc"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Allen Winter <winter@kde.org>"
+SPDX-License-Identifier = "CC0-1.0"
