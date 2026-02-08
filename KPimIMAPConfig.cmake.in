@@ -4,8 +4,17 @@
 
 @PACKAGE_INIT@
 
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR} ${CMAKE_MODULE_PATH})
+set(CMAKE_MODULE_PATH
+    ${CMAKE_CURRENT_LIST_DIR}
+    ${CMAKE_MODULE_PATH}
+)
 include(CMakeFindDependencyMacro)
-find_dependency(KF6CoreAddons "@KF_MIN_VERSION@")
-find_dependency(KPim6Mime "@KMIME_LIBS_VERSION@")
+find_dependency(
+    KF6CoreAddons
+    "@KF_MIN_VERSION@"
+)
+find_dependency(
+    KPim6Mime
+    "@KMIME_LIBS_VERSION@"
+)
 include("${CMAKE_CURRENT_LIST_DIR}/KPim6IMAPTargets.cmake")
