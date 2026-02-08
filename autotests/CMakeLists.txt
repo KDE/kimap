@@ -21,9 +21,15 @@ macro(KIMAP_UNIT_TESTS)
         set_target_properties(
             ${_testname}
             PROPERTIES
-                COMPILE_FLAGS -DTEST_DATA="\\"${CMAKE_CURRENT_SOURCE_DIR}\\""
+                COMPILE_FLAGS
+                    -DTEST_DATA="\\"${CMAKE_CURRENT_SOURCE_DIR}\\""
         )
-        set_tests_properties(${_testname} PROPERTIES RUN_SERIAL TRUE)
+        set_tests_properties(
+            ${_testname}
+            PROPERTIES
+                RUN_SERIAL
+                    TRUE
+        )
     endforeach()
 endmacro()
 

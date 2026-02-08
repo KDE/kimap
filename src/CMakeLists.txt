@@ -112,7 +112,12 @@ ecm_qt_declare_logging_category(KPim6IMAP HEADER kimap_debug.h IDENTIFIER KIMAP_
 )
 
 if(COMPILE_WITH_UNITY_CMAKE_SUPPORT)
-    set_target_properties(KPim6IMAP PROPERTIES UNITY_BUILD ON)
+    set_target_properties(
+        KPim6IMAP
+        PROPERTIES
+            UNITY_BUILD
+                ON
+    )
 endif()
 
 ecm_generate_export_header(KPim6IMAP
@@ -122,14 +127,8 @@ ecm_generate_export_header(KPim6IMAP
     USE_VERSION_HEADER
 )
 
-target_include_directories(
-    KPim6IMAP
-    INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/KPim6/KIMAP>"
-)
-target_include_directories(
-    KPim6IMAP
-    PUBLIC "$<BUILD_INTERFACE:${KIMAP_SOURCE_DIR}/src;${KIMAP_BINARY_DIR}/src>"
-)
+target_include_directories(KPim6IMAP INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/KPim6/KIMAP>")
+target_include_directories(KPim6IMAP PUBLIC "$<BUILD_INTERFACE:${KIMAP_SOURCE_DIR}/src;${KIMAP_BINARY_DIR}/src>")
 
 if(WIN32)
     set(extra_LIBS ws2_32)
@@ -137,18 +136,34 @@ endif()
 
 target_link_libraries(
     KPim6IMAP
-    PUBLIC KPim6::Mime KF6::CoreAddons Qt::Network
-    PRIVATE KF6::KIOCore KF6::I18n Sasl2::Sasl2 ${extra_LIBS}
+    PUBLIC
+        KPim6::Mime
+        KF6::CoreAddons
+        Qt::Network
+    PRIVATE
+        KF6::KIOCore
+        KF6::I18n
+        Sasl2::Sasl2
+        ${extra_LIBS}
 )
 
-set_property(TARGET KPim6IMAP PROPERTY POSITION_INDEPENDENT_CODE ON)
+set_property(
+    TARGET
+        KPim6IMAP
+    PROPERTY
+        POSITION_INDEPENDENT_CODE
+            ON
+)
 
 set_target_properties(
     KPim6IMAP
     PROPERTIES
-        VERSION ${KIMAP_VERSION}
-        SOVERSION ${KIMAP_SOVERSION}
-        EXPORT_NAME IMAP
+        VERSION
+            ${KIMAP_VERSION}
+        SOVERSION
+            ${KIMAP_SOVERSION}
+        EXPORT_NAME
+            IMAP
 )
 
 ecm_generate_headers(KIMAP_CamelCase_HEADERS
@@ -200,11 +215,7 @@ ecm_generate_headers(KIMAP_CamelCase_HEADERS
   REQUIRED_HEADERS KIMAP_HEADERS
 )
 
-install(
-    TARGETS KPim6IMAP
-    EXPORT KPim6IMAPTargets
-    ${KDE_INSTALL_TARGETS_DEFAULT_ARGS}
-)
+install(TARGETS KPim6IMAP EXPORT KPim6IMAPTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(
     FILES
@@ -215,11 +226,7 @@ install(
     COMPONENT Devel
 )
 
-install(
-    FILES ${KIMAP_CamelCase_HEADERS}
-    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/KPim6/KIMAP/KIMAP
-    COMPONENT Devel
-)
+install(FILES ${KIMAP_CamelCase_HEADERS} DESTINATION ${KDE_INSTALL_INCLUDEDIR}/KPim6/KIMAP/KIMAP COMPONENT Devel)
 
 ecm_qt_install_logging_categories(EXPORT KIMAP FILE kimap.categories DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
 ecm_generate_qdoc(KPim6IMAP kimap.qdocconf)

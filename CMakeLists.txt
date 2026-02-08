@@ -43,12 +43,10 @@ endif()
 if(NOT ${PRE_COMMIT_INSTALLED})
     find_program(PRE_COMMIT_EXECUTABLE pre-commit)
     if(PRE_COMMIT_EXECUTABLE)
-        message(
-            STATUS
-            "This module has pre-commit support. pre-commit binary was found. Installing pre-commit hook"
-        )
+        message(STATUS "This module has pre-commit support. pre-commit binary was found. Installing pre-commit hook")
         execute_process(
-            COMMAND "${PRE_COMMIT_EXECUTABLE}" install -f
+            COMMAND
+                "${PRE_COMMIT_EXECUTABLE}" install -f
             ERROR_QUIET
             RESULT_VARIABLE _precommitresult
             WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
@@ -65,10 +63,7 @@ if(NOT ${PRE_COMMIT_INSTALLED})
             kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
         endif()
     else()
-        message(
-            WARNING
-            "This module has pre-commit support. pre-commit binary was not found."
-        )
+        message(WARNING "This module has pre-commit support. pre-commit binary was not found.")
         include(KDEGitCommitHooks)
         include(KDEClangFormat)
         kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
@@ -99,7 +94,12 @@ ecm_setup_version(PROJECT VARIABLE_PREFIX KIMAP
 
 ########### Find packages ###########
 find_package(Sasl2)
-set_package_properties(Sasl2 PROPERTIES TYPE REQUIRED)
+set_package_properties(
+    Sasl2
+    PROPERTIES
+        TYPE
+            REQUIRED
+)
 find_package(KF6CoreAddons ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6I18n ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6KIO ${KF_MIN_VERSION} CONFIG REQUIRED)
@@ -120,11 +120,7 @@ ecm_set_disabled_deprecation_versions(QT 6.11.0
 )
 add_definitions(-DQT_NO_EMIT)
 
-option(
-    USE_UNITY_CMAKE_SUPPORT
-    "Use UNITY cmake support (speedup compile time)"
-    OFF
-)
+option(USE_UNITY_CMAKE_SUPPORT "Use UNITY cmake support (speedup compile time)" OFF)
 
 set(COMPILE_WITH_UNITY_CMAKE_SUPPORT OFF)
 if(USE_UNITY_CMAKE_SUPPORT)
@@ -150,15 +146,11 @@ install(
     COMPONENT Devel
 )
 
-install(
-    EXPORT KPim6IMAPTargets
-    DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-    FILE KPim6IMAPTargets.cmake
-    NAMESPACE KPim6::
-)
+install(EXPORT KPim6IMAPTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE KPim6IMAPTargets.cmake NAMESPACE KPim6::)
 
 install(
-    FILES ${CMAKE_CURRENT_BINARY_DIR}/src/kimap_version.h
+    FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/src/kimap_version.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/KPim6/KIMAP/
     COMPONENT Devel
 )
