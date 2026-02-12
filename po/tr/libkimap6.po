@@ -283,23 +283,3 @@ msgstr "Abone Ol"
 #, kde-format
 msgid "Unsubscribe"
 msgstr "Abonelikten Çık"
-
-#~ msgid "SetAnnotation"
-#~ msgstr "SetAnnotation"
-
-#~ msgid "Mock"
-#~ msgstr "Sahte"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Serdar Soytetir"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "tulliana@gmail.com"
-
-#, fuzzy
-#~| msgid "Create"
-#~ msgctxt "Authentication method"
-#~ msgid "Clear text"
-#~ msgstr "Oluştur"
