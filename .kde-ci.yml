@@ -12,6 +12,7 @@ Dependencies:
 
 Options:
  require-passing-tests-on: ['Linux', 'FreeBSD']
+ per-test-timeout: 120
  allow-failing-tests-on: ['Windows']
  tests-run-in-parallel: True
  enable-lsan: True
