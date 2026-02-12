@@ -30,3 +30,5 @@ Testing/
 /.vscode/
 .qtcreator/
 .sentry-native/
+#for reuse on CI
+ci-utilities/

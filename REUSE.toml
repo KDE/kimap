@@ -7,10 +7,34 @@ SPDX-PackageSupplier = "Montel Laurent <montel@kde.org>"
 SPDX-PackageDownloadLocation = "https://invent.kde.org/pim/kimap"
 
 [[annotations]]
-path = ["autotests/fakeserverscenario.log", "readme-build-ftime.txt", "src/kimap-index.qdoc", "src/kimap.qdoc", "src/kimap.qdocconf"]
+path = ["po/**"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "none"
+SPDX-License-Identifier = "LGPL-2.0-or-later"
+
+[[annotations]]
+path = ["README.md", "metainfo.yaml", ".krazy", "autotests/fakeserverscenario.log", "readme-build-ftime.txt", "src/kimap-index.qdoc", "src/kimap.qdoc", "src/kimap.qdocconf"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "none"
 SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = [".codespellrc"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2022-2026 Laurent Montel <montel@kde.org>"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = ["CMakePresets.json"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2021-2026 Laurent Montel <montel@kde.org>"
+SPDX-License-Identifier = "BSD-3-Clause"
+
+[[annotations]]
+path = ["README-pre-commit.md", "README-qdoc.md"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2023-2026 Laurent Montel <montel@kde.org>"
+SPDX-License-Identifier = "BSD-3-Clause"
 
 [[annotations]]
 path = [".gersemirc"]
