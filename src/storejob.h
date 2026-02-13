@@ -17,11 +17,17 @@ class Session;
 struct Response;
 class StoreJobPrivate;
 
+/*!
+ * \typealias KIMAP::MessageFlags
+ * \relates KIMAP::StoreJob
+ */
 using MessageFlags = QList<QByteArray>;
 /*!
  * \class KIMAP::StoreJob
  * \inmodule KIMAP
  * \inheaderfile KIMAP/StoreJob
+ *
+ * \brief Store Job.
  */
 class KIMAP_EXPORT StoreJob : public Job
 {
@@ -31,14 +37,21 @@ class KIMAP_EXPORT StoreJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     * \value SetFlags
+     * \value AppendFlags
+     * \value RemoveFlags
+     */
     enum StoreMode {
         SetFlags,
         AppendFlags,
         RemoveFlags
     };
+
     /*!
      */
     explicit StoreJob(Session *session);
+
     /*!
      */
     ~StoreJob() override;
@@ -46,6 +59,7 @@ public:
     /*!
      */
     void setSequenceSet(const ImapSet &set);
+
     /*!
      */
     [[nodiscard]] ImapSet sequenceSet() const;
@@ -53,6 +67,7 @@ public:
     /*!
      */
     void setUidBased(bool uidBased);
+
     /*!
      */
     [[nodiscard]] bool isUidBased() const;
@@ -60,6 +75,7 @@ public:
     /*!
      */
     void setFlags(const MessageFlags &flags);
+
     /*!
      */
     [[nodiscard]] MessageFlags flags() const;
@@ -67,6 +83,7 @@ public:
     /*!
      */
     void setGMLabels(const MessageFlags &gmLabels);
+
     /*!
      */
     [[nodiscard]] MessageFlags gmLabels() const;
@@ -74,6 +91,7 @@ public:
     /*!
      */
     void setMode(StoreMode mode);
+
     /*!
      */
     [[nodiscard]] StoreMode mode() const;

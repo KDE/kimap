@@ -12,7 +12,8 @@ sourcedirs += .
 outputformats = HTML
 
 depends += \
-    qtcore
+    qtcore \
+    kcoreaddons
 
 navigation.landingpage = "KIMAP"
 

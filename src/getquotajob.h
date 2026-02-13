@@ -19,7 +19,7 @@ class GetQuotaJobPrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/GetQuotaJob
  *
- * Gets resource limits for a quota root.
+ * \brief Gets resource limits for a quota root.
  *
  * Quotas are defined with respect to "resources" and "quota roots".
  * A resource is a numerical property that can be limited, such
@@ -35,7 +35,7 @@ class GetQuotaJobPrivate;
  *
  * This job requires that the server supports the QUOTA
  * capability, defined in
- * <a href="https://tools.ietf.org/html/rfc2087">RFC 2087</a>.
+ * \l{https://tools.ietf.org/html/rfc2087}{RFC 2087}.
  */
 class KIMAP_EXPORT GetQuotaJob : public QuotaJobBase
 {
@@ -45,12 +45,17 @@ class KIMAP_EXPORT GetQuotaJob : public QuotaJobBase
     friend class SessionPrivate;
 
 public:
+    /*!
+     *
+     */
     explicit GetQuotaJob(Session *session);
     ~GetQuotaJob() override;
 
     /*!
      * Set the quota root to get the resource limits for.
+     *
      * \a root the quota root to set
+     *
      * \sa GetQuotaRootJob
      */
     void setRoot(const QByteArray &root);

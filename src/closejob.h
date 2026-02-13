@@ -21,11 +21,11 @@ class CloseJobPrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/CloseJob
  *
- * Closes the current mailbox.
+ * \brief Closes the current mailbox.
  *
  * This job can only be run when the session is in the selected state.
  *
- * Permanently removes all messages that have the \\Deleted
+ * Permanently removes all messages that have the Deleted
  * flag set from the currently selected mailbox, and returns
  * to the authenticated state from the selected state.
  *

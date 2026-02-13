@@ -21,7 +21,7 @@ class CapabilitiesJobPrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/CapabilitiesJob
  *
- * Checks server capabilities.
+ * \brief Checks server capabilities.
  *
  * This job can be run in any open session.
  *
@@ -58,7 +58,7 @@ Q_SIGNALS:
     /*!
      * Notifies listeners that the capabilities have been fetched.
      *
-     * \a capabilities  The capabilities the server claims to support.
+     * \a capabilities The capabilities the server claims to support.
      */
     void capabilitiesReceived(const QStringList &capabilities);
 

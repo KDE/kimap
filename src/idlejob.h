@@ -24,7 +24,7 @@ class IdleJobPrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/IdleJob
  *
- * Idles the connection to the IMAP server.
+ * \brief Idles the connection to the IMAP server.
  *
  * This job can be run while the client has no other use
  * for the connection, and the server will send updates
@@ -45,7 +45,7 @@ class IdleJobPrivate;
  *
  * This job requires that the server supports the IDLE
  * capability, defined in
- * <a href="https://tools.ietf.org/html/rfc2177">RFC 2177</a>.
+ * \l{https://tools.ietf.org/html/rfc2177}{RFC 2177}.
  */
 class KIMAP_EXPORT IdleJob : public Job
 {
@@ -73,7 +73,7 @@ public:
      * messages in the mailbox when that number changes.
      * This is the last number it reported.
      *
-     * Returns  the last message count the server reported,
+     * Returns the last message count the server reported,
      *          or -1 if it has not reported a message count
      *          since the job started.
      */
@@ -82,11 +82,11 @@ public:
      * The last recent message count that was reported.
      *
      * The server will send updates about the number of
-     * messages in the mailbox that are tagged with \Recent
+     * messages in the mailbox that are tagged with Recent
      * when that number changes. This is the last number it
      * reported.
      *
-     * Returns  the last recent message count the server reported,
+     * Returns the last recent message count the server reported,
      *          or -1 if it has not reported a recent message count
      *          since the job started.
      */
@@ -104,8 +104,11 @@ Q_SIGNALS:
      * recent message counts have changed.
      *
      * \a job           this object
+     *
      * \a mailBox       the selected mailbox
+     *
      * \a messageCount  the new total message count reported by the server
+     *
      * \a recentCount   the new "recent message" count reported by the server
      */
     void mailBoxStats(KIMAP::IdleJob *job, const QString &mailBox, int messageCount, int recentCount);
@@ -115,7 +118,9 @@ Q_SIGNALS:
      * have changed
      *
      * \a job this object
+     *
      * \a uid UID of message that has changed
+     *
      * \since 4.12
      */
     void mailBoxMessageFlagsChanged(KIMAP::IdleJob *job, qint64 uid);

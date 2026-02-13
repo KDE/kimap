@@ -21,6 +21,8 @@ class ImapSet;
  * \class KIMAP::SelectJob
  * \inmodule KIMAP
  * \inheaderfile KIMAP/SelectJob
+ *
+ * \brief Select Job.
  */
 class KIMAP_EXPORT SelectJob : public Job
 {
@@ -40,13 +42,18 @@ public:
     /*!
      */
     void setMailBox(const QString &mailBox);
+
     /*!
      */
     [[nodiscard]] QString mailBox() const;
 
+    /*!
+     *
+     */
     void setOpenReadOnly(bool readOnly);
     /*!
-     * Returns Returns whether the mailbox is opened in read-only mode. Note
+     * Returns whether the mailbox is opened in read-only mode.
+     * Note
      * that this can return true even if setOpenReadOnly() was set to false,
      * as the mailbox may be read-only on the server.
      */
@@ -55,6 +62,7 @@ public:
     /*!
      */
     [[nodiscard]] QList<QByteArray> flags() const;
+
     /*!
      */
     [[nodiscard]] QList<QByteArray> permanentFlags() const;
@@ -62,9 +70,11 @@ public:
     /*!
      */
     [[nodiscard]] int messageCount() const;
+
     /*!
      */
     [[nodiscard]] int recentCount() const;
+
     /*!
      */
     [[nodiscard]] qint64 firstUnseenIndex() const;
@@ -72,6 +82,7 @@ public:
     /*!
      */
     [[nodiscard]] qint64 uidValidity() const;
+
     /*!
      */
     [[nodiscard]] qint64 nextUid() const;
@@ -112,7 +123,9 @@ public:
      * Using this option implies enabling CONDSTORE.
      *
      * \a lastUidvalidity Last UIDValidity value known to the client
+     *
      * \a lastModseq Last modification sequence number known to the client
+     *
      * \a knownUids List of all UIDs known to the client (optional).
      *
      * \sa KIMAP::EnableJob

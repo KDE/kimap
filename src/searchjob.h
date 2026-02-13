@@ -27,20 +27,36 @@ class TermPrivate;
 /*!
  * \class KIMAP::Term
  * \inmodule KIMAP
- * \inheaderfile KIMAP/Term
+ * \inheaderfile KIMAP/SearchJob
  *
- * A query term.
+ * \brief A query term.
+ *
  * Refer to the IMAP RFC for the meaning of the individual terms.
  * \since 4.13
  */
 class KIMAP_EXPORT Term
 {
 public:
+    /*!
+     * \value And
+     * \value Or
+     */
     enum Relation {
         And,
         Or
     };
 
+    /*!
+     * \value All
+     * \value Bcc
+     * \value Body
+     * \value Cc
+     * \value From
+     * \value Subject
+     * \value Text
+     * \value To
+     * \value Keyword
+     */
     enum SearchKey {
         All,
         Bcc,
@@ -53,6 +69,16 @@ public:
         Keyword
     };
 
+    /*!
+     * \value New
+     * \value Old
+     * \value Recent
+     * \value Seen
+     * \value Draft
+     * \value Deleted
+     * \value Flagged
+     * \value Answered
+     */
     enum BooleanSearchKey {
         New,
         Old,
@@ -64,6 +90,14 @@ public:
         Answered
     };
 
+    /*!
+     * \value Before
+     * \value On
+     * \value Since
+     * \value SentBefore
+     * \value SentOn
+     * \value SentSince
+     */
     enum DateSearchKey {
         Before,
         On,
@@ -72,10 +106,20 @@ public:
         SentOn,
         SentSince
     };
+
+    /*!
+     * \value Larger
+     * \value Smaller
+     */
     enum NumberSearchKey {
         Larger,
         Smaller
     };
+
+    /*!
+     * \value Uid
+     * \value SequenceNumber
+     */
     enum SequenceSearchKey {
         Uid,
         SequenceNumber
@@ -84,27 +128,35 @@ public:
     /*!
      */
     Term();
+
     /*!
      */
     ~Term();
+
     /*!
      */
     Term(Relation relation, const QList<Term> &subterms);
+
     /*!
      */
     Term(SearchKey key, const QString &value);
+
     /*!
      */
     Term(BooleanSearchKey key);
+
     /*!
      */
     Term(DateSearchKey key, const QDate &date);
+
     /*!
      */
     Term(NumberSearchKey key, int value);
+
     /*!
      */
     Term(SequenceSearchKey key, const KIMAP::ImapSet &);
+
     /*!
      */
     Term(const QString &header, const QString &value);
@@ -127,6 +179,7 @@ public:
     /*!
      */
     Term &setFuzzy(bool fuzzy);
+
     /*!
      */
     Term &setNegated(bool negated);
@@ -139,6 +192,13 @@ private:
     QSharedDataPointer<TermPrivate> d;
 };
 
+/*!
+ * \class KIMAP::SearchJob
+ * \inmodule KIMAP
+ * \inheaderfile KIMAP/SearchJob
+ *
+ * \brief Search Job.
+ */
 class KIMAP_EXPORT SearchJob : public Job
 {
     Q_OBJECT
@@ -147,28 +207,49 @@ class KIMAP_EXPORT SearchJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     *
+     */
     explicit SearchJob(Session *session);
     ~SearchJob() override;
 
+    /*!
+     *
+     */
     void setUidBased(bool uidBased);
+
+    /*!
+     *
+     */
     [[nodiscard]] bool isUidBased() const;
 
+    /*!
+     *
+     */
     void setCharset(const QByteArray &charSet);
+
+    /*!
+     *
+     */
     [[nodiscard]] QByteArray charset() const;
 
     /*!
      * Get the search result, as a list of sequence numbers or UIDs, based on the isUidBased status
+     *
      * Returns the found items
+     *
      * \since 4.6
      */
     [[nodiscard]] QList<qint64> results() const;
 
     /*!
      * Sets the search term.
+     *
      * \a term The search term.
+     *
      * \since 4.13
      */
-    void setTerm(const Term &);
+    void setTerm(const Term &term);
 
 protected:
     void doStart() override;

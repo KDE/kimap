@@ -18,6 +18,8 @@ class SubscribeJobPrivate;
  * \class KIMAP::SubscribeJob
  * \inmodule KIMAP
  * \inheaderfile KIMAP/SubscribeJob
+ *
+ * \brief Subscribe Job.
  */
 class KIMAP_EXPORT SubscribeJob : public Job
 {
@@ -37,6 +39,7 @@ public:
     /*!
      */
     void setMailBox(const QString &mailBox);
+
     /*!
      */
     [[nodiscard]] QString mailBox() const;

@@ -19,7 +19,7 @@ class SetQuotaJobPrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/SetQuotaJob
  *
- * Sets resource limits on a quota root.
+ * \brief Sets resource limits on a quota root.
  *
  * Quotas are defined with respect to "resources" and "quota roots".
  * A resource is a numerical property that can be limited, such
@@ -35,7 +35,7 @@ class SetQuotaJobPrivate;
  *
  * This job requires that the server supports the QUOTA
  * capability, defined in
- * <a href="https://tools.ietf.org/html/rfc2087">RFC 2087</a>.
+ * \l{https://tools.ietf.org/html/rfc2087}{RFC 2087}.
  */
 class KIMAP_EXPORT SetQuotaJob : public QuotaJobBase
 {
@@ -45,6 +45,9 @@ class KIMAP_EXPORT SetQuotaJob : public QuotaJobBase
     friend class SessionPrivate;
 
 public:
+    /*!
+     *
+     */
     explicit SetQuotaJob(Session *session);
     ~SetQuotaJob() override;
 
@@ -62,8 +65,9 @@ public:
      * almost certainly be composed entirely of upper-case latin
      * letters (A-Z).
      *
-     * \a resource  the resource name
-     * \a limit     the maximum value the resource may take
+     * \a resource the resource name
+     *
+     * \a limit the maximum value the resource may take
      */
     void setQuota(const QByteArray &resource, qint64 limit);
 
@@ -75,6 +79,7 @@ public:
      * existing mailboxes in an implementation-defined manner.
      *
      * \a root the quota root to set, in bytes
+     *
      * \sa GetQuotaRootJob
      */
     void setRoot(const QByteArray &root);

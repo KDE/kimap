@@ -21,7 +21,7 @@ class DeleteAclJobPrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/DeleteAclJob
  *
- * Removes an identifier from the ACL of a mailbox.
+ * \brief Removes an identifier from the ACL of a mailbox.
  *
  * This job can only be run when the session is in the
  * authenticated (or selected) state.
@@ -32,7 +32,7 @@ class DeleteAclJobPrivate;
  *
  * This job requires that the server supports the ACL
  * capability, defined in
- * <a href="https://tools.ietf.org/html/rfc4314">RFC 4314</a>.
+ * \l{https://tools.ietf.org/html/rfc4314}{RFC 4314}.
  */
 class KIMAP_EXPORT DeleteAclJob : public AclJobBase
 {
@@ -50,7 +50,7 @@ public:
     ~DeleteAclJob() override;
 
     /*!
-     * Sets the identifier to remove
+     * Sets the \a identifier to remove
      */
     void setIdentifier(const QByteArray &identifier);
     /*!

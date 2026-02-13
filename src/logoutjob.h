@@ -19,7 +19,7 @@ class LogoutJobPrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/LogoutJob
  *
- * \brief The LogoutJob class
+ * \brief The LogoutJob class.
  */
 class KIMAP_EXPORT LogoutJob : public Job
 {

@@ -19,7 +19,7 @@ class GetQuotaRootJobPrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/GetQuotaRootJob
  *
- * Gets the quota root and resource limits for a mailbox.
+ * \brief Gets the quota root and resource limits for a mailbox.
  *
  * Quotas are defined with respect to "resources" and "quota roots".
  * A resource is a numerical property that can be limited, such
@@ -35,7 +35,7 @@ class GetQuotaRootJobPrivate;
  *
  * This job requires that the server supports the QUOTA
  * capability, defined in
- * <a href="https://tools.ietf.org/html/rfc2087">RFC 2087</a>.
+ * \l{https://tools.ietf.org/html/rfc2087}{RFC 2087}.
  */
 class KIMAP_EXPORT GetQuotaRootJob : public QuotaJobBase
 {
@@ -45,6 +45,9 @@ class KIMAP_EXPORT GetQuotaRootJob : public QuotaJobBase
     friend class SessionPrivate;
 
 public:
+    /*!
+     *
+     */
     explicit GetQuotaRootJob(Session *session);
     ~GetQuotaRootJob() override;
 
@@ -70,9 +73,11 @@ public:
      * server will not provide information about resource
      * usage.
      *
-     * \a root      the quota root to get the resource usage for
-     * \a resource  the resource to get the usage for
-     * Returns  the resource usage in appropriate units, or -1
+     * \a root the quota root to get the resource usage for
+     *
+     * \a resource the resource to get the usage for
+     *
+     * Returns the resource usage in appropriate units, or -1
      *          if the usage is unknown or there is no
      *          limit on the resource
      */
@@ -80,9 +85,11 @@ public:
     /*!
      * Get the current limit for a resource.
      *
-     * \a root      the quota root to get the resource limit for
-     * \a resource  the resource to get the limit for
-     * Returns  the resource limit in appropriate units, or -1
+     * \a root the quota root to get the resource limit for
+     *
+     * \a resource the resource to get the limit for
+     *
+     * Returns the resource limit in appropriate units, or -1
      *          if the limit is unknown or there is no
      *          limit on the resource
      */
@@ -91,15 +98,17 @@ public:
     /*!
      * Get a map containing all resource usage figures for a quota root.
      *
-     * \a root  the quota root to get resource usage figures for
-     * Returns  a map from resource names to usage figures
+     * \a root the quota root to get resource usage figures for
+     *
+     * Returns a map from resource names to usage figures
      */
     [[nodiscard]] QMap<QByteArray, qint64> allUsages(const QByteArray &root) const;
     /*!
      * Get a map containing all resource limits for a quota root.
      *
-     * \a root  the quota root to get resource limits for
-     * Returns  a map from resource names to limits
+     * \a root the quota root to get resource limits for
+     *
+     * Returns a map from resource names to limits
      */
     [[nodiscard]] QMap<QByteArray, qint64> allLimits(const QByteArray &root) const;
 

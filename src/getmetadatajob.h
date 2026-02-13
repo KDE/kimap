@@ -21,26 +21,27 @@ class GetMetaDataJobPrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/GetMetaDataJob
  *
- * Fetches mailbox metadata.
+ * \brief Fetches mailbox metadata.
  *
  * Provides support for the IMAP METADATA extension; both the
  * final RFC version
- * (<a href="https://tools.ietf.org/html/rfc5464">RFC 5464</a>)
+ * (\l{https://tools.ietf.org/html/rfc5464}{RFC 5464})
  * and the older, incompatible draft version (known as ANNOTATEMORE)
- * (<a
- * href="https://tools.ietf.org/html/draft-daboo-imap-annotatemore-07"
- * >draft-daboo-imap-annotatemore-07</a>).  See setServerCompatibility().
+ * (\l{https://tools.ietf.org/html/draft-daboo-imap-annotatemore-07}{draft-daboo-imap-annotatemore-07}).  See setServerCompatibility().
  *
  * This job can only be run when the session is in the
  * authenticated (or selected) state.
  *
  * If the server supports ACLs, the user will need the
  * Acl::Lookup right on the mailbox, as well as one of
- * - Acl::Read
- * - Acl::KeepSeen
- * - Acl::Write
- * - Acl::Insert
- * - Acl::Post
+ * \list
+ * \li Acl::Read
+ * \li Acl::KeepSeen
+ * \li Acl::Write
+ * \li Acl::Insert
+ * \li Acl::Post
+ * \endlist
+ *
  * Otherwise, the user must be able to list the mailbox
  * and either read or write the message content.
  *
@@ -56,16 +57,23 @@ class KIMAP_EXPORT GetMetaDataJob : public MetaDataJobBase
     friend class SessionPrivate;
 
 public:
+    /*!
+     *
+     */
     explicit GetMetaDataJob(Session *session);
     ~GetMetaDataJob() override;
 
     /*!
      * Used to specify the depth of the metadata hierarchy to walk.
+     *
+     * \value NoDepth Only the requested entries
+     * \value OneLevel The requested entries and all their direct children
+     * \value AllLevels The requested entries and all their descendants
      */
     enum Depth {
-        NoDepth = 0, /*!< Only the requested entries */
-        OneLevel, /*!< The requested entries and all their direct children */
-        AllLevels /*!< The requested entries and all their descendants */
+        NoDepth = 0,
+        OneLevel,
+        AllLevels
     };
 
     Q_DECLARE_FLAGS(Depths, Depth)
@@ -140,10 +148,13 @@ public:
      * In ANNOTATEMORE mode, this prefix is automatically replaced with an appropriate attribute.
      *
      * \a entry the entry to get
+     *
      * Returns  the metadata entry value
      */
     [[nodiscard]] QByteArray metaData(const QByteArray &entry) const;
 
+    // XXX: what's with the mailBox argument in a class that has setMailBox()?
+    //      KJobs are not intended to be run more than once
     /*!
      * Get all the metadata for a given mailbox.
      *
@@ -151,22 +162,21 @@ public:
      *
      * If operating in Metadata mode, the metadata value is stored against the
      * empty QByteArray:
-     * \de
+     * \code
      * map = job.allMetaData( "INBOX" );
      * QByteArray value = map[ "/shared/comment" ].value( QByteArray() );
      * \endcode
      *
      * The equivalent in Annotatemore mode would be:
-     * \de
+     * \code
      * map = job.allMetaData( "INBOX" );
      * QByteArray value = map[ "/comment" ].value( "value.shared" );
      * \endcode
      *
      * \a mailBox  a mailbox name or an empty string for server metadata
-     * Returns  a map from metadata entry names to attributes or values
+     *
+     * Returns a map from metadata entry names to attributes or values
      */
-    // XXX: what's with the mailBox argument in a class that has setMailBox()?
-    //      KJobs are not intended to be run more than once
     [[nodiscard]] QMap<QByteArray, QMap<QByteArray, QByteArray>> allMetaData(const QString &mailBox) const;
 
     /*!

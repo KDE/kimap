@@ -19,9 +19,10 @@ namespace KIMAP
 /*!
   \class KIMAP::ImapInterval
   \inmodule KIMAP
-  \inheaderfile KIMAP/ImapInterval
+  \inheaderfile KIMAP/ImapSet
 
-  Represents a single interval in an ImapSet.
+  \brief Represents a single interval in an ImapSet.
+
   This class is implicitly shared.
 */
 class KIMAP_EXPORT ImapInterval
@@ -53,7 +54,9 @@ public:
 
     /*!
       Create a new interval.
+
       \a begin The begin of the interval.
+
       \a end Keep default (0) to just set the interval begin
     */
     explicit ImapInterval(Id begin, Id end = 0);
@@ -75,6 +78,7 @@ public:
 
     /*!
       Returns the size of this interval.
+
       Size is only defined for finite intervals.
     */
     [[nodiscard]] Id size() const;
@@ -85,7 +89,10 @@ public:
     [[nodiscard]] bool hasDefinedBegin() const;
 
     /*!
-      Returns the begin of this interval. The value is the smallest value part of the interval.
+      Returns the begin of this interval.
+
+      The value is the smallest value part of the interval.
+
       Only valid if begin is defined.
     */
     [[nodiscard]] Id begin() const;
@@ -96,7 +103,10 @@ public:
     [[nodiscard]] bool hasDefinedEnd() const;
 
     /*!
-      Returns the end of this interval. This value is the largest value part of the interval.
+      Returns the end of this interval.
+
+      This value is the largest value part of the interval.
+
       Only valid if hasDefinedEnd() returned true.
     */
     [[nodiscard]] Id end() const;
@@ -127,8 +137,14 @@ private:
 };
 
 /*!
-  Represents a set of natural numbers (1->∞) in a as compact as possible form.
+  \class KIMAP::ImapSet
+  \inmodule KIMAP
+  \inheaderfile KIMAP/ImapSet
+
+  \brief Represents a set of natural numbers (1->∞) in a as compact as possible form.
+
   Used to address Akonadi items via the IMAP protocol or in the database.
+
   This class is implicitly shared.
 */
 class KIMAP_EXPORT ImapSet
@@ -178,23 +194,31 @@ public:
 
     /*!
       Adds a single positive integer numbers to the set.
+
       The list is sorted and split into as large as possible intervals.
+
       No interval merging is performed.
+
       \a value A positive integer number
     */
     void add(Id value);
 
     /*!
       Adds the given list of positive integer numbers to the set.
+
       The list is sorted and split into as large as possible intervals.
+
       No interval merging is performed.
+
       \a values List of positive integer numbers in arbitrary order
     */
     void add(const QList<Id> &values);
 
     /*!
       Adds the given ImapInterval to this set.
+
       No interval merging is performed.
+
       \a interval the interval to add
     */
     void add(const ImapInterval &interval);
@@ -235,21 +259,8 @@ private:
 
 }
 
-/*!
- * \fn operator<<(QDebug &d, const KIMAP::ImapInterval &interval)
- * \inmodule KIMAP
- * \inheaderfile KIMAP/ImapSet
- *
- * Debug stream operator for ImapInterval.
- */
 KIMAP_EXPORT QDebug &operator<<(QDebug &d, const KIMAP::ImapInterval &interval);
-/*!
- * \fn operator<<(QDebug &d, const KIMAP::ImapSet &set)
- * \inmodule KIMAP
- * \inheaderfile KIMAP/ImapSet
- *
- * Debug stream operator for ImapSet.
- */
+
 KIMAP_EXPORT QDebug &operator<<(QDebug &d, const KIMAP::ImapSet &set);
 
 Q_DECLARE_METATYPE(KIMAP::ImapInterval)

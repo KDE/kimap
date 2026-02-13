@@ -26,6 +26,9 @@ namespace KIMAP
 class KIMAP_EXPORT SessionUiProxy
 {
 public:
+    /*!
+     * \typealias KIMAP::SessionUiProxy::Ptr
+     */
     using Ptr = QSharedPointer<SessionUiProxy>;
 
     virtual ~SessionUiProxy();
@@ -49,8 +52,10 @@ public:
      * UiProxy *proxy = new UiProxy();
      * session.setUiProxy(proxy);
      * \endcode
+     *
      * \a errorData contains details about the error.
-     * Returns true if the error can be ignored
+     *
+     * Returns \c true if the error can be ignored
      */
     virtual bool ignoreSslError(const KSslErrorUiData &errorData) = 0;
 };
