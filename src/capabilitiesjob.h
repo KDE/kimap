@@ -40,7 +40,11 @@ class KIMAP_EXPORT CapabilitiesJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     */
     explicit CapabilitiesJob(Session *session);
+    /*!
+     */
     ~CapabilitiesJob() override;
 
     /*!
@@ -59,7 +63,11 @@ Q_SIGNALS:
     void capabilitiesReceived(const QStringList &capabilities);
 
 protected:
+    /*!
+     */
     void doStart() override;
+    /*!
+     */
     void handleResponse(const Response &response) override;
 };
 

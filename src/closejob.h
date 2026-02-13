@@ -49,7 +49,11 @@ class KIMAP_EXPORT CloseJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     */
     explicit CloseJob(Session *session);
+    /*!
+     */
     ~CloseJob() override;
 
     /*!
@@ -64,7 +68,11 @@ public:
     [[nodiscard]] quint64 newHighestModSeq() const;
 
 protected:
+    /*!
+     */
     void doStart() override;
+    /*!
+     */
     void handleResponse(const Response &response) override;
 };
 

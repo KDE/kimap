@@ -41,7 +41,11 @@ class KIMAP_EXPORT ExpungeJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     */
     explicit ExpungeJob(Session *session);
+    /*!
+     */
     ~ExpungeJob() override;
 
     /*!

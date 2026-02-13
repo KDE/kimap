@@ -41,7 +41,11 @@ class KIMAP_EXPORT CopyJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     */
     explicit CopyJob(Session *session);
+    /*!
+     */
     ~CopyJob() override;
 
     /*!
@@ -108,7 +112,11 @@ public:
     [[nodiscard]] ImapSet resultingUids() const;
 
 protected:
+    /*!
+     */
     void doStart() override;
+    /*!
+     */
     void handleResponse(const Response &response) override;
 };
 

@@ -27,13 +27,23 @@ class KIMAP_EXPORT SubscribeJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     */
     explicit SubscribeJob(Session *session);
+    /*!
+     */
     ~SubscribeJob() override;
 
+    /*!
+     */
     void setMailBox(const QString &mailBox);
+    /*!
+     */
     [[nodiscard]] QString mailBox() const;
 
 protected:
+    /*!
+     */
     void doStart() override;
 };
 

@@ -42,7 +42,11 @@ class KIMAP_EXPORT EnableJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     */
     explicit EnableJob(Session *session);
+    /*!
+     */
     ~EnableJob() override;
 
     /*!
@@ -56,7 +60,11 @@ public:
     [[nodiscard]] QStringList enabledCapabilities() const;
 
 protected:
+    /*!
+     */
     void doStart() override;
+    /*!
+     */
     void handleResponse(const Response &response) override;
 };
 

@@ -38,7 +38,11 @@ class KIMAP_EXPORT AppendJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     */
     explicit AppendJob(Session *session);
+    /*!
+     */
     ~AppendJob() override;
 
     /*!

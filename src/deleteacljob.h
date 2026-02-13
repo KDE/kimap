@@ -42,7 +42,11 @@ class KIMAP_EXPORT DeleteAclJob : public AclJobBase
     friend class SessionPrivate;
 
 public:
+    /*!
+     */
     explicit DeleteAclJob(Session *session);
+    /*!
+     */
     ~DeleteAclJob() override;
 
     /*!
@@ -55,6 +59,8 @@ public:
     [[nodiscard]] QByteArray identifier();
 
 protected:
+    /*!
+     */
     void doStart() override;
 };
 

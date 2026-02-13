@@ -41,7 +41,11 @@ class KIMAP_EXPORT DeleteJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     */
     explicit DeleteJob(Session *session);
+    /*!
+     */
     ~DeleteJob() override;
 
     /*!

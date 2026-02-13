@@ -42,7 +42,11 @@ class KIMAP_EXPORT CreateJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     */
     explicit CreateJob(Session *session);
+    /*!
+     */
     ~CreateJob() override;
 
     /*!

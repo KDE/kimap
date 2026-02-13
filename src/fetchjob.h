@@ -195,7 +195,11 @@ public:
         bool qresync = false;
     };
 
+    /*!
+     */
     explicit FetchJob(Session *session);
+    /*!
+     */
     ~FetchJob() override;
 
     /*!

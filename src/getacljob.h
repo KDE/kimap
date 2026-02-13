@@ -57,7 +57,11 @@ class KIMAP_EXPORT GetAclJob : public AclJobBase
     friend class SessionPrivate;
 
 public:
+    /*!
+     */
     explicit GetAclJob(Session *session);
+    /*!
+     */
     ~GetAclJob() override;
 
     /*!
@@ -120,7 +124,11 @@ public:
     [[nodiscard]] QMap<QByteArray, Acl::Rights> allRights() const;
 
 protected:
+    /*!
+     */
     void doStart() override;
+    /*!
+     */
     void handleResponse(const Response &response) override;
 };
 

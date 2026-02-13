@@ -32,6 +32,8 @@ public:
      * \param session
      */
     explicit UnsubscribeJob(Session *session);
+    /*!
+     */
     ~UnsubscribeJob() override;
 
     /*!

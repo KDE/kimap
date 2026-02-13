@@ -36,29 +36,58 @@ public:
         AppendFlags,
         RemoveFlags
     };
-
+    /*!
+     */
     explicit StoreJob(Session *session);
+    /*!
+     */
     ~StoreJob() override;
 
+    /*!
+     */
     void setSequenceSet(const ImapSet &set);
+    /*!
+     */
     [[nodiscard]] ImapSet sequenceSet() const;
 
+    /*!
+     */
     void setUidBased(bool uidBased);
+    /*!
+     */
     [[nodiscard]] bool isUidBased() const;
 
+    /*!
+     */
     void setFlags(const MessageFlags &flags);
+    /*!
+     */
     [[nodiscard]] MessageFlags flags() const;
 
+    /*!
+     */
     void setGMLabels(const MessageFlags &gmLabels);
+    /*!
+     */
     [[nodiscard]] MessageFlags gmLabels() const;
 
+    /*!
+     */
     void setMode(StoreMode mode);
+    /*!
+     */
     [[nodiscard]] StoreMode mode() const;
 
+    /*!
+     */
     [[nodiscard]] QMap<qint64, MessageFlags> resultingFlags() const;
 
 protected:
+    /*!
+     */
     void doStart() override;
+    /*!
+     */
     void handleResponse(const Response &response) override;
 };
 
