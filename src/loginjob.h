@@ -22,7 +22,7 @@ class LoginJobPrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/LoginJob
  *
- * \brief The LoginJob class
+ * \brief The LoginJob class.
  */
 class KIMAP_EXPORT LoginJob : public Job
 {
@@ -32,16 +32,31 @@ class KIMAP_EXPORT LoginJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     * \value Unencrypted
+     * \value SSLorTLS Use SSL/TLS encryption, KIMAP will automatically negotiate the best supported encryption protocol.
+     * \value STARTTLS Use STARTTLS to upgrade an initially plaintext connection to
+     e ncrypted connection. KIMAP will automatically negotiate
+     the best supported encryption protocol.
+     */
     enum EncryptionMode {
         Unencrypted = 0,
-        SSLorTLS, /*!< Use SSL/TLS encryption, KIMAP will automatically negotiate
-                       the best supported encryption protocol. */
-        STARTTLS /*!< Use STARTTLS to upgrade an initially plaintext connection to
-                      encrypted connection. KIMAP will automatically negotiate
-                      the best supported encryption protocol. */
+        SSLorTLS,
+        STARTTLS
     };
     Q_ENUM(EncryptionMode)
 
+    /*!
+     * \value ClearText
+     * \value Login
+     * \value Plain
+     * \value CramMD5
+     * \value DigestMD5
+     * \value NTLM
+     * \value GSSAPI
+     * \value Anonymous
+     * \value XOAuth2
+     */
     enum AuthenticationMode {
         ClearText = 0,
         Login,
@@ -55,20 +70,19 @@ public:
     };
     Q_ENUM(AuthenticationMode)
 
+    /*!
+     * \value ERR_COULD_NOT_CONNECT
+     */
     enum ErrorCode {
         ERR_COULD_NOT_CONNECT = KJob::UserDefinedError + 23 // same as in kio
     };
 
     /*!
-     * \brief LoginJob
-     * \param session
      */
     explicit LoginJob(Session *session);
     ~LoginJob() override;
 
     /*!
-     * \brief userName
-     * \return
      */
     [[nodiscard]] QString userName() const;
     /*!
@@ -94,11 +108,19 @@ public:
      */
     void setAuthorizationName(const QString &authorizationName);
 
+    /*!
+     *
+     */
     [[nodiscard]] QString password() const;
+
+    /*!
+     *
+     */
     void setPassword(const QString &password);
 
     /*!
      * Returns the server greeting, in case of a successful login.
+     *
      * If the login wasn't successful, this method returns an empty string. Use errorString() to
      * get the error message in this case.
      *
@@ -109,19 +131,24 @@ public:
     [[nodiscard]] QString serverGreeting() const;
 
     /*!
-     * Set the encryption mode for the connection. In case an encryption mode is set, the caller
+     * Set the encryption mode for the connection.
+     *
+     * In case an encryption mode is set, the caller
      * MUST check the encryptionMode() result after executing the job, to see if the connection is
      * encrypted or not (e.g handshaking failed).
+     *
      * \a mode the encryption mode, see EncryptionModes
      */
     void setEncryptionMode(EncryptionMode mode);
 
     /*!
-      Get the encryption mode.
       Returns the currently active encryption mode
     */
     [[nodiscard]] EncryptionMode encryptionMode();
 
+    /*!
+     *
+     */
     void setAuthenticationMode(AuthenticationMode mode);
 
 protected:

@@ -21,15 +21,13 @@ class MetaDataJobBasePrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/MetaDataJobBase
  *
- * Base class for jobs that operate on mailbox metadata
+ * \brief Base class for jobs that operate on mailbox metadata.
  *
  * Provides support for the IMAP METADATA extension; both the
  * final RFC version
- * (<a href="https://tools.ietf.org/html/rfc5464">RFC 5464</a>)
+ * (\l{https://tools.ietf.org/html/rfc5464}{RFC 5464})
  * and the older, incompatible draft version (known as ANNOTATEMORE)
- * (<a
- * href="https://tools.ietf.org/html/draft-daboo-imap-annotatemore-07"
- * >draft-daboo-imap-annotatemore-07</a>).
+ * (\l{https://tools.ietf.org/html/draft-daboo-imap-annotatemore-07}{draft-daboo-imap-annotatemore-07}).
  *
  * This class cannot be used directly, you must subclass it and reimplement
  * at least the doStart() method.
@@ -42,26 +40,21 @@ class KIMAP_EXPORT MetaDataJobBase : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     *
+     */
     explicit MetaDataJobBase(Session *session);
     ~MetaDataJobBase() override;
 
     /*!
      * Represents the capability level of the server.
+     *
+     * \value Metadata Used to indicate that the server supports the RFC 5464 version of the extension. This corresponds to the METADATA server capability.
+     * \value Annotatemore Used to indicate that the server supports the draft-daboo-imap-annotatemore-07 version of the extension. This corresponds to the
+     * ANNOTATEMORE server capability.
      */
     enum ServerCapability {
-        /*!
-         * Used to indicate that the server supports the RFC 5464 version
-         * of the extension.
-         *
-         * This corresponds to the METADATA server capability.
-         */
         Metadata = 0,
-        /*!
-         * Used to indicate that the server supports the
-         * draft-daboo-imap-annotatemore-07 version of the extension.
-         *
-         * This corresponds to the ANNOTATEMORE server capability.
-         */
         Annotatemore
     };
 

@@ -21,10 +21,10 @@ class QuotaJobBasePrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/QuotaJobBase
  *
- * Base class for jobs that operate on mailbox quotas
+ * \brief Base class for jobs that operate on mailbox quotas.
  *
  * Provides support for the IMAP QUOTA extension, as defined by
- * <a href="https://tools.ietf.org/html/rfc2087" title="IMAP QUOTA extension">RFC 2087</a>.
+ * \l{https://tools.ietf.org/html/rfc2087}{RFC 2087}.
  *
  * This class cannot be used directly, you must subclass it and reimplement
  * at least the doStart() method.
@@ -37,6 +37,9 @@ class KIMAP_EXPORT QuotaJobBase : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     *
+     */
     explicit QuotaJobBase(Session *session);
     ~QuotaJobBase() override;
 
@@ -55,8 +58,9 @@ public:
      * server will not provide information about resource
      * usage.
      *
-     * \a resource  the resource to get the usage for
-     * Returns  the resource usage in appropriate units, or -1
+     * \a resource the resource to get the usage for
+     *
+     * Returns the resource usage in appropriate units, or -1
      *          if the usage is unknown or there is no
      *          limit on the resource
      */
@@ -72,8 +76,9 @@ public:
      * SETQUOTA will cause this information to be sent by the
      * server.
      *
-     * \a resource  the resource to get the limit for
-     * Returns  the resource limit in appropriate units, or -1
+     * \a resource the resource to get the limit for
+     *
+     * Returns the resource limit in appropriate units, or -1
      *          if the limit is unknown or there is no limit
      *          on the resource
      */

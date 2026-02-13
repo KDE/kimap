@@ -21,7 +21,7 @@ class MyRightsJobPrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/MyRightsJob
  *
- * Determine the rights the currently-logged-in user
+ * \brief Determine the rights the currently-logged-in user
  * has on the current mailbox.
  *
  * This should take into account the full access control
@@ -32,16 +32,18 @@ class MyRightsJobPrivate;
  *
  * The current user must have one of the following rights
  * on the mailbox for this job to succeed:
- * - Acl::Lookup
- * - Acl::Read
- * - Acl::Insert
- * - Acl::CreateMailbox
- * - Acl::DeleteMailbox
- * - Acl::Admin
+ * \list
+ * \li Acl::Lookup
+ * \li Acl::Read
+ * \li Acl::Insert
+ * \li Acl::CreateMailbox
+ * \li Acl::DeleteMailbox
+ * \li Acl::Admin
+ * \endlist
  *
  * This job requires that the server supports the ACL
  * capability, defined in
- * <a href="https://tools.ietf.org/html/rfc4314">RFC 4314</a>.
+ * \l{https://tools.ietf.org/html/rfc4314}{RFC 4314}.
  */
 class KIMAP_EXPORT MyRightsJob : public AclJobBase
 {
@@ -51,6 +53,9 @@ class KIMAP_EXPORT MyRightsJob : public AclJobBase
     friend class SessionPrivate;
 
 public:
+    /*!
+     *
+     */
     explicit MyRightsJob(Session *session);
     ~MyRightsJob() override;
 
@@ -61,7 +66,7 @@ public:
      * The result of this method is undefined if the job has
      * not yet completed.
      *
-     * \a right       the right to check for
+     * \a right the right to check for
      */
     [[nodiscard]] bool hasRightEnabled(Acl::Right right);
     /*!

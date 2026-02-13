@@ -21,7 +21,7 @@ class NamespaceJobPrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/NamespaceJob
  *
- * \brief The NamespaceJob class
+ * \brief The NamespaceJob class.
  */
 class KIMAP_EXPORT NamespaceJob : public Job
 {
@@ -31,28 +31,23 @@ class KIMAP_EXPORT NamespaceJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     *
+     */
     explicit NamespaceJob(Session *session);
     ~NamespaceJob() override;
 
     /*!
-     * \brief personalNamespaces
-     * \return
      */
     [[nodiscard]] QList<MailBoxDescriptor> personalNamespaces() const;
     /*!
-     * \brief userNamespaces
-     * \return
      */
     [[nodiscard]] QList<MailBoxDescriptor> userNamespaces() const;
     /*!
-     * \brief sharedNamespaces
-     * \return
      */
     [[nodiscard]] QList<MailBoxDescriptor> sharedNamespaces() const;
 
     /*!
-     * \brief containsEmptyNamespace
-     * \return
      */
     [[nodiscard]] bool containsEmptyNamespace() const;
 

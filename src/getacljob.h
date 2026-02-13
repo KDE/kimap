@@ -21,7 +21,7 @@ class GetAclJobPrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/GetAclJob
  *
- * Gets the ACL for a mailbox
+ * \brief Gets the ACL for a mailbox.
  *
  * This job can only be run when the session is in the
  * authenticated (or selected) state.
@@ -32,15 +32,16 @@ class GetAclJobPrivate;
  *
  * This job requires that the server supports the ACL
  * capability, defined in
- * <a href="https://tools.ietf.org/html/rfc4314">RFC 4314</a>.
+ * \l{https://tools.ietf.org/html/rfc4314}{RFC 4314}.
  *
  * The meaning of identifiers depends on the server implementation,
  * with the following restrictions:
- *
- * - "anyone" means any authenticated user, including anonymous
- * - an identifier starting with a minus sign ('-') indicates
+ * \list
+ * \li "anyone" means any authenticated user, including anonymous
+ * \li an identifier starting with a minus sign ('-') indicates
  *   "negative rights": rights that should be taken away from
  *   matching users
+ * \endlist
  *
  * Other than the above restrictions, ACL identifiers are usually
  * IMAP usernames, but could potentially be group names as well.
@@ -57,6 +58,9 @@ class KIMAP_EXPORT GetAclJob : public AclJobBase
     friend class SessionPrivate;
 
 public:
+    /*!
+     *
+     */
     explicit GetAclJob(Session *session);
     ~GetAclJob() override;
 
@@ -86,6 +90,7 @@ public:
      * a certain right.
      *
      * \a identifier  the identifier to check the rights for
+     *
      * \a right       the right to check for
      */
     [[nodiscard]] bool hasRightEnabled(const QByteArray &identifier, Acl::Right right) const;

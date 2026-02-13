@@ -22,10 +22,10 @@ class ExpungeJobPrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/ExpungeJob
  *
- * Expunges the deleted messages in the selected mailbox.
+ * \brief Expunges the deleted messages in the selected mailbox.
  *
  * This permanently removes any messages that have the
- * \Deleted flag set in the selected mailbox.
+ * Deleted flag set in the selected mailbox.
  *
  * This job can only be run when the session is in the
  * selected state.
@@ -41,6 +41,9 @@ class KIMAP_EXPORT ExpungeJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     *
+     */
     explicit ExpungeJob(Session *session);
     ~ExpungeJob() override;
 

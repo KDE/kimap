@@ -21,15 +21,13 @@ class SetMetaDataJobPrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/SetMetaDataJob
  *
- * Sets mailbox metadata.
+ * \brief Sets mailbox metadata.
  *
  * Provides support for the IMAP METADATA extension; both the
  * final RFC version
- * (<a href="https://tools.ietf.org/html/rfc5464">RFC 5464</a>)
+ * (\l{https://tools.ietf.org/html/rfc5464}{RFC 5464})
  * and the older, incompatible draft version (known as ANNOTATEMORE)
- * (<a
- * href="https://tools.ietf.org/html/draft-daboo-imap-annotatemore-07"
- * >draft-daboo-imap-annotatemore-07</a>).  See setServerCompatibility().
+ * (\l{https://tools.ietf.org/html/draft-daboo-imap-annotatemore-07}{draft-daboo-imap-annotatemore-07}).  See setServerCompatibility().
  *
  * Note that in Annotatemore mode, this job can only operate on
  * one metadata entry at once.
@@ -39,11 +37,14 @@ class SetMetaDataJobPrivate;
  *
  * If the server supports ACLs, the user will need the
  * Acl::Lookup right on the mailbox, as well as one of
- * - Acl::Read
- * - Acl::KeepSeen
- * - Acl::Write
- * - Acl::Insert
- * - Acl::Post
+ * \list
+ * \li Acl::Read
+ * \li Acl::KeepSeen
+ * \li Acl::Write
+ * \li Acl::Insert
+ * \li Acl::Post
+ * \endlist
+ *
  * Otherwise, the user must be able to list the mailbox
  * and either read or write the message content.
  *
@@ -63,9 +64,13 @@ class KIMAP_EXPORT SetMetaDataJob : public MetaDataJobBase
     friend class SessionPrivate;
 
 public:
+    /*!
+     *
+     */
     explicit SetMetaDataJob(Session *session);
     ~SetMetaDataJob() override;
 
+    // KDE5: drop ANNOTATEMORE support
     /*!
      * Adds a metadata entry or attribute to the list of modifications to make
      *
@@ -84,17 +89,21 @@ public:
      * private metadata may not be supported by all servers.
      *
      * Server metadata entry names include:
-     * - /shared/comment
-     * - /shared/admin - a URI for contacting the server administrator
+     * \list
+     * \li /shared/comment
+     * \li /shared/admin - a URI for contacting the server administrator
      *                   (eg: a mailto: or tel: URI)
-     * - /shared/vendor/<vendor-token>/something
-     * - /private/vendor/<vendor-token>/something
+     * \li /shared/vendor/<vendor-token>/something
+     * \li /private/vendor/<vendor-token>/something
+     * \endlist
      *
      * Mailbox metadata entry names include:
-     * - /shared/comment
-     * - /private/comment
-     * - /shared/vendor/<vendor-token>/something
-     * - /private/vendor/<vendor-token>/something
+     * \list
+     * \li /shared/comment
+     * \li /private/comment
+     * \li /shared/vendor/<vendor-token>/something
+     * \li /private/vendor/<vendor-token>/something
+     * \endlist
      *
      * \a value can be any data, although if it is a multi-line string
      * value, CRLF line-endings must be used.
@@ -112,10 +121,12 @@ public:
      * is strongly discouraged.
      *
      * Possible attribute name prefixes are:
-     * - value - the data value of the attribute
-     * - content-type - a MIME content type and subtype
-     * - content-language - a RFC 3282 language code
-     * - vendor.<vendor-token> - a vendor-specific attribute
+     * \list
+     * \li value - the data value of the attribute
+     * \li content-type - a MIME content type and subtype
+     * \li content-language - a RFC 3282 language code
+     * \li vendor.<vendor-token> - a vendor-specific attribute
+     * \endlist
      *
      * Attribute names an attribute name prefix followed by ".priv" for
      * private attributes or ".shared" for shared attributes.  Note that
@@ -123,21 +134,25 @@ public:
      * attributes set by the server, and so cannot be used with
      * SetMetaDataJob.
      *
-     * \a name   the metadata entry name (Metadata or Annotatemore mode) in ASCII or
+     * \a name the metadata entry name (Metadata or Annotatemore mode) in ASCII or
      *               attribute name (Annotatemore mode, if used without /shared or /private prefix) in UTF-8
-     * \a value  the value of the entry or attribute
+     * \a value the value of the entry or attribute
      */
-    // KDE5: drop ANNOTATEMORE support
     void addMetaData(const QByteArray &name, const QByteArray &value);
 
     /*!
      * Possible error codes that may be returned by the server.
+     *
+     * \value NoError Used to indicate that no errors have been received
+     * \value TooMany Cannot add a new metadata item, because the limit has already been reached
+     * \value TooBig A metadata value was too big (see maxAcceptedSize())
+     * \value NoPrivate The server does not support private metadata entries
      */
     enum MetaDataError {
-        NoError = 0, /*!< Used to indicate that no errors have been received */
-        TooMany = 1, /*!< Cannot add a new metadata item, because the limit has already been reached */
-        TooBig = 2, /*!< A metadata value was too big (see maxAcceptedSize()) */
-        NoPrivate = 4 /*!< The server does not support private metadata entries */
+        NoError = 0,
+        TooMany = 1,
+        TooBig = 2,
+        NoPrivate = 4
     };
 
     // Q_DECLARE_WHATEVER_THAT_WAS missing
@@ -146,7 +161,7 @@ public:
     /*!
      * The metadata errors received from the server.
      *
-     * Returns  a set of error codes
+     * Returns a set of error codes
      */
     [[nodiscard]] MetaDataErrors metaDataErrors() const;
     /*!
@@ -156,7 +171,7 @@ public:
      * large (see metaDataErrors), this should indicate what the
      * maximum size accepted by the server is.
      *
-     * Returns  the maximum value size in octets, or -1 if the limit is unknown
+     * Returns the maximum value size in octets, or -1 if the limit is unknown
      */
     [[nodiscard]] qint64 maxAcceptedSize();
 

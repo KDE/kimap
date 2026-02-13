@@ -19,6 +19,8 @@ class StatusJobPrivate;
  * \class KIMAP::StatusJob
  * \inmodule KIMAP
  * \inheaderfile KIMAP/StatusJob
+ *
+ * \brief Status Job.
  */
 class KIMAP_EXPORT StatusJob : public Job
 {
@@ -28,35 +30,28 @@ class KIMAP_EXPORT StatusJob : public Job
     friend class StatusJobPrivate;
 
 public:
+    /*!
+     *
+     */
     explicit StatusJob(Session *session);
     ~StatusJob() override;
 
     /*!
-     * \brief setMailBox
-     * \param mailBox
      */
     void setMailBox(const QString &mailBox);
     /*!
-     * \brief mailBox
-     * \return
      */
     [[nodiscard]] QString mailBox() const;
 
     /*!
-     * \brief setDataItems
-     * \param dataItems
      */
     void setDataItems(const QList<QByteArray> &dataItems);
 
     /*!
-     * \brief dataItems
-     * \return
      */
     [[nodiscard]] QList<QByteArray> dataItems() const;
 
     /*!
-     * \brief status
-     * \return
      */
     [[nodiscard]] QList<QPair<QByteArray, qint64>> status() const;
 

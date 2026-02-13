@@ -22,7 +22,7 @@ class AppendJobPrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/AppendJob
  *
- * Appends a message to a mailbox.
+ * \brief Appends a message to a mailbox.
  *
  * This job can only be run when the session is in the
  * authenticated (or selected) state.
@@ -38,6 +38,9 @@ class KIMAP_EXPORT AppendJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     *
+     */
     explicit AppendJob(Session *session);
     ~AppendJob() override;
 
@@ -47,7 +50,7 @@ public:
      * If the mailbox does not exist, it will not automatically
      * be created and the command will fail.
      *
-     * \a mailBox  the (unquoted) name of the mailbox
+     * \a mailBox the (unquoted) name of the mailbox
      */
     void setMailBox(const QString &mailBox);
     /*!
@@ -58,7 +61,7 @@ public:
     /*!
      * Set the flags that should be applied to the appended message.
      *
-     * \a flags  a list of flags
+     * \a flags a list of flags
      */
     void setFlags(const QList<QByteArray> &flags);
     /*!
@@ -74,7 +77,7 @@ public:
      *
      * If this is not set, the server will use the current date/time.
      *
-     * \a internalDate  the internal date
+     * \a internalDate the internal date
      *
      * \since 4.13
      */

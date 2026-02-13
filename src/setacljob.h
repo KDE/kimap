@@ -21,14 +21,14 @@ class SetAclJobPrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/SetAclJob
  *
- * Sets the rights that correspond to an identifier on a mailbox
+ * \brief Sets the rights that correspond to an identifier on a mailbox.
  *
  * This job can only be run when the session is in the
  * authenticated (or selected) state.
  *
  * This job requires that the server supports the ACL
  * capability, defined in
- * <a href="https://tools.ietf.org/html/rfc4314">RFC 4314</a>.
+ * \l{https://tools.ietf.org/html/rfc4314}{RFC 4314}.
  */
 class KIMAP_EXPORT SetAclJob : public AclJobBase
 {
@@ -38,6 +38,9 @@ class KIMAP_EXPORT SetAclJob : public AclJobBase
     friend class SessionPrivate;
 
 public:
+    /*!
+     *
+     */
     explicit SetAclJob(Session *session);
     ~SetAclJob() override;
 
@@ -59,12 +62,13 @@ public:
      * of rights if you have requested that all the rights in that
      * group should be set.
      *
-     * \a modifier  determines whether the rights will be
+     * \a modifier determines whether the rights will be
      *                  added to the identifier, removed from
      *                  the identifier or will replace any
      *                  existing rights assigned to the
      *                  identifier
-     * \a rights    the rights to be added, removed or set
+     *
+     * \a rights the rights to be added, removed or set
      */
     void setRights(AclModifier modifier, Acl::Rights rights);
 
@@ -73,11 +77,12 @@ public:
      *
      * The meaning of identifiers depends on the server implementation,
      * with the following restrictions:
-     *
-     * - "anyone" means any authenticated user, including anonymous
-     * - an identifier starting with a minus sign ('-') indicates
+     * \list
+     * \li "anyone" means any authenticated user, including anonymous
+     * \li an identifier starting with a minus sign ('-') indicates
      *   "negative rights": rights that should be taken away from
      *   matching users
+     * \endlist
      *
      * Other than the above restrictions, ACL identifiers are usually
      * IMAP usernames, but could potentially be group names as well.
@@ -85,6 +90,7 @@ public:
      * Note that negative rights override positive rights: if
      * "fred" and "-fred" are both assigned the 'w' right, the
      * user "fred" will not have the 'w' right.
+     *
      * \a identifier the identifier to set
      */
     void setIdentifier(const QByteArray &identifier);

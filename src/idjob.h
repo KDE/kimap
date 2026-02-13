@@ -21,7 +21,7 @@ class IdJobPrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/IdJob
  *
- * Reports client id.
+ * \brief Reports client id.
  *
  * This job can be run in any open session.
  */
@@ -33,9 +33,15 @@ class KIMAP_EXPORT IdJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     *
+     */
     explicit IdJob(Session *session);
     ~IdJob() override;
 
+    /*!
+     *
+     */
     void setField(const QByteArray &name, const QByteArray &field);
 
 protected:

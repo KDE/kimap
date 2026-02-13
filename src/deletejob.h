@@ -20,11 +20,11 @@ class DeleteJobPrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/DeleteJob
  *
- * Delete a mailbox
+ * \brief Delete a mailbox.
  *
  * Note that some servers will refuse to delete a
  * mailbox unless it is empty (ie: all mails have
- * had their \Deleted flag set, and then the
+ * had their Deleted flag set, and then the
  * mailbox has been expunged).
  *
  * This job can only be run when the session is in the
@@ -41,6 +41,9 @@ class KIMAP_EXPORT DeleteJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     *
+     */
     explicit DeleteJob(Session *session);
     ~DeleteJob() override;
 

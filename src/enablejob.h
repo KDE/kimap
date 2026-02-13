@@ -23,7 +23,7 @@ class EnableJobPrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/EnableJob
  *
- * Job to enable additional IMAP capabilities.
+ * \brief Job to enable additional IMAP capabilities.
  *
  * Requires server to implement the IMAP ENABLE Extension (RFC5161). The
  * new capabilities to enable will be specified by the user. The user is
@@ -42,6 +42,9 @@ class KIMAP_EXPORT EnableJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     *
+     */
     explicit EnableJob(Session *session);
     ~EnableJob() override;
 

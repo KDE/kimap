@@ -22,10 +22,10 @@ class AclJobBasePrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/AclJobBase
  *
- * Base class for jobs that operate on mailbox ACLs
+ * \brief Base class for jobs that operate on mailbox ACLs.
  *
  * Provides support for the IMAP ACL extension, as defined by
- * <a href="https://tools.ietf.org/html/rfc4314" title="IMAP ACL extension">RFC 4314</a>.
+ * \l{https://tools.ietf.org/html/rfc4314}{RFC 4314}.
  *
  * This class cannot be used directly, you must subclass it and reimplement
  * at least the doStart() method.
@@ -38,11 +38,18 @@ class KIMAP_EXPORT AclJobBase : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     *
+     */
     explicit AclJobBase(Session *session);
     ~AclJobBase() override;
 
     /*!
      * Used when subclassing to specify how the ACL will be modified.
+     *
+     * \value Add
+     * \value Remove
+     * \value Change
      */
     enum AclModifier {
         Add = 0,

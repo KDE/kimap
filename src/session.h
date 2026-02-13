@@ -21,6 +21,8 @@ struct Response;
  * \class KIMAP::Session
  * \inmodule KIMAP
  * \inheaderfile KIMAP/Session
+ *
+ * \brief Session.
  */
 class KIMAP_EXPORT Session : public QObject
 {
@@ -29,6 +31,12 @@ class KIMAP_EXPORT Session : public QObject
     friend class JobPrivate;
 
 public:
+    /*!
+     * \value Disconnected
+     * \value NotAuthenticated
+     * \value Authenticated
+     * \value Selected
+     */
     enum State {
         Disconnected = 0,
         NotAuthenticated,
@@ -36,44 +44,69 @@ public:
         Selected
     };
     Q_ENUM(State)
+
+    /*!
+     *
+     */
     Session(const QString &hostName, quint16 port, QObject *parent = nullptr);
     ~Session();
 
+    /*!
+     *
+     */
     [[nodiscard]] QString hostName() const;
+
+    /*!
+     *
+     */
     [[nodiscard]] quint16 port() const;
+
+    /*!
+     *
+     */
     [[nodiscard]] State state() const;
 
     /*!
      * Returns the name that has been set with LoginJob::setUserName()
+     *
      * The user name is useful to uniquely identify an IMAP resource, in combination with the host name
+     *
      * Note If the Session was pre-authenticated, userName() will return an empty string
      * \since 4.7
      */
     [[nodiscard]] QString userName() const;
 
+    /*!
+     *
+     */
     [[nodiscard]] QByteArray serverGreeting() const;
 
     /*!
      * Sets an ui proxy that displays the error messages and waits for user feedback.
+     *
      * \a proxy the ui proxy object
      */
     void setUiProxy(const SessionUiProxy::Ptr &proxy);
 
     /*!
      * Set the session timeout. The default is 30 seconds.
+     *
      * \a timeout The socket timeout in seconds, negative values disable the timeout.
+     *
      * \since 4.6
      */
     void setTimeout(int timeout);
 
     /*!
      * Returns the session timeout.
+     *
      * \since 4.12
      */
     [[nodiscard]] int timeout() const;
 
     /*!
      * Returns the currently selected mailbox.
+     *
      * \since 4.5
      */
     [[nodiscard]] QString selectedMailBox() const;
@@ -81,8 +114,10 @@ public:
     /*!
      * Sets whether the IMAP network connection should use the system proxy settings.
      *
-     * \a useProxy \\ true if the proxy is to be used
+     * \a useProxy \c true if the proxy is to be used
+     *
      * The default is to not use the proxy.
+     *
      * \since 5.11.41
      *
      * Note If the session is currently connected to the IMAP server, calling this
@@ -90,11 +125,20 @@ public:
      */
     void setUseNetworkProxy(bool useProxy);
 
+    /*!
+     *
+     */
     [[nodiscard]] qsizetype jobQueueSize() const;
 
+    /*!
+     *
+     */
     void close();
 
 Q_SIGNALS:
+    /*!
+     *
+     */
     void jobQueueSizeChanged(qsizetype queueSize);
 
     /*!
@@ -123,7 +167,7 @@ Q_SIGNALS:
       Not very useful after all... :-)
 
       If you want to receive the stateChanged arguments in your slot, you must register the State
-      enum with \\ Q_DECLARE_METATYPE(KIMAP::Session::State) and \\ qRegisterMetaType<KIMAP::Session::State>();
+      enum with Q_DECLARE_METATYPE(KIMAP::Session::State) and qRegisterMetaType<KIMAP::Session::State>();
 
       \since 4.7
     */

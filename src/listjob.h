@@ -21,10 +21,17 @@ class ListJobPrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/ListJob
  *
- * Describes a mailbox name and separator.
+ * \brief Describes a mailbox name and separator.
  */
 struct KIMAP_EXPORT MailBoxDescriptor {
+    /*!
+     * \variable KIMAP::MailBoxDescriptor::name
+     */
     QString name;
+
+    /*!
+     * \variable KIMAP::MailBoxDescriptor::separator
+     */
     QChar separator;
 
     inline bool operator==(const MailBoxDescriptor &other) const
@@ -42,7 +49,7 @@ struct KIMAP_EXPORT MailBoxDescriptor {
  * \inmodule KIMAP
  * \inheaderfile KIMAP/ListJob
  *
- * \brief The ListJob class
+ * \brief The ListJob class.
  */
 class KIMAP_EXPORT ListJob : public Job
 {
@@ -52,23 +59,48 @@ class KIMAP_EXPORT ListJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     * \value NoOption only subscribed mailboxes. (Uses the LSUB IMAP command.)
+     * \value IncludeUnsubscribed subscribed and unsubscribed mailboxes. (Uses the LIST IMAP command.)
+     * \value IncludeFolderRoleFlags List subscribed and unsubscribed mailboxes with flags to identify standard mailboxes whose name may be localized. The
+     * server must support the XLIST extension.
+     */
     enum Option {
-        NoOption = 0x0, /*!< List only subscribed mailboxes. (Uses the LSUB IMAP command.) */
-        IncludeUnsubscribed, /*!< List subscribed and unsubscribed mailboxes. (Uses the LIST IMAP command.) */
-        IncludeFolderRoleFlags /*!< List subscribed and unsubscribed mailboxes with flags to identify standard mailboxes whose name may be localized.
-                                  The server must support the XLIST extension. */
+        NoOption = 0x0,
+        IncludeUnsubscribed,
+        IncludeFolderRoleFlags
     };
 
+    /*!
+     *
+     */
     explicit ListJob(Session *session);
     ~ListJob() override;
 
+    /*!
+     *
+     */
     void setOption(Option option);
+
+    /*!
+     *
+     */
     [[nodiscard]] Option option() const;
 
+    /*!
+     *
+     */
     void setQueriedNamespaces(const QList<MailBoxDescriptor> &namespaces);
+
+    /*!
+     *
+     */
     [[nodiscard]] QList<MailBoxDescriptor> queriedNamespaces() const;
 
 Q_SIGNALS:
+    /*!
+     *
+     */
     void mailBoxesReceived(const QList<KIMAP::MailBoxDescriptor> &descriptors, const QList<QList<QByteArray>> &flags);
 
 protected:
@@ -83,6 +115,8 @@ private:
      *  This is according to the RFC3501, 5.1. Mailbox Naming section.
      *
      * \a descriptor the descriptor to convert, conversion happens in place
+     *
+     * \internal
      **/
     void convertInboxName(KIMAP::MailBoxDescriptor &descriptor);
 };

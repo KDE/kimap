@@ -20,7 +20,7 @@ class MoveJobPrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/MoveJob
  *
- * Moves messages from current mailbox to another
+ * \brief Moves messages from current mailbox to another.
  *
  * Note that move functionality is not specified in the base IMAP
  * protocol and is defined as an extension in RFC6851. That means
@@ -40,6 +40,9 @@ class KIMAP_EXPORT MoveJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     *
+     */
     explicit MoveJob(Session *session);
     ~MoveJob() override;
 
@@ -50,7 +53,7 @@ public:
      * it automatically and the job should fail.  Note, however,
      * that a conforming server may create the mailbox automatically.
      *
-     * \a mailbox  the (unquoted) name of the mailbox where the
+     * \a mailbox the (unquoted) name of the mailbox where the
      *                 messages should be moved to
      */
     void setMailBox(const QString &mailbox);
@@ -65,7 +68,7 @@ public:
      * If sequence numbers are given, isUidBased() should be false.  If UIDs
      * are given, isUidBased() should be true.
      *
-     * \a set  the sequence numbers or UIDs of the messages to be moved
+     * \a set the sequence numbers or UIDs of the messages to be moved
      */
     void setSequenceSet(const ImapSet &set);
     /*!
@@ -74,23 +77,23 @@ public:
      * isUidBased() can be used to check whether the ImapSet contains
      * sequence numbers or UIDs.
      *
-     * Returns  the sequence numbers or UIDs of the messages to be moved
+     * Returns the sequence numbers or UIDs of the messages to be moved
      */
     [[nodiscard]] ImapSet sequenceSet() const;
 
     /*!
      * Set how the sequence set should be interpreted.
      *
-     * \a uidBased  if \\ true the argument to setSequenceSet will be
-     *                  interpreted as UIDs, if \\ false it will be interpreted
+     * \a uidBased  if \c true the argument to setSequenceSet will be
+     *                  interpreted as UIDs, if \c false it will be interpreted
      *                  as sequence numbers
      */
     void setUidBased(bool uidBased);
     /*!
      * How to interpret the sequence set.
      *
-     * Returns  if \\ true the result of sequenceSet() should be
-     *          interpreted as UIDs, if \\ false it should be interpreted
+     * Returns  if \c true the result of sequenceSet() should be
+     *          interpreted as UIDs, if \c false it should be interpreted
      *          as sequence numbers
      */
     [[nodiscard]] bool isUidBased() const;

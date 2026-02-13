@@ -21,8 +21,8 @@ class ListRightsJobPrivate;
  * \inmodule KIMAP
  * \inheaderfile KIMAP/ListRightsJob
  *
- * Lists the possible and automatic rights for
- * an identifier on a mailbox
+ * \brief Lists the possible and automatic rights for
+ * an identifier on a mailbox.
  *
  * This job can only be run when the session is in the
  * authenticated (or selected) state.
@@ -33,7 +33,7 @@ class ListRightsJobPrivate;
  *
  * This job requires that the server supports the ACL
  * capability, defined in
- * <a href="https://tools.ietf.org/html/rfc4314">RFC 4314</a>.
+ * \l{https://tools.ietf.org/html/rfc4314}{RFC 4314}.
  */
 class KIMAP_EXPORT ListRightsJob : public AclJobBase
 {
@@ -43,6 +43,9 @@ class KIMAP_EXPORT ListRightsJob : public AclJobBase
     friend class SessionPrivate;
 
 public:
+    /*!
+     *
+     */
     explicit ListRightsJob(Session *session);
     ~ListRightsJob() override;
 
@@ -51,11 +54,12 @@ public:
      *
      * The meaning of identifiers depends on the server implementation,
      * with the following restrictions:
-     *
-     * - "anyone" means any authenticated user, including anonymous
-     * - an identifier starting with a minus sign ('-') indicates
+     * \list
+     * \li "anyone" means any authenticated user, including anonymous
+     * \li an identifier starting with a minus sign ('-') indicates
      *   "negative rights": rights that should be taken away from
      *   matching users
+     * \endlist
      *
      * Other than the above restrictions, ACL identifiers are usually
      * IMAP usernames, but could potentially be group names as well.
@@ -92,11 +96,13 @@ public:
      * For example, under the UNIX permission model, the following
      * rights are all controlled by the "write" flag, and hence
      * must either all be set or all be not set:
-     * - Acl::KeepSeen
-     * - Acl::Write
-     * - Acl::Insert
-     * - Acl::DeleteMessage
-     * - Acl::Expunge
+     * \list
+     * \li Acl::KeepSeen
+     * \li Acl::Write
+     * \li Acl::Insert
+     * \li Acl::DeleteMessage
+     * \li Acl::Expunge
+     * \endlist
      */
     [[nodiscard]] QList<Acl::Rights> possibleRights();
 
