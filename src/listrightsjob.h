@@ -43,7 +43,11 @@ class KIMAP_EXPORT ListRightsJob : public AclJobBase
     friend class SessionPrivate;
 
 public:
+    /*!
+     */
     explicit ListRightsJob(Session *session);
+    /*!
+     */
     ~ListRightsJob() override;
 
     /*!

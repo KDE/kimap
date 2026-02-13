@@ -42,7 +42,11 @@ class KIMAP_EXPORT MetaDataJobBase : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     */
     explicit MetaDataJobBase(Session *session);
+    /*!
+     */
     ~MetaDataJobBase() override;
 
     /*!

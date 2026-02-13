@@ -37,7 +37,11 @@ class KIMAP_EXPORT QuotaJobBase : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     */
     explicit QuotaJobBase(Session *session);
+    /*!
+     */
     ~QuotaJobBase() override;
 
     /*!

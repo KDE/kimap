@@ -122,6 +122,8 @@ public:
     */
     [[nodiscard]] EncryptionMode encryptionMode();
 
+    /*!
+     */
     void setAuthenticationMode(AuthenticationMode mode);
 
 protected:

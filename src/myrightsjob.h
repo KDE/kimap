@@ -51,7 +51,11 @@ class KIMAP_EXPORT MyRightsJob : public AclJobBase
     friend class SessionPrivate;
 
 public:
+    /*!
+     */
     explicit MyRightsJob(Session *session);
+    /*!
+     */
     ~MyRightsJob() override;
 
     /*!
@@ -73,7 +77,11 @@ public:
     [[nodiscard]] Acl::Rights rights();
 
 protected:
+    /*!
+     */
     void doStart() override;
+    /*!
+     */
     void handleResponse(const Response &response) override;
 };
 

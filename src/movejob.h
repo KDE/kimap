@@ -40,7 +40,11 @@ class KIMAP_EXPORT MoveJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     */
     explicit MoveJob(Session *session);
+    /*!
+     */
     ~MoveJob() override;
 
     /*!

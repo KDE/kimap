@@ -30,10 +30,18 @@ class KIMAP_EXPORT SelectJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     */
     explicit SelectJob(Session *session);
+    /*!
+     */
     ~SelectJob() override;
 
+    /*!
+     */
     void setMailBox(const QString &mailBox);
+    /*!
+     */
     [[nodiscard]] QString mailBox() const;
 
     void setOpenReadOnly(bool readOnly);
@@ -44,14 +52,28 @@ public:
      */
     [[nodiscard]] bool isOpenReadOnly() const;
 
+    /*!
+     */
     [[nodiscard]] QList<QByteArray> flags() const;
+    /*!
+     */
     [[nodiscard]] QList<QByteArray> permanentFlags() const;
 
+    /*!
+     */
     [[nodiscard]] int messageCount() const;
+    /*!
+     */
     [[nodiscard]] int recentCount() const;
+    /*!
+     */
     [[nodiscard]] qint64 firstUnseenIndex() const;
 
+    /*!
+     */
     [[nodiscard]] qint64 uidValidity() const;
+    /*!
+     */
     [[nodiscard]] qint64 nextUid() const;
 
     /*!

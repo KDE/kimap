@@ -63,7 +63,11 @@ class KIMAP_EXPORT SetMetaDataJob : public MetaDataJobBase
     friend class SessionPrivate;
 
 public:
+    /*!
+     */
     explicit SetMetaDataJob(Session *session);
+    /*!
+     */
     ~SetMetaDataJob() override;
 
     /*!

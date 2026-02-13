@@ -29,11 +29,19 @@ class KIMAP_EXPORT LogoutJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     */
     explicit LogoutJob(Session *session);
+    /*!
+     */
     ~LogoutJob() override;
 
 protected:
+    /*!
+     */
     void doStart() override;
+    /*!
+     */
     void connectionLost() override;
 };
 

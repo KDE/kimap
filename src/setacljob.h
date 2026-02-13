@@ -38,7 +38,11 @@ class KIMAP_EXPORT SetAclJob : public AclJobBase
     friend class SessionPrivate;
 
 public:
+    /*!
+     */
     explicit SetAclJob(Session *session);
+    /*!
+     */
     ~SetAclJob() override;
 
     /*!

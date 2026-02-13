@@ -59,16 +59,30 @@ public:
                                   The server must support the XLIST extension. */
     };
 
+    /*!
+     */
     explicit ListJob(Session *session);
+    /*!
+     */
     ~ListJob() override;
 
+    /*!
+     */
     void setOption(Option option);
+    /*!
+     */
     [[nodiscard]] Option option() const;
 
+    /*!
+     */
     void setQueriedNamespaces(const QList<MailBoxDescriptor> &namespaces);
+    /*!
+     */
     [[nodiscard]] QList<MailBoxDescriptor> queriedNamespaces() const;
 
 Q_SIGNALS:
+    /*!
+     */
     void mailBoxesReceived(const QList<KIMAP::MailBoxDescriptor> &descriptors, const QList<QList<QByteArray>> &flags);
 
 protected:

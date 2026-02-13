@@ -81,26 +81,58 @@ public:
         SequenceNumber
     };
 
+    /*!
+     */
     Term();
+    /*!
+     */
     ~Term();
+    /*!
+     */
     Term(Relation relation, const QList<Term> &subterms);
+    /*!
+     */
     Term(SearchKey key, const QString &value);
+    /*!
+     */
     Term(BooleanSearchKey key);
+    /*!
+     */
     Term(DateSearchKey key, const QDate &date);
+    /*!
+     */
     Term(NumberSearchKey key, int value);
+    /*!
+     */
     Term(SequenceSearchKey key, const KIMAP::ImapSet &);
+    /*!
+     */
     Term(const QString &header, const QString &value);
 
+    /*!
+     */
     Term(const Term &other);
 
+    /*!
+     */
     Term &operator=(const Term &other);
+    /*!
+     */
     bool operator==(const Term &other) const;
 
+    /*!
+     */
     [[nodiscard]] bool isNull() const;
 
+    /*!
+     */
     Term &setFuzzy(bool fuzzy);
+    /*!
+     */
     Term &setNegated(bool negated);
 
+    /*!
+     */
     [[nodiscard]] QByteArray serialize() const;
 
 private:

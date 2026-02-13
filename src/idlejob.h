@@ -53,7 +53,11 @@ class KIMAP_EXPORT IdleJob : public Job
     Q_DECLARE_PRIVATE(IdleJob)
 
 public:
+    /*!
+     */
     explicit IdleJob(Session *session);
+    /*!
+     */
     ~IdleJob() override;
 
     /*!

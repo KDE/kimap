@@ -36,11 +36,21 @@ public:
         Selected
     };
     Q_ENUM(State)
+    /*!
+     */
     Session(const QString &hostName, quint16 port, QObject *parent = nullptr);
+    /*!
+     */
     ~Session();
 
+    /*!
+     */
     [[nodiscard]] QString hostName() const;
+    /*!
+     */
     [[nodiscard]] quint16 port() const;
+    /*!
+     */
     [[nodiscard]] State state() const;
 
     /*!
@@ -51,6 +61,8 @@ public:
      */
     [[nodiscard]] QString userName() const;
 
+    /*!
+     */
     [[nodiscard]] QByteArray serverGreeting() const;
 
     /*!
@@ -90,11 +102,17 @@ public:
      */
     void setUseNetworkProxy(bool useProxy);
 
+    /*!
+     */
     [[nodiscard]] qsizetype jobQueueSize() const;
 
+    /*!
+     */
     void close();
 
 Q_SIGNALS:
+    /*!
+     */
     void jobQueueSizeChanged(qsizetype queueSize);
 
     /*!

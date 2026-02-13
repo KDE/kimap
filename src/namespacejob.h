@@ -31,7 +31,11 @@ class KIMAP_EXPORT NamespaceJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     */
     explicit NamespaceJob(Session *session);
+    /*!
+     */
     ~NamespaceJob() override;
 
     /*!
@@ -57,7 +61,11 @@ public:
     [[nodiscard]] bool containsEmptyNamespace() const;
 
 protected:
+    /*!
+     */
     void doStart() override;
+    /*!
+     */
     void handleResponse(const Response &response) override;
 };
 

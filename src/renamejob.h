@@ -29,7 +29,11 @@ class KIMAP_EXPORT RenameJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     */
     explicit RenameJob(Session *session);
+    /*!
+     */
     ~RenameJob() override;
 
     /*!
@@ -37,6 +41,8 @@ public:
      * \a mailBox the original name of the mailbox
      */
     void setSourceMailBox(const QString &mailBox);
+    /*!
+     */
     [[nodiscard]] QString sourceMailBox() const;
 
     /*!
@@ -44,6 +50,8 @@ public:
      * \a mailBox the new mailbox name
      */
     void setDestinationMailBox(const QString &mailBox);
+    /*!
+     */
     [[nodiscard]] QString destinationMailBox() const;
 
 protected:
