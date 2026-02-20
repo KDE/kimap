@@ -98,11 +98,9 @@ msgid "GetQuotaRoot"
 msgstr "GetQuotaRoot"
 
 #: idjob.cpp:32
-#, fuzzy, kde-format
-#| msgctxt "name of the idle job"
-#| msgid "Idle"
+#, kde-format
 msgid "Id"
-msgstr "Díomhaoin"
+msgstr ""
 
 #: idlejob.cpp:62
 #, kde-format
@@ -282,14 +280,3 @@ msgstr "Liostáil"
 #, kde-format
 msgid "Unsubscribe"
 msgstr "Díliostáil"
-
-#~ msgid "SetAnnotation"
-#~ msgstr "SocraighAnótáil"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Kevin Scannell"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "kscanne@gmail.com"
