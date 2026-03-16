@@ -130,6 +130,7 @@ ecm_generate_export_header(KPim6IMAP
 target_include_directories(KPim6IMAP INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/KPim6/KIMAP>")
 target_include_directories(KPim6IMAP PUBLIC "$<BUILD_INTERFACE:${KIMAP_SOURCE_DIR}/src;${KIMAP_BINARY_DIR}/src>")
 
+set(extra_LIBS)
 if(WIN32)
     set(extra_LIBS ws2_32)
 endif()
