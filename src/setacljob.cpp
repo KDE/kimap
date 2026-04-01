@@ -43,7 +43,9 @@ void SetAclJob::doStart()
     } else if (d->modifier == Remove) {
         r.prepend('-');
     }
-    d->tags << d->sessionInternal()->sendCommand("SETACL", '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8()) + "\" \"" + d->id + "\" \"" + r + '\"');
+    d->tags << d->sessionInternal()->sendCommand("SETACL",
+                                                 '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8(), d->sessionInternal()->isUtf8Enabled()) + "\" \""
+                                                     + d->id + "\" \"" + r + '\"');
 }
 
 void SetAclJob::setRights(AclModifier modifier, Acl::Rights rights)

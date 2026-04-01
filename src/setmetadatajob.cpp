@@ -46,7 +46,7 @@ SetMetaDataJob::~SetMetaDataJob() = default;
 void SetMetaDataJob::doStart()
 {
     Q_D(SetMetaDataJob);
-    QByteArray parameters = '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8()) + "\" ";
+    QByteArray parameters = '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8(), d->sessionInternal()->isUtf8Enabled()) + "\" ";
     d->entriesIt = d->entries.constBegin();
 
     QByteArray command = "SETMETADATA";

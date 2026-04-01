@@ -26,7 +26,7 @@ public:
     {
     }
 
-    static QList<MailBoxDescriptor> processNamespaceList(const QList<QByteArray> &namespaceList)
+    static QList<MailBoxDescriptor> processNamespaceList(const QList<QByteArray> &namespaceList, bool utf8Enabled)
     {
         QList<MailBoxDescriptor> result;
 
@@ -40,7 +40,7 @@ public:
                     continue;
                 }
                 MailBoxDescriptor descriptor;
-                descriptor.name = QString::fromUtf8(decodeImapFolderName(parts[0]));
+                descriptor.name = QString::fromUtf8(decodeImapFolderName(parts[0], utf8Enabled));
                 descriptor.separator = QLatin1Char(parts[1][0]);
 
                 result << descriptor;
@@ -111,14 +111,15 @@ void NamespaceJob::handleResponse(const Response &response)
     Q_D(NamespaceJob);
     if (handleErrorReplies(response) == NotHandled) {
         if (response.content.size() >= 5 && response.content[1].toString() == "NAMESPACE") {
+            const bool utf8 = d->sessionInternal()->isUtf8Enabled();
             // Personal namespaces
-            d->personalNamespaces = d->processNamespaceList(response.content[2].toList());
+            d->personalNamespaces = d->processNamespaceList(response.content[2].toList(), utf8);
 
             // User namespaces
-            d->userNamespaces = d->processNamespaceList(response.content[3].toList());
+            d->userNamespaces = d->processNamespaceList(response.content[3].toList(), utf8);
 
             // Shared namespaces
-            d->sharedNamespaces = d->processNamespaceList(response.content[4].toList());
+            d->sharedNamespaces = d->processNamespaceList(response.content[4].toList(), utf8);
         }
     }
 }

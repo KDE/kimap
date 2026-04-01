@@ -40,9 +40,10 @@ RenameJob::~RenameJob() = default;
 void RenameJob::doStart()
 {
     Q_D(RenameJob);
+    const bool utf8 = d->sessionInternal()->isUtf8Enabled();
     d->tags << d->sessionInternal()->sendCommand("RENAME",
-                                                 '\"' + KIMAP::encodeImapFolderName(d->sourceMailBox.toUtf8()) + "\" \""
-                                                     + KIMAP::encodeImapFolderName(d->destinationMailBox.toUtf8()) + '\"');
+                                                 '\"' + KIMAP::encodeImapFolderName(d->sourceMailBox.toUtf8(), utf8) + "\" \""
+                                                     + KIMAP::encodeImapFolderName(d->destinationMailBox.toUtf8(), utf8) + '\"');
 }
 
 void RenameJob::setSourceMailBox(const QString &mailBox)

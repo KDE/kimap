@@ -268,6 +268,40 @@ private Q_SLOTS:
 
         QCOMPARE(select.isOpenReadOnly(), isReadOnly);
     }
+
+    void testSelectWithUtf8()
+    {
+        // gr\xc3\xa5 is the UTF-8 encoding of "grå"
+        // With UTF8=ACCEPT active, SELECT must send raw UTF-8, not mUTF7
+        QList<QByteArray> scenario;
+        scenario << FakeServer::greeting() << "C: A000001 LOGIN \"user\" \"password\""
+                 << "S: * CAPABILITY IMAP4rev1 UTF8=ACCEPT"
+                 << "S: A000001 OK logged in"
+                 << "C: A000002 ENABLE UTF8=ACCEPT"
+                 << "S: * ENABLED UTF8=ACCEPT"
+                 << "S: A000002 OK"
+                 << "C: A000003 SELECT \"INBOX/gr\xc3\xa5\""
+                 << "S: A000003 OK [READ-WRITE] SELECT completed";
+
+        FakeServer fakeServer;
+        fakeServer.setScenario(scenario);
+        fakeServer.startAndWait();
+
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
+
+        auto login = new KIMAP::LoginJob(&session);
+        login->setUserName(QStringLiteral("user"));
+        login->setPassword(QStringLiteral("password"));
+        QVERIFY(login->exec());
+
+        auto select = new KIMAP::SelectJob(&session);
+        select->setMailBox(QString::fromUtf8("INBOX/gr\xc3\xa5"));
+        QVERIFY(select->exec());
+
+        QCOMPARE(session.selectedMailBox(), QString::fromUtf8("INBOX/gr\xc3\xa5"));
+
+        fakeServer.quit();
+    }
 };
 
 QTEST_GUILESS_MAIN(SelectJobTest)

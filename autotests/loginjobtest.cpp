@@ -221,6 +221,61 @@ private Q_SLOTS:
         delete session;
     }
 
+    void shouldEnableUtf8_data()
+    {
+        QTest::addColumn<QList<QByteArray>>("scenario");
+        QTest::addColumn<bool>("success");
+
+        {
+            QList<QByteArray> scenario;
+            scenario << FakeServer::greeting() << "C: A000001 LOGIN \"user\" \"password\""
+                     << "S: * CAPABILITY IMAP4rev1 UTF8=ACCEPT"
+                     << "S: A000001 OK logged in"
+                     << "C: A000002 ENABLE UTF8=ACCEPT"
+                     << "S: * ENABLED UTF8=ACCEPT"
+                     << "S: A000002 OK";
+            QTest::newRow("utf8=accept enabled") << scenario << true;
+        }
+
+        {
+            QList<QByteArray> scenario;
+            scenario << FakeServer::greeting() << "C: A000001 LOGIN \"user\" \"password\""
+                     << "S: * CAPABILITY IMAP4rev1"
+                     << "S: A000001 OK logged in";
+            QTest::newRow("no utf8=accept capability") << scenario << true;
+        }
+
+        {
+            QList<QByteArray> scenario;
+            // This one's weird but let's be thorough.
+            scenario << FakeServer::greeting() << "C: A000001 LOGIN \"user\" \"password\""
+                     << "S: * CAPABILITY IMAP4rev1 UTF8=ACCEPT"
+                     << "S: A000001 OK logged in"
+                     << "C: A000002 ENABLE UTF8=ACCEPT"
+                     << "S: A000002 NO ENABLE not supported";
+            QTest::newRow("enable rejected (non-fatal)") << scenario << true;
+        }
+    }
+
+    void shouldEnableUtf8()
+    {
+        QFETCH(QList<QByteArray>, scenario);
+        QFETCH(bool, success);
+
+        FakeServer fakeServer;
+        fakeServer.setScenario(scenario);
+        fakeServer.startAndWait();
+
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
+
+        auto login = new KIMAP::LoginJob(&session);
+        login->setUserName(QStringLiteral("user"));
+        login->setPassword(QStringLiteral("password"));
+        QCOMPARE(login->exec(), success);
+
+        fakeServer.quit();
+    }
+
     void shouldUseStartTls_data()
     {
         QTest::addColumn<QList<QByteArray>>("scenario");

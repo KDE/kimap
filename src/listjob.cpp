@@ -110,7 +110,7 @@ void ListJob::doStart()
             QString parameters = QStringLiteral("\"\" \"%1\"");
 
             if (descriptor.name.endsWith(descriptor.separator)) {
-                QString name = encodeImapFolderName(descriptor.name);
+                QString name = encodeImapFolderName(descriptor.name, d->sessionInternal()->isUtf8Enabled());
                 name.chop(1);
                 d->tags << d->sessionInternal()->sendCommand(d->command, parameters.arg(name).toUtf8());
             }
@@ -151,7 +151,7 @@ void ListJob::handleResponse(const Response &response)
             }
             fullName.chop(1);
 
-            fullName = decodeImapFolderName(fullName);
+            fullName = decodeImapFolderName(fullName, d->sessionInternal()->isUtf8Enabled());
 
             MailBoxDescriptor mailBoxDescriptor;
             mailBoxDescriptor.separator = QLatin1Char(separator[0]);

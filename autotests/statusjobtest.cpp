@@ -100,6 +100,46 @@ private Q_SLOTS:
 
         fakeServer.quit();
     }
+
+    void testStatusWithUtf8()
+    {
+        // gr\xc3\xa5 is the UTF-8 encoding of "å"
+        QList<QByteArray> scenario;
+        scenario << FakeServer::greeting() << "C: A000001 LOGIN \"user\" \"password\""
+                 << "S: * CAPABILITY IMAP4rev1 UTF8=ACCEPT"
+                 << "S: A000001 OK logged in"
+                 << "C: A000002 ENABLE UTF8=ACCEPT"
+                 << "S: * ENABLED UTF8=ACCEPT"
+                 << "S: A000002 OK"
+                 << "C: A000003 STATUS \"INBOX/gr\xc3\xa5\" (MESSAGES UNSEEN)"
+                 << "S: * STATUS \"INBOX/gr\xc3\xa5\" (MESSAGES 12 UNSEEN 3)"
+                 << "S: A000003 OK STATUS Completed";
+
+        FakeServer fakeServer;
+        fakeServer.setScenario(scenario);
+        fakeServer.startAndWait();
+
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
+
+        auto login = new KIMAP::LoginJob(&session);
+        login->setUserName(QStringLiteral("user"));
+        login->setPassword(QStringLiteral("password"));
+        QVERIFY(login->exec());
+
+        auto job = new KIMAP::StatusJob(&session);
+        job->setMailBox(QString::fromUtf8("INBOX/gr\xc3\xa5"));
+        job->setDataItems({"MESSAGES", "UNSEEN"});
+        QVERIFY(job->exec());
+
+        const StatusMap status = job->status();
+        QCOMPARE(status.size(), 2);
+        QCOMPARE(status[0].first, QByteArray("MESSAGES"));
+        QCOMPARE(status[0].second, qint64(12));
+        QCOMPARE(status[1].first, QByteArray("UNSEEN"));
+        QCOMPARE(status[1].second, qint64(3));
+
+        fakeServer.quit();
+    }
 };
 
 QTEST_GUILESS_MAIN(StatusJobTest)

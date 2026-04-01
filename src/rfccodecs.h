@@ -28,30 +28,41 @@ namespace KIMAP
 
   \since 4.3
 */
-[[nodiscard]] KIMAP_EXPORT QByteArray encodeImapFolderName(const QByteArray &src);
+[[nodiscard]] KIMAP_EXPORT QByteArray encodeImapFolderName(const QByteArray &src, bool utf8Enabled = false);
 
 /*!
   Converts an UTF-7 encoded IMAP mailbox to a QByteArray
 
   \a inSrc is the QByteArray containing the Unicode path.
 
+  \a utf8Enabled must reflect the UTF8=ACCEPT state of the active
+  session — pass the value returned by
+  \c{SessionPrivate::isUtf8Enabled()} (RFC 9755). When true, the input
+  is already UTF-8 and is returned unchanged; otherwise it is decoded
+  from modified UTF-7.
+
   \since 4.3
 */
-[[nodiscard]] KIMAP_EXPORT QByteArray decodeImapFolderName(const QByteArray &inSrc);
+[[nodiscard]] KIMAP_EXPORT QByteArray decodeImapFolderName(const QByteArray &inSrc, bool utf8Enabled);
 /*!
   Converts an Unicode IMAP mailbox to a QString which can be used in
   IMAP communication.
 
   \a src is the QString containing the IMAP mailbox.
 */
-[[nodiscard]] KIMAP_EXPORT QString encodeImapFolderName(const QString &src);
+[[nodiscard]] KIMAP_EXPORT QString encodeImapFolderName(const QString &src, bool utf8Enabled = false);
 
 /*!
   Converts an UTF-7 encoded IMAP mailbox to a Unicode QString.
 
   \a inSrc is the QString containing the Unicode path.
+  \a utf8Enabled must reflect the UTF8=ACCEPT state of the active
+  session — pass the value returned by
+  \c{SessionPrivate::isUtf8Enabled()} (RFC 9755). When true, the input
+  is already UTF-8 and is returned unchanged; otherwise it is decoded
+  from modified UTF-7.
 */
-[[nodiscard]] KIMAP_EXPORT QString decodeImapFolderName(const QString &inSrc);
+[[nodiscard]] KIMAP_EXPORT QString decodeImapFolderName(const QString &inSrc, bool utf8Enabled);
 
 /*!
   Replaces " with \" and \ with \\ " and \ characters.

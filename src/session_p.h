@@ -48,6 +48,7 @@ public:
     void sendData(const QByteArray &data);
 
     [[nodiscard]] QSsl::SslProtocol negotiatedEncryption() const;
+    [[nodiscard]] bool isUtf8Enabled() const;
 
     void setSocketTimeout(int ms);
     [[nodiscard]] int socketTimeout() const;
@@ -105,6 +106,7 @@ private:
     quint16 tagCount = 0;
 
     QSsl::SslProtocol sslVersion = QSsl::UnknownProtocol;
+    bool utf8Enabled = false;
 
     int socketTimerInterval = 30000; // By default timeouts on 30s
     QTimer socketTimer;

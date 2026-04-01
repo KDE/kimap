@@ -65,4 +65,5 @@ kimap_unit_tests(
   appendjobtest
   statusjobtest
   movejobtest
+  namespacejobtest
 )

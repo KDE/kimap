@@ -283,7 +283,7 @@ void SearchJob::doStart()
 
     QByteArray searchKey;
 
-    if (!d->charset.isEmpty()) {
+    if (!d->charset.isEmpty() && !d->sessionInternal()->isUtf8Enabled()) {
         searchKey = "CHARSET " + d->charset;
     }
 

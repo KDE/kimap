@@ -39,7 +39,8 @@ CreateJob::~CreateJob() = default;
 void CreateJob::doStart()
 {
     Q_D(CreateJob);
-    d->tags << d->sessionInternal()->sendCommand("CREATE", '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8()) + '\"');
+    d->tags << d->sessionInternal()->sendCommand("CREATE",
+                                                 '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8(), d->sessionInternal()->isUtf8Enabled()) + '\"');
 }
 
 void CreateJob::handleResponse(const Response &response)

@@ -43,7 +43,8 @@ public:
         StartTls,
         Capability,
         Login,
-        Authenticate
+        Authenticate,
+        EnableUtf8
     };
 
     LoginJobPrivate(LoginJob *job, Session *session, const QString &name)
@@ -235,6 +236,8 @@ void LoginJob::handleResponse(const Response &response)
         commandName = i18n("Capability");
     } else if (d->authState == LoginJobPrivate::StartTls) {
         commandName = i18n("StartTls");
+    } else if (d->authState == LoginJobPrivate::EnableUtf8) {
+        commandName = i18n("Enable");
     }
 
     enum ResponseCode {
@@ -274,6 +277,12 @@ void LoginJob::handleResponse(const Response &response)
         break;
 
     case ERR:
+        // ENABLE UTF8=ACCEPT failure is non-fatal; proceed normally
+        if (d->authState == LoginJobPrivate::EnableUtf8) {
+            emitResult(); // greeting already saved from Login/Authenticate OK
+            return;
+        }
+
         // server replied with NO or BAD for SASL authentication
         if (d->authState == LoginJobPrivate::Authenticate) {
             sasl_dispose(&d->conn);
@@ -398,7 +407,16 @@ void LoginJob::handleResponse(const Response &response)
             [[fallthrough]];
         case LoginJobPrivate::Login:
             d->saveServerGreeting(response);
+            if (d->capabilities.contains(QLatin1StringView("UTF8=ACCEPT"))) {
+                d->authState = LoginJobPrivate::EnableUtf8;
+                d->tags << d->sessionInternal()->sendCommand("ENABLE", "UTF8=ACCEPT");
+                break;
+            }
             emitResult(); // got an OK, command done
+            break;
+
+        case LoginJobPrivate::EnableUtf8:
+            emitResult(); // greeting already saved from Login/Authenticate OK
             break;
         }
     }

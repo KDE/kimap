@@ -73,7 +73,8 @@ void StatusJob::doStart()
 {
     Q_D(StatusJob);
 
-    const QByteArray params = '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8()) + "\" (" + d->dataItems.join(' ') + ')';
+    const QByteArray params =
+        '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8(), d->sessionInternal()->isUtf8Enabled()) + "\" (" + d->dataItems.join(' ') + ')';
 
     d->tags << d->sessionInternal()->sendCommand("STATUS", params);
 }

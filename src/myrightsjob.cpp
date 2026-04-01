@@ -41,7 +41,8 @@ void MyRightsJob::doStart()
 {
     Q_D(MyRightsJob);
 
-    d->tags << d->sessionInternal()->sendCommand("MYRIGHTS", '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8()) + '\"');
+    d->tags << d->sessionInternal()->sendCommand("MYRIGHTS",
+                                                 '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8(), d->sessionInternal()->isUtf8Enabled()) + '\"');
 }
 
 void MyRightsJob::handleResponse(const Response &response)

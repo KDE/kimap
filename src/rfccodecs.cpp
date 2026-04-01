@@ -49,8 +49,11 @@ static const unsigned char base64chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghij
 //@endcond
 
 //-----------------------------------------------------------------------------
-QByteArray KIMAP::decodeImapFolderName(const QByteArray &inSrc)
+QByteArray KIMAP::decodeImapFolderName(const QByteArray &inSrc, bool utf8Enabled)
 {
+    if (utf8Enabled) {
+        return inSrc;
+    }
     unsigned char c;
     unsigned char i;
     unsigned char bitcount;
@@ -138,9 +141,12 @@ QByteArray KIMAP::decodeImapFolderName(const QByteArray &inSrc)
     return dst;
 }
 
-QString KIMAP::decodeImapFolderName(const QString &inSrc)
+QString KIMAP::decodeImapFolderName(const QString &inSrc, bool utf8Enabled)
 {
-    return QString::fromUtf8(decodeImapFolderName(inSrc.toUtf8()));
+    if (utf8Enabled) {
+        return inSrc;
+    }
+    return QString::fromUtf8(decodeImapFolderName(inSrc.toUtf8(), false));
 }
 
 //-----------------------------------------------------------------------------
@@ -176,13 +182,16 @@ QString KIMAP::quoteIMAP(QStringView src)
 }
 
 //-----------------------------------------------------------------------------
-QString KIMAP::encodeImapFolderName(const QString &inSrc)
+QString KIMAP::encodeImapFolderName(const QString &inSrc, bool utf8Enabled)
 {
-    return QString::fromUtf8(encodeImapFolderName(inSrc.toUtf8()));
+    return QString::fromUtf8(encodeImapFolderName(inSrc.toUtf8(), utf8Enabled));
 }
 
-QByteArray KIMAP::encodeImapFolderName(const QByteArray &inSrc)
+QByteArray KIMAP::encodeImapFolderName(const QByteArray &inSrc, bool utf8Enabled)
 {
+    if (utf8Enabled) {
+        return quoteIMAP(inSrc);
+    }
     unsigned int utf8pos;
     unsigned int utf8total;
     unsigned int c;

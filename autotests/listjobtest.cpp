@@ -8,6 +8,7 @@
 */
 
 #include "kimap/listjob.h"
+#include "kimap/loginjob.h"
 #include "kimap/session.h"
 #include "kimaptest/fakeserver.h"
 
@@ -203,6 +204,94 @@ private Q_SLOTS:
             QCOMPARE(mailBoxes, listresult);
         }
         //     QCOMPARE(job->mailBox(), mailbox);
+
+        fakeServer.quit();
+    }
+
+    void testListCommandWithUtf8()
+    {
+        // Verify that LIST sends raw UTF-8 folder names (not modified
+        // UTF-7) when UTF8=ACCEPT is active.  gr\xc3\xa5 is the UTF-8
+        // encoding of "å"; without UTF8=ACCEPT this would be gr&AOU-
+        QList<QByteArray> scenario;
+        scenario << FakeServer::greeting() << "C: A000001 LOGIN \"user\" \"password\""
+                 << "S: * CAPABILITY IMAP4rev1 UTF8=ACCEPT"
+                 << "S: A000001 OK logged in"
+                 << "C: A000002 ENABLE UTF8=ACCEPT"
+                 << "S: * ENABLED UTF8=ACCEPT"
+                 << "S: A000002 OK"
+                 << "C: A000003 LIST \"\" \"INBOX/gr\xc3\xa5\""
+                 << "C: A000004 LIST \"\" \"INBOX/gr\xc3\xa5/*\""
+                 << "S: A000003 OK LIST completed"
+                 << "S: A000004 OK LIST completed";
+
+        FakeServer fakeServer;
+        fakeServer.setScenario(scenario);
+        fakeServer.startAndWait();
+
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
+
+        auto login = new KIMAP::LoginJob(&session);
+        login->setUserName(QStringLiteral("user"));
+        login->setPassword(QStringLiteral("password"));
+        QVERIFY(login->exec());
+
+        KIMAP::MailBoxDescriptor ns;
+        ns.separator = QLatin1Char('/');
+        ns.name = QString::fromUtf8("INBOX/gr\xc3\xa5/");
+
+        auto job = new KIMAP::ListJob(&session);
+        job->setOption(KIMAP::ListJob::IncludeUnsubscribed);
+        job->setQueriedNamespaces({ns});
+        QVERIFY(job->exec());
+
+        fakeServer.quit();
+    }
+
+    void testListWithUtf8()
+    {
+        // gr\xc3\xa5 is the UTF-8 encoding of "grå"
+        QList<QByteArray> scenario;
+        scenario << FakeServer::greeting() << "C: A000001 LOGIN \"user\" \"password\""
+                 << "S: * CAPABILITY IMAP4rev1 UTF8=ACCEPT"
+                 << "S: A000001 OK logged in"
+                 << "C: A000002 ENABLE UTF8=ACCEPT"
+                 << "S: * ENABLED UTF8=ACCEPT"
+                 << "S: A000002 OK"
+                 << "C: A000003 LIST \"\" *"
+                 << "S: * LIST ( \\HasNoChildren ) / INBOX"
+                 << "S: * LIST ( \\HasNoChildren ) / INBOX/gr\xc3\xa5"
+                 << "S: A000003 OK LIST completed";
+
+        FakeServer fakeServer;
+        fakeServer.setScenario(scenario);
+        fakeServer.startAndWait();
+
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
+
+        auto login = new KIMAP::LoginJob(&session);
+        login->setUserName(QStringLiteral("user"));
+        login->setPassword(QStringLiteral("password"));
+        QVERIFY(login->exec());
+
+        auto job = new KIMAP::ListJob(&session);
+        job->setOption(KIMAP::ListJob::IncludeUnsubscribed);
+
+        QSignalSpy spy(job, &KIMAP::ListJob::mailBoxesReceived);
+        QVERIFY(job->exec());
+        QVERIFY(spy.count() > 0);
+
+        QList<KIMAP::MailBoxDescriptor> mailBoxes;
+        for (int i = 0; i < spy.count(); ++i) {
+            mailBoxes += spy.at(i).at(0).value<QList<KIMAP::MailBoxDescriptor>>();
+        }
+
+        QStringList names;
+        names.reserve(mailBoxes.size());
+        for (const auto &mb : mailBoxes) {
+            names << mb.name;
+        }
+        QCOMPARE(names, QStringList({QStringLiteral("INBOX"), QString::fromUtf8("INBOX/gr\xc3\xa5")}));
 
         fakeServer.quit();
     }

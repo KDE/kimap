@@ -98,7 +98,7 @@ void AppendJob::doStart()
 {
     Q_D(AppendJob);
 
-    QByteArray parameters = '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8()) + '\"';
+    QByteArray parameters = '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8(), d->sessionInternal()->isUtf8Enabled()) + '\"';
 
     if (!d->flags.isEmpty()) {
         parameters += " (";

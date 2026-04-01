@@ -104,6 +104,75 @@ private Q_SLOTS:
 
         fakeServer.quit();
     }
+
+    void testSearchWithUtf8_data()
+    {
+        QTest::addColumn<QList<QByteArray>>("scenario");
+        QTest::addColumn<QByteArray>("charset");
+        QTest::addColumn<KIMAP::Term>("searchTerm");
+        QTest::addColumn<int>("expectedResultsCount");
+
+        // UTF8=ACCEPT active, no charset set: search criteria sent as UTF-8, no CHARSET prefix
+        {
+            QList<QByteArray> scenario;
+            scenario << FakeServer::greeting() << "C: A000001 LOGIN \"user\" \"password\""
+                     << "S: * CAPABILITY IMAP4rev1 UTF8=ACCEPT"
+                     << "S: A000001 OK logged in"
+                     << "C: A000002 ENABLE UTF8=ACCEPT"
+                     << "S: * ENABLED UTF8=ACCEPT"
+                     << "S: A000002 OK"
+                     << "C: A000003 SEARCH SUBJECT \"gr\xc3\xa5\""
+                     << "S: * SEARCH 1"
+                     << "S: A000003 OK search done";
+            QTest::newRow("utf8 search, no charset") << scenario << QByteArray{} << KIMAP::Term(KIMAP::Term::Subject, QString::fromUtf8("gr\xc3\xa5")) << 1;
+        }
+
+        // UTF8=ACCEPT active, charset explicitly set: CHARSET must still be suppressed
+        {
+            QList<QByteArray> scenario;
+            scenario << FakeServer::greeting() << "C: A000001 LOGIN \"user\" \"password\""
+                     << "S: * CAPABILITY IMAP4rev1 UTF8=ACCEPT"
+                     << "S: A000001 OK logged in"
+                     << "C: A000002 ENABLE UTF8=ACCEPT"
+                     << "S: * ENABLED UTF8=ACCEPT"
+                     << "S: A000002 OK"
+                     << "C: A000003 SEARCH SUBJECT \"gr\xc3\xa5\""
+                     << "S: * SEARCH 1"
+                     << "S: A000003 OK search done";
+            QTest::newRow("utf8 search, charset suppressed")
+                << scenario << QByteArray{"UTF-8"} << KIMAP::Term(KIMAP::Term::Subject, QString::fromUtf8("gr\xc3\xa5")) << 1;
+        }
+    }
+
+    void testSearchWithUtf8()
+    {
+        QFETCH(QList<QByteArray>, scenario);
+        QFETCH(QByteArray, charset);
+        QFETCH(KIMAP::Term, searchTerm);
+        QFETCH(int, expectedResultsCount);
+
+        FakeServer fakeServer;
+        fakeServer.setScenario(scenario);
+        fakeServer.startAndWait();
+
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
+
+        auto login = new KIMAP::LoginJob(&session);
+        login->setUserName(QStringLiteral("user"));
+        login->setPassword(QStringLiteral("password"));
+        QVERIFY(login->exec());
+
+        auto job = new KIMAP::SearchJob(&session);
+        job->setTerm(searchTerm);
+        if (!charset.isEmpty()) {
+            job->setCharset(charset);
+        }
+
+        QVERIFY(job->exec());
+        QCOMPARE(job->results().size(), expectedResultsCount);
+
+        fakeServer.quit();
+    }
 };
 
 QTEST_GUILESS_MAIN(SearchJobTest)

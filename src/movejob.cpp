@@ -91,7 +91,7 @@ void MoveJob::doStart()
 
     d->set.optimize();
     QByteArray parameters = d->set.toImapSequenceSet() + ' ';
-    parameters += '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8()) + '\"';
+    parameters += '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8(), d->sessionInternal()->isUtf8Enabled()) + '\"';
 
     QByteArray command = "MOVE";
     if (d->uidBased) {

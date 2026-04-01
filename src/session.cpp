@@ -265,6 +265,15 @@ void SessionPrivate::responseReceived(const Response &response)
         closeTag.clear();
     }
 
+    // Track UTF8=ACCEPT being enabled (RFC 6855)
+    if (tag == "*" && code == "ENABLED") {
+        for (int i = 2; i < response.content.size(); ++i) {
+            if (response.content[i].toString() == "UTF8=ACCEPT") {
+                utf8Enabled = true;
+            }
+        }
+    }
+
     // If a job is running forward it the response
     if (currentJob != nullptr) {
         restartSocketTimer();
@@ -302,7 +311,7 @@ QByteArray SessionPrivate::sendCommand(const QByteArray &command, const QByteArr
         upcomingMailBox = args;
         upcomingMailBox.remove(0, 1);
         upcomingMailBox = upcomingMailBox.left(upcomingMailBox.indexOf('\"'));
-        upcomingMailBox = KIMAP::decodeImapFolderName(upcomingMailBox);
+        upcomingMailBox = KIMAP::decodeImapFolderName(upcomingMailBox, utf8Enabled);
     } else if (command == "CLOSE") {
         closeTag = tag;
     }
@@ -433,6 +442,11 @@ void SessionPrivate::onEncryptionNegotiationResult(bool isEncrypted, QSsl::SslPr
 QSsl::SslProtocol SessionPrivate::negotiatedEncryption() const
 {
     return sslVersion;
+}
+
+bool SessionPrivate::isUtf8Enabled() const
+{
+    return utf8Enabled;
 }
 
 void SessionPrivate::setSocketTimeout(int ms)

@@ -6,6 +6,7 @@
 
 #include "../src/movejob.h"
 #include "kimap/imapset.h"
+#include "kimap/loginjob.h"
 #include "kimap/session.h"
 #include "kimaptest/fakeserver.h"
 
@@ -61,6 +62,41 @@ private Q_SLOTS:
         bool result = job->exec();
         QVERIFY(result);
         QCOMPARE(job->resultingUids(), KIMAP::ImapSet(resultUid));
+
+        fakeServer.quit();
+    }
+
+    void testMoveWithUtf8()
+    {
+        // gr\xc3\xa5 is the UTF-8 encoding of "å"
+        QList<QByteArray> scenario;
+        scenario << FakeServer::greeting() << "C: A000001 LOGIN \"user\" \"password\""
+                 << "S: * CAPABILITY IMAP4rev1 UTF8=ACCEPT"
+                 << "S: A000001 OK logged in"
+                 << "C: A000002 ENABLE UTF8=ACCEPT"
+                 << "S: * ENABLED UTF8=ACCEPT"
+                 << "S: A000002 OK"
+                 << "C: A000003 UID MOVE 42 \"INBOX/gr\xc3\xa5\""
+                 << "S: * OK [COPYUID 99 42 43]"
+                 << "S: A000003 OK MOVE completed";
+
+        FakeServer fakeServer;
+        fakeServer.setScenario(scenario);
+        fakeServer.startAndWait();
+
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
+
+        auto login = new KIMAP::LoginJob(&session);
+        login->setUserName(QStringLiteral("user"));
+        login->setPassword(QStringLiteral("password"));
+        QVERIFY(login->exec());
+
+        auto job = new KIMAP::MoveJob(&session);
+        job->setMailBox(QString::fromUtf8("INBOX/gr\xc3\xa5"));
+        job->setUidBased(true);
+        job->setSequenceSet(KIMAP::ImapSet(42));
+        QVERIFY(job->exec());
+        QCOMPARE(job->resultingUids(), KIMAP::ImapSet(43));
 
         fakeServer.quit();
     }

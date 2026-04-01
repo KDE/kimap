@@ -39,7 +39,8 @@ DeleteJob::~DeleteJob() = default;
 void DeleteJob::doStart()
 {
     Q_D(DeleteJob);
-    d->tags << d->sessionInternal()->sendCommand("DELETE", '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8()) + '\"');
+    d->tags << d->sessionInternal()->sendCommand("DELETE",
+                                                 '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8(), d->sessionInternal()->isUtf8Enabled()) + '\"');
 }
 
 void DeleteJob::handleResponse(const Response &response)

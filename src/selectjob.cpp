@@ -178,7 +178,7 @@ void SelectJob::doStart()
         command = "EXAMINE";
     }
 
-    QByteArray params = '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8()) + '\"';
+    QByteArray params = '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8(), d->sessionInternal()->isUtf8Enabled()) + '\"';
 
     if (d->condstoreEnabled) {
         // Check whether we only do CONDSTORE, or QRESYNC

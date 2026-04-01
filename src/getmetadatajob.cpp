@@ -54,7 +54,7 @@ void GetMetaDataJob::doStart()
 {
     Q_D(GetMetaDataJob);
     QByteArray parameters;
-    parameters = '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8()) + "\" ";
+    parameters = '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8(), d->sessionInternal()->isUtf8Enabled()) + "\" ";
 
     QByteArray command = "GETMETADATA";
     if (d->serverCapability == Annotatemore) {
@@ -127,7 +127,7 @@ void GetMetaDataJob::handleResponse(const Response &response)
     if (handleErrorReplies(response) == NotHandled) {
         if (response.content.size() >= 4) {
             if (d->serverCapability == Annotatemore && response.content[1].toString() == "ANNOTATION") {
-                QString mailBox = QString::fromUtf8(KIMAP::decodeImapFolderName(response.content[2].toString()));
+                QString mailBox = QString::fromUtf8(KIMAP::decodeImapFolderName(response.content[2].toString(), d->sessionInternal()->isUtf8Enabled()));
 
                 int i = 3;
                 while (i < response.content.size() - 1) {
@@ -141,7 +141,7 @@ void GetMetaDataJob::handleResponse(const Response &response)
                     i += 2;
                 }
             } else if (d->serverCapability == Metadata && response.content[1].toString() == "METADATA") {
-                QString mailBox = QString::fromUtf8(KIMAP::decodeImapFolderName(response.content[2].toString()));
+                QString mailBox = QString::fromUtf8(KIMAP::decodeImapFolderName(response.content[2].toString(), d->sessionInternal()->isUtf8Enabled()));
 
                 const QList<QByteArray> &entries = response.content[3].toList();
                 int i = 0;

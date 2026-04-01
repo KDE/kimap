@@ -224,7 +224,9 @@ public:
     [[nodiscard]] bool isUidBased() const;
 
     /*!
-     *
+     * Sets the charset to be used to \a charSet. Note that RFCs 9051
+     * and 9755 both restrict charset support to UTF8, which effectively
+     * deprecates setCharset() since the argument is then ignored.
      */
     void setCharset(const QByteArray &charSet);
 
