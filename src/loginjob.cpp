@@ -62,9 +62,9 @@ public:
 
     LoginJob *const q;
 
-    QString userName;
-    QString authorizationName;
-    QString password;
+    QByteArray userName;
+    QByteArray authorizationName;
+    QByteArray password;
     QString serverGreeting;
 
     LoginJob::EncryptionMode encryptionMode = LoginJob::Unencrypted;
@@ -101,20 +101,20 @@ bool LoginJobPrivate::sasl_interact()
         case SASL_CB_AUTHNAME:
             if (!authorizationName.isEmpty()) {
                 qCDebug(KIMAP_LOG) << "SASL_CB_[AUTHNAME]: '" << authorizationName << "'";
-                interact->result = strdup(authorizationName.toUtf8().constData());
-                interact->len = strlen((const char *)interact->result);
+                interact->result = authorizationName.constData();
+                interact->len = authorizationName.size();
                 break;
             }
             [[fallthrough]];
         case SASL_CB_USER:
             qCDebug(KIMAP_LOG) << "SASL_CB_[USER|AUTHNAME]: '" << userName << "'";
-            interact->result = strdup(userName.toUtf8().constData());
-            interact->len = strlen((const char *)interact->result);
+            interact->result = userName.constData();
+            interact->len = userName.size();
             break;
         case SASL_CB_PASS:
             qCDebug(KIMAP_LOG) << "SASL_CB_PASS: [hidden]";
-            interact->result = strdup(password.toUtf8().constData());
-            interact->len = strlen((const char *)interact->result);
+            interact->result = password.constData();
+            interact->len = password.size();
             break;
         default:
             interact->result = nullptr;
@@ -141,37 +141,37 @@ LoginJob::~LoginJob()
 QString LoginJob::userName() const
 {
     Q_D(const LoginJob);
-    return d->userName;
+    return QString::fromUtf8(d->userName);
 }
 
 void LoginJob::setUserName(const QString &userName)
 {
     Q_D(LoginJob);
-    d->userName = userName;
+    d->userName = userName.toUtf8();
 }
 
 QString LoginJob::authorizationName() const
 {
     Q_D(const LoginJob);
-    return d->authorizationName;
+    return QString::fromUtf8(d->authorizationName);
 }
 
 void LoginJob::setAuthorizationName(const QString &authorizationName)
 {
     Q_D(LoginJob);
-    d->authorizationName = authorizationName;
+    d->authorizationName = authorizationName.toUtf8();
 }
 
 QString LoginJob::password() const
 {
     Q_D(const LoginJob);
-    return d->password;
+    return QString::fromUtf8(d->password);
 }
 
 void LoginJob::setPassword(const QString &password)
 {
     Q_D(LoginJob);
-    d->password = password;
+    d->password = password.toUtf8();
 }
 
 void LoginJob::doStart()
@@ -212,8 +212,7 @@ void LoginJob::doStart()
         if (d->authMode.isEmpty()) {
             d->authState = LoginJobPrivate::Login;
             qCDebug(KIMAP_LOG) << "sending LOGIN";
-            d->tags << d->sessionInternal()->sendCommand("LOGIN",
-                                                         '"' + quoteIMAP(d->userName).toUtf8() + '"' + ' ' + '"' + quoteIMAP(d->password).toUtf8() + '"');
+            d->tags << d->sessionInternal()->sendCommand("LOGIN", '"' + quoteIMAP(d->userName) + '"' + ' ' + '"' + quoteIMAP(d->password) + '"');
         } else {
             if (!d->startAuthentication()) {
                 emitResult();
@@ -316,12 +315,12 @@ void LoginJob::handleResponse(const Response &response)
             }
             QByteArray challengeResponse;
             if (!d->authorizationName.isEmpty()) {
-                challengeResponse += d->authorizationName.toUtf8();
+                challengeResponse += d->authorizationName;
             }
             challengeResponse += '\0';
-            challengeResponse += d->userName.toUtf8();
+            challengeResponse += d->userName;
             challengeResponse += '\0';
-            challengeResponse += d->password.toUtf8();
+            challengeResponse += d->password;
             challengeResponse = challengeResponse.toBase64();
             d->sessionInternal()->sendData(challengeResponse);
         } else if (response.content.size() >= 2) {
@@ -370,9 +369,7 @@ void LoginJob::handleResponse(const Response &response)
                     emitResult();
                 } else {
                     d->authState = LoginJobPrivate::Login;
-                    d->tags << d->sessionInternal()->sendCommand("LOGIN",
-                                                                 '"' + quoteIMAP(d->userName).toUtf8() + '"' + ' ' + '"' + quoteIMAP(d->password).toUtf8()
-                                                                     + '"');
+                    d->tags << d->sessionInternal()->sendCommand("LOGIN", '"' + quoteIMAP(d->userName) + '"' + ' ' + '"' + quoteIMAP(d->password) + '"');
                 }
             } else {
                 bool authModeSupported = false;
