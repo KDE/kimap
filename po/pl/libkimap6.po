@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-05 00:44+0000\n"
+"POT-Creation-Date: 2026-04-17 00:45+0000\n"
 "PO-Revision-Date: 2022-02-07 20:22+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -113,17 +113,17 @@ msgstr "Bezczynny"
 msgid "Job"
 msgstr "Zadanie"
 
-#: job.cpp:54 loginjob.cpp:581
+#: job.cpp:54 loginjob.cpp:578
 #, kde-format
 msgid "Connection to server lost."
 msgstr "Utracono połączenie z serwerem."
 
-#: job.cpp:65 loginjob.cpp:410 setmetadatajob.cpp:121
+#: job.cpp:65 loginjob.cpp:407 setmetadatajob.cpp:121
 #, kde-format
 msgid "%1 failed, malformed reply from the server."
 msgstr "%1 nie powiodło się, błędna odpowiedź serwera."
 
-#: job.cpp:68 loginjob.cpp:284 setmetadatajob.cpp:104 setmetadatajob.cpp:124
+#: job.cpp:68 loginjob.cpp:283 setmetadatajob.cpp:104 setmetadatajob.cpp:124
 #, kde-format
 msgid "%1 failed, server replied: %2"
 msgstr "%1 nie powiodło się, odpowiedź serwera: %2"
@@ -138,7 +138,7 @@ msgstr "Lista"
 msgid "ListRights"
 msgstr "PrawaListy"
 
-#: loginjob.cpp:130 loginjob.cpp:234
+#: loginjob.cpp:130 loginjob.cpp:233
 #, kde-format
 msgid "Login"
 msgstr "Logowanie"
@@ -148,52 +148,52 @@ msgstr "Logowanie"
 msgid "IMAP session in the wrong state for authentication"
 msgstr "Sesja IMAP w złym stanie uwierzytelniania"
 
-#: loginjob.cpp:236
+#: loginjob.cpp:235
 #, kde-format
 msgid "Capability"
 msgstr "Możliwość"
 
-#: loginjob.cpp:238
+#: loginjob.cpp:237
 #, kde-format
 msgid "StartTls"
 msgstr "StartTls"
 
-#: loginjob.cpp:347
+#: loginjob.cpp:346
 #, kde-format
 msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
 msgstr ""
 "STARTTLS nie jest obsługiwany przez serwer, zamiast tego spróbuj użyć SSL/"
 "TLS."
 
-#: loginjob.cpp:360
+#: loginjob.cpp:359
 #, kde-format
 msgid "Internal error, tried to login before encryption"
 msgstr "Błąd wewnętrzny, próbowano się zalogować przed zaszyfrowaniem"
 
-#: loginjob.cpp:369
+#: loginjob.cpp:368
 #, kde-format
 msgid "Login failed, plain login is disabled by the server."
 msgstr ""
 "Logowanie nie powiodło się, zwykłe logowanie jest wyłączone na serwerze."
 
-#: loginjob.cpp:390
+#: loginjob.cpp:387
 #, kde-format
 msgid "Login failed, authentication mode %1 is not supported by the server."
 msgstr ""
 "Logowanie nie powiodło się, tryb uwierzytelnienia %1 nie jest obsługiwany "
 "przez serwer."
 
-#: loginjob.cpp:420
+#: loginjob.cpp:417
 #, kde-format
 msgid "Login failed, client cannot initialize the SASL library."
 msgstr "Logowanie nie powiodło się, nie można zainicjować biblioteki SASL."
 
-#: loginjob.cpp:519
+#: loginjob.cpp:516
 #, kde-format
 msgid "Login failed, TLS negotiation failed."
 msgstr "Logowanie nie powiodło się, nie udała się negocjacja TLS."
 
-#: loginjob.cpp:577
+#: loginjob.cpp:574
 #, kde-format
 msgid "SSL handshake failed."
 msgstr "Nieudany uścisk dłoni SSL."
