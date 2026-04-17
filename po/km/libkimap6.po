@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-05 00:44+0000\n"
+"POT-Creation-Date: 2026-04-17 02:41+0000\n"
 "PO-Revision-Date: 2010-06-24 15:47+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -117,17 +117,17 @@ msgstr "ទំនេរ​"
 msgid "Job"
 msgstr "ការងារ"
 
-#: job.cpp:54 loginjob.cpp:581
+#: job.cpp:54 loginjob.cpp:578
 #, kde-format
 msgid "Connection to server lost."
 msgstr "បាត់​ការ​តភ្ជាប់​ទៅ​កាន់​ម៉ាស៊ីន​បម្រើ ។"
 
-#: job.cpp:65 loginjob.cpp:410 setmetadatajob.cpp:121
+#: job.cpp:65 loginjob.cpp:407 setmetadatajob.cpp:121
 #, kde-format
 msgid "%1 failed, malformed reply from the server."
 msgstr "%1 បានបរាជ័យ កា​រឆ្លើយតប​មិន​ត្រឹមត្រូវ​ពី​ម៉ាស៊ីន​បម្រើ ។"
 
-#: job.cpp:68 loginjob.cpp:284 setmetadatajob.cpp:104 setmetadatajob.cpp:124
+#: job.cpp:68 loginjob.cpp:283 setmetadatajob.cpp:104 setmetadatajob.cpp:124
 #, kde-format
 msgid "%1 failed, server replied: %2"
 msgstr "%1 បានបរាជ័យ ម៉ាស៊ីនបម្រើ​បាន​ឆ្លើយតប ៖ %2"
@@ -142,7 +142,7 @@ msgstr "បញ្ជី"
 msgid "ListRights"
 msgstr "ListRights"
 
-#: loginjob.cpp:130 loginjob.cpp:234
+#: loginjob.cpp:130 loginjob.cpp:233
 #, kde-format
 msgid "Login"
 msgstr "ចូល"
@@ -152,47 +152,47 @@ msgstr "ចូល"
 msgid "IMAP session in the wrong state for authentication"
 msgstr "សម័យ​ IMAP ក្នុង​​ភាព​មិន​ត្រឹមត្រូវ​​សម្រាប់​ការផ្ទៀងផ្ទាត់​ភាពត្រឹមត្រូវ​"
 
-#: loginjob.cpp:236
+#: loginjob.cpp:235
 #, kde-format
 msgid "Capability"
 msgstr "សមត្ថភាព"
 
-#: loginjob.cpp:238
+#: loginjob.cpp:237
 #, kde-format
 msgid "StartTls"
 msgstr "StartTls"
 
-#: loginjob.cpp:347
+#: loginjob.cpp:346
 #, kde-format
 msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
 msgstr ""
 
-#: loginjob.cpp:360
+#: loginjob.cpp:359
 #, kde-format
 msgid "Internal error, tried to login before encryption"
 msgstr ""
 
-#: loginjob.cpp:369
+#: loginjob.cpp:368
 #, kde-format
 msgid "Login failed, plain login is disabled by the server."
 msgstr "បានបរាជ័យ​ក្នុងកា​រចូល ចូល​ធម្ម​ត្រូវ​បានបិទ​ដោយ​ម៉ាស៊ីន​បម្រើ ។"
 
-#: loginjob.cpp:390
+#: loginjob.cpp:387
 #, kde-format
 msgid "Login failed, authentication mode %1 is not supported by the server."
 msgstr "បានបរាជ័យ​ក្នុងកា​រចូល របៀប​ផ្ទៀងផ្ទាត់​ភាព​ត្រឹមត្រូវ %1 មិន​ត្រូវ​បានគាំទ្រ​ដោយ​ម៉ាស៊ីន​បម្រើ​ទេ ។"
 
-#: loginjob.cpp:420
+#: loginjob.cpp:417
 #, kde-format
 msgid "Login failed, client cannot initialize the SASL library."
 msgstr "បាន​បរាជ័យ​ក្នុងកា​រចូល ម៉ាស៊ីន​ភ្ញៀវ​មិនអាច​ចាប់ផ្ដើម​បណ្ណាល័យ SASL បានទេ ។"
 
-#: loginjob.cpp:519
+#: loginjob.cpp:516
 #, kde-format
 msgid "Login failed, TLS negotiation failed."
 msgstr "បា​ន​បរាជ័យ​ក្នុងការ​ចូល បានបរាជ័យ​ក្នុងកា​រចរចារ​របស់ TLS ។"
 
-#: loginjob.cpp:577
+#: loginjob.cpp:574
 #, kde-format
 msgid "SSL handshake failed."
 msgstr ""
