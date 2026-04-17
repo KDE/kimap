@@ -138,7 +138,7 @@ endif()
 target_link_libraries(
     KPim6IMAP
     PUBLIC
-        KPim6::Mime
+        KF6::Mime
         KF6::CoreAddons
         Qt::Network
     PRIVATE

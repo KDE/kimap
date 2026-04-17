@@ -124,7 +124,11 @@ set_package_properties(
 find_package(KF6CoreAddons ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6I18n ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6KIO ${KF_MIN_VERSION} CONFIG REQUIRED)
-find_package(KPim6Mime ${KMIME_LIBS_VERSION} CONFIG REQUIRED)
+find_package(KF6Mime ${KF_MIN_VERSION} CONFIG)
+if(NOT TARGET KF6::Mime)
+    find_package(KPim6Mime ${KMIME_LIBS_VERSION} CONFIG REQUIRED)
+    add_library(KF6::Mime ALIAS KPim6::Mime)
+endif()
 
 ########### CMake Config Files ###########
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KPim6IMAP")
