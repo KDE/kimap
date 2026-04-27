@@ -24,6 +24,15 @@ extern "C" {
 #include <sasl/sasl.h>
 }
 
+// Windows builds of cyrus-sasl don't log by default, so let's help.
+static int kimap_sasl_log(void *, int level, const char *message)
+{
+    if (message) {
+        qCDebug(KIMAP_LOG) << "SASL[" << level << "]:" << message;
+    }
+    return SASL_OK;
+}
+
 static const sasl_callback_t callbacks[] = {{SASL_CB_ECHOPROMPT, nullptr, nullptr},
                                             {SASL_CB_NOECHOPROMPT, nullptr, nullptr},
                                             {SASL_CB_GETREALM, nullptr, nullptr},
@@ -31,6 +40,7 @@ static const sasl_callback_t callbacks[] = {{SASL_CB_ECHOPROMPT, nullptr, nullpt
                                             {SASL_CB_AUTHNAME, nullptr, nullptr},
                                             {SASL_CB_PASS, nullptr, nullptr},
                                             {SASL_CB_CANON_USER, nullptr, nullptr},
+                                            {SASL_CB_LOG, reinterpret_cast<int (*)()>(&kimap_sasl_log), nullptr},
                                             {SASL_CB_LIST_END, nullptr, nullptr}};
 
 namespace KIMAP
