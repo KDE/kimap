@@ -304,6 +304,27 @@ private Q_SLOTS:
 
             QTest::newRow("STARTTLS not supported") << scenario << false;
         }
+
+        {
+            // RFC 3501 keywords are case-insensitive: a server may advertise
+            // capabilities in mixed case. The client must still recognise
+            // STARTTLS and UTF8=ACCEPT.
+            QList<QByteArray> scenario;
+            scenario << FakeServer::greeting() << "C: A000001 CAPABILITY"
+                     << "S: * CAPABILITY IMAP4rev1 StartTLS"
+                     << "S: A000001 OK CAPABILITY completed"
+                     << "C: A000002 STARTTLS"
+                     << "S: A000002 OK"
+                     << "C: A000003 CAPABILITY"
+                     << "S: * CAPABILITY IMAP4rev1 UTF8=Accept"
+                     << "S: A000003 OK CAPABILITY completed"
+                     << "C: A000004 LOGIN \"user\" \"password\""
+                     << "S: A000004 OK"
+                     << "C: A000005 ENABLE UTF8=ACCEPT"
+                     << "S: * ENABLED UTF8=ACCEPT"
+                     << "S: A000005 OK";
+            QTest::newRow("mixed-case capabilities") << scenario << true;
+        }
     }
 
     void shouldUseStartTls()

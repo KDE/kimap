@@ -265,10 +265,11 @@ void SessionPrivate::responseReceived(const Response &response)
         closeTag.clear();
     }
 
-    // Track UTF8=ACCEPT being enabled (RFC 6855)
+    // Track UTF8=ACCEPT being enabled (RFC 9755). Capability names are
+    // case-insensitive, so squash to upper case before comparing.
     if (tag == "*" && code == "ENABLED") {
         for (int i = 2; i < response.content.size(); ++i) {
-            if (response.content[i].toString() == "UTF8=ACCEPT") {
+            if (response.content[i].toString().toUpper() == "UTF8=ACCEPT") {
                 utf8Enabled = true;
             }
         }

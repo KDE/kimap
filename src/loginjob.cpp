@@ -299,7 +299,7 @@ void LoginJob::handleResponse(const Response &response)
             d->capabilities.clear();
             QList<Response::Part>::const_iterator p = response.content.begin() + 2;
             while (p != response.content.end()) {
-                QString capability = QLatin1StringView(p->toString());
+                QString capability = QString::fromLatin1(p->toString()).toUpper();
                 d->capabilities << capability;
                 if (capability == QLatin1StringView("LOGINDISABLED")) {
                     d->plainLoginDisabled = true;
