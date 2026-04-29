@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-17 00:45+0000\n"
+"POT-Creation-Date: 2026-04-29 00:46+0000\n"
 "PO-Revision-Date: 2009-12-24 06:59-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -57,7 +57,7 @@ msgstr "DeleteAclJob"
 msgid "Delete"
 msgstr "Scrios"
 
-#: enablejob.cpp:31
+#: enablejob.cpp:31 loginjob.cpp:250
 #, kde-format
 msgid "Enable"
 msgstr ""
@@ -113,17 +113,17 @@ msgstr "Díomhaoin"
 msgid "Job"
 msgstr "Jab"
 
-#: job.cpp:54 loginjob.cpp:578
+#: job.cpp:54 loginjob.cpp:606
 #, kde-format
 msgid "Connection to server lost."
 msgstr "Cailleadh an ceangal leis an bhfreastalaí."
 
-#: job.cpp:65 loginjob.cpp:407 setmetadatajob.cpp:121
+#: job.cpp:65 loginjob.cpp:435 setmetadatajob.cpp:121
 #, kde-format
 msgid "%1 failed, malformed reply from the server."
 msgstr "Theip ar %1, fuarthas freagra míchumtha ón bhfreastalaí."
 
-#: job.cpp:68 loginjob.cpp:283 setmetadatajob.cpp:104 setmetadatajob.cpp:124
+#: job.cpp:68 loginjob.cpp:302 setmetadatajob.cpp:104 setmetadatajob.cpp:124
 #, kde-format
 msgid "%1 failed, server replied: %2"
 msgstr "Theip ar %1, freagra ón bhfreastalaí: %2"
@@ -138,62 +138,62 @@ msgstr "Liosta"
 msgid "ListRights"
 msgstr "ListRights"
 
-#: loginjob.cpp:130 loginjob.cpp:233
+#: loginjob.cpp:141 loginjob.cpp:244
 #, kde-format
 msgid "Login"
 msgstr "Logáil isteach"
 
-#: loginjob.cpp:185
+#: loginjob.cpp:196
 #, kde-format
 msgid "IMAP session in the wrong state for authentication"
 msgstr "Tá seisiún IMAP sa staid mhícheart le haghaidh fíordheimhnithe"
 
-#: loginjob.cpp:235
+#: loginjob.cpp:246
 #, kde-format
 msgid "Capability"
 msgstr "Ábaltacht"
 
-#: loginjob.cpp:237
+#: loginjob.cpp:248
 #, kde-format
 msgid "StartTls"
 msgstr "StartTls"
 
-#: loginjob.cpp:346
+#: loginjob.cpp:365
 #, kde-format
 msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
 msgstr ""
 
-#: loginjob.cpp:359
+#: loginjob.cpp:378
 #, kde-format
 msgid "Internal error, tried to login before encryption"
 msgstr ""
 
-#: loginjob.cpp:368
+#: loginjob.cpp:387
 #, kde-format
 msgid "Login failed, plain login is disabled by the server."
 msgstr ""
 "Theip ar logáil isteach, dhíchumasaigh an freastalaí gnáthlogáil isteach."
 
-#: loginjob.cpp:387
+#: loginjob.cpp:406
 #, kde-format
 msgid "Login failed, authentication mode %1 is not supported by the server."
 msgstr ""
 "Theip ar logáil isteach, ní thacaíonn an freastalaí le mód fíordheimhnithe "
 "%1."
 
-#: loginjob.cpp:417
+#: loginjob.cpp:445
 #, kde-format
 msgid "Login failed, client cannot initialize the SASL library."
 msgstr ""
 "Theip ar logáil isteach, ní féidir leis an gcliant an leabharlann SASL a "
 "thúsú."
 
-#: loginjob.cpp:516
+#: loginjob.cpp:544
 #, kde-format
 msgid "Login failed, TLS negotiation failed."
 msgstr "Theip ar logáil isteach, theip ar idirbheartaíocht TLS."
 
-#: loginjob.cpp:574
+#: loginjob.cpp:602
 #, kde-format
 msgid "SSL handshake failed."
 msgstr ""

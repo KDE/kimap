@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkimap5\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-17 00:45+0000\n"
+"POT-Creation-Date: 2026-04-29 00:46+0000\n"
 "PO-Revision-Date: 2022-04-09 20:15+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -56,7 +56,7 @@ msgstr "DeleteAclJob"
 msgid "Delete"
 msgstr "Vymazať"
 
-#: enablejob.cpp:31
+#: enablejob.cpp:31 loginjob.cpp:250
 #, kde-format
 msgid "Enable"
 msgstr "Povoliť"
@@ -112,17 +112,17 @@ msgstr "Nečinný"
 msgid "Job"
 msgstr "Úloha"
 
-#: job.cpp:54 loginjob.cpp:578
+#: job.cpp:54 loginjob.cpp:606
 #, kde-format
 msgid "Connection to server lost."
 msgstr "Spojenie k serveru bolo stratené."
 
-#: job.cpp:65 loginjob.cpp:407 setmetadatajob.cpp:121
+#: job.cpp:65 loginjob.cpp:435 setmetadatajob.cpp:121
 #, kde-format
 msgid "%1 failed, malformed reply from the server."
 msgstr "%1 zlyhalo, neplatná odpoveď zo servera."
 
-#: job.cpp:68 loginjob.cpp:283 setmetadatajob.cpp:104 setmetadatajob.cpp:124
+#: job.cpp:68 loginjob.cpp:302 setmetadatajob.cpp:104 setmetadatajob.cpp:124
 #, kde-format
 msgid "%1 failed, server replied: %2"
 msgstr "%1 zlyhalo, server odpovedal: %2"
@@ -137,58 +137,58 @@ msgstr "Zoznam"
 msgid "ListRights"
 msgstr "ListRights"
 
-#: loginjob.cpp:130 loginjob.cpp:233
+#: loginjob.cpp:141 loginjob.cpp:244
 #, kde-format
 msgid "Login"
 msgstr "Prihlásenie"
 
-#: loginjob.cpp:185
+#: loginjob.cpp:196
 #, kde-format
 msgid "IMAP session in the wrong state for authentication"
 msgstr "IMAP sedenie v zlom stave na overenie"
 
-#: loginjob.cpp:235
+#: loginjob.cpp:246
 #, kde-format
 msgid "Capability"
 msgstr "Schopnosti"
 
-#: loginjob.cpp:237
+#: loginjob.cpp:248
 #, kde-format
 msgid "StartTls"
 msgstr "StartTls"
 
-#: loginjob.cpp:346
+#: loginjob.cpp:365
 #, kde-format
 msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
 msgstr ""
 "STARTTLS nie je podporovaný serverom, skúste namiesto toho použiť SSL/TLS."
 
-#: loginjob.cpp:359
+#: loginjob.cpp:378
 #, kde-format
 msgid "Internal error, tried to login before encryption"
 msgstr "Interná chyba, pokus o prihlásenie pred šifrovaním"
 
-#: loginjob.cpp:368
+#: loginjob.cpp:387
 #, kde-format
 msgid "Login failed, plain login is disabled by the server."
 msgstr "Pihlásenie zlyhalo, čisté prihlásenie je zakázané na serveri."
 
-#: loginjob.cpp:387
+#: loginjob.cpp:406
 #, kde-format
 msgid "Login failed, authentication mode %1 is not supported by the server."
 msgstr "Prihlásenie zlyhalo, režim overenia %1 nepodporovaný serverom."
 
-#: loginjob.cpp:417
+#: loginjob.cpp:445
 #, kde-format
 msgid "Login failed, client cannot initialize the SASL library."
 msgstr "Prihlásenie zlyhalo, klient nemôže inicializovať knižnicu SASL."
 
-#: loginjob.cpp:516
+#: loginjob.cpp:544
 #, kde-format
 msgid "Login failed, TLS negotiation failed."
 msgstr "Prihlásenie zlyhalo, TLS skúška zlyhala."
 
-#: loginjob.cpp:574
+#: loginjob.cpp:602
 #, kde-format
 msgid "SSL handshake failed."
 msgstr "SSL handshake zlyhalo."
