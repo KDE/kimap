@@ -13,6 +13,8 @@
 #include "rfccodecs.h"
 #include "session_p.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 namespace KIMAP
 {
 class GetQuotaRootJobPrivate : public QuotaJobBasePrivate
@@ -24,8 +26,8 @@ public:
     }
 
     QString mailBox;
-    QList<QByteArray> rootList;
-    QMap<QByteArray, QMap<QByteArray, QPair<qint64, qint64>>> quotas;
+    QStringList rootList;
+    QMap<QString, QMap<QByteArray, QPair<qint64, qint64>>> quotas;
 };
 }
 
@@ -55,22 +57,23 @@ void GetQuotaRootJob::handleResponse(const Response &response)
                 // some impls don't give the root a name which for us seems as if
                 // there were no message part
                 if (response.content.size() == 3) {
-                    d->rootList.append("");
+                    d->rootList.append(u""_s);
                 } else {
+                    const bool utf8Enabled = d->sessionInternal()->isUtf8Enabled();
                     int i = 3;
                     while (i < response.content.size()) {
-                        d->rootList.append(response.content[i].toString());
+                        d->rootList.append(QString::fromUtf8(decodeImapFolderName(response.content[i].toString(), utf8Enabled)));
                         i++;
                     }
                 }
             } else if (response.content[1].toString() == "QUOTA") {
-                QByteArray rootName;
+                QString rootName;
                 int quotaContentIndex = 3;
                 // some impls don't give the root a name in the response
                 if (response.content.size() == 3) {
                     quotaContentIndex = 2;
                 } else {
-                    rootName = response.content[2].toString();
+                    rootName = QString::fromUtf8(decodeImapFolderName(response.content[2].toString(), d->sessionInternal()->isUtf8Enabled()));
                 }
 
                 const QMap<QByteArray, QPair<qint64, qint64>> &quota = d->readQuota(response.content[quotaContentIndex]);
@@ -96,13 +99,13 @@ QString GetQuotaRootJob::mailBox() const
     return d->mailBox;
 }
 
-QList<QByteArray> GetQuotaRootJob::roots() const
+QStringList GetQuotaRootJob::roots() const
 {
     Q_D(const GetQuotaRootJob);
     return d->rootList;
 }
 
-qint64 GetQuotaRootJob::usage(const QByteArray &root, const QByteArray &resource) const
+qint64 GetQuotaRootJob::usage(const QString &root, const QByteArray &resource) const
 {
     Q_D(const GetQuotaRootJob);
     QByteArray r = resource.toUpper();
@@ -113,7 +116,7 @@ qint64 GetQuotaRootJob::usage(const QByteArray &root, const QByteArray &resource
     return -1;
 }
 
-qint64 GetQuotaRootJob::limit(const QByteArray &root, const QByteArray &resource) const
+qint64 GetQuotaRootJob::limit(const QString &root, const QByteArray &resource) const
 {
     Q_D(const GetQuotaRootJob);
 
@@ -125,7 +128,7 @@ qint64 GetQuotaRootJob::limit(const QByteArray &root, const QByteArray &resource
     return -1;
 }
 
-QMap<QByteArray, qint64> GetQuotaRootJob::allUsages(const QByteArray &root) const
+QMap<QByteArray, qint64> GetQuotaRootJob::allUsages(const QString &root) const
 {
     Q_D(const GetQuotaRootJob);
 
@@ -142,7 +145,7 @@ QMap<QByteArray, qint64> GetQuotaRootJob::allUsages(const QByteArray &root) cons
     return result;
 }
 
-QMap<QByteArray, qint64> GetQuotaRootJob::allLimits(const QByteArray &root) const
+QMap<QByteArray, qint64> GetQuotaRootJob::allLimits(const QString &root) const
 {
     Q_D(const GetQuotaRootJob);
 

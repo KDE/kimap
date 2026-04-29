@@ -11,6 +11,7 @@
 
 #include "quotajobbase_p.h"
 #include "response_p.h"
+#include "rfccodecs.h"
 #include "session_p.h"
 
 namespace KIMAP
@@ -27,7 +28,7 @@ public:
     }
 
     QMap<QByteArray, qint64> setList;
-    QByteArray root;
+    QString root;
 };
 }
 
@@ -56,9 +57,10 @@ void SetQuotaJob::doStart()
         s[s.length() - 1] = ')';
     }
 
-    qCDebug(KIMAP_LOG) << "SETQUOTA" << '\"' + d->root + "\" " + s;
+    const QByteArray encoded = encodeImapFolderName(d->root.toUtf8(), d->sessionInternal()->isUtf8Enabled());
+    qCDebug(KIMAP_LOG) << "SETQUOTA" << '\"' + encoded + "\" " + s;
     // XXX: [alexmerry, 2010-07-24]: should d->root be quoted properly?
-    d->tags << d->sessionInternal()->sendCommand("SETQUOTA", '\"' + d->root + "\" " + s);
+    d->tags << d->sessionInternal()->sendCommand("SETQUOTA", '\"' + encoded + "\" " + s);
 }
 
 void SetQuotaJob::handleResponse(const Response &response)
@@ -78,14 +80,14 @@ void SetQuotaJob::setQuota(const QByteArray &resource, qint64 limit)
     d->setList[resource.toUpper()] = limit;
 }
 
-void SetQuotaJob::setRoot(const QByteArray &root)
+void SetQuotaJob::setRoot(const QString &root)
 {
     Q_D(SetQuotaJob);
 
     d->root = root;
 }
 
-QByteArray SetQuotaJob::root() const
+QString SetQuotaJob::root() const
 {
     Q_D(const SetQuotaJob);
 

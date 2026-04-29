@@ -5,6 +5,7 @@
 */
 
 #include "kimap/getquotarootjob.h"
+#include "kimap/loginjob.h"
 #include "kimap/session.h"
 #include "kimaptest/fakeserver.h"
 
@@ -21,18 +22,18 @@ private Q_SLOTS:
     void testGetQuotaRoot_data()
     {
         QTest::addColumn<QString>("mailbox");
-        QTest::addColumn<QList<QByteArray>>("roots");
+        QTest::addColumn<QStringList>("roots");
         QTest::addColumn<QList<QByteArray>>("resources");
         QTest::addColumn<QList<qint64>>("usages");
         QTest::addColumn<QList<qint64>>("limits");
         QTest::addColumn<QList<QByteArray>>("scenario");
 
-        QList<QByteArray> roots;
+        QStringList roots;
         QList<QByteArray> resources;
         QList<qint64> usages;
         QList<qint64> limits;
         QList<QByteArray> scenario;
-        roots << "";
+        roots << QString();
         resources << "STORAGE";
         limits << 512;
         usages << 10;
@@ -47,7 +48,7 @@ private Q_SLOTS:
         usages.clear();
         limits.clear();
         scenario.clear();
-        roots << "";
+        roots << QString();
         resources << "STORAGE"
                   << "MESSAGE";
         usages << 10 << 8221;
@@ -64,8 +65,7 @@ private Q_SLOTS:
         usages.clear();
         limits.clear();
         scenario.clear();
-        roots << "root1"
-              << "root2";
+        roots << QStringLiteral("root1") << QStringLiteral("root2");
         resources << "STORAGE"
                   << "MESSAGE";
         usages << 10 << 8221 << 30 << 100;
@@ -84,7 +84,7 @@ private Q_SLOTS:
         usages.clear();
         limits.clear();
         scenario.clear();
-        roots << "";
+        roots << QString();
         resources << "STORAGE"
                   << "MESSAGE";
         usages << 10 << 8221;
@@ -101,7 +101,7 @@ private Q_SLOTS:
         usages.clear();
         limits.clear();
         scenario.clear();
-        roots << "";
+        roots << QString();
         resources << "STORAGE";
         limits << 512;
         usages << 10;
@@ -116,7 +116,7 @@ private Q_SLOTS:
         usages.clear();
         limits.clear();
         scenario.clear();
-        roots << "";
+        roots << QString();
         resources << "STORAGE";
         limits << 512;
         usages << 10;
@@ -130,7 +130,7 @@ private Q_SLOTS:
     void testGetQuotaRoot()
     {
         QFETCH(QString, mailbox);
-        QFETCH(QList<QByteArray>, roots);
+        QFETCH(QStringList, roots);
         QFETCH(QList<QByteArray>, resources);
         QFETCH(QList<qint64>, usages);
         QFETCH(QList<qint64>, limits);
@@ -151,7 +151,7 @@ private Q_SLOTS:
         QEXPECT_FAIL("rootname mismatch", "Expected failure on rootname mismatch in QUOTAROOT and QUOTA response", Abort);
         QCOMPARE(job->roots(), roots);
         for (int rootIdx = 0; rootIdx < roots.size(); rootIdx++) {
-            const QByteArray &root = roots[rootIdx];
+            const QString &root = roots[rootIdx];
             for (int i = 0; i < resources.size(); i++) {
                 int idx = i + rootIdx * roots.size();
                 QByteArray resource = resources[i];
@@ -159,6 +159,72 @@ private Q_SLOTS:
                 QCOMPARE(job->usage(root, resource), usages[idx]);
             }
         }
+
+        fakeServer.quit();
+    }
+
+    // The wire format for non-ASCII mailbox names is mUTF-7 (RFC 3501) when
+    // UTF8=ACCEPT is not enabled and raw UTF-8 (RFC 9755) when it is. roots()
+    // hides that distinction and returns decoded Unicode in both cases.
+    void testGetQuotaRootDecodesMUtf7()
+    {
+        // "INBOX/grå" mUTF-7-encoded
+        QList<QByteArray> scenario;
+        scenario << FakeServer::preauth() << "C: A000001 GETQUOTAROOT \"INBOX/gr&AOU-\""
+                 << "S: * QUOTAROOT INBOX/gr&AOU- INBOX/gr&AOU- "
+                 << "S: * QUOTA INBOX/gr&AOU- (STORAGE 10 512)"
+                 << "S: A000001 OK GETQUOTA completed";
+
+        FakeServer fakeServer;
+        fakeServer.setScenario(scenario);
+        fakeServer.startAndWait();
+
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
+
+        auto job = new KIMAP::GetQuotaRootJob(&session);
+        job->setMailBox(QString::fromUtf8("INBOX/gr\xc3\xa5"));
+        QVERIFY(job->exec());
+        const QString decoded = QString::fromUtf8("INBOX/gr\xc3\xa5");
+        QCOMPARE(job->roots(), QStringList{decoded});
+        QCOMPARE(job->limit(decoded, "STORAGE"), 512);
+        QCOMPARE(job->usage(decoded, "STORAGE"), 10);
+
+        fakeServer.quit();
+    }
+
+    void testGetQuotaRootPassesThroughUtf8()
+    {
+        // Same mailbox, but UTF8=ACCEPT enabled — bytes on the wire are raw UTF-8.
+        QList<QByteArray> scenario;
+        scenario << FakeServer::greeting() << "C: A000001 LOGIN \"user\" \"password\""
+                 << "S: * CAPABILITY IMAP4rev1 UTF8=ACCEPT"
+                 << "S: A000001 OK logged in"
+                 << "C: A000002 ENABLE UTF8=ACCEPT"
+                 << "S: * ENABLED UTF8=ACCEPT"
+                 << "S: A000002 OK"
+                 << "C: A000003 GETQUOTAROOT \"INBOX/gr\xc3\xa5\""
+                 << "S: * QUOTAROOT INBOX/gr\xc3\xa5 INBOX/gr\xc3\xa5 "
+                 << "S: * QUOTA INBOX/gr\xc3\xa5 (STORAGE 10 512)"
+                 << "S: A000003 OK GETQUOTA completed";
+
+        FakeServer fakeServer;
+        fakeServer.setScenario(scenario);
+        fakeServer.startAndWait();
+
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
+
+        auto login = new KIMAP::LoginJob(&session);
+        login->setUserName(QStringLiteral("user"));
+        login->setPassword(QStringLiteral("password"));
+        QVERIFY(login->exec());
+
+        auto job = new KIMAP::GetQuotaRootJob(&session);
+        job->setMailBox(QString::fromUtf8("INBOX/gr\xc3\xa5"));
+        QVERIFY(job->exec());
+        const QString decoded = QString::fromUtf8("INBOX/gr\xc3\xa5");
+        QCOMPARE(job->roots(), QStringList{decoded});
+        QCOMPARE(job->limit(decoded, "STORAGE"), 512);
+        QCOMPARE(job->usage(decoded, "STORAGE"), 10);
 
         fakeServer.quit();
     }

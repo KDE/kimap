@@ -64,8 +64,14 @@ public:
 
     /*!
      * The quota roots for the mailbox.
+     *
+     * Mailbox names are returned in their decoded Unicode form. When
+     * the server speaks IMAP4rev2 (RFC 9051) or has UTF8=ACCEPT enabled
+     * (RFC 9755) the bytes from the wire are already UTF-8; otherwise
+     * they are mUTF-7-encoded per RFC 3501 and are decoded here so that
+     * callers never see the wire form.
      */
-    [[nodiscard]] QList<QByteArray> roots() const;
+    [[nodiscard]] QStringList roots() const;
     /*!
      * Get the current usage for a resource.
      *
@@ -73,7 +79,8 @@ public:
      * server will not provide information about resource
      * usage.
      *
-     * \a root the quota root to get the resource usage for
+     * \a root the quota root (in decoded Unicode form, as returned by roots())
+     *         to get the resource usage for
      *
      * \a resource the resource to get the usage for
      *
@@ -81,11 +88,12 @@ public:
      *          if the usage is unknown or there is no
      *          limit on the resource
      */
-    [[nodiscard]] qint64 usage(const QByteArray &root, const QByteArray &resource) const;
+    [[nodiscard]] qint64 usage(const QString &root, const QByteArray &resource) const;
     /*!
      * Get the current limit for a resource.
      *
-     * \a root the quota root to get the resource limit for
+     * \a root the quota root (in decoded Unicode form, as returned by roots())
+     *         to get the resource limit for
      *
      * \a resource the resource to get the limit for
      *
@@ -93,24 +101,26 @@ public:
      *          if the limit is unknown or there is no
      *          limit on the resource
      */
-    [[nodiscard]] qint64 limit(const QByteArray &root, const QByteArray &resource) const;
+    [[nodiscard]] qint64 limit(const QString &root, const QByteArray &resource) const;
 
     /*!
      * Get a map containing all resource usage figures for a quota root.
      *
-     * \a root the quota root to get resource usage figures for
+     * \a root the quota root (in decoded Unicode form, as returned by roots())
+     *         to get resource usage figures for
      *
      * Returns a map from resource names to usage figures
      */
-    [[nodiscard]] QMap<QByteArray, qint64> allUsages(const QByteArray &root) const;
+    [[nodiscard]] QMap<QByteArray, qint64> allUsages(const QString &root) const;
     /*!
      * Get a map containing all resource limits for a quota root.
      *
-     * \a root the quota root to get resource limits for
+     * \a root the quota root (in decoded Unicode form, as returned by roots())
+     *         to get resource limits for
      *
      * Returns a map from resource names to limits
      */
-    [[nodiscard]] QMap<QByteArray, qint64> allLimits(const QByteArray &root) const;
+    [[nodiscard]] QMap<QByteArray, qint64> allLimits(const QString &root) const;
 
 protected:
     void doStart() override;

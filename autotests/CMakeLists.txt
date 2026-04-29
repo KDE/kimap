@@ -58,6 +58,8 @@ kimap_unit_tests(
   idjobtest
   idlejobtest
   quotarootjobtest
+  getquotajobtest
+  setquotajobtest
   searchjobtest
   getmetadatajobtest
   streamparsertest

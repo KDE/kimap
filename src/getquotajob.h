@@ -54,15 +54,22 @@ public:
     /*!
      * Set the quota root to get the resource limits for.
      *
+     * A quota root may be a mailbox name (RFC 9208/2087); pass it in
+     * decoded Unicode form. The job encodes for the wire as needed,
+     * using mUTF-7 (RFC 3501) for plain IMAP4rev1 sessions and raw
+     * UTF-8 for IMAP4rev2 (RFC 9051) or sessions with UTF8=ACCEPT
+     * enabled (RFC 9755).
+     *
      * \a root the quota root to set
      *
      * \sa GetQuotaRootJob
      */
-    void setRoot(const QByteArray &root);
+    void setRoot(const QString &root);
     /*!
-     * The quota root that resource limit information will be fetched for.
+     * The quota root that resource limit information will be fetched for,
+     * in decoded Unicode form.
      */
-    [[nodiscard]] QByteArray root() const;
+    [[nodiscard]] QString root() const;
 
 protected:
     void doStart() override;

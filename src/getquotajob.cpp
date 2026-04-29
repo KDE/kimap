@@ -10,6 +10,7 @@
 
 #include "quotajobbase_p.h"
 #include "response_p.h"
+#include "rfccodecs.h"
 #include "session_p.h"
 
 namespace KIMAP
@@ -22,7 +23,7 @@ public:
     {
     }
 
-    QByteArray root;
+    QString root;
 };
 }
 
@@ -38,8 +39,9 @@ GetQuotaJob::~GetQuotaJob() = default;
 void GetQuotaJob::doStart()
 {
     Q_D(GetQuotaJob);
+    const QByteArray encoded = encodeImapFolderName(d->root.toUtf8(), d->sessionInternal()->isUtf8Enabled());
     // XXX: [alexmerry, 2010-07-24]: should d->root be quoted properly?
-    d->tags << d->sessionInternal()->sendCommand("GETQUOTA", '\"' + d->root + '\"');
+    d->tags << d->sessionInternal()->sendCommand("GETQUOTA", '\"' + encoded + '\"');
 }
 
 void GetQuotaJob::handleResponse(const Response &response)
@@ -52,13 +54,13 @@ void GetQuotaJob::handleResponse(const Response &response)
     }
 }
 
-void GetQuotaJob::setRoot(const QByteArray &root)
+void GetQuotaJob::setRoot(const QString &root)
 {
     Q_D(GetQuotaJob);
     d->root = root;
 }
 
-QByteArray GetQuotaJob::root() const
+QString GetQuotaJob::root() const
 {
     Q_D(const GetQuotaJob);
     return d->root;
