@@ -15,7 +15,7 @@ using namespace Qt::Literals::StringLiterals;
 #include "capabilitiesjob.h"
 #include "job_p.h"
 #include "response_p.h"
-#include "rfccodecs.h"
+#include "rfccodecs_p.h"
 #include "session_p.h"
 
 #include "common.h"

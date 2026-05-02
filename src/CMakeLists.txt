@@ -88,7 +88,7 @@ target_sources(
         expungejob.h
         imapstreamparser.h
         getmetadatajob.h
-        rfccodecs.h
+        rfccodecs_p.h
         getquotajob.h
         listjob.h
         deleteacljob.h
@@ -199,7 +199,6 @@ ecm_generate_headers(KIMAP_CamelCase_HEADERS
   NamespaceJob
   QuotaJobBase
   RenameJob
-  RFCCodecs
   SearchJob
   SelectJob
   Session

@@ -17,7 +17,7 @@
  * @author Sven Carstens
  */
 
-#include "rfccodecs.h"
+#include "rfccodecs_p.h"
 
 #include <ctype.h>
 #include <sys/types.h>

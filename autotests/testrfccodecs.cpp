@@ -11,7 +11,7 @@
 
 QTEST_GUILESS_MAIN(RFCCodecsTest)
 
-#include "rfccodecs.h"
+#include "rfccodecs_p.h"
 using namespace KIMAP;
 
 void RFCCodecsTest::testIMAPEncoding()

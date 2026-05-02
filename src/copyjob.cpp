@@ -10,7 +10,7 @@
 
 #include "job_p.h"
 #include "response_p.h"
-#include "rfccodecs.h"
+#include "rfccodecs_p.h"
 #include "session_p.h"
 
 // TODO: when custom error codes are introduced, handle the NO [TRYCREATE] response

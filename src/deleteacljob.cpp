@@ -10,7 +10,7 @@
 
 #include "acljobbase_p.h"
 #include "response_p.h"
-#include "rfccodecs.h"
+#include "rfccodecs_p.h"
 #include "session_p.h"
 
 namespace KIMAP

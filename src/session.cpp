@@ -19,7 +19,7 @@
 #include "job_p.h"
 #include "loginjob.h"
 #include "response_p.h"
-#include "rfccodecs.h"
+#include "rfccodecs_p.h"
 #include "sessionlogger_p.h"
 #include "sessionthread_p.h"
 
