@@ -199,7 +199,6 @@ ecm_generate_headers(KIMAP_CamelCase_HEADERS
   NamespaceJob
   QuotaJobBase
   RenameJob
-  RFCCodecs
   SearchJob
   SelectJob
   Session

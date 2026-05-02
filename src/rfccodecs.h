@@ -17,6 +17,8 @@
  * \namespace KIMAP
  * \inmodule KIMAP
  * \brief Provides handlers for various RFC/MIME encodings.
+ *
+ * \internal
  */
 namespace KIMAP
 {
