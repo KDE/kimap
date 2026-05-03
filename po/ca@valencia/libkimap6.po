@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-29 00:46+0000\n"
+"POT-Creation-Date: 2026-05-03 00:44+0000\n"
 "PO-Revision-Date: 2022-01-28 09:30+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -92,12 +92,12 @@ msgstr "ObténMetaDades"
 msgid "GetAnnotation"
 msgstr "ObténAnotació"
 
-#: getquotajob.cpp:32
+#: getquotajob.cpp:33
 #, kde-format
 msgid "GetQuota"
 msgstr "ObténQuota"
 
-#: getquotarootjob.cpp:35
+#: getquotarootjob.cpp:37
 #, kde-format
 msgid "GetQuotaRoot"
 msgstr "ObténQuotaArrel"
@@ -263,7 +263,7 @@ msgstr "EstablixAcl"
 msgid "SetMetaData"
 msgstr "EstablixMetaDades"
 
-#: setquotajob.cpp:37
+#: setquotajob.cpp:38
 #, kde-format
 msgid "SetQuota"
 msgstr "EstablixQuota"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-29 00:46+0000\n"
+"POT-Creation-Date: 2026-05-03 00:44+0000\n"
 "PO-Revision-Date: 2021-06-16 18:08+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -90,12 +90,12 @@ msgstr "Λήψη μεταδεδομένων"
 msgid "GetAnnotation"
 msgstr "Λήψη σημείωσης"
 
-#: getquotajob.cpp:32
+#: getquotajob.cpp:33
 #, kde-format
 msgid "GetQuota"
 msgstr "Λήψη Quota"
 
-#: getquotarootjob.cpp:35
+#: getquotarootjob.cpp:37
 #, kde-format
 msgid "GetQuotaRoot"
 msgstr "Λήψη βάσης Quota"
@@ -259,7 +259,7 @@ msgstr "ΟρισμόςAcl"
 msgid "SetMetaData"
 msgstr "Ορισμός μεταδεδομένων"
 
-#: setquotajob.cpp:37
+#: setquotajob.cpp:38
 #, kde-format
 msgid "SetQuota"
 msgstr "ΟρισμόςQuota"

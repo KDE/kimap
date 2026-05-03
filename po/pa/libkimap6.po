@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-29 00:46+0000\n"
+"POT-Creation-Date: 2026-05-03 00:44+0000\n"
 "PO-Revision-Date: 2010-01-16 08:29+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: ਪੰਜਾਬੀ <punjabi-users@lists.sf.net>\n"
@@ -87,12 +87,12 @@ msgstr ""
 msgid "GetAnnotation"
 msgstr ""
 
-#: getquotajob.cpp:32
+#: getquotajob.cpp:33
 #, kde-format
 msgid "GetQuota"
 msgstr ""
 
-#: getquotarootjob.cpp:35
+#: getquotarootjob.cpp:37
 #, kde-format
 msgid "GetQuotaRoot"
 msgstr ""
@@ -252,7 +252,7 @@ msgstr ""
 msgid "SetMetaData"
 msgstr ""
 
-#: setquotajob.cpp:37
+#: setquotajob.cpp:38
 #, kde-format
 msgid "SetQuota"
 msgstr "ਕੋਟਾਸੈੱਟ"

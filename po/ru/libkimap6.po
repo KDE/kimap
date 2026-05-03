@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-29 00:46+0000\n"
+"POT-Creation-Date: 2026-05-03 00:44+0000\n"
 "PO-Revision-Date: 2022-10-01 15:04+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -120,14 +120,14 @@ msgstr "получение примечаний к папке"
 
 # [JobPrivate::m_name]
 # http://tools.ietf.org/html/rfc2087#section-4.2
-#: getquotajob.cpp:32
+#: getquotajob.cpp:33
 #, kde-format
 msgid "GetQuota"
 msgstr "определение ограничения объёма"
 
 # [JobPrivate::m_name]
 # http://tools.ietf.org/html/rfc2087#section-4.3
-#: getquotarootjob.cpp:35
+#: getquotarootjob.cpp:37
 #, kde-format
 msgid "GetQuotaRoot"
 msgstr "определение ограничения объёма в папке"
@@ -322,7 +322,7 @@ msgstr "установку метаданных"
 
 # [JobPrivate::m_name]
 # http://tools.ietf.org/html/rfc2087#section-4.1
-#: setquotajob.cpp:37
+#: setquotajob.cpp:38
 #, kde-format
 msgid "SetQuota"
 msgstr "установку ограничения объёма в папке"

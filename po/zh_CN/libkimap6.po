@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-29 00:46+0000\n"
+"POT-Creation-Date: 2026-05-03 00:44+0000\n"
 "PO-Revision-Date: 2024-04-22 15:58\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -87,12 +87,12 @@ msgstr "获取元数据"
 msgid "GetAnnotation"
 msgstr "获取批注"
 
-#: getquotajob.cpp:32
+#: getquotajob.cpp:33
 #, kde-format
 msgid "GetQuota"
 msgstr "获取配额信息"
 
-#: getquotarootjob.cpp:35
+#: getquotarootjob.cpp:37
 #, kde-format
 msgid "GetQuotaRoot"
 msgstr "获取配额根"
@@ -250,7 +250,7 @@ msgstr "设定访问控制列表"
 msgid "SetMetaData"
 msgstr "设定元数据"
 
-#: setquotajob.cpp:37
+#: setquotajob.cpp:38
 #, kde-format
 msgid "SetQuota"
 msgstr "设定配额"

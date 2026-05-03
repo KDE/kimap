@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkimap5\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-29 00:46+0000\n"
+"POT-Creation-Date: 2026-05-03 00:44+0000\n"
 "PO-Revision-Date: 2016-11-28 01:33+0100\n"
 "Last-Translator: Chusslove Illich <caslav.ilic@gmx.net>\n"
 "Language-Team: Serbian <kde-i18n-sr@kde.org>\n"
@@ -90,12 +90,12 @@ msgstr "Dobavljanje metapodataka"
 msgid "GetAnnotation"
 msgstr "Dobavljanje tumačenja"
 
-#: getquotajob.cpp:32
+#: getquotajob.cpp:33
 #, kde-format
 msgid "GetQuota"
 msgstr "Dobavljanje kvote"
 
-#: getquotarootjob.cpp:35
+#: getquotarootjob.cpp:37
 #, kde-format
 msgid "GetQuotaRoot"
 msgstr "Dobavljanje kvote korena"
@@ -257,7 +257,7 @@ msgstr "Postavljanje ACL‑a"
 msgid "SetMetaData"
 msgstr "Postavljanje metapodataka"
 
-#: setquotajob.cpp:37
+#: setquotajob.cpp:38
 #, kde-format
 msgid "SetQuota"
 msgstr "Postavljanje kvote"

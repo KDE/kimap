@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-29 00:46+0000\n"
+"POT-Creation-Date: 2026-05-03 00:44+0000\n"
 "PO-Revision-Date: 2022-02-12 19:14+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -104,13 +104,13 @@ msgid "GetAnnotation"
 msgstr "GetAnnotation"
 
 # Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
-#: getquotajob.cpp:32
+#: getquotajob.cpp:33
 #, kde-format
 msgid "GetQuota"
 msgstr "GetQuota"
 
 # Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
-#: getquotarootjob.cpp:35
+#: getquotarootjob.cpp:37
 #, kde-format
 msgid "GetQuotaRoot"
 msgstr "GetQuotaRoot"
@@ -288,7 +288,7 @@ msgid "SetMetaData"
 msgstr "SetMetaData"
 
 # Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
-#: setquotajob.cpp:37
+#: setquotajob.cpp:38
 #, kde-format
 msgid "SetQuota"
 msgstr "SetQuota"
