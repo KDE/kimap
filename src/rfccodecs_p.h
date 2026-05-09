@@ -11,8 +11,6 @@
 
 #include <QString>
 
-#include "kimap_export.h"
-
 /*!
  * \namespace KIMAP
  * \inmodule KIMAP
@@ -30,7 +28,7 @@ namespace KIMAP
 
   \since 4.3
 */
-[[nodiscard]] KIMAP_EXPORT QByteArray encodeImapFolderName(const QByteArray &src, bool utf8Enabled = false);
+[[nodiscard]] QByteArray encodeImapFolderName(const QByteArray &src, bool utf8Enabled = false);
 
 /*!
   Converts a wire-format IMAP mailbox to a UTF8-encoded QByteArray.
@@ -46,7 +44,7 @@ namespace KIMAP
 
   \since 4.3
 */
-[[nodiscard]] KIMAP_EXPORT QByteArray decodeImapFolderName(const QByteArray &inSrc, bool utf8Enabled);
+[[nodiscard]] QByteArray decodeImapFolderName(const QByteArray &inSrc, bool utf8Enabled);
 
 /*!
   Converts an Unicode IMAP mailbox to a QString which can be used in
@@ -54,7 +52,7 @@ namespace KIMAP
 
   \a src is the QString containing the IMAP mailbox.
 */
-[[nodiscard]] KIMAP_EXPORT QString encodeImapFolderName(const QString &src, bool utf8Enabled = false);
+[[nodiscard]] QString encodeImapFolderName(const QString &src, bool utf8Enabled = false);
 
 /*!
   Converts a wire-encoded IMAP mailbox to a Unicode QString.
@@ -67,14 +65,14 @@ namespace KIMAP
   true, the input is already UTF-8 and is returned unchanged; otherwise
   it is decoded from modified UTF-7.
 */
-[[nodiscard]] KIMAP_EXPORT QString decodeImapFolderName(const QString &inSrc, bool utf8Enabled);
+[[nodiscard]] QString decodeImapFolderName(const QString &inSrc, bool utf8Enabled);
 
 /*!
   Replaces " with \" and \ with \\ " and \ characters.
 
   \a src is the QString to quote.
 */
-[[nodiscard]] KIMAP_EXPORT QString quoteIMAP(QStringView src);
+[[nodiscard]] QString quoteIMAP(QStringView src);
 
 /*!
   Replaces " with \" and \ with \\ " and \ characters.
@@ -83,5 +81,5 @@ namespace KIMAP
 
   \since 4.3
 */
-[[nodiscard]] KIMAP_EXPORT QByteArray quoteIMAP(QByteArrayView src);
+[[nodiscard]] QByteArray quoteIMAP(QByteArrayView src);
 }
