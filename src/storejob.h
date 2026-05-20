@@ -28,6 +28,9 @@ using MessageFlags = QList<QByteArray>;
  * \inheaderfile KIMAP/StoreJob
  *
  * \brief Store Job.
+ *
+ * If flags contains \Recent, it won't be pushed to the server. This is to protect clients from mistake making them violate the RFC which mandates that clients
+ * shouldn't fiddle with this flag.
  */
 class KIMAP_EXPORT StoreJob : public Job
 {

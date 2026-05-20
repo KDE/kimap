@@ -39,10 +39,15 @@ public:
         }
 
         parameters += " (";
+        bool hasFlags = false;
         for (const QByteArray &flag : flags) {
+            if (flag == "\\Recent") {
+                continue;
+            }
+            hasFlags = true;
             parameters += flag + ' ';
         }
-        if (!flags.isEmpty()) {
+        if (hasFlags) {
             parameters.chop(1);
         }
         parameters += ')';

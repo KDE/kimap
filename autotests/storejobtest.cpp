@@ -46,6 +46,17 @@ private Q_SLOTS:
                                    << (QList<QByteArray>() << "\\Seen"
                                                            << "\\Foo")
                                    << scenario;
+
+        scenario.clear();
+        scenario << FakeServer::preauth() << "C: A000001 STORE 3 FLAGS (\\Seen \\Foo)"
+                 << "S: * 3 FETCH (FLAGS (\\Seen \\Foo) UID 1096)"
+                 << "S: A000001 OK STORE completed";
+
+        QTest::newRow("Ensure store don't sent \\Recent flag") << false << qint64(3) << qint64(1096)
+                                                               << (QList<QByteArray>() << "\\Seen"
+                                                                                       << "\\Foo"
+                                                                                       << "\\Recent")
+                                                               << scenario;
     }
 
     void testStore()

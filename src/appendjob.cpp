@@ -100,9 +100,11 @@ void AppendJob::doStart()
 
     QByteArray parameters = '\"' + KIMAP::encodeImapFolderName(d->mailBox.toUtf8(), d->sessionInternal()->isUtf8Enabled()) + '\"';
 
-    if (!d->flags.isEmpty()) {
+    QList<QByteArray> filteredFlags = d->flags;
+    filteredFlags.removeAll("\\Recent");
+    if (!filteredFlags.isEmpty()) {
         parameters += " (";
-        for (const QByteArray &flag : std::as_const(d->flags)) {
+        for (const QByteArray &flag : std::as_const(filteredFlags)) {
             parameters += flag + ' ';
         }
         parameters.chop(1);

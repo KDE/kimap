@@ -57,6 +57,14 @@ private Q_SLOTS:
                      << "X";
             QTest::newRow("Don't crash on empty response") << "INBOX" << scenario << flags << QDateTime() << QByteArray("content") << qint64(0);
         }
+        QList<QByteArray> flagsRecent;
+        flagsRecent << QByteArray("\\Recent");
+        {
+            QList<QByteArray> scenario;
+            scenario << FakeServer::preauth() << "C: A000001 APPEND \"INBOX\" {7}\r\ncontent"
+                     << "S: A000001 OK APPEND completed. [ APPENDUID 492 2671 ]";
+            QTest::newRow("Don't send \\Recent flag") << "INBOX" << scenario << flagsRecent << QDateTime() << QByteArray("content") << qint64(2671);
+        }
     }
 
     void testAppend()
