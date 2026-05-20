@@ -56,6 +56,9 @@ struct Message {
  * This job will always use BODY.PEEK rather than BODY to fetch message
  * content, so it will not set the Seen flag.
  *
+ * The \Recent flag will be excluded from the returned message flags. There is little value for clients to know about it, it can be error prone to store it, and
+ * it has been deprecated in IMAP4rev2.
+ *
  * This job can only be run when the session is in the selected state.
  */
 class KIMAP_EXPORT FetchJob : public Job

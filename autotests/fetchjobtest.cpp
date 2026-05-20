@@ -281,6 +281,44 @@ private Q_SLOTS:
         m_signals.clear();
         m_msgs.clear();
     }
+
+    void testRecentFlags()
+    {
+        QList<QByteArray> scenario;
+        scenario << FakeServer::preauth() << "C: A000001 FETCH 1 (FLAGS UID)"
+                 << "S: * 1 FETCH ( FLAGS (\\Recent) UID 1 )"
+                 << "S: A000001 OK fetch done";
+
+        KIMAP::FetchJob::FetchScope scope;
+        scope.mode = KIMAP::FetchJob::FetchScope::Flags;
+
+        FakeServer fakeServer;
+        fakeServer.setScenario(scenario);
+        fakeServer.startAndWait();
+
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
+
+        auto job = new KIMAP::FetchJob(&session);
+        job->setUidBased(false);
+        job->setSequenceSet(KIMAP::ImapSet(1, 1));
+        job->setScope(scope);
+
+        connect(job, &KIMAP::FetchJob::messagesAvailable, this, &FetchJobTest::onMessagesAvailable);
+        bool result = job->exec();
+
+        QVERIFY(result);
+        QVERIFY(m_signals.count() > 0);
+        QCOMPARE(m_msgs.count(), 1);
+
+        // Check that we didn't receive \\Recent
+        QMap<qint64, KIMAP::MessageFlags> expectedFlags;
+        QCOMPARE(m_msgs[1].flags, expectedFlags[1]);
+
+        fakeServer.quit();
+
+        m_signals.clear();
+        m_msgs.clear();
+    }
 };
 
 QTEST_GUILESS_MAIN(FetchJobTest)

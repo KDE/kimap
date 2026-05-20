@@ -252,6 +252,7 @@ void FetchJob::handleResponse(const Response &response)
                     } else {
                         msg.flags << *it;
                     }
+                    msg.flags.removeAll("\\Recent");
                 } else if (str == "X-GM-LABELS") {
                     msg.attributes.insert("X-GM-LABELS", *it);
                 } else if (str == "X-GM-THRID") {
