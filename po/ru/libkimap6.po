@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-03 00:44+0000\n"
+"POT-Creation-Date: 2026-05-23 00:45+0000\n"
 "PO-Revision-Date: 2022-10-01 15:04+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -335,7 +335,7 @@ msgstr "определение состояния"
 
 # [JobPrivate::m_name]
 # http://tools.ietf.org/html/rfc3501#section-6.4.6
-#: storejob.cpp:66
+#: storejob.cpp:71
 #, kde-format
 msgid "Store"
 msgstr "запись данных в письмо"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepimlibs\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-03 00:44+0000\n"
+"POT-Creation-Date: 2026-05-23 00:45+0000\n"
 "PO-Revision-Date: 2009-12-24 06:32+0000\n"
 "Last-Translator: Launchpad Translations Administrators <rosetta@launchpad."
 "net>\n"
@@ -264,7 +264,7 @@ msgctxt "name of the status job"
 msgid "Status"
 msgstr ""
 
-#: storejob.cpp:66
+#: storejob.cpp:71
 #, kde-format
 msgid "Store"
 msgstr "Ruaje"

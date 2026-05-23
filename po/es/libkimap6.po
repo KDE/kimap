@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-03 00:44+0000\n"
+"POT-Creation-Date: 2026-05-23 00:45+0000\n"
 "PO-Revision-Date: 2022-01-28 23:55+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -274,7 +274,7 @@ msgctxt "name of the status job"
 msgid "Status"
 msgstr "Estado"
 
-#: storejob.cpp:66
+#: storejob.cpp:71
 #, kde-format
 msgid "Store"
 msgstr "Almacenar"

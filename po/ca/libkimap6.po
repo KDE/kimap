@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-03 00:44+0000\n"
+"POT-Creation-Date: 2026-05-23 00:45+0000\n"
 "PO-Revision-Date: 2022-01-28 09:30+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -273,7 +273,7 @@ msgctxt "name of the status job"
 msgid "Status"
 msgstr "Estat"
 
-#: storejob.cpp:66
+#: storejob.cpp:71
 #, kde-format
 msgid "Store"
 msgstr "Emmagatzema"
