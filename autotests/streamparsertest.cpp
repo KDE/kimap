@@ -149,6 +149,46 @@ private Q_SLOTS:
         *payload << Response::Part(parser.readParenthesizedList());
         QVERIFY(parser.atCommandEnd());
     }
+
+    void testWithBytesInString()
+    {
+        QByteArray bytes;
+        for (int i = 0; i < 256; ++i) {
+            bytes += static_cast<char>(i);
+        }
+
+        QByteArray command2;
+        command2 =
+            "* 33 FETCH (FLAGS (\\Recent \\Seen) UID 33 INTERNALDATE \" 1-Nov-2013 18:43:34 +0100\" RFC822.SIZE 1203 BODY[HEADER.FIELDS (TO FROM MESSAGE-ID "
+            "REFERENCES IN-REPLY-TO SUBJECT DATE)] ~{256}\r\n";
+        command2 += bytes;
+        command2 += ")\n\r";
+
+        QByteArray buffer;
+        QBuffer socket(&buffer);
+        socket.open(QBuffer::WriteOnly);
+        QVERIFY(socket.write(command2) != -1);
+
+        QBuffer readSocket(&buffer);
+        readSocket.open(QBuffer::ReadOnly);
+        ImapStreamParser parser(&readSocket);
+
+        QVERIFY(parser.availableDataSize() != 0);
+
+        Response message;
+        QList<Response::Part> *payload = &message.content;
+        QVERIFY(!parser.atCommandEnd());
+        QVERIFY(parser.hasString());
+        *payload << Response::Part(parser.readString()); //*
+        QVERIFY(parser.hasString());
+        *payload << Response::Part(parser.readString()); // 33
+        QVERIFY(parser.hasString());
+        *payload << Response::Part(parser.readString()); // FETCH
+        QVERIFY(parser.hasList());
+        *payload << Response::Part(parser.readParenthesizedList());
+        QVERIFY(parser.atCommandEnd());
+        QCOMPARE(payload->back().toList().back(), bytes);
+    }
 };
 
 QTEST_GUILESS_MAIN(StreamParserTest)

@@ -83,6 +83,15 @@ bool ImapStreamParser::hasLiteral()
     }
     auto savedPos = m_position;
     stripLeadingSpaces();
+
+    // If `~` it's raw bytes which we already support
+    if (m_data.at(m_position) == '~') {
+        m_position++;
+        if (!waitForMoreData(m_position >= m_data.length())) {
+            throw ImapParserException("Unable to read more data");
+        }
+    }
+
     if (m_data.at(m_position) == '{') {
         qsizetype end = -1;
         do {
