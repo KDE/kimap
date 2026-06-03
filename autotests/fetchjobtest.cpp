@@ -282,6 +282,70 @@ private Q_SLOTS:
         m_msgs.clear();
     }
 
+    void testFetchBinaryParts()
+    {
+        auto bytes = QByteArray();
+        for (int i = 0; i <= std::numeric_limits<uint8_t>::max(); ++i) {
+            bytes.append(static_cast<char>(i));
+        }
+
+        QList<QByteArray> scenario;
+        scenario << FakeServer::preauth()
+                 << "C: A000001 FETCH 2 (BODY.PEEK[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT DATE)] BODY.PEEK[1.1.1.MIME] "
+                    "BINARY.PEEK[1.1.1] FLAGS UID)"
+                 << "S: * 2 FETCH (UID 20 FLAGS (\\Seen) BODY[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT DATE)] {154}\r\nFrom: Joe Smith "
+                    "<smith@example.com>\r\nDate: Wed, 2 Mar 2011 11:33:24 +0700\r\nMessage-ID: <1234@example.com>\r\nSubject: hello\r\nTo: Jane "
+                    "<jane@example.com>\r\n\r\n BINARY[1.1.1] ~{" + QByteArray::number(bytes.size()) + "}\r\n" + bytes + "\r\n BODY[1.1.1.MIME] {81}\r\n"
+                    "Content-Type: text/plain; charset=ISO-8859-1\r\nContent-Transfer-Encoding: base64\r\n)\r\n"
+                 << "S: A000001 OK fetch done";
+
+        KIMAP::FetchJob::FetchScope scope;
+        scope.mode = KIMAP::FetchJob::FetchScope::HeaderAndContentBinary;
+        scope.parts.clear();
+        scope.parts.append("1.1.1");
+
+        FakeServer fakeServer;
+        fakeServer.setScenario(scenario);
+        fakeServer.startAndWait();
+
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
+
+        auto job = new KIMAP::FetchJob(&session);
+        job->setUidBased(false);
+        job->setSequenceSet(KIMAP::ImapSet(2, 2));
+        job->setScope(scope);
+
+        connect(job, &KIMAP::FetchJob::messagesAvailable, this, &FetchJobTest::onMessagesAvailable);
+        bool result = job->exec();
+
+        QVERIFY(result);
+        QVERIFY(m_signals.count() > 0);
+        QCOMPARE(m_msgs.count(), 1);
+
+        // Check that we received the message header
+        QCOMPARE(m_msgs[2].message->messageID()->identifier(), QByteArray("1234@example.com"));
+
+        // Check that we received the flags
+        QMap<qint64, KIMAP::MessageFlags> expectedFlags;
+        expectedFlags.insert(2, KIMAP::MessageFlags() << "\\Seen");
+        QCOMPARE(m_msgs[2].flags, expectedFlags[2]);
+
+        // Check that we didn't receive the full message body, since we only requested a specific part
+        QCOMPARE(m_msgs[2].message->decodedText().length(), 0);
+        QCOMPARE(m_msgs[2].message->attachments().count(), 0);
+
+        // Check that we received the part we requested
+        QVERIFY(m_msgs[2].parts.keys().size() == 1);
+        QByteArray partId = m_msgs[2].parts.keys().first();
+        QCOMPARE(partId, QByteArray("1.1.1"));
+        QCOMPARE(m_msgs[2].parts.value(partId)->decodedBody(), bytes);
+
+        fakeServer.quit();
+
+        m_signals.clear();
+        m_msgs.clear();
+    }
+
     void testRecentFlags()
     {
         QList<QByteArray> scenario;
