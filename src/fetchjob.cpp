@@ -178,6 +178,14 @@ void FetchJob::doStart()
     case FetchScope::FullHeaders:
         parameters += "(RFC822.SIZE INTERNALDATE BODY.PEEK[HEADER] FLAGS UID";
         break;
+    case FetchScope::HeaderAndContentBinary:
+        Q_ASSERT(!d->scope.parts.isEmpty());
+        parameters += "(BODY.PEEK[HEADER.FIELDS (TO FROM MESSAGE-ID REFERENCES IN-REPLY-TO SUBJECT DATE)]";
+        for (const QByteArray &part : std::as_const(d->scope.parts)) {
+            parameters += " BODY.PEEK[" + part + ".MIME] BINARY.PEEK[" + part + "]"; // krazy:exclude=doublequote_chars
+        }
+        parameters += " FLAGS UID";
+        break;
     }
 
     if (d->gmailEnabled) {
@@ -203,6 +211,24 @@ void FetchJob::doStart()
     d->tags << d->sessionInternal()->sendCommand(command, parameters);
 }
 
+/*!
+ * Replaces existing ContentTransferEncoding header in \head() with 8Bit encoding.
+ * \Note If you need to access parsed fields, you need to call parse() again
+ */
+static void setKMimeCteDecoded(KMime::Content &content)
+{
+    // Parse original head into headers
+    auto clone = KMime::Content();
+    clone.setHead(content.head());
+    clone.parse();
+    // Update CTE header
+    auto cte = clone.contentTransferEncoding(KMime::Create);
+    cte->setEncoding(KMime::Headers::CE8Bit);
+    // Generate head from headers
+    clone.assemble();
+    content.setHead(clone.head());
+}
+
 void FetchJob::handleResponse(const Response &response)
 {
     Q_D(FetchJob);
@@ -222,6 +248,7 @@ void FetchJob::handleResponse(const Response &response)
             const qint64 id = response.content[1].toString().toLongLong();
             const QList<QByteArray> content = response.content[3].toList();
 
+            QSet<QByteArray> binaryPartsIds;
             Message msg;
             auto message = std::make_shared<KMime::Message>();
             bool shouldParseMessage = false;
@@ -276,11 +303,16 @@ void FetchJob::handleResponse(const Response &response)
                     if ((index = str.indexOf("HEADER")) > 0 || (index = str.indexOf("MIME")) > 0) { // headers
                         if (str[index - 1] == '.') {
                             QByteArray partId = str.mid(5, index - 6);
+                            const bool isBinary = binaryPartsIds.contains(partId);
                             if (!parts.contains(partId)) {
                                 parts[partId] = std::make_shared<KMime::Content>();
                             }
                             parts[partId]->setHead(*it);
                             parts[partId]->parse();
+                            if (isBinary) {
+                                setKMimeCteDecoded(*parts[partId]);
+                                parts[partId]->parse();
+                            }
                             msg.parts = parts;
                         } else {
                             message->setHead(*it);
@@ -303,6 +335,31 @@ void FetchJob::handleResponse(const Response &response)
                             msg.parts = parts;
                         }
                     }
+                } else if (str.startsWith("BINARY[")) {
+                    if (!str.endsWith(']')) { // BINARY[ ... ] might have been split, skip until we find the ]
+                        while (!(*it).endsWith(']')) {
+                            ++it;
+                        }
+                        ++it;
+                    }
+
+                    if (str == "BINARY[]") {
+                        message->setContent(KMime::CRLFtoLF(*it));
+                        shouldParseMessage = true;
+                        msg.message = message;
+                    } else {
+                        QByteArray partId = str.mid(7, str.size() - 8);
+                        if (!parts.contains(partId)) {
+                            parts[partId] = std::make_shared<KMime::Content>();
+                        } else {
+                            setKMimeCteDecoded(*parts[partId]);
+                            parts[partId]->parse();
+                        }
+                        parts[partId]->setBody(*it);
+
+                        msg.parts = parts;
+                        binaryPartsIds.insert(partId);
+                    }
                 }
             }
 
@@ -313,7 +370,8 @@ void FetchJob::handleResponse(const Response &response)
             // For the headers mode the message is built in several
             // steps, hence why we wait it to be done until putting it
             // in the pending queue.
-            if (d->scope.mode == FetchScope::Headers || d->scope.mode == FetchScope::HeaderAndContent || d->scope.mode == FetchScope::FullHeaders) {
+            if (d->scope.mode == FetchScope::Headers || d->scope.mode == FetchScope::HeaderAndContent || d->scope.mode == FetchScope::HeaderAndContentBinary
+                || d->scope.mode == FetchScope::FullHeaders) {
                 msg.message = message;
             }
 

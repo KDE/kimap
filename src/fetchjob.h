@@ -112,6 +112,8 @@ public:
          * fetch those parts - At the request of the user, you can repeat the step above to fetch the attachments
          * \value FullHeaders Fetch message size (in octets), internal date of the message, flags, UID
          * and all RFC822 headers. The parts field is ignored when using this scope
+         * \value HeaderAndContentBinary Identical to FetchScope::HeaderAndContent but parts are fetched in BINARY format directly.
+         *
          */
         enum Mode {
             Headers,
@@ -120,7 +122,8 @@ public:
             Content,
             Full,
             HeaderAndContent,
-            FullHeaders
+            FullHeaders,
+            HeaderAndContentBinary,
         };
 
         /*!
