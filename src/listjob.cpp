@@ -46,6 +46,8 @@ public:
     QTimer emitPendingsTimer;
     QList<MailBoxDescriptor> pendingDescriptors;
     QList<QList<QByteArray>> pendingFlags;
+
+    bool listExtendedEnabled = false;
 };
 }
 
@@ -74,6 +76,18 @@ ListJob::Option ListJob::option() const
     return d->option;
 }
 
+void ListJob::setListExtendedEnabled(bool enabled)
+{
+    Q_D(ListJob);
+    d->listExtendedEnabled = enabled;
+}
+
+bool ListJob::listExtendedEnabled() const
+{
+    Q_D(const ListJob);
+    return d->listExtendedEnabled;
+}
+
 void ListJob::setQueriedNamespaces(const QList<MailBoxDescriptor> &namespaces)
 {
     Q_D(ListJob);
@@ -90,6 +104,8 @@ void ListJob::doStart()
 {
     Q_D(ListJob);
 
+    auto listOptions = QByteArray();
+
     switch (d->option) {
     case IncludeUnsubscribed:
         d->command = "LIST";
@@ -98,24 +114,40 @@ void ListJob::doStart()
         d->command = "XLIST";
         break;
     case NoOption:
-        d->command = "LSUB";
+        if (d->listExtendedEnabled) {
+            d->command = "LIST";
+            listOptions += "(SUBSCRIBED) ";
+        } else {
+            d->command = "LSUB";
+        }
     }
 
     d->emitPendingsTimer.start(100);
 
     if (d->namespaces.isEmpty()) {
-        d->tags << d->sessionInternal()->sendCommand(d->command, "\"\" *");
+        d->tags << d->sessionInternal()->sendCommand(d->command, listOptions + "\"\" *");
     } else {
+        auto mailboxPatterns = QList<QString>{};
         for (const MailBoxDescriptor &descriptor : std::as_const(d->namespaces)) {
-            QString parameters = QStringLiteral("\"\" \"%1\"");
-
             if (descriptor.name.endsWith(descriptor.separator)) {
                 QString name = encodeImapFolderName(descriptor.name, d->sessionInternal()->isUtf8Enabled());
                 name.chop(1);
-                d->tags << d->sessionInternal()->sendCommand(d->command, parameters.arg(name).toUtf8());
+                mailboxPatterns.append(name);
             }
+            mailboxPatterns.append(descriptor.name + u'*');
+        }
 
-            d->tags << d->sessionInternal()->sendCommand(d->command, parameters.arg(descriptor.name + u'*').toUtf8());
+        if (!d->listExtendedEnabled) {
+            const auto parameters = QStringLiteral("\"\" \"%1\"");
+            for (const auto &pattern : mailboxPatterns) {
+                d->tags << d->sessionInternal()->sendCommand(d->command, parameters.arg(pattern).toUtf8());
+            }
+        } else {
+            for (auto &pattern : mailboxPatterns) {
+                pattern = QStringLiteral("\"%1\"").arg(pattern);
+            }
+            auto patterns = mailboxPatterns.join(u' ').toUtf8();
+            d->tags << d->sessionInternal()->sendCommand(d->command, listOptions + "\"\" (" + patterns + ')');
         }
     }
 }
