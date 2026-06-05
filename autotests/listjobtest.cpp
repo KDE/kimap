@@ -248,6 +248,45 @@ private Q_SLOTS:
         fakeServer.quit();
     }
 
+    void testExtendedListCommand()
+    {
+        QList<QByteArray> scenario;
+        scenario << FakeServer::greeting() << "C: A000001 LOGIN \"user\" \"password\""
+                 << "S: * CAPABILITY IMAP4rev2 UTF8=ACCEPT"
+                 << "S: A000001 OK logged in"
+                 << "C: A000002 ENABLE UTF8=ACCEPT"
+                 << "S: * ENABLED UTF8=ACCEPT"
+                 << "S: A000002 OK"
+                 << "C: A000003 LIST (SUBSCRIBED) \"\" (\"INBOX/great\" \"INBOX/great/*\" \"INBOX/super\" \"INBOX/super/*\")"
+                 << "S: A000003 OK LIST completed";
+
+        FakeServer fakeServer;
+        fakeServer.setScenario(scenario);
+        fakeServer.startAndWait();
+
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
+
+        auto login = new KIMAP::LoginJob(&session);
+        login->setUserName(QStringLiteral("user"));
+        login->setPassword(QStringLiteral("password"));
+        QVERIFY(login->exec());
+
+        KIMAP::MailBoxDescriptor ns1;
+        ns1.separator = QLatin1Char('/');
+        ns1.name = QString::fromUtf8("INBOX/great/");
+        KIMAP::MailBoxDescriptor ns2;
+        ns2.separator = QLatin1Char('/');
+        ns2.name = QString::fromUtf8("INBOX/super/");
+
+        auto job = new KIMAP::ListJob(&session);
+        job->setListExtendedEnabled(true);
+        job->setOption(KIMAP::ListJob::NoOption);
+        job->setQueriedNamespaces({ns1, ns2});
+        QVERIFY(job->exec());
+
+        fakeServer.quit();
+    }
+
     void testListWithUtf8()
     {
         // gr\xc3\xa5 is the UTF-8 encoding of "grå"

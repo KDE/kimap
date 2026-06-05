@@ -88,6 +88,14 @@ public:
 
     /*!
      */
+    void setListExtendedEnabled(bool enabled);
+
+    /*!
+     */
+    [[nodiscard]] bool listExtendedEnabled() const;
+
+    /*!
+     */
     void setQueriedNamespaces(const QList<MailBoxDescriptor> &namespaces);
 
     /*!
