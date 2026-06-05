@@ -5,6 +5,7 @@
 */
 
 #include "capabilitiesjob.h"
+#include <iostream>
 
 #include <KLocalizedString>
 
@@ -53,8 +54,40 @@ void CapabilitiesJob::handleResponse(const Response &response)
     if (handleErrorReplies(response) == NotHandled) {
         const auto responseSize(response.content.size());
         if (responseSize >= 2 && response.content[1].toString() == "CAPABILITY") {
+            bool supportsRev2 = false;
+            bool supportsLiteral = false;
             for (int i = 2; i < responseSize; ++i) {
                 d->capabilities << QLatin1StringView(response.content[i].toString().toUpper());
+                if (d->capabilities[d->capabilities.length() - 1] == QLatin1StringView("IMAP4REV2")) {
+                    supportsRev2 = true;
+                }
+                if (d->capabilities[d->capabilities.length() - 1] == QLatin1StringView("LITERAL+")
+                    || d->capabilities[d->capabilities.length() - 1] == QLatin1StringView("LITERAL-")) {
+                    supportsLiteral = true;
+                }
+            }
+            if (supportsRev2) {
+                constexpr auto foldedInCapabilities = std::to_array({
+                    QLatin1StringView("NAMESPACE"),
+                    QLatin1StringView("UNSELECT"),
+                    QLatin1StringView("UIDPLUS"),
+                    QLatin1StringView("ESEARCH"),
+                    QLatin1StringView("SEARCHRES"),
+                    QLatin1StringView("ENABLE"),
+                    QLatin1StringView("IDLE"),
+                    QLatin1StringView("SASL-IR"),
+                    QLatin1StringView("LIST-EXTENDED"),
+                    QLatin1StringView("LIST-STATUS"),
+                    QLatin1StringView("MOVE"),
+                });
+                for (const auto capability : std::as_const(foldedInCapabilities)) {
+                    if (!d->capabilities.contains(capability)) {
+                        d->capabilities << capability;
+                    }
+                }
+                if (!supportsLiteral) {
+                    d->capabilities << QLatin1StringView("LITERAL-");
+                }
             }
             Q_EMIT capabilitiesReceived(d->capabilities);
         }
