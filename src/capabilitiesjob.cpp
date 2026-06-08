@@ -55,6 +55,8 @@ void CapabilitiesJob::handleResponse(const Response &response)
         if (responseSize >= 2 && response.content[1].toString() == "CAPABILITY") {
             bool supportsRev2 = false;
             bool supportsLiteral = false;
+            bool supportsCondstore = false;
+            bool supportsQresync = false;
             for (int i = 2; i < responseSize; ++i) {
                 d->capabilities << QLatin1StringView(response.content[i].toString().toUpper());
                 if (d->capabilities.last() == QLatin1StringView("IMAP4REV2")) {
@@ -62,6 +64,10 @@ void CapabilitiesJob::handleResponse(const Response &response)
                 } else if (d->capabilities.last() == QLatin1StringView("LITERAL+") || d->capabilities.last() == QLatin1StringView("LITERAL-")) {
                     // LITERAL- is the restricted form of LITERAL+ (see RFC 7888), so don't report both
                     supportsLiteral = true;
+                } else if (d->capabilities.last() == QLatin1StringView("CONDSTORE")) {
+                    supportsCondstore = true;
+                } else if (d->capabilities.last() == QLatin1StringView("QRESYNC")) {
+                    supportsQresync = true;
                 }
             }
             if (supportsRev2) {
@@ -87,6 +93,11 @@ void CapabilitiesJob::handleResponse(const Response &response)
                 if (!supportsLiteral) {
                     d->capabilities << QLatin1StringView("LITERAL-");
                 }
+            }
+            if (supportsQresync && !supportsCondstore) {
+                // If the server supports QRESYNC, it is required to also support CONDSTORE
+                // However, it is not strictly required to report it in a CAPABILITY call (see RFC 7162)
+                d->capabilities << QLatin1StringView("CONDSTORE");
             }
             Q_EMIT capabilitiesReceived(d->capabilities);
         }
