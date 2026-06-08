@@ -56,6 +56,8 @@ void CapabilitiesJob::handleResponse(const Response &response)
         if (responseSize >= 2 && response.content[1].toString() == "CAPABILITY") {
             bool supportsRev2 = false;
             bool supportsLiteral = false;
+            bool supportsCondstore = false;
+            bool supportsQresync = false;
             for (int i = 2; i < responseSize; ++i) {
                 d->capabilities << QLatin1StringView(response.content[i].toString().toUpper());
                 if (d->capabilities[d->capabilities.length() - 1] == QLatin1StringView("IMAP4REV2")) {
@@ -64,6 +66,12 @@ void CapabilitiesJob::handleResponse(const Response &response)
                 if (d->capabilities[d->capabilities.length() - 1] == QLatin1StringView("LITERAL+")
                     || d->capabilities[d->capabilities.length() - 1] == QLatin1StringView("LITERAL-")) {
                     supportsLiteral = true;
+                }
+                if (d->capabilities[d->capabilities.length() - 1] == QLatin1StringView("CONDSTORE")) {
+                    supportsCondstore = true;
+                }
+                if (d->capabilities[d->capabilities.length() - 1] == QLatin1StringView("QRESYNC")) {
+                    supportsQresync = true;
                 }
             }
             if (supportsRev2) {
@@ -88,6 +96,9 @@ void CapabilitiesJob::handleResponse(const Response &response)
                 if (!supportsLiteral) {
                     d->capabilities << QLatin1StringView("LITERAL-");
                 }
+            }
+            if (supportsQresync && !supportsCondstore) {
+                d->capabilities << QLatin1StringView("CONDSTORE");
             }
             Q_EMIT capabilitiesReceived(d->capabilities);
         }

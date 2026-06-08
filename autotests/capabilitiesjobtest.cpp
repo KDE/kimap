@@ -76,6 +76,16 @@ private Q_SLOTS:
                      << QStringLiteral("IDLE") << QStringLiteral("SASL-IR") << QStringLiteral("LIST-STATUS") << QStringLiteral("MOVE")
                      << QStringLiteral("LITERAL-");
         QTest::newRow("rev2-folded-in-2") << scenario << capabilities;
+
+        scenario.clear();
+        capabilities.clear();
+        scenario << "S: * PREAUTH"
+                 << "C: A000001 CAPABILITY"
+                 << "S: * CAPABILITY IMAP4rev1 STARTTLS QRESYNC"
+                 << "S: A000001 OK CAPABILITY completed";
+
+        capabilities << QStringLiteral("IMAP4REV1") << QStringLiteral("STARTTLS") << QStringLiteral("QRESYNC") << QStringLiteral("CONDSTORE");
+        QTest::newRow("condstore-qresync") << scenario << capabilities;
     }
 
     void testCapabilities()
