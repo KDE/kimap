@@ -42,6 +42,7 @@ public:
     ListJob::Option option = ListJob::NoOption;
     QList<MailBoxDescriptor> namespaces;
     QByteArray command;
+    QByteArrayList returnOptions;
 
     QTimer emitPendingsTimer;
     QList<MailBoxDescriptor> pendingDescriptors;
@@ -88,6 +89,12 @@ bool ListJob::listExtendedEnabled() const
     return d->listExtendedEnabled;
 }
 
+void ListJob::clearReturnOptions()
+{
+    Q_D(ListJob);
+    d->returnOptions.clear();
+}
+
 void ListJob::setQueriedNamespaces(const QList<MailBoxDescriptor> &namespaces)
 {
     Q_D(ListJob);
@@ -122,10 +129,19 @@ void ListJob::doStart()
         }
     }
 
+    auto returnOptions = QByteArray();
+    if (!d->returnOptions.isEmpty()) {
+        if (d->listExtendedEnabled && d->command == "LIST") {
+            returnOptions = " RETURN (" + d->returnOptions.join(' ') + ')';
+        } else {
+            qWarning() << "Return options are only supported with LIST-EXTENDED: ignoring";
+        }
+    }
+
     d->emitPendingsTimer.start(100);
 
     if (d->namespaces.isEmpty()) {
-        d->tags << d->sessionInternal()->sendCommand(d->command, listOptions + "\"\" *");
+        d->tags << d->sessionInternal()->sendCommand(d->command, listOptions + "\"\" *" + returnOptions);
     } else {
         auto mailboxPatterns = QList<QString>{};
         for (const MailBoxDescriptor &descriptor : std::as_const(d->namespaces)) {
@@ -147,7 +163,7 @@ void ListJob::doStart()
                 pattern = QStringLiteral("\"%1\"").arg(pattern);
             }
             auto patterns = mailboxPatterns.join(u' ').toUtf8();
-            d->tags << d->sessionInternal()->sendCommand(d->command, listOptions + "\"\" (" + patterns + ')');
+            d->tags << d->sessionInternal()->sendCommand(d->command, listOptions + "\"\" (" + patterns + ")" + returnOptions);
         }
     }
 }
@@ -208,4 +224,11 @@ void ListJob::convertInboxName(KIMAP::MailBoxDescriptor &descriptor)
         }
     }
 }
+
+void ListJob::setReturnOption(const ReturnOptions::Subscribed &)
+{
+    Q_D(ListJob);
+    d->returnOptions.append("SUBSCRIBED");
+}
+
 #include "moc_listjob.cpp"

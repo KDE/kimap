@@ -73,6 +73,13 @@ public:
 
     /*!
      */
+    struct ReturnOptions {
+        struct Subscribed {
+        };
+    };
+
+    /*!
+     */
     explicit ListJob(Session *session);
     /*!
      */
@@ -93,6 +100,20 @@ public:
     /*!
      */
     [[nodiscard]] bool listExtendedEnabled() const;
+
+    /*!
+     */
+    template<typename... Ts>
+    void setReturnOptions(Ts &&...vals)
+    {
+        clearReturnOptions();
+        (setReturnOption(std::forward<Ts>(vals)), ...);
+    }
+
+    /*!
+     * \internal
+     */
+    void clearReturnOptions();
 
     /*!
      */
@@ -121,6 +142,11 @@ private:
      * \internal
      **/
     void convertInboxName(KIMAP::MailBoxDescriptor &descriptor);
+
+    /*!
+     * \internal
+     */
+    void setReturnOption(const ReturnOptions::Subscribed &opt);
 };
 
 }

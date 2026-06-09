@@ -287,6 +287,60 @@ private Q_SLOTS:
         fakeServer.quit();
     }
 
+    void testExtendedListReturnSubscribedCommand()
+    {
+        QList<QByteArray> scenario;
+        scenario << FakeServer::greeting() << "C: A000001 LOGIN \"user\" \"password\""
+                 << "S: * CAPABILITY IMAP4rev2 UTF8=ACCEPT"
+                 << "S: A000001 OK logged in"
+                 << "C: A000002 ENABLE UTF8=ACCEPT"
+                 << "S: * ENABLED UTF8=ACCEPT"
+                 << "S: A000002 OK"
+                 << "C: A000003 LIST \"\" * RETURN (SUBSCRIBED)"
+                 << "S: * LIST ( \\Subscribed \\HasChildren ) / Inbox"
+                 << "S: * LIST ( \\Subscribed ) / Inbox/Subscribed"
+                 << "S: * LIST ( ) / Inbox/NotSubscribed"
+                 << "S: A000003 OK LIST completed";
+
+        FakeServer fakeServer;
+        fakeServer.setScenario(scenario);
+        fakeServer.startAndWait();
+
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
+
+        auto login = new KIMAP::LoginJob(&session);
+        login->setUserName(QStringLiteral("user"));
+        login->setPassword(QStringLiteral("password"));
+        QVERIFY(login->exec());
+
+        auto job = new KIMAP::ListJob(&session);
+        job->setListExtendedEnabled(true);
+        job->setReturnOptions(KIMAP::ListJob::ReturnOptions::Subscribed{});
+        job->setOption(KIMAP::ListJob::IncludeUnsubscribed);
+
+        const QSignalSpy spy(job, &KIMAP::ListJob::mailBoxesReceived);
+        QVERIFY(job->exec());
+        QVERIFY(spy.count() > 0);
+
+        QList<KIMAP::MailBoxDescriptor> mailBoxes;
+        QList<QList<QByteArray>> mailboxFlags;
+        for (int i = 0; i < spy.count(); ++i) {
+            mailBoxes += spy.at(i).at(0).value<QList<KIMAP::MailBoxDescriptor>>();
+            mailboxFlags += spy.at(i).at(1).value<QList<QList<QByteArray>>>();
+        }
+
+        QStringList names;
+        names.reserve(mailBoxes.size());
+        for (const auto &mb : mailBoxes) {
+            names << mb.name;
+        }
+
+        QCOMPARE(names, QStringList({QStringLiteral("INBOX"), QStringLiteral("INBOX/Subscribed"), QStringLiteral("INBOX/NotSubscribed")}));
+        QCOMPARE(mailboxFlags, QList({QByteArrayList{"\\subscribed", "\\haschildren"}, QByteArrayList{"\\subscribed"}, QByteArrayList{}}));
+
+        fakeServer.quit();
+    }
+
     void testListWithUtf8()
     {
         // gr\xc3\xa5 is the UTF-8 encoding of "grå"
