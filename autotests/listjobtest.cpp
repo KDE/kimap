@@ -287,6 +287,82 @@ private Q_SLOTS:
         fakeServer.quit();
     }
 
+    void testExtendedListReturnOptionsCommand()
+    {
+        QList<QByteArray> scenario;
+        scenario << FakeServer::greeting() << "C: A000001 LOGIN \"user\" \"password\""
+                 << "S: * CAPABILITY IMAP4rev2 UTF8=ACCEPT"
+                 << "S: A000001 OK logged in"
+                 << "C: A000002 ENABLE UTF8=ACCEPT"
+                 << "S: * ENABLED UTF8=ACCEPT"
+                 << "S: A000002 OK"
+                 << "C: A000003 LIST \"\" * RETURN (SUBSCRIBED CHILDREN STATUS (MESSAGES UNSEEN))"
+                 << "S: * LIST ( \\Subscribed \\HasChildren ) / Inbox"
+                 << "S: * STATUS \"Inbox\" (MESSAGES 5 UNSEEN 1)"
+                 << "S: * LIST ( \\Subscribed \\HasNoChildren) / Inbox/Subscribed"
+                 << "S: * STATUS \"Inbox/Subscribed\" (MESSAGES 10 UNSEEN 2)"
+                 << "S: * LIST ( \\NoSelect \\HasNoChildren) / Inbox/NotSubscribed"
+                 << "S: A000003 OK LIST completed";
+
+        FakeServer fakeServer;
+        fakeServer.setScenario(scenario);
+        fakeServer.startAndWait();
+
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
+
+        auto login = new KIMAP::LoginJob(&session);
+        login->setUserName(QStringLiteral("user"));
+        login->setPassword(QStringLiteral("password"));
+        QVERIFY(login->exec());
+
+        auto job = new KIMAP::ListJob(&session);
+        job->setListExtendedEnabled(true);
+        {
+            using namespace KIMAP::ListReturnOptions;
+            auto statusOpt = Status();
+            statusOpt.messages = true;
+            statusOpt.unseen = true;
+            job->setReturnOptions(Subscribed{}, Children{}, statusOpt);
+        }
+        job->setOption(KIMAP::ListJob::IncludeUnsubscribed);
+
+        const QSignalSpy spy(job, &KIMAP::ListJob::mailBoxesStatusReceived);
+        QVERIFY(job->exec());
+        QVERIFY(spy.count() > 0);
+
+        // Check returned mailbox contain expected data
+
+        QList<KIMAP::MailBoxDescriptor> mailBoxes;
+        QList<QList<QByteArray>> mailboxFlags;
+        QList<std::optional<KIMAP::ListJob::MailboxStatus>> mailboxStatuses;
+        for (int i = 0; i < spy.count(); ++i) {
+            mailBoxes += spy.at(i).at(0).value<QList<KIMAP::MailBoxDescriptor>>();
+            mailboxFlags += spy.at(i).at(1).value<QList<QList<QByteArray>>>();
+            mailboxStatuses += spy.at(i).at(2).value<QList<std::optional<KIMAP::ListJob::MailboxStatus>>>();
+        }
+
+        QStringList names;
+        names.reserve(mailBoxes.size());
+        std::ranges::transform(mailBoxes, std::back_inserter(names), [](const auto &mb) {
+            return mb.name;
+        });
+
+        QCOMPARE(names, QStringList({QStringLiteral("INBOX"), QStringLiteral("INBOX/Subscribed"), QStringLiteral("INBOX/NotSubscribed")}));
+        QCOMPARE(mailboxFlags,
+                 QList({QByteArrayList{"\\subscribed", "\\haschildren"},
+                        QByteArrayList{"\\subscribed", "\\hasnochildren"},
+                        QByteArrayList{"\\noselect", "\\hasnochildren"}}));
+
+        auto expectedStatus = QList({
+            std::optional{QList{qMakePair(QByteArray("MESSAGES"), static_cast<qint64>(5)), qMakePair(QByteArray("UNSEEN"), static_cast<qint64>(1))}},
+            std::optional{QList{qMakePair(QByteArray("MESSAGES"), static_cast<qint64>(10)), qMakePair(QByteArray("UNSEEN"), static_cast<qint64>(2))}},
+            std::optional<KIMAP::ListJob::MailboxStatus>{},
+        });
+        QCOMPARE(mailboxStatuses, expectedStatus);
+
+        fakeServer.quit();
+    }
+
     void testListWithUtf8()
     {
         // gr\xc3\xa5 is the UTF-8 encoding of "grå"

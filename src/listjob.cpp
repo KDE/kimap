@@ -10,6 +10,7 @@
 #include <QTimer>
 
 #include "job_p.h"
+#include "kimap_debug.h"
 #include "response_p.h"
 #include "rfccodecs_p.h"
 #include "session_p.h"
@@ -25,16 +26,35 @@ public:
     {
     }
 
-    void emitPendings()
+    void emitPendings(bool finalEmit)
     {
         if (pendingDescriptors.isEmpty()) {
             return;
         }
 
-        Q_EMIT q->mailBoxesReceived(pendingDescriptors, pendingFlags);
+        // We should be missing at most one status
+        Q_ASSERT(pendingStatus.size() == pendingDescriptors.size() - 1 || pendingStatus.size() == pendingDescriptors.size());
 
-        pendingDescriptors.clear();
-        pendingFlags.clear();
+        if (finalEmit) {
+            pendingStatus.resize(pendingDescriptors.size());
+        }
+
+        // If we are missing a status (emit between LIST and STATUS response)
+        if (pendingStatus.size() != pendingDescriptors.size()) {
+            const auto readyDescriptors = pendingDescriptors.mid(0, pendingStatus.size());
+            const auto readyFlags = pendingFlags.mid(0, pendingStatus.size());
+            Q_EMIT q->mailBoxesReceived(readyDescriptors, readyFlags);
+            Q_EMIT q->mailBoxesStatusReceived(readyDescriptors, readyFlags, pendingStatus);
+            pendingDescriptors.erase(pendingDescriptors.begin(), pendingDescriptors.begin() + pendingStatus.size());
+            pendingFlags.erase(pendingFlags.begin(), pendingFlags.begin() + pendingStatus.size());
+            pendingStatus.clear();
+        } else {
+            Q_EMIT q->mailBoxesReceived(pendingDescriptors, pendingFlags);
+            Q_EMIT q->mailBoxesStatusReceived(pendingDescriptors, pendingFlags, pendingStatus);
+            pendingDescriptors.clear();
+            pendingFlags.clear();
+            pendingStatus.clear();
+        }
     }
 
     ListJob *const q;
@@ -42,9 +62,11 @@ public:
     ListJob::Option option = ListJob::NoOption;
     QList<MailBoxDescriptor> namespaces;
     QByteArray command;
+    QByteArrayList returnOptions;
 
     QTimer emitPendingsTimer;
     QList<MailBoxDescriptor> pendingDescriptors;
+    QList<std::optional<ListJob::MailboxStatus>> pendingStatus;
     QList<QList<QByteArray>> pendingFlags;
 
     bool listExtendedEnabled = false;
@@ -58,7 +80,7 @@ ListJob::ListJob(Session *session)
 {
     Q_D(ListJob);
     connect(&d->emitPendingsTimer, &QTimer::timeout, this, [d]() {
-        d->emitPendings();
+        d->emitPendings(false);
     });
 }
 
@@ -86,6 +108,12 @@ bool ListJob::listExtendedEnabled() const
 {
     Q_D(const ListJob);
     return d->listExtendedEnabled;
+}
+
+void ListJob::clearReturnOptions()
+{
+    Q_D(ListJob);
+    d->returnOptions.clear();
 }
 
 void ListJob::setQueriedNamespaces(const QList<MailBoxDescriptor> &namespaces)
@@ -122,10 +150,19 @@ void ListJob::doStart()
         }
     }
 
+    auto returnOptions = QByteArray();
+    if (!d->returnOptions.isEmpty()) {
+        if (d->listExtendedEnabled && d->command == "LIST") {
+            returnOptions = " RETURN (" + d->returnOptions.join(' ') + ')';
+        } else {
+            qCWarning(KIMAP_LOG) << "Return options are only supported with LIST-EXTENDED: ignoring";
+        }
+    }
+
     d->emitPendingsTimer.start(100);
 
     if (d->namespaces.isEmpty()) {
-        d->tags << d->sessionInternal()->sendCommand(d->command, listOptions + "\"\" *");
+        d->tags << d->sessionInternal()->sendCommand(d->command, listOptions + "\"\" *" + returnOptions);
     } else {
         auto mailboxPatterns = QList<QString>{};
         for (const MailBoxDescriptor &descriptor : std::as_const(d->namespaces)) {
@@ -147,7 +184,7 @@ void ListJob::doStart()
                 pattern = QStringLiteral("\"%1\"").arg(pattern);
             }
             auto patterns = mailboxPatterns.join(u' ').toUtf8();
-            d->tags << d->sessionInternal()->sendCommand(d->command, listOptions + "\"\" (" + patterns + ')');
+            d->tags << d->sessionInternal()->sendCommand(d->command, listOptions + "\"\" (" + patterns + ')' + returnOptions);
         }
     }
 }
@@ -156,11 +193,16 @@ void ListJob::handleResponse(const Response &response)
 {
     Q_D(ListJob);
 
+    // Fill any missing statuses
+    if (!d->pendingDescriptors.empty() && d->pendingStatus.size() < d->pendingDescriptors.size() - 1) {
+        d->pendingStatus.resize(d->pendingDescriptors.size() - 1);
+    }
+
     // We can predict it'll be handled by handleErrorReplies() so stop
     // the timer now so that result() will really be the last emitted signal.
     if (!response.content.isEmpty() && d->tags.size() == 1 && d->tags.contains(response.content.first().toString())) {
         d->emitPendingsTimer.stop();
-        d->emitPendings();
+        d->emitPendings(true);
     }
 
     if (handleErrorReplies(response) == NotHandled) {
@@ -192,6 +234,34 @@ void ListJob::handleResponse(const Response &response)
 
             d->pendingDescriptors << mailBoxDescriptor;
             d->pendingFlags << flags;
+            if (flags.contains(QByteArrayLiteral("\\noselect"))) {
+                d->pendingStatus << std::nullopt;
+            }
+        } else if (response.content.size() >= 4 && response.content[1].toString() == "STATUS") {
+            // RFC 5819 guarantees a STATUS, if present, will come after it's corresponding LIST
+            Q_ASSERT(!d->pendingDescriptors.empty() && d->pendingDescriptors.size() - 1 == d->pendingStatus.size());
+            if (d->pendingDescriptors.empty() || d->pendingDescriptors.size() - 1 != d->pendingStatus.size()) {
+                qCWarning(KIMAP_LOG) << "Received an unexpected STATUS response, ignoring...";
+                return;
+            }
+
+            const auto mailbox = QString::fromUtf8(response.content[2].toString());
+            const auto &descriptor = d->pendingDescriptors.last();
+            // Handle mailboxes starting with "inbox" that are set uppercase on our side
+            const bool startsWithInbox =
+                mailbox.startsWith(QStringLiteral("INBOX"), Qt::CaseInsensitive) && descriptor.name.startsWith(QStringLiteral("INBOX"));
+            Q_ASSERT((startsWithInbox && mailbox.mid(5) == descriptor.name.mid(5)) || (!startsWithInbox && descriptor.name == mailbox));
+            if ((startsWithInbox && mailbox.mid(5) != descriptor.name.mid(5)) || (!startsWithInbox && descriptor.name != mailbox)) {
+                qCWarning(KIMAP_LOG) << "Received an unrelated STATUS mailbox `" << mailbox << "`, ignoring...";
+                return;
+            }
+
+            auto status = MailboxStatus{};
+            const auto responseStatus = response.content[3].toList();
+            for (int i = 0; i < responseStatus.size(); i += 2) {
+                status << (qMakePair(responseStatus[i], responseStatus[i + 1].toLongLong()));
+            }
+            d->pendingStatus << status;
         }
     }
 }
@@ -208,4 +278,43 @@ void ListJob::convertInboxName(KIMAP::MailBoxDescriptor &descriptor)
         }
     }
 }
+
+void ListJob::setReturnOption(const ListReturnOptions::Subscribed &)
+{
+    Q_D(ListJob);
+    d->returnOptions.append("SUBSCRIBED");
+}
+
+void ListJob::setReturnOption(const ListReturnOptions::Children &)
+{
+    Q_D(ListJob);
+    d->returnOptions.append("CHILDREN");
+}
+
+void ListJob::setReturnOption(const ListReturnOptions::Status &opt)
+{
+    Q_D(ListJob);
+    auto options = QByteArrayList();
+    if (opt.messages) {
+        options << "MESSAGES";
+    }
+    if (opt.uidNext) {
+        options << "UIDNEXT";
+    }
+    if (opt.uidValidity) {
+        options << "UIDVALIDITY";
+    }
+    if (opt.unseen) {
+        options << "UNSEEN";
+    }
+    if (opt.deleted) {
+        options << "DELETED";
+    }
+    if (opt.size) {
+        options << "SIZE";
+    }
+
+    d->returnOptions.append(QByteArray("STATUS (") + options.join(' ') + ')');
+}
+
 #include "moc_listjob.cpp"

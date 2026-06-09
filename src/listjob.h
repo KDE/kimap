@@ -44,6 +44,30 @@ struct KIMAP_EXPORT MailBoxDescriptor {
         return other.name < name || (other.name == name && other.separator < separator);
     }
 };
+
+/*!
+ * List return options, require LIST-EXTENDED support
+ * \value Subscribed adds \Subscribed flags in the response
+ * \value Children adds \HasChildren and \HasNoChildren flags in the response
+ * \value Status will also fetch mailbox status
+ * \since 6.8
+ */
+namespace ListReturnOptions
+{
+struct Subscribed {
+};
+struct Children {
+};
+struct Status {
+    bool messages = false;
+    bool uidNext = false;
+    bool uidValidity = false;
+    bool unseen = false;
+    bool deleted = false;
+    bool size = false;
+};
+}
+
 /*!
  * \class KIMAP::ListJob
  * \inmodule KIMAP
@@ -59,6 +83,12 @@ class KIMAP_EXPORT ListJob : public Job
     friend class SessionPrivate;
 
 public:
+    /*!
+     * \typealias KIMAP::ListJob::MailboxStatus
+     * \since 6.8
+     */
+    using MailboxStatus = QList<QPair<QByteArray, qint64>>;
+
     /*!
      * \value NoOption only subscribed mailboxes. (Uses the LSUB IMAP command.)
      * \value IncludeUnsubscribed subscribed and unsubscribed mailboxes. (Uses the LIST IMAP command.)
@@ -95,6 +125,23 @@ public:
     [[nodiscard]] bool listExtendedEnabled() const;
 
     /*!
+     * Sets a new return options list
+     * \since 6.8
+     */
+    template<typename... Ts>
+    void setReturnOptions(Ts &&...vals)
+    {
+        clearReturnOptions();
+        (setReturnOption(std::forward<Ts>(vals)), ...);
+    }
+
+    /*!
+     * Removes all return options
+     * \since 6.8
+     */
+    void clearReturnOptions();
+
+    /*!
      */
     void setQueriedNamespaces(const QList<MailBoxDescriptor> &namespaces);
 
@@ -106,6 +153,12 @@ Q_SIGNALS:
     /*!
      */
     void mailBoxesReceived(const QList<KIMAP::MailBoxDescriptor> &descriptors, const QList<QList<QByteArray>> &flags);
+
+    /*!
+     */
+    void mailBoxesStatusReceived(const QList<KIMAP::MailBoxDescriptor> &descriptors,
+                                 const QList<QList<QByteArray>> &flags,
+                                 const QList<std::optional<MailboxStatus>> &status);
 
 protected:
     void doStart() override;
@@ -121,6 +174,24 @@ private:
      * \internal
      **/
     void convertInboxName(KIMAP::MailBoxDescriptor &descriptor);
+
+    /*!
+     * \internal
+     * \since 6.8
+     */
+    void setReturnOption(const ListReturnOptions::Subscribed &opt);
+
+    /*!
+     * \internal
+     * \since 6.8
+     */
+    void setReturnOption(const ListReturnOptions::Children &opt);
+
+    /*!
+     * \internal
+     * \since 6.8
+     */
+    void setReturnOption(const ListReturnOptions::Status &opt);
 };
 
 }
