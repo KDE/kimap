@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: libkimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-23 00:45+0000\n"
-"PO-Revision-Date: 2015-08-30 15:56+0200\n"
+"PO-Revision-Date: 2026-06-11 22:02+0300\n"
 "Last-Translator: Liudas Ališauskas <liudas@akmc.lt>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
 "Language: lt\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n%10>=2 && (n%100<10 || n"
 "%100>=20) ? 1 : n%10==0 || (n%100>10 && n%100<20) ? 2 : 3);\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Poedit 3.9\n"
 
 #: acljobbase.cpp:56
 #, kde-format
@@ -57,17 +57,17 @@ msgstr "DeleteAclJob"
 #: deletejob.cpp:33
 #, kde-format
 msgid "Delete"
-msgstr "Trinti"
+msgstr "Ištrinti"
 
 #: enablejob.cpp:31 loginjob.cpp:250
 #, kde-format
 msgid "Enable"
-msgstr ""
+msgstr "Įjungti"
 
 #: expungejob.cpp:37
 #, kde-format
 msgid "Expunge"
-msgstr "Išvalyti"
+msgstr "Išbraukti"
 
 #: fetchjob.cpp:62
 #, kde-format
@@ -100,17 +100,15 @@ msgid "GetQuotaRoot"
 msgstr "GetQuotaRoot"
 
 #: idjob.cpp:32
-#, fuzzy, kde-format
-#| msgctxt "name of the idle job"
-#| msgid "Idle"
+#, kde-format
 msgid "Id"
-msgstr "Be darbo"
+msgstr "Id"
 
 #: idlejob.cpp:62
 #, kde-format
 msgctxt "name of the idle job"
 msgid "Idle"
-msgstr "Be darbo"
+msgstr "Neveiklus"
 
 #: job.cpp:19
 #, kde-format
@@ -120,17 +118,17 @@ msgstr "Darbas"
 #: job.cpp:54 loginjob.cpp:606
 #, kde-format
 msgid "Connection to server lost."
-msgstr "Ryšys su serveriu prarastas."
+msgstr "Nutrūko ryšys su serveriu."
 
 #: job.cpp:65 loginjob.cpp:435 setmetadatajob.cpp:121
 #, kde-format
 msgid "%1 failed, malformed reply from the server."
-msgstr "%1 nepavyko, klaidingai suformuotas atsakymas iš serverio."
+msgstr "%1 patyrė nesėkmę, klaidingai suformuotas atsakymas iš serverio."
 
 #: job.cpp:68 loginjob.cpp:302 setmetadatajob.cpp:104 setmetadatajob.cpp:124
 #, kde-format
 msgid "%1 failed, server replied: %2"
-msgstr "%1 nepavyko, serverio atsakymas: %2"
+msgstr "%1 patyrė nesėkmę, serveris atsakė: %2"
 
 #: listjob.cpp:55
 #, kde-format
@@ -150,7 +148,8 @@ msgstr "Prisijungti"
 #: loginjob.cpp:196
 #, kde-format
 msgid "IMAP session in the wrong state for authentication"
-msgstr "IMAP sesija netinkamoje būsenoje kad autentifikuotis"
+msgstr ""
+"IMAP seansas yra netinkamoje būsenoje, kad galima būtų nustatyti tapatybę"
 
 #: loginjob.cpp:246
 #, kde-format
@@ -165,40 +164,43 @@ msgstr "StartTls"
 #: loginjob.cpp:365
 #, kde-format
 msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
-msgstr ""
+msgstr "Serveris nepalaiko STARTTLS, vietoj to, bandykite naudoti SSL/TLS."
 
 #: loginjob.cpp:378
 #, kde-format
 msgid "Internal error, tried to login before encryption"
-msgstr ""
+msgstr "Vidinė klaida, bandyta prisijungti prie paskyros dar prieš šifravimą"
 
 #: loginjob.cpp:387
 #, kde-format
 msgid "Login failed, plain login is disabled by the server."
 msgstr ""
-"Prisijungimas nepavyko, prisijungimas atviru tekstu išjungtas serveryje."
+"Nepavyko prisijungti prie paskyros, serveryje išjungtas prisijungimas "
+"naudojant grynąjį tekstą."
 
 #: loginjob.cpp:406
 #, kde-format
 msgid "Login failed, authentication mode %1 is not supported by the server."
 msgstr ""
-"Prisijungimas nepavyko, autentikacijos metodas %1 nepalaikomas serverio."
+"Nepavyko prisijungti prie paskyros, serveris nepalaiko %1 tapatybės "
+"nustatymo veiksenos."
 
 #: loginjob.cpp:445
 #, kde-format
 msgid "Login failed, client cannot initialize the SASL library."
 msgstr ""
-"Prisijungimas nepavyko, klientui nepavyksta inicializuoti SASL bibliotekos."
+"Nepavyko prisijungti prie paskyros, kliento programa negali inicijuoti SASL "
+"bibliotekos."
 
 #: loginjob.cpp:544
 #, kde-format
 msgid "Login failed, TLS negotiation failed."
-msgstr "Prisijungti nepavyko. TLS derybos nepavyko."
+msgstr "Nepavyko prisijungti prie paskyros. TLS suderinimas patyrė nesėkmę."
 
 #: loginjob.cpp:602
 #, kde-format
 msgid "SSL handshake failed."
-msgstr "SSL derybos nepavyko."
+msgstr "SSL suderinimas patyrė nesėkmę."
 
 #: logoutjob.cpp:30
 #, kde-format
@@ -213,7 +215,7 @@ msgstr "MetaDataJobBase"
 #: movejob.cpp:38
 #, kde-format
 msgid "Move"
-msgstr ""
+msgstr "Perkelti"
 
 #: myrightsjob.cpp:34
 #, kde-format
@@ -223,7 +225,7 @@ msgstr "MyRights"
 #: namespacejob.cpp:65
 #, kde-format
 msgid "Namespace"
-msgstr "Vardų zona"
+msgstr "Vardų erdvė"
 
 #: quotajobbase.cpp:34
 #, kde-format
@@ -266,7 +268,7 @@ msgstr "SetQuota"
 #, kde-format
 msgctxt "name of the status job"
 msgid "Status"
-msgstr ""
+msgstr "Būsena"
 
 #: storejob.cpp:71
 #, kde-format
@@ -281,7 +283,7 @@ msgstr "Prenumeruoti"
 #: unsubscribejob.cpp:33
 #, kde-format
 msgid "Unsubscribe"
-msgstr "Nebeprenumeruoti"
+msgstr "Atsisakyti prenumeratos"
 
 #~ msgid "SetAnnotation"
 #~ msgstr "SetAnnotation"
