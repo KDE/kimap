@@ -103,6 +103,44 @@ public:
      */
     [[nodiscard]] QMap<qint64, MessageFlags> resultingFlags() const;
 
+    /*!
+     * Get CONDSTORE mod-seq parameter for UNCHANGEDSINCE modifier
+     * If this equals 0 (default value), the modifier won't be added to the command
+     *
+     * This can be set only when server
+     * has CONDSTORE capability (RFC4551), otherwise the STORE command will
+     * fail.
+     *
+     */
+    [[nodiscard]] quint64 lastModSeq() const;
+
+    /*!
+     * Set CONDSTORE mod-seq parameter for UNCHANGEDSINCE modifier
+     * If set to 0 (default value), the modifier won't be added to the command
+     *
+     * This can be set only when server
+     * has CONDSTORE capability (RFC4551), otherwise the STORE command will
+     * fail.
+     *
+     * \a lastModseq Last modification sequence number known to the client
+     */
+    void setLastModSeq(quint64 lastModSeq);
+
+    /*!
+    The list of updated MODSEQ for the modified messages
+
+    Only use when CONDSTORE is enabled (when lastModSeq is set)
+     */
+    [[nodiscard]] QMap<qint64, qint64> resultingModSeqs() const;
+
+    /*!
+    The list of messages that have not been modified by the StoreJob
+    Because their MODSEQ on the server is superior to the lastModSeq value set for this job
+
+    Only use when CONDSTORE is enabled (when lastModSeq is set)
+     */
+    ImapSet unchangedMessages() const;
+
 protected:
     /*!
      */

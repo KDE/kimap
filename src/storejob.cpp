@@ -60,8 +60,11 @@ public:
     StoreJob::StoreMode mode = StoreJob::SetFlags;
     MessageFlags flags;
     MessageFlags gmLabels;
+    quint64 lastModSeq = 0;
 
     QMap<qint64, MessageFlags> resultingFlags;
+    QMap<qint64, qint64> resultingModSeqs;
+    ImapSet unchangedMessages;
 };
 }
 
@@ -135,10 +138,34 @@ StoreJob::StoreMode StoreJob::mode() const
     return d->mode;
 }
 
+quint64 StoreJob::lastModSeq() const
+{
+    Q_D(const StoreJob);
+    return d->lastModSeq;
+}
+
+void StoreJob::setLastModSeq(quint64 lastModSeq)
+{
+    Q_D(StoreJob);
+    d->lastModSeq = lastModSeq;
+}
+
 QMap<qint64, MessageFlags> StoreJob::resultingFlags() const
 {
     Q_D(const StoreJob);
     return d->resultingFlags;
+}
+
+QMap<qint64, qint64> StoreJob::resultingModSeqs() const
+{
+    Q_D(const StoreJob);
+    return d->resultingModSeqs;
+}
+
+ImapSet StoreJob::unchangedMessages() const
+{
+    Q_D(const StoreJob);
+    return d->unchangedMessages;
 }
 
 void StoreJob::doStart()
@@ -155,6 +182,11 @@ void StoreJob::doStart()
 
     d->set.optimize();
     QByteArray parameters = d->set.toImapSequenceSet() + ' ';
+
+    // add UNCHANGEDSINCE modifier
+    if (d->lastModSeq != 0) {
+        parameters += "(UNCHANGEDSINCE " + QByteArray::number(d->lastModSeq) + ") ";
+    }
 
     if (!d->flags.isEmpty()) {
         parameters += d->addFlags("FLAGS", d->flags);
@@ -180,12 +212,21 @@ void StoreJob::handleResponse(const Response &response)
 {
     Q_D(StoreJob);
 
+    QByteArray tag = response.content.first().toString();
+    if (tag != "*" && response.content.size() > 2 && response.content[1].toString() == "OK" && response.responseCode.size() == 2
+        && response.responseCode[0].toString() == "MODIFIED") {
+        d->unchangedMessages = ImapSet::fromImapSequenceSet(response.responseCode[1].toString());
+    }
+
     if (handleErrorReplies(response) == NotHandled) {
         if (response.content.size() == 4 && response.content[2].toString() == "FETCH" && response.content[3].type() == Response::Part::List) {
             int id = response.content[1].toString().toInt();
             qint64 uid = 0;
             bool uidFound = false;
             QList<QByteArray> resultingFlags;
+
+            qint64 resultingModSeq = 0;
+            bool modSeqFound = false;
 
             QList<QByteArray> content = response.content[3].toList();
 
@@ -204,12 +245,23 @@ void StoreJob::handleResponse(const Response &response)
                     }
                 } else if (str == "UID") {
                     uid = it->toLongLong(&uidFound);
+                } else if (str == "MODSEQ") {
+                    QByteArray str = *it;
+                    str.chop(1);
+                    str.remove(0, 1);
+                    resultingModSeq = str.toULongLong(&modSeqFound);
                 }
             }
 
             if (!d->uidBased) {
+                if (modSeqFound) {
+                    d->resultingModSeqs[id] = resultingModSeq;
+                }
                 d->resultingFlags[id] = resultingFlags;
             } else if (uidFound) {
+                if (modSeqFound) {
+                    d->resultingModSeqs[uid] = resultingModSeq;
+                }
                 d->resultingFlags[uid] = resultingFlags;
             } else {
                 qCWarning(KIMAP_LOG) << "We asked for UID but the server didn't give it back, resultingFlags not stored.";
