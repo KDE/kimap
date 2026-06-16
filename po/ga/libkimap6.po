@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-23 00:45+0000\n"
+"POT-Creation-Date: 2026-06-16 00:46+0000\n"
 "PO-Revision-Date: 2009-12-24 06:59-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -128,7 +128,7 @@ msgstr "Theip ar %1, fuarthas freagra míchumtha ón bhfreastalaí."
 msgid "%1 failed, server replied: %2"
 msgstr "Theip ar %1, freagra ón bhfreastalaí: %2"
 
-#: listjob.cpp:55
+#: listjob.cpp:57
 #, kde-format
 msgid "List"
 msgstr "Liosta"

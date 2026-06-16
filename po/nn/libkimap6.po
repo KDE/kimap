@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-23 00:45+0000\n"
+"POT-Creation-Date: 2026-06-16 00:46+0000\n"
 "PO-Revision-Date: 2022-07-02 13:33+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@nuug.no>\n"
@@ -131,7 +131,7 @@ msgstr "%1 var mislukka. Svaret frå tenaren var ugyldig."
 msgid "%1 failed, server replied: %2"
 msgstr "%1 var mislukka. Svaret frå tenaren var: %2"
 
-#: listjob.cpp:55
+#: listjob.cpp:57
 #, kde-format
 msgid "List"
 msgstr "Liste"

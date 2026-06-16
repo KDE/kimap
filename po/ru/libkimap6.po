@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-23 00:45+0000\n"
+"POT-Creation-Date: 2026-06-16 00:46+0000\n"
 "PO-Revision-Date: 2022-10-01 15:04+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -170,7 +170,7 @@ msgstr "Не удалось выполнить %1, ответ сервера: %2
 
 # [JobPrivate::m_name]
 # http://tools.ietf.org/html/rfc3501#section-6.3.8
-#: listjob.cpp:55
+#: listjob.cpp:57
 #, kde-format
 msgid "List"
 msgstr "получение списка"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-23 00:45+0000\n"
+"POT-Creation-Date: 2026-06-16 00:46+0000\n"
 "PO-Revision-Date: 2022-01-28 23:55+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -133,7 +133,7 @@ msgstr "%1 ha fallado: respuesta no válida del servidor."
 msgid "%1 failed, server replied: %2"
 msgstr "%1 ha fallado. El servidor ha respondido: %2"
 
-#: listjob.cpp:55
+#: listjob.cpp:57
 #, kde-format
 msgid "List"
 msgstr "Lista"

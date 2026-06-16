@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-23 00:45+0000\n"
+"POT-Creation-Date: 2026-06-16 00:46+0000\n"
 "PO-Revision-Date: 2019-11-17 00:57+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -129,7 +129,7 @@ msgstr "%1 nurjus, serverist saadi vigane vastus."
 msgid "%1 failed, server replied: %2"
 msgstr "%1 nurjus, server vastas: %2"
 
-#: listjob.cpp:55
+#: listjob.cpp:57
 #, kde-format
 msgid "List"
 msgstr "Nimekiri"
