@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkimap5\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-16 00:46+0000\n"
+"POT-Creation-Date: 2026-06-25 00:45+0000\n"
 "PO-Revision-Date: 2016-11-28 01:33+0100\n"
 "Last-Translator: Chusslove Illich <caslav.ilic@gmx.net>\n"
 "Language-Team: Serbian <kde-i18n-sr@kde.org>\n"
@@ -134,7 +134,7 @@ msgid "%1 failed, server replied: %2"
 msgstr "%1 неуспјело, сервер одговара: %2"
 
 # skip-rule: t-list
-#: listjob.cpp:57
+#: listjob.cpp:79
 #, kde-format
 msgid "List"
 msgstr "Листање"
@@ -268,7 +268,7 @@ msgctxt "name of the status job"
 msgid "Status"
 msgstr "Стање"
 
-#: storejob.cpp:71
+#: storejob.cpp:74
 #, kde-format
 msgid "Store"
 msgstr "Складиштење"

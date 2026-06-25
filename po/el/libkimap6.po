@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-16 00:46+0000\n"
+"POT-Creation-Date: 2026-06-25 00:45+0000\n"
 "PO-Revision-Date: 2021-06-16 18:08+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -131,7 +131,7 @@ msgstr "Αποτυχία %1, μη έγκυρη απάντηση από τον ε
 msgid "%1 failed, server replied: %2"
 msgstr "Αποτυχία %1, απάντηση εξυπηρετητή: %2"
 
-#: listjob.cpp:57
+#: listjob.cpp:79
 #, kde-format
 msgid "List"
 msgstr "Λίστα"
@@ -270,7 +270,7 @@ msgctxt "name of the status job"
 msgid "Status"
 msgstr "Κατάσταση"
 
-#: storejob.cpp:71
+#: storejob.cpp:74
 #, kde-format
 msgid "Store"
 msgstr "Αποθήκευση"

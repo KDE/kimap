@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4.3\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-16 00:46+0000\n"
+"POT-Creation-Date: 2026-06-25 00:45+0000\n"
 "PO-Revision-Date: 2022-02-08 09:29+0100\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -131,7 +131,7 @@ msgstr "%1 nem sikerült, hibás válasz érkezett a kiszolgálótól."
 msgid "%1 failed, server replied: %2"
 msgstr "%1 nem sikerült, a kiszolgáló válasza: %2"
 
-#: listjob.cpp:57
+#: listjob.cpp:79
 #, kde-format
 msgid "List"
 msgstr "Listázás"
@@ -272,7 +272,7 @@ msgctxt "name of the status job"
 msgid "Status"
 msgstr "Állapot"
 
-#: storejob.cpp:71
+#: storejob.cpp:74
 #, kde-format
 msgid "Store"
 msgstr "Eltárolás"

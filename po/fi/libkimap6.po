@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-16 00:46+0000\n"
+"POT-Creation-Date: 2026-06-25 00:45+0000\n"
 "PO-Revision-Date: 2022-02-12 19:14+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -149,7 +149,7 @@ msgid "%1 failed, server replied: %2"
 msgstr "%1 epäonnistui, palvelimen vastaus: %2"
 
 # Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
-#: listjob.cpp:57
+#: listjob.cpp:79
 #, kde-format
 msgid "List"
 msgstr "List"
@@ -300,7 +300,7 @@ msgid "Status"
 msgstr "Status"
 
 # Tämä on jätetty suomentamatta, koska on IMAP-komennon nimi. Parempi alkuteksti saadaan toivottavasti pian.
-#: storejob.cpp:71
+#: storejob.cpp:74
 #, kde-format
 msgid "Store"
 msgstr "Store"

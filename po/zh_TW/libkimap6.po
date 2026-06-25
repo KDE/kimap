@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-16 00:46+0000\n"
+"POT-Creation-Date: 2026-06-25 00:45+0000\n"
 "PO-Revision-Date: 2023-12-13 04:59+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -131,7 +131,7 @@ msgstr "%1 失敗，伺服器的回應不正確。"
 msgid "%1 failed, server replied: %2"
 msgstr "%1 失敗，伺服器回應：%2"
 
-#: listjob.cpp:57
+#: listjob.cpp:79
 #, kde-format
 msgid "List"
 msgstr "清單"
@@ -264,7 +264,7 @@ msgctxt "name of the status job"
 msgid "Status"
 msgstr "狀態"
 
-#: storejob.cpp:71
+#: storejob.cpp:74
 #, kde-format
 msgid "Store"
 msgstr "儲存"

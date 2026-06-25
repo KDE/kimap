@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libkimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-16 00:46+0000\n"
+"POT-Creation-Date: 2026-06-25 00:45+0000\n"
 "PO-Revision-Date: 2023-02-08 19:39+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -132,7 +132,7 @@ msgstr "%1 başarısız oldu, sunucudan bozuk yanıt alındı."
 msgid "%1 failed, server replied: %2"
 msgstr "%1 başarısız oldu, sunucunun yanıtı: %2"
 
-#: listjob.cpp:57
+#: listjob.cpp:79
 #, kde-format
 msgid "List"
 msgstr "Listele"
@@ -269,7 +269,7 @@ msgctxt "name of the status job"
 msgid "Status"
 msgstr "Durum"
 
-#: storejob.cpp:71
+#: storejob.cpp:74
 #, kde-format
 msgid "Store"
 msgstr "Kaydet"

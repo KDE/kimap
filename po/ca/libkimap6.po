@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-16 00:46+0000\n"
+"POT-Creation-Date: 2026-06-25 00:45+0000\n"
 "PO-Revision-Date: 2022-01-28 09:30+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -133,7 +133,7 @@ msgstr "%1 ha fallat, resposta amb format incorrecte des del servidor."
 msgid "%1 failed, server replied: %2"
 msgstr "%1 ha fallat, el servidor ha contestat: %2"
 
-#: listjob.cpp:57
+#: listjob.cpp:79
 #, kde-format
 msgid "List"
 msgstr "Llista"
@@ -273,7 +273,7 @@ msgctxt "name of the status job"
 msgid "Status"
 msgstr "Estat"
 
-#: storejob.cpp:71
+#: storejob.cpp:74
 #, kde-format
 msgid "Store"
 msgstr "Emmagatzema"
