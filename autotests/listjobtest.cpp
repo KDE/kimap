@@ -160,6 +160,28 @@ private Q_SLOTS:
 
         scenario.clear();
         scenario << FakeServer::preauth() << "C: A000001 LIST \"\" *"
+                 << "S: * LIST ( \\HasChildren ) / INBOX"
+                 << "W: 50"
+                 << "S: * LIST ( \\HasNoChildren ) / INBOX/Child1"
+                 << "W: 50"
+                 << "S: * LIST ( \\HasNoChildren ) / INBOX/Child2"
+                 << "W: 50"
+                 << "S: A000001 OK LIST completed";
+        listresult.clear();
+        descriptor.separator = QLatin1Char('/');
+        descriptor.name = QStringLiteral("INBOX");
+        listresult << descriptor;
+        descriptor.separator = QLatin1Char('/');
+        descriptor.name = QStringLiteral("INBOX/Child1");
+        listresult << descriptor;
+        descriptor.separator = QLatin1Char('/');
+        descriptor.name = QStringLiteral("INBOX/Child2");
+        listresult << descriptor;
+
+        QTest::newRow("response with latency") << true << scenario << listresult;
+
+        scenario.clear();
+        scenario << FakeServer::preauth() << "C: A000001 LIST \"\" *"
                  << "S: A000001 BAD command unknown or arguments invalid";
         listresult.clear();
         QTest::newRow("bad") << true << scenario << listresult;

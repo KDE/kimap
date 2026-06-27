@@ -193,11 +193,6 @@ void ListJob::handleResponse(const Response &response)
 {
     Q_D(ListJob);
 
-    // Fill any missing statuses
-    if (!d->pendingDescriptors.empty() && d->pendingStatus.size() < d->pendingDescriptors.size() - 1) {
-        d->pendingStatus.resize(d->pendingDescriptors.size() - 1);
-    }
-
     // We can predict it'll be handled by handleErrorReplies() so stop
     // the timer now so that result() will really be the last emitted signal.
     if (!response.content.isEmpty() && d->tags.size() == 1 && d->tags.contains(response.content.first().toString())) {
@@ -231,6 +226,11 @@ void ListJob::handleResponse(const Response &response)
             mailBoxDescriptor.separator = QLatin1Char(separator[0]);
             mailBoxDescriptor.name = QString::fromUtf8(fullName);
             convertInboxName(mailBoxDescriptor);
+
+            // If previous LIST response was STATUS-less, update pendingStatus list
+            if (d->pendingStatus.size() < d->pendingDescriptors.size()) {
+                d->pendingStatus.resize(d->pendingDescriptors.size());
+            }
 
             d->pendingDescriptors << mailBoxDescriptor;
             d->pendingFlags << flags;
