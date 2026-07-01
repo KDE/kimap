@@ -230,3 +230,28 @@ install(FILES ${KIMAP_CamelCase_HEADERS} DESTINATION ${KDE_INSTALL_INCLUDEDIR}/K
 
 ecm_qt_install_logging_categories(EXPORT KIMAP FILE kimap.categories DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
 ecm_generate_qdoc(KPim6IMAP kimap.qdocconf)
+
+ecm_add_installed_library_check(KPim6IMAP
+    PACKAGE_NAME "KPim6IMAP"
+    PACKAGE_VERSION ${KIMAP_VERSION}
+    PACKAGE_TARGET_NAMESPACE "KPim6::"
+)
+
+ecm_installed_library_check_include_strings(KPim6IMAP
+    HEADERS
+    ${KIMAP_HEADERS}
+    ${KIMAP_CamelCase_HEADERS}
+    PREFIX kimap
+)
+
+ecm_installed_library_check_include_strings(KPim6IMAP
+   HEADERS
+   ${KIMAP_CamelCase_HEADERS}
+    PREFIX KIMAP
+)
+
+ecm_installed_library_check_version_preprocessor_macros(KPim6IMAP
+    PREFIX KIMAP
+    VERSION ${KIMAP_VERSION}
+    SILENT
+)
