@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 cmake_minimum_required(VERSION 3.29)
-set(PIM_VERSION "6.7.42")
+set(PIM_VERSION "6.8.40")
 
 project(KIMAP VERSION ${PIM_VERSION})
 
