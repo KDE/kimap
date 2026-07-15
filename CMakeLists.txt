@@ -106,7 +106,6 @@ file(
 ecm_check_outbound_license(LICENSES LGPL-2.0-only FILES ${ALL_SOURCE_FILES})
 ecm_check_outbound_license(LICENSES LGPL-3.0-only FILES ${ALL_SOURCE_FILES})
 
-set(KMIME_LIBS_VERSION "6.7.40")
 ecm_setup_version(PROJECT VARIABLE_PREFIX KIMAP
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/src/kimap_version.h"
                         PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KPim6IMAPConfigVersion.cmake"
@@ -125,10 +124,6 @@ find_package(KF6CoreAddons ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6I18n ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6KIO ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6Mime ${KF_MIN_VERSION} CONFIG)
-if(NOT TARGET KF6::Mime)
-    find_package(KPim6Mime ${KMIME_LIBS_VERSION} CONFIG REQUIRED)
-    add_library(KF6::Mime ALIAS KPim6::Mime)
-endif()
 
 ########### CMake Config Files ###########
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KPim6IMAP")

@@ -13,21 +13,10 @@ find_dependency(
     KF6CoreAddons
     "@KF_MIN_VERSION@"
 )
-if(@KF6Mime_FOUND@)
-    find_dependency(
-        KF6Mime
-        "@KF_MIN_VERSION@"
-    )
-else()
-    find_dependency(
-        KPim6Mime
-        "@KMIME_LIBS_VERSION@"
-    )
-    if(NOT TARGET KF6::Mime)
-        add_library(KF6::Mime ALIAS KPim6::Mime)
-    endif()
-endif()
-
+find_dependency(
+    KF6Mime
+    "@KF_MIN_VERSION@"
+)
 find_dependency(
     Qt6Network
     "@QT_REQUIRED_VERSION@"
