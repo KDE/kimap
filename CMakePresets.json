@@ -21,6 +21,13 @@
             ]
         },
         {
+            "name": "all_installed_library_check",
+            "displayName": "Build as debug + using mold linker + generate doc (need for check libs)",
+            "inherits": [
+                "dev-mold"
+            ]
+        },
+        {
             "name": "dev-mold",
             "displayName": "Build as debug + using mold linker",
             "cacheVariables": {
@@ -144,6 +151,13 @@
             "targets": [
                 "prepare_docs",
                 "generate_docs"
+            ]
+        },
+        {
+            "name": "all_installed_library_check",
+            "configurePreset": "all_installed_library_check",
+            "targets": [
+                "all_installed_library_check"
             ]
         },
         {
