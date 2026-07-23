@@ -15,3 +15,4 @@ Options:
  allow-failing-tests-on: ['Windows']
  tests-run-in-parallel: True
  enable-lsan: True
+ run-installed-library-check: true
