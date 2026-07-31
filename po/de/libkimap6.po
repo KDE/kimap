@@ -164,7 +164,8 @@ msgstr "StartTls"
 #, kde-format
 msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
 msgstr ""
-"STARTTLS wird vom Server nicht unterstützt, benutzen Sie stattdessen SSL/TLS."
+"STARTTLS wird vom Server nicht unterstützt, verwenden Sie stattdessen SSL/"
+"TLS."
 
 #: loginjob.cpp:378
 #, kde-format
