@@ -123,7 +123,7 @@ set_package_properties(
 find_package(KF6CoreAddons ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6I18n ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6KIO ${KF_MIN_VERSION} CONFIG REQUIRED)
-find_package(KF6Mime ${KF_MIN_VERSION} CONFIG)
+find_package(KF6Mime ${KF_MIN_VERSION} CONFIG REQUIRED)
 
 ########### CMake Config Files ###########
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KPim6IMAP")
