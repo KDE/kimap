@@ -6,6 +6,14 @@ set(PIM_VERSION "6.8.40")
 
 project(KIMAP VERSION ${PIM_VERSION})
 
+option(USE_MOLD_LINKER "Use the mold linker when available (much faster link times)" ON)
+if(USE_MOLD_LINKER AND NOT DEFINED CMAKE_LINKER_TYPE)
+    find_program(MOLD_EXECUTABLE mold)
+    if(MOLD_EXECUTABLE)
+        set(CMAKE_LINKER_TYPE MOLD)
+    endif()
+endif()
+
 # ECM setup
 set(KF_MIN_VERSION "6.28.0")
 set(QT_REQUIRED_VERSION "6.9.0")
