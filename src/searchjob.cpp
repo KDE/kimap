@@ -221,7 +221,7 @@ QByteArray Term::serialize() const
         command = "FUZZY ";
     }
     if (d->isNegated) {
-        command = "NOT ";
+        command += "NOT ";
     }
     return command + d->command;
 }
