@@ -236,10 +236,10 @@ void StoreJob::handleResponse(const Response &response)
 
                 if (str == "FLAGS") {
                     if ((*it).startsWith('(') && (*it).endsWith(')')) {
-                        QByteArray str = *it;
-                        str.chop(1);
-                        str.remove(0, 1);
-                        resultingFlags = str.split(' ');
+                        QByteArray flagStr = *it;
+                        flagStr.chop(1);
+                        flagStr.remove(0, 1);
+                        resultingFlags = flagStr.split(' ');
                     } else {
                         resultingFlags << *it;
                     }
