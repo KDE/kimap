@@ -59,14 +59,15 @@ void CapabilitiesJob::handleResponse(const Response &response)
             bool supportsQresync = false;
             for (int i = 2; i < responseSize; ++i) {
                 d->capabilities << QLatin1StringView(response.content[i].toString().toUpper());
-                if (d->capabilities.last() == QLatin1StringView("IMAP4REV2")) {
+                const QString capabilitiesLast = d->capabilities.last();
+                if (capabilitiesLast == QLatin1StringView("IMAP4REV2")) {
                     supportsRev2 = true;
-                } else if (d->capabilities.last() == QLatin1StringView("LITERAL+") || d->capabilities.last() == QLatin1StringView("LITERAL-")) {
+                } else if (capabilitiesLast == QLatin1StringView("LITERAL+") || capabilitiesLast == QLatin1StringView("LITERAL-")) {
                     // LITERAL- is the restricted form of LITERAL+ (see RFC 7888), so don't report both
                     supportsLiteral = true;
-                } else if (d->capabilities.last() == QLatin1StringView("CONDSTORE")) {
+                } else if (capabilitiesLast == QLatin1StringView("CONDSTORE")) {
                     supportsCondstore = true;
-                } else if (d->capabilities.last() == QLatin1StringView("QRESYNC")) {
+                } else if (capabilitiesLast == QLatin1StringView("QRESYNC")) {
                     supportsQresync = true;
                 }
             }

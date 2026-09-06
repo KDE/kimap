@@ -280,8 +280,8 @@ void SessionPrivate::responseReceived(const Response &response)
         restartSocketTimer();
         currentJob->handleResponse(response);
     } else {
-        qCWarning(KIMAP_LOG) << "A message was received from the server with no job to handle it:" << response.toString()
-                             << '(' + response.toString().toHex() + ')';
+        const QByteArray reponseStr = response.toString();
+        qCWarning(KIMAP_LOG) << "A message was received from the server with no job to handle it:" << reponseStr << '(' + reponseStr.toHex() + ')';
     }
 }
 
