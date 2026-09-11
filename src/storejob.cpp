@@ -212,10 +212,12 @@ void StoreJob::handleResponse(const Response &response)
 {
     Q_D(StoreJob);
 
-    QByteArray tag = response.content.first().toString();
-    if (tag != "*" && response.content.size() > 2 && response.content[1].toString() == "OK" && response.responseCode.size() == 2
-        && response.responseCode[0].toString() == "MODIFIED") {
-        d->unchangedMessages = ImapSet::fromImapSequenceSet(response.responseCode[1].toString());
+    if (!response.content.isEmpty()) {
+        QByteArray tag = response.content.first().toString();
+        if (tag != "*" && response.content.size() > 2 && response.content[1].toString() == "OK" && response.responseCode.size() == 2
+            && response.responseCode[0].toString() == "MODIFIED") {
+            d->unchangedMessages = ImapSet::fromImapSequenceSet(response.responseCode[1].toString());
+        }
     }
 
     if (handleErrorReplies(response) == NotHandled) {

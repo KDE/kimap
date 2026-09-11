@@ -160,6 +160,27 @@ private Q_SLOTS:
 
         fakeServer.quit();
     }
+
+    void testStoreEmptyResponse()
+    {
+        FakeServer fakeServer;
+        fakeServer.setScenario({
+            FakeServer::preauth(),
+            "C: A000001 STORE 3 FLAGS (\\Seen)",
+            "S: ",
+            "X",
+        });
+        fakeServer.startAndWait();
+
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
+        auto *job = new KIMAP::StoreJob(&session);
+        job->setSequenceSet(KIMAP::ImapSet(3));
+        job->setFlags({QByteArray("\\Seen")});
+
+        QVERIFY(!job->exec());
+
+        fakeServer.quit();
+    }
 };
 
 QTEST_GUILESS_MAIN(StoreJobTest)
