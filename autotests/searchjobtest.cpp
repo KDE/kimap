@@ -6,6 +6,7 @@
  */
 
 #include "kimap/searchjob.h"
+#include "imapset.h"
 #include "kimap/loginjob.h"
 #include "kimap/session.h"
 #include "kimaptest/fakeserver.h"
@@ -172,6 +173,31 @@ private Q_SLOTS:
         QCOMPARE(job->results().size(), expectedResultsCount);
 
         fakeServer.quit();
+    }
+
+    void testSearchWithExpunged()
+    {
+        QList<QByteArray> scenario;
+        scenario << FakeServer::preauth() << "C: A000001 UID SEARCH UID 1:5"
+                 << "S: * 1 EXPUNGE"
+                 << "S: * 1 EXPUNGE"
+                 << "S: * SEARCH 3 4 5"
+                 << "S: A000001 OK search done";
+
+        FakeServer fakeServer;
+        fakeServer.setScenario(scenario);
+        fakeServer.startAndWait();
+
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
+
+        auto job = new KIMAP::SearchJob(&session);
+        job->setUidBased(true);
+        job->setTerm(KIMAP::Term(KIMAP::Term::Uid, KIMAP::ImapSet(1, 5)));
+
+        QVERIFY(job->exec());
+
+        QCOMPARE(job->results().size(), 3);
+        QCOMPARE(job->expunged().size(), 2);
     }
 };
 

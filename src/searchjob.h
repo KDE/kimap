@@ -245,6 +245,12 @@ public:
     [[nodiscard]] QList<qint64> results() const;
 
     /*!
+     * Get the sequence numbers of messages that have been expunged from the mailbox since the search
+     * was started.
+     */
+    [[nodiscard]] QList<qint64> expunged() const;
+
+    /*!
      * Sets the search term.
      *
      * \a term The search term.

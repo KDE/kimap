@@ -256,6 +256,7 @@ public:
     QByteArray charset;
     QList<QByteArray> contents;
     QList<qint64> results;
+    QList<qint64> expunged;
     uint nextContent = 0;
     bool uidBased = false;
     Term term;
@@ -314,6 +315,8 @@ void SearchJob::handleResponse(const Response &response)
                 qCWarning(KIMAP_LOG) << "The term API only supports inline strings.";
             }
             d->nextContent++;
+        } else if (response.content.size() == 3 && response.content[2].toString() == "EXPUNGE") {
+            d->expunged.append(response.content[1].toString().toInt());
         } else if (response.content.size() >= 2 && response.content[1].toString() == "SEARCH") {
             for (int i = 2; i < response.content.size(); i++) {
                 d->results.append(response.content[i].toString().toInt());
@@ -350,6 +353,12 @@ QList<qint64> SearchJob::results() const
 {
     Q_D(const SearchJob);
     return d->results;
+}
+
+QList<qint64> SearchJob::expunged() const
+{
+    Q_D(const SearchJob);
+    return d->expunged;
 }
 
 #include "moc_searchjob.cpp"

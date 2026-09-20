@@ -244,6 +244,9 @@ void FetchJob::handleResponse(const Response &response)
         if (response.content.size() == 4 && response.content[1].toString() == "VANISHED") {
             const auto vanishedSet = ImapSet::fromImapSequenceSet(response.content[3].toString());
             Q_EMIT messagesVanished(vanishedSet);
+        } else if (response.content.size() == 3 && response.content[2].toString() == "EXPUNGE") {
+            const auto expunged = response.content[1].toString().toLongLong();
+            Q_EMIT messageExpunged(expunged);
         } else if (response.content.size() == 4 && response.content[2].toString() == "FETCH" && response.content[3].type() == Response::Part::List) {
             const qint64 id = response.content[1].toString().toLongLong();
             const QList<QByteArray> content = response.content[3].toList();

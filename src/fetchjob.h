@@ -290,6 +290,16 @@ Q_SIGNALS:
      */
     void messagesVanished(const KIMAP::ImapSet &uids);
 
+    /*!
+     * Provides expunged message.
+     *
+     * UID FETCH response may include `EXPUNGE` response code, indicating a message in the
+     * sequence has been permanently removed from the mailbox.
+     *
+     * \a id Sequence number of the expunged message.
+     */
+    void messageExpunged(KIMAP::ImapSet::Id sequence);
+
 protected:
     void doStart() override;
     void handleResponse(const Response &response) override;

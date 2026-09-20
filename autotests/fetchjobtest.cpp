@@ -28,12 +28,19 @@ private:
     QStringList m_signals;
 
     QMap<qint64, KIMAP::Message> m_msgs;
+    QVector<KIMAP::ImapSet::Id> m_expunged;
 
 public Q_SLOTS:
     void onMessagesAvailable(const QMap<qint64, KIMAP::Message> &messages)
     {
         m_signals << QStringLiteral("messagesAvailable");
         m_msgs.insert(messages);
+    }
+
+    void onMessageExpunged(KIMAP::ImapSet::Id sequence)
+    {
+        m_signals << QStringLiteral("messageExpunged");
+        m_expunged.push_back(sequence);
     }
 
 private Q_SLOTS:
@@ -377,6 +384,46 @@ private Q_SLOTS:
         // Check that we didn't receive \\Recent
         QMap<qint64, KIMAP::MessageFlags> expectedFlags;
         QCOMPARE(m_msgs[1].flags, expectedFlags[1]);
+
+        fakeServer.quit();
+
+        m_signals.clear();
+        m_msgs.clear();
+    }
+
+    void testExpungedMessages()
+    {
+        QList<QByteArray> scenario;
+        scenario << FakeServer::preauth() << "C: A000001 UID FETCH 1:5 (FLAGS UID)"
+                 << "S: * 1 FETCH ( FLAGS (\\Recent) UID 1 )"
+                 << "S: * 2 EXPUNGE"
+                 << "S: * 2 EXPUNGE"
+                 << "S: * 2 EXPUNGE"
+                 << "S: * 3 FETCH ( FLAGS (\\Seen) UID 5 )"
+                 << "S: A000001 OK fetch done";
+
+        KIMAP::FetchJob::FetchScope scope;
+        scope.mode = KIMAP::FetchJob::FetchScope::Flags;
+
+        FakeServer fakeServer;
+        fakeServer.setScenario(scenario);
+        fakeServer.startAndWait();
+
+        KIMAP::Session session(QStringLiteral("127.0.0.1"), 5989);
+
+        auto job = new KIMAP::FetchJob(&session);
+        job->setUidBased(true);
+        job->setSequenceSet(KIMAP::ImapSet(1, 5));
+        job->setScope(scope);
+
+        connect(job, &KIMAP::FetchJob::messagesAvailable, this, &FetchJobTest::onMessagesAvailable);
+        connect(job, &KIMAP::FetchJob::messageExpunged, this, &FetchJobTest::onMessageExpunged);
+        bool result = job->exec();
+
+        QVERIFY(result);
+        QCOMPARE(m_signals.count(), 4);
+        QCOMPARE(m_msgs.count(), 2);
+        QCOMPARE(m_expunged.count(), 3);
 
         fakeServer.quit();
 
