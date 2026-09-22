@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-06-25 00:45+0000\n"
+"POT-Creation-Date: 2026-09-22 00:45+0000\n"
 "PO-Revision-Date: 2024-01-27 16:20+0200\n"
 "Last-Translator: Māris Nartišs <maris.kde@gmail.com>\n"
 "Language-Team: \n"
@@ -234,7 +234,7 @@ msgstr "QuotaJobBase"
 msgid "Rename"
 msgstr "Pārdēvēt"
 
-#: searchjob.cpp:268
+#: searchjob.cpp:269
 #, kde-format
 msgctxt "Name of the search job"
 msgid "Search"
