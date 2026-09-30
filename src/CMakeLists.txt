@@ -94,7 +94,7 @@ target_sources(
         deleteacljob.h
         quotajobbase.h
         myrightsjob.h
-        common.h
+        sasl_p.h
         renamejob.h
         statusjob.h
         setacljob.h

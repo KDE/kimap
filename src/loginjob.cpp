@@ -18,7 +18,7 @@ using namespace Qt::Literals::StringLiterals;
 #include "rfccodecs_p.h"
 #include "session_p.h"
 
-#include "common.h"
+#include "sasl_p.h"
 
 extern "C" {
 #include <sasl/sasl.h>
