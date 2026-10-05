@@ -56,7 +56,7 @@ msgstr "закрытие сеанса"
 #: copyjob.cpp:38
 #, kde-format
 msgid "Copy"
-msgstr "Копировать"
+msgstr "копирование"
 
 # [JobPrivate::m_name]
 #: createjob.cpp:33
@@ -77,12 +77,12 @@ msgstr "удаление прав ACL"
 #: deletejob.cpp:33
 #, kde-format
 msgid "Delete"
-msgstr "Удалить"
+msgstr "удаление"
 
 #: enablejob.cpp:31 loginjob.cpp:250
 #, kde-format
 msgid "Enable"
-msgstr "Включить"
+msgstr "включение"
 
 # [JobPrivate::m_name]
 # http://tools.ietf.org/html/rfc3501#section-6.4.3
@@ -192,7 +192,7 @@ msgstr "аутентификацию пользователя"
 #: loginjob.cpp:196
 #, kde-format
 msgid "IMAP session in the wrong state for authentication"
-msgstr "Сессия IMAP в состоянии, не подходящем для аутентификации"
+msgstr "Сеанс IMAP в состоянии, не подходящем для аутентификации"
 
 # [JobPrivate::m_name]
 # http://tools.ietf.org/html/rfc3501#section-6.1.1
