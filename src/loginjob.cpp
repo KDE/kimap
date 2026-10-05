@@ -6,7 +6,6 @@
 */
 
 #include "loginjob.h"
-using namespace Qt::Literals::StringLiterals;
 
 #include <KLocalizedString>
 
@@ -19,6 +18,8 @@ using namespace Qt::Literals::StringLiterals;
 #include "session_p.h"
 
 #include "sasl_p.h"
+
+using namespace Qt::Literals::StringLiterals;
 
 extern "C" {
 #include <sasl/sasl.h>
