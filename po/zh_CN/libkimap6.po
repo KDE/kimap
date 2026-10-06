@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-22 00:45+0000\n"
+"POT-Creation-Date: 2026-10-06 00:48+0000\n"
 "PO-Revision-Date: 2024-04-22 15:58\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -57,7 +57,7 @@ msgstr "DeleteAclJob"
 msgid "Delete"
 msgstr "删除"
 
-#: enablejob.cpp:31 loginjob.cpp:250
+#: enablejob.cpp:31 loginjob.cpp:251
 #, kde-format
 msgid "Enable"
 msgstr "启用"
@@ -113,17 +113,17 @@ msgstr "空闲"
 msgid "Job"
 msgstr "任务"
 
-#: job.cpp:54 loginjob.cpp:606
+#: job.cpp:54 loginjob.cpp:607
 #, kde-format
 msgid "Connection to server lost."
 msgstr "与服务器的连接丢失。"
 
-#: job.cpp:65 loginjob.cpp:435 setmetadatajob.cpp:121
+#: job.cpp:65 loginjob.cpp:436 setmetadatajob.cpp:121
 #, kde-format
 msgid "%1 failed, malformed reply from the server."
 msgstr "%1 失败，服务器的响应数据格式不正常。"
 
-#: job.cpp:68 loginjob.cpp:302 setmetadatajob.cpp:104 setmetadatajob.cpp:124
+#: job.cpp:68 loginjob.cpp:303 setmetadatajob.cpp:104 setmetadatajob.cpp:124
 #, kde-format
 msgid "%1 failed, server replied: %2"
 msgstr "%1 失败，服务器响应：%2"
@@ -138,57 +138,57 @@ msgstr "列表"
 msgid "ListRights"
 msgstr "列出权限"
 
-#: loginjob.cpp:141 loginjob.cpp:244
+#: loginjob.cpp:142 loginjob.cpp:245
 #, kde-format
 msgid "Login"
 msgstr "登录"
 
-#: loginjob.cpp:196
+#: loginjob.cpp:197
 #, kde-format
 msgid "IMAP session in the wrong state for authentication"
 msgstr "IMAP 会话在进行身份验证时状态出错"
 
-#: loginjob.cpp:246
+#: loginjob.cpp:247
 #, kde-format
 msgid "Capability"
 msgstr "特性"
 
-#: loginjob.cpp:248
+#: loginjob.cpp:249
 #, kde-format
 msgid "StartTls"
 msgstr "开启 TLS"
 
-#: loginjob.cpp:365
+#: loginjob.cpp:366
 #, kde-format
 msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
 msgstr "服务器不支持 STARTTLS，请尝试使用 SSL/TLS 代替。"
 
-#: loginjob.cpp:378
+#: loginjob.cpp:379
 #, kde-format
 msgid "Internal error, tried to login before encryption"
 msgstr "内部错误，尝试在加密前登录"
 
-#: loginjob.cpp:387
+#: loginjob.cpp:388
 #, kde-format
 msgid "Login failed, plain login is disabled by the server."
 msgstr "登录失败，服务器已禁用纯文本登录。"
 
-#: loginjob.cpp:406
+#: loginjob.cpp:407
 #, kde-format
 msgid "Login failed, authentication mode %1 is not supported by the server."
 msgstr "登录失败，服务器不支持 %1 验证模式。"
 
-#: loginjob.cpp:445
+#: loginjob.cpp:446
 #, kde-format
 msgid "Login failed, client cannot initialize the SASL library."
 msgstr "登录失败，客户端无法初始化 SASL 类库。"
 
-#: loginjob.cpp:544
+#: loginjob.cpp:545
 #, kde-format
 msgid "Login failed, TLS negotiation failed."
 msgstr "登录失败，TLS 协商失败。"
 
-#: loginjob.cpp:602
+#: loginjob.cpp:603
 #, kde-format
 msgid "SSL handshake failed."
 msgstr "SSL 握手失败。"

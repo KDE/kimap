@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kimap\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-22 00:45+0000\n"
+"POT-Creation-Date: 2026-10-06 00:48+0000\n"
 "PO-Revision-Date: 2023-01-03 09:03+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -60,7 +60,7 @@ msgstr "EzabatuAclAtaza"
 msgid "Delete"
 msgstr "Ezabatu"
 
-#: enablejob.cpp:31 loginjob.cpp:250
+#: enablejob.cpp:31 loginjob.cpp:251
 #, kde-format
 msgid "Enable"
 msgstr "Gaitu"
@@ -116,17 +116,17 @@ msgstr "Inaktibo"
 msgid "Job"
 msgstr "Ataza"
 
-#: job.cpp:54 loginjob.cpp:606
+#: job.cpp:54 loginjob.cpp:607
 #, kde-format
 msgid "Connection to server lost."
 msgstr "Zerbitzarirako konexioa galdu da."
 
-#: job.cpp:65 loginjob.cpp:435 setmetadatajob.cpp:121
+#: job.cpp:65 loginjob.cpp:436 setmetadatajob.cpp:121
 #, kde-format
 msgid "%1 failed, malformed reply from the server."
 msgstr "%1 huts egin du, gaizki eratutako erantzuna zerbitzaritik."
 
-#: job.cpp:68 loginjob.cpp:302 setmetadatajob.cpp:104 setmetadatajob.cpp:124
+#: job.cpp:68 loginjob.cpp:303 setmetadatajob.cpp:104 setmetadatajob.cpp:124
 #, kde-format
 msgid "%1 failed, server replied: %2"
 msgstr "%1 huts egin du, zerbitzariak erantzun du: %2"
@@ -141,61 +141,61 @@ msgstr "Zerrenda"
 msgid "ListRights"
 msgstr "ZerrendatuEskubideak"
 
-#: loginjob.cpp:141 loginjob.cpp:244
+#: loginjob.cpp:142 loginjob.cpp:245
 #, kde-format
 msgid "Login"
 msgstr "Saio-hasiera"
 
-#: loginjob.cpp:196
+#: loginjob.cpp:197
 #, kde-format
 msgid "IMAP session in the wrong state for authentication"
 msgstr "IMAP saioa autentifikazioa egiteko okerreko egoeran"
 
-#: loginjob.cpp:246
+#: loginjob.cpp:247
 #, kde-format
 msgid "Capability"
 msgstr "Gaitasuna"
 
-#: loginjob.cpp:248
+#: loginjob.cpp:249
 #, kde-format
 msgid "StartTls"
 msgstr "StartTls"
 
-#: loginjob.cpp:365
+#: loginjob.cpp:366
 #, kde-format
 msgid "STARTTLS is not supported by the server, try using SSL/TLS instead."
 msgstr ""
 "Zerbitzariak ez du STARTTLS onartzen, saiatu horren ordez SSL/TLS erabiltzen."
 
-#: loginjob.cpp:378
+#: loginjob.cpp:379
 #, kde-format
 msgid "Internal error, tried to login before encryption"
 msgstr "Barneko errorea, zifratzearen aurretik saio-hasten saiatu da"
 
-#: loginjob.cpp:387
+#: loginjob.cpp:388
 #, kde-format
 msgid "Login failed, plain login is disabled by the server."
 msgstr ""
 "Saio-hastea huts egin du, zerbitzariak ageriko saio-hasiera ezgaitu du."
 
-#: loginjob.cpp:406
+#: loginjob.cpp:407
 #, kde-format
 msgid "Login failed, authentication mode %1 is not supported by the server."
 msgstr ""
 "Saio-hastea huts egin du, zerbitzariak ez du %1 autentifikazio moduaren "
 "euskarririk."
 
-#: loginjob.cpp:445
+#: loginjob.cpp:446
 #, kde-format
 msgid "Login failed, client cannot initialize the SASL library."
 msgstr "Saio-hastea huts egin du, ezin du SASL liburutegia hasieratu."
 
-#: loginjob.cpp:544
+#: loginjob.cpp:545
 #, kde-format
 msgid "Login failed, TLS negotiation failed."
 msgstr "Saio-hastea huts egin du, TLS negoziazioak huts egin du."
 
-#: loginjob.cpp:602
+#: loginjob.cpp:603
 #, kde-format
 msgid "SSL handshake failed."
 msgstr "SSL bostekoa estutzea huts egin du."
