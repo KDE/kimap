@@ -35,7 +35,7 @@
         },
         {
             "name": "all_installed_library_check",
-            "displayName": "Build as debug + using mold linker + generate doc (need for check libs)",
+            "displayName": "Build as debug + using mold linker + build for testing check libs",
             "inherits": [
                 "dev-mold"
             ]
