@@ -53,7 +53,7 @@ public:
 
     /*!
      */
-    [[nodiscard]] QList<QPair<QByteArray, qint64>> status() const;
+    [[nodiscard]] QList<std::pair<QByteArray, qint64>> status() const;
 
 protected:
     void doStart() override;

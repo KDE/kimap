@@ -22,8 +22,8 @@ public:
     {
     }
 
-    static QMap<QByteArray, QPair<qint64, qint64>> readQuota(const Response::Part &content);
+    static QMap<QByteArray, std::pair<qint64, qint64>> readQuota(const Response::Part &content);
 
-    QMap<QByteArray, QPair<qint64, qint64>> quota;
+    QMap<QByteArray, std::pair<qint64, qint64>> quota;
 };
 }

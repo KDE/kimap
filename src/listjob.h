@@ -54,10 +54,8 @@ struct KIMAP_EXPORT MailBoxDescriptor {
  */
 namespace ListReturnOptions
 {
-struct Subscribed {
-};
-struct Children {
-};
+struct Subscribed { };
+struct Children { };
 struct Status {
     bool messages = false;
     bool uidNext = false;
@@ -87,7 +85,7 @@ public:
      * \typealias KIMAP::ListJob::MailboxStatus
      * \since 6.8
      */
-    using MailboxStatus = QList<QPair<QByteArray, qint64>>;
+    using MailboxStatus = QList<std::pair<QByteArray, qint64>>;
 
     /*!
      * \value NoOption only subscribed mailboxes. (Uses the LSUB IMAP command.)

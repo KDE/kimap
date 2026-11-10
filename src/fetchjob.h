@@ -26,7 +26,7 @@ using MessageParts = QMap<QByteArray, std::shared_ptr<KMime::Content>>;
 
 using MessageFlags = QList<QByteArray>;
 
-using MessageAttribute = QPair<QByteArray, QVariant>;
+using MessageAttribute = std::pair<QByteArray, QVariant>;
 
 struct Message {
     inline bool operator==(const Message &other) const

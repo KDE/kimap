@@ -27,7 +27,7 @@ public:
 
     QString mailBox;
     QStringList rootList;
-    QMap<QString, QMap<QByteArray, QPair<qint64, qint64>>> quotas;
+    QMap<QString, QMap<QByteArray, std::pair<qint64, qint64>>> quotas;
 };
 }
 
@@ -76,7 +76,7 @@ void GetQuotaRootJob::handleResponse(const Response &response)
                     rootName = QString::fromUtf8(decodeImapFolderName(response.content[2].toString(), d->sessionInternal()->isUtf8Enabled()));
                 }
 
-                const QMap<QByteArray, QPair<qint64, qint64>> &quota = d->readQuota(response.content[quotaContentIndex]);
+                const QMap<QByteArray, std::pair<qint64, qint64>> &quota = d->readQuota(response.content[quotaContentIndex]);
                 if (d->quotas.contains(rootName)) {
                     d->quotas[rootName].insert(quota);
                 } else {
@@ -135,9 +135,9 @@ QMap<QByteArray, qint64> GetQuotaRootJob::allUsages(const QString &root) const
     QMap<QByteArray, qint64> result;
 
     if (d->quotas.contains(root)) {
-        const QMap<QByteArray, QPair<qint64, qint64>> quota = d->quotas[root];
-        QMap<QByteArray, QPair<qint64, qint64>>::const_iterator it = quota.cbegin();
-        const QMap<QByteArray, QPair<qint64, qint64>>::const_iterator itEnd = quota.cend();
+        const QMap<QByteArray, std::pair<qint64, qint64>> quota = d->quotas[root];
+        QMap<QByteArray, std::pair<qint64, qint64>>::const_iterator it = quota.cbegin();
+        const QMap<QByteArray, std::pair<qint64, qint64>>::const_iterator itEnd = quota.cend();
         for (; it != itEnd; ++it) {
             result[it.key()] = it.value().first;
         }
@@ -152,9 +152,9 @@ QMap<QByteArray, qint64> GetQuotaRootJob::allLimits(const QString &root) const
     QMap<QByteArray, qint64> result;
 
     if (d->quotas.contains(root)) {
-        const QMap<QByteArray, QPair<qint64, qint64>> quota = d->quotas[root];
-        QMap<QByteArray, QPair<qint64, qint64>>::const_iterator it = quota.cbegin();
-        const QMap<QByteArray, QPair<qint64, qint64>>::const_iterator itEnd = quota.cend();
+        const QMap<QByteArray, std::pair<qint64, qint64>> quota = d->quotas[root];
+        QMap<QByteArray, std::pair<qint64, qint64>>::const_iterator it = quota.cbegin();
+        const QMap<QByteArray, std::pair<qint64, qint64>>::const_iterator itEnd = quota.cend();
         for (; it != itEnd; ++it) {
             result[it.key()] = it.value().second;
         }

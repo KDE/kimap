@@ -25,7 +25,7 @@ public:
 
     QString mailBox;
     QList<QByteArray> dataItems;
-    QList<QPair<QByteArray, qint64>> status;
+    QList<std::pair<QByteArray, qint64>> status;
 };
 
 }
@@ -63,7 +63,7 @@ QList<QByteArray> StatusJob::dataItems() const
     return d->dataItems;
 }
 
-QList<QPair<QByteArray, qint64>> StatusJob::status() const
+QList<std::pair<QByteArray, qint64>> StatusJob::status() const
 {
     Q_D(const StatusJob);
     return d->status;
@@ -89,7 +89,7 @@ void StatusJob::handleResponse(const Response &response)
             if (code == "STATUS") {
                 const QList<QByteArray> resp = response.content[3].toList();
                 for (int i = 0; i < resp.size(); i += 2) {
-                    d->status << (qMakePair(resp[i], resp[i + 1].toLongLong()));
+                    d->status << (std::make_pair(resp[i], resp[i + 1].toLongLong()));
                 }
 
             } else if (code == "OK") {

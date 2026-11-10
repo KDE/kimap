@@ -376,8 +376,8 @@ private Q_SLOTS:
                         QByteArrayList{"\\noselect", "\\hasnochildren"}}));
 
         auto expectedStatus = QList({
-            std::optional{QList{qMakePair(QByteArray("MESSAGES"), static_cast<qint64>(5)), qMakePair(QByteArray("UNSEEN"), static_cast<qint64>(1))}},
-            std::optional{QList{qMakePair(QByteArray("MESSAGES"), static_cast<qint64>(10)), qMakePair(QByteArray("UNSEEN"), static_cast<qint64>(2))}},
+            std::optional{QList{std::make_pair(QByteArray("MESSAGES"), static_cast<qint64>(5)), std::make_pair(QByteArray("UNSEEN"), static_cast<qint64>(1))}},
+            std::optional{QList{std::make_pair(QByteArray("MESSAGES"), static_cast<qint64>(10)), std::make_pair(QByteArray("UNSEEN"), static_cast<qint64>(2))}},
             std::optional<KIMAP::ListJob::MailboxStatus>{},
         });
         QCOMPARE(mailboxStatuses, expectedStatus);

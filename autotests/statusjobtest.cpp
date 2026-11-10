@@ -11,7 +11,7 @@
 #include "kimap/statusjob.h"
 #include "kimaptest/fakeserver.h"
 
-using StatusMap = QList<QPair<QByteArray, qint64>>;
+using StatusMap = QList<std::pair<QByteArray, qint64>>;
 Q_DECLARE_METATYPE(StatusMap)
 
 class StatusJobTest : public QObject

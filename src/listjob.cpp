@@ -259,7 +259,7 @@ void ListJob::handleResponse(const Response &response)
             auto status = MailboxStatus{};
             const auto responseStatus = response.content[3].toList();
             for (int i = 0; i < responseStatus.size(); i += 2) {
-                status << (qMakePair(responseStatus[i], responseStatus[i + 1].toLongLong()));
+                status << (std::make_pair(responseStatus[i], responseStatus[i + 1].toLongLong()));
             }
             d->pendingStatus << status;
         }
