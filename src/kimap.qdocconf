@@ -1,6 +1,7 @@
 include($KDE_DOCS/global/qt-module-defaults.qdocconf)
 
 project = KIMAP
+moduleheader = kimap_qdocmoduleheader.h
 description = A job-based API for interacting with IMAP servers.
 
 
