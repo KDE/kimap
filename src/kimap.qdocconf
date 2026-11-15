@@ -7,7 +7,49 @@ description = A job-based API for interacting with IMAP servers.
 
 documentationinheaders = true
 
-headerdirs += .
+headers += \
+    acl.h \
+    acljobbase.h \
+    appendjob.h \
+    capabilitiesjob.h \
+    closejob.h \
+    copyjob.h \
+    createjob.h \
+    deleteacljob.h \
+    deletejob.h \
+    enablejob.h \
+    expungejob.h \
+    fetchjob.h \
+    getacljob.h \
+    getmetadatajob.h \
+    getquotajob.h \
+    getquotarootjob.h \
+    idjob.h \
+    idlejob.h \
+    imapset.h \
+    job.h \
+    kimap_qdocmoduleheader.h \
+    listjob.h \
+    listrightsjob.h \
+    loginjob.h \
+    logoutjob.h \
+    metadatajobbase.h \
+    movejob.h \
+    myrightsjob.h \
+    namespacejob.h \
+    quotajobbase.h \
+    renamejob.h \
+    searchjob.h \
+    selectjob.h \
+    session.h \
+    sessionuiproxy.h \
+    setacljob.h \
+    setmetadatajob.h \
+    setquotajob.h \
+    statusjob.h \
+    storejob.h \
+    subscribejob.h \
+    unsubscribejob.h
 sourcedirs += .
 
 outputformats = HTML
