@@ -10,7 +10,7 @@
 
     \section2 Building with CMake
 
-    \include {module-use.qdocinc} {building with cmake} {KPim6} {IMAP} {KPim6::IMAP}
+    \include {module-use.qdocinc} {building with cmake nomodule} {KPim6IMAP} {KPim6::IMAP}
 
     \section1 API Reference
 

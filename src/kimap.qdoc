@@ -2,8 +2,8 @@
     \module KIMAP
     \title KIMAP C++ Classes
     \ingroup modules
-    \cmakepackage KPim6
-    \cmakecomponent IMAP
+    \cmakepackage KPim6IMAP
+    \cmaketargetitem KPim6::IMAP
 
     \brief A job-based API for interacting with IMAP servers.
 */
