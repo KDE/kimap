@@ -47,9 +47,7 @@ void IdJob::doStart()
     QByteArray command = "ID";
     command += " (";
 
-    QMapIterator<QByteArray, QByteArray> i(d->fields);
-    while (i.hasNext()) {
-        i.next();
+    for (auto i = d->fields.cbegin(), end = d->fields.cend(); i != end; ++i) {
         command += "\"" + i.key() + "\" \"" + i.value() + "\" ";
     }
     command.chop(1);
