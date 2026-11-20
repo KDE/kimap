@@ -144,6 +144,7 @@ ecm_set_disabled_deprecation_versions(QT 6.12.0
 )
 add_definitions(-DQT_NO_EMIT)
 add_definitions(-DQT_NO_JAVA_STYLE_ITERATORS)
+add_definitions(-DQT_LEAN_HEADERS=2)
 
 option(USE_UNITY_CMAKE_SUPPORT "Use UNITY cmake support (speedup compile time)" OFF)
 
