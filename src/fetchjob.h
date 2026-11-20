@@ -13,6 +13,7 @@
 
 #include <KMime/Content>
 #include <KMime/Message>
+#include <QMap>
 
 #include <tuple>
 
